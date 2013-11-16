@@ -418,11 +418,6 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>sdtest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sdtest.c</FilePath>
-            </File>
-            <File>
               <FileName>pittest.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\pittest.c</FilePath>
@@ -463,11 +458,6 @@
               <FilePath>..\..\Libraries\drivers\src\systick.c</FilePath>
             </File>
             <File>
-              <FileName>sdhc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\sdhc.c</FilePath>
-            </File>
-            <File>
               <FileName>pit.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\drivers\src\pit.c</FilePath>
@@ -476,11 +466,6 @@
               <FileName>wdog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\drivers\src\wdog.c</FilePath>
-            </File>
-            <File>
-              <FileName>lptmr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\lptmr.c</FilePath>
             </File>
           </Files>
         </Group>

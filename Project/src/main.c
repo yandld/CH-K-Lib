@@ -13,8 +13,6 @@ extern int CommandFun_WDOGInitTest(int argc, char *argv[]);
 
 MINISHELL_CommandTableTypeDef cmd_tbl[] =
 {
-    { "SDInit", 4, CommandFun_SDInitTest ,"SD Init" },
-    { "RS", 3, CommandFun_SDReadSingleBlockTest ,"Read Single Block" },
     { "PITInit", 4, CommandFun_PITInitTest ,"PIT Init" },
     { "info", 1, DisplayCPUInfo ,"list CPU info" },
     { "WDOGInit", 1, CommandFun_WDOGInitTest ,"Init WDOG" },

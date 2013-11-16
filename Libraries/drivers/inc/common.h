@@ -78,6 +78,31 @@ typedef enum {FALSE = 0, TRUE = !FALSE} ErrorState;
 //! @}
 
 
+/*! @brief Status return codes.*/
+typedef enum
+{
+    kStatus_Success = 0,
+    kStatus_AbortDataPhase,
+    kStatus_ReadOnly,
+    kStatus_OutOfRange,
+    kStatusUnknownProperty,
+    kStatusInvalidArgument,
+    kStatusFail,
+    kStatusRomLdrSectionOverrun,
+    kStatusRomLdrSignature,
+    kStatusRomLdrSectionLength,
+    kStatusRomLdrUnencryptedOnly,
+    kStatusRomLdrEOFReached,
+    kStatusRomLdrChecksum,
+    kStatusRomLdrUnknownCommand,
+    kStatusRomLdrIdNotFound,
+    kStatusUnknownCommand,
+    kStatusMemoryRangeInvalid,
+    kStatusMemoryReadFailed,
+    kStatusMemoryWriteFailed,
+    kStatusNoMedium,
+    kStatusTimeOut,
+}status_t;
 
 
 //Peripheral IP CODE  use for further version. No use in V2.5

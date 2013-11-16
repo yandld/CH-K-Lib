@@ -24,16 +24,23 @@ void GUI_Init(CHGUI_InitTypeDef* CHGUI_InitStruct)
 		{
         return;
 		}
-    gpCHGUI = CHGUI_InitStruct;
-	  gpCHGUI->ops->ctrl_init();
-		gpCHGUI->ops->ctrl_fill(0, 0, gpCHGUI->x_max, gpCHGUI->y_max, gGUI_BackColor);
-		gpCHGUI->device_id = gpCHGUI->ops->ctrl_get_id();
-		//Initalize Touch system
-		if(gpCHGUI->tops == NULL)
+		if(gpCHGUI->ops->ctrl_init != NULL)
 		{
-        return;
+        gpCHGUI->ops->ctrl_init();
 		}
-		gpCHGUI->tops->ctrl_init();
+		if(gpCHGUI->ops->ctrl_fill != NULL)
+		{
+        gpCHGUI->ops->ctrl_fill(0, 0, gpCHGUI->x_max, gpCHGUI->y_max, gGUI_BackColor);
+		}
+		if(gpCHGUI->ops->ctrl_get_id != NULL)
+		{
+        gpCHGUI->device_id = gpCHGUI->ops->ctrl_get_id();
+		}
+		//Initalize Touch system
+		if(gpCHGUI->tops != NULL)
+		{
+        gpCHGUI->tops->ctrl_init();
+		}
 }
 
 

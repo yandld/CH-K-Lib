@@ -69,8 +69,6 @@ typedef struct
     void (*ctrl_init)(void);
     uint32_t (*ctrl_get_touch_x)(void);
     uint32_t (*ctrl_get_touch_y)(void);
-    uint32_t (*ctrl_read_touch_data)(uint8_t * pData);
-    uint32_t (*ctrl_write_touch_data)(uint8_t * pData, uint32_t size);
 }CHGUI_TouchCtrlOperation_TypeDef;
 
 

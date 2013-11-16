@@ -124,7 +124,10 @@ void GUI_BMP_DrawEx(uint16_t xPos, uint16_t yPos, GUI_GetDataCallbackType fpAppG
             if(countpix >= rowlen)//水平方向像素值到了.换行
             {		 
                 y--; 
-                if(y == 0)break;			 
+                if(y == 0)
+								{
+									return ;									
+								}
                 x = 0; 
                 countpix = 0;
                 color = 0x00;

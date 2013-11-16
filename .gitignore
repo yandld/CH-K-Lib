@@ -1,6 +1,36 @@
 # Object files
 *.o
 *.ko
+*.o.*
+*.uvgui.*
+*.bat
+*.__i
+*.dbgdt
+*.tra
+*.pbd
+*.browse
+*.tmp
+*.db
+*.__ia
+*.dni
+*.wsdt
+*.pbi
+*.bin
+*.cout
+*.crf
+*.d
+*.sct
+*.htm
+*.map
+*.axf
+*.lnp
+*.txt
+*.ini
+*.lst
+output
+settings
+Debug
+Release
 
 # Libraries
 *.lib
@@ -16,3 +46,10 @@
 *.exe
 *.out
 *.app
+*.hex
+
+# Project files
+*.plg
+*.Yandld
+*.dep
+*.bak

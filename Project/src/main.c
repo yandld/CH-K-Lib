@@ -1,7 +1,7 @@
 #include "sys.h"
 #include "gpio.h"
 #include "uart.h"
-#include "shell.h"
+#include "minishell.h"
 #include "systick.h"
 #include "sdhc.h"
 
@@ -11,7 +11,7 @@ extern int CommandFun_SDReadSingleBlockTest(int argc, char *argv[]);
 extern int CommandFun_PITInitTest(int argc, char *argv[]);
 extern int CommandFun_WDOGInitTest(int argc, char *argv[]);
 
-SHELL_CommandTableTypeDef cmd_tbl[] =
+MINISHELL_CommandTableTypeDef cmd_tbl[] =
 {
     { "SDInit", 4, CommandFun_SDInitTest ,"SD Init" },
     { "RS", 3, CommandFun_SDReadSingleBlockTest ,"Read Single Block" },
@@ -30,7 +30,7 @@ int main(void)
     UART_DebugPortInit(UART4_RX_PC14_TX_PC15, 115200);
     UART_printf("HelloWorld!\r\n");
 	
-	  SHELL_RegisterFunction(cmd_tbl,ARRAY_SIZE(cmd_tbl));
+	  MINISHELL_Register(cmd_tbl, ARRAY_SIZE(cmd_tbl));
     GPIO_InitStruct1.GPIOx = PTC;                             //C端口
     GPIO_InitStruct1.GPIO_InitState = Bit_RESET;                //初始化后输出高电平
     GPIO_InitStruct1.GPIO_Pin = kGPIO_Pin_18;                  //PC16引脚

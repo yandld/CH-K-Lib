@@ -348,10 +348,10 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>--c99</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\startup\CoreSupport;..\..\Libraries\startup\DeviceSupport;..\..\Libraries\drivers\inc;..\..\Libraries\Components\shell</IncludePath>
+              <IncludePath>..\..\Libraries\startup\CoreSupport;..\..\Libraries\startup\DeviceSupport;..\..\Libraries\drivers\inc;..\..\Libraries\utilities\minishell</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -485,12 +485,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Components</GroupName>
+          <GroupName>utilities</GroupName>
           <Files>
             <File>
-              <FileName>shell.c</FileName>
+              <FileName>minishell.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Libraries\Components\shell\shell.c</FilePath>
+              <FilePath>..\..\Libraries\utilities\minishell\minishell.c</FilePath>
             </File>
           </Files>
         </Group>

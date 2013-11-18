@@ -159,7 +159,6 @@ extern uint32_t SystemCoreClock;
 //! @{
 
 void SystemClockSetup(SYS_ClockSourceSelect_TypeDef clockSource, SYS_CoreClockSelect_TypeDef coreClock);
-void PinMuxConfig(uint8_t GPIOIndex, uint8_t PinIndex, uint8_t MuxIndex);
 void SystemSoftReset(void);                                     
 void GetCPUInfo(void);                                         
 void EnableInterrupts(void);                                    

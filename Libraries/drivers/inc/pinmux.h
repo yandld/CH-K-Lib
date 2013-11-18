@@ -1,6 +1,7 @@
 #ifndef __PINMUX_H__
 #define __PINMUX_H__
 
+#include "stdint.h"
 
 typedef enum
 {
@@ -16,6 +17,9 @@ typedef enum
 }PINMUX_Alt_Type;
 
 
+
+//!< API functions
+void PinMuxConfig(uint8_t GPIOIndex, uint8_t PinIndex, uint8_t MuxIndex);
 
 #endif
 

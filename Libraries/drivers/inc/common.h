@@ -25,8 +25,6 @@
 #define USE_FULL_ASSERT         (1)
 //! @brief Debug printf and shell max char len
 #define UART_PRINTF_CMD_LENGTH  (64)
-//! @brief Target MCU
-#define TARGET_MCU               MK60
 //! @brief DELAY Function Selection
 #define DelayInit              SYSTICK_DelayInit
 #define DelayMs(x)             SYSTICK_DelayMs(x)
@@ -36,7 +34,7 @@
 //! @}
 
 
-//版本
+//Version
 #define  FW_VERSION                 (250)                //CH_K60固件库版本
 //参数检测器
 #if USE_FULL_ASSERT
@@ -77,7 +75,7 @@ typedef enum {FALSE = 0, TRUE = !FALSE} ErrorState;
 #define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
 
-#ifndef NULL
+#if !defined(NULL)
 	#define NULL 0
 #endif
 
@@ -111,6 +109,8 @@ typedef enum
 }State_Type;
 
 
+#define EnableInterrupts   __enable_irq
+#define DisableInterrupts  __disable_irq
 
 
 

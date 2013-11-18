@@ -3,7 +3,13 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "system_MK60DZ10.h"
+
+#ifdef SYSTEM_MK60DZ10_H_
 #include "MK60DZ10.h"
+#endif
+
+
 
 //! @addtogroup CH_Periph_Driver
 //! @{
@@ -22,9 +28,9 @@
 //! @brief Target MCU
 #define TARGET_MCU               MK60
 //! @brief DELAY Function Selection
-#define DelayInit              PIT_DelayInit
-#define DelayMs(x)             PIT_DelayMs(x)
-#define DelayUs(x)             PIT_DelayUs(x)
+#define DelayInit              SYSTICK_DelayInit
+#define DelayMs(x)             SYSTICK_DelayMs(x)
+#define DelayUs(x)             SYSTICK_DelayUs(x)
 
 
 //! @}
@@ -102,14 +108,10 @@ typedef enum
     kStatusMemoryWriteFailed,
     kStatusNoMedium,
     kStatusTimeOut,
-}status_t;
+}State_Type;
 
 
-//Peripheral IP CODE  use for further version. No use in V2.5
-#define  SYS_IP_CODE    (0)
-#define GPIO_IP_CODE    (0)
-#define UART_IP_CODE    (0)
-#define  PIT_IP_CODE    (0)
+
 
 
 #endif

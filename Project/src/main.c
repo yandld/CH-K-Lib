@@ -13,9 +13,7 @@ extern int CommandFun_WDOGInitTest(int argc, char *argv[]);
 
 MINISHELL_CommandTableTypeDef cmd_tbl[] =
 {
-    { "PITInit", 4, CommandFun_PITInitTest ,"PIT Init" },
     { "info", 1, DisplayCPUInfo ,"list CPU info" },
-    { "WDOGInit", 1, CommandFun_WDOGInitTest ,"Init WDOG" },
 };
 
 int main(void)
@@ -53,13 +51,10 @@ int main(void)
     //GPIO_ITConfig(PTC,kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
 		
     //CommandFun_WDOGInitTest2();
-		WDOG_QuickInit(500*1000);
 		while(1)
 		{
 			DelayMs(300);
-			WDOG_Refresh(); 
 			DelayMs(300);
-			UART_printf("%d\r\n", WDOG_ReadResetCounter());
 			while(1);
 			
 		}

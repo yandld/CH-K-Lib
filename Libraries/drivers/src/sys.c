@@ -8,7 +8,7 @@
   ******************************************************************************
   */
 #include "sys.h"
-
+#include "libconfig.h"
 //! @brief struct CPUInfo contain various CPU information.
 SYS_CPUInfoTypeDef CPUInfo; //处理器运行信息结构体
 
@@ -112,21 +112,21 @@ void GetCPUInfo(void)
     //PFlash Size
     switch((SIM->FCFG1 & SIM_FCFG1_PFSIZE(0xF))>>SIM_FCFG1_PFSIZE_SHIFT)
     {
-        case 0x7: 
+        case 0x7:
             CPUInfo.m_PFlashSizeInKB = 128;
             break;
-        case 0x9: 
+        case 0x9:
             CPUInfo.m_PFlashSizeInKB = 256;
             break;
-        case 0xB: 
+        case 0xB:
             CPUInfo.m_PFlashSizeInKB = 512;
             break;
-        case 0xF: 
+        case 0xF:
             CPUInfo.m_PFlashSizeInKB = 512;
             break;
-        default:  
-            CPUInfo.m_PFlashSizeInKB = 0; 
-        break; 		
+        default:
+            CPUInfo.m_PFlashSizeInKB = 0;
+        break;
     }
     //FlexNVM Size
     if (SIM->FCFG2 & SIM_FCFG2_PFLSH_MASK) 
@@ -426,7 +426,7 @@ void SetVectorTable(uint32_t VectorOffset)
 {
     //param check
     assert_param(IS_VECTOR_OFFSET(VectorOffset));
-    SCB->VTOR = VectorOffset;  //更改中断向量表偏移地址
+    SCB->VTOR = VectorOffset;  // 更改中断向量表偏移地址
 }
 /**
  * @brief  Get Fwlib Version

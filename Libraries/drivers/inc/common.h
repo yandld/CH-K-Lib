@@ -111,7 +111,7 @@ typedef enum
 
 #define EnableInterrupts   __enable_irq
 #define DisableInterrupts  __disable_irq
-
+#define SystemSoftReset    NVIC_SystemReset
 
 
 #endif

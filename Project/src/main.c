@@ -4,7 +4,7 @@
 #include "minishell.h"
 #include "systick.h"
 #include "sdhc.h"
-
+#include "clock.h"
 //User defined functions
 extern int CommandFun_SDInitTest(int argc, char *argv[]);
 extern int CommandFun_SDReadSingleBlockTest(int argc, char *argv[]);

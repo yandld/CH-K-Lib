@@ -106,10 +106,10 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
             break;
     }
     //配置传输频率
-    clock = CPUInfo.m_BusClockInHz;
+    clock = CPUInfo.BusClockInHz;
     if((uint32_t)UARTx == UART0_BASE||(uint32_t)UARTx == UART1_BASE) 
     {
-        clock = CPUInfo.m_CoreClockInHz; //UART0 UART1使用CoreClock
+        clock = CPUInfo.CoreClockInHz; //UART0 UART1使用CoreClock
     }
     sbr = (uint16_t)((clock)/((UART_InitStruct->UART_BaudRate)*16));
     brfa = ((clock*2)/(UART_InitStruct->UART_BaudRate)-(sbr*32));
@@ -513,19 +513,19 @@ void DisplayCPUInfo(void)
             break;
     }
     //PFlash size
-    UART_printf("PFlash Size: %dKB\r\n",CPUInfo.m_PFlashSizeInKB);
+    UART_printf("PFlash Size: %dKB\r\n",CPUInfo.PFlashSizeInKB);
     //Flex RAM size
-    UART_printf("FlexNVM Size: %dKB\r\n",CPUInfo.m_FlexNVMSizeInKB);
+    UART_printf("FlexNVM Size: %dKB\r\n",CPUInfo.FlexNVMSizeInKB);
     //RAM size
-    UART_printf("RAM Size :%dKB\r\n",CPUInfo.m_RAMSizeInKB);
+    UART_printf("RAM Size :%dKB\r\n",CPUInfo.RAMSizeInKB);
     //core clock
-    UART_printf("CoreClock: %dHz\r\n",CPUInfo.m_CoreClockInHz);
+    UART_printf("CoreClock: %dHz\r\n",CPUInfo.CoreClockInHz);
     //bus clock
-    UART_printf("BusClock: %dHz\r\n",CPUInfo.m_BusClockInHz);
+    UART_printf("BusClock: %dHz\r\n",CPUInfo.BusClockInHz);
     //flexbus clock
-    UART_printf("FlexBusClock: %dHz\r\n",CPUInfo.m_FlexBusClockHz);
+    UART_printf("FlexBusClock: %dHz\r\n",CPUInfo.FlexBusClockHz);
     //flash clock
-    UART_printf("FlashClock: %dHz\r\n",CPUInfo.m_FlashClockHz);
+    UART_printf("FlashClock: %dHz\r\n",CPUInfo.FlashClockHz);
 }
 
 /*

@@ -113,44 +113,44 @@ void GetCPUInfo(void)
     switch((SIM->FCFG1 & SIM_FCFG1_PFSIZE(0xF))>>SIM_FCFG1_PFSIZE_SHIFT)
     {
         case 0x7:
-            CPUInfo.m_PFlashSizeInKB = 128;
+            CPUInfo.PFlashSizeInKB = 128;
             break;
         case 0x9:
-            CPUInfo.m_PFlashSizeInKB = 256;
+            CPUInfo.PFlashSizeInKB = 256;
             break;
         case 0xB:
-            CPUInfo.m_PFlashSizeInKB = 512;
+            CPUInfo.PFlashSizeInKB = 512;
             break;
         case 0xF:
-            CPUInfo.m_PFlashSizeInKB = 512;
+            CPUInfo.PFlashSizeInKB = 512;
             break;
         default:
-            CPUInfo.m_PFlashSizeInKB = 0;
+            CPUInfo.PFlashSizeInKB = 0;
         break;
     }
     //FlexNVM Size
     if (SIM->FCFG2 & SIM_FCFG2_PFLSH_MASK) 
     {
-        CPUInfo.m_FlexNVMSizeInKB = 0;
+        CPUInfo.FlexNVMSizeInKB = 0;
     }
     else
     {
         switch((SIM->FCFG1 & SIM_FCFG1_NVMSIZE(0xF))>>SIM_FCFG1_NVMSIZE_SHIFT)
         {
             case 0x0:
-                CPUInfo.m_FlexNVMSizeInKB = 0;
+                CPUInfo.FlexNVMSizeInKB = 0;
                 break;
             case 0x7: 
-                CPUInfo.m_FlexNVMSizeInKB = 128;
+                CPUInfo.FlexNVMSizeInKB = 128;
                 break;
             case 0x9: 
-                CPUInfo.m_FlexNVMSizeInKB = 256;
+                CPUInfo.FlexNVMSizeInKB = 256;
                 break;
             case 0xF: 
-                CPUInfo.m_FlexNVMSizeInKB = 256;
+                CPUInfo.FlexNVMSizeInKB = 256;
                 break;
             default:  
-                CPUInfo.m_FlexNVMSizeInKB = 0;
+                CPUInfo.FlexNVMSizeInKB = 0;
                 break; 		
         }
     }
@@ -158,26 +158,26 @@ void GetCPUInfo(void)
     switch((SIM->SOPT1 & SIM_SOPT1_RAMSIZE(0xF))>>SIM_SOPT1_RAMSIZE_SHIFT)
     {
         case 0x5: 
-            CPUInfo.m_RAMSizeInKB = 32; 
+            CPUInfo.RAMSizeInKB = 32; 
             break;
         case 0x7: 
-            CPUInfo.m_RAMSizeInKB = 64;  
+            CPUInfo.RAMSizeInKB = 64;  
             break;
         case 0x8: 
-            CPUInfo.m_RAMSizeInKB = 96;  
+            CPUInfo.RAMSizeInKB = 96;  
             break;
         case 0x9: 
-            CPUInfo.m_RAMSizeInKB = 128;
+            CPUInfo.RAMSizeInKB = 128;
             break;
         default: 
-            CPUInfo.m_RAMSizeInKB = 0; 
+            CPUInfo.RAMSizeInKB = 0; 
             break;	
     }
     //Clock 
-    CPUInfo.m_CoreClockInHz = SystemCoreClock;
-    CPUInfo.m_BusClockInHz =(SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1));     
-    CPUInfo.m_FlexBusClockHz =(SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT)+1)); 
-    CPUInfo.m_FlashClockHz =(SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT)+1));
+    CPUInfo.CoreClockInHz = SystemCoreClock;
+    CPUInfo.BusClockInHz =(SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1));     
+    CPUInfo.FlexBusClockHz =(SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT)+1)); 
+    CPUInfo.FlashClockHz =(SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT)+1));
 }
 
 /**
@@ -346,15 +346,7 @@ void NVIC_Init(IRQn_Type IRQn,uint32_t PriorityGroup,uint32_t PreemptPriority,ui
     //Set NVIC interrupt priority
     NVIC_SetPriority(IRQn,NVIC_EncodePriority(PriorityGroup,PreemptPriority,SubPriority));
 }
-/**
- * @brief  Reboot
- * @param  none
- * @retval none
- */
-void SystemSoftReset(void)
-{   
-    NVIC_SystemReset();
-} 
+
 
 
 

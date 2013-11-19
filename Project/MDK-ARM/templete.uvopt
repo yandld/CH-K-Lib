@@ -104,8 +104,8 @@
         <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
       </DllOpt>
       <DebugOpt>
-        <uSim>0</uSim>
-        <uTrg>1</uTrg>
+        <uSim>1</uSim>
+        <uTrg>0</uTrg>
         <sLdApp>1</sLdApp>
         <sGomain>1</sGomain>
         <sRbreak>1</sRbreak>
@@ -123,7 +123,7 @@
         <tRtrace>0</tRtrace>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
-        <nTsel>7</nTsel>
+        <nTsel>5</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -139,13 +139,18 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGDARM</Key>
+          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)</Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>DLGTARM</Key>
           <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
           <Key>ARMDBGFLAGS</Key>
-          <Name></Name>
+          <Name>-T0</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -217,10 +222,10 @@
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>29</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>50</TopLine>
-      <CurrentLine>51</CurrentLine>
+      <TopLine>467</TopLine>
+      <CurrentLine>473</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60DZ10.s</PathWithFileName>
       <FilenameWithoutPath>startup_MK60DZ10.s</FilenameWithoutPath>
@@ -233,10 +238,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>34</ColumnNumber>
+      <ColumnNumber>22</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>13</TopLine>
-      <CurrentLine>14</CurrentLine>
+      <TopLine>134</TopLine>
+      <CurrentLine>152</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\startup\DeviceSupport\MDK-ARM\system_MK60DZ10.c</PathWithFileName>
       <FilenameWithoutPath>system_MK60DZ10.c</FilenameWithoutPath>
@@ -259,7 +264,7 @@
       <Focus>0</Focus>
       <ColumnNumber>1</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
+      <TopLine>26</TopLine>
       <CurrentLine>45</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\isr.c</PathWithFileName>
@@ -273,10 +278,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>24</ColumnNumber>
+      <ColumnNumber>15</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>12</TopLine>
-      <CurrentLine>22</CurrentLine>
+      <TopLine>15</TopLine>
+      <CurrentLine>24</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -313,10 +318,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>12</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>355</TopLine>
-      <CurrentLine>360</CurrentLine>
+      <TopLine>6</TopLine>
+      <CurrentLine>13</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\drivers\src\sys.c</PathWithFileName>
       <FilenameWithoutPath>sys.c</FilenameWithoutPath>
@@ -329,10 +334,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>4</ColumnNumber>
+      <ColumnNumber>29</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>4</TopLine>
-      <CurrentLine>9</CurrentLine>
+      <TopLine>271</TopLine>
+      <CurrentLine>278</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\drivers\src\gpio.c</PathWithFileName>
       <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
@@ -345,10 +350,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2</ColumnNumber>
+      <ColumnNumber>24</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>306</TopLine>
-      <CurrentLine>324</CurrentLine>
+      <TopLine>103</TopLine>
+      <CurrentLine>112</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\drivers\src\uart.c</PathWithFileName>
       <FilenameWithoutPath>uart.c</FilenameWithoutPath>
@@ -361,10 +366,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1</ColumnNumber>
+      <ColumnNumber>21</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>22</TopLine>
-      <CurrentLine>90</CurrentLine>
+      <TopLine>12</TopLine>
+      <CurrentLine>18</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\drivers\src\systick.c</PathWithFileName>
       <FilenameWithoutPath>systick.c</FilenameWithoutPath>
@@ -377,10 +382,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>21</ColumnNumber>
+      <ColumnNumber>18</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>8</TopLine>
-      <CurrentLine>22</CurrentLine>
+      <TopLine>20</TopLine>
+      <CurrentLine>40</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\drivers\src\pinmux.c</PathWithFileName>
       <FilenameWithoutPath>pinmux.c</FilenameWithoutPath>
@@ -396,7 +401,7 @@
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>1</TopLine>
-      <CurrentLine>10</CurrentLine>
+      <CurrentLine>5</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\drivers\src\clock.c</PathWithFileName>
       <FilenameWithoutPath>clock.c</FilenameWithoutPath>
@@ -412,10 +417,26 @@
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>1</TopLine>
-      <CurrentLine>10</CurrentLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Libraries\drivers\inc\libconfig.h</PathWithFileName>
       <FilenameWithoutPath>libconfig.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>3</GroupNumber>
+      <FileNumber>13</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>1</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1</TopLine>
+      <CurrentLine>12</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\Libraries\drivers\src\cpuconfig.c</PathWithFileName>
+      <FilenameWithoutPath>cpuconfig.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -429,7 +450,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>4</GroupNumber>
-      <FileNumber>13</FileNumber>
+      <FileNumber>14</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>

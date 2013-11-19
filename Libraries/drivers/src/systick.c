@@ -15,7 +15,7 @@ void SYSTICK_Init(SYSTICK_InitTypeDef* SYSTICK_InitStruct)
     // Set ClockSource = busClock
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; 
     GetCPUInfo();
-    fac_us = CPUInfo.m_CoreClockInHz/1000000;
+    fac_us = CPUInfo.CoreClockInHz/1000000;
     fac_ms = (uint32_t)fac_us*1000;
     SysTick->LOAD = (SYSTICK_InitStruct->SYSTICK_PeriodInUs)*fac_us;
 }
@@ -35,7 +35,7 @@ void SYSTICK_DelayInit()
 {
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; //! <Set ClockSource = busClock
     GetCPUInfo();
-    fac_us = CPUInfo.m_CoreClockInHz/1000000;
+    fac_us = CPUInfo.CoreClockInHz/1000000;
     fac_ms = (uint32_t)fac_us*1000;
 }
 

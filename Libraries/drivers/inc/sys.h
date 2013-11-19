@@ -77,13 +77,14 @@ typedef struct
 	FamilyTypeCodeSelect_TypeDef  m_FamilyTypeCode;    //!< Kinetis family type
 	ResetStateCodeSelect_TpyeDef  m_ResetStateCode;    //!< Reset state code
 	PinNumberCodeSelect_TypeDef   m_PinNumberCode;     //!< Pin package info code
-	uint32_t m_PFlashSizeInKB;                         //!< PFlash size(KB)
-	uint32_t m_FlexNVMSizeInKB;                        //!< FlexNVM size(KB)
-	uint32_t m_RAMSizeInKB;                            //!< RAM size(KB)
-	uint32_t m_CoreClockInHz;                          //!< CoreClock freq (Hz)
-	uint32_t m_BusClockInHz;                           //!< BusClock freq(Hz)
-	uint32_t m_FlexBusClockHz;                         //!< FlexBusClock freq(Hz)
-	uint32_t m_FlashClockHz;                           //!< FlashClock freq(Hz)
+	uint32_t PFlashSizeInKB;                         //!< PFlash size(KB)
+	uint32_t DFlashSizeInKB;
+	uint32_t FlexNVMSizeInKB;                        //!< FlexNVM size(KB)
+	uint32_t RAMSizeInKB;                            //!< RAM size(KB)
+	uint32_t CoreClockInHz;                          //!< CoreClock freq (Hz)
+	uint32_t BusClockInHz;                           //!< BusClock freq(Hz)
+	uint32_t FlexBusClockHz;                         //!< FlexBusClock freq(Hz)
+	uint32_t FlashClockHz;                           //!< FlashClock freq(Hz)
 } SYS_CPUInfoTypeDef;
 
 //! @brief [SystemClockUpdate] <clockSource> selection enumeration

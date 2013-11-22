@@ -1,9 +1,9 @@
-#ifndef __CPUCONFIG_H__
-#define __CPUCONFIG_H__
+#ifndef __CPUIDY_H__
+#define __CPUIDY_H__
 
 typedef enum
 {
-    kPFlashSizeInKB,                 //!< Coreclock = 48M
+    kPFlashSizeInKB,                 
     kDFlashSizeInKB,
     kFlexNVMSizeInKB,
     kRAMSizeInKB,

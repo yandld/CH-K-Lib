@@ -25,15 +25,20 @@
 #define USE_FULL_ASSERT         (1)
 //! @brief Debug printf and shell max char len
 #define UART_PRINTF_CMD_LENGTH  (64)
-//! @brief DELAY Function Selection
-#define DelayInit              SYSTICK_DelayInit
-#define DelayMs(x)             SYSTICK_DelayMs(x)
-#define DelayUs(x)             SYSTICK_DelayUs(x)
+
 
 
 //! @}
 
+//!< CH_Kinetis version information
+#define CHK_VERSION                   2L              //!< major version number
+#define CHK_SUBVERSION                4L              //< minor version number
+#define CHK_REVISION                  1L              //< revise version number
 
+/* CH_Kinetis version */
+#define FW_VERSION                ((CHK_VERSION * 10000) + \
+                                         (CHK_SUBVERSION * 100) + CHK_REVISION)
+																				 
 //Version
 #define  FW_VERSION                 (250)                //CH_K60固件库版本
 //参数检测器
@@ -108,7 +113,10 @@ typedef enum
     kStatusTimeOut,
 }State_Type;
 
-
+//! @brief DELAY Function Selection
+#define DelayInit              SYSTICK_DelayInit
+#define DelayMs(x)             SYSTICK_DelayMs(x)
+#define DelayUs(x)             SYSTICK_DelayUs(x)
 #define EnableInterrupts   __enable_irq
 #define DisableInterrupts  __disable_irq
 #define SystemSoftReset    NVIC_SystemReset

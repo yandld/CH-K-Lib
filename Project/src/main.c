@@ -19,9 +19,11 @@ MINISHELL_CommandTableTypeDef cmd_tbl[] =
 int main(void)
 {
 	  uint8_t ch;
+    uint32_t Req;
+    uint8_t i;
     //定义GPIO初始化结构
     GPIO_InitTypeDef GPIO_InitStruct1;
-    SystemClockSetup(kClockSource_EX50M,kCoreClock_96M);
+    SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
 	  DelayInit();
     UART_DebugPortInit(UART4_RX_PC14_TX_PC15, 115200);
     UART_printf("HelloWorld!\r\n");
@@ -41,7 +43,12 @@ int main(void)
     GPIO_InitStruct1.GPIO_Mode = kGPIO_Mode_OPP;               //推挽输出
     //执行GPIO初始化
     GPIO_Init(&GPIO_InitStruct1);     
-	
+
+		for(i=0;i<kClockNameCount;i++)
+		{
+    CLOCK_GetClockFrequency(i ,&Req);
+		UART_printf("Req:%d\r\n", Req);
+		}
 
 		
 	 // UART_ITConfig(UART4, kUART_IT_RDRF, ENABLE);

@@ -4,7 +4,7 @@
 void PORTC_IRQHandler(void)
 {
 //	GPIO_ClearITPendingBit(PTC,kGPIO_Pin_18);
-	UART_printf("!!\r\n");
+	//UART_printf("!!\r\n");
 }
 
 uint16_t i = 0;

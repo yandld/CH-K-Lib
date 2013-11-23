@@ -37,10 +37,10 @@
 
 /* CH_Kinetis version */
 #define FW_VERSION                ((CHK_VERSION * 10000) + \
-                                         (CHK_SUBVERSION * 100) + CHK_REVISION)
+                                  (CHK_SUBVERSION * 100) + CHK_REVISION)
 																				 
-//Version
-#define  FW_VERSION                 (250)                //CH_K60固件库版本
+
+
 //参数检测器
 #if USE_FULL_ASSERT
 

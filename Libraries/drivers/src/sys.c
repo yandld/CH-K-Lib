@@ -173,11 +173,6 @@ void GetCPUInfo(void)
             CPUInfo.RAMSizeInKB = 0; 
             break;	
     }
-    //Clock 
-    CPUInfo.CoreClockInHz = SystemCoreClock;
-    CPUInfo.BusClockInHz =(SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1));     
-    CPUInfo.FlexBusClockHz =(SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT)+1)); 
-    CPUInfo.FlashClockHz =(SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT)+1));
 }
 
 /**
@@ -368,7 +363,7 @@ void SetVectorTable(uint32_t VectorOffset)
  */
 uint16_t GetFWVersion(void)
 {
-    return(FW_VERSION);
+    return(CHK_VERSION);
 }
 
 //! @}

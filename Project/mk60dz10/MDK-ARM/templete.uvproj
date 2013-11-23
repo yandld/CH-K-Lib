@@ -391,93 +391,15 @@
       <Groups>
         <Group>
           <GroupName>startup</GroupName>
-          <Files>
-            <File>
-              <FileName>startup_MK60DZ10.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60DZ10.s</FilePath>
-            </File>
-            <File>
-              <FileName>system_MK60DZ10.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\startup\DeviceSupport\MDK-ARM\system_MK60DZ10.c</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>user</GroupName>
-          <Files>
-            <File>
-              <FileName>isr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\isr.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main.c</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>drivers</GroupName>
-          <Files>
-            <File>
-              <FileName>sys.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\sys.c</FilePath>
-            </File>
-            <File>
-              <FileName>gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\systick.c</FilePath>
-            </File>
-            <File>
-              <FileName>pinmux.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\pinmux.c</FilePath>
-            </File>
-            <File>
-              <FileName>clock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\clock.c</FilePath>
-            </File>
-            <File>
-              <FileName>libconfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\drivers\inc\libconfig.h</FilePath>
-            </File>
-            <File>
-              <FileName>cpuidy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\cpuidy.c</FilePath>
-            </File>
-            <File>
-              <FileName>mcg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\drivers\src\mcg.c</FilePath>
-            </File>
-          </Files>
         </Group>
         <Group>
           <GroupName>utilities</GroupName>
-          <Files>
-            <File>
-              <FileName>minishell.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\utilities\minishell\minishell.c</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>

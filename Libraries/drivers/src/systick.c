@@ -1,6 +1,7 @@
 #include "systick.h"
 #include "sys.h"
-static uint8_t  fac_us = 0; //!< usDelay Mut
+#include "clock.h"
+static uint32_t  fac_us = 0; //!< usDelay Mut
 static uint32_t fac_ms = 0; //!< msDelay Mut
 
 //! @defgroup CH_Periph_Driver
@@ -10,12 +11,14 @@ static uint32_t fac_ms = 0; //!< msDelay Mut
 //! @brief SYSTICK driver modules
 //! @{
 
+
 void SYSTICK_Init(SYSTICK_InitTypeDef* SYSTICK_InitStruct)
 {
     // Set ClockSource = busClock
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; 
     GetCPUInfo();
-    fac_us = CPUInfo.CoreClockInHz/1000000;
+	  CLOCK_GetClockFrequency(kCoreClock, &fac_us);
+	  fac_us /= 1000000;
     fac_ms = (uint32_t)fac_us*1000;
     SysTick->LOAD = (SYSTICK_InitStruct->SYSTICK_PeriodInUs)*fac_us;
 }
@@ -35,7 +38,8 @@ void SYSTICK_DelayInit()
 {
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; //! <Set ClockSource = busClock
     GetCPUInfo();
-    fac_us = CPUInfo.CoreClockInHz/1000000;
+	  CLOCK_GetClockFrequency(kCoreClock, &fac_us);
+	  fac_us /= 1000000;
     fac_ms = (uint32_t)fac_us*1000;
 }
 

@@ -81,10 +81,6 @@ typedef struct
 	uint32_t DFlashSizeInKB;
 	uint32_t FlexNVMSizeInKB;                        //!< FlexNVM size(KB)
 	uint32_t RAMSizeInKB;                            //!< RAM size(KB)
-	uint32_t CoreClockInHz;                          //!< CoreClock freq (Hz)
-	uint32_t BusClockInHz;                           //!< BusClock freq(Hz)
-	uint32_t FlexBusClockHz;                         //!< FlexBusClock freq(Hz)
-	uint32_t FlashClockHz;                           //!< FlashClock freq(Hz)
 } SYS_CPUInfoTypeDef;
 
 //! @brief [SystemClockUpdate] <clockSource> selection enumeration
@@ -161,9 +157,7 @@ extern uint32_t SystemCoreClock;
 
 void SystemClockSetup(SYS_ClockSourceSelect_TypeDef clockSource, SYS_CoreClockSelect_TypeDef coreClock);
 void SystemSoftReset(void);                                     
-void GetCPUInfo(void);                                         
-void EnableInterrupts(void);                                    
-void DisableInterrupts(void);                                   
+void GetCPUInfo(void);                                                                         
 void SetVectorTable(uint32_t offset);                                                 
 void NVIC_Init(IRQn_Type IRQn,uint32_t PriorityGroup,uint32_t PreemptPriority,uint32_t SubPriority);
 uint16_t GetFWVersion(void);

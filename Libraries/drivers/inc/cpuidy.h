@@ -6,8 +6,10 @@ typedef enum
     kPFlashSizeInKB,                 
     kDFlashSizeInKB,
     kFlexNVMSizeInKB,
+    kEEPORMSizeInKB,
     kRAMSizeInKB,
-}CPUCONFIG_MemSize_Type;
+    kMemNameCount,
+}CPUIDY_MemSize_Type;
 
 
 #endif

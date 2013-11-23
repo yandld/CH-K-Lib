@@ -1,6 +1,6 @@
 #ifndef __CLOCK_H__
 #define __CLOCK_H__
-
+#include "common.h"
 
 typedef enum
 {
@@ -43,7 +43,7 @@ typedef enum
     kClockSimDiv16,
 }CLOCK_DivideValue_Type;
 
-
+State_Type CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
 
 #endif
 

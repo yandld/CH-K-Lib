@@ -10,6 +10,7 @@
 #include "uart.h"
 #include "common.h"
 #include "string.h"
+#include "clock.h"
 #include "stdarg.h"
 #include "stdio.h"
 //发送结构
@@ -106,10 +107,10 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
             break;
     }
     //配置传输频率
-    clock = CPUInfo.BusClockInHz;
+		CLOCK_GetClockFrequency(kBusClock, &clock);
     if((uint32_t)UARTx == UART0_BASE||(uint32_t)UARTx == UART1_BASE) 
     {
-        clock = CPUInfo.CoreClockInHz; //UART0 UART1使用CoreClock
+        CLOCK_GetClockFrequency(kCoreClock, &clock); //UART0 UART1使用CoreClock
     }
     sbr = (uint16_t)((clock)/((UART_InitStruct->UART_BaudRate)*16));
     brfa = ((clock*2)/(UART_InitStruct->UART_BaudRate)-(sbr*32));
@@ -519,13 +520,13 @@ void DisplayCPUInfo(void)
     //RAM size
     UART_printf("RAM Size :%dKB\r\n",CPUInfo.RAMSizeInKB);
     //core clock
-    UART_printf("CoreClock: %dHz\r\n",CPUInfo.CoreClockInHz);
+  //  UART_printf("CoreClock: %dHz\r\n",CPUInfo.CoreClockInHz);
     //bus clock
-    UART_printf("BusClock: %dHz\r\n",CPUInfo.BusClockInHz);
+   // UART_printf("BusClock: %dHz\r\n",CPUInfo.BusClockInHz);
     //flexbus clock
-    UART_printf("FlexBusClock: %dHz\r\n",CPUInfo.FlexBusClockHz);
+   // UART_printf("FlexBusClock: %dHz\r\n",CPUInfo.FlexBusClockHz);
     //flash clock
-    UART_printf("FlashClock: %dHz\r\n",CPUInfo.FlashClockHz);
+  //  UART_printf("FlashClock: %dHz\r\n",CPUInfo.FlashClockHz);
 }
 
 /*

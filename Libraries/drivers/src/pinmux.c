@@ -17,34 +17,34 @@
   * @param  MuxIndex: 0 - 7
   * @retval None
   */
-void PinMuxConfig(uint8_t GPIOIndex, uint8_t PinIndex, uint8_t MuxIndex)
+void PinMuxConfig(uint8_t GPIOIndex, uint8_t pinIndex, PINMUX_Alt_Type muxIndex)
 {
     switch(GPIOIndex)
     {
         case 0:
             SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
-            PORTA->PCR[PinIndex] &= ~(PORT_PCR_MUX_MASK);    
-            PORTA->PCR[PinIndex] |= PORT_PCR_MUX(MuxIndex); 
+            PORTA->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);    
+            PORTA->PCR[pinIndex] |= PORT_PCR_MUX(muxIndex); 
             break;
         case 1:
             SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
-            PORTB->PCR[PinIndex] &= ~(PORT_PCR_MUX_MASK);    
-            PORTB->PCR[PinIndex] |= PORT_PCR_MUX(MuxIndex); 
+            PORTB->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);    
+            PORTB->PCR[pinIndex] |= PORT_PCR_MUX(muxIndex); 
             break;
         case 2:
             SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;
-            PORTC->PCR[PinIndex] &= ~(PORT_PCR_MUX_MASK);    
-            PORTC->PCR[PinIndex] |= PORT_PCR_MUX(MuxIndex); 
+            PORTC->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);    
+            PORTC->PCR[pinIndex] |= PORT_PCR_MUX(muxIndex); 
             break;
         case 3:
             SIM->SCGC5|=SIM_SCGC5_PORTD_MASK;
-            PORTD->PCR[PinIndex]&= ~(PORT_PCR_MUX_MASK);    
-            PORTD->PCR[PinIndex]|= PORT_PCR_MUX(MuxIndex); 
+            PORTD->PCR[pinIndex]&= ~(PORT_PCR_MUX_MASK);    
+            PORTD->PCR[pinIndex]|= PORT_PCR_MUX(muxIndex); 
             break;
         case 4:
             SIM->SCGC5|=SIM_SCGC5_PORTE_MASK;
-            PORTE->PCR[PinIndex]&= ~(PORT_PCR_MUX_MASK);    
-            PORTE->PCR[PinIndex]|= PORT_PCR_MUX(MuxIndex); 
+            PORTE->PCR[pinIndex]&= ~(PORT_PCR_MUX_MASK);    
+            PORTE->PCR[pinIndex]|= PORT_PCR_MUX(muxIndex); 
             break;
         default:
             break;

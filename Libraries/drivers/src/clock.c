@@ -17,6 +17,9 @@
 #define MCGOUT_TO_FLEXBUS_DIV_SET(x)     SIM_CLKDIV1_OUTDIV3(x)
 #define MCGOUT_TO_FLASH_DIV_SET(x)       SIM_CLKDIV1_OUTDIV4(x)
 
+
+
+
 State_Type CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideValue_Type dividerValue)
 {
     if(clockDivName >= kClockDividerNameCount)
@@ -25,14 +28,27 @@ State_Type CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_Di
 		} 
     switch (clockDivName)
 		{
-			case kCoreClock:
+			case kMcgOut2CoreDivider:
+				MCGOUT_TO_CORE_DIV_SET(dividerValue);
+				break;
+			case kMcgOut2SystemDivider:
+				MCGOUT_TO_SYSTEM_DIV_SET(dividerValue);
+				break;
+			case kMcgOut2BusDivider:
+				MCGOUT_TO_BUS_DIV_SET(dividerValue);
+				break;
+			case kMcgOut2FlexBusDivider:
+				MCGOUT_TO_FLEXBUS_DIV_SET(dividerValue);
+				break;
+			case kMcgOut2FlashDivider:
+				MCGOUT_TO_FLASH_DIV_SET(dividerValue);
+				break;
+			default :
+				return kStatusFail;
 				break;
 		}
-		
-	
+    return kStatus_Success;
 }
-
-
 
 
 State_Type CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz)

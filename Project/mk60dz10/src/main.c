@@ -16,6 +16,8 @@ MINISHELL_CommandTableTypeDef cmd_tbl[] =
     { "info", 1, DisplayCPUInfo ,"list CPU info" },
 };
 
+#pragma weak configure_uart_pin_mux
+extern void configure_uart_pin_mux(uint32_t instance);
 int main(void)
 {
 	  uint8_t ch;
@@ -23,11 +25,11 @@ int main(void)
     uint8_t i;
     //定义GPIO初始化结构
     GPIO_InitTypeDef GPIO_InitStruct1;
-    SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
+  //  SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
 	  DelayInit();
     UART_DebugPortInit(UART4_RX_PC14_TX_PC15, 115200);
     UART_printf("HelloWorld!\r\n");
-	
+	  configure_uart_pin_mux(1);
 	  MINISHELL_Register(cmd_tbl, ARRAY_SIZE(cmd_tbl));
     GPIO_InitStruct1.GPIOx = PTC;                             //C端口
     GPIO_InitStruct1.GPIO_InitState = Bit_RESET;                //初始化后输出高电平
@@ -36,14 +38,16 @@ int main(void)
     //执行GPIO初始化
     GPIO_Init(&GPIO_InitStruct1);      
 		GPIO_ITConfig(PTC, kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
-	
+	  
     GPIO_InitStruct1.GPIOx = PTD;                             //C端口
     GPIO_InitStruct1.GPIO_InitState = Bit_SET;                //初始化后输出高电平
     GPIO_InitStruct1.GPIO_Pin = kGPIO_Pin_1;                  //PC16引脚
     GPIO_InitStruct1.GPIO_Mode = kGPIO_Mode_OPP;               //推挽输出
     //执行GPIO初始化
     GPIO_Init(&GPIO_InitStruct1);     
-
+		
+		UART_printf("%d\r\n", &configure_uart_pin_mux);
+    
 		for(i=0;i<kClockNameCount;i++)
 		{
     CLOCK_GetClockFrequency(i ,&Req);
@@ -62,7 +66,7 @@ int main(void)
 		{
 			DelayMs(300);
 			DelayMs(300);
-			while(1);
+			UART_printf("!!\r\n");
 			
 		}
 		

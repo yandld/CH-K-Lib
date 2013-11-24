@@ -16,7 +16,6 @@ void SYSTICK_Init(SYSTICK_InitTypeDef* SYSTICK_InitStruct)
 {
     // Set ClockSource = busClock
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; 
-    GetCPUInfo();
 	  CLOCK_GetClockFrequency(kCoreClock, &fac_us);
 	  fac_us /= 1000000;
     fac_ms = (uint32_t)fac_us*1000;
@@ -37,7 +36,6 @@ void SYSTICK_ITConfig(FunctionalState NewState)
 void SYSTICK_DelayInit()
 {
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; //! <Set ClockSource = busClock
-    GetCPUInfo();
 	  CLOCK_GetClockFrequency(kCoreClock, &fac_us);
 	  fac_us /= 1000000;
     fac_ms = (uint32_t)fac_us*1000;

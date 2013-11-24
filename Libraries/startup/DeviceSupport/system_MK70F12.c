@@ -66,7 +66,7 @@
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
-         Core clock = 41.94MHz, BusClock = 41.94MHz
+         Core clock = 4 1.94MHz, BusClock = 41.94MHz
    1 ... Multipurpose Clock Generator (MCG) in PLL Engaged External (PEE) mode
          Reference clock source for MCG module is an external reference clock source 50MHz
          Core clock = 120MHz, BusClock = 60MHz

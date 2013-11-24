@@ -9,8 +9,7 @@
   */
 #include "sys.h"
 #include "libconfig.h"
-//! @brief struct CPUInfo contain various CPU information.
-SYS_CPUInfoTypeDef CPUInfo; //处理器运行信息结构体
+
 
 //! @defgroup CH_Periph_Driver
 //! @{
@@ -23,157 +22,7 @@ SYS_CPUInfoTypeDef CPUInfo; //处理器运行信息结构体
 //! @defgroup SYS_Exported_Functions
 //! @{
 
-/**
-  * @brief  GetCPUInfo, this function mainly for Fwlib interaly use. but user can also call this funtion.
-						this function caluate many CPU information and store in public struct CPUInfo.
-  * @param  None			
-  * @retval None
-  */
-void GetCPUInfo(void)
-{
-    //ResetStateCode
-    if (MC->SRSH & MC_SRSH_SW_MASK)     CPUInfo.m_ResetStateCode = kSoftwareReset;
-    if (MC->SRSH & MC_SRSH_LOCKUP_MASK) CPUInfo.m_ResetStateCode = kCoreLockupEventReset;
-    if (MC->SRSH & MC_SRSH_JTAG_MASK)   CPUInfo.m_ResetStateCode = kJTAGReset;
-    if (MC->SRSL & MC_SRSL_POR_MASK)    CPUInfo.m_ResetStateCode = kPOReset;
-    if (MC->SRSL & MC_SRSL_PIN_MASK)  	CPUInfo.m_ResetStateCode = kExternalPinReset;
-    if (MC->SRSL & MC_SRSL_COP_MASK)    CPUInfo.m_ResetStateCode = kWdogReset;
-    if (MC->SRSL & MC_SRSL_LOC_MASK)    CPUInfo.m_ResetStateCode = kLossOfClockReset;
-    if (MC->SRSL & MC_SRSL_LVD_MASK)    CPUInfo.m_ResetStateCode = kLowVoltageDetectReset;
-    if (MC->SRSL & MC_SRSL_WAKEUP_MASK) CPUInfo.m_ResetStateCode = kLLWUReset;
-    //FaimlyTypeCode
-    switch((SIM->SDID & SIM_SDID_FAMID(0x7))>>SIM_SDID_FAMID_SHIFT) 
-    {  
-        case 0x0:
-            CPUInfo.m_FamilyTypeCode = kK10;
-            break;
-        case 0x1: 
-            CPUInfo.m_FamilyTypeCode = kK20; 
-            break;
-        case 0x2: 
-            CPUInfo.m_FamilyTypeCode = kK30;
-            break;
-        case 0x3: 
-            CPUInfo.m_FamilyTypeCode = kK40; 
-            break;
-        case 0x4: 
-            CPUInfo.m_FamilyTypeCode = kK60; 
-            break;
-        case 0x5: 
-            CPUInfo.m_FamilyTypeCode = kK70; 
-            break;
-        case 0x6:
-            CPUInfo.m_FamilyTypeCode = kK50;
-            break;
-        case 0x7: 
-            CPUInfo.m_FamilyTypeCode = kK53; 
-            break;
-        default: 
-            CPUInfo.m_FamilyTypeCode = kUnrecognizedFamilyType; 
-            break;
-    }
-    //Pin package information
-    switch((SIM->SDID & SIM_SDID_PINID(0xF))>>SIM_SDID_PINID_SHIFT) 
-    {  
-        case 0x02: 
-            CPUInfo.m_PinNumberCode = k32Pin; 
-            break;
-        case 0x04: 
-            CPUInfo.m_PinNumberCode = k48Pin; 
-            break;
-        case 0x05:
-            CPUInfo.m_PinNumberCode = k64Pin;
-            break;
-        case 0x06: 
-            CPUInfo.m_PinNumberCode = k80Pin;
-            break;
-        case 0x07: 
-            CPUInfo.m_PinNumberCode = k81Pin; 
-            break;
-        case 0x08:
-            CPUInfo.m_PinNumberCode = k100Pin;
-            break;
-        case 0x09:
-            CPUInfo.m_PinNumberCode = k104Pin; 
-            break;
-        case 0x0A: 
-					CPUInfo.m_PinNumberCode = k144Pin; 
-            break;
-        case 0x0C: 
-            CPUInfo.m_PinNumberCode = k196Pin; 
-            break;
-        case 0x0E: 
-            CPUInfo.m_PinNumberCode = k256Pin;
-            break;
-        default:  
-            CPUInfo.m_PinNumberCode = kUnrecognizedPin;  
-            break;	
-    }  
-    //PFlash Size
-    switch((SIM->FCFG1 & SIM_FCFG1_PFSIZE(0xF))>>SIM_FCFG1_PFSIZE_SHIFT)
-    {
-        case 0x7:
-            CPUInfo.PFlashSizeInKB = 128;
-            break;
-        case 0x9:
-            CPUInfo.PFlashSizeInKB = 256;
-            break;
-        case 0xB:
-            CPUInfo.PFlashSizeInKB = 512;
-            break;
-        case 0xF:
-            CPUInfo.PFlashSizeInKB = 512;
-            break;
-        default:
-            CPUInfo.PFlashSizeInKB = 0;
-        break;
-    }
-    //FlexNVM Size
-    if (SIM->FCFG2 & SIM_FCFG2_PFLSH_MASK) 
-    {
-        CPUInfo.FlexNVMSizeInKB = 0;
-    }
-    else
-    {
-        switch((SIM->FCFG1 & SIM_FCFG1_NVMSIZE(0xF))>>SIM_FCFG1_NVMSIZE_SHIFT)
-        {
-            case 0x0:
-                CPUInfo.FlexNVMSizeInKB = 0;
-                break;
-            case 0x7: 
-                CPUInfo.FlexNVMSizeInKB = 128;
-                break;
-            case 0x9: 
-                CPUInfo.FlexNVMSizeInKB = 256;
-                break;
-            case 0xF: 
-                CPUInfo.FlexNVMSizeInKB = 256;
-                break;
-            default:  
-                CPUInfo.FlexNVMSizeInKB = 0;
-                break; 		
-        }
-    }
-    //RAM Size
-    switch((SIM->SOPT1 & SIM_SOPT1_RAMSIZE(0xF))>>SIM_SOPT1_RAMSIZE_SHIFT)
-    {
-        case 0x5: 
-            CPUInfo.RAMSizeInKB = 32; 
-            break;
-        case 0x7: 
-            CPUInfo.RAMSizeInKB = 64;  
-            break;
-        case 0x8: 
-            CPUInfo.RAMSizeInKB = 96;  
-            break;
-        case 0x9: 
-            CPUInfo.RAMSizeInKB = 128;
-            break;
-        default: 
-            CPUInfo.RAMSizeInKB = 0; 
-            break;	
-    }
-}
+
 
 /**
   * @brief  SystemClockSetup, change coreclock freq.other clock freq is also changed 
@@ -193,6 +42,7 @@ void GetCPUInfo(void)
             @arg kCoreClock_200M    : coreclock = 200MHz					
   * @retval None
   */
+/*
 void SystemClockSetup(SYS_ClockSourceSelect_TypeDef clockSource, SYS_CoreClockSelect_TypeDef coreClock)
 {
     //SIM_CLKDIV1_OUTDIV1(0) CORE     CLOCK    UP TO 100M  
@@ -314,7 +164,7 @@ void SystemClockSetup(SYS_ClockSourceSelect_TypeDef clockSource, SYS_CoreClockSe
 		// recalculate all clock
     GetCPUInfo();
 }
-
+*/
 
 
 /**

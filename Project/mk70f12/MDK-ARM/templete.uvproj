@@ -139,7 +139,7 @@
             <RestoreTracepoints>0</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>16</TargetSelection>
+          <TargetSelection>7</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -153,7 +153,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>PEMicro\Pemicro_ArmCortexInterface.dll</Driver>
+            <Driver>Segger\JL2CM3.dll</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -163,10 +163,10 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4106</DriverSelection>
+            <DriverSelection>4099</DriverSelection>
           </Flash1>
           <bUseTDR>0</bUseTDR>
-          <Flash2>PEMicro\Pemicro_ArmCortexInterface.dll</Flash2>
+          <Flash2>Segger\JL2CM3.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
         </Utilities>
@@ -349,7 +349,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60DZ10</Define>
+              <Define>MK70F12</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\inc;..\..\..\Libraries\utilities\minishell</IncludePath>
             </VariousControls>
@@ -393,14 +393,14 @@
           <GroupName>startup</GroupName>
           <Files>
             <File>
-              <FileName>system_MK60DZ10.c</FileName>
+              <FileName>system_MK70F12.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\startup\DeviceSupport\system_MK60DZ10.c</FilePath>
+              <FilePath>..\..\..\Libraries\startup\DeviceSupport\system_MK70F12.c</FilePath>
             </File>
             <File>
-              <FileName>startup_MK60DZ10.s</FileName>
+              <FileName>startup_MK70F12.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60DZ10.s</FilePath>
+              <FilePath>..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK70F12.s</FilePath>
             </File>
           </Files>
         </Group>

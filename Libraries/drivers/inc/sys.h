@@ -41,47 +41,7 @@ typedef enum
 	kLLWUReset,                    //!< LLWU reset
 }ResetStateCodeSelect_TpyeDef;
 
-//! @brief Kinetis family type code enum
-typedef enum
-{
-	kK10,                          //!< K10 Family
-	kK20,                          //!< K20 Family
-	kK30,                          //!< K30 Family
-	kK40,                          //!< K40 Family
-  kK50,                          //!< K50 Family
-	kK53,                          //!< K53 Family
-	kK60,                          //!< K60 Family
-	kK70,                          //!< K70 Family
-	kUnrecognizedFamilyType,       //!< kUnrecognizedFamilyType
-}FamilyTypeCodeSelect_TypeDef; 
 
-//! @brief Kinetis pin package code enum
-typedef enum
-{
-	k24Pin,                        //!< 24Pin
-	k32Pin,                        //!< 32Pin
-	k48Pin,                        //!< 48Pin
-	k64Pin,                        //!< 64Pin
-	k80Pin,                        //!< 80Pin
-	k81Pin,                        //!< 81Pin
-	k100Pin,                       //!< 100Pin
-	k104Pin,                       //!< 104Pin
-	k144Pin,                       //!< 144Pin
-	k196Pin,                       //!< 196Pin
-	k256Pin,                       //!< 256Pin
-	kUnrecognizedPin,              //!< kUnrecognizedPin
-}PinNumberCodeSelect_TypeDef;
-//! @brief CPU information struct typedef
-typedef struct
-{
-	FamilyTypeCodeSelect_TypeDef  m_FamilyTypeCode;    //!< Kinetis family type
-	ResetStateCodeSelect_TpyeDef  m_ResetStateCode;    //!< Reset state code
-	PinNumberCodeSelect_TypeDef   m_PinNumberCode;     //!< Pin package info code
-	uint32_t PFlashSizeInKB;                         //!< PFlash size(KB)
-	uint32_t DFlashSizeInKB;
-	uint32_t FlexNVMSizeInKB;                        //!< FlexNVM size(KB)
-	uint32_t RAMSizeInKB;                            //!< RAM size(KB)
-} SYS_CPUInfoTypeDef;
 
 //! @brief [SystemClockUpdate] <clockSource> selection enumeration
 typedef enum
@@ -135,8 +95,6 @@ typedef struct
 //! @addtogroup SYS_Exported_Variables
 //! @{
 
-extern SYS_CPUInfoTypeDef CPUInfo;
-extern uint32_t SystemCoreClock;
 //! @}
 
 //²ÎÊý¼ì²âÆ÷ºê

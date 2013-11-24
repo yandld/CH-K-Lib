@@ -3,12 +3,31 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "system_MK60DZ10.h"
 
-#ifdef SYSTEM_MK60DZ10_H_
+#ifdef MK10D5
+#include "MK10D5.h"
+#endif
+#ifdef MK10D10
+#include "MK10D10.h"
+#endif
+#ifdef MK20D10
+#include "MK20D10.h"
+#endif
+#ifdef MK40D10
+#include "MK40D10.h"
+#endif
+#ifdef MK60D10
+#include "MK60D10.h"
+#endif
+#ifdef MK60DZ10
 #include "MK60DZ10.h"
 #endif
-
+#ifdef MK70F12
+#include "MK70F12.h"
+#endif
+#ifdef MK70F15
+#include "MK70F15.h"
+#endif
 
 
 //! @addtogroup CH_Periph_Driver
@@ -22,7 +41,7 @@
 //! @{
 
 //! @brief Set to 1 to expanse the "assert_param" macro in the Lib drivers code 
-#define USE_FULL_ASSERT         (1)
+//#define USE_FULL_ASSERT         (1)
 //! @brief Debug printf and shell max char len
 #define UART_PRINTF_CMD_LENGTH  (64)
 
@@ -32,8 +51,8 @@
 
 //!< CH_Kinetis version information
 #define CHK_VERSION                   2L              //!< major version number
-#define CHK_SUBVERSION                4L              //< minor version number
-#define CHK_REVISION                  1L              //< revise version number
+#define CHK_SUBVERSION                4L              //!< minor version number
+#define CHK_REVISION                  1L              //!< revise version number
 
 /* CH_Kinetis version */
 #define FW_VERSION                ((CHK_VERSION * 10000) + \

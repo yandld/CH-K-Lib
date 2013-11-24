@@ -26,7 +26,9 @@ int main(void)
     GPIO_InitTypeDef GPIO_InitStruct1;
   //  SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
 	  DelayInit();
-    UART_DebugPortInit(UART4_RX_PC14_TX_PC15, 115200);
+    UART_DebugPortInit(UART0_RX_PA01_TX_PA02, 115200);
+	//  PinMuxConfig(PTE,16,3);
+	//  PinMuxConfig(PTE,17,3);
     UART_printf("HelloWorld!\r\n");
 	  configure_uart_pin_mux(1);
 	  MINISHELL_Register(cmd_tbl, ARRAY_SIZE(cmd_tbl));

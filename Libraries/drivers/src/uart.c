@@ -412,6 +412,7 @@ void DisplayCPUInfo(void)
     //FwLib Version
     UART_printf("CH_K60 FW_Version:%d\r\n",GetFWVersion());
     //Reset infomation
+	/*
     switch(CPUInfo.m_ResetStateCode)
     {
         case kSoftwareReset:
@@ -442,83 +443,13 @@ void DisplayCPUInfo(void)
             UART_printf("LLWU Reset\r\n");     
             break;
     }
-    //Faimly tpye information
-    switch(CPUInfo.m_FamilyTypeCode)
-    {
-        case kK10: 
-            UART_printf("Family:K10\r\n"); 
-            break;
-        case kK20: 
-            UART_printf("Family:K20\r\n"); 
-            break;
-        case kK30:
-            UART_printf("Family:K30\r\n"); 
-            break;
-        case kK40:
-            UART_printf("Family:K40\r\n");
-            break;
-        case kK50: 
-            UART_printf("Family:K50\r\n"); 
-            break;
-        case kK53:
-            UART_printf("Family:K53\r\n"); 
-            break;
-        case kK60: 
-            UART_printf("Family:K60\r\n");
-            break;
-        case kK70: 
-            UART_printf("Family:K70\r\n");
-            break;
-        case kUnrecognizedFamilyType: 
-            UART_printf("kUnrecognizedFamilyType\r\n");
-            break;
-    }
-    //Pin package infomation
-    switch(CPUInfo.m_PinNumberCode)
-    {
-        case k24Pin:
-            UART_printf("Pin:24\r\n");
-            break;
-        case k32Pin:
-            UART_printf("Pin:32\r\n");
-            break;
-        case k48Pin:
-            UART_printf("Pin:48\r\n");
-            break;
-        case k64Pin:
-            UART_printf("Pin:64\r\n");
-            break;
-        case k80Pin:
-            UART_printf("Pin:80\r\n");
-            break;
-        case k81Pin:
-            UART_printf("Pin:81\r\n");
-            break;
-        case k100Pin: 
-            UART_printf("Pin:100\r\n");
-            break;
-        case k104Pin:
-            UART_printf("Pin:104\r\n");
-            break;
-        case k144Pin:
-            UART_printf("Pin:144\r\n");
-            break;
-        case k196Pin: 
-            UART_printf("Pin:196\r\n");
-            break;
-        case k256Pin: 
-            UART_printf("Pin:256\r\n");
-            break;
-        case kUnrecognizedPin:
-            UART_printf("kUnrecognizedPin\r\n");
-            break;
-    }
+		*/
     //PFlash size
-    UART_printf("PFlash Size: %dKB\r\n",CPUInfo.PFlashSizeInKB);
+    //UART_printf("PFlash Size: %dKB\r\n",CPUInfo.PFlashSizeInKB);
     //Flex RAM size
-    UART_printf("FlexNVM Size: %dKB\r\n",CPUInfo.FlexNVMSizeInKB);
+    //UART_printf("FlexNVM Size: %dKB\r\n",CPUInfo.FlexNVMSizeInKB);
     //RAM size
-    UART_printf("RAM Size :%dKB\r\n",CPUInfo.RAMSizeInKB);
+    //UART_printf("RAM Size :%dKB\r\n",CPUInfo.RAMSizeInKB);
     //core clock
   //  UART_printf("CoreClock: %dHz\r\n",CPUInfo.CoreClockInHz);
     //bus clock

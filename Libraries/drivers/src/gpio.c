@@ -7,7 +7,9 @@
   * @brief   超核K60固件库 GPIO 函数库 API函数
   ******************************************************************************
   */
- #include "gpio.h"
+#include "gpio.h"
+#include "pinmux.h"
+
 
 //! @defgroup CH_Periph_Driver
 //! @{
@@ -20,7 +22,17 @@
 //! @defgroup GPIO_Exported_Functions
 //! @{
 
+const GPIO_Type *GPIO_InstanceTable[] = GPIO_BASES;
 
+State_Type GPIO_ModeConfig(GPIO_InstanceType instance, GPIO_ModeSelect_TypeDef mode, PINMUX_Alt_Type muxIndex)
+{
+    GPIO_Type *GPIOx = NULL;
+    if(instance >= ARRAY_SIZE(GPIO_InstanceTable))
+		{
+        return kStatusInvalidArgument;
+		}
+    
+}
 
 	/**
   * @brief  Initializes the GPIOx peripheral according to the specified
@@ -121,7 +133,7 @@ void GPIO_Init(GPIO_InitTypeDef* GPIO_InitStruct)
   * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0    
   * @retval None
   */
-ITStatus GPIO_GetITStates(GPIO_Type *GPIOx,GPIO_PinSelect_TypeDef GPIO_Pin)
+ITStatus GPIO_GetITStates(GPIO_Type *GPIOx,GPIO_Pin_Type GPIO_Pin)
 {
     PORT_Type *PORTx = NULL;
     //开端口时钟
@@ -398,7 +410,7 @@ uint32_t GPIO_ReadInputData(GPIO_Type *GPIOx)
     return(GPIOx->PDIR);
 }
 
-void GPIO_ITConfig(GPIO_Type* GPIOx, GPIO_ITSelect_TypeDef GPIO_IT, GPIO_PinSelect_TypeDef GPIO_Pin, FunctionalState NewState)
+void GPIO_ITConfig(GPIO_Type* GPIOx, GPIO_ITSelect_TypeDef GPIO_IT, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState)
 {
     PORT_Type *PORTx = NULL;
     IRQn_Type  IRQn;
@@ -456,7 +468,7 @@ void GPIO_ITConfig(GPIO_Type* GPIOx, GPIO_ITSelect_TypeDef GPIO_IT, GPIO_PinSele
   *         @arg DISABLE
   * @retval None
   */
-void GPIO_DMACmd(GPIO_Type* GPIOx, GPIO_DMASelect_TypeDef GPIO_DMAReq, GPIO_PinSelect_TypeDef GPIO_Pin, FunctionalState NewState)
+void GPIO_DMACmd(GPIO_Type* GPIOx, GPIO_DMASelect_TypeDef GPIO_DMAReq, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState)
 {
     PORT_Type *PORTx = NULL;
     PORTx->PCR[(uint8_t)GPIO_Pin] &= ~PORT_PCR_IRQC_MASK;

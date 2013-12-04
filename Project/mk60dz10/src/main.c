@@ -6,6 +6,10 @@
 #include "sdhc.h"
 #include "clock.h"
 #include "cpuidy.h"
+
+#include "stdio.h"
+
+#include "shell.h"
 //User defined functions
 extern int CommandFun_SDInitTest(int argc, char *argv[]);
 MINISHELL_CommandTableTypeDef cmd_tbl[] =
@@ -14,6 +18,18 @@ MINISHELL_CommandTableTypeDef cmd_tbl[] =
 };
 
 
+//??MINISHELL????PutChar??
+static void Putc(uint8_t data)
+{
+	UART_SendByte(UART4, data);
+}
+//??MINISHELL????GetChar??
+static uint8_t Getc(void)
+{
+	uint8_t ch;
+  while(UART_ReceiveByte(UART4, &ch) == FALSE);
+	return ch;
+}
 
 #pragma weak configure_uart_pin_mux
 extern void configure_uart_pin_mux(uint32_t instance);
@@ -35,7 +51,7 @@ int main(void)
     GPIO_InitStruct1.GPIO_Pin = kGPIO_Pin_18;                  //PC16引脚
     GPIO_InitStruct1.GPIO_Mode = kGPIO_Mode_IPU;               //推挽输出
     //执行GPIO初始化
-    GPIO_Init(&GPIO_InitStruct1);      
+   // GPIO_Init(&GPIO_InitStruct1);      
 		GPIO_ITConfig(PTC, kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
 	  
     GPIO_InitStruct1.GPIOx = PTD;                             //C端口
@@ -66,7 +82,23 @@ int main(void)
     UART_printf("FamilyID:%s\r\n", CPUIDY_GetFamID());
 		CPUIDY_GetPinCount(&Req);
 		UART_printf("PinCnt:%d\r\n", Req);
-    //CommandFun_WDOGInitTest2();
+
+		
+//?? MiniShell??????
+MINISHELL_InstallTypeDef MiniShell_InstallStruct1 = 
+{
+    .ctrl_putchar = putc,
+    .ctrl_getchar = getc,
+};
+
+    MINISHELL_Install(&MiniShell_InstallStruct1);
+	 // MINISHELL_Init();
+    while(1)
+		{
+			readline("MS>>");
+		}
+    
+	  MINISHELL_CmdHandleLoop("SHELL>>");
 		while(1)
 		{
 			DelayMs(300);

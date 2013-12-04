@@ -22,6 +22,9 @@
 //! @defgroup GPIO_Exported_Functions
 //! @{
 
+#ifndef GPIO_BASES
+#define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
+#endif
 const GPIO_Type *GPIO_InstanceTable[] = GPIO_BASES;
 
 State_Type GPIO_ModeConfig(GPIO_InstanceType instance, GPIO_ModeSelect_TypeDef mode, PINMUX_Alt_Type muxIndex)

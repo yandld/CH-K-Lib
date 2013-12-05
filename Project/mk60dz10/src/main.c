@@ -95,17 +95,12 @@ MINISHELL_InstallTypeDef MiniShell_InstallStruct1 =
 	 // MINISHELL_Init();
     while(1)
 		{
+			//UART_printf("%d\r\n", Getc());
 			readline("MS>>");
 		}
     
-	  MINISHELL_CmdHandleLoop("SHELL>>");
-		while(1)
-		{
-			DelayMs(300);
-			DelayMs(300);
-			UART_printf("!!\r\n");
-		}
-		
+
+
     while(1)
     {
 			SHELL_CmdHandleLoop("SHELL>>");

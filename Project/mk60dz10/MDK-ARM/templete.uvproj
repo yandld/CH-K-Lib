@@ -30,6 +30,7 @@
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
           <SFDFile>SFD\Freescale\Kinetis\MK60D10.sfr</SFDFile>
+          <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
           <IncludePath></IncludePath>
@@ -97,6 +98,7 @@
           <StopOnExitCode>3</StopOnExitCode>
           <CustomArgument></CustomArgument>
           <IncludeLibraryModules></IncludeLibraryModules>
+          <ComprImg>1</ComprImg>
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
@@ -139,7 +141,7 @@
             <RestoreTracepoints>0</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>16</TargetSelection>
+          <TargetSelection>7</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -153,7 +155,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>PEMicro\Pemicro_ArmCortexInterface.dll</Driver>
+            <Driver>Segger\JL2CM3.dll</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -163,12 +165,16 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4106</DriverSelection>
+            <DriverSelection>4099</DriverSelection>
           </Flash1>
           <bUseTDR>0</bUseTDR>
-          <Flash2>PEMicro\Pemicro_ArmCortexInterface.dll</Flash2>
+          <Flash2>Segger\JL2CM3.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
+          <pFcarmOut></pFcarmOut>
+          <pFcarmGrp></pFcarmGrp>
+          <pFcArmRoot></pFcArmRoot>
+          <FcArmLst>0</FcArmLst>
         </Utilities>
         <TargetArmAds>
           <ArmAdsMisc>
@@ -351,7 +357,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60DZ10</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\inc;..\..\..\Libraries\utilities\minishell</IncludePath>
+              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\inc;..\..\..\Libraries\utilities\minishell;..\..\..\Libraries\utilities\shell</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -466,6 +472,11 @@
               <FileName>minishell.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\utilities\minishell\minishell.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\utilities\shell\shell.c</FilePath>
             </File>
           </Files>
         </Group>

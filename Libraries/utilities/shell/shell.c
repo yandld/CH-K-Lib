@@ -5,7 +5,7 @@
 
 #define CTL_CH(c)		((c) - 'a' + 1)
 #define CTL_BACKSPACE		('\b')
-#define DEL			((char)255)
+#define DEL       ((char)255)
 #define DEL7			((char)127)
 #define CREAD_HIST_CHAR		('!')
 
@@ -44,14 +44,8 @@
 		num = eol_num;			\
 	}					\
 }
-static int hist_max;
-static int hist_add_idx;
-static int hist_cur = -1;
-static unsigned hist_num;
 
-static char *hist_list[HIST_MAX];
-static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
-char        console_buffer[CONFIG_SYS_CBSIZE + 1];	/* console I/O buffer	*/
+char console_buffer[CONFIG_SYS_CBSIZE + 1];	/* console I/O buffer	*/
 
 
 void mputs(const char *str)
@@ -62,79 +56,101 @@ void mputs(const char *str)
 	}
 }
 
+static int hist_max;
+static int hist_add_idx;
+static int hist_cur = -1;
+static unsigned hist_num;
+
+static char *hist_list[HIST_MAX];
+static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
 
 static void hist_init(void)
 {
-	int i;
+    int i;
 
-	hist_max = 0;
-	hist_add_idx = 0;
-	hist_cur = -1;
-	hist_num = 0;
+    hist_max = 0;
+    hist_add_idx = 0;
+    hist_cur = -1;
+    hist_num = 0;
 
-	for (i = 0; i < HIST_MAX; i++) {
-		hist_list[i] = hist_lines[i];
-		hist_list[i][0] = '\0';
-	}
+    for (i = 0; i < HIST_MAX; i++)
+    {
+        hist_list[i] = hist_lines[i];
+        hist_list[i][0] = '\0';
+    }
 }
 
 
 static void cread_add_to_hist(char *line)
 {
-	strcpy(hist_list[hist_add_idx], line);
+    strcpy(hist_list[hist_add_idx], line);
 
-	if (++hist_add_idx >= HIST_MAX)
-		hist_add_idx = 0;
-
-	if (hist_add_idx > hist_max)
-		hist_max = hist_add_idx;
-
-	hist_num++;
+    if (++hist_add_idx >= HIST_MAX)
+		{
+        hist_add_idx = 0;
+		}
+		
+		if (hist_add_idx > hist_max)
+		{
+        hist_max = hist_add_idx;
+		}
+		hist_num++;
 }
 
 static char* hist_prev(void)
 {
-	char *ret;
-	int old_cur;
+    char *ret;
+    int old_cur;
 
-	if (hist_cur < 0)
-		return NULL;
+    if (hist_cur < 0)
+    {
+        return NULL;
+    }
 
-	old_cur = hist_cur;
-	if (--hist_cur < 0)
-		hist_cur = hist_max;
+    old_cur = hist_cur;
+    if (--hist_cur < 0)
+		{
+        hist_cur = hist_max;
+		}
 
-	if (hist_cur == hist_add_idx) {
-		hist_cur = old_cur;
-		ret = NULL;
-	} else
-		ret = hist_list[hist_cur];
-
-	return (ret);
+		if (hist_cur == hist_add_idx) 
+		{
+				hist_cur = old_cur;
+				ret = NULL;
+		} 
+		else
+		{
+        ret = hist_list[hist_cur];
+		}
+    return (ret);
 }
 
 static char* hist_next(void)
 {
-	char *ret;
+    char *ret;
 
-	if (hist_cur < 0)
-		return NULL;
-
-	if (hist_cur == hist_add_idx)
-		return NULL;
-
-	if (++hist_cur > hist_max)
-		hist_cur = 0;
-
-	if (hist_cur == hist_add_idx) {
-		ret = "";
-	} else
-		ret = hist_list[hist_cur];
-
+    if (hist_cur < 0)
+    {
+        return NULL;
+    }
+    if (hist_cur == hist_add_idx)
+		{
+        return NULL;
+		}
+		if (++hist_cur > hist_max)
+		{
+				hist_cur = 0;
+		}
+		if (hist_cur == hist_add_idx)
+		{
+				ret = "";
+		}
+		else
+		{
+				ret = hist_list[hist_cur];
+		}
 	return (ret);
 }
-
-
 
 static void cread_add_char(char ichar, int insert, unsigned long *num,
 	       unsigned long *eol_num, char *buf, unsigned long len)
@@ -171,6 +187,7 @@ static void cread_add_char(char ichar, int insert, unsigned long *num,
 	}
 }
 
+
 static void cread_add_str(char *str, int strsize, int insert, unsigned long *num,
 	      unsigned long *eol_num, char *buf, unsigned long len)
 {
@@ -181,144 +198,150 @@ static void cread_add_str(char *str, int strsize, int insert, unsigned long *num
 }
 
 
-static int cread_line(const char *const prompt, char *buf, unsigned int *len,
-		int timeout)
+
+static int cread_line(const char *const prompt, char *buf, unsigned int *len, int timeout)
 {
-	unsigned long num = 0;
-	unsigned long eol_num = 0;
-	unsigned long wlen;
-	char ichar;
-	int insert = 1;
-	int esc_len = 0;
-	char esc_save[8];
-	int init_len = strlen(buf);
-	int first = 1;
+    unsigned long num = 0;
+    unsigned long eol_num = 0;
+    unsigned long wlen;
+    char ichar;
+    int insert = 1;
+    int esc_len = 0;
+    char esc_save[8];
+    int init_len = strlen(buf);
+    int first = 1;
 
-	if (init_len)
-		cread_add_str(buf, init_len, 1, &num, &eol_num, buf, *len);
-
-	while (1) {
-#ifdef CONFIG_BOOT_RETRY_TIME
-		while (!tstc()) {	/* while no incoming data */
-			if (retry_time >= 0 && get_ticks() > endtime)
-				return (-2);	/* timed out */
-			WATCHDOG_RESET();
-		}
-#endif
-
-
-		ichar = getcmd_getch();
-
-		if ((ichar == '\n') || (ichar == '\r')) {
-			putc('\r');putc('\n');
-			break;
-		}
-
+    if (init_len)
+    {
+        cread_add_str(buf, init_len, 1, &num, &eol_num, buf, *len);
+    }
+    while (1) 
+    {
+        ichar = getcmd_getch();
+        if ((ichar == '\n') || (ichar == '\r')) 
+        {
+            putc('\r');putc('\n');
+            break;
+        }
 		/*
 		 * handle standard linux xterm esc sequences for arrow key, etc.
 		 */
-		if (esc_len != 0) {
-			if (esc_len == 1) {
-				if (ichar == '[') {
-					esc_save[esc_len] = ichar;
-					esc_len = 2;
-				} else {
-					cread_add_str(esc_save, esc_len, insert,
-						      &num, &eol_num, buf, *len);
-					esc_len = 0;
-				}
-				continue;
-			}
+        if (esc_len != 0)
+        {
+            if (esc_len == 1) 
+            {
+                if (ichar == '[')
+                {
+                    esc_save[esc_len] = ichar;
+                    esc_len = 2;
+                } 
+                else
+                {
+                    cread_add_str(esc_save, esc_len, insert, &num, &eol_num, buf, *len);
+                    esc_len = 0;
+                }
+                continue;
+            }
 
-			switch (ichar) {
+        switch (ichar) 
+        {
 
-			case 'D':	/* <- key */
-				ichar = CTL_CH('b');
-				esc_len = 0;
-				break;
-			case 'C':	/* -> key */
-				ichar = CTL_CH('f');
-				esc_len = 0;
-				break;	/* pass off to ^F handler */
-			case 'H':	/* Home key */
-				ichar = CTL_CH('a');
-				esc_len = 0;
-				break;	/* pass off to ^A handler */
-			case 'A':	/* up arrow */
-				ichar = CTL_CH('p');
-				esc_len = 0;
-				break;	/* pass off to ^P handler */
-			case 'B':	/* down arrow */
-				ichar = CTL_CH('n');
-				esc_len = 0;
-				break;	/* pass off to ^N handler */
-			default:
-				esc_save[esc_len++] = ichar;
-				cread_add_str(esc_save, esc_len, insert,
+            case 'D':	/* <- key */
+                ichar = CTL_CH('b');
+                esc_len = 0;
+                break;
+            case 'C':	/* -> key */
+                ichar = CTL_CH('f');
+                esc_len = 0;
+                break;	/* pass off to ^F handler */
+            case 'H':	/* Home key */
+                ichar = CTL_CH('a');
+                esc_len = 0;
+                break;	/* pass off to ^A handler */
+            case 'A':	/* up arrow */
+                ichar = CTL_CH('p');
+                esc_len = 0;
+                break;	/* pass off to ^P handler */
+            case 'B':	/* down arrow */
+                ichar = CTL_CH('n');
+                esc_len = 0;
+                break;	/* pass off to ^N handler */
+            default:
+                esc_save[esc_len++] = ichar;
+                cread_add_str(esc_save, esc_len, insert,
 					      &num, &eol_num, buf, *len);
-				esc_len = 0;
+                esc_len = 0;
 				continue;
 			}
 		}
 
-		switch (ichar) {
-		case 0x1b:
-			if (esc_len == 0) {
-				esc_save[esc_len] = ichar;
-				esc_len = 1;
-			} else {
-				mputs("impossible condition #876\n");
-				esc_len = 0;
-			}
-			break;
+    switch (ichar)
+    {
+        case 0x1b:
+            if (esc_len == 0) 
+            {
+                esc_save[esc_len] = ichar;
+                esc_len = 1;
+            }
+            else 
+            {
+                mputs("impossible condition #876\n");
+                esc_len = 0;
+            }
+            break;
 
-		case CTL_CH('a'):
-			BEGINNING_OF_LINE();
-			break;
-		case CTL_CH('c'):	/* ^C - break */
-			*buf = '\0';	/* discard input */
-			return (-1);
-		case CTL_CH('f'):
-			if (num < eol_num) {
-				getcmd_putch(buf[num]);
-				num++;
-			}
-			break;
-		case CTL_CH('b'):
-			if (num) {
-				getcmd_putch(CTL_BACKSPACE);
-				num--;
-			}
-			break;
-		case CTL_CH('d'):
-			if (num < eol_num) {
-				wlen = eol_num - num - 1;
-				if (wlen) {
-					memmove(&buf[num], &buf[num+1], wlen);
-					putnstr(buf + num, wlen);
-				}
+        case CTL_CH('a'):
+            BEGINNING_OF_LINE();
+            break;
+        case CTL_CH('c'):	/* ^C - break */
+            *buf = '\0';	/* discard input */
+            return (-1);
+        case CTL_CH('f'):
+            if (num < eol_num)
+            {
+                getcmd_putch(buf[num]);
+                num++;
+            }
+            break;
+        case CTL_CH('b'):
+            if (num)
+            {
+                getcmd_putch(CTL_BACKSPACE);
+                num--;
+            }
+            break;
+        case CTL_CH('d'):
+            if (num < eol_num)
+            {
+                wlen = eol_num - num - 1;
+                if (wlen)
+                {
+                    memmove(&buf[num], &buf[num+1], wlen);
+                    putnstr(buf + num, wlen);
+                }
 
-				getcmd_putch(' ');
-				do {
-					getcmd_putch(CTL_BACKSPACE);
-				} while (wlen--);
-				eol_num--;
-			}
-			break;
-		case CTL_CH('k'):
-			ERASE_TO_EOL();
-			break;
-		case CTL_CH('e'):
-			REFRESH_TO_EOL();
-			break;
-		case CTL_CH('o'):
-			insert = !insert;
-			break;
-		case CTL_CH('x'):
-		case CTL_CH('u'):
-			BEGINNING_OF_LINE();
-			ERASE_TO_EOL();
-			break;
+                getcmd_putch(' ');
+                do 
+                {
+                    getcmd_putch(CTL_BACKSPACE);
+                } while (wlen--);
+                eol_num--;
+            }
+            break;
+        case CTL_CH('k'):
+            ERASE_TO_EOL();
+            break;
+        case CTL_CH('e'):
+            REFRESH_TO_EOL();
+            break;
+        case CTL_CH('o'):
+            insert = !insert;
+            break;
+        case CTL_CH('x'):
+        case CTL_CH('u'):
+            BEGINNING_OF_LINE();
+            ERASE_TO_EOL();
+            break;
 		case DEL:
 		case DEL7:
 		case 8:
@@ -374,17 +397,22 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len,
 				getcmd_cbeep();
 				break;
 			}
-
+      
 			buf[num] = '\0';
 			col = strlen(prompt) + eol_num;
 			num2 = num;
+			/*
 			if (cmd_auto_complete(prompt, buf, &num2, &col)) {
 				col = num2 - num;
 				num += col;
 				eol_num += col;
 			}
+			*/
 			break;
+			
 		}
+#else
+
 #endif
 		default:
 			cread_add_char(ichar, insert, &num, &eol_num, buf, *len);
@@ -400,10 +428,6 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len,
 
 	return 0;
 }
-
-
-
-
 
 
 

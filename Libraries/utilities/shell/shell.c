@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "shell_autocomplete.h"
 #include "common.h"
 
 #define CONFIG_SYS_CBSIZE 128
@@ -401,13 +402,13 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len, in
 			buf[num] = '\0';
 			col = strlen(prompt) + eol_num;
 			num2 = num;
-			/*
+			
 			if (cmd_auto_complete(prompt, buf, &num2, &col)) {
 				col = num2 - num;
 				num += col;
 				eol_num += col;
 			}
-			*/
+			
 			break;
 			
 		}
@@ -468,4 +469,72 @@ int readline (const char *const prompt)
 	console_buffer[0] = '\0';
 
 	return readline_into_buffer(prompt, console_buffer, 0);
+}
+
+
+
+/****************************************************************************/
+
+int parse_line (char *line, char *argv[])
+{
+	int nargs = 0;
+
+	while (nargs < 20) {
+
+		/* skip any white space */
+		while (isblank(*line))
+			++line;
+
+		if (*line == '\0') {	/* end of line, no more args	*/
+			argv[nargs] = NULL;
+			return nargs;
+		}
+
+		argv[nargs++] = line;	/* begin of argument string	*/
+
+		/* find end of string */
+		while (*line && !isblank(*line))
+			++line;
+
+		if (*line == '\0') {	/* end of line, no more args	*/
+			argv[nargs] = NULL;
+			return nargs;
+		}
+
+		*line++ = '\0';		/* terminate current arg	 */
+	}
+
+	printf ("** Too many args (max. %d) **\n", 20);
+
+	return (nargs);
+}
+
+
+void main_loop()
+{
+	uint8_t len;
+	uint8_t rc;
+	uint8_t argc;
+	uint8_t result;
+  cmd_tbl_t *cmdtp;
+	char *argv[20];	/* NULL terminated	*/
+		for(;;)
+		{
+	    	len = 	readline("MS>>");
+		   if ((argc = parse_line (console_buffer, argv)) == 0) 
+				  {
+		  	    rc = -1;	/* no command at all */
+		      	continue;
+	      	}
+				//UART_printf("console_buffer:%s\r\n", console_buffer);
+	      cmdtp = find_cmd(argv[0]);
+				if(cmdtp != NULL)
+				{
+					result = (cmdtp->cmd)(cmdtp, 0, argc, argv);
+				}
+				
+		}
+
+		
+	
 }

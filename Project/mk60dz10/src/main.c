@@ -1,7 +1,7 @@
 #include "sys.h"
 #include "gpio.h"
 #include "uart.h"
-#include "minishell.h"
+
 #include "systick.h"
 #include "sdhc.h"
 #include "clock.h"
@@ -10,12 +10,6 @@
 #include "stdio.h"
 
 #include "shell.h"
-//User defined functions
-extern int CommandFun_SDInitTest(int argc, char *argv[]);
-MINISHELL_CommandTableTypeDef cmd_tbl[] =
-{
-    { "info", 1, DisplayCPUInfo ,"list CPU info" },
-};
 
 
 //??MINISHELL????PutChar??
@@ -45,7 +39,6 @@ int main(void)
     UART_DebugPortInit(UART4_RX_PC14_TX_PC15, 115200);
     UART_printf("HelloWorld!\r\n");
 	  configure_uart_pin_mux(1);
-	  MINISHELL_Register(cmd_tbl, ARRAY_SIZE(cmd_tbl));
     GPIO_InitStruct1.GPIOx = PTC;                             //C端口
     GPIO_InitStruct1.GPIO_InitState = Bit_RESET;                //初始化后输出高电平
     GPIO_InitStruct1.GPIO_Pin = kGPIO_Pin_18;                  //PC16引脚
@@ -83,7 +76,7 @@ int main(void)
 		CPUIDY_GetPinCount(&Req);
 		UART_printf("PinCnt:%d\r\n", Req);
 
-		
+		/*
 //?? MiniShell??????
 MINISHELL_InstallTypeDef MiniShell_InstallStruct1 = 
 {
@@ -93,18 +86,14 @@ MINISHELL_InstallTypeDef MiniShell_InstallStruct1 =
 
     MINISHELL_Install(&MiniShell_InstallStruct1);
 	 // MINISHELL_Init();
+	 */
     while(1)
 		{
 			//UART_printf("%d\r\n", Getc());
-			readline("MS>>");
+			main_loop();
 		}
     
 
-
-    while(1)
-    {
-			SHELL_CmdHandleLoop("SHELL>>");
-    }
 }
 
 

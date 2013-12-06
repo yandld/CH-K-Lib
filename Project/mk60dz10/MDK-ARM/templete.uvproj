@@ -469,14 +469,14 @@
           <GroupName>utilities</GroupName>
           <Files>
             <File>
-              <FileName>minishell.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\utilities\minishell\minishell.c</FilePath>
-            </File>
-            <File>
               <FileName>shell.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\utilities\shell\shell.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_autocomplete.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\utilities\shell\shell_autocomplete.c</FilePath>
             </File>
           </Files>
         </Group>

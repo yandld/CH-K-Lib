@@ -12,18 +12,81 @@
 #include "shell.h"
 
 
-//??MINISHELL????PutChar??
 static void Putc(uint8_t data)
 {
 	UART_SendByte(UART4, data);
 }
-//??MINISHELL????GetChar??
+
 static uint8_t Getc(void)
 {
 	uint8_t ch;
   while(UART_ReceiveByte(UART4, &ch) == FALSE);
 	return ch;
 }
+
+
+
+SHELL_IOInstall_Type Shell_IOInstallStruct1 = 
+{
+	.getc = Getc,
+	.putc = Putc,
+};
+
+
+
+int CommandFun1(struct cmd_tbl_s *cmd_tp, int flag, int argc, char *const argv[])
+{
+	UART_printf("I am the Test CommandFun1\r\n");
+	UART_printf("flag:%d\r\n", flag);
+	while(argc--)
+	{
+		UART_printf("ARGV[%d]:%s\r\n", argc, argv[argc]);
+	}
+}
+
+int CommandFun1Complete(int argc, char * const argv[], char last_char, int maxv, char *cmdv[])
+{
+    uint8_t str_len;
+    uint8_t found = 0;
+
+    str_len = strlen(argv[argc-1]);
+    if(!strncmp(argv[argc-1], "help", str_len))
+    {
+        cmdv[found] = "help";
+        cmdv[found+1] = NULL;
+        found++;
+    }
+    if(!strncmp(argv[argc-1], "hexx", str_len))
+    {
+        cmdv[found] = "hexx";
+        cmdv[found+1] = NULL;
+        found++;
+    }
+    return found;
+}
+
+
+const cmd_tbl_t MyCommand1 = 
+{
+	.name = "test",
+	.maxargs = 5,
+	.repeatable = 1,
+	.cmd = CommandFun1,
+	.usage = "Help on my function",
+	.complete = CommandFun1Complete,
+	.help = "I am long help of command1",
+};
+
+const cmd_tbl_t MyCommand2 = 
+{
+	.name = "ttt",
+	.maxargs = 5,
+	.repeatable = 1,
+	.cmd = CommandFun1,
+	.usage = "Help on my function2",
+	.complete = CommandFun1Complete,
+	.help = "I am long help of command2",
+};
 
 #pragma weak configure_uart_pin_mux
 extern void configure_uart_pin_mux(uint32_t instance);
@@ -75,18 +138,10 @@ int main(void)
     UART_printf("FamilyID:%s\r\n", CPUIDY_GetFamID());
 		CPUIDY_GetPinCount(&Req);
 		UART_printf("PinCnt:%d\r\n", Req);
-
-		/*
-//?? MiniShell??????
-MINISHELL_InstallTypeDef MiniShell_InstallStruct1 = 
-{
-    .ctrl_putchar = putc,
-    .ctrl_getchar = getc,
-};
-
-    MINISHELL_Install(&MiniShell_InstallStruct1);
-	 // MINISHELL_Init();
-	 */
+    
+   SHELL_InsertFunction(&MyCommand1);
+	 SHELL_InsertFunction(&MyCommand2);
+		SHELL_IOInstall(&Shell_IOInstallStruct1);
     while(1)
 		{
 			//UART_printf("%d\r\n", Getc());

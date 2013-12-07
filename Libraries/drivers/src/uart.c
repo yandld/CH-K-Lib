@@ -12,33 +12,12 @@
 #include "string.h"
 #include "clock.h"
 #include "stdarg.h"
-#include <stdio.h>
 //·¢ËÍ½á¹¹
 /*
 UART_TxSendTypeDef UART_TxIntStruct1;
 */
 UART_Type* UART_DebugPort = NULL;
-struct __FILE 
-{ 
-	int handle; 
-	/* Whatever you require here. If the only file you are using is */ 
-	/* standard output using printf() for debugging, no file handling */ 
-	/* is required. */ 
-}; 
-/* FILE is typedef¡¯ d in stdio.h. */ 
-FILE __stdout; 
-int fputc(int ch,FILE *f)
-{
-	UART_SendByte(UART4,ch);
-	return ch;
-}
 
-int fgetc(FILE *f)
-{
-	uint8_t ch;
-  while(UART_ReceiveByte(UART4, &ch) == FALSE);
-	return ch;
-}
 
 
 

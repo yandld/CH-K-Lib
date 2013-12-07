@@ -5,67 +5,6 @@
 
 
 
-
-
-int CommandFun1(struct cmd_tbl_s *cmd_tp, int flag, int argc, char *const argv[])
-{
-	UART_printf("I am the Test CommandFun1\r\n");
-	UART_printf("flag:%d\r\n", flag);
-	while(argc--)
-	{
-		UART_printf("ARGV[%d]:%s\r\n", argc, argv[argc]);
-	}
-}
-
-int CommandFun1Complete(int argc, char * const argv[], char last_char, int maxv, char *cmdv[])
-{
-    uint8_t str_len;
-    uint8_t found = 0;
-
-    str_len = strlen(argv[argc-1]);
-    if(!strncmp(argv[argc-1], "help", str_len))
-    {
-        cmdv[found] = "help";
-        cmdv[found+1] = NULL;
-        found++;
-    }
-    if(!strncmp(argv[argc-1], "hexx", str_len))
-    {
-        cmdv[found] = "hexx";
-        cmdv[found+1] = NULL;
-        found++;
-    }
-    return found;
-}
-
-
-const cmd_tbl_t MyCommand1 = 
-{
-	.name = "test",
-	.maxargs = 5,
-	.repeatable = 1,
-	.cmd = CommandFun1,
-	.usage = "Help on my function",
-	.complete = CommandFun1Complete,
-};
-
-const cmd_tbl_t MyCommand2 = 
-{
-	.name = "ttt",
-	.maxargs = 5,
-	.repeatable = 1,
-	.cmd = CommandFun1,
-	.usage = "Help on my function2",
-	.complete = CommandFun1Complete,
-};
-
-cmd_tbl_t gCMD_Table[5] = {NULL,NULL,NULL,NULL,NULL};
-
-
-
-/***************************************************************************
- * find command table entry for a command
- */
 cmd_tbl_t *find_cmd_tbl (const char *cmd, cmd_tbl_t *table, int table_len)
 {
 	cmd_tbl_t *cmdtp;
@@ -107,9 +46,7 @@ cmd_tbl_t *find_cmd (const char *cmd)
 {
 	//cmd_tbl_t *start = ll_entry_start(cmd_tbl_t, cmd);
 	//const int len = ll_entry_count(cmd_tbl_t, cmd);
-	gCMD_Table[0] = MyCommand1;
-	gCMD_Table[1] = MyCommand2;
-	return find_cmd_tbl(cmd, gCMD_Table, 2);
+	return find_cmd_tbl(cmd, gpCmdTable[0], 2);
 }
 
 static int make_argv(char *s, int argvsz, char *argv[])
@@ -150,9 +87,7 @@ static int make_argv(char *s, int argvsz, char *argv[])
 static int complete_cmdv(int argc, char * const argv[], char last_char, int maxv, char *cmdv[])
 {
 
-  	gCMD_Table[0] = MyCommand1;
-		gCMD_Table[1] = MyCommand2;
-	cmd_tbl_t *cmdtp = gCMD_Table;
+	cmd_tbl_t *cmdtp = gpCmdTable[0];
 	const int count = 2;
 	
 	const cmd_tbl_t *cmdend = cmdtp + count;
@@ -226,11 +161,6 @@ static int complete_cmdv(int argc, char * const argv[], char last_char, int maxv
 
 
 
-
-
-
-
-
 static void print_argv(const char *banner, const char *leader, const char *sep, int linemax, char * const argv[])
 {
 	int ll = leader != NULL ? strlen(leader) : 0;
@@ -257,7 +187,6 @@ static void print_argv(const char *banner, const char *leader, const char *sep, 
 	}
 	printf("\r\n");
 }
-
 
 
 static int find_common_prefix(char * const argv[])

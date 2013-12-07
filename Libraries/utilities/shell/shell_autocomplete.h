@@ -3,6 +3,7 @@
 
 #include "shell.h"
 
+extern cmd_tbl_t* gpCmdTable[SHELL_MAX_FUNCTION_NUM];
 
 #define CONFIG_SYS_MAXARGS 20
 #define  CONFIG_SYS_PROMPT  "MS>>"

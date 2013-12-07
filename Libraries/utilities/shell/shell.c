@@ -1,8 +1,10 @@
 #include "shell.h"
 #include "shell_autocomplete.h"
 #include "common.h"
+#include <stdio.h>
 
-#define CONFIG_SYS_CBSIZE 128
+static uint8_t SHELL_GetChar(void);
+static void SHELL_PutChar(uint8_t ch);
 
 #define CTL_CH(c)		((c) - 'a' + 1)
 #define CTL_BACKSPACE		('\b')
@@ -11,20 +13,105 @@
 #define CREAD_HIST_CHAR		('!')
 
 
-#define getcmd_putch(ch)	putc(ch)
-#define getcmd_getch()		getc()
-#define getcmd_cbeep()		getcmd_putch('\a')
+#define sputc(ch)	        SHELL_PutChar(ch)
+#define sgetc()		        SHELL_GetChar()
+#define getcmd_cbeep()		sputc('\a')
 
-#define putnstr(str,n)	do {			\
-		printf ("%.*s", (int)n, str);	\
-	} while (0)
+
+
+static void putnstr(char* str, uint8_t n)
+{
+	while(n--) sputc(*str++);
+}
+
+
+void mputs(const char *str)
+{
+	while(*str != '\0')
+	{
+		sputc(*str++);
+	}
+}
+
+
+SHELL_IOInstall_Type* gpIOInstallStruct;
+cmd_tbl_t* gpCmdTable[SHELL_MAX_FUNCTION_NUM];
+
+
+struct __FILE 
+{ 
+	int handle; 
+	/* Whatever you require here. If the only file you are using is */ 
+	/* standard output using printf() for debugging, no file handling */ 
+	/* is required. */ 
+}; 
+/* FILE is typedef¡¯ d in stdio.h. */ 
+FILE __stdout; 
+int fputc(int ch,FILE *f)
+{
+	SHELL_PutChar(ch);
+	return ch;
+}
+
+int fgetc(FILE *f)
+{
+    return SHELL_GetChar();
+}
+
+
+SHELL_Status_Type SHELL_IOInstall(SHELL_IOInstall_Type* IOInstallStruct)
+{
+    if(IOInstallStruct == NULL)
+		{
+        return kShell_Fail;
+		}
+    gpIOInstallStruct = IOInstallStruct;
+    return kShell_Success;
+}
+
+static uint8_t SHELL_GetChar(void)
+{
+    return gpIOInstallStruct->getc();
+}
+
+static void SHELL_PutChar(uint8_t ch)
+{
+    gpIOInstallStruct->putc(ch);
+}
+
+
+
+SHELL_Status_Type SHELL_InsertFunction(cmd_tbl_t* pAddress)
+{
+    uint32_t i;
+	  //check name conflict
+		for(i = 0; i < SHELL_MAX_FUNCTION_NUM; i++)
+		{
+        if(!strcmp(gpCmdTable[i]->name, pAddress->name))
+				{
+            return kShell_Fail;
+				}
+    }
+		//find empty pointer
+		for(i = 0; i < SHELL_MAX_FUNCTION_NUM; i++)
+		{
+        if(gpCmdTable[i] == NULL)
+        {
+            gpCmdTable[i] = (cmd_tbl_t*) pAddress;
+            return kShell_Success;
+        }
+		}
+		return kShell_Fail; //impossible
+}
+
+
 
 #define HIST_MAX		20
-#define HIST_SIZE		CONFIG_SYS_CBSIZE
+#define HIST_SIZE		SHELL_CB_SIZE
 
 #define BEGINNING_OF_LINE() {			\
 	while (num) {				\
-		getcmd_putch(CTL_BACKSPACE);	\
+		sputc(CTL_BACKSPACE);	\
 		num--;				\
 	}					\
 }
@@ -33,7 +120,7 @@
 	if (num < eol_num) {				\
 		printf("%*s", (int)(eol_num - num), ""); \
 		do {					\
-			getcmd_putch(CTL_BACKSPACE);	\
+			sputc(CTL_BACKSPACE);	\
 		} while (--eol_num > num);		\
 	}						\
 }
@@ -46,16 +133,7 @@
 	}					\
 }
 
-char console_buffer[CONFIG_SYS_CBSIZE + 1];	/* console I/O buffer	*/
-
-
-void mputs(const char *str)
-{
-	while(*str != '\0')
-	{
-		putc(*str++);
-	}
-}
+char console_buffer[SHELL_CB_SIZE + 1];	/* console I/O buffer	*/
 
 static int hist_max;
 static int hist_add_idx;
@@ -177,7 +255,7 @@ static void cread_add_char(char ichar, int insert, unsigned long *num,
 		putnstr(buf + *num, wlen);
 		(*num)++;
 		while (--wlen) {
-			getcmd_putch(CTL_BACKSPACE);
+			sputc(CTL_BACKSPACE);
 		}
 	} else {
 		/* echo the character */
@@ -218,10 +296,10 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len, in
     }
     while (1) 
     {
-        ichar = getcmd_getch();
+        ichar = sgetc();
         if ((ichar == '\n') || (ichar == '\r')) 
         {
-            putc('\r');putc('\n');
+            sputc('\r');sputc('\n');
             break;
         }
 		/*
@@ -242,7 +320,7 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len, in
                     esc_len = 0;
                 }
                 continue;
-            }
+            } 
 
         switch (ichar) 
         {
@@ -300,14 +378,14 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len, in
         case CTL_CH('f'):
             if (num < eol_num)
             {
-                getcmd_putch(buf[num]);
+                sputc(buf[num]);
                 num++;
             }
             break;
         case CTL_CH('b'):
             if (num)
             {
-                getcmd_putch(CTL_BACKSPACE);
+                sputc(CTL_BACKSPACE);
                 num--;
             }
             break;
@@ -321,10 +399,10 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len, in
                     putnstr(buf + num, wlen);
                 }
 
-                getcmd_putch(' ');
+                sputc(' ');
                 do 
                 {
-                    getcmd_putch(CTL_BACKSPACE);
+                    sputc(CTL_BACKSPACE);
                 } while (wlen--);
                 eol_num--;
             }
@@ -350,11 +428,11 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len, in
 				wlen = eol_num - num;
 				num--;
 				memmove(&buf[num], &buf[num+1], wlen);
-				getcmd_putch(CTL_BACKSPACE);
+				sputc(CTL_BACKSPACE);
 				putnstr(buf + num, wlen);
-				getcmd_putch(' ');
+				sputc(' ');
 				do {
-					getcmd_putch(CTL_BACKSPACE);
+					sputc(CTL_BACKSPACE);
 				} while (wlen--);
 				eol_num--;
 			}
@@ -435,7 +513,7 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len, in
 int readline_into_buffer(const char *const prompt, char *buffer, int timeout)
 {
 	char *p = buffer;
-	unsigned int len = CONFIG_SYS_CBSIZE;
+	unsigned int len = SHELL_CB_SIZE;
 	int rc;
 	static int initted = 0;
 
@@ -526,15 +604,14 @@ void main_loop()
 		  	    rc = -1;	/* no command at all */
 		      	continue;
 	      	}
-				//UART_printf("console_buffer:%s\r\n", console_buffer);
 	      cmdtp = find_cmd(argv[0]);
 				if(cmdtp != NULL)
 				{
 					result = (cmdtp->cmd)(cmdtp, 0, argc, argv);
 				}
-				
+				else
+				{
+            printf("Unknown command '%s' - try 'help'\r\n", argv[0]);	
+				}
 		}
-
-		
-	
 }

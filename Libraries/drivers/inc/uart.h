@@ -118,7 +118,7 @@ void UART_DMACmd(UART_Type* UARTx, UART_DMAReq_Select_TypeDef UART_DMAReq, Funct
 void UART_DebugPortInit(UART_MapSelect_TypeDef UARTxMAP,uint32_t UART_BaudRate);
 void UART_ITConfig(UART_Type* UARTx, UART_ITSelect_TypeDef UART_IT, FunctionalState NewState);
 ITStatus UART_GetITStatus(UART_Type* UARTx, UART_ITSelect_TypeDef UART_IT);
-int UART_printf(const char *format,...);
+int UART_SHELL_printf(const char *format,...);
 
 //! @}
 

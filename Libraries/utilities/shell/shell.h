@@ -2,49 +2,54 @@
 #define __SHELL_H__
 
 #include <stdint.h>
-
+#include <string.h>
+#include <ctype.h>
 
 typedef struct
 {
     uint8_t (*getc)(void);
     void    (*putc)(uint8_t ch);
-}SHELL_IOInstall_Type;
+}SHELL_io_install_t;
 
-typedef enum
-{
-    kShell_Success = 0,
-		kShell_Fail,
-}SHELL_Status_Type;
-
-
-#define SHELL_CB_SIZE			64
-#define SHELL_MAX_ARGS		5
-#define SHELL_MAX_FUNCTION_NUM  (64)
-
-#define CONFIG_CMDLINE_EDITING
+#define CONFIG_USE_STDOUT
 #define CONFIG_AUTO_COMPLETE
 #define CONFIG_SYS_LONGHELP
 
+#define SHELL_CB_SIZE	      		 64
+#define SHELL_MAX_ARGS		        5
+#define SHELL_MAX_FUNCTION_NUM  (64)
+#define HIST_MAX                 20
+#define HIST_SIZE		             SHELL_CB_SIZE
 
-struct cmd_tbl_s 
+
+
+
+#ifdef CONFIG_USE_STDOUT
+#define SHELL_printf   printf
+#endif
+
+typedef struct  
 {
-	char		*name;		/* Command Name			*/
-	int		maxargs;	/* maximum number of arguments	*/
-	int		repeatable;	/* autorepeat allowed?		*/
-	int		(*cmd)(struct cmd_tbl_s *, int, int, char * const []);  /* Implementation function	*/
-	char		*usage;		/* Usage message	(short)	*/
+    char		*name;		/* Command Name			*/
+    uint8_t		maxargs;	/* maximum number of arguments	*/
+    uint8_t		repeatable;	/* autorepeat allowed?		*/
+    int		(*cmd)(int, char * const []);  /* Implementation function	*/
+    char		*usage;		/* Usage message	(short)	*/
 #ifdef	CONFIG_SYS_LONGHELP
-	char		*help;		/* Help  message	(long)	*/
+    char		*help;		/* Help  message	(long)	*/
 #endif
 #ifdef CONFIG_AUTO_COMPLETE
-	int		(*complete)(int argc, char * const argv[], char last_char, int maxv, char *cmdv[]); 	/* do auto completion on the arguments */
+    int		(*complete)(int argc, char * const argv[], char last_char, int maxv, char *cmdv[]); 	/* do auto completion on the arguments */
 #endif
-};
+}cmd_tbl_t;
 
-typedef struct cmd_tbl_s	cmd_tbl_t;
-
-
-
-int readline (const char *const prompt);
+//!< API funcion
+uint8_t SHELL_register_function(const cmd_tbl_t* pAddress);
+uint8_t SHELL_unregister_function(char* name);
+int SHELL_printf(const char *format,...);
+void SHELL_beep(void);
+cmd_tbl_t *SHELL_find_command (const char *cmd);
+uint8_t SHELL_io_install(SHELL_io_install_t* IOInstallStruct);
+cmd_tbl_t **SHELL_get_cmd_tbl(void);
 
 #endif

@@ -218,7 +218,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <RoSelD>3</RoSelD>
@@ -423,6 +423,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_cpuinfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_cpuinfo.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -479,9 +484,9 @@
               <FilePath>..\..\..\Libraries\utilities\shell\shell_autocomplete.c</FilePath>
             </File>
             <File>
-              <FileName>minishell.c</FileName>
+              <FileName>shell_cmdhelp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\utilities\minishell\minishell.c</FilePath>
+              <FilePath>..\..\..\Libraries\utilities\shell\shell_cmdhelp.c</FilePath>
             </File>
           </Files>
         </Group>

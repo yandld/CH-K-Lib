@@ -14,7 +14,29 @@
  
  
  
- 
+int DoHist(int argc, char *const argv[])
+{
+    uint8_t num;
+		uint8_t i = 0;
+    char **pplist = SHELL_get_hist_data_list(&num);
+		SHELL_printf("history:\r\n");
+		while(num--)
+    {
+        SHELL_printf("(%d) %s\r\n", i, *pplist++);
+        i++;
+    }
+ }
+
+const cmd_tbl_t CommandFun_Hist = 
+{
+    .name = "history",
+    .maxargs = 2,
+    .repeatable = 1,
+    .cmd = DoHist,
+    .usage = "print history",
+    .complete = NULL,
+    .help = NULL,
+};
  
  /*******************************************************************************
  * EOF

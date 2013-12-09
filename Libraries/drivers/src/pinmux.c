@@ -17,6 +17,7 @@
   * @param  MuxIndex: 0 - 7
   * @retval None
   */
+
 void PinMuxConfig(uint8_t GPIOIndex, uint8_t pinIndex, PINMUX_Alt_Type muxIndex)
 {
     switch(GPIOIndex)
@@ -50,6 +51,7 @@ void PinMuxConfig(uint8_t GPIOIndex, uint8_t pinIndex, PINMUX_Alt_Type muxIndex)
             break;
     }
 }
+
 
 
 

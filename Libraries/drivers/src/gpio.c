@@ -25,17 +25,35 @@
 #ifndef GPIO_BASES
 #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
 #endif
-const GPIO_Type *GPIO_InstanceTable[] = GPIO_BASES;
 
-State_Type GPIO_ModeConfig(GPIO_InstanceType instance, GPIO_ModeSelect_TypeDef mode, PINMUX_Alt_Type muxIndex)
+#ifndef PORT_BASES
+#define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
+#endif
+
+
+GPIO_Type *GPIO_InstanceTable[] = GPIO_BASES;
+PORT_Type* PORT_InstanceTable[] = PORT_BASES;
+const uint32_t GPIO_ClockGateTable[] =
 {
-    GPIO_Type *GPIOx = NULL;
-    if(instance >= ARRAY_SIZE(GPIO_InstanceTable))
+    SIM_SCGC5_PORTA_MASK,
+    SIM_SCGC5_PORTB_MASK,
+    SIM_SCGC5_PORTC_MASK,
+    SIM_SCGC5_PORTD_MASK,
+    SIM_SCGC5_PORTE_MASK
+};
+
+State_Type GPIO_PinMuxConfig(GPIO_InstanceType instance, uint8_t pinIndex, GPIO_PinMux_Type pinMux)
+{
+    if(instance >= ARRAY_SIZE(PORT_InstanceTable))
 		{
         return kStatusInvalidArgument;
 		}
-    
+    SIM->SCGC5 |= GPIO_ClockGateTable[instance];
+		PORT_InstanceTable[instance]->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);
+		PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
+		return kStatus_Success;
 }
+
 
 	/**
   * @brief  Initializes the GPIOx peripheral according to the specified

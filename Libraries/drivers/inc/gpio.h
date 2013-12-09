@@ -31,9 +31,21 @@ typedef enum
     HW_GPIOD,
     HW_GPIOE,
     HW_GPIOF,
-		kMaxGPIOName,
+		HW_GPIONameCount,
 }GPIO_InstanceType;
 
+typedef enum
+{
+    kPinAlt0,
+    kPinAlt1,
+    kPinAlt2,
+    kPinAlt3,
+    kPinAlt4,
+    kPinAlt5,
+    kPinAlt6,
+    kPinAlt7,
+    kPinAltNameCount,
+}GPIO_PinMux_Type;
 
 //位带操作,实现51类似的GPIO控制功能
 //IO口操作宏定义

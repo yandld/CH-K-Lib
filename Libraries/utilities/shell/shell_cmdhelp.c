@@ -13,7 +13,7 @@
  ******************************************************************************/
  
  
-  /*!
+ /*!
  * @brief help command.
  */
 int DoHelp(int argc, char *const argv[])
@@ -54,7 +54,7 @@ int DoHelp(int argc, char *const argv[])
 		return 0;
 }
 
-  /*!
+ /*!
  * @brief help command auto complete function.
  */
 int DoHelpComplete(int argc, char * const argv[], char last_char, int maxv, char *cmdv[])

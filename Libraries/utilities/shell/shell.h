@@ -45,11 +45,13 @@ typedef struct
 
 //!< API funcions
 uint8_t SHELL_register_function(const cmd_tbl_t* pAddress);
+void SHELL_register_function_array(const cmd_tbl_t* pAddress, uint8_t num);
 uint8_t SHELL_unregister_function(char* name);
 int SHELL_printf(const char *format,...);
 void SHELL_beep(void);
 cmd_tbl_t *SHELL_find_command (const char *cmd);
 uint8_t SHELL_io_install(SHELL_io_install_t* IOInstallStruct);
 cmd_tbl_t **SHELL_get_cmd_tbl(void);
+char ** SHELL_get_hist_data_list(uint8_t* num);
 
 #endif

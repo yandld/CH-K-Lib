@@ -11,20 +11,49 @@
 #define DEL       ((char)255)
 #define DEL7			((char)127)
 #define CREAD_HIST_CHAR		('!')
+#define putstr(str)  do {while(*str != '\0') sputc(*str++);} while(0);
+#define sgetc()      gpIOInstallStruct->getc()
+#define sputc(ch)    gpIOInstallStruct->putc(ch)
+
+#define BEGINNING_OF_LINE() {			\
+	while (num) {				\
+		sputc(CTL_BACKSPACE);	\
+		num--;				\
+	}					\
+}
+
+#define ERASE_TO_EOL() {				\
+	if (num < eol_num) {				\
+		SHELL_printf("%*s", (int)(eol_num - num), ""); \
+		do {					\
+			sputc(CTL_BACKSPACE);	\
+		} while (--eol_num > num);		\
+	}						\
+}
+
+#define REFRESH_TO_EOL() {			\
+	if (num < eol_num) {			\
+		wlen = eol_num - num;		\
+		putnstr(buf + num, wlen);	\
+		num = eol_num;			\
+	}					\
+}
 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
  
-static SHELL_io_install_t* gpIOInstallStruct;
-static cmd_tbl_t* gpCmdTable[SHELL_MAX_FUNCTION_NUM];
-
-/*******************************************************************************
- * Prototypes
- ******************************************************************************/
- 
-static uint8_t sgetc(void);
-static void sputc(uint8_t ch);
+static SHELL_io_install_t* gpIOInstallStruct;   /* install struct	*/
+static cmd_tbl_t* gpCmdTable[SHELL_MAX_FUNCTION_NUM];  /* cmd table array pointer	*/
+char console_buffer[SHELL_CB_SIZE + 1];	/* console I/O buffer	*/
+/* hist support */
+static int hist_max;
+static int hist_add_idx;
+static int hist_cur = -1;
+static unsigned hist_num;
+/* hist buffer */
+static char *hist_list[HIST_MAX];
+static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
 
  /*******************************************************************************
  * Code
@@ -67,42 +96,38 @@ int SHELL_printf(const char *format,...)
 }
 #endif
 
+ /*!
+ * @brief install shell io function.
+ */
 uint8_t SHELL_io_install(SHELL_io_install_t* IOInstallStruct)
 {
     gpIOInstallStruct = IOInstallStruct;
     return 0;
 }
-
-static uint8_t sgetc(void)
-{
-    return gpIOInstallStruct->getc();
-}
-
-static void sputc(uint8_t ch)
-{
-    gpIOInstallStruct->putc(ch);
-}
-
+ /*!
+ * @brief beep consult
+ */
 void SHELL_beep(void)
 {
     sputc('\a');
 }
-
+ /*!
+ * @brief get global cmdstruct table address
+ */
 cmd_tbl_t **SHELL_get_cmd_tbl(void)
 {
     return &gpCmdTable[0];
 }
-
+ /*!
+ * @brief send n chars
+ */
 static void putnstr(char* str, uint8_t n)
 {
     while(n--) sputc(*str++);
 }
-
-static void putstr(const char* str)
-{
-    while(*str != '\0') sputc(*str++);
-}
-
+ /*!
+ * @brief register a user function
+ */
 uint8_t SHELL_register_function(const cmd_tbl_t* pAddress)
 {
     uint32_t i = 0;
@@ -115,6 +140,7 @@ uint8_t SHELL_register_function(const cmd_tbl_t* pAddress)
         }
 				i++;
 		}
+		/* insert */
 		for(i = 0; i< SHELL_MAX_FUNCTION_NUM; i++)
 		{
 			if(gpCmdTable[i] == NULL)
@@ -123,10 +149,23 @@ uint8_t SHELL_register_function(const cmd_tbl_t* pAddress)
 				return 0;
 			}
 		}
-		
     return 1;
 }
+ /*!
+ * @brief register function array
+ */
+void SHELL_register_function_array(const cmd_tbl_t* pAddress, uint8_t num)
+{
+		cmd_tbl_t* cmdtp = (cmd_tbl_t*) pAddress;
+		while(num--)
+		{
+        SHELL_register_function(cmdtp++);
+		}
+}
 
+ /*!
+ * @brief unregister function
+ */
 uint8_t SHELL_unregister_function(char* name)
 {
     uint8_t i,j;
@@ -148,43 +187,9 @@ uint8_t SHELL_unregister_function(char* name)
 		return 0;
 }
 
-
-
-
-#define BEGINNING_OF_LINE() {			\
-	while (num) {				\
-		sputc(CTL_BACKSPACE);	\
-		num--;				\
-	}					\
-}
-
-#define ERASE_TO_EOL() {				\
-	if (num < eol_num) {				\
-		SHELL_printf("%*s", (int)(eol_num - num), ""); \
-		do {					\
-			sputc(CTL_BACKSPACE);	\
-		} while (--eol_num > num);		\
-	}						\
-}
-
-#define REFRESH_TO_EOL() {			\
-	if (num < eol_num) {			\
-		wlen = eol_num - num;		\
-		putnstr(buf + num, wlen);	\
-		num = eol_num;			\
-	}					\
-}
-
-char console_buffer[SHELL_CB_SIZE + 1];	/* console I/O buffer	*/
-
-static int hist_max;
-static int hist_add_idx;
-static int hist_cur = -1;
-static unsigned hist_num;
-
-static char *hist_list[HIST_MAX];
-static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
-
+ /*!
+ * @brief init history buffer and vars
+ */
 static void hist_init(void)
 {
     int i;
@@ -211,6 +216,12 @@ static void cread_add_to_hist(char *line)
         hist_max = hist_add_idx;
 		}
 		hist_num++;
+}
+
+char ** SHELL_get_hist_data_list(uint8_t* num)
+{
+    *num = hist_max;
+    return  &hist_list[0];
 }
 
 static char* hist_prev(void)
@@ -397,7 +408,7 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len)
             }
         else 
             {
-                putstr("impossible condition #876\n");
+                SHELL_printf("impossible condition #876\n");
                 esc_len = 0;
             }
             break;
@@ -536,7 +547,7 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len)
     return 0;
 }
 
-int readline_into_buffer(const char *const prompt, char *buffer)
+int readline_into_buffer(char * prompt, char *buffer)
 {
 	char *p = buffer;
 	unsigned int len = SHELL_CB_SIZE;
@@ -562,7 +573,7 @@ int readline_into_buffer(const char *const prompt, char *buffer)
 
 }
 
-int readline (const char *const prompt)
+int readline (char *prompt)
 {
 	/*
 	 * If console_buffer isn't 0-length the user will be prompted to modify
@@ -631,30 +642,41 @@ cmd_tbl_t *SHELL_find_command (const char *cmd)
 	  return NULL;
 }
 
-void main_loop()
+void main_loop(char* prompt)
 {
-	uint8_t len;
-	int rc;
-	uint8_t argc;
-	uint8_t result;
-  cmd_tbl_t *cmdtp;
-	char *argv[20];	/* NULL terminated	*/
+    int len;
+    uint8_t argc;
+    uint8_t result;
+    cmd_tbl_t *cmdtp;
+    char *argv[SHELL_MAX_ARGS];	/* NULL terminated	*/
 		for(;;)
 		{
-	    	len = 	readline("MS>>");
-		   if ((argc = parse_line (console_buffer, argv)) == 0) 
-				  {
-		  	    rc = -1;	/* no command at all */
-		      	continue;
-	      	}
-	      cmdtp = SHELL_find_command(argv[0]);
-				if((cmdtp != NULL) && (cmdtp->cmd != NULL))
+	    	len = readline(prompt);
+				if(len > 0)
 				{
-					result = (cmdtp->cmd)(argc, argv);
+            if ((argc = parse_line (console_buffer, argv)) == 0) 
+            {
+                continue;
+            }
+            cmdtp = SHELL_find_command(argv[0]);
+            if((cmdtp != NULL) && (cmdtp->cmd != NULL))
+            {
+                result = (cmdtp->cmd)(argc, argv);
+            }
+            else
+            {
+                SHELL_printf("Unknown command '%s' - try 'help'\r\n", argv[0]);	
+            }
 				}
-				else
+        else if (len == -1)
 				{
-            printf("Unknown command '%s' - try 'help'\r\n", argv[0]);	
+					SHELL_printf("<INTERRUPT>\r\n");
 				}
 		}
 }
+
+/*******************************************************************************
+ * EOF
+ ******************************************************************************/
+ 
+ 

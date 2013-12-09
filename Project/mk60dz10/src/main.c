@@ -64,8 +64,9 @@ int CommandFun1Complete(int argc, char * const argv[], char last_char, int maxv,
 }
 
 
-const cmd_tbl_t MyCommand1 = 
+const cmd_tbl_t MyCommand[] = 
 {
+	{
 	.name = "test",
 	.maxargs = 5,
 	.repeatable = 1,
@@ -73,10 +74,9 @@ const cmd_tbl_t MyCommand1 =
 	.usage = "Help on my function",
 	.complete = CommandFun1Complete,
 	.help = "I am long help of command1",
-};
-
-const cmd_tbl_t MyCommand2 = 
-{
+	},
+	
+	{
 	.name = "ttt",
 	.maxargs = 5,
 	.repeatable = 1,
@@ -84,13 +84,23 @@ const cmd_tbl_t MyCommand2 =
 	.usage = "Help on my function2",
 	.complete = CommandFun1Complete,
 	.help = "I am long help of command2",
+	},
+	{
+	.name = "dummy",
+	.maxargs = 5,
+	.repeatable = 1,
+	.cmd = CommandFun1,
+	.usage = "Help on my function2",
+	.complete = CommandFun1Complete,
+	.help = "I am long help of command2",
+	},
 };
 
 
 
 
 extern const cmd_tbl_t CommandFun_CPU;
-
+extern const cmd_tbl_t CommandFun_Hist;
 #pragma weak configure_uart_pin_mux
 extern void configure_uart_pin_mux(uint32_t instance);
 int main(void)
@@ -128,35 +138,25 @@ int main(void)
 	 // while(1);
     //GPIO_ITConfig(PTC,kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
    
-   SHELL_register_function(&MyCommand1);
+   SHELL_register_function_array(MyCommand, ARRAY_SIZE(MyCommand));
 	 SHELL_register_function(&CommandFun_Help);
-	 SHELL_register_function(&MyCommand2);
-	 	 SHELL_register_function(&MyCommand2);
-   SHELL_register_function(&MyCommand1);
 	 SHELL_register_function(&CommandFun_Help);
-	 SHELL_register_function(&MyCommand2);
 	 SHELL_register_function(&CommandFun_CPU);
 	SHELL_register_function(&CommandFun_CPU);
-	 SHELL_unregister_function("test");
 	 SHELL_register_function(&CommandFun_CPU);
 	SHELL_register_function(&CommandFun_CPU);
-	 SHELL_unregister_function("test");
-	 SHELL_register_function(&MyCommand1);
-	 SHELL_register_function(&MyCommand2);
-   SHELL_register_function(&MyCommand1);
+	 SHELL_register_function(&CommandFun_Hist);
 	 SHELL_register_function(&CommandFun_Help);
-	 SHELL_register_function(&MyCommand2);
 	 SHELL_register_function(&CommandFun_CPU);
 	SHELL_register_function(&CommandFun_CPU);
-	 SHELL_unregister_function("test");
-	 SHELL_register_function(&MyCommand1);
-	 SHELL_register_function(&MyCommand2);
+	// SHELL_unregister_function("test");
+	 
 		SHELL_io_install(&Shell_IOInstallStruct1);
 		
 
     while(1)
 		{
-			main_loop();
+			main_loop("TEST>>");
 		}
 
 }

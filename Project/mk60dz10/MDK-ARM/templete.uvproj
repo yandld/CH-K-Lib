@@ -488,6 +488,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\utilities\shell\shell_cmdhelp.c</FilePath>
             </File>
+            <File>
+              <FileName>shell_cmdhist.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

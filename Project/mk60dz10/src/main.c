@@ -10,7 +10,9 @@
 #include "stdio.h"
 
 #include "shell.h"
-#include "shell_cmdhelp.h"
+
+extern const cmd_tbl_t CommandFun_Help;
+
 static void Putc(uint8_t data)
 {
 	UART_SendByte(UART4, data);
@@ -152,13 +154,10 @@ int main(void)
 		SHELL_io_install(&Shell_IOInstallStruct1);
 		
 
-		
     while(1)
 		{
 			main_loop();
-			
 		}
-    
 
 }
 

@@ -1,24 +1,38 @@
+#include <stdio.h>
+
 #include "shell.h"
-#include "stdio.h"
 
-
-
+/*******************************************************************************
+ * Defination
+ ******************************************************************************/
+ 
 #define CTL_CH(c)		((c) - 'a' + 1)
 #define CTL_BACKSPACE		('\b')
 #define DEL       ((char)255)
 #define DEL7			((char)127)
 #define CREAD_HIST_CHAR		('!')
 
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
+ 
+static SHELL_io_install_t* gpIOInstallStruct;
+static cmd_tbl_t* gpCmdTable[SHELL_MAX_FUNCTION_NUM];
 
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+ 
 static uint8_t sgetc(void);
 static void sputc(uint8_t ch);
 
-
-SHELL_io_install_t* gpIOInstallStruct;
-cmd_tbl_t* gpCmdTable[SHELL_MAX_FUNCTION_NUM];
+ /*******************************************************************************
+ * Code
+ ******************************************************************************/
 
 
 #ifdef CONFIG_USE_STDOUT
+
 struct __FILE 
 { 
 	int handle; 
@@ -55,10 +69,6 @@ int SHELL_printf(const char *format,...)
 
 uint8_t SHELL_io_install(SHELL_io_install_t* IOInstallStruct)
 {
-    if(IOInstallStruct == NULL)
-		{
-        return 1;
-		}
     gpIOInstallStruct = IOInstallStruct;
     return 0;
 }
@@ -105,16 +115,6 @@ uint8_t SHELL_register_function(const cmd_tbl_t* pAddress)
         }
 				i++;
 		}
-		/*find empty */
-		/*
-		while(gpCmdTable[i] != NULL && (i < SHELL_MAX_FUNCTION_NUM))
-		{
-			i++;
-		}
-		gpCmdTable[i] = (cmd_tbl_t*) pAddress;
-		return 0;
-		*/
-		
 		for(i = 0; i< SHELL_MAX_FUNCTION_NUM; i++)
 		{
 			if(gpCmdTable[i] == NULL)

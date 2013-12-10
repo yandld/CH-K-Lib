@@ -493,6 +493,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
             </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\Libraries\utilities\shell\shell_config.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

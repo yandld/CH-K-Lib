@@ -1,5 +1,34 @@
+/*
+ * Copyright (c) 2013, Freescale Semiconductor, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * o Redistributions of source code must retain the above copyright notice, this list
+ *   of conditions and the following disclaimer.
+ *
+ * o Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 #include <stdio.h>
-
+#include <stdarg.h>
 #include "shell.h"
 
 /*******************************************************************************
@@ -40,6 +69,12 @@
 }
 
 /*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
+ 
+extern int cmd_auto_complete(const char *const prompt, char *buf, uint8_t *np, uint8_t *colp);
+static void putnstr(char* str, uint8_t n);
+/*******************************************************************************
  * Variables
  ******************************************************************************/
  
@@ -47,10 +82,10 @@ static SHELL_io_install_t* gpIOInstallStruct;   /* install struct	*/
 static cmd_tbl_t* gpCmdTable[SHELL_MAX_FUNCTION_NUM];  /* cmd table array pointer	*/
 char console_buffer[SHELL_CB_SIZE + 1];	/* console I/O buffer	*/
 /* hist support */
-static int hist_max;
-static int hist_add_idx;
-static int hist_cur = -1;
-static unsigned hist_num;
+static int8_t hist_max;
+static int8_t hist_add_idx;
+static int8_t hist_cur = -1;
+static int8_t hist_num;
 /* hist buffer */
 static char *hist_list[HIST_MAX];
 static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
@@ -58,10 +93,11 @@ static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
  /*******************************************************************************
  * Code
  ******************************************************************************/
-
-
+ 
 #ifdef CONFIG_USE_STDOUT
 
+
+#ifdef __CC_ARM /* MDK Support */
 struct __FILE 
 { 
 	int handle; 
@@ -81,11 +117,24 @@ int fgetc(FILE *f)
 {
     return sgetc();
 }
+#elif __ICCARM__/* IAR Support */
+
+
+#elif CW/* CodeWarrior Support */
+
+
+#elif __GNUC__/* GCC Support */
+
+
+#endif
+
 #else
+ /*!
+ * @brief use vsprintf for format.
+ */
 int SHELL_printf(const char *format,...)
 {
     int chars;
-    int i;
     va_list ap;
     char printbuffer[SHELL_CB_SIZE];
     va_start(ap, format);
@@ -192,7 +241,7 @@ uint8_t SHELL_unregister_function(char* name)
  */
 static void hist_init(void)
 {
-    int i;
+    uint8_t i;
     hist_max = 0;
     hist_add_idx = 0;
     hist_cur = -1;
@@ -204,6 +253,9 @@ static void hist_init(void)
     }
 }
 
+ /*!
+ * @brief and line string to history buffer
+ */
 static void cread_add_to_hist(char *line)
 {
     strcpy(hist_list[hist_add_idx], line);
@@ -218,16 +270,22 @@ static void cread_add_to_hist(char *line)
 		hist_num++;
 }
 
+ /*!
+ * @brief get history data list and also get number of the list
+ */
 char ** SHELL_get_hist_data_list(uint8_t* num)
 {
     *num = hist_max;
     return  &hist_list[0];
 }
 
+ /*!
+ * @brief return previous history string
+ */
 static char* hist_prev(void)
 {
     char *ret;
-    int old_cur;
+    uint8_t old_cur;
     if (hist_cur < 0)
     {
         return NULL;
@@ -249,6 +307,9 @@ static char* hist_prev(void)
     return (ret);
 }
 
+ /*!
+ * @brief return next history string
+ */
 static char* hist_next(void)
 {
     char *ret;
@@ -275,8 +336,11 @@ static char* hist_next(void)
 	return (ret);
 }
 
-static void cread_add_char(char ichar, int insert, unsigned long *num,
-	       unsigned long *eol_num, char *buf, unsigned long len)
+ /*!
+ * @brief add a char to conslt buffer
+ */
+static void cread_add_char(char ichar, uint8_t insert, uint8_t *num,
+	       uint8_t *eol_num, char *buf, uint8_t len)
 {
     unsigned long wlen;
 
@@ -315,9 +379,11 @@ static void cread_add_char(char ichar, int insert, unsigned long *num,
     }
 }
 
-
-static void cread_add_str(char *str, int strsize, int insert, unsigned long *num,
-	      unsigned long *eol_num, char *buf, unsigned long len)
+ /*!
+ * @brief add string to conslt buffer
+ */
+static void cread_add_str(char *str, uint8_t strsize, uint8_t insert, uint8_t *num,
+	      uint8_t *eol_num, char *buf, uint8_t len)
 {
     while (strsize--)
     {
@@ -326,18 +392,19 @@ static void cread_add_str(char *str, int strsize, int insert, unsigned long *num
     }
 }
 
-
-
-static int cread_line(const char *const prompt, char *buf, unsigned int *len)
+ /*!
+ * @brief read line into buffer
+ */
+static int cread_line(const char *const prompt, char *buf, uint8_t *len)
 {
-    unsigned long num = 0;
-    unsigned long eol_num = 0;
-    unsigned long wlen;
+    uint8_t num = 0;
+    uint8_t eol_num = 0;
+    uint8_t wlen;
     char ichar;
-    int insert = 1;
-    int esc_len = 0;
+    uint8_t insert = 1;
+    uint8_t esc_len = 0;
     char esc_save[8];
-    int init_len = strlen(buf);
+    uint8_t init_len = strlen(buf);
 
     if (init_len)
     {
@@ -510,26 +577,26 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len)
             continue;
         }
 #ifdef CONFIG_AUTO_COMPLETE
-    case '\t': 
-    {
-        int num2, col;
-        /* do not autocomplete when in the middle */
-        if (num < eol_num)
+        case '\t': 
         {
-            SHELL_beep();
+            uint8_t num2, col;
+            /* do not autocomplete when in the middle */
+            if (num < eol_num)
+            {
+                SHELL_beep();
+                break;
+            }
+            buf[num] = '\0';
+            col = strlen(prompt) + eol_num;
+            num2 = num;
+            if (cmd_auto_complete(prompt, buf, &num2, &col))
+            {
+                col = num2 - num;
+                num += col;
+                eol_num += col;
+            }
             break;
         }
-        buf[num] = '\0';
-        col = strlen(prompt) + eol_num;
-        num2 = num;
-        if (cmd_auto_complete(prompt, buf, &num2, &col))
-        {
-            col = num2 - num;
-            num += col;
-            eol_num += col;
-        }
-        break;
-    }
 #endif
         default:
             cread_add_char(ichar, insert, &num, &eol_num, buf, *len);
@@ -538,7 +605,6 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len)
     }
     *len = eol_num;
     buf[eol_num] = '\0';	/* lose the newline */
-
     if (buf[0] && buf[0] != CREAD_HIST_CHAR)
     {
         cread_add_to_hist(buf);
@@ -547,47 +613,38 @@ static int cread_line(const char *const prompt, char *buf, unsigned int *len)
     return 0;
 }
 
-int readline_into_buffer(char * prompt, char *buffer)
+ /*!
+ * @brief read line from consult
+ */
+static int readline (char *prompt)
 {
-	char *p = buffer;
-	unsigned int len = SHELL_CB_SIZE;
-	int rc;
-	static int initted = 0;
-
-	/*
-	 * History uses a global array which is not
-	 * writable until after relocation to RAM.
-	 * Revert to non-history version if still
-	 * running from flash.
-	 */
-		if (!initted) {
-			hist_init();
-			initted = 1;
-		}
-
+    uint8_t len = SHELL_CB_SIZE;
+    int8_t rc;
+    char *p = console_buffer;
+    static uint8_t initted = 0;
+		/* break console_buffer so that is will not repeatable */
+    console_buffer[0] = '\0';
+    if (!initted)
+    {
+        hist_init();
+        initted = 1;
+        printf("\r\nSHELL (build: %s)\r\n", __DATE__);
+        printf("Copyright (c) 2013 Freescale Semiconductor\r\n");
+    }
 		if (prompt)
-			putstr (prompt);
-
-		rc = cread_line(prompt, p, &len);
+		{
+        putstr (prompt);
+		}
+    rc = cread_line(prompt, p, &len);
 		return rc < 0 ? rc : len;
-
 }
 
-int readline (char *prompt)
+ /*!
+ * @brief extract from readline
+ */
+static int parse_line (char *line, char *argv[])
 {
-	/*
-	 * If console_buffer isn't 0-length the user will be prompted to modify
-	 * it instead of entering it from scratch as desired.
-	 */
-	console_buffer[0] = '\0';
-
-	return readline_into_buffer(prompt, console_buffer);
-}
-
-
-int parse_line (char *line, char *argv[])
-{
-    int nargs = 0;
+    uint8_t nargs = 0;
     while (nargs < SHELL_MAX_ARGS) 
     {
 				/* skip any white space */
@@ -617,36 +674,39 @@ int parse_line (char *line, char *argv[])
 		return (nargs);
 }
 
-
+ /*!
+ * @brief find command form command struct's name
+ */
 cmd_tbl_t *SHELL_find_command (const char *cmd)
 {
     uint8_t i = 0, n_found = 0;
     cmd_tbl_t *cmdtp_temp = NULL;
     if(cmd == NULL) 
-		{
+    {
         return NULL;
 		}
     while((gpCmdTable[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
 		{
-			if(!strcmp(cmd, gpCmdTable[i]->name))
-			{
-					cmdtp_temp = gpCmdTable[i];
-					n_found++;
-			}
-			i++;
+        if(!strcmp(cmd, gpCmdTable[i]->name))
+        {
+            cmdtp_temp = gpCmdTable[i];
+            n_found++;
+        }
+    i++;
+    }
+		/* we need exactly one match */
+    if(n_found == 1)
+    {
+        return cmdtp_temp;
 		}
-		if(n_found == 1)
-		{
-			return cmdtp_temp;
-		}
-	  return NULL;
+    return NULL;
 }
 
-void main_loop(char* prompt)
+void SHELL_main_loop(char* prompt)
 {
-    int len;
+    int8_t len;
     uint8_t argc;
-    uint8_t result;
+    int8_t result;
     cmd_tbl_t *cmdtp;
     char *argv[SHELL_MAX_ARGS];	/* NULL terminated	*/
 		for(;;)
@@ -661,12 +721,35 @@ void main_loop(char* prompt)
             cmdtp = SHELL_find_command(argv[0]);
             if((cmdtp != NULL) && (cmdtp->cmd != NULL))
             {
-                result = (cmdtp->cmd)(argc, argv);
+                if(argc > cmdtp->maxargs)
+								{
+                    result = CMD_RET_USAGE;
+								}
+								else
+								{
+                    result = (cmdtp->cmd)(argc, argv);
+								}
             }
             else
             {
                 SHELL_printf("Unknown command '%s' - try 'help'\r\n", argv[0]);	
             }
+						if(result == CMD_RET_USAGE)
+						{
+                if(cmdtp->usage != NULL)
+								{
+									SHELL_printf("%s - %s\r\n", cmdtp->name, cmdtp->usage);
+								}
+								if(cmdtp->help != NULL)
+								{
+									SHELL_printf("Usage:\r\n%s ", cmdtp->name);
+									SHELL_printf("%s\r\n", cmdtp->help);
+								}
+								else
+								{
+									SHELL_printf ("- No additional help available.\r\n");
+								}
+						}
 				}
         else if (len == -1)
 				{

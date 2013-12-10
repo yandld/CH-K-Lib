@@ -27,48 +27,30 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "shell.h"
+#ifndef __SHELL_CONFIG_H__
+#define __SHELL_CONFIG_H__
+
+/* config if use standard output*/
+#define CONFIG_USE_STDOUT
+/* config if use auto complete*/
+#define CONFIG_AUTO_COMPLETE
+
+
+/* consult buffer size */
+#define SHELL_CB_SIZE	      		 (64)
+/* maximum function args */
+#define SHELL_MAX_ARGS		       (8)
+/* maximum number of user functions */
+#define SHELL_MAX_FUNCTION_NUM   (64)
+/* maximum number of histort record */
+#define HIST_MAX                 (20)
+/* size of each history record, usually define it as SHELL_CB_SIZE */
+#define HIST_SIZE		             SHELL_CB_SIZE
+
+
+
+#endif
 
 /*******************************************************************************
- * Defination
- ******************************************************************************/
-
-/*******************************************************************************
- * Variables
- ******************************************************************************/
- 
- /*******************************************************************************
- * Code
- ******************************************************************************/
- 
- 
-
-int DoHist(int argc, char *const argv[])
-{
-    uint8_t num;
-		uint8_t i = 0;
-    char **pplist = SHELL_get_hist_data_list(&num);
-		SHELL_printf("history:\r\n");
-		while(num--)
-    {
-        SHELL_printf("(%d) %s\r\n", i, *pplist++);
-        i++;
-    }
-    return CMD_RET_SUCCESS;
-}
-
-const cmd_tbl_t CommandFun_Hist = 
-{
-    .name = "history",
-    .maxargs = 2,
-    .repeatable = 1,
-    .cmd = DoHist,
-    .usage = "print history",
-    .complete = NULL,
-    .help = NULL,
-};
- 
- /*******************************************************************************
  * EOF
  ******************************************************************************/
-

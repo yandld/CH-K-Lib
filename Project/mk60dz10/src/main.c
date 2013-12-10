@@ -36,6 +36,7 @@ SHELL_io_install_t Shell_IOInstallStruct1 =
 int CommandFun1(int argc, char *const argv[])
 {
 	UART_printf("I am the Test CommandFun1\r\n");
+	
 	while(argc--)
 	{
 		UART_printf("ARGV[%d]:%s\r\n", argc, argv[argc]);
@@ -138,25 +139,24 @@ int main(void)
 	 // while(1);
     //GPIO_ITConfig(PTC,kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
    
-   SHELL_register_function_array(MyCommand, ARRAY_SIZE(MyCommand));
-	 SHELL_register_function(&CommandFun_Help);
-	 SHELL_register_function(&CommandFun_Help);
-	 SHELL_register_function(&CommandFun_CPU);
-	SHELL_register_function(&CommandFun_CPU);
-	 SHELL_register_function(&CommandFun_CPU);
-	SHELL_register_function(&CommandFun_CPU);
-	 SHELL_register_function(&CommandFun_Hist);
-	 SHELL_register_function(&CommandFun_Help);
-	 SHELL_register_function(&CommandFun_CPU);
-	SHELL_register_function(&CommandFun_CPU);
+    SHELL_register_function_array(MyCommand, ARRAY_SIZE(MyCommand));
+    SHELL_register_function(&CommandFun_Help);
+    SHELL_register_function(&CommandFun_Help);
+    SHELL_register_function(&CommandFun_CPU);
+    SHELL_register_function(&CommandFun_CPU);
+    SHELL_register_function(&CommandFun_CPU);
+    SHELL_register_function(&CommandFun_CPU);
+    SHELL_register_function(&CommandFun_Hist);
+    SHELL_register_function(&CommandFun_Help);
+    SHELL_register_function(&CommandFun_CPU);
+    SHELL_register_function(&CommandFun_CPU);
 	// SHELL_unregister_function("test");
 	 
-		SHELL_io_install(&Shell_IOInstallStruct1);
-		
-
+    SHELL_io_install(&Shell_IOInstallStruct1);
+    printf("When you see this string, It means that printf is OK!\r\n");
     while(1)
 		{
-			main_loop("TEST>>");
+			SHELL_main_loop("SHELL>>");
 		}
 
 }

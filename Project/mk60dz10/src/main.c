@@ -139,17 +139,14 @@ int main(void)
 	 // while(1);
     //GPIO_ITConfig(PTC,kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
    
-    SHELL_register_function_array(MyCommand, ARRAY_SIZE(MyCommand));
+//    SHELL_register_function_array(MyCommand, ARRAY_SIZE(MyCommand));
     SHELL_register_function(&CommandFun_Help);
     SHELL_register_function(&CommandFun_Help);
-    SHELL_register_function(&CommandFun_CPU);
-    SHELL_register_function(&CommandFun_CPU);
-    SHELL_register_function(&CommandFun_CPU);
-    SHELL_register_function(&CommandFun_CPU);
+   // SHELL_register_function(&CommandFun_CPU);
+
     SHELL_register_function(&CommandFun_Hist);
     SHELL_register_function(&CommandFun_Help);
-    SHELL_register_function(&CommandFun_CPU);
-    SHELL_register_function(&CommandFun_CPU);
+
 	// SHELL_unregister_function("test");
 	 
     SHELL_io_install(&Shell_IOInstallStruct1);

@@ -42,7 +42,7 @@ typedef struct
     void    (*putc)(uint8_t ch);
 }SHELL_io_install_t;
 
-#ifdef CONFIG_USE_STDOUT
+#ifdef SHELL_CONFIG_USE_STDIO
 #define SHELL_printf   printf
 #endif
 
@@ -51,7 +51,7 @@ typedef struct
     char		*name;		/* Command Name			*/
     uint8_t		maxargs;	/* maximum number of arguments	*/
     uint8_t		repeatable;	/* autorepeat allowed?		*/
-    int		(*cmd)(int, char * const []);  /* Implementation function	*/
+    int		(*cmd)(int argc, char * const argv[]);  /* Implementation function	*/
     char		*usage;		/* Usage message	(short)	*/
     char		*help;		/* Help  message	(long)	*/
     int		(*complete)(int argc, char * const argv[], char last_char, int maxv, char *cmdv[]); 	/* do auto completion on the arguments */
@@ -59,22 +59,22 @@ typedef struct
 
 typedef enum
 {
-	CMD_RET_SUCCESS,	/* 0 = Success */
-	CMD_RET_FAILURE,	/* 1 = Failure */
-	CMD_RET_USAGE = -1,	/* Failure, please report 'usage' error */
+    CMD_RET_SUCCESS = 0,    /* 0 = Success */
+    CMD_RET_FAILURE = 1,    /* 1 = Failure */
+    CMD_RET_USAGE = -1,     /* Failure, please report 'usage' error */
 }command_ret_t;
 
 //!< API funcions
-uint8_t SHELL_register_function(const cmd_tbl_t* pAddress);
-void SHELL_register_function_array(const cmd_tbl_t* pAddress, uint8_t num);
-uint8_t SHELL_unregister_function(char* name);
-int SHELL_printf(const char *format,...);
+uint8_t SHELL_register_function(const cmd_tbl_t * pAddress);
+void SHELL_register_function_array(const cmd_tbl_t * pAddress, uint8_t num);
+uint8_t SHELL_unregister_function(char * name);
+int SHELL_printf(const char * format,...);
 void SHELL_beep(void);
-cmd_tbl_t *SHELL_find_command (const char *cmd);
-uint8_t SHELL_io_install(SHELL_io_install_t* IOInstallStruct);
-cmd_tbl_t **SHELL_get_cmd_tbl(void);
-char **SHELL_get_hist_data_list(uint8_t* num);
-void SHELL_main_loop(char* prompt);
+const cmd_tbl_t *SHELL_find_command (const char * cmd);
+uint8_t SHELL_io_install(SHELL_io_install_t * IOInstallStruct);
+const cmd_tbl_t ** SHELL_get_cmd_tbl(void);
+char **SHELL_get_hist_data_list(uint8_t * num);
+void SHELL_main_loop(char * prompt);
 
 #endif
 

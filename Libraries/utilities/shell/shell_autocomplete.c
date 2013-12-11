@@ -49,7 +49,7 @@
  /*!
  * @brief This function parse string into argv[].
  */
-static int make_argv(char *s, int argvsz, char *argv[])
+static int make_argv(char *s, int argvsz, char * argv[])
 {
     uint8_t argc = 0;
     /* split into argv */
@@ -57,24 +57,27 @@ static int make_argv(char *s, int argvsz, char *argv[])
     {
         /* skip any white space */
         while (isblank(*s))
-				{
-					++s;
-				}
-				if (*s == '\0')	/* end of s, no more args	*/
-				{
-				    break;
-				}    
-				argv[argc++] = s;	/* begin of argument string	*/
-				/* find end of string */
-				while (*s && !isblank(*s))
-				++s;
-				if (*s == '\0')		/* end of s, no more args	*/
-				{
-				    break;
-				}				
-				*s++ = '\0';		/* terminate current arg	 */
+        {
+            ++s;
+        }
+        if (*s == '\0')	/* end of s, no more args	*/
+        {
+            argv[argc] = NULL;
+            return argc;
+        }    
+        argv[argc++] = s;	/* begin of argument string	*/
+        /* find end of string */
+        while ((*s) && (!isblank(*s)))
+        {
+            ++s;
+        }
+        if (*s == '\0')		/* end of s, no more args	*/
+        {
+            argv[argc] = NULL;
+            return argc;
+        }
+        *s++ = '\0';		/* terminate current arg	 */
     }
-    argv[argc] = NULL;
     return argc;
 }
 
@@ -83,24 +86,24 @@ static int make_argv(char *s, int argvsz, char *argv[])
  */
 static int complete_cmdv(int argc, char * const argv[], char last_char, int maxv, char *cmdv[])
 {
-    cmd_tbl_t *cmdtp = NULL;
-		cmd_tbl_t **cmdtpt = SHELL_get_cmd_tbl();
-	  uint8_t i;
+    const cmd_tbl_t *cmdtp = NULL;
+    const cmd_tbl_t **cmdtpt = SHELL_get_cmd_tbl();
+    uint8_t i;
     uint8_t clen;
     uint8_t n_found = 0;
     /* sanity */
     if (maxv < 2)
     {
         return -2;
-		}
+    }
     cmdv[0] = NULL;
     if (argc == 0) 
     {
-			  /* no argment, only typed TAB   */
+        /* no argment, only typed TAB   */
         /* output full list of commands */
-				i = 0;
-				while((cmdtpt[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
-				{
+        i = 0;
+        while ((cmdtpt[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
+        {
             if (n_found >= maxv - 2)
             {
                 cmdv[n_found] = "...";
@@ -108,15 +111,15 @@ static int complete_cmdv(int argc, char * const argv[], char last_char, int maxv
             }
             cmdv[n_found] = cmdtpt[n_found]->name; 
             i++;
-						n_found++;
-				}
+            n_found++;
+        }
         return n_found;
     }
     /* more than one arg or one but the start of the next */
-    if (argc > 1 || (last_char == '\0' || isblank(last_char)))
+    if ((argc > 1) || ((last_char == '\0') || (isblank(last_char))))
     {
         cmdtp = SHELL_find_command(argv[0]);
-        if (cmdtp == NULL || cmdtp->complete == NULL) 
+        if ((cmdtp == NULL) || (cmdtp->complete == NULL)) 
         {
             cmdv[0] = NULL;
             return 0;
@@ -128,19 +131,19 @@ static int complete_cmdv(int argc, char * const argv[], char last_char, int maxv
     * Some commands allow length modifiers (like "cp.b");
     * compare command name only until first dot.
     */
-		i = 0;
-		n_found = 0;
-		while((cmdtpt[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
-		{
+    i = 0;
+    n_found = 0;
+    while ((cmdtpt[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
+    {
         clen = strlen(cmdtpt[i]->name);
         if (clen < strlen(argv[0]))
         {
-					  i++;
+            i++;
             continue;
         }
         if (memcmp(argv[0], cmdtpt[i]->name, strlen(argv[0])) != 0)
         {
-					  i++;
+            i++;
             continue;
         }
         /* too many! */
@@ -150,8 +153,8 @@ static int complete_cmdv(int argc, char * const argv[], char last_char, int maxv
             break;
         }
         cmdv[n_found++] = cmdtpt[i]->name;
-				i++;
-		}
+        i++;
+    }
     cmdv[n_found] = NULL;
     return n_found;
 }
@@ -159,7 +162,7 @@ static int complete_cmdv(int argc, char * const argv[], char last_char, int maxv
  /*!
  * @brief print possible matchs
  */
-static void print_argv(const char *banner, const char *leader, const char *sep, int linemax, char * const argv[])
+static void print_argv(const char * banner, const char * leader, const char * sep, int linemax, char * const argv[], uint8_t num)
 {
     uint8_t ll = leader != NULL ? strlen(leader) : 0;
     uint8_t sl = sep != NULL ? strlen(sep) : 0;
@@ -169,7 +172,7 @@ static void print_argv(const char *banner, const char *leader, const char *sep, 
         SHELL_printf("\r\n%s", banner);
     }
     i = linemax;	/* force leader and newline */
-    while (*argv != NULL)
+    while ((*argv != NULL) && (num--))
     {
         len = strlen(*argv) + sl;
         if (i + len >= linemax)
@@ -178,13 +181,13 @@ static void print_argv(const char *banner, const char *leader, const char *sep, 
             if (leader)
             {
                 SHELL_printf(leader);
-						}
+            }
             i = ll - sl;
         }
         else if (sep)
-				{
+        {
             SHELL_printf(sep);
-				}
+        }
         SHELL_printf(*argv++);
         i += len;
     }
@@ -194,28 +197,30 @@ static void print_argv(const char *banner, const char *leader, const char *sep, 
  /*!
  * @brief find the number of common characters of matchs.
  */
-static int find_common_prefix(char * const argv[])
+static int find_common_prefix(char * const argv[], uint8_t num)
 {
     uint8_t i, len;
-    char *anchor, *s, *t;
+    char * anchor, *s, *t;
     if (*argv == NULL)
-		{
-        return 0;
-		}
-	/* begin with max */
-    anchor = *argv++;
-    len = strlen(anchor);
-    while ((t = *argv++) != NULL)
     {
+        return 0;
+    }
+	/* begin with max */
+    anchor = argv[0];
+    len = strlen(anchor);
+    while ((num--) && (*argv != NULL))
+    {
+        t = *argv++;
         s = anchor;
-        for (i = 0; i < len; i++, t++, s++)
+        for (i = 0; i < len; i++)
         {
+            t++;s++;
             if (*t != *s)
             {
                 break;
             }       
         }
-    len = s - anchor;
+        len = s - anchor;
     }
     return len;
 }
@@ -224,25 +229,25 @@ static int find_common_prefix(char * const argv[])
  /*!
  * @brief auto complete interface function.
  */
-int cmd_auto_complete(const char *const prompt, char *buf, uint8_t *np, uint8_t *colp)
+int cmd_auto_complete(const char * const prompt, char * buf, uint8_t * np, uint8_t * colp)
 {
     uint8_t n = *np, col = *colp;
-    char *argv[20 + 1];		/* NULL terminated	*/
-    char *cmdv[20];
-    char *s, *t;
+    char * argv[20 + 1];		/* NULL terminated	*/
+    char * cmdv[20];
+    char * s, * t;
     const char *sep;
-    uint8_t i, j, k, len, seplen, argc;
+    int i, j, k, len, seplen, argc;
     uint8_t cnt;
     char last_char;
     cnt = strlen(buf);
     if (cnt >= 1)
-		{
-			last_char = buf[cnt - 1];
-		}
+    {
+        last_char = buf[cnt - 1];
+    }
     else
-		{
-			last_char = '\0';
-		}
+    {
+        last_char = '\0';
+    }
     /* copy to secondary buffer which will be affected */
     strcpy(tmp_buf, buf);
 
@@ -250,14 +255,17 @@ int cmd_auto_complete(const char *const prompt, char *buf, uint8_t *np, uint8_t 
     argc = make_argv(tmp_buf, sizeof(argv)/sizeof(argv[0]), argv);
     /* do the completion and return the possible completions */
     i = complete_cmdv(argc, argv, last_char, sizeof(cmdv)/sizeof(cmdv[0]), cmdv);
-
+    if (argc == 0)
+    {
+      return 1;
+    }
     /* no match; bell and out */
     if (i == 0)
     {
         if (argc > 1)	/* allow tab for non command */
-				{
+        {
             return 0;
-				}
+        }
         SHELL_beep();
         return 1;
     }
@@ -273,7 +281,7 @@ int cmd_auto_complete(const char *const prompt, char *buf, uint8_t *np, uint8_t 
         sep = " ";
         seplen = 1;
     }
-		else if (i > 1 && (j = find_common_prefix(cmdv)) != 0)
+    else if ((i > 1) && ((j = find_common_prefix(cmdv, i)) != 0))
     {	/* more */
         k = strlen(argv[argc - 1]);
         j -= k;
@@ -281,7 +289,7 @@ int cmd_auto_complete(const char *const prompt, char *buf, uint8_t *np, uint8_t 
         {
             s = cmdv[0] + k;
             len = j;
-        }
+        } 
     }
     if (s != NULL)
     {
@@ -294,22 +302,31 @@ int cmd_auto_complete(const char *const prompt, char *buf, uint8_t *np, uint8_t 
         }
         t = buf + cnt;
         for (i = 0; i < len; i++)
-        *t++ = *s++;
+        {
+          *t++ = *s++;
+        }
+        
         if (sep != NULL)
-        for (i = 0; i < seplen; i++)
-        *t++ = sep[i];
+        {
+            for (i = 0; i < seplen; i++)
+            {
+                *t++ = sep[i];
+            }   
+        }
         *t = '\0';
         n += k;
         col += k;
         SHELL_printf(t - k);
         if (sep == NULL)
-        SHELL_beep();
+        {
+            SHELL_beep(); 
+        }
         *np = n;
         *colp = col;
     }
     else
     {
-        print_argv(NULL , "  ", " ", 78, cmdv);
+        print_argv(NULL , "  ", " ", 78, cmdv, i);
         SHELL_printf(prompt);
         SHELL_printf(buf);
     }

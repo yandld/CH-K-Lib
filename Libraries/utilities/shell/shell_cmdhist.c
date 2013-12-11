@@ -41,15 +41,13 @@
  * Code
  ******************************************************************************/
  
- 
-
-int DoHist(int argc, char *const argv[])
+static int DoHist(int argc, char * const argv[])
 {
     uint8_t num;
-		uint8_t i = 0;
-    char **pplist = SHELL_get_hist_data_list(&num);
-		SHELL_printf("history:\r\n");
-		while(num--)
+    uint8_t i = 0;
+    char ** pplist = SHELL_get_hist_data_list(&num);
+    SHELL_printf("history:\r\n");
+    while (num--)
     {
         SHELL_printf("(%d) %s\r\n", i, *pplist++);
         i++;

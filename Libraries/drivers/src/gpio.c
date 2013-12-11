@@ -22,17 +22,22 @@
 //! @defgroup GPIO_Exported_Functions
 //! @{
 
-#ifndef GPIO_BASES
-#define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
+#if (!defined(GPIO_BASES))
+    #if (defined(MK60DZ10))
+        #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
+        #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
+    #elif
+		
+    #endif
+
 #endif
 
-#ifndef PORT_BASES
-#define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
-#endif
+
 
 
 GPIO_Type *GPIO_InstanceTable[] = GPIO_BASES;
 PORT_Type* PORT_InstanceTable[] = PORT_BASES;
+
 const uint32_t GPIO_ClockGateTable[] =
 {
     SIM_SCGC5_PORTA_MASK,
@@ -42,7 +47,7 @@ const uint32_t GPIO_ClockGateTable[] =
     SIM_SCGC5_PORTE_MASK
 };
 
-State_Type GPIO_PinMuxConfig(GPIO_InstanceType instance, uint8_t pinIndex, GPIO_PinMux_Type pinMux)
+State_Type GPIO_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_PinMux_Type pinMux)
 {
     if(instance >= ARRAY_SIZE(PORT_InstanceTable))
 		{
@@ -52,6 +57,11 @@ State_Type GPIO_PinMuxConfig(GPIO_InstanceType instance, uint8_t pinIndex, GPIO_
 		PORT_InstanceTable[instance]->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);
 		PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
 		return kStatus_Success;
+}
+
+State_Type GPIO_PullConfig(GPIO_Instance_Type instance, uint8_t pinIndex,  )
+{
+	
 }
 
 

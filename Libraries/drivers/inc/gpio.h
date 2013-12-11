@@ -32,7 +32,7 @@ typedef enum
     HW_GPIOE,
     HW_GPIOF,
 		HW_GPIONameCount,
-}GPIO_InstanceType;
+}GPIO_Instance_Type;
 
 typedef enum
 {
@@ -46,6 +46,14 @@ typedef enum
     kPinAlt7,
     kPinAltNameCount,
 }GPIO_PinMux_Type;
+
+typedef enum
+{
+    kNoPullResister,
+    kPullUp,
+    kPullDown,
+    kPullNameCount,
+}GPIO_Pull_Type;
 
 //位带操作,实现51类似的GPIO控制功能
 //IO口操作宏定义

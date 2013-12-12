@@ -57,12 +57,9 @@ State_Type PORT_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT
 		return kStatus_Success;
 }
 
-State_Type PORT_PullConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_Pull_Type pull)
+State_Type PORT_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState)
 {
-    if(instance >= ARRAY_SIZE(PORT_InstanceTable))
-		{
-        return kStatusInvalidArgument;
-		}
+		(newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
     switch(pull)
 		{
         case kPullDisabled:
@@ -85,10 +82,6 @@ State_Type PORT_PullConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_P
 
 State_Type GPIO_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_PinConfig_Type pull)
 {
-    if(instance >= ARRAY_SIZE(GPIO_InstanceTable))
-		{
-        return kStatusInvalidArgument;
-		}
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
 		if(pull >= kPinConfigNameCount)
 		{
@@ -102,11 +95,47 @@ State_Type GPIO_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_Pi
 
 State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 {
-
+    //param check
     if(GPIO_InitStruct->instance >= ARRAY_SIZE(GPIO_InstanceTable))
 		{
         return kStatusInvalidArgument;
 		}
+    if(GPIO_InitStruct->pinx >= kGPIO_PinNameCount)
+		{
+        return kStatusInvalidArgument;
+		}
+    if(GPIO_InitStruct->mode >= kGPIO_ModeNameCount)
+		{
+        return kStatusInvalidArgument;
+		}
+		//
+		switch(GPIO_InitStruct->mode)
+		{
+        case kGPIO_Mode_IFT:
+            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled, DISABLE);
+						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
+            break;
+        case kGPIO_Mode_IPD:
+            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDown, DISABLE);
+						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
+            break;
+        case kGPIO_Mode_IPU:
+            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp, DISABLE);
+						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
+            break;
+        case kGPIO_Mode_OOD:
+            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp, ENABLE);
+						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
+            break;
+        case kGPIO_Mode_OPP:
+            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled, DISABLE);
+						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
+            break;
+        default:
+            break;					
+		}
+		//config pinMux
+		PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
 }
 
 	/**
@@ -290,10 +319,7 @@ void GPIO_ClearAllITPendingBit(GPIO_Type *GPIOx)
   *         contains the configuration information for the specified GPIO peripheral.
   * @retval None
   */
-void GPIO_StructInit(GPIO_InitTypeDef* GPIO_InitStruct)
-{
-    GPIO_InitStruct->GPIO_Mode = kGPIO_Mode_IFT;
-}
+
 	/**
   * @brief  GPIO write a single bit to any GPIO pin
   * @param  GPIOx: pointer to a GPIO_Type

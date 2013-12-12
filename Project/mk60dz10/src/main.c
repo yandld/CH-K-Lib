@@ -117,6 +117,7 @@ int main(void)
     UART_DebugPortInit(UART4_RX_PC14_TX_PC15, 115200);
     UART_printf("HelloWorld!\r\n");
 	  configure_uart_pin_mux(1);
+		/*
     GPIO_InitStruct1.GPIOx = PTC;                             //C端口
     GPIO_InitStruct1.GPIO_InitState = Bit_RESET;                //初始化后输出高电平
     GPIO_InitStruct1.GPIO_Pin = kGPIO_Pin_18;                  //PC16引脚
@@ -131,7 +132,7 @@ int main(void)
     GPIO_InitStruct1.GPIO_Mode = kGPIO_Mode_OPP;               //推挽输出
     //执行GPIO初始化
     GPIO_Init(&GPIO_InitStruct1);     
-		
+		*/
 	//	UART_printf("%d\r\n", &configure_uart_pin_mux);
     
 	 // UART_ITConfig(UART4, kUART_IT_RDRF, ENABLE);

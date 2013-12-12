@@ -30,6 +30,7 @@ typedef enum
     kGPIO_Mode_IPU = 0x06,            //!< input pull up mode
     kGPIO_Mode_OOD = 0x07,            //!< output open drain mode
     kGPIO_Mode_OPP = 0x08,            //!< output push mode
+		kGPIO_ModeNameCount,
 }GPIO_ModeSelect_Type;
 
 typedef enum
@@ -182,6 +183,7 @@ typedef enum
     kGPIO_Pin_29,
     kGPIO_Pin_30,
     kGPIO_Pin_31,
+    kGPIO_PinNameCount,
 }GPIO_Pin_Type;
 
 
@@ -217,7 +219,8 @@ typedef struct
 //! @defgroup GPIO_Exported_Functions
 //! @{
 
-void GPIO_Init(GPIO_InitTypeDef* GPIO_InitStruct);
+State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
+/*
 void GPIO_WriteBit(GPIO_Type *GPIOx,uint16_t GPIO_Pin,BitAction BitVal);
 void GPIO_SetBits(GPIO_Type* GPIOx, uint16_t GPIO_Pin);
 void GPIO_ResetBits(GPIO_Type* GPIOx, uint16_t GPIO_Pin);
@@ -232,6 +235,7 @@ ITStatus GPIO_GetITStates(GPIO_Type *GPIOx,GPIO_Pin_Type GPIO_Pin);
 void GPIO_ClearITPendingBit(GPIO_Type *GPIOx,uint16_t GPIO_Pin);
 void GPIO_ITConfig(GPIO_Type* GPIOx, GPIO_ITSelect_TypeDef GPIO_IT, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState);
 void GPIO_DMACmd(GPIO_Type* GPIOx, GPIO_DMASelect_TypeDef GPIO_DMAReq, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState);
+*/
 
 #ifdef __cplusplus
 }

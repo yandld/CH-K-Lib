@@ -25,6 +25,15 @@
 
 typedef enum
 {
+    kGPIO_Mode_IFT = 0x04,            //!< input floating mode
+    kGPIO_Mode_IPD = 0x05,            //!< input pull down mode
+    kGPIO_Mode_IPU = 0x06,            //!< input pull up mode
+    kGPIO_Mode_OOD = 0x07,            //!< output open drain mode
+    kGPIO_Mode_OPP = 0x08,            //!< output push mode
+}GPIO_ModeSelect_Type;
+
+typedef enum
+{
     HW_GPIOA,
     HW_GPIOB,
     HW_GPIOC,
@@ -45,15 +54,22 @@ typedef enum
     kPinAlt6,
     kPinAlt7,
     kPinAltNameCount,
-}GPIO_PinMux_Type;
+}PORT_PinMux_Type;
 
 typedef enum
 {
-    kNoPullResister,
+    kPullDisabled,
     kPullUp,
     kPullDown,
     kPullNameCount,
-}GPIO_Pull_Type;
+}PORT_Pull_Type;
+
+typedef enum
+{
+    kInpput,
+    kOutput,
+    kPinConfigNameCount,
+}GPIO_PinConfig_Type;
 
 //位带操作,实现51类似的GPIO控制功能
 //IO口操作宏定义
@@ -168,14 +184,7 @@ typedef enum
     kGPIO_Pin_31,
 }GPIO_Pin_Type;
 
-typedef enum
-{
-    kGPIO_Mode_IFT = 0x04,            //!< input floating mode
-    kGPIO_Mode_IPD = 0x05,            //!< input pull down mode
-    kGPIO_Mode_IPU = 0x06,            //!< input pull up mode
-    kGPIO_Mode_OOD = 0x07,            //!< output open drain mode
-    kGPIO_Mode_OPP = 0x08,            //!< output push mode
-}GPIO_ModeSelect_TypeDef;
+
 
 
 typedef enum
@@ -194,12 +203,13 @@ typedef enum
     kGPIO_DMA_RisingAndFalling = 0x03, //!< Trigger DMA when GPIO external pin detect rising or falling edge
 }GPIO_DMASelect_TypeDef;
 
+
 typedef struct
 {
-    GPIO_Pin_Type GPIO_Pin;    //!< GPIO pin select
-    BitAction GPIO_InitState;           //!< In GPIO config into output mode, this flied determinate higt or low state, when GPIO config to input mode, this field is no use.
-    GPIO_ModeSelect_TypeDef GPIO_Mode;  //!< GPIO operation mode
-    GPIO_Type *GPIOx;                   //!< GPIO port : PTA-PTE
+    GPIO_Instance_Type instance;             //!< GPIO pin select
+    uint8_t inititalState;                   //!< In GPIO config into output mode, this flied determinate higt or low state, when GPIO config to input mode, this field is no use.
+		GPIO_ModeSelect_Type mode;               //!< GPIO operation mode
+		GPIO_Pin_Type   pinx;
 }GPIO_InitTypeDef;
 
 //! @}
@@ -222,7 +232,6 @@ ITStatus GPIO_GetITStates(GPIO_Type *GPIOx,GPIO_Pin_Type GPIO_Pin);
 void GPIO_ClearITPendingBit(GPIO_Type *GPIOx,uint16_t GPIO_Pin);
 void GPIO_ITConfig(GPIO_Type* GPIOx, GPIO_ITSelect_TypeDef GPIO_IT, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState);
 void GPIO_DMACmd(GPIO_Type* GPIOx, GPIO_DMASelect_TypeDef GPIO_DMAReq, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState);
-
 
 #ifdef __cplusplus
 }

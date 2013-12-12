@@ -23,6 +23,7 @@
 //! @{
 
 #if (!defined(GPIO_BASES))
+
     #if (defined(MK60DZ10))
         #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
         #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
@@ -33,12 +34,10 @@
 #endif
 
 
+GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
+PORT_Type * const PORT_InstanceTable[] = PORT_BASES;
 
-
-GPIO_Type *GPIO_InstanceTable[] = GPIO_BASES;
-PORT_Type* PORT_InstanceTable[] = PORT_BASES;
-
-const uint32_t GPIO_ClockGateTable[] =
+const uint32_t SIM_GPIOClockGateTable[] =
 {
     SIM_SCGC5_PORTA_MASK,
     SIM_SCGC5_PORTB_MASK,
@@ -47,23 +46,68 @@ const uint32_t GPIO_ClockGateTable[] =
     SIM_SCGC5_PORTE_MASK
 };
 
-State_Type GPIO_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_PinMux_Type pinMux)
+State_Type PORT_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
 {
     if(instance >= ARRAY_SIZE(PORT_InstanceTable))
 		{
         return kStatusInvalidArgument;
 		}
-    SIM->SCGC5 |= GPIO_ClockGateTable[instance];
 		PORT_InstanceTable[instance]->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);
 		PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
 		return kStatus_Success;
 }
 
-State_Type GPIO_PullConfig(GPIO_Instance_Type instance, uint8_t pinIndex,  )
+State_Type PORT_PullConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_Pull_Type pull)
 {
-	
+    if(instance >= ARRAY_SIZE(PORT_InstanceTable))
+		{
+        return kStatusInvalidArgument;
+		}
+    switch(pull)
+		{
+        case kPullDisabled:
+            PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_PE_MASK;
+            break;
+        case kPullUp:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_PE_MASK;
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_PS_MASK;
+            break;
+        case kPullDown:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_PE_MASK;
+            PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_PS_MASK;
+            break;
+        default:
+            return kStatusInvalidArgument;
+            break;
+		}
+		return kStatus_Success;
 }
 
+State_Type GPIO_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_PinConfig_Type pull)
+{
+    if(instance >= ARRAY_SIZE(GPIO_InstanceTable))
+		{
+        return kStatusInvalidArgument;
+		}
+    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
+		if(pull >= kPinConfigNameCount)
+		{
+        return kStatusInvalidArgument;
+		}
+    (pull == kOutput) ? (GPIO_InstanceTable[instance]->PDDR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PDDR &= ~(1 << pinIndex));
+		return kStatus_Success;
+}
+
+
+
+State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
+{
+
+    if(GPIO_InitStruct->instance >= ARRAY_SIZE(GPIO_InstanceTable))
+		{
+        return kStatusInvalidArgument;
+		}
+}
 
 	/**
   * @brief  Initializes the GPIOx peripheral according to the specified
@@ -72,6 +116,7 @@ State_Type GPIO_PullConfig(GPIO_Instance_Type instance, uint8_t pinIndex,  )
   *         contains the configuration information for the specified GPIO peripheral.
   * @retval None
   */
+	/*
 void GPIO_Init(GPIO_InitTypeDef* GPIO_InitStruct)
 {
     GPIO_Type *GPIOx = NULL;
@@ -152,6 +197,7 @@ void GPIO_Init(GPIO_InitTypeDef* GPIO_InitStruct)
         }
     }
 }
+*/
 
 	/**
   * @brief  Get interrupt status flag of GPIO peripheral

@@ -128,7 +128,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     //PinMux Config
     for(i = 0; i < pUART_Map->m_PinCnt; i++)
     {
-        PinMuxConfig(pUART_Map->m_PortIndex, pUART_Map->m_PinBase+i, pUART_Map->m_Mux);
+				PORT_PinMuxConfig(pUART_Map->m_PortIndex, pUART_Map->m_PinBase+i, pUART_Map->m_Mux);
     }
 }
 

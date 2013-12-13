@@ -220,6 +220,7 @@ typedef struct
 //! @{
 
 State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
+State_Type PORT_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
 /*
 void GPIO_WriteBit(GPIO_Type *GPIOx,uint16_t GPIO_Pin,BitAction BitVal);
 void GPIO_SetBits(GPIO_Type* GPIOx, uint16_t GPIO_Pin);

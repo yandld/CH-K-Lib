@@ -454,11 +454,6 @@
               <FilePath>..\..\..\Libraries\drivers\src\gpio.c</FilePath>
             </File>
             <File>
-              <FileName>pinmux.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\src\pinmux.c</FilePath>
-            </File>
-            <File>
               <FileName>clock.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\drivers\src\clock.c</FilePath>

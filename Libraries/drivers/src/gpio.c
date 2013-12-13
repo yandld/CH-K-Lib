@@ -8,7 +8,6 @@
   ******************************************************************************
   */
 #include "gpio.h"
-#include "pinmux.h"
 
 
 //! @defgroup CH_Periph_Driver

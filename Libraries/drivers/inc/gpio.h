@@ -31,7 +31,7 @@ typedef enum
     kGPIO_Mode_OOD = 0x07,            //!< output open drain mode
     kGPIO_Mode_OPP = 0x08,            //!< output push mode
 		kGPIO_ModeNameCount,
-}GPIO_ModeSelect_Type;
+}GPIO_Mode_Type;
 
 typedef enum
 {
@@ -64,6 +64,7 @@ typedef enum
     kPullDown,
     kPullNameCount,
 }PORT_Pull_Type;
+
 
 typedef enum
 {
@@ -151,38 +152,38 @@ typedef enum
 //! @brief GPIO_Pin select
 typedef enum
 {
-    kGPIO_Pin_0,
-    kGPIO_Pin_1,
-    kGPIO_Pin_2,
-    kGPIO_Pin_3,
-    kGPIO_Pin_4,
-    kGPIO_Pin_5,
-    kGPIO_Pin_6,
-    kGPIO_Pin_7,
-    kGPIO_Pin_8,
-    kGPIO_Pin_9,
-    kGPIO_Pin_10,
-    kGPIO_Pin_11,
-    kGPIO_Pin_12,
-    kGPIO_Pin_13,
-    kGPIO_Pin_14,
-    kGPIO_Pin_15,
-    kGPIO_Pin_16,
-    kGPIO_Pin_17,
-    kGPIO_Pin_18,
-    kGPIO_Pin_19,
-    kGPIO_Pin_20,
-    kGPIO_Pin_21,
-    kGPIO_Pin_22,
-    kGPIO_Pin_23,
-    kGPIO_Pin_24,
-    kGPIO_Pin_25,
-    kGPIO_Pin_26,
-    kGPIO_Pin_27,
-    kGPIO_Pin_28,
-    kGPIO_Pin_29,
-    kGPIO_Pin_30,
-    kGPIO_Pin_31,
+    kGPIO_Pin0,
+    kGPIO_Pin1,
+    kGPIO_Pin2,
+    kGPIO_Pin3,
+    kGPIO_Pin4,
+    kGPIO_Pin5,
+    kGPIO_Pin6,
+    kGPIO_Pin7,
+    kGPIO_Pin8,
+    kGPIO_Pin9,
+    kGPIO_Pin10,
+    kGPIO_Pin11,
+    kGPIO_Pin12,
+    kGPIO_Pin13,
+    kGPIO_Pin14,
+    kGPIO_Pin15,
+    kGPIO_Pin16,
+    kGPIO_Pin17,
+    kGPIO_Pin18,
+    kGPIO_Pin19,
+    kGPIO_Pin20,
+    kGPIO_Pin21,
+    kGPIO_Pin22,
+    kGPIO_Pin23,
+    kGPIO_Pin24,
+    kGPIO_Pin25,
+    kGPIO_Pin26,
+    kGPIO_Pin27,
+    kGPIO_Pin28,
+    kGPIO_Pin29,
+    kGPIO_Pin30,
+    kGPIO_Pin31,
     kGPIO_PinNameCount,
 }GPIO_Pin_Type;
 
@@ -208,10 +209,9 @@ typedef enum
 
 typedef struct
 {
-    GPIO_Instance_Type instance;             //!< GPIO pin select
-    uint8_t inititalState;                   //!< In GPIO config into output mode, this flied determinate higt or low state, when GPIO config to input mode, this field is no use.
-		GPIO_ModeSelect_Type mode;               //!< GPIO operation mode
-		GPIO_Pin_Type   pinx;
+    GPIO_Instance_Type     instance;             //!< GPIO pin select
+		GPIO_Mode_Type         mode;                 //!< GPIO operation mode
+		GPIO_Pin_Type          pinx;                 //!< pin index
 }GPIO_InitTypeDef;
 
 //! @}

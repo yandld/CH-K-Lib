@@ -28,7 +28,7 @@
         #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
         #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
     #elif
-		
+		;
     #endif
 
 #endif
@@ -48,6 +48,7 @@ const uint32_t SIM_GPIOClockGateTable[] =
 
 State_Type PORT_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
 {
+    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     if(instance >= ARRAY_SIZE(PORT_InstanceTable))
 		{
         return kStatusInvalidArgument;
@@ -59,6 +60,7 @@ State_Type PORT_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT
 
 State_Type PORT_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState)
 {
+    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
 		(newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
     switch(pull)
 		{
@@ -92,7 +94,13 @@ State_Type GPIO_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_Pi
 }
 
 
-
+	/**
+  * @brief  Initializes the GPIOx peripheral according to the specified
+  *         parameters in the GPIO_InitStruct.
+  * @param  GPIO_InitStruct: pointer to a GPIO_InitTypeDef structure that
+  *         contains the configuration information for the specified GPIO peripheral.
+  * @retval None
+  */
 State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 {
     //param check
@@ -108,7 +116,7 @@ State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 		{
         return kStatusInvalidArgument;
 		}
-		//
+		//config state
 		switch(GPIO_InitStruct->mode)
 		{
         case kGPIO_Mode_IFT:
@@ -133,101 +141,63 @@ State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
             break;
         default:
             break;					
-		}
-		//config pinMux
-		PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
+    }
+    //config pinMux
+    PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
+}
+
+State_Type GPIO_QuickInit(GPIO_Instance_Type instance, GPIO_Pin_Type pinx, GPIO_Mode_Type mode)
+{
+    GPIO_InitTypeDef GPIO_InitStruct1;
+		GPIO_InitStruct1.instance = instance;
+		GPIO_InitStruct1.mode = mode;
+		GPIO_InitStruct1.pinx = pinx;
+		return GPIO_Init(&GPIO_InitStruct1);
 }
 
 	/**
-  * @brief  Initializes the GPIOx peripheral according to the specified
-  *         parameters in the GPIO_InitStruct.
-  * @param  GPIO_InitStruct: pointer to a GPIO_InitTypeDef structure that
-  *         contains the configuration information for the specified GPIO peripheral.
+  * @brief  GPIO write a single bit to any GPIO pin
+  * @param  GPIOx: pointer to a GPIO_Type
+  *         @arg PTA: A Port
+  *         @arg PTB: B Port
+  *         @arg PTC: C Port
+  *         @arg PTD: D Port
+	*         @arg PTE: E Port 
+  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
+  * @param  BitVal : bit value
+	*         @arg Bit_RESET : low state
+	*         @arg Bit_SET   : high state
   * @retval None
   */
-	/*
-void GPIO_Init(GPIO_InitTypeDef* GPIO_InitStruct)
+State_Type GPIO_WriteBit(GPIO_Instance_Type instance, uint8_t pinIndex, uint8_t data)
 {
-    GPIO_Type *GPIOx = NULL;
-    PORT_Type *PORTx = NULL;
-    //param check
-    assert_param(IS_GPIO_ALL_PERIPH(GPIO_InitStruct->GPIOx));
-    assert_param(IS_GPIO_BIT_ACTION(GPIO_InitStruct->GPIO_InitState )); 
-    GPIOx = GPIO_InitStruct->GPIOx;
-    //Open clock gate
-    switch((uint32_t)GPIOx)
-    {
-        case PTA_BASE:
-            PORTx = PORTA;
-            SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
-            break;
-        case PTB_BASE:
-            PORTx = PORTB;
-            SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
-            break;
-        case PTC_BASE:
-            PORTx = PORTC;
-            SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;
-            break;
-        case PTD_BASE:
-            PORTx = PORTD;
-            SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;
-            break;
-        case PTE_BASE:
-            PORTx = PORTE;
-            SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
-            break;
-        default : 
-            break;
-    } 
-    //set pinmux into GPIO mode
-    PORTx->PCR[GPIO_InitStruct->GPIO_Pin] &= ~(PORT_PCR_MUX_MASK);    
-    PORTx->PCR[GPIO_InitStruct->GPIO_Pin] |= PORT_PCR_MUX(1); 
-    //input or output
-    if((GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_OOD) || (GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_OPP))
-    {
-        //set pin into putout
-        GPIOx->PDDR |= (1<<(GPIO_InitStruct->GPIO_Pin));	
-        //disable pull select
-        PORTx->PCR[(GPIO_InitStruct->GPIO_Pin)]&=~(PORT_PCR_PE_MASK); 
-        //output low or high
-        (Bit_SET == GPIO_InitStruct->GPIO_InitState)?(GPIOx->PDOR |= (1<<(GPIO_InitStruct->GPIO_Pin))):(GPIOx->PDOR &= ~(1<<(GPIO_InitStruct->GPIO_Pin)));
-			  //open drian output or push pull output
-        if(GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_OOD)
-        {
-            PORTx->PCR[GPIO_InitStruct->GPIO_Pin]|= PORT_PCR_ODE_MASK;
-        }
-        else if (GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_OPP)
-        {
-            PORTx->PCR[GPIO_InitStruct->GPIO_Pin]&= ~PORT_PCR_ODE_MASK;
-        }
-    }
-    //input mode
-    else if ((GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_IFT) || (GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_IPD) || (GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_IPU))
-    {
-			  //set pin to input
-        GPIOx->PDDR &= ~(1<<(GPIO_InitStruct->GPIO_Pin));		
-        if(GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_IFT)
-        {
-            //disable pull resister
-            PORTx->PCR[GPIO_InitStruct->GPIO_Pin]&=~PORT_PCR_PE_MASK; 
-        }
-        else if (GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_IPD)
-        {
-            //pull down
-            PORTx->PCR[GPIO_InitStruct->GPIO_Pin]|= PORT_PCR_PE_MASK;
-            PORTx->PCR[GPIO_InitStruct->GPIO_Pin]&= ~PORT_PCR_PS_MASK;
-        }
-        else if (GPIO_InitStruct->GPIO_Mode == kGPIO_Mode_IPU)
-        {
-            //pull up
-            PORTx->PCR[GPIO_InitStruct->GPIO_Pin]|= PORT_PCR_PE_MASK;
-            PORTx->PCR[GPIO_InitStruct->GPIO_Pin]|= PORT_PCR_PS_MASK;
-        }
-    }
+    (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pinIndex));
+		return kStatus_Success;
 }
-*/
 
+uint8_t GPIO_ReadBit(GPIO_Instance_Type instance, uint8_t pinIndex)
+{
+	
+	
+}
+	/**
+  * @brief  Toggle a GPIO single bit
+  * @param  GPIOx: pointer to a GPIO_Type
+  *         @arg PTA: A Port
+  *         @arg PTB: B Port
+  *         @arg PTC: C Port
+  *         @arg PTD: D Port
+	*         @arg PTE: E Port 
+  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
+  * @retval None
+  */
+void GPIO_ToggleBit(GPIO_Type *GPIOx, uint16_t GPIO_Pin)
+{
+    //检测参数
+    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
+    
+    GPIOx->PTOR |= (1<<GPIO_Pin);	//将引脚的电平进行翻转，参考k10手册1483页
+}
 	/**
   * @brief  Get interrupt status flag of GPIO peripheral
   * @param  GPIOx: pointer to a GPIO_Type
@@ -320,34 +290,8 @@ void GPIO_ClearAllITPendingBit(GPIO_Type *GPIOx)
   * @retval None
   */
 
-	/**
-  * @brief  GPIO write a single bit to any GPIO pin
-  * @param  GPIOx: pointer to a GPIO_Type
-  *         @arg PTA: A Port
-  *         @arg PTB: B Port
-  *         @arg PTC: C Port
-  *         @arg PTD: D Port
-	*         @arg PTE: E Port 
-  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
-  * @param  BitVal : bit value
-	*         @arg Bit_RESET : low state
-	*         @arg Bit_SET   : high state
-  * @retval None
-  */
-void GPIO_WriteBit(GPIO_Type *GPIOx, uint16_t GPIO_Pin, BitAction BitVal)
-{	 
-    //检测参数
-    assert_param(IS_GPIO_BIT_ACTION(BitVal)); 
-	
-    if (BitVal != Bit_RESET)
-    {
-        GPIOx->PSOR |= (1<<GPIO_Pin);
-    }
-    else
-    {
-        GPIOx->PCOR |= (1<<GPIO_Pin);
-    }
-}
+
+
 	/**
   * @brief  GPIO write a single bit to any GPIO pin to hight state
   * @param  GPIOx: pointer to a GPIO_Type
@@ -383,24 +327,7 @@ void GPIO_ResetBits(GPIO_Type* GPIOx, uint16_t GPIO_Pin)
     GPIOx->PCOR |= (1<<GPIO_Pin);
 }
 
-	/**
-  * @brief  Toggle a GPIO single bit
-  * @param  GPIOx: pointer to a GPIO_Type
-  *         @arg PTA: A Port
-  *         @arg PTB: B Port
-  *         @arg PTC: C Port
-  *         @arg PTD: D Port
-	*         @arg PTE: E Port 
-  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
-  * @retval None
-  */
-void GPIO_ToggleBit(GPIO_Type *GPIOx, uint16_t GPIO_Pin)
-{
-    //检测参数
-    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
-    
-    GPIOx->PTOR |= (1<<GPIO_Pin);	//将引脚的电平进行翻转，参考k10手册1483页
-}
+
 	/**
   * @brief  write GPIO 32 bit data
   * @param  GPIOx: pointer to a GPIO_Type

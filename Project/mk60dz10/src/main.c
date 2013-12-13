@@ -152,6 +152,12 @@ int main(void)
 	 
     SHELL_io_install(&Shell_IOInstallStruct1);
     printf("When you see this string, It means that printf is OK!\r\n");
+		
+		
+		GPIO_QuickInit(HW_GPIOD, kGPIO_Pin0, kGPIO_Mode_OPP);
+		GPIO_QuickInit(HW_GPIOD, kGPIO_Pin7, kGPIO_Mode_OPP);
+		GPIO_WriteBit(HW_GPIOD, kGPIO_Pin0, 1);
+	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);
     while(1)
 		{
 			SHELL_main_loop("SHELL>>");
@@ -162,6 +168,6 @@ int main(void)
 
 void SysTick_Handler(void)
 {
-	GPIO_ToggleBit(PTD, kGPIO_Pin_1);
+	//GPIO_ToggleBit(PTD, kGPIO_Pin1);
 }
 

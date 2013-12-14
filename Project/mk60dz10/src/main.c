@@ -102,6 +102,7 @@ const cmd_tbl_t MyCommand[] =
 
 extern const cmd_tbl_t CommandFun_CPU;
 extern const cmd_tbl_t CommandFun_Hist;
+extern const cmd_tbl_t CommandFun_GPIO;
 #pragma weak configure_uart_pin_mux
 extern void configure_uart_pin_mux(uint32_t instance);
 int main(void)
@@ -143,12 +144,11 @@ int main(void)
 //    SHELL_register_function_array(MyCommand, ARRAY_SIZE(MyCommand));
     SHELL_register_function(&CommandFun_Help);
     SHELL_register_function(&CommandFun_Help);
-   // SHELL_register_function(&CommandFun_CPU);
+    SHELL_register_function(&CommandFun_GPIO);
 
     SHELL_register_function(&CommandFun_Hist);
-    SHELL_register_function(&CommandFun_Help);
 
-	// SHELL_unregister_function("test");
+//	 SHELL_unregister_function("test");
 	 
     SHELL_io_install(&Shell_IOInstallStruct1);
     printf("When you see this string, It means that printf is OK!\r\n");
@@ -158,6 +158,8 @@ int main(void)
 		GPIO_QuickInit(HW_GPIOD, kGPIO_Pin7, kGPIO_Mode_OPP);
 		GPIO_WriteBit(HW_GPIOD, kGPIO_Pin0, 1);
 	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);
+	SHELL_printf("%d\r\n", GPIO_ReadBit(HW_GPIOD, kGPIO_Pin0));
+	
     while(1)
 		{
 			SHELL_main_loop("SHELL>>");

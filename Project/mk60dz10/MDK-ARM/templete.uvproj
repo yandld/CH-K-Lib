@@ -428,6 +428,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_cpuinfo.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_gpio.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

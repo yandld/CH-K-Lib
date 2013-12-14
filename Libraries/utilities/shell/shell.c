@@ -205,10 +205,6 @@ uint8_t SHELL_io_install(SHELL_io_install_t * IOInstallStruct)
 {
     uint8_t i;
     gpIOInstallStruct = IOInstallStruct;
-    for (i = 0; i < SHELL_MAX_FUNCTION_NUM; i++)
-    {
-      gpCmdTable[i] = NULL;
-    }
     return 0;
 }
  /*!

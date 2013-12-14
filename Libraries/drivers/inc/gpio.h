@@ -25,11 +25,11 @@
 
 typedef enum
 {
-    kGPIO_Mode_IFT = 0x04,            //!< input floating mode
-    kGPIO_Mode_IPD = 0x05,            //!< input pull down mode
-    kGPIO_Mode_IPU = 0x06,            //!< input pull up mode
-    kGPIO_Mode_OOD = 0x07,            //!< output open drain mode
-    kGPIO_Mode_OPP = 0x08,            //!< output push mode
+    kGPIO_Mode_IFT = 0x00,            //!< input floating mode
+    kGPIO_Mode_IPD = 0x01,            //!< input pull down mode
+    kGPIO_Mode_IPU = 0x02,            //!< input pull up mode
+    kGPIO_Mode_OOD = 0x03,            //!< output open drain mode
+    kGPIO_Mode_OPP = 0x04,            //!< output push mode
 		kGPIO_ModeNameCount,
 }GPIO_Mode_Type;
 
@@ -204,7 +204,7 @@ typedef enum
     kGPIO_DMA_Rising = 0x01,           //!< Trigger DMA when GPIO external pin detect rising edge
     kGPIO_DMA_Falling = 0x02,          //!< Trigger DMA when GPIO external pin detect falling edge
     kGPIO_DMA_RisingAndFalling = 0x03, //!< Trigger DMA when GPIO external pin detect rising or falling edge
-}GPIO_DMASelect_TypeDef;
+}GPIO_DMA_Type;
 
 
 typedef struct

@@ -93,6 +93,7 @@ State_Type GPIO_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_Pi
 }
 
 
+
 	/**
   * @brief  Initializes the GPIOx peripheral according to the specified
   *         parameters in the GPIO_InitStruct.
@@ -168,16 +169,23 @@ State_Type GPIO_QuickInit(GPIO_Instance_Type instance, GPIO_Pin_Type pinx, GPIO_
 	*         @arg Bit_SET   : high state
   * @retval None
   */
-State_Type GPIO_WriteBit(GPIO_Instance_Type instance, uint8_t pinIndex, uint8_t data)
+void GPIO_WriteBit(GPIO_Instance_Type instance, uint8_t pinIndex, uint8_t data)
 {
     (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pinIndex));
-		return kStatus_Success;
 }
 
 uint8_t GPIO_ReadBit(GPIO_Instance_Type instance, uint8_t pinIndex)
 {
-	
-	
+    if(((GPIO_InstanceTable[instance]->PDDR) >> pinIndex) & 0x01)
+		{
+        //output
+        return ((GPIO_InstanceTable[instance]->PDOR >> pinIndex) & 0x01);
+		}
+		else
+		{
+			//input
+        return ((GPIO_InstanceTable[instance]->PDIR >> pinIndex) & 0x01);
+		}
 }
 	/**
   * @brief  Toggle a GPIO single bit
@@ -190,24 +198,49 @@ uint8_t GPIO_ReadBit(GPIO_Instance_Type instance, uint8_t pinIndex)
   * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
   * @retval None
   */
-void GPIO_ToggleBit(GPIO_Type *GPIOx, uint16_t GPIO_Pin)
+void GPIO_ToggleBit(GPIO_Instance_Type instance, uint8_t pinIndex)
 {
-    //检测参数
-    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
-    
-    GPIOx->PTOR |= (1<<GPIO_Pin);	//将引脚的电平进行翻转，参考k10手册1483页
+    GPIO_InstanceTable[instance]->PTOR |= (1 << pinIndex);
 }
+
+
 	/**
-  * @brief  Get interrupt status flag of GPIO peripheral
+  * @brief  Enable or disable GPIO's DMA support
+  * @code
+  *      // Check if transmit buffer is empty.
+  *      if (spi_hal_is_transmit_buffer_empty(0))
+  *      {
+  *          // Buffer has room, so write the next data value.
+  *          spi_hal_write_data(0, byte);
+  *      }
+  * @endcode
   * @param  GPIOx: pointer to a GPIO_Type
   *         @arg PTA: A Port
   *         @arg PTB: B Port
   *         @arg PTC: C Port
   *         @arg PTD: D Port
-	*         @arg PTE: E Port
-  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0    
+	*         @arg PTE: E Port 
+  * @param  GPIO_DMASelect_TypeDef: DMA trigger source select
+	*         @arg kGPIO_DMA_Rising
+	*         @arg kGPIO_DMA_Falling
+	*         @arg kGPIO_DMA_RisingAndFalling
+  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
+  * @param  NewState : disable or enable
+  *         @arg ENABLE
+  *         @arg DISABLE
   * @retval None
   */
+void GPIO_DMACmd(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_DMA_Type dmaReq, FunctionalState newState)
+{
+    uint8_t i;
+    PORT_InstanceTable[pinIndex]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
+		if(ENABLE == newState)
+		{
+			PORT_InstanceTable[pinIndex]->PCR[pinIndex] |= PORT_PCR_IRQC(dmaReq);
+		}
+}
+
+
 ITStatus GPIO_GetITStates(GPIO_Type *GPIOx,GPIO_Pin_Type GPIO_Pin)
 {
     PORT_Type *PORTx = NULL;
@@ -290,41 +323,6 @@ void GPIO_ClearAllITPendingBit(GPIO_Type *GPIOx)
   */
 
 
-
-	/**
-  * @brief  GPIO write a single bit to any GPIO pin to hight state
-  * @param  GPIOx: pointer to a GPIO_Type
-  *         @arg PTA: A Port
-  *         @arg PTB: B Port
-  *         @arg PTC: C Port
-  *         @arg PTD: D Port
-	*         @arg PTE: E Port 
-  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
-  * @retval None
-  */
-void GPIO_SetBits(GPIO_Type* GPIOx, uint16_t GPIO_Pin)
-{
-    //检测参数
-    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
-    GPIOx->PSOR |= (1<<GPIO_Pin);
-}
-	/**
-  * @brief  GPIO write a single bit to any GPIO pin to low state
-  * @param  GPIOx: pointer to a GPIO_Type
-  *         @arg PTA: A Port
-  *         @arg PTB: B Port
-  *         @arg PTC: C Port
-  *         @arg PTD: D Port
-	*         @arg PTE: E Port 
-  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
-  * @retval None
-  */
-void GPIO_ResetBits(GPIO_Type* GPIOx, uint16_t GPIO_Pin)
-{
-    //检测参数
-    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
-    GPIOx->PCOR |= (1<<GPIO_Pin);
-}
 
 
 	/**
@@ -471,59 +469,7 @@ void GPIO_ITConfig(GPIO_Type* GPIOx, GPIO_ITSelect_TypeDef GPIO_IT, GPIO_Pin_Typ
     (ENABLE == NewState)?(PORTx->PCR[(uint8_t)GPIO_Pin] |= PORT_PCR_IRQC((uint8_t)GPIO_IT)):(PORTx->PCR[(uint8_t)GPIO_Pin] &= ~PORT_PCR_IRQC_MASK);
 		(ENABLE == NewState)?(NVIC_EnableIRQ(IRQn)):(NVIC_DisableIRQ(IRQn));
 }
-	/**
-  * @brief  Enable or disable GPIO's DMA support
-  * @code
-  *      // Check if transmit buffer is empty.
-  *      if (spi_hal_is_transmit_buffer_empty(0))
-  *      {
-  *          // Buffer has room, so write the next data value.
-  *          spi_hal_write_data(0, byte);
-  *      }
-  * @endcode
-  * @param  GPIOx: pointer to a GPIO_Type
-  *         @arg PTA: A Port
-  *         @arg PTB: B Port
-  *         @arg PTC: C Port
-  *         @arg PTD: D Port
-	*         @arg PTE: E Port 
-  * @param  GPIO_DMASelect_TypeDef: DMA trigger source select
-	*         @arg kGPIO_DMA_Rising
-	*         @arg kGPIO_DMA_Falling
-	*         @arg kGPIO_DMA_RisingAndFalling
-  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
-  * @param  NewState : disable or enable
-  *         @arg ENABLE
-  *         @arg DISABLE
-  * @retval None
-  */
-void GPIO_DMACmd(GPIO_Type* GPIOx, GPIO_DMASelect_TypeDef GPIO_DMAReq, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState)
-{
-    PORT_Type *PORTx = NULL;
-    PORTx->PCR[(uint8_t)GPIO_Pin] &= ~PORT_PCR_IRQC_MASK;
-    switch((uint32_t)GPIOx)
-    {
-        case PTA_BASE:
-            PORTx = PORTA;
-            break; 
-        case PTB_BASE:
-            PORTx = PORTB;
-            break;	
-        case PTC_BASE:
-            PORTx = PORTC;
-            break;	
-        case PTD_BASE:
-            PORTx = PORTD;
-            break;	
-        case PTE_BASE:
-            PORTx = PORTE;
-            break;	
-        default: 
-            break;
-    } 
-    PORTx->PCR[(uint8_t)GPIO_Pin] &= ~PORT_PCR_IRQC_MASK;
-    (ENABLE == NewState)?(PORTx->PCR[(uint8_t)GPIO_Pin] |= PORT_PCR_IRQC((uint8_t)GPIO_DMAReq)):(PORTx->PCR[(uint8_t)GPIO_Pin] &= ~PORT_PCR_IRQC(0x00));
-}
+
 
 //! @}
 

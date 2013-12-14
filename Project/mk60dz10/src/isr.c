@@ -1,11 +1,6 @@
 #include "isr.h"
 
 
-void PORTC_IRQHandler(void)
-{
-//	GPIO_ClearITPendingBit(PTC,kGPIO_Pin_18);
-	//UART_printf("!!\r\n");
-}
 
 uint16_t i = 0;
 void UART4_RX_TX_IRQHandler(void)

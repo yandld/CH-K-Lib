@@ -21,6 +21,8 @@
 //! @defgroup GPIO_Exported_Functions
 //! @{
 
+
+//!< Leagacy Support for Kineis Z Version
 #if (!defined(GPIO_BASES))
 
     #if (defined(MK60DZ10))
@@ -32,17 +34,20 @@
 
 #endif
 
-
+//!< IRQTable Definitaion
+IRQn_Type   const GPIO_IRQBase = PORTA_IRQn;
 GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
 PORT_Type * const PORT_InstanceTable[] = PORT_BASES;
+static GPIO_CallBackType  gGPIOCallBackFun;
 
+//!< GPIO & PORT Clock Gate Table
 const uint32_t SIM_GPIOClockGateTable[] =
 {
     SIM_SCGC5_PORTA_MASK,
     SIM_SCGC5_PORTB_MASK,
     SIM_SCGC5_PORTC_MASK,
     SIM_SCGC5_PORTD_MASK,
-    SIM_SCGC5_PORTE_MASK
+    SIM_SCGC5_PORTE_MASK,
 };
 
 State_Type PORT_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
@@ -241,6 +246,76 @@ void GPIO_DMACmd(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_DMA_Type dm
 }
 
 
+uint32_t GPIO_ReadByte(GPIO_Instance_Type instance, uint8_t pinIndex)
+{
+    return (GPIO_InstanceTable[instance]->PDIR);
+}
+/**
+ * @brief  write GPIO 32 bit data
+ * @param  GPIOx: pointer to a GPIO_Type
+ *         @arg PTA: A Port
+ *         @arg PTB: B Port
+ *         @arg PTC: C Port
+ *         @arg PTD: D Port
+ *         @arg PTE: E Port 
+ * @param  PortVal: 32bit data value
+ * @retval None
+ */
+void GPIO_WriteByte(GPIO_Instance_Type instance, uint8_t pinIndex, uint32_t data)
+{
+    GPIO_InstanceTable[instance]->PDOR = data;
+}
+
+
+State_Type GPIO_CallBackInstall(GPIO_CallBackType AppCallBack)
+{
+    if(AppCallBack != NULL)
+		{
+        gGPIOCallBackFun = AppCallBack;
+		}
+//	AppCallBack
+   // NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
+}
+
+
+void PORTA_IRQHandler(void)
+{
+    gGPIOCallBackFun(HW_GPIOA, 1);
+}
+
+void PORTB_IRQHandler(void)
+{
+    gGPIOCallBackFun(HW_GPIOB, 1);
+}
+
+void PORTC_IRQHandler(void)
+{
+    gGPIOCallBackFun(HW_GPIOC, 1);
+}
+
+void PORTD_IRQHandler(void)
+{
+    gGPIOCallBackFun(HW_GPIOD, 1);
+}
+
+void PORTE_IRQHandler(void)
+{
+    gGPIOCallBackFun(HW_GPIOE, 1);
+}
+
+void PORTF_IRQHandler(void)
+{
+    gGPIOCallBackFun(HW_GPIOF, 1);
+}
+
+
+
+
+
+
+
+
+
 ITStatus GPIO_GetITStates(GPIO_Type *GPIOx,GPIO_Pin_Type GPIO_Pin)
 {
     PORT_Type *PORTx = NULL;
@@ -325,117 +400,8 @@ void GPIO_ClearAllITPendingBit(GPIO_Type *GPIOx)
 
 
 
-	/**
-  * @brief  write GPIO 32 bit data
-  * @param  GPIOx: pointer to a GPIO_Type
-  *         @arg PTA: A Port
-  *         @arg PTB: B Port
-  *         @arg PTC: C Port
-  *         @arg PTD: D Port
-	*         @arg PTE: E Port 
-  * @param  PortVal: 32bit data value
-  * @retval None
-  */
-void GPIO_WriteData(GPIO_Type *GPIOx,uint32_t PortVal)
-{
-    //检测参数
-    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
-    GPIOx->PDOR = PortVal;
-}
-/***********************************************************************************************
- 功能：读取一个已经设置为输出的IO Pin的 电平
- 形参：GPIOx:
-			 @arg PTA:A端口
-			 @arg PTB:B端口
-			 @arg PTC:C端口
-			 @arg PTD:D端口
-			 @arg PTE:E端口
-		 	 GPIO_Pin：
-			 @arg 0-31: 端口号
- 返回：端口电平
- 详解：实际上就是读取PDOR的值
-************************************************************************************************/
-uint8_t GPIO_ReadOutputDataBit(GPIO_Type* GPIOx, uint16_t GPIO_Pin)
-{
-    uint8_t bitstatus = 0x00;
-    //检测参数
-    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
-	
-    if(((GPIOx->PDOR >> GPIO_Pin) & 1 ) != (uint32_t)Bit_RESET)
-    {
-        bitstatus = (uint8_t)Bit_SET;
-    }
-    else
-    {
-        bitstatus = (uint8_t)Bit_RESET;
-    }
-    return bitstatus;
-}
-/***********************************************************************************************
- 功能：读取一个已经设置为输出的IO的 电平
- 形参：GPIOx:
-			 @arg PTA:A端口
-			 @arg PTB:B端口
-			 @arg PTC:C端口
-			 @arg PTD:D端口
-			 @arg PTE:E端口
- 返回：端口电平
- 详解：实际上就是读取PDOR的值
-************************************************************************************************/
-uint32_t GPIO_ReadOutputData(GPIO_Type* GPIOx)
-{
-  //检测参数
-    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
-    
-    return ((uint16_t)GPIOx->PDOR);
-}
-/***********************************************************************************************
- 功能：读取一个IO端口的某一个PIN的电平
- 形参：GPIOx:
-			 @arg PTA:A端口
-			 @arg PTB:B端口
-			 @arg PTC:C端口
-			 @arg PTD:D端口
-			 @arg PTE:E端口
-			 GPIO_Pin:
-			 @arg 0-31 数字
- 返回：逻辑电平 0 或者 1
- 详解：必须先设置端口为输入端口
-************************************************************************************************/
-uint8_t GPIO_ReadInputDataBit(GPIO_Type* GPIOx, uint16_t GPIO_Pin)
-{	 
-    uint8_t bitstatus = 0x00;
-    //检测参数
-    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
-	
-    if (((GPIOx->PDIR >> GPIO_Pin)& 0x01) != (uint32_t)Bit_RESET)
-    {
-        bitstatus = (uint8_t)Bit_SET;
-    }
-    else
-    {
-        bitstatus = (uint8_t)Bit_RESET;
-    }
-    return bitstatus;
-}
-/***********************************************************************************************
- 功能：读取一个IO端口的输入电平
- 形参：GPIOx:
-			 @arg PTA:A端口
-			 @arg PTB:B端口
-			 @arg PTC:C端口
-			 @arg PTD:D端口
-			 @arg PTE:E端口
- 返回：端口电平
- 详解：必须先设置端口为输入端口
-************************************************************************************************/
-uint32_t GPIO_ReadInputData(GPIO_Type *GPIOx)
-{
-    //检测参数
-    assert_param(IS_GPIO_ALL_PERIPH(GPIOx));
-	
-    return(GPIOx->PDIR);
-}
+
+
 
 void GPIO_ITConfig(GPIO_Type* GPIOx, GPIO_ITSelect_TypeDef GPIO_IT, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState)
 {

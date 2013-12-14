@@ -31,7 +31,17 @@ UART_Type* UART_DebugPort = NULL;
 
 //! @defgroup UART_Exported_Functions
 //! @{
+#if (!defined(GPIO_BASES))
 
+    #if (defined(MK60DZ10))
+        #define UART_BASES {UART0, UART1, UART2, UART3, UART4}
+    #elif
+		;
+    #endif
+
+#endif
+
+UART_Type * const UART_InstanceTable[] = UART_BASES;
 
 void UART_DebugPortInit(UART_MapSelect_TypeDef UARTxMAP,uint32_t UART_BaudRate)
 {

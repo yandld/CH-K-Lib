@@ -199,6 +199,8 @@ typedef enum
     kGPIO_IT_High = 0x0C,              //!< Trigger interrupt when GPIO external pin is in high state
 }GPIO_ITSelect_TypeDef;
 
+
+
 typedef enum
 {
     kGPIO_DMA_Rising = 0x01,           //!< Trigger DMA when GPIO external pin detect rising edge
@@ -214,6 +216,8 @@ typedef struct
 		GPIO_Pin_Type          pinx;                 //!< pin index
 }GPIO_InitTypeDef;
 
+
+typedef void (*GPIO_CallBackType)(GPIO_Instance_Type instance, GPIO_Pin_Type pinx);
 //! @}
 
 //! @defgroup GPIO_Exported_Functions

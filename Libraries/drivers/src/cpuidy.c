@@ -84,5 +84,3 @@ State_Type CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeI
 
 
 
-
-

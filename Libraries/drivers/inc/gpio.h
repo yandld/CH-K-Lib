@@ -141,83 +141,34 @@ typedef enum
 //! @addtogroup GPIO_Exported_Types
 //! @{
 
-//! @brief GPIO_Bit action :low or high state
-typedef enum
-{
-    Bit_RESET = 0,           //!< Reset, low  state
-    Bit_SET                  //!< Set  , high state
-}BitAction;
-#define IS_GPIO_BIT_ACTION(ACTION) (((ACTION) == Bit_RESET) || ((ACTION) == Bit_SET))
-
-//! @brief GPIO_Pin select
-typedef enum
-{
-    kGPIO_Pin0,
-    kGPIO_Pin1,
-    kGPIO_Pin2,
-    kGPIO_Pin3,
-    kGPIO_Pin4,
-    kGPIO_Pin5,
-    kGPIO_Pin6,
-    kGPIO_Pin7,
-    kGPIO_Pin8,
-    kGPIO_Pin9,
-    kGPIO_Pin10,
-    kGPIO_Pin11,
-    kGPIO_Pin12,
-    kGPIO_Pin13,
-    kGPIO_Pin14,
-    kGPIO_Pin15,
-    kGPIO_Pin16,
-    kGPIO_Pin17,
-    kGPIO_Pin18,
-    kGPIO_Pin19,
-    kGPIO_Pin20,
-    kGPIO_Pin21,
-    kGPIO_Pin22,
-    kGPIO_Pin23,
-    kGPIO_Pin24,
-    kGPIO_Pin25,
-    kGPIO_Pin26,
-    kGPIO_Pin27,
-    kGPIO_Pin28,
-    kGPIO_Pin29,
-    kGPIO_Pin30,
-    kGPIO_Pin31,
-    kGPIO_PinNameCount,
-}GPIO_Pin_Type;
-
 
 
 
 typedef enum
 {
-    kGPIO_IT_Low = 0x08,               //!< Trigger interrupt when GPIO external pin is in low state
-    kGPIO_IT_Rising = 0x09,            //!< Trigger interrupt when GPIO external pin dectect rising edge
-    kGPIO_IT_Falling = 0x0A,           //!< Trigger interrupt when GPIO external pin dectect falling edge
-    kGPIO_IT_RisingAndFalling = 0x0B,  //!< Trigger interrupt when GPIO external pin dectect rising or falling edge
-    kGPIO_IT_High = 0x0C,              //!< Trigger interrupt when GPIO external pin is in high state
-}GPIO_ITSelect_TypeDef;
+    kGPIO_ITDMA_Disable = 0x00,
+    kGPIO_DMA_RisingEdge = 0x01,	
+    kGPIO_DMA_FallingEdge = 0x02,
+    kGPIO_DMA_RisingFallingEdge = 0x03,
+    kGPIO_IT_Low = 0x08,
+    kGPIO_IT_RisingEdge = 0x09,
+    kGPIO_IT_FallingEdge = 0x0A,
+    kGPIO_IT_RisingFallingEdge = 0x0B,
+    kGPIO_IT_High = 0x0C,
+		kGPIO_ITDMAConfigNameCount,
+}GPIO_ITDMAConfig_Type;
 
-
-
-typedef enum
-{
-    kGPIO_DMA_Rising = 0x01,           //!< Trigger DMA when GPIO external pin detect rising edge
-    kGPIO_DMA_Falling = 0x02,          //!< Trigger DMA when GPIO external pin detect falling edge
-    kGPIO_DMA_RisingAndFalling = 0x03, //!< Trigger DMA when GPIO external pin detect rising or falling edge
-}GPIO_DMA_Type;
 
 
 typedef struct
 {
     GPIO_Instance_Type     instance;             //!< GPIO pin select
 		GPIO_Mode_Type         mode;                 //!< GPIO operation mode
-		GPIO_Pin_Type          pinx;                 //!< pin index
+		uint32_t               pinx;                 //!< pin index
 }GPIO_InitTypeDef;
 
 
-typedef void (*GPIO_CallBackType)(GPIO_Instance_Type instance, GPIO_Pin_Type pinx);
+typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 //! @}
 
 //! @defgroup GPIO_Exported_Functions

@@ -22,7 +22,7 @@
 //! @{
 
 
-//!< Leagacy Support for Kineis Z Version
+//!< Leagacy Support for Kineis Z Version(Inital Version)
 #if (!defined(GPIO_BASES))
 
     #if (defined(MK60DZ10))
@@ -34,13 +34,11 @@
 
 #endif
 
-//!< IRQTable Definitaion
+//!< Gloabl Const Table Defination
 IRQn_Type   const GPIO_IRQBase = PORTA_IRQn;
 GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
 PORT_Type * const PORT_InstanceTable[] = PORT_BASES;
-static GPIO_CallBackType  gGPIOCallBackFun;
-
-//!< GPIO & PORT Clock Gate Table
+GPIO_CallBackType GPIO_CallBackTable[sizeof(PORT_InstanceTable)] = {NULL};
 const uint32_t SIM_GPIOClockGateTable[] =
 {
     SIM_SCGC5_PORTA_MASK,
@@ -49,6 +47,7 @@ const uint32_t SIM_GPIOClockGateTable[] =
     SIM_SCGC5_PORTD_MASK,
     SIM_SCGC5_PORTE_MASK,
 };
+
 
 State_Type PORT_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
 {
@@ -113,7 +112,7 @@ State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 		{
         return kStatusInvalidArgument;
 		}
-    if(GPIO_InitStruct->pinx >= kGPIO_PinNameCount)
+    if(GPIO_InitStruct->pinx >= 32)
 		{
         return kStatusInvalidArgument;
 		}
@@ -151,7 +150,7 @@ State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
     PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
 }
 
-State_Type GPIO_QuickInit(GPIO_Instance_Type instance, GPIO_Pin_Type pinx, GPIO_Mode_Type mode)
+State_Type GPIO_QuickInit(GPIO_Instance_Type instance, uint32_t pinx, GPIO_Mode_Type mode)
 {
     GPIO_InitTypeDef GPIO_InitStruct1;
 		GPIO_InitStruct1.instance = instance;
@@ -209,6 +208,8 @@ void GPIO_ToggleBit(GPIO_Instance_Type instance, uint8_t pinIndex)
 }
 
 
+
+
 	/**
   * @brief  Enable or disable GPIO's DMA support
   * @code
@@ -235,15 +236,7 @@ void GPIO_ToggleBit(GPIO_Instance_Type instance, uint8_t pinIndex)
   *         @arg DISABLE
   * @retval None
   */
-void GPIO_DMACmd(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_DMA_Type dmaReq, FunctionalState newState)
-{
-    uint8_t i;
-    PORT_InstanceTable[pinIndex]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
-		if(ENABLE == newState)
-		{
-			PORT_InstanceTable[pinIndex]->PCR[pinIndex] |= PORT_PCR_IRQC(dmaReq);
-		}
-}
+
 
 
 uint32_t GPIO_ReadByte(GPIO_Instance_Type instance, uint8_t pinIndex)
@@ -266,174 +259,109 @@ void GPIO_WriteByte(GPIO_Instance_Type instance, uint8_t pinIndex, uint32_t data
     GPIO_InstanceTable[instance]->PDOR = data;
 }
 
-
-State_Type GPIO_CallBackInstall(GPIO_CallBackType AppCallBack)
-{
-    if(AppCallBack != NULL)
-		{
-        gGPIOCallBackFun = AppCallBack;
-		}
-//	AppCallBack
-   // NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
-}
-
-
-void PORTA_IRQHandler(void)
-{
-    gGPIOCallBackFun(HW_GPIOA, 1);
-}
-
-void PORTB_IRQHandler(void)
-{
-    gGPIOCallBackFun(HW_GPIOB, 1);
-}
-
-void PORTC_IRQHandler(void)
-{
-    gGPIOCallBackFun(HW_GPIOC, 1);
-}
-
-void PORTD_IRQHandler(void)
-{
-    gGPIOCallBackFun(HW_GPIOD, 1);
-}
-
-void PORTE_IRQHandler(void)
-{
-    gGPIOCallBackFun(HW_GPIOE, 1);
-}
-
-void PORTF_IRQHandler(void)
-{
-    gGPIOCallBackFun(HW_GPIOF, 1);
-}
-
-
-
-
-
-
-
-
-
-ITStatus GPIO_GetITStates(GPIO_Type *GPIOx,GPIO_Pin_Type GPIO_Pin)
-{
-    PORT_Type *PORTx = NULL;
-    //开端口时钟
-    switch((uint32_t)GPIOx)
-    {
-        case PTA_BASE:PORTx = PORTA;break;
-        case PTB_BASE:PORTx = PORTB;break;
-        case PTC_BASE:PORTx = PORTC;break;
-        case PTD_BASE:PORTx = PORTD;break;
-        case PTE_BASE:PORTx = PORTE;break;
-        default : break;
-    } 
-    //返回标志位
-    if(PORTx->ISFR & (1<<GPIO_Pin))
-    {
-        return SET;
-    }
-    else
-    {
-        return RESET;
-    }
-}
-	/**
-  * @brief  clear interrupt status flag of GPIO peripheral
-  * @param  GPIOx: pointer to a GPIO_Type
-  *         @arg PTA: A Port
-  *         @arg PTB: B Port
-  *         @arg PTC: C Port
-  *         @arg PTD: D Port
-	*         @arg PTE: E Port
-  * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0    
-  * @retval None
-  */
-void GPIO_ClearITPendingBit(GPIO_Type *GPIOx,uint16_t GPIO_Pin)
-{
-    PORT_Type *PORTx = NULL;
-    //开端口时钟
-    switch((uint32_t)GPIOx)
-    {
-        case PTA_BASE:PORTx=PORTA;SIM->SCGC5|=SIM_SCGC5_PORTA_MASK;break; //开启PORTA口使能时钟，在设置前首先开启使能时钟参见k10手册268页，
-        case PTB_BASE:PORTx=PORTB;SIM->SCGC5|=SIM_SCGC5_PORTB_MASK;break;	//开启PORTB口使能时钟
-        case PTC_BASE:PORTx=PORTC;SIM->SCGC5|=SIM_SCGC5_PORTC_MASK;break;	//开启PORTC口使能时钟
-        case PTD_BASE:PORTx=PORTD;SIM->SCGC5|=SIM_SCGC5_PORTD_MASK;break;	//开启PORTD口使能时钟
-        case PTE_BASE:PORTx=PORTE;SIM->SCGC5|=SIM_SCGC5_PORTE_MASK;break;	//开启PORTE口使能时钟
-        default : break;
-    } 
-    PORTx->ISFR |= (1<<GPIO_Pin);
-}
-	/**
-  * @brief  clear all interrupt status flag of GPIO peripheral
-  * @param  GPIOx: pointer to a GPIO_Type
-  *         @arg PTA: A Port
-  *         @arg PTB: B Port
-  *         @arg PTC: C Port
-  *         @arg PTD: D Port
-	*         @arg PTE: E Port 
-  * @retval None
-  */
-void GPIO_ClearAllITPendingBit(GPIO_Type *GPIOx)
-{
-    PORT_Type *PORTx = NULL;
-    //开端口时钟
-    switch((uint32_t)GPIOx)
-    {
-        case PTA_BASE:PORTx=PORTA;SIM->SCGC5|=SIM_SCGC5_PORTA_MASK;break; //开启PORTA口使能时钟，在设置前首先开启使能时钟参见k10手册268页，
-        case PTB_BASE:PORTx=PORTB;SIM->SCGC5|=SIM_SCGC5_PORTB_MASK;break;	//开启PORTB口使能时钟
-        case PTC_BASE:PORTx=PORTC;SIM->SCGC5|=SIM_SCGC5_PORTC_MASK;break;	//开启PORTC口使能时钟
-        case PTD_BASE:PORTx=PORTD;SIM->SCGC5|=SIM_SCGC5_PORTD_MASK;break;	//开启PORTD口使能时钟
-        case PTE_BASE:PORTx=PORTE;SIM->SCGC5|=SIM_SCGC5_PORTE_MASK;break;	//开启PORTE口使能时钟
-        default : break;
-    } 
-    PORTx->ISFR |= 0xFFFFFFFF;
-}
 	/**
   * @brief  default GPIO struct init
   * @param  GPIO_InitStruct: pointer to a GPIO_InitTypeDef structure that
   *         contains the configuration information for the specified GPIO peripheral.
   * @retval None
   */
-
-
-
-
-
-
-
-void GPIO_ITConfig(GPIO_Type* GPIOx, GPIO_ITSelect_TypeDef GPIO_IT, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState)
+void GPIO_ITDMAConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, FunctionalState newState)
 {
-    PORT_Type *PORTx = NULL;
-    IRQn_Type  IRQn;
-    switch((uint32_t)GPIOx)
-    {
-        case (uint32_t)PTA_BASE:
-            PORTx = PORTA;
-            IRQn = PORTA_IRQn;
-            break; 
-        case (uint32_t)PTB_BASE:
-            PORTx = PORTB; 
-            IRQn = PORTB_IRQn;
-            break;	
-        case PTC_BASE:
-            PORTx = PORTC; 
-            IRQn = PORTC_IRQn; 
-            break;	
-        case PTD_BASE:
-            PORTx = PORTD; 
-            IRQn = PORTD_IRQn; 
-            break;	
-        case PTE_BASE:
-            PORTx = PORTE; 
-            IRQn = PORTE_IRQn; 
-            break;	
-        default : break;
-    } 
-    PORTx->PCR[(uint8_t)GPIO_Pin] &= ~PORT_PCR_IRQC_MASK;
-    (ENABLE == NewState)?(PORTx->PCR[(uint8_t)GPIO_Pin] |= PORT_PCR_IRQC((uint8_t)GPIO_IT)):(PORTx->PCR[(uint8_t)GPIO_Pin] &= ~PORT_PCR_IRQC_MASK);
-		(ENABLE == NewState)?(NVIC_EnableIRQ(IRQn)):(NVIC_DisableIRQ(IRQn));
+	
+    // disable interrupt first
+    NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
+    PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] &= ~PORT_PCR_IRQC_MASK;
+		//config
+    PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] |= PORT_PCR_IRQC(config);
+    //enable interrupt
+    (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance)));
+}
+
+void GPIO_CallBackInstall(GPIO_Instance_Type instance, GPIO_CallBackType AppCBFun)
+{
+    if(AppCBFun != NULL)
+		{
+        GPIO_CallBackTable[instance] = AppCBFun;
+		}
+}
+
+
+void PORTA_IRQHandler(void)
+{
+    uint32_t ISFR;
+		//safe copy
+    ISFR = PORT_InstanceTable[HW_GPIOA]->ISFR;
+		//clear IT pending bit
+		PORT_InstanceTable[HW_GPIOA]->ISFR = 0xFFFFFFFF;
+		if(GPIO_CallBackTable[HW_GPIOA])
+		{
+        GPIO_CallBackTable[HW_GPIOA](ISFR);
+		}	
+}
+
+void PORTB_IRQHandler(void)
+{
+    uint32_t ISFR;
+		//safe copy
+    ISFR = PORT_InstanceTable[HW_GPIOB]->ISFR;
+		//clear IT pending bit
+		PORT_InstanceTable[HW_GPIOB]->ISFR = 0xFFFFFFFF;
+		if(GPIO_CallBackTable[HW_GPIOB])
+		{
+        GPIO_CallBackTable[HW_GPIOB](ISFR);
+		}	
+}
+
+void PORTC_IRQHandler(void)
+{
+    uint32_t ISFR;
+		//safe copy
+    ISFR = PORT_InstanceTable[HW_GPIOC]->ISFR;
+		//clear IT pending bit
+		PORT_InstanceTable[HW_GPIOC]->ISFR = 0xFFFFFFFF;
+		if(GPIO_CallBackTable[HW_GPIOC])
+		{
+        GPIO_CallBackTable[HW_GPIOC](ISFR);
+		}	
+}
+
+void PORTD_IRQHandler(void)
+{
+    uint32_t ISFR;
+		//safe copy
+    ISFR = PORT_InstanceTable[HW_GPIOD]->ISFR;
+		//clear IT pending bit
+		PORT_InstanceTable[HW_GPIOD]->ISFR = 0xFFFFFFFF;
+		if(GPIO_CallBackTable[HW_GPIOD])
+		{
+        GPIO_CallBackTable[HW_GPIOD](ISFR);
+		}	
+}
+
+void PORTE_IRQHandler(void)
+{
+    uint32_t ISFR;
+		//safe copy
+    ISFR = PORT_InstanceTable[HW_GPIOE]->ISFR;
+		//clear IT pending bit
+		PORT_InstanceTable[HW_GPIOE]->ISFR = 0xFFFFFFFF;
+		if(GPIO_CallBackTable[HW_GPIOE])
+		{
+        GPIO_CallBackTable[HW_GPIOE](ISFR);
+		}	
+}
+
+void PORTF_IRQHandler(void)
+{
+    uint32_t ISFR;
+		//safe copy
+    ISFR = PORT_InstanceTable[HW_GPIOF]->ISFR;
+		//clear IT pending bit
+		PORT_InstanceTable[HW_GPIOF]->ISFR = 0xFFFFFFFF;
+		if(GPIO_CallBackTable[HW_GPIOF])
+		{
+        GPIO_CallBackTable[HW_GPIOF](ISFR);
+		}	
 }
 
 

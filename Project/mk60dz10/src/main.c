@@ -103,8 +103,11 @@ const cmd_tbl_t MyCommand[] =
 extern const cmd_tbl_t CommandFun_CPU;
 extern const cmd_tbl_t CommandFun_Hist;
 extern const cmd_tbl_t CommandFun_GPIO;
+
+
 #pragma weak configure_uart_pin_mux
 extern void configure_uart_pin_mux(uint32_t instance);
+static void GPIO_ISR(uint32_t pinArray);
 int main(void)
 {
 	  uint8_t ch;
@@ -112,28 +115,12 @@ int main(void)
     uint32_t Req;
     uint8_t i;
     //定义GPIO初始化结构
-    GPIO_InitTypeDef GPIO_InitStruct1;
   //  SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
 	  DelayInit();
     UART_DebugPortInit(UART4_RX_PC14_TX_PC15, 115200);
     UART_printf("HelloWorld!\r\n");
 	  configure_uart_pin_mux(1);
-		/*
-    GPIO_InitStruct1.GPIOx = PTC;                             //C端口
-    GPIO_InitStruct1.GPIO_InitState = Bit_RESET;                //初始化后输出高电平
-    GPIO_InitStruct1.GPIO_Pin = kGPIO_Pin_18;                  //PC16引脚
-    GPIO_InitStruct1.GPIO_Mode = kGPIO_Mode_IPU;               //推挽输出
-    //执行GPIO初始化
-   // GPIO_Init(&GPIO_InitStruct1);      
-		GPIO_ITConfig(PTC, kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
-	  
-    GPIO_InitStruct1.GPIOx = PTD;                             //C端口
-    GPIO_InitStruct1.GPIO_InitState = Bit_SET;                //初始化后输出高电平
-    GPIO_InitStruct1.GPIO_Pin = kGPIO_Pin_1;                  //PC16引脚
-    GPIO_InitStruct1.GPIO_Mode = kGPIO_Mode_OPP;               //推挽输出
-    //执行GPIO初始化
-    GPIO_Init(&GPIO_InitStruct1);     
-		*/
+
 	//	UART_printf("%d\r\n", &configure_uart_pin_mux);
     
 	 // UART_ITConfig(UART4, kUART_IT_RDRF, ENABLE);
@@ -154,17 +141,28 @@ int main(void)
     printf("When you see this string, It means that printf is OK!\r\n");
 		
 		
-		GPIO_QuickInit(HW_GPIOD, kGPIO_Pin0, kGPIO_Mode_OPP);
-		GPIO_QuickInit(HW_GPIOD, kGPIO_Pin7, kGPIO_Mode_OPP);
-		GPIO_WriteBit(HW_GPIOD, kGPIO_Pin0, 1);
+		GPIO_QuickInit(HW_GPIOD, 0 , kGPIO_Mode_OPP);
+		GPIO_QuickInit(HW_GPIOD, 7 , kGPIO_Mode_OPP);
+		GPIO_QuickInit(HW_GPIOC, 17, kGPIO_Mode_IPU);
+		
+		GPIO_ITDMAConfig(HW_GPIOC, 17, kGPIO_IT_RisingEdge, ENABLE);
+		GPIO_CallBackInstall(HW_GPIOC, GPIO_ISR);
+		
+	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin0, 1);
 	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);
-	SHELL_printf("%d\r\n", GPIO_ReadBit(HW_GPIOD, kGPIO_Pin0));
-	
+	//SHELL_printf("%d\r\n", GPIO_ReadBit(HW_GPIOD, kGPIO_Pin0));
+	//SHELL_printf("%x\r\n", (uint32_t)PORTA_IRQHandler);
     while(1)
 		{
 			SHELL_main_loop("SHELL>>");
 		}
 
+}
+
+static void GPIO_ISR(uint32_t pinArray)
+{
+    SHELL_printf(" array:0x%x\r\n", pinArray);
+	
 }
 
 

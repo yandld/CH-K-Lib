@@ -28,18 +28,16 @@
     #if (defined(MK60DZ10))
         #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
         #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
-    #elif
-		;
     #endif
 
 #endif
 
 //!< Gloabl Const Table Defination
-IRQn_Type   const GPIO_IRQBase = PORTA_IRQn;
-GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
-PORT_Type * const PORT_InstanceTable[] = PORT_BASES;
-GPIO_CallBackType GPIO_CallBackTable[sizeof(PORT_InstanceTable)] = {NULL};
-const uint32_t SIM_GPIOClockGateTable[] =
+static IRQn_Type   const GPIO_IRQBase = PORTA_IRQn;
+static GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
+static PORT_Type * const PORT_InstanceTable[] = PORT_BASES;
+static GPIO_CallBackType GPIO_CallBackTable[sizeof(PORT_InstanceTable)] = {NULL};
+static const uint32_t SIM_GPIOClockGateTable[] =
 {
     SIM_SCGC5_PORTA_MASK,
     SIM_SCGC5_PORTB_MASK,
@@ -80,7 +78,6 @@ State_Type PORT_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_Pu
             break;
         default:
             return kStatusInvalidArgument;
-            break;
 		}
 		return kStatus_Success;
 }
@@ -148,6 +145,7 @@ State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
     }
     //config pinMux
     PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
+		return kStatus_Success;
 }
 
 State_Type GPIO_QuickInit(GPIO_Instance_Type instance, uint32_t pinx, GPIO_Mode_Type mode)
@@ -277,7 +275,7 @@ void GPIO_ITDMAConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_ITDMAC
     (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance)));
 }
 
-void GPIO_CallBackInstall(GPIO_Instance_Type instance, GPIO_CallBackType AppCBFun)
+void GPIO_CallbackInstall(GPIO_Instance_Type instance, GPIO_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
 		{
@@ -318,7 +316,7 @@ void PORTC_IRQHandler(void)
 		//safe copy
     ISFR = PORT_InstanceTable[HW_GPIOC]->ISFR;
 		//clear IT pending bit
-		PORT_InstanceTable[HW_GPIOC]->ISFR = 0xFFFFFFFF;
+		PORT_InstanceTable[HW_GPIOC]->ISFR = PORT_ISFR_ISF_MASK;
 		if(GPIO_CallBackTable[HW_GPIOC])
 		{
         GPIO_CallBackTable[HW_GPIOC](ISFR);
@@ -331,7 +329,7 @@ void PORTD_IRQHandler(void)
 		//safe copy
     ISFR = PORT_InstanceTable[HW_GPIOD]->ISFR;
 		//clear IT pending bit
-		PORT_InstanceTable[HW_GPIOD]->ISFR = 0xFFFFFFFF;
+		PORT_InstanceTable[HW_GPIOD]->ISFR = PORT_ISFR_ISF_MASK;
 		if(GPIO_CallBackTable[HW_GPIOD])
 		{
         GPIO_CallBackTable[HW_GPIOD](ISFR);
@@ -344,25 +342,27 @@ void PORTE_IRQHandler(void)
 		//safe copy
     ISFR = PORT_InstanceTable[HW_GPIOE]->ISFR;
 		//clear IT pending bit
-		PORT_InstanceTable[HW_GPIOE]->ISFR = 0xFFFFFFFF;
+		PORT_InstanceTable[HW_GPIOE]->ISFR = PORT_ISFR_ISF_MASK;
 		if(GPIO_CallBackTable[HW_GPIOE])
 		{
         GPIO_CallBackTable[HW_GPIOE](ISFR);
 		}	
 }
 
+#if (defined(MK70F12))
 void PORTF_IRQHandler(void)
 {
     uint32_t ISFR;
 		//safe copy
     ISFR = PORT_InstanceTable[HW_GPIOF]->ISFR;
 		//clear IT pending bit
-		PORT_InstanceTable[HW_GPIOF]->ISFR = 0xFFFFFFFF;
+		PORT_InstanceTable[HW_GPIOF]->ISFR = PORT_ISFR_ISF_MASK;
 		if(GPIO_CallBackTable[HW_GPIOF])
 		{
         GPIO_CallBackTable[HW_GPIOF](ISFR);
-		}	
+		}
 }
+#endif
 
 
 //! @}

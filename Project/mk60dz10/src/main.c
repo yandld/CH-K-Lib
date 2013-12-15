@@ -146,7 +146,7 @@ int main(void)
 		GPIO_QuickInit(HW_GPIOC, 17, kGPIO_Mode_IPU);
 		
 		GPIO_ITDMAConfig(HW_GPIOC, 17, kGPIO_IT_RisingEdge, ENABLE);
-		GPIO_CallBackInstall(HW_GPIOC, GPIO_ISR);
+		GPIO_CallbackInstall(HW_GPIOC, GPIO_ISR);
 		
 	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin0, 1);
 	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);

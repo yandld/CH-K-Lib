@@ -29,6 +29,10 @@
 #include "MK70F15.h"
 #endif
 
+#ifdef MKL25Z4
+#include "MKL25Z4.h"
+#endif
+
 
 //! @addtogroup CH_Periph_Driver
 //! @{

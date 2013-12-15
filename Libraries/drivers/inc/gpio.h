@@ -125,23 +125,8 @@ typedef enum
 
 //! @}
 
-#define IS_GPIO_ALL_PERIPH(PERIPH) (((PERIPH) == PTA) || \
-                                    ((PERIPH) == PTB) || \
-                                    ((PERIPH) == PTC) || \
-                                    ((PERIPH) == PTD) || \
-                                    ((PERIPH) == PTE))
-
-
-#define IS_PORT_ALL_PERIPH(PERIPH) (((PERIPH) == PORTA) || \
-                                    ((PERIPH) == PORTB) || \
-                                    ((PERIPH) == PORTC) || \
-                                    ((PERIPH) == PORTD) || \
-                                    ((PERIPH) == PORTE))
-
 //! @addtogroup GPIO_Exported_Types
 //! @{
-
-
 
 
 typedef enum
@@ -157,7 +142,6 @@ typedef enum
     kGPIO_IT_High = 0x0C,
 		kGPIO_ITDMAConfigNameCount,
 }GPIO_ITDMAConfig_Type;
-
 
 
 typedef struct
@@ -176,22 +160,20 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 
 State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
 State_Type PORT_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
-/*
-void GPIO_WriteBit(GPIO_Type *GPIOx,uint16_t GPIO_Pin,BitAction BitVal);
-void GPIO_SetBits(GPIO_Type* GPIOx, uint16_t GPIO_Pin);
-void GPIO_ResetBits(GPIO_Type* GPIOx, uint16_t GPIO_Pin);
-void GPIO_ToggleBit(GPIO_Type *GPIOx,uint16_t GPIO_Pin);
-void GPIO_WriteData(GPIO_Type *GPIOx,uint32_t PortVal);
-uint8_t GPIO_ReadOutputDataBit(GPIO_Type* GPIOx, uint16_t GPIO_Pin);
-uint32_t GPIO_ReadOutputData(GPIO_Type* GPIOx);
-uint8_t GPIO_ReadInputDataBit(GPIO_Type* GPIOx, uint16_t GPIO_Pin);
-uint32_t GPIO_ReadInputData(GPIO_Type *GPIOx);
-void GPIO_StructInit(GPIO_InitTypeDef* GPIO_InitStruct);
-ITStatus GPIO_GetITStates(GPIO_Type *GPIOx,GPIO_Pin_Type GPIO_Pin);
-void GPIO_ClearITPendingBit(GPIO_Type *GPIOx,uint16_t GPIO_Pin);
-void GPIO_ITConfig(GPIO_Type* GPIOx, GPIO_ITSelect_TypeDef GPIO_IT, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState);
-void GPIO_DMACmd(GPIO_Type* GPIOx, GPIO_DMASelect_TypeDef GPIO_DMAReq, GPIO_Pin_Type GPIO_Pin, FunctionalState NewState);
-*/
+State_Type PORT_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState);
+State_Type GPIO_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_PinConfig_Type pull);
+State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
+State_Type GPIO_QuickInit(GPIO_Instance_Type instance, uint32_t pinx, GPIO_Mode_Type mode);
+void GPIO_WriteBit(GPIO_Instance_Type instance, uint8_t pinIndex, uint8_t data);
+uint8_t GPIO_ReadBit(GPIO_Instance_Type instance, uint8_t pinIndex);
+void GPIO_ToggleBit(GPIO_Instance_Type instance, uint8_t pinIndex);
+uint32_t GPIO_ReadByte(GPIO_Instance_Type instance, uint8_t pinIndex);
+void GPIO_WriteByte(GPIO_Instance_Type instance, uint8_t pinIndex, uint32_t data);
+void GPIO_ITDMAConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, FunctionalState newState);
+void GPIO_CallbackInstall(GPIO_Instance_Type instance, GPIO_CallBackType AppCBFun);
+
+
+
 
 #ifdef __cplusplus
 }

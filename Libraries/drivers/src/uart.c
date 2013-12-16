@@ -165,7 +165,7 @@ void UART_ITConfig(UART_Type* UARTx, UART_ITSelect_TypeDef UART_IT, FunctionalSt
 {
     IRQn_Type  IRQn;
     //参数检查
-    assert_param(IS_UART_ALL_PERIPH(UARTx));
+   // //assert_param(IS_UART_ALL_PERIPH(UARTx));
     //找出对应的UART端口
     switch((uint32_t)UARTx)
     {
@@ -222,7 +222,7 @@ ITStatus UART_GetITStatus(UART_Type* UARTx, UART_ITSelect_TypeDef UART_IT)
 {
     ITStatus retval;
     //参数检查
-    assert_param(IS_UART_ALL_PERIPH(UARTx));
+ //   //assert_param(IS_UART_ALL_PERIPH(UARTx));
     
     switch(UART_IT)
     {
@@ -288,7 +288,7 @@ void UART_SendByte_Async(UART_Type* UARTx, uint8_t Data)
 void UART_DMACmd(UART_Type* UARTx, UART_DMAReq_Select_TypeDef UART_DMAReq, FunctionalState NewState)
 {
     //参数检查
-    assert_param(IS_UART_ALL_PERIPH(UARTx));
+   // //assert_param(IS_UART_ALL_PERIPH(UARTx));
 	
     switch(UART_DMAReq)
     {
@@ -321,7 +321,7 @@ void UART_DMACmd(UART_Type* UARTx, UART_DMAReq_Select_TypeDef UART_DMAReq, Funct
 void UART_SendDataInt(UART_Type* UARTx,uint8_t* pBuffer,uint8_t NumberOfBytes)
 {
     //参数检测
-    assert_param(IS_UART_ALL_PERIPH(UARTx));
+    //assert_param(IS_UART_ALL_PERIPH(UARTx));
 	
     //内存拷贝
     memcpy(UART_TxIntStruct1.TxBuf,pBuffer,NumberOfBytes);

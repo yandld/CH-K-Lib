@@ -20,44 +20,35 @@
 
 
 
-State_Type CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideValue_Type dividerValue)
+void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideValue_Type dividerValue)
 {
-    if(clockDivName >= kClockDividerNameCount)
-		{
-        return kStatusInvalidArgument;
-		} 
     switch (clockDivName)
 		{
 			case kMcgOut2CoreDivider:
-				MCGOUT_TO_CORE_DIV_SET(dividerValue);
+			//	SIM->CLKDIV1 &= ~SIM_CLKDIV1_OUTDIV1_MASK;
+				SIM->CLKDIV1 |= MCGOUT_TO_CORE_DIV_SET(dividerValue);
 				break;
 			case kMcgOut2SystemDivider:
-				MCGOUT_TO_SYSTEM_DIV_SET(dividerValue);
+				SIM->CLKDIV1 |= MCGOUT_TO_SYSTEM_DIV_SET(dividerValue);
 				break;
 			case kMcgOut2BusDivider:
-				MCGOUT_TO_BUS_DIV_SET(dividerValue);
+				SIM->CLKDIV1 |= MCGOUT_TO_BUS_DIV_SET(dividerValue);
 				break;
 			case kMcgOut2FlexBusDivider:
-				MCGOUT_TO_FLEXBUS_DIV_SET(dividerValue);
+				SIM->CLKDIV1 |= MCGOUT_TO_FLEXBUS_DIV_SET(dividerValue);
 				break;
 			case kMcgOut2FlashDivider:
-				MCGOUT_TO_FLASH_DIV_SET(dividerValue);
+				SIM->CLKDIV1 |= MCGOUT_TO_FLASH_DIV_SET(dividerValue);
 				break;
 			default :
-				return kStatusFail;
 				break;
 		}
-    return kStatus_Success;
 }
 
 
-State_Type CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz)
+void CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz)
 {
     uint32_t MCGOutClock = 0;
-    if(clockName >= kClockNameCount)
-		{
-        return kStatusInvalidArgument;
-		}
 		//calualte MCGOutClock
 		MCGOutClock = SystemCoreClock * MCGOUT_TO_CORE_DIVIDER;
     

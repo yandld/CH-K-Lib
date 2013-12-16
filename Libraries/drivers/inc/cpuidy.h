@@ -16,8 +16,8 @@ typedef enum
 
 //!< API functions
 char *CPUIDY_GetFamID(void);
-State_Type CPUIDY_GetPinCount(uint32_t *pinCount);
-State_Type CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB);
+void CPUIDY_GetPinCount(uint32_t *pinCount);
+void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB);
 
 
 

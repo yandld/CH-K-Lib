@@ -43,7 +43,7 @@ typedef enum
     kClockSimDiv16,
 }CLOCK_DivideValue_Type;
 
-State_Type CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
+void CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
 
 #endif
 

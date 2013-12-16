@@ -171,3 +171,11 @@ void SysTick_Handler(void)
 	//GPIO_ToggleBit(PTD, kGPIO_Pin1);
 }
 
+
+void assert_failed(char * file, uint32_t line)
+{
+	//∂œ—‘ ß∞‹ºÏ≤‚
+	UART_printf("assert_failed:line:%d %s\r\n",line,file);
+	while(1);
+}
+

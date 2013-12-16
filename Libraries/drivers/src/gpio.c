@@ -36,7 +36,7 @@
 static IRQn_Type   const GPIO_IRQBase = PORTA_IRQn;
 static GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
 static PORT_Type * const PORT_InstanceTable[] = PORT_BASES;
-static GPIO_CallBackType GPIO_CallBackTable[sizeof(PORT_InstanceTable)] = {NULL};
+static GPIO_CallBackType GPIO_CallBackTable[ARRAY_SIZE(PORT_InstanceTable)] = {NULL};
 static const uint32_t SIM_GPIOClockGateTable[] =
 {
     SIM_SCGC5_PORTA_MASK,
@@ -47,22 +47,27 @@ static const uint32_t SIM_GPIOClockGateTable[] =
 };
 
 
-State_Type PORT_PinMuxConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
+void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
 {
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
+		assert_param(IS_GPIO_ALL_PIN(pinIndex));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    if(instance >= ARRAY_SIZE(PORT_InstanceTable))
-		{
-        return kStatusInvalidArgument;
-		}
 		PORT_InstanceTable[instance]->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);
 		PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
-		return kStatus_Success;
 }
 
-State_Type PORT_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState)
+void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState)
 {
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
+		assert_param(IS_GPIO_ALL_PIN(pinIndex));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
+		#ifndef MKL25Z4
 		(newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
+		#endif
     switch(pull)
 		{
         case kPullDisabled:
@@ -77,20 +82,18 @@ State_Type PORT_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, PORT_Pu
             PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_PS_MASK;
             break;
         default:
-            return kStatusInvalidArgument;
+            break;
 		}
-		return kStatus_Success;
 }
 
-State_Type GPIO_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_PinConfig_Type pull)
+void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type pull)
 {
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
+		assert_param(IS_GPIO_ALL_PIN(pinIndex));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-		if(pull >= kPinConfigNameCount)
-		{
-        return kStatusInvalidArgument;
-		}
     (pull == kOutput) ? (GPIO_InstanceTable[instance]->PDDR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PDDR &= ~(1 << pinIndex));
-		return kStatus_Success;
 }
 
 
@@ -102,21 +105,12 @@ State_Type GPIO_PinConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_Pi
   *         contains the configuration information for the specified GPIO peripheral.
   * @retval None
   */
-State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
+void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 {
     //param check
-    if(GPIO_InitStruct->instance >= ARRAY_SIZE(GPIO_InstanceTable))
-		{
-        return kStatusInvalidArgument;
-		}
-    if(GPIO_InitStruct->pinx >= 32)
-		{
-        return kStatusInvalidArgument;
-		}
-    if(GPIO_InitStruct->mode >= kGPIO_ModeNameCount)
-		{
-        return kStatusInvalidArgument;
-		}
+    assert_param(IS_GPIO_ALL_INSTANCE(GPIO_InitStruct->instance));
+		assert_param(IS_PORT_ALL_INSTANCE(GPIO_InitStruct->instance));
+		assert_param(IS_GPIO_ALL_PIN(GPIO_InitStruct->pinx));
 		//config state
 		switch(GPIO_InitStruct->mode)
 		{
@@ -145,16 +139,15 @@ State_Type GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
     }
     //config pinMux
     PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
-		return kStatus_Success;
 }
 
-State_Type GPIO_QuickInit(GPIO_Instance_Type instance, uint32_t pinx, GPIO_Mode_Type mode)
+void GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode)
 {
     GPIO_InitTypeDef GPIO_InitStruct1;
 		GPIO_InitStruct1.instance = instance;
 		GPIO_InitStruct1.mode = mode;
 		GPIO_InitStruct1.pinx = pinx;
-		return GPIO_Init(&GPIO_InitStruct1);
+		GPIO_Init(&GPIO_InitStruct1);
 }
 
 	/**
@@ -171,21 +164,28 @@ State_Type GPIO_QuickInit(GPIO_Instance_Type instance, uint32_t pinx, GPIO_Mode_
 	*         @arg Bit_SET   : high state
   * @retval None
   */
-void GPIO_WriteBit(GPIO_Instance_Type instance, uint8_t pinIndex, uint8_t data)
+void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data)
 {
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
+		assert_param(IS_GPIO_ALL_PIN(pinIndex));
     (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pinIndex));
 }
 
-uint8_t GPIO_ReadBit(GPIO_Instance_Type instance, uint8_t pinIndex)
+uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex)
 {
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
+		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    //!< input or output
     if(((GPIO_InstanceTable[instance]->PDDR) >> pinIndex) & 0x01)
 		{
-        //output
         return ((GPIO_InstanceTable[instance]->PDOR >> pinIndex) & 0x01);
 		}
 		else
 		{
-			//input
         return ((GPIO_InstanceTable[instance]->PDIR >> pinIndex) & 0x01);
 		}
 }
@@ -200,8 +200,12 @@ uint8_t GPIO_ReadBit(GPIO_Instance_Type instance, uint8_t pinIndex)
   * @param  GPIO_Pin: GPIO pin:  eg : kGPIO_Pin_0   
   * @retval None
   */
-void GPIO_ToggleBit(GPIO_Instance_Type instance, uint8_t pinIndex)
+void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex)
 {
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
+		assert_param(IS_GPIO_ALL_PIN(pinIndex));
     GPIO_InstanceTable[instance]->PTOR |= (1 << pinIndex);
 }
 
@@ -237,8 +241,12 @@ void GPIO_ToggleBit(GPIO_Instance_Type instance, uint8_t pinIndex)
 
 
 
-uint32_t GPIO_ReadByte(GPIO_Instance_Type instance, uint8_t pinIndex)
+uint32_t GPIO_ReadByte(uint8_t instance, uint8_t pinIndex)
 {
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
+		assert_param(IS_GPIO_ALL_PIN(pinIndex));
     return (GPIO_InstanceTable[instance]->PDIR);
 }
 /**
@@ -252,8 +260,12 @@ uint32_t GPIO_ReadByte(GPIO_Instance_Type instance, uint8_t pinIndex)
  * @param  PortVal: 32bit data value
  * @retval None
  */
-void GPIO_WriteByte(GPIO_Instance_Type instance, uint8_t pinIndex, uint32_t data)
+void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data)
 {
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
+		assert_param(IS_GPIO_ALL_PIN(pinIndex));
     GPIO_InstanceTable[instance]->PDOR = data;
 }
 
@@ -263,9 +275,12 @@ void GPIO_WriteByte(GPIO_Instance_Type instance, uint8_t pinIndex, uint32_t data
   *         contains the configuration information for the specified GPIO peripheral.
   * @retval None
   */
-void GPIO_ITDMAConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, FunctionalState newState)
+void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, FunctionalState newState)
 {
-	
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
+		assert_param(IS_GPIO_ALL_PIN(pinIndex));
     // disable interrupt first
     NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
     PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] &= ~PORT_PCR_IRQC_MASK;
@@ -275,8 +290,11 @@ void GPIO_ITDMAConfig(GPIO_Instance_Type instance, uint8_t pinIndex, GPIO_ITDMAC
     (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance)));
 }
 
-void GPIO_CallbackInstall(GPIO_Instance_Type instance, GPIO_CallBackType AppCBFun)
+void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
 {
+    //param check
+    assert_param(IS_GPIO_ALL_INSTANCE(instance));
+		assert_param(IS_PORT_ALL_INSTANCE(instance));
     if(AppCBFun != NULL)
 		{
         GPIO_CallBackTable[instance] = AppCBFun;

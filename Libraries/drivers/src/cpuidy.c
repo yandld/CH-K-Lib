@@ -38,24 +38,16 @@ char *CPUIDY_GetFamID(void)
 }
 
 
-State_Type CPUIDY_GetPinCount(uint32_t *pinCount)
+void CPUIDY_GetPinCount(uint32_t *pinCount)
 {
     *pinCount = 0;
-    State_Type ret;
     *pinCount = CPUIDY_PinCountTable[PINCOUNT_FIELD];
-    (*pinCount != 0)?(ret = kStatus_Success):(ret = kStatusFail);
-		return ret;
 }
 
 
-State_Type CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB)
+void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB)
 {
     *memSizeInKB = 0;
-    State_Type ret;
-    if(memSizeName >= kMemNameCount)
-		{
-        ret = kStatusInvalidArgument;
-		}
     switch (memSizeName)
 		{
         case kPFlashSizeInKB:
@@ -76,8 +68,6 @@ State_Type CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeI
 				default:
             break;
 		}
-    (*memSizeInKB != 0)?(ret = kStatus_Success):(ret = kStatusFail);
-		return ret;
 }
 
 

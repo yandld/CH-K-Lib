@@ -183,9 +183,9 @@ void SystemClockSetup(SYS_ClockSourceSelect_TypeDef clockSource, SYS_CoreClockSe
 void NVIC_Init(IRQn_Type IRQn,uint32_t PriorityGroup,uint32_t PreemptPriority,uint32_t SubPriority)
 {
     //param check
-    assert_param(IS_NVIC_PRIORITY_GROUP(PriorityGroup));
-    assert_param(IS_NVIC_PREEMPTION_PRIORITY(PreemptPriority));  
-    assert_param(IS_NVIC_SUB_PRIORITY(SubPriority));
+    //assert_param(IS_NVIC_PRIORITY_GROUP(PriorityGroup));
+    //assert_param(IS_NVIC_PREEMPTION_PRIORITY(PreemptPriority));  
+    //assert_param(IS_NVIC_SUB_PRIORITY(SubPriority));
     //NVIC priority grouping
     NVIC_SetPriorityGrouping(PriorityGroup);
     //Set NVIC interrupt priority
@@ -203,7 +203,7 @@ void NVIC_Init(IRQn_Type IRQn,uint32_t PriorityGroup,uint32_t PreemptPriority,ui
 void SetVectorTable(uint32_t VectorOffset)
 {
     //param check
-    assert_param(IS_VECTOR_OFFSET(VectorOffset));
+    //assert_param(IS_VECTOR_OFFSET(VectorOffset));
     SCB->VTOR = VectorOffset;  // 更改中断向量表偏移地址
 }
 /**

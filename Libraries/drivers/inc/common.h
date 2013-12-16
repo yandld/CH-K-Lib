@@ -45,7 +45,7 @@
 //! @{
 
 //! @brief Set to 1 to expanse the "assert_param" macro in the Lib drivers code 
-//#define USE_FULL_ASSERT         (1)
+#define USE_FULL_ASSERT         
 //! @brief Debug printf and shell max char len
 #define UART_PRINTF_CMD_LENGTH  (64)
 
@@ -65,7 +65,7 @@
 
 
 //²ÎÊý¼ì²âÆ÷
-#if USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 
 /**
   * @brief  The assert_param macro is used for function's parameters check.
@@ -74,12 +74,13 @@
   *         that failed. If expr is true, it returns no value.
   * @retval None
   */
-  #define assert_param(expr) ((expr) ? (void)0 : assert_failed((uint8_t *)__FILE__, __LINE__))
+  #define assert_param(expr) ((expr) ? (void)0 : assert_failed((char *)__FILE__, __LINE__))
 /* Exported functions ------------------------------------------------------- */
-  void assert_failed(uint8_t* file, uint32_t line);
+  void assert_failed(char * file, uint32_t line);
 #else
   #define assert_param(expr) ((void)0)
 #endif /* USE_FULL_ASSERT */
+
 
 //! @addtogroup COMMON_Typedef
 //! @{
@@ -111,30 +112,7 @@ typedef enum {FALSE = 0, TRUE = !FALSE} ErrorState;
 
 
 /*! @brief Status return codes.*/
-typedef enum
-{
-    kStatus_Success = 0,
-    kStatus_AbortDataPhase,
-    kStatus_ReadOnly,
-    kStatus_OutOfRange,
-    kStatusUnknownProperty,
-    kStatusInvalidArgument,
-    kStatusFail,
-    kStatusRomLdrSectionOverrun,
-    kStatusRomLdrSignature,
-    kStatusRomLdrSectionLength,
-    kStatusRomLdrUnencryptedOnly,
-    kStatusRomLdrEOFReached,
-    kStatusRomLdrChecksum,
-    kStatusRomLdrUnknownCommand,
-    kStatusRomLdrIdNotFound,
-    kStatusUnknownCommand,
-    kStatusMemoryRangeInvalid,
-    kStatusMemoryReadFailed,
-    kStatusMemoryWriteFailed,
-    kStatusNoMedium,
-    kStatusTimeOut,
-}State_Type;
+
 
 //! @brief DELAY Function Selection
 #define DelayInit              SYSTICK_DelayInit

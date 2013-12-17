@@ -8,10 +8,12 @@
   ******************************************************************************
   */
 #include "uart.h"
+#include "gpio.h"
 #include "common.h"
 #include "string.h"
 #include "clock.h"
 #include "stdarg.h"
+#include <stdio.h>
 //发送结构
 /*
 UART_TxSendTypeDef UART_TxIntStruct1;
@@ -40,6 +42,27 @@ UART_Type* UART_DebugPort = NULL;
     #endif
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 UART_Type * const UART_InstanceTable[] = UART_BASES;
 
@@ -403,73 +426,16 @@ int UART_printf(const char *format,...)
     va_list ap;
     char printbuffer[UART_PRINTF_CMD_LENGTH];
     va_start(ap, format);
-    chars = vsprintf(printbuffer, format, ap);
+    chars = vsnprintf(printbuffer,UART_PRINTF_CMD_LENGTH, format, ap);
     va_end(ap);
-    for(i=0;i<chars;i++)
-    {
-        UART_SendByte(UART_DebugPort,printbuffer[i]);
-    }
+		while(chars--)
+		{
+			UART_SendByte(UART_DebugPort,printbuffer[i]);
+		}
     return chars ;
 }
 
-/***********************************************************************************************
- 功能：打印处理器信息
- 形参：0          
- 返回：0
- 详解：针对于Freescale Kinetis系列
-************************************************************************************************/
-void DisplayCPUInfo(void)
-{
-    //FwLib Version
-    UART_printf("CH_K60 FW_Version:%d\r\n",GetFWVersion());
-    //Reset infomation
-	/*
-    switch(CPUInfo.m_ResetStateCode)
-    {
-        case kSoftwareReset:
-            UART_printf("Software Reset\r\n");
-            break;
-        case kCoreLockupEventReset: 
-            UART_printf("Core Lockup Event Reset\r\n"); 
-            break;
-        case kJTAGReset: 
-            UART_printf("JTAG Reset\r\n");         
-            break;
-        case kPOReset:
-            UART_printf("Power-on Reset\r\n");    
-            break;
-        case kExternalPinReset: 
-            UART_printf("External Pin Reset\r\n");     
-            break;
-        case kWdogReset:
-            UART_printf("Watchdog(COP) Reset\r\n");    
-            break;
-        case kLossOfClockReset: 
-            UART_printf("Loss of Clock Reset\r\n");    
-            break;
-        case kLowVoltageDetectReset: 
-            UART_printf("Low-voltage Detect Reset\r\n");
-            break;
-        case kLLWUReset: 
-            UART_printf("LLWU Reset\r\n");     
-            break;
-    }
-		*/
-    //PFlash size
-    //UART_printf("PFlash Size: %dKB\r\n",CPUInfo.PFlashSizeInKB);
-    //Flex RAM size
-    //UART_printf("FlexNVM Size: %dKB\r\n",CPUInfo.FlexNVMSizeInKB);
-    //RAM size
-    //UART_printf("RAM Size :%dKB\r\n",CPUInfo.RAMSizeInKB);
-    //core clock
-  //  UART_printf("CoreClock: %dHz\r\n",CPUInfo.CoreClockInHz);
-    //bus clock
-   // UART_printf("BusClock: %dHz\r\n",CPUInfo.BusClockInHz);
-    //flexbus clock
-   // UART_printf("FlexBusClock: %dHz\r\n",CPUInfo.FlexBusClockHz);
-    //flash clock
-  //  UART_printf("FlashClock: %dHz\r\n",CPUInfo.FlashClockHz);
-}
+
 
 /*
 static const PeripheralMap_TypeDef UART_Check_Maps[] = 

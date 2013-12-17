@@ -27,6 +27,15 @@
 //! @addtogroup UART_Exported_Types
 //! @{
 	 
+	 
+#define HW_UART0  (0x00U)
+#define HW_UART1  (0x00U)
+#define HW_UART2  (0x00U)	 
+#define HW_UART3  (0x00U)
+#define HW_UART4  (0x00U)
+#define HW_UART5  (0x00U)
+
+	 
 //可使用的UART初始化结构
 typedef enum
 {

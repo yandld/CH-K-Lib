@@ -145,11 +145,12 @@ int main(void)
 		GPIO_QuickInit(HW_GPIOD, 7 , kGPIO_Mode_OPP);
 		GPIO_QuickInit(HW_GPIOC, 17, kGPIO_Mode_IPU);
 		GPIO_QuickInit(HW_GPIOC, 18, kGPIO_Mode_IPU);
+		
 		GPIO_ITDMAConfig(HW_GPIOC, 17, kGPIO_IT_RisingEdge, ENABLE);
 		GPIO_ITDMAConfig(HW_GPIOC, 18, kGPIO_IT_RisingEdge, ENABLE);
 		GPIO_CallbackInstall(HW_GPIOC, GPIO_ISR);
 		
-	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin0, 1);
+		GPIO_WriteBit(HW_GPIOD, 0, 1);
 	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);
 	//SHELL_printf("%d\r\n", GPIO_ReadBit(HW_GPIOD, kGPIO_Pin0));
 	//SHELL_printf("%x\r\n", (uint32_t)PORTA_IRQHandler);

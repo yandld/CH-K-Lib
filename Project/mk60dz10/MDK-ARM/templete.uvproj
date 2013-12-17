@@ -357,7 +357,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60DZ10</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\inc;..\..\..\Libraries\utilities\minishell;..\..\..\Libraries\utilities\shell</IncludePath>
+              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\utilities\minishell;..\..\..\Libraries\utilities\shell</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -439,34 +439,34 @@
           <GroupName>drivers</GroupName>
           <Files>
             <File>
-              <FileName>sys.c</FileName>
+              <FileName>clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\src\sys.c</FilePath>
-            </File>
-            <File>
-              <FileName>uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\src\uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\src\systick.c</FilePath>
+              <FilePath>..\..\..\Libraries\drivers\K\src\clock.c</FilePath>
             </File>
             <File>
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\src\gpio.c</FilePath>
+              <FilePath>..\..\..\Libraries\drivers\K\src\gpio.c</FilePath>
             </File>
             <File>
-              <FileName>clock.c</FileName>
+              <FileName>uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\src\clock.c</FilePath>
+              <FilePath>..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
             </File>
             <File>
               <FileName>cpuidy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\src\cpuidy.c</FilePath>
+              <FilePath>..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
+            </File>
+            <File>
+              <FileName>systick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
+            </File>
+            <File>
+              <FileName>sys.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\drivers\K\src\sys.c</FilePath>
             </File>
           </Files>
         </Group>

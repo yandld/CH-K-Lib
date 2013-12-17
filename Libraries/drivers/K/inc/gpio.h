@@ -2,9 +2,9 @@
   ******************************************************************************
   * @file    gpio.h
   * @author  YANDLD
-  * @version V2.4
-  * @date    2013.5.25
-  * @brief   超核K60固件库 GPIO API函数 头文件
+  * @version V2.5
+  * @date    2013.12.25
+  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
   ******************************************************************************
   */
 #ifndef __GPIO_H__
@@ -161,7 +161,7 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
 void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
 void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState);
-void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type pull);
+void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode);
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
 void GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode);
 void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data);

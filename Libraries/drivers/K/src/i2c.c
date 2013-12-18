@@ -29,13 +29,11 @@ static const uint32_t SIM_I2CClockGateTable[] =
     SIM_SCGC4_I2C1_MASK,
 };
 
-typedef struct I2CDividerTableEntry 
+typedef struct 
 {
     uint8_t icr;            /*!< F register ICR value.*/
     uint16_t sclDivider;    /*!< SCL clock divider.*/
-} i2c_divider_table_entry_t;
-
-
+}_I2C_Divider_Type;
 
 /*******************************************************************************
  * Variables
@@ -47,7 +45,8 @@ typedef struct I2CDividerTableEntry
 /*! reference manual. In the original table there are, in some cases, multiple*/
 /*! entries with the same divider but different hold values. This table*/
 /*! includes only one entry for every divider, selecting the lowest hold value.*/
-const i2c_divider_table_entry_t kI2CDividerTable[] = {
+const _I2C_Divider_Type I2C_DiverTable[] =
+{
         /* ICR  Divider*/
         { 0x00, 20 },
         { 0x01, 22 },
@@ -103,22 +102,18 @@ const i2c_divider_table_entry_t kI2CDividerTable[] = {
 
 
 /* Documentation for this function is in fsl_i2c_hal.h.*/
-uint8_t i2c_hal_set_baud(uint32_t instance, uint32_t sourceClockInHz, uint32_t kbps,
-                                  uint32_t * absoluteError_Hz)
+void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
 {
-        
     /* Check if the requested frequency is greater than the max supported baud.*/
-    if ((kbps * 1000U) > (sourceClockInHz / (1U * 20U)))
+    if (baudrate > (sourceClockInHz / (1U * 20U)))
     {
-  //      return kStatus_I2C_OutOfRange;
+        return;
     }
-    
     uint32_t mult;
-    uint32_t hz = kbps * 1000u;
+    uint32_t hz = baudrate;
     uint32_t bestError = 0xffffffffu;
     uint32_t bestMult = 0u;
     uint32_t bestIcr = 0u;
-
     /* Search for the settings with the lowest error.*/
     /**/
     /* mult is the MULT field of the I2C_F register, and ranges from 0-2. It selects the*/
@@ -126,20 +121,17 @@ uint8_t i2c_hal_set_baud(uint32_t instance, uint32_t sourceClockInHz, uint32_t k
     for (mult = 0u; (mult <= 2u) && (bestError != 0); ++mult)
     {
         uint32_t multiplier = 1u << mult;
-        
         /* Scan table to find best match.*/
         uint32_t i;
-        for (i = 0u; i < ARRAY_SIZE(kI2CDividerTable); ++i)
+        for (i = 0u; i < ARRAY_SIZE(I2C_DiverTable); ++i)
         {
-            uint32_t computedRate = sourceClockInHz / (multiplier * kI2CDividerTable[i].sclDivider);
+            uint32_t computedRate = sourceClockInHz / (multiplier * I2C_DiverTable[i].sclDivider);
             uint32_t absError = hz > computedRate ? hz - computedRate : computedRate - hz;
-            
             if (absError < bestError)
             {
                 bestMult = mult;
-                bestIcr = kI2CDividerTable[i].icr;
+                bestIcr = I2C_DiverTable[i].icr;
                 bestError = absError;
-                
                 /* If the error is 0, then we can stop searching because we won't find a*/
                 /* better match.*/
                 if (absError == 0)
@@ -149,31 +141,25 @@ uint8_t i2c_hal_set_baud(uint32_t instance, uint32_t sourceClockInHz, uint32_t k
             }
         }
     }
-
-    /* Set the resulting error.*/
-    if (absoluteError_Hz)
-    {
-        *absoluteError_Hz = bestError;
-    }
-    
-    /* Set frequency register based on best settings.*/
-   // HW_I2C_F_WR(instance, BF_I2C_F_MULT(bestMult) | BF_I2C_F_ICR(bestIcr));
-    
-  //  return kStatus_I2C_Success;
+    I2C_InstanceTable[instance]->F = (I2C_F_ICR(bestIcr)|I2C_F_MULT(bestMult));
 }
 
-
+/*
+1 ????    48KHz
+2 ??        76KHz       
+3 ??        96KHz
+4 ??       376KHz
+*/
 
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 {
-    //I2C_InstanceTable[I2C_InitStruct->instance]
     SIM->SCGC4 |= SIM_I2CClockGateTable[I2C_InitStruct->instance];
-	uint32_t prescaler = 0;
+    uint32_t prescaler = 0;
     uint32_t freq;
+    // set baudrate
     CLOCK_GetClockFrequency(kBusClock, &freq);
-	//prescaler = (((freq /(I2C_InitStruct->I2C_ClockSpeed))-160))/32 +  0x20;
-	//I2Cx->F	= prescaler;
-    
+    I2C_SetBaudrate(I2C_InitStruct->instance, freq, I2C_InitStruct->baudrate);
+    // enable i2c
     I2C_InstanceTable[I2C_InitStruct->instance]->C1 = I2C_C1_IICEN_MASK;
     
 }

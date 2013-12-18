@@ -136,15 +136,15 @@ typedef enum
     kGPIO_IT_FallingEdge = 0x0A,
     kGPIO_IT_RisingFallingEdge = 0x0B,
     kGPIO_IT_High = 0x0C,
-		kGPIO_ITDMAConfigNameCount,
+    kGPIO_ITDMAConfigNameCount,
 }GPIO_ITDMAConfig_Type;
 
 
 typedef struct
 {
     uint8_t                instance;             //!< GPIO pin select
-		GPIO_Mode_Type         mode;                 //!< GPIO operation mode
-		uint32_t               pinx;                 //!< pin index
+    GPIO_Mode_Type         mode;                 //!< GPIO operation mode
+    uint32_t               pinx;                 //!< pin index
 }GPIO_InitTypeDef;
 
 //!< param check

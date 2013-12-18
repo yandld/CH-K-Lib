@@ -103,7 +103,7 @@ const cmd_tbl_t MyCommand[] =
 extern const cmd_tbl_t CommandFun_CPU;
 extern const cmd_tbl_t CommandFun_Hist;
 extern const cmd_tbl_t CommandFun_GPIO;
-
+extern const cmd_tbl_t CommandFun_I2C;
 
 #pragma weak configure_uart_pin_mux
 extern void configure_uart_pin_mux(uint32_t instance);
@@ -132,7 +132,7 @@ int main(void)
     SHELL_register_function(&CommandFun_Help);
     SHELL_register_function(&CommandFun_Help);
     SHELL_register_function(&CommandFun_GPIO);
-
+    SHELL_register_function(&CommandFun_I2C);
     SHELL_register_function(&CommandFun_Hist);
 
 //	 SHELL_unregister_function("test");

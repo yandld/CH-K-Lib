@@ -19,8 +19,10 @@
 //I2C 初始化结构 
 typedef struct
 {
-	uint32_t I2CxMAP;
-  uint32_t I2C_ClockSpeed;        
+    uint8_t instance;
+    uint32_t baudrate;
+    
+    //uint32_t I2C_ClockSpeed;        
 }I2C_InitTypeDef;
 //参数检查器														
 #define IS_I2C_ALL_PERIPH(PERIPH) ((PERIPH) == I2C0 || (PERIPH) == I2C1)
@@ -47,8 +49,8 @@ typedef struct
     uint32_t I2C_GPIO_Index:4;
     uint32_t I2C_Alt_Index:4;
     uint32_t I2C_SCL_Pin_Index:6;
-		uint32_t I2C_SDA_Pin_Index:6;
-	  uint32_t I2C_Reserved:8;
+    uint32_t I2C_SDA_Pin_Index:6;
+    uint32_t I2C_Reserved:8;
 }I2C_MapTypeDef;
 
 //I2C 设备外设引脚定义
@@ -93,6 +95,7 @@ void I2C_GenerateSTART(I2C_Type *I2Cx);
 void I2C_GenerateRESTART(I2C_Type *I2Cx);
 void I2C_GenerateSTOP(I2C_Type *I2Cx);
 void I2C_SendData(I2C_Type *I2Cx,uint8_t data8);
+uint8_t I2C_ReadData(I2C_Type *I2Cx);
 void I2C_Send7bitAddress(I2C_Type* I2Cx, uint8_t Address, uint8_t I2C_Direction);
 uint8_t I2C_WaitAck(I2C_Type *I2Cx);
 void I2C_SetMasterMode(I2C_Type* I2Cx,uint8_t I2C_Direction);
@@ -105,6 +108,8 @@ void I2C_ClearITPendingBit(I2C_Type* I2Cx, uint16_t I2C_IT);
 uint8_t I2C_IsLineBusy(I2C_Type* I2Cx);
 uint8_t I2C_WriteSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data);
 uint8_t I2C_ReadSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData);
+uint8_t I2C_Write(I2C_Type *I2Cx ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len);
+
 #ifdef __cplusplus
 }
 #endif

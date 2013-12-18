@@ -8,7 +8,184 @@
   ******************************************************************************
   */
 #include "i2c.h"
+#include "gpio.h"
+#include "clock.h"
 
+//!< Leagacy Support for Kineis Z Version(Inital Version)
+#if (!defined(I2C_BASES))
+
+    #if (defined(MK60DZ10))
+        #define I2C_BASES {I2C0, I2C1}
+    #endif
+
+#endif
+
+//!< Gloabl Const Table Defination
+static IRQn_Type   const I2C_IRQBase = I2C0_IRQn;
+static I2C_Type * const I2C_InstanceTable[] = I2C_BASES;
+static const uint32_t SIM_I2CClockGateTable[] =
+{
+    SIM_SCGC4_I2C0_MASK,
+    SIM_SCGC4_I2C1_MASK,
+};
+
+typedef struct I2CDividerTableEntry 
+{
+    uint8_t icr;            /*!< F register ICR value.*/
+    uint16_t sclDivider;    /*!< SCL clock divider.*/
+} i2c_divider_table_entry_t;
+
+
+
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
+
+/*! @brief I2C divider values.*/
+/*!*/
+/*! This table is taken from the I2C Divider and Hold values section of the*/
+/*! reference manual. In the original table there are, in some cases, multiple*/
+/*! entries with the same divider but different hold values. This table*/
+/*! includes only one entry for every divider, selecting the lowest hold value.*/
+const i2c_divider_table_entry_t kI2CDividerTable[] = {
+        /* ICR  Divider*/
+        { 0x00, 20 },
+        { 0x01, 22 },
+        { 0x02, 24 },
+        { 0x03, 26 },
+        { 0x04, 28 },
+        { 0x05, 30 },
+        { 0x09, 32 },
+        { 0x06, 34 },
+        { 0x0a, 36 },
+        { 0x07, 40 },
+        { 0x0c, 44 },
+        { 0x0d, 48 },
+        { 0x0e, 56 },
+        { 0x12, 64 },
+        { 0x0f, 68 },
+        { 0x13, 72 },
+        { 0x14, 80 },
+        { 0x15, 88 },
+        { 0x19, 96 },
+        { 0x16, 104 },
+        { 0x1a, 112 },
+        { 0x17, 128 },
+        { 0x1c, 144 },
+        { 0x1d, 160 },
+        { 0x1e, 192 },
+        { 0x22, 224 },
+        { 0x1f, 240 },
+        { 0x23, 256 },
+        { 0x24, 288 },
+        { 0x25, 320 },
+        { 0x26, 384 },
+        { 0x2a, 448 },
+        { 0x27, 480 },
+        { 0x2b, 512 },
+        { 0x2c, 576 },
+        { 0x2d, 640 },
+        { 0x2e, 768 },
+        { 0x32, 896 },
+        { 0x2f, 960 },
+        { 0x33, 1024 },
+        { 0x34, 1152 },
+        { 0x35, 1280 },
+        { 0x36, 1536 },
+        { 0x3a, 1792 },
+        { 0x37, 1920 },
+        { 0x3b, 2048 },
+        { 0x3c, 2304 },
+        { 0x3d, 2560 },
+        { 0x3e, 3072 },
+        { 0x3f, 3840 }
+    };
+
+
+/* Documentation for this function is in fsl_i2c_hal.h.*/
+uint8_t i2c_hal_set_baud(uint32_t instance, uint32_t sourceClockInHz, uint32_t kbps,
+                                  uint32_t * absoluteError_Hz)
+{
+        
+    /* Check if the requested frequency is greater than the max supported baud.*/
+    if ((kbps * 1000U) > (sourceClockInHz / (1U * 20U)))
+    {
+  //      return kStatus_I2C_OutOfRange;
+    }
+    
+    uint32_t mult;
+    uint32_t hz = kbps * 1000u;
+    uint32_t bestError = 0xffffffffu;
+    uint32_t bestMult = 0u;
+    uint32_t bestIcr = 0u;
+
+    /* Search for the settings with the lowest error.*/
+    /**/
+    /* mult is the MULT field of the I2C_F register, and ranges from 0-2. It selects the*/
+    /* multiplier factor for the divider.*/
+    for (mult = 0u; (mult <= 2u) && (bestError != 0); ++mult)
+    {
+        uint32_t multiplier = 1u << mult;
+        
+        /* Scan table to find best match.*/
+        uint32_t i;
+        for (i = 0u; i < ARRAY_SIZE(kI2CDividerTable); ++i)
+        {
+            uint32_t computedRate = sourceClockInHz / (multiplier * kI2CDividerTable[i].sclDivider);
+            uint32_t absError = hz > computedRate ? hz - computedRate : computedRate - hz;
+            
+            if (absError < bestError)
+            {
+                bestMult = mult;
+                bestIcr = kI2CDividerTable[i].icr;
+                bestError = absError;
+                
+                /* If the error is 0, then we can stop searching because we won't find a*/
+                /* better match.*/
+                if (absError == 0)
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    /* Set the resulting error.*/
+    if (absoluteError_Hz)
+    {
+        *absoluteError_Hz = bestError;
+    }
+    
+    /* Set frequency register based on best settings.*/
+   // HW_I2C_F_WR(instance, BF_I2C_F_MULT(bestMult) | BF_I2C_F_ICR(bestIcr));
+    
+  //  return kStatus_I2C_Success;
+}
+
+
+
+void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
+{
+    //I2C_InstanceTable[I2C_InitStruct->instance]
+    SIM->SCGC4 |= SIM_I2CClockGateTable[I2C_InitStruct->instance];
+	uint32_t prescaler = 0;
+    uint32_t freq;
+    CLOCK_GetClockFrequency(kBusClock, &freq);
+	//prescaler = (((freq /(I2C_InitStruct->I2C_ClockSpeed))-160))/32 +  0x20;
+	//I2Cx->F	= prescaler;
+    
+    I2C_InstanceTable[I2C_InitStruct->instance]->C1 = I2C_C1_IICEN_MASK;
+    
+}
+
+
+
+
+
+
+
+
+#if 0
 /***********************************************************************************************
  功能：I2C 初始化
  形参：I2C_InitStruct: I2C初始化结构
@@ -22,8 +199,8 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 	uint32_t prescaler = 0;
 	I2C_MapTypeDef *pI2C_Map = (I2C_MapTypeDef*)&(I2C_InitStruct->I2CxMAP);
 	//参数检查
-	assert_param(IS_I2C_DATA_CHL(I2C_InitStruct->I2CxMAP));
-	assert_param(IS_I2C_CLOCK_SPEED(I2C_InitStruct->I2C_ClockSpeed));
+	//assert_param(IS_I2C_DATA_CHL(I2C_InitStruct->I2CxMAP));
+	//assert_param(IS_I2C_CLOCK_SPEED(I2C_InitStruct->I2C_ClockSpeed));
 	//使能I2C时钟
 	switch(pI2C_Map->I2C_Index)
 	{
@@ -69,7 +246,7 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 	I2C_PORT->PCR[pI2C_Map->I2C_SDA_Pin_Index] |= PORT_PCR_MUX(pI2C_Map->I2C_Alt_Index)|PORT_PCR_ODE_MASK;
 	//将引脚设置为漏极输出
 	//设置I2C分频数
-	prescaler = (((CPUInfo.BusClock /(I2C_InitStruct->I2C_ClockSpeed))-160))/32 +  0x20;
+//	prescaler = (((CPUInfo.BusClock /(I2C_InitStruct->I2C_ClockSpeed))-160))/32 +  0x20;
 	I2Cx->F	= prescaler;
 	//使能I2C模块
 	I2Cx->C1 = I2C_C1_IICEN_MASK ;
@@ -86,7 +263,7 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 void I2C_GenerateSTART(I2C_Type *I2Cx)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
 	I2Cx->C1 |= I2C_C1_TX_MASK;
 	I2Cx->C1 |= I2C_C1_MST_MASK;
@@ -102,7 +279,7 @@ void I2C_GenerateSTART(I2C_Type *I2Cx)
 void I2C_GenerateRESTART(I2C_Type *I2Cx)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
 	I2Cx->C1 |= I2C_C1_RSTA_MASK;
 }
@@ -117,7 +294,7 @@ void I2C_GenerateRESTART(I2C_Type *I2Cx)
 void I2C_GenerateSTOP(I2C_Type *I2Cx)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
 	I2Cx->C1 &= ~I2C_C1_MST_MASK;
 	I2Cx->C1 &= ~I2C_C1_TX_MASK;
@@ -134,7 +311,7 @@ void I2C_GenerateSTOP(I2C_Type *I2Cx)
 void I2C_SendData(I2C_Type *I2Cx,uint8_t data8)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
 	I2Cx->D = data8;
 }
@@ -149,7 +326,7 @@ void I2C_SendData(I2C_Type *I2Cx,uint8_t data8)
 uint8_t I2C_ReadData(I2C_Type *I2Cx)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
 	return (I2Cx->D);
 }
@@ -168,8 +345,8 @@ uint8_t I2C_ReadData(I2C_Type *I2Cx)
 void I2C_Send7bitAddress(I2C_Type* I2Cx, uint8_t Address, uint8_t I2C_Direction)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	assert_param(IS_I2C_MASTER_DIRECTION(I2C_Direction));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_MASTER_DIRECTION(I2C_Direction));
 	
 	(I2C_Direction == I2C_MASTER_WRITE)?(Address &= 0xFE):(Address |= 0x01);
 	I2Cx->D = Address;
@@ -188,7 +365,7 @@ uint8_t I2C_WaitAck(I2C_Type *I2Cx)
 {
 
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
     //wait for transfer complete
     while ((I2Cx->S & I2C_S_TCF_MASK) == 0);
@@ -221,7 +398,7 @@ uint8_t I2C_WaitAck(I2C_Type *I2Cx)
 void I2C_SetMasterMode(I2C_Type* I2Cx,uint8_t I2C_Direction)
 {
 	//参数检查
-	assert_param(IS_I2C_MASTER_DIRECTION(I2C_Direction));
+	//assert_param(IS_I2C_MASTER_DIRECTION(I2C_Direction));
 	
 	(I2C_Direction == I2C_MASTER_WRITE)?(I2Cx->C1 |= I2C_C1_TX_MASK):(I2Cx->C1 &= ~I2C_C1_TX_MASK);
 }
@@ -236,7 +413,7 @@ void I2C_SetMasterMode(I2C_Type* I2Cx,uint8_t I2C_Direction)
 void I2C_GenerateNAck(I2C_Type *I2Cx)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
 	I2Cx->C1 |= I2C_C1_TXAK_MASK;
 }
@@ -251,7 +428,7 @@ void I2C_GenerateNAck(I2C_Type *I2Cx)
 void I2C_GenerateAck(I2C_Type *I2Cx)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
 	I2Cx->C1 &= ~I2C_C1_TXAK_MASK;
 }
@@ -272,9 +449,9 @@ void I2C_GenerateAck(I2C_Type *I2Cx)
 void I2C_ITConfig(I2C_Type* I2Cx, uint16_t I2C_IT, FunctionalState NewState)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	assert_param(IS_I2C_IT(I2C_IT));
-	assert_param(IS_FUNCTIONAL_STATE(NewState));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_IT(I2C_IT));
+	////assert_param(IS_FUNCTIONAL_STATE(NewState));
 	
 	switch(I2C_IT)
 	{
@@ -309,8 +486,8 @@ ITStatus I2C_GetITStatus(I2C_Type* I2Cx, uint16_t I2C_IT)
 {
 	ITStatus retval = RESET;
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	assert_param(IS_I2C_IT(I2C_IT));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_IT(I2C_IT));
 	switch(I2C_IT)
 	{
 		case I2C_IT_TCF:
@@ -349,9 +526,9 @@ ITStatus I2C_GetITStatus(I2C_Type* I2Cx, uint16_t I2C_IT)
 void I2C_DMACmd(I2C_Type* I2Cx, uint16_t I2C_DMAReq, FunctionalState NewState)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	assert_param(IS_I2C_DMAREQ(I2C_DMAReq));
-	assert_param(IS_FUNCTIONAL_STATE(NewState));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_DMAREQ(I2C_DMAReq));
+	//assert_param(IS_FUNCTIONAL_STATE(NewState));
 	
 	switch(I2C_DMAReq)
 	{
@@ -375,8 +552,8 @@ void I2C_DMACmd(I2C_Type* I2Cx, uint16_t I2C_DMAReq, FunctionalState NewState)
 void I2C_ClearITPendingBit(I2C_Type* I2Cx, uint16_t I2C_IT)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	assert_param(IS_I2C_IT(I2C_IT));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_IT(I2C_IT));
 	
 	//清中断标志位
 	I2Cx->C1 |= I2C_C1_IICEN_MASK;
@@ -408,7 +585,7 @@ void I2C_ClearITPendingBit(I2C_Type* I2Cx, uint16_t I2C_IT)
 uint8_t I2C_IsLineBusy(I2C_Type* I2Cx)
 {
 	//参数检查
-	assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
 	if(I2Cx->S & I2C_S_BUSY_MASK)
 	{
@@ -419,6 +596,37 @@ uint8_t I2C_IsLineBusy(I2C_Type* I2Cx)
 		return FALSE;
 	}
 }
+
+uint8_t I2C_Write(I2C_Type *I2Cx ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len)
+{
+    //Generate START signal
+    I2C_GenerateSTART(I2Cx);
+    //Send 7bit Data with WRITE operation
+    I2C_Send7bitAddress(I2Cx, DeviceAddress, I2C_MASTER_WRITE);
+    if(I2C_WaitAck(I2Cx))
+    {
+			  I2C_GenerateSTOP(I2Cx);
+			  while((I2Cx->S & I2C_S_BUSY_MASK) == 1) {};
+        return 1;
+    }
+		//Send All Data
+		while(len--)
+		{
+        I2C_SendData(I2Cx, *(pBuffer++));
+        if(I2C_WaitAck(I2Cx))
+        {
+            I2C_GenerateSTOP(I2Cx);
+            while((I2Cx->S & I2C_S_BUSY_MASK) == 1) {};
+            return 2;
+        }
+		}
+		//Generate stop and wait for line idle
+		I2C_GenerateSTOP(I2Cx);
+    while((I2Cx->S & I2C_S_BUSY_MASK) == 1) {};
+		return 0;
+}
+
+
 /***********************************************************************************************
  功能：通用 I2C 读写一个从机的一个寄存器 适用于大多数期间 MMA84系列传感器等等
  形参：I2Cx: I2C模块号
@@ -432,37 +640,16 @@ uint8_t I2C_IsLineBusy(I2C_Type* I2Cx)
 ************************************************************************************************/
 uint8_t I2C_WriteSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data)
 {
-    //Generate START signal
-    I2C_GenerateSTART(I2Cx);
-    //Send 7bit Data with WRITE operation
-    I2C_Send7bitAddress(I2Cx, DeviceAddress, I2C_MASTER_WRITE);
-    if(I2C_WaitAck(I2Cx))
-    {
-			  I2C_GenerateSTOP(I2Cx);
-			  while(I2Cx->S & I2C_S_BUSY_MASK == 1) {};
-        return 1;
-    }
-    //Send Reg Address
-		I2C_SendData(I2Cx, RegisterAddress);
-    if(I2C_WaitAck(I2Cx))
-    {
-			  I2C_GenerateSTOP(I2Cx);
-        while((I2Cx->S & I2C_S_BUSY_MASK) == 1) {};
-        return 2;
-    }
-		//SendData
-		I2C_SendData(I2Cx, Data);
-    if(I2C_WaitAck(I2Cx))
-    {
-			  I2C_GenerateSTOP(I2Cx);
-        while((I2Cx->S & I2C_S_BUSY_MASK) == 1) {};
-        return 3;
-    }
-		//Generate stop and wait for line idle
-		I2C_GenerateSTOP(I2Cx);
-    while((I2Cx->S & I2C_S_BUSY_MASK) == 1) {};
-		return 0;
+    uint8_t ret;
+    uint8_t buf[2];
+    buf[0] = RegisterAddress;
+    buf[1] = Data;
+    ret = I2C_Write(I2Cx, DeviceAddress, buf, sizeof(buf));
+    return ret;
 }
+
+
+
 /***********************************************************************************************
  功能：通用 I2C 读写一个从机的一个寄存器 适用于大多数期间 MMA84系列传感器等等
  形参：I2Cx: I2C模块号
@@ -544,5 +731,5 @@ void I2C_CalConstValue(void)
 	}
 }
 */
-
+#endif
 

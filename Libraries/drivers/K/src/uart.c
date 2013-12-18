@@ -43,28 +43,33 @@ UART_Type* UART_DebugPort = NULL;
 
 #endif
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 UART_Type * const UART_InstanceTable[] = UART_BASES;
+
+
+
+void UART_Init2(UART_InitTypeDef2* UART_InitStruct)
+{
+    
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void UART_DebugPortInit(UART_MapSelect_TypeDef UARTxMAP,uint32_t UART_BaudRate)
 {

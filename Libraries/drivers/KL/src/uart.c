@@ -1,5 +1,10 @@
 #include "uart.h"
 
+
+
+
+
+#if 0
 void *UART_DebugPort = NULL;
 
 
@@ -217,6 +222,7 @@ _loop:
  返回：0
  详解：针对于Freescale Kinetis系列
 ************************************************************************************************/
+#if 0
 void DisplayCPUInfo(void)
 {
 	//Fireware Version
@@ -281,6 +287,7 @@ void DisplayCPUInfo(void)
 	//打印FlashClock
 	UART_printf("FlashClock: %dHz\r\n",CPUInfo.FlashClock);
 }
+#endif
 
 /***********************************************************************************************
  功能：配置中断开启
@@ -441,3 +448,5 @@ void UART_CalConstValue(void)
 	}
 }
 */
+
+#endif

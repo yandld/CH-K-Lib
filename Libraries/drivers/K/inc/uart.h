@@ -72,12 +72,28 @@ typedef struct
 	UART_MapSelect_TypeDef UARTxMAP;           //!< UART Module and pinmux select
 } UART_InitTypeDef;
 
+
+typedef enum
+{
+    kUART_Mode_IFT = 0x00,            //!< input floating mode
+		kUART_ModeNameCount,
+}UART_Mode_Type;
+//串口初始化结构
+typedef struct
+{
+    uint8_t                instance;             //!< GPIO pin select
+		UART_Mode_Type         mode;                 //!< GPIO operation mode
+} UART_InitTypeDef2;
+
+
 #define IS_UART_ALL_PERIPH(PERIPH) (((PERIPH) == UART0) || \
                                     ((PERIPH) == UART1) || \
                                     ((PERIPH) == UART2) || \
                                     ((PERIPH) == UART3) || \
                                     ((PERIPH) == UART4))												
-																
+					
+
+
 typedef enum
 {
     kUART_IT_TDRE,                //!< Transmit Data Register Empty flag

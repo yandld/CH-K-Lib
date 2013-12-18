@@ -91,7 +91,7 @@ void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, Fun
 		assert_param(IS_PORT_ALL_INSTANCE(instance));
 		assert_param(IS_GPIO_ALL_PIN(pinIndex));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-//		(newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
+    //(newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
     switch(pull)
 		{
         case kPullDisabled:
@@ -161,10 +161,12 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
             PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp, DISABLE);
 						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
             break;
+				#ifndef MKL25Z4
         case kGPIO_Mode_OOD:
             PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp, ENABLE);
 						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
             break;
+				#endif
         case kGPIO_Mode_OPP:
             PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled, DISABLE);
 						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);

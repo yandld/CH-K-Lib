@@ -431,12 +431,12 @@ int UART_printf(const char *format,...)
     va_list ap;
     char printbuffer[UART_PRINTF_CMD_LENGTH];
     va_start(ap, format);
-    chars = vsnprintf(printbuffer,UART_PRINTF_CMD_LENGTH, format, ap);
+    chars = vsnprintf(printbuffer, UART_PRINTF_CMD_LENGTH, format, ap);
     va_end(ap);
-		while(chars--)
-		{
-			UART_SendByte(UART_DebugPort,printbuffer[i]);
-		}
+    for(i = 0; i < chars; i++)
+    {
+        UART_SendByte(UART_DebugPort,printbuffer[i]);
+    }
     return chars ;
 }
 

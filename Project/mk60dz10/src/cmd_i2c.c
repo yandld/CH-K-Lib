@@ -6,7 +6,7 @@ int DoI2C(int argc, char *const argv[])
 {
     uint8_t i;
     I2C_QuickInit(I2C1_SCL_PC10_SDA_PC11, 240*1000);
-    I2C_WriteSingleRegister(I2C1, 0x44, 3, 44);
+   // I2C_WriteSingleRegister(I2C1, 0x44, 3, 44);
 }
 
 

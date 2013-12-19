@@ -182,8 +182,6 @@ void I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
         PORT_PinMuxConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, pI2CxMap->mux);
         PORT_PinConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, kPullUp, ENABLE); 
     }
-
-    //UART_printf("pI2CxMap->io_base:%d\r\n", pI2CxMap->io_base);
 }
 
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
@@ -200,7 +198,6 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 }
 
 
-
 /***********************************************************************************************
  功能：I2C 发送开始信号
  形参：I2Cx: I2C模块号
@@ -209,13 +206,11 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
  返回：0
  详解： I2C 总线当SCL为高电平 时 SDA下降沿跳变 识别为开始信号
 ************************************************************************************************/
-void I2C_GenerateSTART(I2C_Type *I2Cx)
+void I2C_GenerateSTART(uint8_t instance)
 {
 	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	
-	I2Cx->C1 |= I2C_C1_TX_MASK;
-	I2Cx->C1 |= I2C_C1_MST_MASK;
+    I2C_InstanceTable[instance]->C1 |= I2C_C1_TX_MASK;
+    I2C_InstanceTable[instance]->C1 |= I2C_C1_MST_MASK;
 }
 /***********************************************************************************************
  功能：I2C 发送重新开始信号
@@ -225,12 +220,11 @@ void I2C_GenerateSTART(I2C_Type *I2Cx)
  返回：0
  详解： I2C 总线当SCL为高电平 时 SDA下降沿跳变 识别为开始信号
 ************************************************************************************************/
-void I2C_GenerateRESTART(I2C_Type *I2Cx)
+void I2C_GenerateRESTART(uint8_t instance)
 {
 	//参数检查
 	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	
-	I2Cx->C1 |= I2C_C1_RSTA_MASK;
+    I2C_InstanceTable[instance]->C1 |= I2C_C1_RSTA_MASK;
 }
 /***********************************************************************************************
  功能：I2C 发送停止信号
@@ -240,13 +234,12 @@ void I2C_GenerateRESTART(I2C_Type *I2Cx)
  返回：0
  详解： I2C 总线当SCL为高电平 时 SDA上升沿跳变 识别为结束信号
 ************************************************************************************************/
-void I2C_GenerateSTOP(I2C_Type *I2Cx)
+void I2C_GenerateSTOP(uint8_t instance)
 {
 	//参数检查
 	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	
-	I2Cx->C1 &= ~I2C_C1_MST_MASK;
-	I2Cx->C1 &= ~I2C_C1_TX_MASK;
+	I2C_InstanceTable[instance]->C1 &= ~I2C_C1_MST_MASK;
+    I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TX_MASK;
 }
 /***********************************************************************************************
  功能：I2C 发送8bit数据
@@ -257,12 +250,11 @@ void I2C_GenerateSTOP(I2C_Type *I2Cx)
  返回：0
  详解：0
 ************************************************************************************************/
-void I2C_SendData(I2C_Type *I2Cx,uint8_t data8)
+void I2C_SendData(uint8_t instance, uint8_t data)
 {
 	//参数检查
 	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	
-	I2Cx->D = data8;
+	I2C_InstanceTable[instance]->D = data;
 }
 /***********************************************************************************************
  功能：I2C 读取8bit数据
@@ -272,12 +264,11 @@ void I2C_SendData(I2C_Type *I2Cx,uint8_t data8)
  返回：读取到的8bit 数据
  详解：0
 ************************************************************************************************/
-uint8_t I2C_ReadData(I2C_Type *I2Cx)
+uint8_t I2C_ReadData(uint8_t instance)
 {
 	//参数检查
 	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	
-	return (I2Cx->D);
+	return (I2C_InstanceTable[instance]->D);
 }
 /***********************************************************************************************
  功能：I2C 发送7位地址码
@@ -291,14 +282,14 @@ uint8_t I2C_ReadData(I2C_Type *I2Cx)
  返回：0
  详解：封装了SendData
 ************************************************************************************************/
-void I2C_Send7bitAddress(I2C_Type* I2Cx, uint8_t Address, uint8_t I2C_Direction)
+void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type direction)
 {
 	//参数检查
 	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	//assert_param(IS_I2C_MASTER_DIRECTION(I2C_Direction));
-	
-	(I2C_Direction == I2C_MASTER_WRITE)?(Address &= 0xFE):(Address |= 0x01);
-	I2Cx->D = Address;
+    address <<= 1;
+	(kI2C_Write == direction)?((address &= 0xFE)):(address |= 0x01);
+	I2C_InstanceTable[instance]->D = address;
 }
 /***********************************************************************************************
  功能：I2C 等待应答信号完成
@@ -310,27 +301,33 @@ void I2C_Send7bitAddress(I2C_Type* I2Cx, uint8_t Address, uint8_t I2C_Direction)
        1   :未收到应答
  详解：主机每传送一个字节都需要调用I2C_WaitAck一次 WaitAck 会等待这一个字节传输结束 包括最后ACK位的结束后返回
 ************************************************************************************************/
-uint8_t I2C_WaitAck(I2C_Type *I2Cx)
+uint8_t I2C_WaitAck(uint8_t instance)
 {
 
 	//参数检查
 	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
 	
     //wait for transfer complete
-    while ((I2Cx->S & I2C_S_TCF_MASK) == 0);
+    uint32_t timeout = 0x00FFFFF;
+    while (((I2C_InstanceTable[instance]->S & I2C_S_TCF_MASK) == 0) && (timeout--));
     //both TCF and IICIF indicate one byte trasnfer complete
-    while ((I2Cx->S & I2C_S_IICIF_MASK) == 0);
-	  //IICIF is a W1C Reg, so clear it!
-	  I2Cx->S |= I2C_S_IICIF_MASK;
+    timeout = 0x00FFFF;
+    while (((I2C_InstanceTable[instance]->S & I2C_S_IICIF_MASK) == 0) && (timeout--));
+    //IICIF is a W1C Reg, so clear it!
+    I2C_InstanceTable[instance]->S |= I2C_S_IICIF_MASK;
+    if(timeout < 10U)
+    {
+        return 2;
+    }
     //see if we receive the ACK signal
-    if (I2Cx->S & I2C_S_RXAK_MASK)
-		{
+    if (I2C_InstanceTable[instance]->S & I2C_S_RXAK_MASK)
+    {
         return 1;
-		}
-		else
-		{
+    }
+    else
+    {
         return 0;
-		}
+    }
 }
 
 /***********************************************************************************************
@@ -344,12 +341,11 @@ uint8_t I2C_WaitAck(I2C_Type *I2Cx)
  返回：0
  详解：0 
 ************************************************************************************************/
-void I2C_SetMasterMode(I2C_Type* I2Cx,uint8_t I2C_Direction)
+void I2C_SetMasterMode(uint8_t instance, I2C_Direction_Type direction)
 {
 	//参数检查
 	//assert_param(IS_I2C_MASTER_DIRECTION(I2C_Direction));
-	
-	(I2C_Direction == I2C_MASTER_WRITE)?(I2Cx->C1 |= I2C_C1_TX_MASK):(I2Cx->C1 &= ~I2C_C1_TX_MASK);
+	(direction == kI2C_Write)?(I2C_InstanceTable[instance]->C1 |= I2C_C1_TX_MASK):(I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TX_MASK);
 }
 /***********************************************************************************************
  功能：I2C 设置为读取一个字节后返回NACK
@@ -359,12 +355,11 @@ void I2C_SetMasterMode(I2C_Type* I2Cx,uint8_t I2C_Direction)
  返回：0
  详解：0 
 ************************************************************************************************/
-void I2C_GenerateNAck(I2C_Type *I2Cx)
+void I2C_GenerateNAck(uint8_t instance)
 {
 	//参数检查
 	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	
-	I2Cx->C1 |= I2C_C1_TXAK_MASK;
+	I2C_InstanceTable[instance]->C1 |= I2C_C1_TXAK_MASK;
 }
 /***********************************************************************************************
  功能：I2C 设置为读取一个字节后返回ACK
@@ -374,12 +369,11 @@ void I2C_GenerateNAck(I2C_Type *I2Cx)
  返回：0
  详解：0 
 ************************************************************************************************/
-void I2C_GenerateAck(I2C_Type *I2Cx)
+void I2C_GenerateAck(uint8_t instance)
 {
 	//参数检查
 	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	
-	I2Cx->C1 &= ~I2C_C1_TXAK_MASK;
+	I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TXAK_MASK;
 }
 
 /***********************************************************************************************
@@ -545,7 +539,7 @@ uint8_t I2C_IsLineBusy(I2C_Type* I2Cx)
 		return FALSE;
 	}
 }
-
+#if 0
 uint8_t I2C_Write(I2C_Type *I2Cx ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len)
 {
     //Generate START signal
@@ -619,116 +613,42 @@ uint8_t I2C_ReadSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t Re
     I2C_Send7bitAddress(I2Cx, DeviceAddress, I2C_MASTER_WRITE);
     if(I2C_WaitAck(I2Cx))
     {
-			  I2C_GenerateSTOP(I2Cx);
-			  while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
+        I2C_GenerateSTOP(I2Cx);
+        while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
         return 1;
     }
     //Send Reg Address
-		I2C_SendData(I2Cx, RegisterAddress);
+    I2C_SendData(I2Cx, RegisterAddress);
     if(I2C_WaitAck(I2Cx))
     {
-			  I2C_GenerateSTOP(I2Cx);
-			  while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
+        I2C_GenerateSTOP(I2Cx);
+        while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
         return 2;
     }
-		//Generate RESTART Signal
+    //Generate RESTART Signal
     I2C_GenerateRESTART(I2Cx);
-		//Resend 7bit Address, This time we use READ Command
+    //Resend 7bit Address, This time we use READ Command
     I2C_Send7bitAddress(I2Cx, DeviceAddress, I2C_MASTER_READ);
     if(I2C_WaitAck(I2Cx))
     {
-			  I2C_GenerateSTOP(I2Cx);
+        I2C_GenerateSTOP(I2Cx);
         while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
         return 3;
     }
     //Set Master in slave mode
     I2C_SetMasterMode(I2Cx,I2C_MASTER_READ);
-		//Dummy Read in order to generate SCL clock
+    //Dummy Read in order to generate SCL clock
     data = I2Cx->D;
-		I2C_GenerateNAck(I2Cx);
-		//This time, We just wait for masters receive byte transfer complete
+    I2C_GenerateNAck(I2Cx);
+    //This time, We just wait for masters receive byte transfer complete
     I2C_WaitAck(I2Cx);
-		//Generate stop and wait for line idle
-		I2C_GenerateSTOP(I2Cx);
+    //Generate stop and wait for line idle
+    I2C_GenerateSTOP(I2Cx);
     while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
-		//actual read
-		data = I2Cx->D;
-		*pData = data;
-		return 0;
+    //actual read
+    data = I2Cx->D;
+    *pData = data;
+    return 0;
 }
-
-
-
-
-#if 0
-/***********************************************************************************************
- 功能：I2C 初始化
- 形参：I2C_InitStruct: I2C初始化结构
- 返回：0
- 详解：0
-************************************************************************************************/
-void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
-{
-	I2C_Type *I2Cx = NULL;
-	PORT_Type *I2C_PORT = NULL;
-	uint32_t prescaler = 0;
-	I2C_MapTypeDef *pI2C_Map = (I2C_MapTypeDef*)&(I2C_InitStruct->I2CxMAP);
-	//参数检查
-	//assert_param(IS_I2C_DATA_CHL(I2C_InitStruct->I2CxMAP));
-	//assert_param(IS_I2C_CLOCK_SPEED(I2C_InitStruct->I2C_ClockSpeed));
-	//使能I2C时钟
-	switch(pI2C_Map->I2C_Index)
-	{
-		case 0:
-			SIM->SCGC4 |= SIM_SCGC4_I2C0_MASK; 
-			I2Cx = I2C0;
-			break;
-		case 1:
-			SIM->SCGC4 |= SIM_SCGC4_I2C1_MASK;
-			I2Cx = I2C1;		
-			break;
-		default:break;
-	}
-	//使能对应的PORT
-	switch(pI2C_Map->I2C_GPIO_Index)
-	{
-		case 0:
-			SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
-			I2C_PORT = PORTA;
-			break;
-		case 1:
-			SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
-			I2C_PORT = PORTB;
-			break;
-		case 2:
-			SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;
-			I2C_PORT = PORTC;
-			break;
-		case 3:
-			SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;
-			I2C_PORT = PORTD;
-			break;
-		case 4:
-			SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
-			I2C_PORT = PORTE;
-			break;
-		default:break;
-	}
-	//开启对应引脚为I2C功能
-	I2C_PORT->PCR[pI2C_Map->I2C_SCL_Pin_Index] &= ~PORT_PCR_MUX_MASK;
-	I2C_PORT->PCR[pI2C_Map->I2C_SDA_Pin_Index] &= ~PORT_PCR_MUX_MASK;
-	I2C_PORT->PCR[pI2C_Map->I2C_SCL_Pin_Index] |= PORT_PCR_MUX(pI2C_Map->I2C_Alt_Index)|PORT_PCR_ODE_MASK;
-	I2C_PORT->PCR[pI2C_Map->I2C_SDA_Pin_Index] |= PORT_PCR_MUX(pI2C_Map->I2C_Alt_Index)|PORT_PCR_ODE_MASK;
-	//将引脚设置为漏极输出
-	//设置I2C分频数
-//	prescaler = (((CPUInfo.BusClock /(I2C_InitStruct->I2C_ClockSpeed))-160))/32 +  0x20;
-	I2Cx->F	= prescaler;
-	//使能I2C模块
-	I2Cx->C1 = I2C_C1_IICEN_MASK ;
-}
-
-
-
-
 #endif
 

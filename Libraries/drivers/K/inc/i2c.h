@@ -16,6 +16,10 @@
 	 
 #include "sys.h"
 
+#define HW_I2C0   (0x00U)
+#define HW_I2C1   (0x01U)
+
+
 //I2C 初始化结构 
 typedef struct
 {
@@ -24,7 +28,8 @@ typedef struct
     
     //uint32_t I2C_ClockSpeed;        
 }I2C_InitTypeDef;
-
+/*??48  ??76    ??96   ??376 
+*/
 
 
 
@@ -78,15 +83,12 @@ typedef struct
 #define I2C_IT_SLTF            (uint16_t)(3)
 #define I2C_IT_SHTF2           (uint16_t)(4)
 //参数检查器
-#define IS_I2C_IT(IT) (((IT) == I2C_IT_TCF)     || \
-                       ((IT) == I2C_IT_SLTF)    || \
-                       ((IT) == I2C_IT_ARBL)    || \
-                       ((IT) == I2C_IT_SHTF2)   || \
-                       ((IT) == I2C_IT_IAAS))
+
 
 //DMA命令
 #define I2C_DMAReq_TCF             ((uint16_t)0)
 #define IS_I2C_DMAREQ(REQ)   ((REQ) == I2C_DMAReq_TCF)
+
 
 //I2C主机读写方向
 #define I2C_MASTER_WRITE   (0)
@@ -94,9 +96,26 @@ typedef struct
 //参数检查
 #define IS_I2C_MASTER_DIRECTION(DIR)    (((DIR) == I2C_MASTER_WRITE) || \
                                         ((DIR) == I2C_MASTER_READ))
-              
+typedef enum
+{
+    kI2C_Read,
+    kI2C_Write,
+    kI2C_DirectionNameCount,
+}I2C_Direction_Type; 
+
+typedef enum
+{
+    kI2C_ITDMA_Disable,
+    kI2C_IT_BTC,	//!< Byte Transfer Complete Interrupt
+    kI2C_DMA_BTC,   //!< DMA Trigger On Byte Transfer Complete
+}I2C_ITDMAConfig_Type;
+
+
+//!< API functions
+void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
 
 //本构件实现的接口函数
+/*
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
 void I2C_GenerateSTART(I2C_Type *I2Cx);
 void I2C_GenerateRESTART(I2C_Type *I2Cx);
@@ -116,7 +135,7 @@ uint8_t I2C_IsLineBusy(I2C_Type* I2Cx);
 uint8_t I2C_WriteSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data);
 uint8_t I2C_ReadSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData);
 uint8_t I2C_Write(I2C_Type *I2Cx ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len);
-
+*/
 #ifdef __cplusplus
 }
 #endif

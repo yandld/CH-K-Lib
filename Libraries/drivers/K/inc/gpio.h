@@ -30,7 +30,7 @@ typedef enum
     kGPIO_Mode_IPU = 0x02,            //!< input pull up mode
     kGPIO_Mode_OOD = 0x03,            //!< output open drain mode
     kGPIO_Mode_OPP = 0x04,            //!< output push mode
-		kGPIO_ModeNameCount,
+    kGPIO_ModeNameCount,
 }GPIO_Mode_Type;
 
 #define HW_GPIOA  (0x00U)

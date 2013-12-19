@@ -1,0 +1,6 @@
+output
+settings
+Debug
+Release
+*.dep
+

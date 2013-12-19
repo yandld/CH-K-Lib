@@ -1,7 +1,7 @@
 #include "sys.h"
 #include "gpio.h"
 #include "uart.h"
-
+#include "i2c.h"
 #include "systick.h"
 #include "sdhc.h"
 #include "clock.h"
@@ -136,7 +136,7 @@ int main(void)
     SHELL_register_function(&CommandFun_Hist);
 
 //	 SHELL_unregister_function("test");
-	 
+
     SHELL_io_install(&Shell_IOInstallStruct1);
     printf("When you see this string, It means that printf is OK!\r\n");
 		

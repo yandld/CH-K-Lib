@@ -47,58 +47,58 @@ typedef struct
 /*! includes only one entry for every divider, selecting the lowest hold value.*/
 const _I2C_Divider_Type I2C_DiverTable[] =
 {
-        /* ICR  Divider*/
-        { 0x00, 20 },
-        { 0x01, 22 },
-        { 0x02, 24 },
-        { 0x03, 26 },
-        { 0x04, 28 },
-        { 0x05, 30 },
-        { 0x09, 32 },
-        { 0x06, 34 },
-        { 0x0a, 36 },
-        { 0x07, 40 },
-        { 0x0c, 44 },
-        { 0x0d, 48 },
-        { 0x0e, 56 },
-        { 0x12, 64 },
-        { 0x0f, 68 },
-        { 0x13, 72 },
-        { 0x14, 80 },
-        { 0x15, 88 },
-        { 0x19, 96 },
-        { 0x16, 104 },
-        { 0x1a, 112 },
-        { 0x17, 128 },
-        { 0x1c, 144 },
-        { 0x1d, 160 },
-        { 0x1e, 192 },
-        { 0x22, 224 },
-        { 0x1f, 240 },
-        { 0x23, 256 },
-        { 0x24, 288 },
-        { 0x25, 320 },
-        { 0x26, 384 },
-        { 0x2a, 448 },
-        { 0x27, 480 },
-        { 0x2b, 512 },
-        { 0x2c, 576 },
-        { 0x2d, 640 },
-        { 0x2e, 768 },
-        { 0x32, 896 },
-        { 0x2f, 960 },
-        { 0x33, 1024 },
-        { 0x34, 1152 },
-        { 0x35, 1280 },
-        { 0x36, 1536 },
-        { 0x3a, 1792 },
-        { 0x37, 1920 },
-        { 0x3b, 2048 },
-        { 0x3c, 2304 },
-        { 0x3d, 2560 },
-        { 0x3e, 3072 },
-        { 0x3f, 3840 }
-    };
+    /* ICR  Divider*/
+    { 0x00, 20 },
+    { 0x01, 22 },
+    { 0x02, 24 },
+    { 0x03, 26 },
+    { 0x04, 28 },
+    { 0x05, 30 },
+    { 0x09, 32 },
+    { 0x06, 34 },
+    { 0x0a, 36 },
+    { 0x07, 40 },
+    { 0x0c, 44 },
+    { 0x0d, 48 },
+    { 0x0e, 56 },
+    { 0x12, 64 },
+    { 0x0f, 68 },
+    { 0x13, 72 },
+    { 0x14, 80 },
+    { 0x15, 88 },
+    { 0x19, 96 },
+    { 0x16, 104 },
+    { 0x1a, 112 },
+    { 0x17, 128 },
+    { 0x1c, 144 },
+    { 0x1d, 160 },
+    { 0x1e, 192 },
+    { 0x22, 224 },
+    { 0x1f, 240 },
+    { 0x23, 256 },
+    { 0x24, 288 },
+    { 0x25, 320 },
+    { 0x26, 384 },
+    { 0x2a, 448 },
+    { 0x27, 480 },
+    { 0x2b, 512 },
+    { 0x2c, 576 },
+    { 0x2d, 640 },
+    { 0x2e, 768 },
+    { 0x32, 896 },
+    { 0x2f, 960 },
+    { 0x33, 1024 },
+    { 0x34, 1152 },
+    { 0x35, 1280 },
+    { 0x36, 1536 },
+    { 0x3a, 1792 },
+    { 0x37, 1920 },
+    { 0x3b, 2048 },
+    { 0x3c, 2304 },
+    { 0x3d, 2560 },
+    { 0x3e, 3072 },
+    { 0x3f, 3840 }
+};
 
 
 /* Documentation for this function is in fsl_i2c_hal.h.*/
@@ -115,7 +115,6 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
     uint32_t bestMult = 0u;
     uint32_t bestIcr = 0u;
     /* Search for the settings with the lowest error.*/
-    /**/
     /* mult is the MULT field of the I2C_F register, and ranges from 0-2. It selects the*/
     /* multiplier factor for the divider.*/
     for (mult = 0u; (mult <= 2u) && (bestError != 0); ++mult)
@@ -144,99 +143,63 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
     I2C_InstanceTable[instance]->F = (I2C_F_ICR(bestIcr)|I2C_F_MULT(bestMult));
 }
 
-/*
-1 ????    48KHz
-2 ??        76KHz       
-3 ??        96KHz
-4 ??       376KHz
-*/
+
+static const QuickInit_Type I2C_QuickInitTable[] =
+{
+    { 1, 4, 6, 0, 2, 0}, //I2C1_SCL_PE01_SDA_PE00
+    { 0, 1, 2, 0, 2, 0}, //I2C0_SCL_PB00_SDA_PB01
+    { 0, 1, 2, 2, 2, 0}, //I2C0_SCL_PB02_SDA_PB03
+    { 1, 2, 2,10, 2, 0}, //I2C1_SCL_PC10_SDA_PC11
+};
+
+void CalConst(const QuickInit_Type * table, uint32_t size)
+{
+	uint8_t i =0;
+	uint32_t value = 0;
+	for(i = 0; i < size; i++)
+	{
+		value = table[i].ip_instance<<0;
+		value|= table[i].io_instance<<3;
+		value|= table[i].mux<<6;
+		value|= table[i].io_base<<9;
+		value|= table[i].io_offset<<14;
+		value|= table[i].channel<<19;
+		UART_printf("(0x%08xU)\r\n",value);
+	}
+}
+
+void I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
+{
+    uint8_t i;
+    I2C_InitTypeDef I2C_InitStruct1;
+    QuickInit_Type *pI2CxMap = (QuickInit_Type*)&(I2CxMAP);
+    I2C_InitStruct1.baudrate = baudrate;
+    I2C_InitStruct1.instance = pI2CxMap->ip_instance;
+    I2C_Init(&I2C_InitStruct1);
+    // init pinmux and  open drain and pull up
+    for(i = 0; i < pI2CxMap->io_offset; i++)
+    {
+        PORT_PinMuxConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, pI2CxMap->mux);
+        PORT_PinConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, kPullUp, ENABLE); 
+    }
+
+    //UART_printf("pI2CxMap->io_base:%d\r\n", pI2CxMap->io_base);
+}
 
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 {
-    SIM->SCGC4 |= SIM_I2CClockGateTable[I2C_InitStruct->instance];
-    uint32_t prescaler = 0;
     uint32_t freq;
+    SIM->SCGC4 |= SIM_I2CClockGateTable[I2C_InitStruct->instance];
+    // disable first
+    I2C_InstanceTable[I2C_InitStruct->instance]->C1 &= ~I2C_C1_IICEN_MASK;
     // set baudrate
     CLOCK_GetClockFrequency(kBusClock, &freq);
     I2C_SetBaudrate(I2C_InitStruct->instance, freq, I2C_InitStruct->baudrate);
     // enable i2c
-    I2C_InstanceTable[I2C_InitStruct->instance]->C1 = I2C_C1_IICEN_MASK;
-    
+    I2C_InstanceTable[I2C_InitStruct->instance]->C1 |= I2C_C1_IICEN_MASK;
 }
 
 
-
-
-
-
-
-
-#if 0
-/***********************************************************************************************
- 功能：I2C 初始化
- 形参：I2C_InitStruct: I2C初始化结构
- 返回：0
- 详解：0
-************************************************************************************************/
-void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
-{
-	I2C_Type *I2Cx = NULL;
-	PORT_Type *I2C_PORT = NULL;
-	uint32_t prescaler = 0;
-	I2C_MapTypeDef *pI2C_Map = (I2C_MapTypeDef*)&(I2C_InitStruct->I2CxMAP);
-	//参数检查
-	//assert_param(IS_I2C_DATA_CHL(I2C_InitStruct->I2CxMAP));
-	//assert_param(IS_I2C_CLOCK_SPEED(I2C_InitStruct->I2C_ClockSpeed));
-	//使能I2C时钟
-	switch(pI2C_Map->I2C_Index)
-	{
-		case 0:
-			SIM->SCGC4 |= SIM_SCGC4_I2C0_MASK; 
-			I2Cx = I2C0;
-			break;
-		case 1:
-			SIM->SCGC4 |= SIM_SCGC4_I2C1_MASK;
-			I2Cx = I2C1;		
-			break;
-		default:break;
-	}
-	//使能对应的PORT
-	switch(pI2C_Map->I2C_GPIO_Index)
-	{
-		case 0:
-			SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
-			I2C_PORT = PORTA;
-			break;
-		case 1:
-			SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
-			I2C_PORT = PORTB;
-			break;
-		case 2:
-			SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;
-			I2C_PORT = PORTC;
-			break;
-		case 3:
-			SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;
-			I2C_PORT = PORTD;
-			break;
-		case 4:
-			SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
-			I2C_PORT = PORTE;
-			break;
-		default:break;
-	}
-	//开启对应引脚为I2C功能
-	I2C_PORT->PCR[pI2C_Map->I2C_SCL_Pin_Index] &= ~PORT_PCR_MUX_MASK;
-	I2C_PORT->PCR[pI2C_Map->I2C_SDA_Pin_Index] &= ~PORT_PCR_MUX_MASK;
-	I2C_PORT->PCR[pI2C_Map->I2C_SCL_Pin_Index] |= PORT_PCR_MUX(pI2C_Map->I2C_Alt_Index)|PORT_PCR_ODE_MASK;
-	I2C_PORT->PCR[pI2C_Map->I2C_SDA_Pin_Index] |= PORT_PCR_MUX(pI2C_Map->I2C_Alt_Index)|PORT_PCR_ODE_MASK;
-	//将引脚设置为漏极输出
-	//设置I2C分频数
-//	prescaler = (((CPUInfo.BusClock /(I2C_InitStruct->I2C_ClockSpeed))-160))/32 +  0x20;
-	I2Cx->F	= prescaler;
-	//使能I2C模块
-	I2Cx->C1 = I2C_C1_IICEN_MASK ;
-}
 
 /***********************************************************************************************
  功能：I2C 发送开始信号
@@ -694,28 +657,78 @@ uint8_t I2C_ReadSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t Re
 		return 0;
 }
 
-/*
-static const I2C_MapTypeDef I2C_Check_Maps[] = 
-{ 
-    {1, 4, 6, 1, 0,0},  //I2C1_SCL_PE1_SDA_PE0
-    {0, 1, 2, 0, 1,0},  //I2C0_SCL_PB0_SDA_PB1
-    {0, 1, 2, 2, 3,0},  //I2C0_SCL_PB2_SDA_PB3
-    {1, 2, 2,10,11,0},  //I2C1_SCL_PC10_SDA_PC11
-};
-void I2C_CalConstValue(void)
+
+
+
+#if 0
+/***********************************************************************************************
+ 功能：I2C 初始化
+ 形参：I2C_InitStruct: I2C初始化结构
+ 返回：0
+ 详解：0
+************************************************************************************************/
+void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 {
-	uint8_t i =0;
-	uint32_t value = 0;
-	for(i=0;i<sizeof(I2C_Check_Maps)/sizeof(I2C_MapTypeDef);i++)
+	I2C_Type *I2Cx = NULL;
+	PORT_Type *I2C_PORT = NULL;
+	uint32_t prescaler = 0;
+	I2C_MapTypeDef *pI2C_Map = (I2C_MapTypeDef*)&(I2C_InitStruct->I2CxMAP);
+	//参数检查
+	//assert_param(IS_I2C_DATA_CHL(I2C_InitStruct->I2CxMAP));
+	//assert_param(IS_I2C_CLOCK_SPEED(I2C_InitStruct->I2C_ClockSpeed));
+	//使能I2C时钟
+	switch(pI2C_Map->I2C_Index)
 	{
-		value = I2C_Check_Maps[i].I2C_Index<<0;
-		value|= I2C_Check_Maps[i].I2C_GPIO_Index<<4;
-		value|= I2C_Check_Maps[i].I2C_Alt_Index<<8;
-		value|= I2C_Check_Maps[i].I2C_SCL_Pin_Index<<12;
-		value|= I2C_Check_Maps[i].I2C_SDA_Pin_Index<<18;
-		printf("(0x%08xU)\r\n",value);
+		case 0:
+			SIM->SCGC4 |= SIM_SCGC4_I2C0_MASK; 
+			I2Cx = I2C0;
+			break;
+		case 1:
+			SIM->SCGC4 |= SIM_SCGC4_I2C1_MASK;
+			I2Cx = I2C1;		
+			break;
+		default:break;
 	}
+	//使能对应的PORT
+	switch(pI2C_Map->I2C_GPIO_Index)
+	{
+		case 0:
+			SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;
+			I2C_PORT = PORTA;
+			break;
+		case 1:
+			SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
+			I2C_PORT = PORTB;
+			break;
+		case 2:
+			SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;
+			I2C_PORT = PORTC;
+			break;
+		case 3:
+			SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;
+			I2C_PORT = PORTD;
+			break;
+		case 4:
+			SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;
+			I2C_PORT = PORTE;
+			break;
+		default:break;
+	}
+	//开启对应引脚为I2C功能
+	I2C_PORT->PCR[pI2C_Map->I2C_SCL_Pin_Index] &= ~PORT_PCR_MUX_MASK;
+	I2C_PORT->PCR[pI2C_Map->I2C_SDA_Pin_Index] &= ~PORT_PCR_MUX_MASK;
+	I2C_PORT->PCR[pI2C_Map->I2C_SCL_Pin_Index] |= PORT_PCR_MUX(pI2C_Map->I2C_Alt_Index)|PORT_PCR_ODE_MASK;
+	I2C_PORT->PCR[pI2C_Map->I2C_SDA_Pin_Index] |= PORT_PCR_MUX(pI2C_Map->I2C_Alt_Index)|PORT_PCR_ODE_MASK;
+	//将引脚设置为漏极输出
+	//设置I2C分频数
+//	prescaler = (((CPUInfo.BusClock /(I2C_InitStruct->I2C_ClockSpeed))-160))/32 +  0x20;
+	I2Cx->F	= prescaler;
+	//使能I2C模块
+	I2Cx->C1 = I2C_C1_IICEN_MASK ;
 }
-*/
+
+
+
+
 #endif
 

@@ -107,6 +107,15 @@ typedef enum {FALSE = 0, TRUE = !FALSE} ErrorState;
 
 //! @}
 
+typedef struct
+{
+    uint32_t ip_instance:3;
+    uint32_t io_instance:3;
+    uint32_t mux:3;
+    uint32_t io_base:5;
+    uint32_t io_offset:5;
+    uint32_t channel:5;
+}QuickInit_Type;
 
 /*! @brief Status return codes.*/
 

@@ -24,6 +24,17 @@ typedef struct
     
     //uint32_t I2C_ClockSpeed;        
 }I2C_InitTypeDef;
+
+
+
+
+//!< I2C QuickInit macro
+#define I2C1_SCL_PE01_SDA_PE00       (0x000081a1U)
+#define I2C0_SCL_PB00_SDA_PB01       (0x00008088U)
+#define I2C0_SCL_PB02_SDA_PB03       (0x00008488U)
+#define I2C1_SCL_PC10_SDA_PC11       (0x00009491U)
+
+
 //参数检查器														
 #define IS_I2C_ALL_PERIPH(PERIPH) ((PERIPH) == I2C0 || (PERIPH) == I2C1)
 
@@ -53,11 +64,7 @@ typedef struct
     uint32_t I2C_Reserved:8;
 }I2C_MapTypeDef;
 
-//I2C 设备外设引脚定义
-#define I2C1_SCL_PE1_SDA_PE0       (0x00001641U)
-#define I2C0_SCL_PB0_SDA_PB1       (0x00040210U)
-#define I2C0_SCL_PB2_SDA_PB3       (0x000c2210U)
-#define I2C1_SCL_PC10_SDA_PC11     (0x002ca221U)
+
 //参数检查
 #define IS_I2C_DATA_CHL(CHL)     (((CHL) == I2C1_SCL_PE1_SDA_PE0) || \
                                   ((CHL) == I2C0_SCL_PB0_SDA_PB1) || \

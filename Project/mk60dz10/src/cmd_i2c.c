@@ -1,12 +1,28 @@
 #include "shell.h"
 #include "i2c.h"
 
+static int _do_i2c_scan(int argc, char *const argv[])
+{
+    
+    
+}
+
 
 int DoI2C(int argc, char *const argv[])
 {
     uint8_t i;
-    I2C_QuickInit(I2C1_SCL_PC10_SDA_PC11, 240*1000);
-   // I2C_WriteSingleRegister(I2C1, 0x44, 3, 44);
+    static uint8_t init = 0;
+    if(!init)
+    {
+        I2C_QuickInit(I2C1_SCL_PC10_SDA_PC11, 240*1000);
+        init = 1;
+    }
+    if(!strcmp("scan", argv[2]))
+    {
+        _do_i2c_scan(argc, argv);
+        
+    }
+    I2C_WriteSingleRegister(I2C1, 0x44, 3, 44);
 }
 
 

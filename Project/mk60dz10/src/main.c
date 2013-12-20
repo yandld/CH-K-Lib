@@ -129,15 +129,15 @@ int main(void)
     //GPIO_ITConfig(PTC,kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
    
 //    SHELL_register_function_array(MyCommand, ARRAY_SIZE(MyCommand));
-    shell_register_function(&CommandFun_Help);
-    shell_register_function(&CommandFun_Help);
-    shell_register_function(&CommandFun_GPIO);
-    shell_register_function(&CommandFun_I2C);
-    shell_register_function(&CommandFun_Hist);
+
 
 //	 SHELL_unregister_function("test");
 
     shell_io_install(&Shell_IOInstallStruct1);
+    shell_register_function(&CommandFun_Help);
+    shell_register_function(&CommandFun_GPIO);
+    shell_register_function(&CommandFun_I2C);
+    shell_register_function(&CommandFun_Hist);
     printf("When you see this string, It means that printf is OK!\r\n");
 		
 		

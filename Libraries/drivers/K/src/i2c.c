@@ -376,6 +376,25 @@ void I2C_GenerateAck(uint8_t instance)
 	I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TXAK_MASK;
 }
 
+
+void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalState newState)
+{
+    // disable interrupt and dma first
+    NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance));
+    I2C_InstanceTable[instance]->C1 &= ~I2C_C1_IICIE_MASK;
+    I2C_InstanceTable[instance]->C1 &= ~I2C_C1_DMAEN_MASK;
+    switch(config)
+    {
+        case kI2C_ITDMA_Disable:
+            break;
+        case kI2C_IT_BTC:
+            I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK;
+        default:
+            break;
+    }
+    
+}
+
 /***********************************************************************************************
  功能：I2C 中断配置
  形参：I2Cx: I2C模块号
@@ -539,34 +558,34 @@ uint8_t I2C_IsLineBusy(I2C_Type* I2Cx)
 		return FALSE;
 	}
 }
-#if 0
-uint8_t I2C_Write(I2C_Type *I2Cx ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len)
+
+uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len)
 {
     //Generate START signal
-    I2C_GenerateSTART(I2Cx);
+    I2C_GenerateSTART(instance);
     //Send 7bit Data with WRITE operation
-    I2C_Send7bitAddress(I2Cx, DeviceAddress, I2C_MASTER_WRITE);
-    if(I2C_WaitAck(I2Cx))
+    I2C_Send7bitAddress(instance, DeviceAddress, I2C_MASTER_WRITE);
+    if(I2C_WaitAck(instance))
     {
-			  I2C_GenerateSTOP(I2Cx);
-			  while((I2Cx->S & I2C_S_BUSY_MASK) == 1) {};
+        I2C_GenerateSTOP(instance);
+        while((I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK) == 1) {};
         return 1;
     }
-		//Send All Data
-		while(len--)
-		{
-        I2C_SendData(I2Cx, *(pBuffer++));
-        if(I2C_WaitAck(I2Cx))
+    //Send All Data
+    while(len--)
+    {
+        I2C_SendData(instance, *(pBuffer++));
+        if(I2C_WaitAck(instance))
         {
-            I2C_GenerateSTOP(I2Cx);
-            while((I2Cx->S & I2C_S_BUSY_MASK) == 1) {};
+            I2C_GenerateSTOP(instance);
+            while((I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK) == 1) {};
             return 2;
         }
-		}
-		//Generate stop and wait for line idle
-		I2C_GenerateSTOP(I2Cx);
-    while((I2Cx->S & I2C_S_BUSY_MASK) == 1) {};
-		return 0;
+    }
+    //Generate stop and wait for line idle
+    I2C_GenerateSTOP(instance);
+    while((I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK) == 1) {};
+    return 0;
 }
 
 
@@ -581,16 +600,16 @@ uint8_t I2C_Write(I2C_Type *I2Cx ,uint8_t DeviceAddress, uint8_t *pBuffer, uint3
  返回：0:成功 else: 错误代码
  详解：实质顺序为 START->ADDRESS->RegADR->Data->STOP->Wait until all stop
 ************************************************************************************************/
-uint8_t I2C_WriteSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data)
+uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data)
 {
     uint8_t ret;
     uint8_t buf[2];
     buf[0] = RegisterAddress;
     buf[1] = Data;
-    ret = I2C_Write(I2Cx, DeviceAddress, buf, sizeof(buf));
+    ret = I2C_WriteByte(instance, DeviceAddress, buf, sizeof(buf));
     return ret;
 }
-
+#if 0
 
 
 /***********************************************************************************************

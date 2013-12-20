@@ -331,12 +331,12 @@ void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type 
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
-		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     // disable interrupt first
     NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
     PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] &= ~PORT_PCR_IRQC_MASK;
-		//config
+    //config
     PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] |= PORT_PCR_IRQC(config);
     //enable interrupt
     (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance)));

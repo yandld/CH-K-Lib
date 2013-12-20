@@ -87,7 +87,7 @@ static int make_argv(char *s, int argvsz, char * argv[])
 static int complete_cmdv(int argc, char * const argv[], char last_char, int maxv, char *cmdv[])
 {
     const cmd_tbl_t *cmdtp = NULL;
-    const cmd_tbl_t **cmdtpt = SHELL_get_cmd_tbl();
+    const cmd_tbl_t **cmdtpt = shell_get_cmd_tbl();
     uint8_t i;
     uint8_t clen;
     uint8_t n_found = 0;
@@ -118,7 +118,7 @@ static int complete_cmdv(int argc, char * const argv[], char last_char, int maxv
     /* more than one arg or one but the start of the next */
     if ((argc > 1) || ((last_char == '\0') || (isblank(last_char))))
     {
-        cmdtp = SHELL_find_command(argv[0]);
+        cmdtp = shell_find_command(argv[0]);
         if ((cmdtp == NULL) || (cmdtp->complete == NULL)) 
         {
             cmdv[0] = NULL;
@@ -169,7 +169,7 @@ static void print_argv(const char * banner, const char * leader, const char * se
     uint8_t len, i;
     if (banner)
     {
-        SHELL_printf("\r\n%s", banner);
+        shell_printf("\r\n%s", banner);
     }
     i = linemax;	/* force leader and newline */
     while ((*argv != NULL) && (num--))
@@ -177,21 +177,21 @@ static void print_argv(const char * banner, const char * leader, const char * se
         len = strlen(*argv) + sl;
         if (i + len >= linemax)
         {
-            SHELL_printf("\r\n");
+            shell_printf("\r\n");
             if (leader)
             {
-                SHELL_printf(leader);
+                shell_printf(leader);
             }
             i = ll - sl;
         }
         else if (sep)
         {
-            SHELL_printf(sep);
+            shell_printf(sep);
         }
-        SHELL_printf(*argv++);
+        shell_printf(*argv++);
         i += len;
     }
-    SHELL_printf("\r\n");
+    shell_printf("\r\n");
 }
 
  /*!
@@ -266,7 +266,7 @@ int cmd_auto_complete(const char * const prompt, char * buf, uint8_t * np, uint8
         {
             return 0;
         }
-        SHELL_beep();
+        shell_beep();
         return 1;
     }
     s = NULL;
@@ -297,7 +297,7 @@ int cmd_auto_complete(const char * const prompt, char * buf, uint8_t * np, uint8
         /* make sure it fits */
         if (n + k >= SHELL_CB_SIZE - 2) 
         {
-            SHELL_beep();
+            shell_beep();
             return 1;
         }
         t = buf + cnt;
@@ -316,10 +316,10 @@ int cmd_auto_complete(const char * const prompt, char * buf, uint8_t * np, uint8
         *t = '\0';
         n += k;
         col += k;
-        SHELL_printf(t - k);
+        shell_printf(t - k);
         if (sep == NULL)
         {
-            SHELL_beep(); 
+            shell_beep(); 
         }
         *np = n;
         *colp = col;
@@ -327,8 +327,8 @@ int cmd_auto_complete(const char * const prompt, char * buf, uint8_t * np, uint8
     else
     {
         print_argv(NULL , "  ", " ", 78, cmdv, i);
-        SHELL_printf(prompt);
-        SHELL_printf(buf);
+        shell_printf(prompt);
+        shell_printf(buf);
     }
     return 1;
 }

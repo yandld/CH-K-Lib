@@ -47,13 +47,13 @@
 static int DoHelp(int argc, char * const argv[])
 {
     uint8_t i;
-    const cmd_tbl_t ** cmdtpt = SHELL_get_cmd_tbl();
+    const cmd_tbl_t ** cmdtpt = shell_get_cmd_tbl();
     if (argc == 1)
     {
         i = 0;
         while ((cmdtpt[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
         {
-            SHELL_printf("%-*s(%d)- %s\r\n", 8, cmdtpt[i]->name, i, cmdtpt[i]->usage);
+            shell_printf("%-*s(%d)- %s\r\n", 8, cmdtpt[i]->name, i, cmdtpt[i]->usage);
             i++;
         }
     }
@@ -66,18 +66,18 @@ static int DoHelp(int argc, char * const argv[])
             {
                 if (cmdtpt[i]->help != NULL)
                 {
-                    SHELL_printf("%-*s- %s\r\n", 8, cmdtpt[i]->name, cmdtpt[i]->help);
+                    shell_printf("%-*s- %s\r\n", 8, cmdtpt[i]->name, cmdtpt[i]->help);
                     return CMD_RET_SUCCESS;
                 }
                 else
                 {
-                    SHELL_printf ("- No additional help available.\r\n");
+                    shell_printf ("- No additional help available.\r\n");
                     return CMD_RET_SUCCESS;
                 }
             }
             i++;
         }
-        SHELL_printf ("- No command available.\r\n");
+        shell_printf ("- No command available.\r\n");
     }
     return CMD_RET_SUCCESS;
 }
@@ -91,7 +91,7 @@ static int DoHelpComplete(int argc, char * const argv[], char last_char, int max
     uint8_t found = 0;
     uint8_t i;
     str_len = strlen(argv[argc-1]);
-    const cmd_tbl_t **cmdtpt = SHELL_get_cmd_tbl();
+    const cmd_tbl_t **cmdtpt = shell_get_cmd_tbl();
     switch(argc)
     {
         case 2:

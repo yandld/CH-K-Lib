@@ -30,11 +30,12 @@
 #ifndef __SHELL_CONFIG_H__
 #define __SHELL_CONFIG_H__
 
-/* config if use standard output*/
+/* config if use standard output */
 #define SHELL_CONFIG_USE_STDIO
-/* config if use auto complete*/
+/* config if use auto complete */
 #define SHELL_CONFIG_AUTO_COMPLETE
-
+/* config if use history */
+#define SHELL_CONFIG_USE_HIST
 
 /* consult buffer size */
 #define SHELL_CB_SIZE                 (128)
@@ -43,7 +44,7 @@
 /* maximum number of user functions */
 #define SHELL_MAX_FUNCTION_NUM        (64)
 /* maximum number of histort record */
-#define HIST_MAX                      (20)
+#define HIST_MAX                      (10)
 /* size of each history record, usually define it as SHELL_CB_SIZE */
 #define HIST_SIZE                     SHELL_CB_SIZE
 

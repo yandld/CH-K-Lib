@@ -27,7 +27,7 @@ static uint8_t Getc(void)
 
 
 
-SHELL_io_install_t Shell_IOInstallStruct1 = 
+shell_io_install_t Shell_IOInstallStruct1 = 
 {
 	.getc = Getc,
 	.putc = Putc,
@@ -129,15 +129,15 @@ int main(void)
     //GPIO_ITConfig(PTC,kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
    
 //    SHELL_register_function_array(MyCommand, ARRAY_SIZE(MyCommand));
-    SHELL_register_function(&CommandFun_Help);
-    SHELL_register_function(&CommandFun_Help);
-    SHELL_register_function(&CommandFun_GPIO);
-    SHELL_register_function(&CommandFun_I2C);
-    SHELL_register_function(&CommandFun_Hist);
+    shell_register_function(&CommandFun_Help);
+    shell_register_function(&CommandFun_Help);
+    shell_register_function(&CommandFun_GPIO);
+    shell_register_function(&CommandFun_I2C);
+    shell_register_function(&CommandFun_Hist);
 
 //	 SHELL_unregister_function("test");
 
-    SHELL_io_install(&Shell_IOInstallStruct1);
+    shell_io_install(&Shell_IOInstallStruct1);
     printf("When you see this string, It means that printf is OK!\r\n");
 		
 		
@@ -156,14 +156,14 @@ int main(void)
 	//SHELL_printf("%x\r\n", (uint32_t)PORTA_IRQHandler);
     while(1)
 		{
-			SHELL_main_loop("SHELL>>");
+			shell_main_loop("SHELL>>");
 		}
 
 }
 
 static void GPIO_ISR(uint32_t pinArray)
 {
-    SHELL_printf(" array:0x%x\r\n", pinArray);
+    shell_printf(" array:0x%x\r\n", pinArray);
 	
 }
 

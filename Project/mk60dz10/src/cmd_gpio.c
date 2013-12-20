@@ -25,40 +25,40 @@ int DoGPIO(int argc, char *const argv[])
 {
     uint8_t i;
     uint32_t gpio_instance;
-		uint32_t gpio_pinx;
-		GPIO_Mode_Type gpio_mode;
+    uint32_t gpio_pinx;
+    GPIO_Mode_Type gpio_mode;
     if(argc == 5 && (!strcmp(argv[1], "Init")))
-		{
+    {
         switch(argv[2][0])
-				{
+        {
             case 'A':
-							gpio_instance = HW_GPIOA;
-							break;
+                gpio_instance = HW_GPIOA;
+                break;
             case 'B':
-							gpio_instance = HW_GPIOB;
-							break;
+                gpio_instance = HW_GPIOB;
+                break;
             case 'C':
-							gpio_instance = HW_GPIOC;
-							break;
+                gpio_instance = HW_GPIOC;
+                break;
             case 'D':
-							gpio_instance = HW_GPIOD;
-							break;
+                gpio_instance = HW_GPIOD;
+                break;
             case 'E':
-							gpio_instance = HW_GPIOE;
-							break;
-				}
-				gpio_pinx = strtoul(argv[3], 0, 0);
-					  i = ARRAY_SIZE(CMD_GPIOModeSelectTable);
-						while(i--)
-						{
-							if(!strcmp(argv[4], CMD_GPIOModeSelectTable[i]))
-							{
-								gpio_mode = i;
-							}
-						}
-						SHELL_printf("%d %d %d \r\n", gpio_instance, gpio_pinx, gpio_mode);
-						GPIO_QuickInit(gpio_instance, gpio_pinx, gpio_mode);
-		}
+                gpio_instance = HW_GPIOE;
+                break;
+        }
+        gpio_pinx = strtoul(argv[3], 0, 0);
+        i = ARRAY_SIZE(CMD_GPIOModeSelectTable);
+        while(i--)
+        {
+            if(!strcmp(argv[4], CMD_GPIOModeSelectTable[i]))
+            {
+                gpio_mode = i;
+            }
+        }
+        shell_printf("%d %d %d \r\n", gpio_instance, gpio_pinx, gpio_mode);
+        GPIO_QuickInit(gpio_instance, gpio_pinx, gpio_mode);
+    }
 }
 
 
@@ -72,27 +72,27 @@ int DoGPIOComplete(int argc, char * const argv[], char last_char, int maxv, char
     switch(argc)
     {
         case 2:
-					  i = ARRAY_SIZE(CMD_GPIOFunctionSelectTable);
-						while(i--)
-						{
-							if(!strncmp(argv[argc-1], CMD_GPIOFunctionSelectTable[i], str_len))
-							{
-								cmdv[found] = CMD_GPIOFunctionSelectTable[i];
-								found++;
-							}
-						}
-						break;
+            i = ARRAY_SIZE(CMD_GPIOFunctionSelectTable);
+            while(i--)
+            {
+                if(!strncmp(argv[argc-1], CMD_GPIOFunctionSelectTable[i], str_len))
+                {
+                    cmdv[found] = CMD_GPIOFunctionSelectTable[i];
+                    found++;
+                }
+            }
+            break;
 
         case 5:
-					  i = ARRAY_SIZE(CMD_GPIOModeSelectTable);
-						while(i--)
-						{
-							if(!strncmp(argv[argc-1], CMD_GPIOModeSelectTable[i], str_len))
-							{
-								cmdv[found] = CMD_GPIOModeSelectTable[i];
-								found++;
-							}
-						}
+            i = ARRAY_SIZE(CMD_GPIOModeSelectTable);
+            while(i--)
+            {
+                if(!strncmp(argv[argc-1], CMD_GPIOModeSelectTable[i], str_len))
+                {
+                    cmdv[found] = CMD_GPIOModeSelectTable[i];
+                    found++;
+                }
+            }
             break;
         default:
             break;
@@ -109,7 +109,7 @@ const cmd_tbl_t CommandFun_GPIO =
     .usage = "GPIO",
     .complete = DoGPIOComplete,
     .help = "\r\n"
-		        "GPIO clock - print CPU clock\r\n"
-						"GPIO memory   - print CPU memory info"
+                "GPIO clock - print CPU clock\r\n"
+                "GPIO memory   - print CPU memory info"
 };
 

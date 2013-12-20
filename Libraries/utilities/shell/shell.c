@@ -57,7 +57,7 @@
 
 #define ERASE_TO_EOL() {				\
 	if (num < eol_num) {				\
-		SHELL_printf("%*s", (int)(eol_num - num), ""); \
+		shell_printf("%*s", (int)(eol_num - num), ""); \
 		do {					\
 			sputc(CTL_BACKSPACE);	\
 		} while (--eol_num > num);		\
@@ -82,10 +82,11 @@ static void putnstr(char * str, uint8_t n);
  * Variables
  ******************************************************************************/
  
-static SHELL_io_install_t * gpIOInstallStruct;   /* install struct	*/
+static shell_io_install_t * gpIOInstallStruct;   /* install struct	*/
 static const cmd_tbl_t * gpCmdTable[SHELL_MAX_FUNCTION_NUM];  /* cmd table array pointer	*/
 static char console_buffer[SHELL_CB_SIZE + 1];	/* console I/O buffer	*/
 /* hist support */
+#ifdef SHELL_CONFIG_USE_HIST
 static int8_t hist_max;
 static int8_t hist_add_idx;
 static int8_t hist_cur = -1;
@@ -93,7 +94,9 @@ static int8_t hist_num;
 /* hist buffer */
 static char *hist_list[HIST_MAX];
 static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
-
+static char *hist_list[HIST_MAX];
+static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
+#endif /* SHELL_CONFIG_USE_HIST */
  /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -182,18 +185,15 @@ int _write (int handle, char * buffer, int size)
  /*!
  * @brief use vsprintf for format.
  */
-int SHELL_printf(const char * format,...)
+int shell_printf(const char * format,...)
 {
     int chars;
     va_list ap;
     char printbuffer[SHELL_CB_SIZE];
     va_start(ap, format);
-    chars = vsprintf(printbuffer, format, ap);
+    chars = vsnprintf(printbuffer, SHELL_CB_SIZE, format, ap);
     //va_end(ap); /* follow MISRA... */
-    if(chars <= SHELL_CB_SIZE)
-    {
-        putnstr(printbuffer, chars);
-    }
+    putnstr(printbuffer, chars);
     return chars ;
 }
 #endif
@@ -201,23 +201,27 @@ int SHELL_printf(const char * format,...)
  /*!
  * @brief install shell io function.
  */
-uint8_t SHELL_io_install(SHELL_io_install_t * IOInstallStruct)
+uint8_t shell_io_install(shell_io_install_t * IOInstallStruct)
 {
     uint8_t i;
     gpIOInstallStruct = IOInstallStruct;
+    for (i = 0; i < SHELL_MAX_FUNCTION_NUM; i++)
+    {
+      gpCmdTable[i] = NULL;
+    }
     return 0;
 }
  /*!
  * @brief beep consult
  */
-void SHELL_beep(void)
+void shell_beep(void)
 {
     sputc('\a');
 }
  /*!
  * @brief get global cmdstruct table address
  */
-const cmd_tbl_t ** SHELL_get_cmd_tbl(void)
+const cmd_tbl_t ** shell_get_cmd_tbl(void)
 {
     return gpCmdTable;
 }
@@ -235,7 +239,7 @@ static void putnstr(char * str, uint8_t n)
  /*!
  * @brief register a user function
  */
-uint8_t SHELL_register_function(const cmd_tbl_t * pAddress)
+uint8_t shell_register_function(const cmd_tbl_t * pAddress)
 {
     uint32_t i = 0;
     /* check name conflict */
@@ -261,19 +265,19 @@ uint8_t SHELL_register_function(const cmd_tbl_t * pAddress)
  /*!
  * @brief register function array
  */
-void SHELL_register_function_array(const cmd_tbl_t * pAddress, uint8_t num)
+void shell_register_function_array(const cmd_tbl_t * pAddress, uint8_t num)
 {
     const cmd_tbl_t * cmdtp =  pAddress;
     while (num--)
     {
-        SHELL_register_function(cmdtp++);
+        shell_register_function(cmdtp++);
     }
 }
 
  /*!
  * @brief unregister function
  */
-uint8_t SHELL_unregister_function(char * name)
+uint8_t shell_unregister_function(char * name)
 {
     uint8_t i,j;
     i = 0;
@@ -293,7 +297,7 @@ uint8_t SHELL_unregister_function(char * name)
     }
     return 0;
 }
-
+#ifdef SHELL_CONFIG_USE_HIST
  /*!
  * @brief init history buffer and vars
  */
@@ -331,7 +335,7 @@ static void cread_add_to_hist(char * line)
  /*!
  * @brief get history data list and also get number of the list
  */
-char ** SHELL_get_hist_data_list(uint8_t * num)
+char ** shell_get_hist_data_list(uint8_t * num)
 {
     *num = hist_max;
     return  &hist_list[0];
@@ -393,7 +397,7 @@ static char * hist_next(void)
     }
     return (ret);
 }
-
+#endif
  /*!
  * @brief add a char to conslt buffer
  */
@@ -407,7 +411,7 @@ static void cread_add_char(char ichar, uint8_t insert, uint8_t * num,
     {
         if (*eol_num > len - 1)
         {
-            SHELL_beep();
+            shell_beep();
             return;
         }
         (*eol_num)++;
@@ -458,7 +462,7 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
     uint8_t num = 0;
     uint8_t eol_num = 0;
     uint8_t wlen;
-    char ichar;
+    char ichar = 0;
     uint8_t insert = 1;
     uint8_t esc_len = 0;
     char esc_save[8];
@@ -469,7 +473,10 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
     }
     while (1) 
     {
-        ichar = sgetc();
+        do
+        {
+            ichar = sgetc();
+        }while(!ichar);
         if ((ichar == '\n') || (ichar == '\r')) 
         {
             sputc('\r');sputc('\n');
@@ -532,7 +539,7 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
             }
         else 
             {
-                SHELL_printf("impossible condition #876\n");
+                shell_printf("impossible condition #876\n");
                 esc_len = 0;
             }
             break;
@@ -606,8 +613,10 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
                 eol_num--;
             }
             break;
+
         case CTL_CH('p'):
         case CTL_CH('n'):
+#ifdef SHELL_CONFIG_USE_HIST
         {
             char * hline;
             esc_len = 0;
@@ -621,7 +630,7 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
             }
             if (!hline)
             {
-                SHELL_beep();
+                shell_beep();
                 continue;
             }
             /* nuke the current line */
@@ -635,14 +644,20 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
             continue;
             break; /* have to follow MISRA */
         }
-#ifdef SHELL_CONFIG_AUTO_COMPLETE
+#else
+        {
+            continue;
+        }
+        
+#endif /* SHELL_CONFIG_USE_HIST */
         case '\t': 
+#ifdef SHELL_CONFIG_AUTO_COMPLETE
         {
             uint8_t num2, col;
             /* do not autocomplete when in the middle */
             if (num < eol_num)
             {
-                SHELL_beep();
+                shell_beep();
                 break;
             }
             buf[num] = '\0';
@@ -656,7 +671,11 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
             }
             break;
         }
-#endif
+#else
+        {
+            continue;
+        }
+#endif /* SHELL_CONFIG_AUTO_COMPLETE */
         default:
             cread_add_char(ichar, insert, &num, &eol_num, buf, *len);
             break;
@@ -664,11 +683,13 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
     }
     *len = eol_num;
     buf[eol_num] = '\0';	/* lose the newline */
+#ifdef SHELL_CONFIG_USE_HIST
     if ((buf[0]) && (buf[0] != CREAD_HIST_CHAR))
     {
         cread_add_to_hist(buf);
     }
     hist_cur = hist_add_idx;
+#endif
     return 0;
 }
 
@@ -685,7 +706,9 @@ static int readline (char * prompt)
     console_buffer[0] = '\0';
     if (!initted)
     {
+#ifdef SHELL_CONFIG_USE_HIST
         hist_init();
+#endif
         initted = 1;
         printf("\r\nSHELL (build: %s)\r\n", __DATE__);
         printf("Copyright (c) 2013 Freescale Semiconductor\r\n");
@@ -729,14 +752,14 @@ static int parse_line (char * line, char * argv[])
         }
         *line++ = '\0';		/* terminate current arg	 */
     }
-    SHELL_printf ("** Too many args (max. %d) **\n", SHELL_MAX_ARGS);
+    shell_printf ("** Too many args (max. %d) **\r\n", SHELL_MAX_ARGS);
     return (nargs);
 }
 
  /*!
  * @brief find command form command struct's name
  */
-const cmd_tbl_t * SHELL_find_command (const char * cmd)
+const cmd_tbl_t * shell_find_command (const char * cmd)
 {
     uint8_t i = 0, n_found = 0;
     const cmd_tbl_t *cmdtp_temp = NULL;
@@ -761,7 +784,7 @@ const cmd_tbl_t * SHELL_find_command (const char * cmd)
     return NULL;
 }
 
-void SHELL_main_loop(char * prompt)
+void shell_main_loop(char * prompt)
 {
     int8_t len;
     uint8_t argc;
@@ -777,7 +800,7 @@ void SHELL_main_loop(char * prompt)
             {
                 continue;
             }
-            cmdtp = SHELL_find_command(argv[0]);
+            cmdtp = shell_find_command(argv[0]);
             if ((cmdtp != NULL) && (cmdtp->cmd != NULL))
             {
                 if (argc > cmdtp->maxargs)
@@ -791,28 +814,28 @@ void SHELL_main_loop(char * prompt)
             }
             else
             {
-                SHELL_printf("Unknown command '%s' - try 'help'\r\n", argv[0]);	
+                shell_printf("Unknown command '%s' - try 'help'\r\n", argv[0]);	
             }
             if (result == CMD_RET_USAGE)
             {
                 if (cmdtp->usage != NULL)
                 {
-                    SHELL_printf("%s - %s\r\n", cmdtp->name, cmdtp->usage);
+                    shell_printf("%s - %s\r\n", cmdtp->name, cmdtp->usage);
                 }
                 if (cmdtp->help != NULL)
                 {
-                    SHELL_printf("Usage:\r\n%s ", cmdtp->name);
-                    SHELL_printf("%s\r\n", cmdtp->help);
+                    shell_printf("Usage:\r\n%s ", cmdtp->name);
+                    shell_printf("%s\r\n", cmdtp->help);
                 }
                 else
                 {
-                    SHELL_printf ("- No additional help available.\r\n");
+                    shell_printf ("- No additional help available.\r\n");
                 }
             }
         }
         else if (len == -1)
         {
-            SHELL_printf("<INTERRUPT>\r\n");
+            shell_printf("<INTERRUPT>\r\n");
         }
     }
 }

@@ -27,8 +27,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef __SHELL_H__
-#define __SHELL_H__
+#ifndef __shell_H__
+#define __shell_H__
 
 #include <stdint.h>
 #include <string.h>
@@ -40,10 +40,10 @@ typedef struct
 {
     uint8_t (*getc)(void);
     void    (*putc)(uint8_t ch);
-}SHELL_io_install_t;
+}shell_io_install_t;
 
 #ifdef SHELL_CONFIG_USE_STDIO
-#define SHELL_printf   printf
+#define shell_printf(fmt,args...)	printf (fmt ,##args)
 #endif
 
 typedef struct  
@@ -65,16 +65,16 @@ typedef enum
 }command_ret_t;
 
 //!< API funcions
-uint8_t SHELL_register_function(const cmd_tbl_t * pAddress);
-void SHELL_register_function_array(const cmd_tbl_t * pAddress, uint8_t num);
-uint8_t SHELL_unregister_function(char * name);
-int SHELL_printf(const char * format,...);
-void SHELL_beep(void);
-const cmd_tbl_t *SHELL_find_command (const char * cmd);
-uint8_t SHELL_io_install(SHELL_io_install_t * IOInstallStruct);
-const cmd_tbl_t ** SHELL_get_cmd_tbl(void);
-char **SHELL_get_hist_data_list(uint8_t * num);
-void SHELL_main_loop(char * prompt);
+uint8_t shell_register_function(const cmd_tbl_t * pAddress);
+void shell_register_function_array(const cmd_tbl_t * pAddress, uint8_t num);
+uint8_t shell_unregister_function(char * name);
+int shell_printf(const char * format,...);
+void shell_beep(void);
+const cmd_tbl_t *shell_find_command (const char * cmd);
+uint8_t shell_io_install(shell_io_install_t * IOInstallStruct);
+const cmd_tbl_t ** shell_get_cmd_tbl(void);
+char **shell_get_hist_data_list(uint8_t * num);
+void shell_main_loop(char * prompt);
 
 #endif
 

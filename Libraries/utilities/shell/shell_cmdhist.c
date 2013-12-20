@@ -40,16 +40,16 @@
  /*******************************************************************************
  * Code
  ******************************************************************************/
- 
+#ifdef SHELL_CONFIG_USE_HIST
 static int DoHist(int argc, char * const argv[])
 {
     uint8_t num;
     uint8_t i = 0;
-    char ** pplist = SHELL_get_hist_data_list(&num);
-    SHELL_printf("history:\r\n");
+    char ** pplist = shell_get_hist_data_list(&num);
+    shell_printf("history:\r\n");
     while (num--)
     {
-        SHELL_printf("(%d) %s\r\n", i, *pplist++);
+        shell_printf("(%d) %s\r\n", i, *pplist++);
         i++;
     }
     return CMD_RET_SUCCESS;
@@ -65,7 +65,8 @@ const cmd_tbl_t CommandFun_Hist =
     .complete = NULL,
     .help = NULL,
 };
- 
+#endif
+
  /*******************************************************************************
  * EOF
  ******************************************************************************/

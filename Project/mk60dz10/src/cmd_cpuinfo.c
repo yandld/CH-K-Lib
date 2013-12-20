@@ -28,16 +28,16 @@ int DoCPUInfo(int argc, char *const argv[])
     CPUIDY_GetPinCount(&val);
 		if(argc == 1)
 		{
-        SHELL_printf("%-*s- %s - %dPin\r\n", 16, "CPU:", CPUIDY_GetFamID(), val);
+        shell_printf("%-*s- %s - %dPin\r\n", 16, "CPU:", CPUIDY_GetFamID(), val);
         for(i=0;i< kClockNameCount; i++)
         {
             CLOCK_GetClockFrequency(i,&val);
-            SHELL_printf("%-*s- %dKHZ\r\n", 16, ClockSourceNameTable[i],val/1000);
+            shell_printf("%-*s- %dKHZ\r\n", 16, ClockSourceNameTable[i],val/1000);
         }
         for(i=0;i< kMemNameCount; i++)
         {
             CPUIDY_GetMemSize(i,&val);
-            SHELL_printf("%-*s- %dKB\r\n", 16, MemNameTable[i],val);
+            shell_printf("%-*s- %dKB\r\n", 16, MemNameTable[i],val);
         }
     }
     if(argc == 2 && !strcmp(argv[1], "help"))

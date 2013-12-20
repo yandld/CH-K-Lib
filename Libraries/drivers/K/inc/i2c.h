@@ -110,32 +110,20 @@ typedef enum
     kI2C_DMA_BTC,   //!< DMA Trigger On Byte Transfer Complete
 }I2C_ITDMAConfig_Type;
 
-
+typedef void (*I2C_CallBackType)(uint8_t data);
 //!< API functions
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
+void I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate);
+void I2C_GenerateSTART(uint8_t instance);
+void I2C_GenerateRESTART(uint8_t instance);
+void I2C_GenerateSTOP(uint8_t instance);
+void I2C_SendData(uint8_t instance, uint8_t data);
+void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type direction);
+uint8_t I2C_WaitAck(uint8_t instance);
+uint8_t I2C_IsBusy(uint8_t instance);
+void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalState newState);
+void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun);
 
-//本构件实现的接口函数
-/*
-void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
-void I2C_GenerateSTART(I2C_Type *I2Cx);
-void I2C_GenerateRESTART(I2C_Type *I2Cx);
-void I2C_GenerateSTOP(I2C_Type *I2Cx);
-void I2C_SendData(I2C_Type *I2Cx,uint8_t data8);
-uint8_t I2C_ReadData(I2C_Type *I2Cx);
-void I2C_Send7bitAddress(I2C_Type* I2Cx, uint8_t Address, uint8_t I2C_Direction);
-uint8_t I2C_WaitAck(I2C_Type *I2Cx);
-void I2C_SetMasterMode(I2C_Type* I2Cx,uint8_t I2C_Direction);
-void I2C_GenerateAck(I2C_Type *I2Cx);
-void I2C_GenerateNAck(I2C_Type *I2Cx);
-void I2C_ITConfig(I2C_Type* I2Cx, uint16_t I2C_IT, FunctionalState NewState);
-ITStatus I2C_GetITStatus(I2C_Type* I2Cx, uint16_t I2C_IT);
-void I2C_DMACmd(I2C_Type* I2Cx, uint16_t I2C_DMAReq, FunctionalState NewState);
-void I2C_ClearITPendingBit(I2C_Type* I2Cx, uint16_t I2C_IT);
-uint8_t I2C_IsLineBusy(I2C_Type* I2Cx);
-uint8_t I2C_WriteSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data);
-uint8_t I2C_ReadSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData);
-uint8_t I2C_Write(I2C_Type *I2Cx ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len);
-*/
 #ifdef __cplusplus
 }
 #endif

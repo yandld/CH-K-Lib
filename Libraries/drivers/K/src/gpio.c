@@ -356,11 +356,11 @@ void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
     if(AppCBFun != NULL)
-		{
+    {
         GPIO_CallBackTable[instance] = AppCBFun;
-		}
+    }
 }
 
 void PORTA_IRQHandler(void)

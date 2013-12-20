@@ -23,6 +23,7 @@
 //!< Gloabl Const Table Defination
 static IRQn_Type   const I2C_IRQBase = I2C0_IRQn;
 static I2C_Type * const I2C_InstanceTable[] = I2C_BASES;
+static I2C_CallBackType I2C_CallBackTable[ARRAY_SIZE(I2C_InstanceTable)] = {NULL};
 static const uint32_t SIM_I2CClockGateTable[] =
 {
     SIM_SCGC4_I2C0_MASK,
@@ -389,174 +390,41 @@ void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalSt
             break;
         case kI2C_IT_BTC:
             I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK;
+        case kI2C_DMA_BTC:
+            I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK;
+            I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK; // Don't know if need to init IICIE
         default:
             break;
     }
-    
+    (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(I2C_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance)));
 }
 
-/***********************************************************************************************
- 功能：I2C 中断配置
- 形参：I2Cx: I2C模块号
-       @arg I2C0 : I2C0模块
-       @arg I2C1 : I2C1模块
-			 I2C_IT : 中断源
-       @arg I2C_IT_TCF : I2C中断传输完成
-       NewState : 使能或者禁止
-       @arg ENABLE : 使能
-       @arg DISABLE: 禁止 
- 返回：0
- 详解：0
-************************************************************************************************/
-void I2C_ITConfig(I2C_Type* I2Cx, uint16_t I2C_IT, FunctionalState NewState)
+void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
 {
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	//assert_param(IS_I2C_IT(I2C_IT));
-	////assert_param(IS_FUNCTIONAL_STATE(NewState));
-	
-	switch(I2C_IT)
-	{
-		case I2C_IT_TCF:
-			(ENABLE == NewState)?(I2Cx->C1 |= I2C_C1_IICIE_MASK):(I2Cx->C1 &= ~I2C_C1_IICIE_MASK);
-			break;
-		case I2C_IT_IAAS:
-			(ENABLE == NewState)?(I2Cx->C1 |= I2C_C1_IICIE_MASK):(I2Cx->C1 &= ~I2C_C1_IICIE_MASK);
-		  (ENABLE == NewState)?(I2Cx->C1 |= I2C_C1_WUEN_MASK):(I2Cx->C1 &= ~I2C_C1_WUEN_MASK);
-			break;
-		case I2C_IT_SLTF:
-			(ENABLE == NewState)?(I2Cx->C1 |= I2C_C1_IICIE_MASK):(I2Cx->C1 &= ~I2C_C1_IICIE_MASK);
-			break;
-		case I2C_IT_SHTF2:
-			(ENABLE == NewState)?(I2Cx->C1 |= I2C_C1_IICIE_MASK):(I2Cx->C1 &= ~I2C_C1_IICIE_MASK);
-		  (ENABLE == NewState)?(I2Cx->SMB |= I2C_SMB_SHTF2IE_MASK):(I2Cx->SMB &= ~I2C_SMB_SHTF2IE_MASK);
-			break;
-		default:break;
-	}
-}
-/***********************************************************************************************
- 功能：I2C 获取中断状态
- 形参：I2Cx: I2C模块号
-       @arg I2C0 : I2C0模块
-       @arg I2C1 : I2C1模块
-			 I2C_IT : 中断源
-       @arg I2C_IT_TCF : I2C中断传输完成
- 返回：0
- 详解：0
-************************************************************************************************/
-ITStatus I2C_GetITStatus(I2C_Type* I2Cx, uint16_t I2C_IT)
-{
-	ITStatus retval = RESET;
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	//assert_param(IS_I2C_IT(I2C_IT));
-	switch(I2C_IT)
-	{
-		case I2C_IT_TCF:
-			(I2Cx->S & I2C_S_TCF_MASK)?(retval = SET):(retval = RESET);
-			break;
-		case I2C_IT_IAAS:
-			(I2Cx->S & I2C_S_IAAS_MASK)?(retval = SET):(retval = RESET);
-			break;
-		case I2C_IT_SLTF:
-			(I2Cx->SMB & I2C_SMB_SLTF_MASK)?(retval = SET):(retval = RESET);
-			break;
-		case I2C_IT_ARBL:
-			(I2Cx->S & I2C_S_ARBL_MASK)?(retval = SET):(retval = RESET);
-			break;  
-		case I2C_IT_SHTF2:
-			(I2Cx->SMB & I2C_SMB_SHTF2_MASK)?(retval = SET):(retval = RESET);
-			break;
-		default:break;
-	}
-	return retval;
+    if(AppCBFun != NULL)
+    {
+        I2C_CallBackTable[instance] = AppCBFun;
+    }
 }
 
-/***********************************************************************************************
- 功能：I2C DMA使能
- 形参：I2Cx: I2C模块号
-       @arg I2C0 : I2C0模块
-       @arg I2C1 : I2C1模块
-			 I2C_DMAReq : 中断源
-       @arg I2C_DMAReq_TCF : I2C传输完成
-       NewState : 使能或者禁止
-       @arg ENABLE : 使能
-       @arg DISABLE: 禁止 
- 返回：0
- 详解：0
-************************************************************************************************/
-void I2C_DMACmd(I2C_Type* I2Cx, uint16_t I2C_DMAReq, FunctionalState NewState)
-{
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	//assert_param(IS_I2C_DMAREQ(I2C_DMAReq));
-	//assert_param(IS_FUNCTIONAL_STATE(NewState));
-	
-	switch(I2C_DMAReq)
-	{
-		case I2C_DMAReq_TCF:
-			(NewState == ENABLE)?(I2Cx->C1 |= I2C_C1_DMAEN_MASK):(I2Cx->C1 &= ~I2C_C1_DMAEN_MASK);
-			break;
-		default:break;
-	}
-}
-
-/***********************************************************************************************
- 功能：I2C 清除中断标志
- 形参：I2Cx: I2C模块号
-       @arg I2C0 : I2C0模块
-       @arg I2C1 : I2C1模块
-			 I2C_IT : 中断源
-       @arg I2C_IT_TCF : I2C中断传输完成
- 返回：0
- 详解：0
-************************************************************************************************/
-void I2C_ClearITPendingBit(I2C_Type* I2Cx, uint16_t I2C_IT)
-{
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	//assert_param(IS_I2C_IT(I2C_IT));
-	
-	//清中断标志位
-	I2Cx->C1 |= I2C_C1_IICEN_MASK;
-	switch(I2C_IT)
-	{
-		case I2C_IT_TCF:
-			break;
-		case I2C_IT_IAAS:
-			break;
-		case I2C_IT_SLTF:
-			I2Cx->SMB |= I2C_SMB_SLTF_MASK;
-			break; 
-		case I2C_IT_ARBL:
-	  	I2Cx->S |= I2C_S_ARBL_MASK;
-			break;
-		case I2C_IT_SHTF2:
-			I2Cx->SMB |= I2C_SMB_SHTF2_MASK;
-			break;
-	}
-}
 /***********************************************************************************************
  功能：判断I2C 线上是否空闲 高电平
  形参：I2Cx: I2C模块号
        @arg I2C0 : I2C0模块
        @arg I2C1 : I2C1模块
- 返回：TRUE: 空闲 FALSE :忙
+ 返回：0 busy 1 idle
  详解：0
 ************************************************************************************************/
-uint8_t I2C_IsLineBusy(I2C_Type* I2Cx)
+uint8_t I2C_IsBusy(uint8_t instance)
 {
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	
-	if(I2Cx->S & I2C_S_BUSY_MASK)
+	if(I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK)
 	{
-		return TRUE;
+		return 0;
 	}
 	else
 	{
-		return FALSE;
-	}
+		return 1;
+	}  
 }
 
 uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len)
@@ -568,7 +436,7 @@ uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer,
     if(I2C_WaitAck(instance))
     {
         I2C_GenerateSTOP(instance);
-        while((I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK) == 1) {};
+        while(!I2C_IsBusy(instance));
         return 1;
     }
     //Send All Data
@@ -578,7 +446,7 @@ uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer,
         if(I2C_WaitAck(instance))
         {
             I2C_GenerateSTOP(instance);
-            while((I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK) == 1) {};
+            while(!I2C_IsBusy(instance));
             return 2;
         }
     }

@@ -102,7 +102,6 @@ const _I2C_Divider_Type I2C_DiverTable[] =
 };
 
 
-/* Documentation for this function is in fsl_i2c_hal.h.*/
 void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
 {
     /* Check if the requested frequency is greater than the max supported baud.*/
@@ -394,6 +393,8 @@ void I2C_GenerateAck(uint8_t instance)
  */
 void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalState newState)
 {
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
     // disable interrupt and dma first
     NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance));
     I2C_InstanceTable[instance]->C1 &= ~I2C_C1_IICIE_MASK;
@@ -404,9 +405,11 @@ void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalSt
             break;
         case kI2C_IT_BTC:
             I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK;
+            break;
         case kI2C_DMA_BTC:
             I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK;
             I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK; // Don't know if need to init IICIE
+            break;
         default:
             break;
     }
@@ -446,8 +449,6 @@ uint8_t I2C_IsBusy(uint8_t instance)
 		return 1;
 	}  
 }
-
-
 
 /**
  * @brief  I2C genereal write bytes to slave

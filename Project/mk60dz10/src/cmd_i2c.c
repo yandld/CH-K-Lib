@@ -3,7 +3,7 @@
 
 #define I2C_QUICK_INIT  I2C1_SCL_PC10_SDA_PC11
 
-
+/*
 
 static uint8_t gI2C_Instance = 0;
 
@@ -13,7 +13,6 @@ static int _do_i2c_scan(int argc, char *const argv[])
     shell_printf("scanning I2c bus...\r\n");
     for(i=0;i<0x7F;i++)
     {
-<<<<<<< HEAD
         I2C_GenerateSTART(gI2C_Instance);
         I2C_Send7bitAddress(gI2C_Instance, i, kI2C_Write);
         if(I2C_WaitAck(gI2C_Instance))
@@ -53,9 +52,8 @@ static int _do_i2c_it(int argc, char *const argv[])
         while(!I2C_IsBusy(gI2C_Instance));    
     }
     
-=======
         I2C_GenerateSTART(1);
-        I2C_Send7bitAddress(1, i, kI2C_Write);
+        I2C_Send7bitAddress(1, 0x44, kI2C_Write);
         if(I2C_WaitAck(1))
         {
             I2C_GenerateSTOP(1);
@@ -65,7 +63,7 @@ static int _do_i2c_it(int argc, char *const argv[])
         {
             I2C_GenerateSTOP(1);
             while(!I2C_IsBusy(1)); 
-            shell_printf("address:0x%x found!\r\n", i);
+            shell_printf("address:0x%x found!\r\n", 3);
         }
     }
 }
@@ -93,7 +91,6 @@ static int _do_i2c_it(int argc, char *const argv[])
             while(!I2C_IsBusy(1));    
         }
     I2C_CallbackInstall(1, I2C_ISR);
->>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
 }
 
 int DoI2C(int argc, char *const argv[])
@@ -126,13 +123,13 @@ int DoI2C(int argc, char *const argv[])
 >>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
 }
 
-
+*/
 const cmd_tbl_t CommandFun_I2C = 
 {
     .name = "I2C",
     .maxargs = 5,
     .repeatable = 1,
-    .cmd = DoI2C,
+    .cmd = NULL,
     .usage = "I2C",
     .complete = NULL,
     .help = "\r\n"

@@ -404,22 +404,13 @@ void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalSt
             break;
         case kI2C_IT_BTC:
             I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK;
-<<<<<<< HEAD
-            break;
         case kI2C_DMA_BTC:
             I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK;
             I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK; // Don't know if need to init IICIE
-            break;
-=======
-        case kI2C_DMA_BTC:
-            I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK;
-            I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK; // Don't know if need to init IICIE
->>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
         default:
             break;
     }
     (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(I2C_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance)));
-<<<<<<< HEAD
 }
 /**
  * @brief  install ISR callback
@@ -443,26 +434,7 @@ void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
  *         @arg HW_I2C1
  * @retval 0:busy 1:idle
  */
-=======
-}
 
-void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
-{
-    if(AppCBFun != NULL)
-    {
-        I2C_CallBackTable[instance] = AppCBFun;
-    }
-}
-
-/***********************************************************************************************
- 功能：判断I2C 线上是否空闲 高电平
- 形参：I2Cx: I2C模块号
-       @arg I2C0 : I2C0模块
-       @arg I2C1 : I2C1模块
- 返回：0 busy 1 idle
- 详解：0
-************************************************************************************************/
->>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
 uint8_t I2C_IsBusy(uint8_t instance)
 {
 	if(I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK)
@@ -474,6 +446,9 @@ uint8_t I2C_IsBusy(uint8_t instance)
 		return 1;
 	}  
 }
+
+
+
 /**
  * @brief  I2C genereal write bytes to slave
  * @param  instance:

@@ -50,19 +50,13 @@ typedef enum
     kI2C_DMA_BTC,           //!< DMA Trigger On Byte Transfer Complete
 }I2C_ITDMAConfig_Type;
 
-<<<<<<< HEAD
+
 //!< I2C CallBack Type
 typedef void (*I2C_CallBackType)(void);
 
 //!< API functions
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
 uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate);
-=======
-typedef void (*I2C_CallBackType)(uint8_t data);
-//!< API functions
-void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
-void I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate);
->>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
 void I2C_GenerateSTART(uint8_t instance);
 void I2C_GenerateRESTART(uint8_t instance);
 void I2C_GenerateSTOP(uint8_t instance);
@@ -72,10 +66,8 @@ uint8_t I2C_WaitAck(uint8_t instance);
 uint8_t I2C_IsBusy(uint8_t instance);
 void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalState newState);
 void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun);
-<<<<<<< HEAD
 uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData);
-=======
->>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
+
 
 #ifdef __cplusplus
 }

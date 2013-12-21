@@ -202,8 +202,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\startup\DeviceSupport\system_MK60DZ10.c</PathWithFileName>
       <FilenameWithoutPath>system_MK60DZ10.c</FilenameWithoutPath>
@@ -218,8 +218,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>488</TopLine>
-      <CurrentLine>489</CurrentLine>
+      <TopLine>468</TopLine>
+      <CurrentLine>473</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60DZ10.s</PathWithFileName>
       <FilenameWithoutPath>startup_MK60DZ10.s</FilenameWithoutPath>
@@ -256,10 +256,17 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
+      <ColumnNumber>1</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>144</TopLine>
+      <CurrentLine>172</CurrentLine>
+=======
       <ColumnNumber>10</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>141</TopLine>
       <CurrentLine>144</CurrentLine>
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -274,8 +281,13 @@
       <Focus>0</Focus>
       <ColumnNumber>9</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+=======
       <TopLine>38</TopLine>
       <CurrentLine>41</CurrentLine>
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\cmd_cpuinfo.c</PathWithFileName>
       <FilenameWithoutPath>cmd_cpuinfo.c</FilenameWithoutPath>
@@ -288,10 +300,15 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>18</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
+=======
       <TopLine>96</TopLine>
       <CurrentLine>111</CurrentLine>
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\cmd_gpio.c</PathWithFileName>
       <FilenameWithoutPath>cmd_gpio.c</FilenameWithoutPath>
@@ -304,10 +321,17 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
+      <ColumnNumber>17</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>41</TopLine>
+      <CurrentLine>47</CurrentLine>
+=======
       <ColumnNumber>19</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>27</TopLine>
       <CurrentLine>38</CurrentLine>
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\cmd_i2c.c</PathWithFileName>
       <FilenameWithoutPath>cmd_i2c.c</FilenameWithoutPath>
@@ -328,10 +352,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>29</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>55</TopLine>
+      <CurrentLine>51</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\drivers\K\src\clock.c</PathWithFileName>
       <FilenameWithoutPath>clock.c</FilenameWithoutPath>
@@ -344,10 +368,15 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>16</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+      <TopLine>351</TopLine>
+      <CurrentLine>359</CurrentLine>
+=======
       <TopLine>347</TopLine>
       <CurrentLine>360</CurrentLine>
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\drivers\K\src\gpio.c</PathWithFileName>
       <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
@@ -362,8 +391,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>442</TopLine>
-      <CurrentLine>443</CurrentLine>
+      <TopLine>285</TopLine>
+      <CurrentLine>290</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\drivers\K\src\uart.c</PathWithFileName>
       <FilenameWithoutPath>uart.c</FilenameWithoutPath>
@@ -394,8 +423,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>53</TopLine>
+      <CurrentLine>58</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\drivers\K\src\systick.c</PathWithFileName>
       <FilenameWithoutPath>systick.c</FilenameWithoutPath>
@@ -424,10 +453,17 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
+      <ColumnNumber>3</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>221</TopLine>
+      <CurrentLine>237</CurrentLine>
+=======
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>391</TopLine>
       <CurrentLine>402</CurrentLine>
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\drivers\K\src\i2c.c</PathWithFileName>
       <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
@@ -448,10 +484,17 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
+      <ColumnNumber>13</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>827</TopLine>
+      <CurrentLine>30</CurrentLine>
+=======
       <ColumnNumber>3</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>201</TopLine>
       <CurrentLine>216</CurrentLine>
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\utilities\shell\shell.c</PathWithFileName>
       <FilenameWithoutPath>shell.c</FilenameWithoutPath>
@@ -480,10 +523,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>37</ColumnNumber>
+      <ColumnNumber>32</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>98</TopLine>
+      <CurrentLine>126</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\utilities\shell\shell_cmdhelp.c</PathWithFileName>
       <FilenameWithoutPath>shell_cmdhelp.c</FilenameWithoutPath>
@@ -496,10 +539,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>15</ColumnNumber>
+      <ColumnNumber>13</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>18</TopLine>
+      <CurrentLine>33</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\utilities\shell\shell_cmdhist.c</PathWithFileName>
       <FilenameWithoutPath>shell_cmdhist.c</FilenameWithoutPath>
@@ -512,10 +555,15 @@
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>13</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+      <TopLine>17</TopLine>
+      <CurrentLine>52</CurrentLine>
+=======
       <TopLine>27</TopLine>
       <CurrentLine>30</CurrentLine>
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\Libraries\utilities\shell\shell_config.h</PathWithFileName>
       <FilenameWithoutPath>shell_config.h</FilenameWithoutPath>

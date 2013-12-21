@@ -2,9 +2,9 @@
   ******************************************************************************
   * @file    i2c.c
   * @author  YANDLD
-  * @version V2.4
-  * @date    2013.5.23
-  * @brief   超核K60固件库 IIC 驱动文件
+  * @version V2.5
+  * @date    2013.12.25
+  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
   ******************************************************************************
   */
 #include "i2c.h"
@@ -144,7 +144,7 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
     I2C_InstanceTable[instance]->F = (I2C_F_ICR(bestIcr)|I2C_F_MULT(bestMult));
 }
 
-
+/*
 static const QuickInit_Type I2C_QuickInitTable[] =
 {
     { 1, 4, 6, 0, 2, 0}, //I2C1_SCL_PE01_SDA_PE00
@@ -168,12 +168,27 @@ void CalConst(const QuickInit_Type * table, uint32_t size)
 		UART_printf("(0x%08xU)\r\n",value);
 	}
 }
+*/
 
-void I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
+ /**
+ * @brief  Quick init for user, do not need init struct
+ * @code
+ *      // init I2C1 pin: SCL:PC10 SDA:PC11 baudrate:47000Hz
+ *      I2C_QuickInit(I2C1_SCL_PC10_SDA_PC11, 47000);
+ * @endcode
+ * @param  I2CxMAP: QuickInit Select
+ *         @arg I2C1_SCL_PE01_SDA_PE00
+ *         @arg I2C0_SCL_PB00_SDA_PB01
+ *         @arg I2C0_SCL_PB02_SDA_PB03
+ *         @arg I2C1_SCL_PC10_SDA_PC11
+ * @param  baudrate: better to be 48000Hz 76000Hz 96000Hz 376000Hz
+ * @retval moudle instance
+ */
+uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
 {
     uint8_t i;
     I2C_InitTypeDef I2C_InitStruct1;
-    QuickInit_Type *pI2CxMap = (QuickInit_Type*)&(I2CxMAP);
+    QuickInit_Type * pI2CxMap = (QuickInit_Type*)&(I2CxMAP);
     I2C_InitStruct1.baudrate = baudrate;
     I2C_InitStruct1.instance = pI2CxMap->ip_instance;
     I2C_Init(&I2C_InitStruct1);
@@ -183,10 +198,17 @@ void I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
         PORT_PinMuxConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, pI2CxMap->mux);
         PORT_PinConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, kPullUp, ENABLE); 
     }
+    return pI2CxMap->ip_instance;
 }
-
+/**
+ * @brief  init I2C moudle
+ * @param  I2C_InitStruct: init struct of I2C
+ * @retval None
+ */
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 {
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(I2C_InitStruct->instance));
     uint32_t freq;
     SIM->SCGC4 |= SIM_I2CClockGateTable[I2C_InitStruct->instance];
     // disable first
@@ -198,119 +220,106 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
     I2C_InstanceTable[I2C_InitStruct->instance]->C1 |= I2C_C1_IICEN_MASK;
 }
 
-
-/***********************************************************************************************
- 功能：I2C 发送开始信号
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
- 返回：0
- 详解： I2C 总线当SCL为高电平 时 SDA下降沿跳变 识别为开始信号
-************************************************************************************************/
+/**
+ * @brief  generate start signal
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @retval None
+ */
 void I2C_GenerateSTART(uint8_t instance)
 {
-	//参数检查
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
     I2C_InstanceTable[instance]->C1 |= I2C_C1_TX_MASK;
     I2C_InstanceTable[instance]->C1 |= I2C_C1_MST_MASK;
 }
-/***********************************************************************************************
- 功能：I2C 发送重新开始信号
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
- 返回：0
- 详解： I2C 总线当SCL为高电平 时 SDA下降沿跳变 识别为开始信号
-************************************************************************************************/
+/**
+ * @brief  generate restart signal
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @retval None
+ */
 void I2C_GenerateRESTART(uint8_t instance)
 {
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
     I2C_InstanceTable[instance]->C1 |= I2C_C1_RSTA_MASK;
 }
-/***********************************************************************************************
- 功能：I2C 发送停止信号
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
- 返回：0
- 详解： I2C 总线当SCL为高电平 时 SDA上升沿跳变 识别为结束信号
-************************************************************************************************/
+/**
+ * @brief  generate stop signal
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @retval None
+ */
 void I2C_GenerateSTOP(uint8_t instance)
 {
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
 	I2C_InstanceTable[instance]->C1 &= ~I2C_C1_MST_MASK;
     I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TX_MASK;
 }
-/***********************************************************************************************
- 功能：I2C 发送8bit数据
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
-			 data8: 8bit数据
- 返回：0
- 详解：0
-************************************************************************************************/
+/**
+ * @brief  i2c send a byte
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @retval None
+ */
 void I2C_SendData(uint8_t instance, uint8_t data)
 {
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
 	I2C_InstanceTable[instance]->D = data;
 }
-/***********************************************************************************************
- 功能：I2C 读取8bit数据
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
- 返回：读取到的8bit 数据
- 详解：0
-************************************************************************************************/
+/**
+ * @brief  i2c read a byte
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @retval None
+ */
 uint8_t I2C_ReadData(uint8_t instance)
 {
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
 	return (I2C_InstanceTable[instance]->D);
 }
-/***********************************************************************************************
- 功能：I2C 发送7位地址码
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
-			 Address: 7bit地址码
-       I2C_Direction：
-       @arg I2C_MASTER_WRITE: 主机写
-       @arg I2C_MASTER_READ:  主机读
- 返回：0
- 详解：封装了SendData
-************************************************************************************************/
+/**
+ * @brief  i2c send 7 bit address
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @param  address: address of slave device should be 0-127
+ * @param  direction:
+ *         @arg kI2C_Read  : Master read
+ *         @arg kI2C_Write : Master write
+ * @retval None
+ */
 void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type direction)
 {
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	//assert_param(IS_I2C_MASTER_DIRECTION(I2C_Direction));
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
     address <<= 1;
 	(kI2C_Write == direction)?((address &= 0xFE)):(address |= 0x01);
 	I2C_InstanceTable[instance]->D = address;
 }
-/***********************************************************************************************
- 功能：I2C 等待应答信号完成
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
-
- 返回：0   :成功收到应答 
-       1   :未收到应答
- 详解：主机每传送一个字节都需要调用I2C_WaitAck一次 WaitAck 会等待这一个字节传输结束 包括最后ACK位的结束后返回
-************************************************************************************************/
+/**
+ * @brief  i2c wait ack. this function should be follow by senddata when using polling mode
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @retval 0:received ack 1:no ack  2:timeout
+ */
 uint8_t I2C_WaitAck(uint8_t instance)
 {
-
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-	
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
     //wait for transfer complete
     uint32_t timeout = 0x00FFFFF;
-    while (((I2C_InstanceTable[instance]->S & I2C_S_TCF_MASK) == 0) && (timeout--));
+    while (((I2C_InstanceTable[instance]->S & I2C_S_TCF_MASK) == 0) && (timeout--)) {};
     //both TCF and IICIF indicate one byte trasnfer complete
     timeout = 0x00FFFF;
     while (((I2C_InstanceTable[instance]->S & I2C_S_IICIF_MASK) == 0) && (timeout--));
@@ -330,54 +339,59 @@ uint8_t I2C_WaitAck(uint8_t instance)
         return 0;
     }
 }
-
-/***********************************************************************************************
- 功能：I2C 设置主机读写模式
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
-			 I2C_Direction : 主机读写方向
-			 @arg  I2C_MASTER_WRITE : 主机写
-       @arg  I2C_MASTER_READ  : 主机读
- 返回：0
- 详解：0 
-************************************************************************************************/
+/**
+ * @brief  I2C set read or write data when in Master mode
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @param  direction:
+ *         @arg kI2C_Read  : Master read
+ *         @arg kI2C_Write : Master write
+ * @retval None
+ */
 void I2C_SetMasterMode(uint8_t instance, I2C_Direction_Type direction)
 {
-	//参数检查
-	//assert_param(IS_I2C_MASTER_DIRECTION(I2C_Direction));
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
 	(direction == kI2C_Write)?(I2C_InstanceTable[instance]->C1 |= I2C_C1_TX_MASK):(I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TX_MASK);
 }
-/***********************************************************************************************
- 功能：I2C 设置为读取一个字节后返回NACK
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
- 返回：0
- 详解：0 
-************************************************************************************************/
+/**
+ * @brief  Generate NACK signal
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @retval None
+ */
 void I2C_GenerateNAck(uint8_t instance)
 {
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
 	I2C_InstanceTable[instance]->C1 |= I2C_C1_TXAK_MASK;
 }
-/***********************************************************************************************
- 功能：I2C 设置为读取一个字节后返回ACK
- 形参：I2Cx: I2C模块号
-       @arg I2C0: I2C0 模块
-       @arg I2C1: I2C1 模块
- 返回：0
- 详解：0 
-************************************************************************************************/
+/**
+ * @brief  Generate ACK signal
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @retval None
+ */
 void I2C_GenerateAck(uint8_t instance)
 {
-	//参数检查
-	//assert_param(IS_I2C_ALL_PERIPH(I2Cx));
+	//param check
+    assert_param(IS_I2C_ALL_INSTANCE(instance));
 	I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TXAK_MASK;
 }
-
-
+/**
+ * @brief  config I2C dma or Intrrupt settings
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @param  config:
+ *         @arg kI2C_ITDMA_Disable: disable DMA and interrupt
+ *         @arg kI2C_IT_BTC  : trigger interrupt when byte transfer complete
+ *         @arg kI2C_DMA_BTC : trigger dma when byte transfer complete
+ * @retval None
+ */
 void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalState newState)
 {
     // disable interrupt and dma first
@@ -390,13 +404,46 @@ void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalSt
             break;
         case kI2C_IT_BTC:
             I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK;
+<<<<<<< HEAD
+            break;
         case kI2C_DMA_BTC:
             I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK;
             I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK; // Don't know if need to init IICIE
+            break;
+=======
+        case kI2C_DMA_BTC:
+            I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK;
+            I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK; // Don't know if need to init IICIE
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
         default:
             break;
     }
     (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(I2C_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance)));
+<<<<<<< HEAD
+}
+/**
+ * @brief  install ISR callback
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @param  AppCBFun: user callback function
+ * @retval None
+ */
+void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
+{
+    if(AppCBFun != NULL)
+    {
+        I2C_CallBackTable[instance] = AppCBFun;
+    }
+}
+/**
+ * @brief  return 0 if line is busy
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @retval 0:busy 1:idle
+ */
+=======
 }
 
 void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
@@ -415,6 +462,7 @@ void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
  返回：0 busy 1 idle
  详解：0
 ************************************************************************************************/
+>>>>>>> fc8bf1d57433d68f677c54811be1598ee62d903b
 uint8_t I2C_IsBusy(uint8_t instance)
 {
 	if(I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK)
@@ -426,13 +474,22 @@ uint8_t I2C_IsBusy(uint8_t instance)
 		return 1;
 	}  
 }
-
+/**
+ * @brief  I2C genereal write bytes to slave
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @param  DeviceAddress: device address 0-127
+ * @param  pBuffer: send data pointer
+ * @param  len: len of data to send
+ * @retval 0:succ  1:address send fail 2:data send fail
+ */
 uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len)
 {
     //Generate START signal
     I2C_GenerateSTART(instance);
     //Send 7bit Data with WRITE operation
-    I2C_Send7bitAddress(instance, DeviceAddress, I2C_MASTER_WRITE);
+    I2C_Send7bitAddress(instance, DeviceAddress, kI2C_Write);
     if(I2C_WaitAck(instance))
     {
         I2C_GenerateSTOP(instance);
@@ -452,22 +509,21 @@ uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer,
     }
     //Generate stop and wait for line idle
     I2C_GenerateSTOP(instance);
-    while((I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK) == 1) {};
+    while(!I2C_IsBusy(instance));
     return 0;
 }
 
-
-/***********************************************************************************************
- 功能：通用 I2C 读写一个从机的一个寄存器 适用于大多数期间 MMA84系列传感器等等
- 形参：I2Cx: I2C模块号
-       @arg I2C0 : I2C0模块
-       @arg I2C1 : I2C1模块
-       DeviceAddress: 设备地址
-       RegisterAddress:寄存器在设备中的地址
-       Data: 需要写入的数据
- 返回：0:成功 else: 错误代码
- 详解：实质顺序为 START->ADDRESS->RegADR->Data->STOP->Wait until all stop
-************************************************************************************************/
+/**
+ * @brief  I2C genereal write a single register to slave
+ *         general to use for write a single register to slave
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @param  DeviceAddress: device address 0-127
+ * @param  RegisterAddress: register address offest in slave
+ * @param  Data: data
+ * @retval 0:succ  1:address send fail 2:data send fail
+ */
 uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data)
 {
     uint8_t ret;
@@ -477,65 +533,84 @@ uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t
     ret = I2C_WriteByte(instance, DeviceAddress, buf, sizeof(buf));
     return ret;
 }
-#if 0
 
-
-/***********************************************************************************************
- 功能：通用 I2C 读写一个从机的一个寄存器 适用于大多数期间 MMA84系列传感器等等
- 形参：I2Cx: I2C模块号
-       @arg I2C0 : I2C0模块
-       @arg I2C1 : I2C1模块
-       DeviceAddress: 设备地址
-       RegisterAddress:寄存器在设备中的地址
-       Data: 需要写入的数据
- 返回：0:成功 else: 错误代码
- 详解：实质顺序为 START->ADDRESS->RESTART->ADDRESS_With_READ->ReadData->SEND_NACK->STOP->Wait until all stop
-************************************************************************************************/
-uint8_t I2C_ReadSingleRegister(I2C_Type* I2Cx, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData)
+/**
+ * @brief  I2C genereal read a single register to slave
+ *         general to use for read a single register to slave
+ * @param  instance:
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @param  DeviceAddress: device address 0-127
+ * @param  RegisterAddress: register address offest in slave
+ * @param  pData: pointer of read data
+ * @retval 0:succ  1:address send fail 2:data send fail
+ */
+uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData)
 {
     uint8_t data;
     //Generate START signal
-    I2C_GenerateSTART(I2Cx);
+    I2C_GenerateSTART(instance);
     //Send 7bit Data with WRITE operation
-    I2C_Send7bitAddress(I2Cx, DeviceAddress, I2C_MASTER_WRITE);
-    if(I2C_WaitAck(I2Cx))
+    I2C_Send7bitAddress(instance, DeviceAddress, kI2C_Write);
+    if(I2C_WaitAck(instance))
     {
-        I2C_GenerateSTOP(I2Cx);
-        while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
+        I2C_GenerateSTOP(instance);
+        while(!I2C_IsBusy(instance));
         return 1;
     }
     //Send Reg Address
-    I2C_SendData(I2Cx, RegisterAddress);
-    if(I2C_WaitAck(I2Cx))
+    I2C_SendData(instance, RegisterAddress);
+    if(I2C_WaitAck(instance))
     {
-        I2C_GenerateSTOP(I2Cx);
-        while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
+        I2C_GenerateSTOP(instance);
+        while(!I2C_IsBusy(instance));
         return 2;
     }
     //Generate RESTART Signal
-    I2C_GenerateRESTART(I2Cx);
+    I2C_GenerateRESTART(instance);
     //Resend 7bit Address, This time we use READ Command
-    I2C_Send7bitAddress(I2Cx, DeviceAddress, I2C_MASTER_READ);
-    if(I2C_WaitAck(I2Cx))
+    I2C_Send7bitAddress(instance, DeviceAddress, kI2C_Read);
+    if(I2C_WaitAck(instance))
     {
-        I2C_GenerateSTOP(I2Cx);
-        while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
+        I2C_GenerateSTOP(instance);
+        while(!I2C_IsBusy(instance));
         return 3;
     }
     //Set Master in slave mode
-    I2C_SetMasterMode(I2Cx,I2C_MASTER_READ);
+    I2C_SetMasterMode(instance,kI2C_Read);
     //Dummy Read in order to generate SCL clock
-    data = I2Cx->D;
-    I2C_GenerateNAck(I2Cx);
+    data = I2C_InstanceTable[instance]->D;
+    I2C_GenerateNAck(instance);
     //This time, We just wait for masters receive byte transfer complete
-    I2C_WaitAck(I2Cx);
+    I2C_WaitAck(instance);
     //Generate stop and wait for line idle
-    I2C_GenerateSTOP(I2Cx);
-    while((I2Cx->S & I2C_S_BUSY_MASK) == 1);
+    I2C_GenerateSTOP(instance);
+    while(!I2C_IsBusy(instance));
     //actual read
-    data = I2Cx->D;
+    data = I2C_InstanceTable[instance]->D;
     *pData = data;
     return 0;
 }
-#endif
+
+
+void I2C0_IRQHandler(void)
+{
+    // clear pending bit
+    I2C_InstanceTable[HW_I2C0]->S |= I2C_S_IICIF_MASK;
+    if(I2C_CallBackTable[HW_I2C0])
+    {
+        I2C_CallBackTable[HW_I2C0]();
+    }
+    
+}
+
+void I2C1_IRQHandler(void)
+{
+    // clear pending bit
+    I2C_InstanceTable[HW_I2C1]->S |= I2C_S_IICIF_MASK;
+    if(I2C_CallBackTable[HW_I2C1])
+    {
+        I2C_CallBackTable[HW_I2C1]();
+    }
+}
 

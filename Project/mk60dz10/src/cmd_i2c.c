@@ -6,26 +6,31 @@
 
 static uint8_t gI2C_Instance = 0;
 
-
+static const uint32_t I2C_TestSpeedTable[] = {47000, 76000, 96000, 376000};
 
 static int _do_i2c_scan(int argc, char *const argv[])
 {
-    uint8_t i;
-    shell_printf("scanning i2c bus...\r\n");
-    for(i=0;i<127;i++)
+    uint8_t i,j;
+    
+    for(j = 0; j < ARRAY_SIZE(I2C_TestSpeedTable); j++)
     {
-        I2C_GenerateSTART(gI2C_Instance);
-        I2C_Send7bitAddress(gI2C_Instance, i, kI2C_Write);
-        if(I2C_WaitAck(gI2C_Instance))
+        gI2C_Instance = I2C_QuickInit(I2C_QUICK_INIT, I2C_TestSpeedTable[j]);
+        shell_printf("scanning i2c bus at:%dHz\r\n", I2C_TestSpeedTable[j]);
+        for(i=0;i<127;i++)
         {
-            I2C_GenerateSTOP(gI2C_Instance);
-            while(!I2C_IsBusy(gI2C_Instance));
-        }
-        else
-        {
-            I2C_GenerateSTOP(gI2C_Instance);
-            while(!I2C_IsBusy(gI2C_Instance)); 
-            shell_printf("address:0x%x found!\r\n", i);
+            I2C_GenerateSTART(gI2C_Instance);
+            I2C_Send7bitAddress(gI2C_Instance, i, kI2C_Write);
+            if(I2C_WaitAck(gI2C_Instance))
+            {
+                I2C_GenerateSTOP(gI2C_Instance);
+                while(!I2C_IsBusy(gI2C_Instance));
+            }
+            else
+            {
+                I2C_GenerateSTOP(gI2C_Instance);
+                while(!I2C_IsBusy(gI2C_Instance)); 
+                shell_printf("address:0x%x found!\r\n", i);
+            }
         }
     }
 }
@@ -52,6 +57,7 @@ static int _do_i2c_it(int argc, char *const argv[])
         I2C_GenerateSTOP(gI2C_Instance);
         while(!I2C_IsBusy(gI2C_Instance));    
     }
+    I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_BTC, DISABLE);
 }
 
 int DoI2C(int argc, char *const argv[])
@@ -61,7 +67,6 @@ int DoI2C(int argc, char *const argv[])
     if(!init)
     {
         gI2C_Instance = I2C_QuickInit(I2C_QUICK_INIT, 96*1000);
-        I2C_QuickInit(I2C1_SCL_PC10_SDA_PC11, 96*1000);
         init = 1;
     }
     if(!strcmp("scan", argv[1]))

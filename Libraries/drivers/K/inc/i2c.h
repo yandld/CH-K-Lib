@@ -67,7 +67,7 @@ uint8_t I2C_IsBusy(uint8_t instance);
 void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalState newState);
 void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun);
 uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData);
-
+uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data);
 
 #ifdef __cplusplus
 }

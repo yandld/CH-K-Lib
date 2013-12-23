@@ -357,7 +357,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60DZ10</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\utilities\minishell;..\..\..\Libraries\utilities\shell;..\..\..\Libraries\devices\mpu6050;..\..\..\Libraries\devices\hmc5883</IncludePath>
+              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\utilities\minishell;..\..\..\Libraries\utilities\shell;..\..\..\Libraries\devices\mpu6050;..\..\..\Libraries\devices\hmc5883;..\..\..\Libraries\devices\bmp180</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -527,6 +527,11 @@
               <FileName>hmc5883.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\devices\hmc5883\hmc5883.c</FilePath>
+            </File>
+            <File>
+              <FileName>bmp180.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\devices\bmp180\bmp180.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -6,7 +6,7 @@
 
 
 /* BMP180 defines */
-#define BMP180_ADDR                     0x1E // BMP180 address
+#define BMP180_ADDR                     0x77 // BMP180 address
 /* BMP180 registers */
 #define BMP180_PROM_START_ADDR          0xAA // E2PROM calibration data start register
 #define BMP180_PROM_DATA_LEN            22   // E2PROM length
@@ -57,7 +57,9 @@ typedef struct bmp180_device
     uint8_t i2c_instance;
     uint8_t (*read_reg)(struct bmp180_device * device, uint8_t reg_addr, uint8_t *data);
     uint8_t (*write_reg)(struct bmp180_device * device, uint8_t reg_addr, uint8_t data);
-    uint8_t (*read_data)(struct bmp180_device * device, int16_t* x, int16_t* y, int16_t* z);
+    uint8_t (*read_temperature)(struct bmp180_device * device, uint32_t* temperature);
+    uint8_t (*start_temperature_conversion)(struct bmp180_device * device);
+    uint8_t (*read_pressure)(struct bmp180_device * device, uint32_t pressure);
     uint8_t (*ctrl)(struct bmp180_device * device, uint8_t cmd);
     uint8_t (*probe)(struct bmp180_device * device);
 }bmp180_device;

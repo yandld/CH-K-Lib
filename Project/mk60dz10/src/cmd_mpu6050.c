@@ -12,6 +12,7 @@ static bmp180_device bmp180_device1;
 int DoMPU(int argc, char *const argv[])
 {
     int16_t ax,ay,az, gx,gy,gz, mx,my,mz;
+    uint32_t data;
     uint16_t i;
     static uint8_t init;
     if(!init)
@@ -44,8 +45,21 @@ int DoMPU(int argc, char *const argv[])
         mpu6050_device1.read_accel(&mpu6050_device1, &ax, &ay, &az);
         mpu6050_device1.read_gyro(&mpu6050_device1, &gx, &gy, &gz);
         hmc_device.read_data (&hmc_device, &mx, &my, &mz);
-        shell_printf("A:%05d, %05d, %05d G: %05d %05d %05d M:%05d %05d %05d\r", ax, ay, az, gx, gz, gz, mx, my, mz);
+        
+        if(bmp180_device1.read_temperature(&bmp180_device1, &data))
+        {
+            shell_printf("bmp180 busy!\r");
+            continue;
+        }
+        else
+        {
+            bmp180_device1.start_temperature_conversion(&bmp180_device1);
+            shell_printf("bmp180_temptureate:%d\r", data);
+        }
+        
+       // shell_printf("A:%05d, %05d, %05d G: %05d %05d %05d M:%05d %05d %05d\r", ax, ay, az, gx, gz, gz, mx, my, mz);
         DelayMs(50);
+        
     }
     shell_printf("data display finish\r\n");
 

@@ -28,11 +28,11 @@ typedef enum
     kGPIO_Mode_IFT = 0x00,            //!< input floating mode
     kGPIO_Mode_IPD = 0x01,            //!< input pull down mode
     kGPIO_Mode_IPU = 0x02,            //!< input pull up mode
-		#ifndef ML25Z4
+    #ifndef ML25Z4
     kGPIO_Mode_OOD = 0x03,            //!< output open drain mode KL25 has no open drain mode
-		#endif
+    #endif
     kGPIO_Mode_OPP = 0x04,            //!< output push mode
-		kGPIO_ModeNameCount,
+    kGPIO_ModeNameCount,
 }GPIO_Mode_Type;
 
 #define HW_GPIOA  (0x00U)

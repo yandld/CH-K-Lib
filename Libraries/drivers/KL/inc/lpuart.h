@@ -57,9 +57,7 @@ uint8_t LPUART_QuickInit(uint32_t LPUARTxMAP, uint32_t baudrate);
 void LPUART_Init(LPUART_InitTypeDef * LPUART_InitStruct);
 void LPUART_ITDMAConfig(uint8_t instance, LPUART_ITDMAConfig_Type config, FunctionalState newState);
 void LPUART_CallbackInstall(uint8_t instance, LPUART_CallBackType AppCBFun);
-
-
-
+void LPUART_SendByte(uint8_t instance, uint8_t ch);
 
 
 

@@ -337,9 +337,9 @@ void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type 
     NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
     PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] &= ~PORT_PCR_IRQC_MASK;
     //config
-    PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] |= PORT_PCR_IRQC(config);
+    (ENABLE == newState)?(PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] |= PORT_PCR_IRQC(config)):(PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] &= ~PORT_PCR_IRQC_MASK);
     //enable interrupt
-    (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance)));
+    NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
 }
 /**
  * @brief  install interrupt callback function

@@ -6,19 +6,19 @@
 
 void LPUART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag)
 {
-    static int i;
+    static uint8_t ch;
     if(flag == kLPUART_IT_TxBTC)
     {
-        *pbyteToSend = 'A';
-        i++;
-        if(i == 10)
-        {
-            LPUART_ITDMAConfig(HW_LPUART0, kLPUART_IT_TxBTC, DISABLE);
-        }
+        *pbyteToSend = ch;
+        LPUART_ITDMAConfig(HW_LPUART0, kLPUART_IT_TxBTC, DISABLE);
+         GPIO_ToggleBit(HW_GPIOA, 5);
     }
-    
-    
-
+    if(flag == kLPUART_IT_RxBTC)
+    {
+        LPUART_ITDMAConfig(HW_LPUART0, kLPUART_IT_TxBTC, ENABLE);
+        ch = byteReceived;
+        GPIO_ToggleBit(HW_GPIOA, 16);
+    }
 }
 
 int main(void)
@@ -46,10 +46,15 @@ int main(void)
 
     
     ch = LPUART_QuickInit(UART0_RX_PA15_TX_PA14, 115200);
-    LPUART_ITDMAConfig(HW_LPUART0, kLPUART_IT_TxBTC, ENABLE);
-    LPUART_ITDMAConfig(HW_LPUART0, kLPUART_IT_RxBTC, ENABLE);
+    
+    
     LPUART_CallbackInstall(HW_LPUART0, LPUART_ISR);
-    UART_printf("123123,%d\r\n", ch);
+  //  LPUART_ITDMAConfig(HW_LPUART0, kLPUART_IT_TxBTC, ENABLE);
+    LPUART_ITDMAConfig(HW_LPUART0, kLPUART_IT_RxBTC, ENABLE);
+    
+   // UART_printf("HelloWorld,%d\r\n", ch);
+    while(1);
+    
 }
 
 static void GPIO_ISR(uint32_t pinArray)

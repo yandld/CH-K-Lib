@@ -46,18 +46,18 @@ static const uint32_t SIM_GPIOClockGateTable[] =
     SIM_SCGC5_PORTE_MASK,
 };
 
-	/**
-  * @brief  Config PinMux function. This function is used in many other drivers code
-  * @param  instance: GPIO instance
-  *         @arg HW_GPIOA
-  *         @arg HW_GPIOB
-  *         @arg HW_GPIOC
-  *         @arg HW_GPIOD
-	*         @arg HW_GPIOE
-  * @param  pinIndex: 0-31
-  * @param  pinMux:   0 - kPinAltNameCount different pinmux value indcatie different pin function. It's various form chip to chip.
-  * @retval None
-  */
+ /**
+ * @brief  Config PinMux function. This function is used in many other drivers code
+ * @param  instance: GPIO instance
+ *         @arg HW_GPIOA
+ *         @arg HW_GPIOB
+ *         @arg HW_GPIOC
+ *         @arg HW_GPIOD
+ *         @arg HW_GPIOE
+ * @param  pinIndex: 0-31
+ * @param  pinMux:   0 - kPinAltNameCount different pinmux value indcatie different pin function. It's various form chip to chip.
+ * @retval None
+ */
 void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
 {
     //param check
@@ -68,22 +68,22 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
 		PORT_InstanceTable[instance]->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);
 		PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
 }
-	/**
-  * @brief  Config pin pull select and open drain enablement
-  * @param  instance: GPIO instance
-  *         @arg HW_GPIOA
-  *         @arg HW_GPIOB
-  *         @arg HW_GPIOC
-  *         @arg HW_GPIOD
-	*         @arg HW_GPIOE
-  * @param  pinIndex: 0-31
-  * @param  pull: pull select
-  *         @arg kPullDisabled
-  *         @arg kPullUp
-  *         @arg kPullDown
-  * @param  newState: enable open drain or not. This select only vailid on K series.
-  * @retval None
-  */
+/**
+ * @brief  Config pin pull select and open drain enablement
+ * @param  instance: GPIO instance
+ *         @arg HW_GPIOA
+ *         @arg HW_GPIOB
+ *         @arg HW_GPIOC
+ *         @arg HW_GPIOD
+ *         @arg HW_GPIOE
+ * @param  pinIndex: 0-31
+ * @param  pull: pull select
+ *         @arg kPullDisabled
+ *         @arg kPullUp
+ *         @arg kPullDown
+ * @param  newState: enable open drain or not. This select only vailid on K series.
+ * @retval None
+ */
 void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState)
 {
     //param check
@@ -109,20 +109,20 @@ void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, Fun
             break;
 		}
 }
-	/**
-  * @brief  config GPIO pin input or output
-  * @param  instance: GPIO instance
-  *         @arg HW_GPIOA
-  *         @arg HW_GPIOB
-  *         @arg HW_GPIOC
-  *         @arg HW_GPIOD
-	*         @arg HW_GPIOE
-  * @param  pinIndex: 0-31
-  * @param  mode: input or output
-  *         @arg kInpput
-  *         @arg kOutput
-  * @retval None
-  */
+/**
+ * @brief  config GPIO pin input or output
+ * @param  instance: GPIO instance
+ *         @arg HW_GPIOA
+ *         @arg HW_GPIOB
+ *         @arg HW_GPIOC
+ *         @arg HW_GPIOD
+ *         @arg HW_GPIOE
+ * @param  pinIndex: 0-31
+ * @param  mode: input or output
+ *         @arg kInpput
+ *         @arg kOutput
+ * @retval None
+ */
 void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode)
 {
     //param check
@@ -133,13 +133,13 @@ void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode
     (mode == kOutput) ? (GPIO_InstanceTable[instance]->PDDR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PDDR &= ~(1 << pinIndex));
 }
 
-	/**
-  * @brief  Initializes the GPIOx peripheral according to the specified
-  *         parameters in the GPIO_InitStruct.
-  * @param  GPIO_InitStruct: pointer to a GPIO_InitTypeDef structure that
-  *         contains the configuration information for the specified GPIO peripheral.
-  * @retval None
-  */
+ /**
+ * @brief  Initializes the GPIOx peripheral according to the specified
+ *         parameters in the GPIO_InitStruct.
+ * @param  GPIO_InitStruct: pointer to a GPIO_InitTypeDef structure that
+ *         contains the configuration information for the specified GPIO peripheral.
+ * @retval None
+ */
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 {
     //param check
@@ -177,7 +177,7 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
     //config pinMux
     PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
 }
-	/**
+ /**
   * @brief  Quick init for user, do not need init struct
   * @code
   *      // init PA3 a pin as output
@@ -333,15 +333,15 @@ void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type 
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
-		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     // disable interrupt first
     NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
     PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] &= ~PORT_PCR_IRQC_MASK;
-		//config
-    PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] |= PORT_PCR_IRQC(config);
+    //config
+    (ENABLE == newState)?(PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] |= PORT_PCR_IRQC(config)):(PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] &= ~PORT_PCR_IRQC_MASK);
     //enable interrupt
-    (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance)));
+    NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
 }
 /**
  * @brief  install interrupt callback function

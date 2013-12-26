@@ -17,18 +17,28 @@
     #if (defined(MK60DZ10))
         #define I2C_BASES {I2C0, I2C1}
     #endif
-
+    #if (defined(MK10D5))
+        #define I2C_BASES {I2C0}
+    #endif 
 #endif
 
 //!< Gloabl Const Table Defination
 static IRQn_Type   const I2C_IRQBase = I2C0_IRQn;
 static I2C_Type * const I2C_InstanceTable[] = I2C_BASES;
 static I2C_CallBackType I2C_CallBackTable[ARRAY_SIZE(I2C_InstanceTable)] = {NULL};
+#if (defined(MK60DZ10))
 static const uint32_t SIM_I2CClockGateTable[] =
 {
     SIM_SCGC4_I2C0_MASK,
     SIM_SCGC4_I2C1_MASK,
 };
+#elif (defined(MK10D5))
+static const uint32_t SIM_I2CClockGateTable[] =
+{
+    SIM_SCGC4_I2C0_MASK,
+};
+#endif
+
 
 typedef struct 
 {

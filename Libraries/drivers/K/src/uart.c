@@ -10,16 +10,11 @@
 #include "uart.h"
 #include "gpio.h"
 #include "common.h"
-#include "string.h"
 #include "clock.h"
 #include "stdarg.h"
 #include <stdio.h>
-//发送结构
-/*
-UART_TxSendTypeDef UART_TxIntStruct1;
-*/
-UART_Type* UART_DebugPort = NULL;
 
+static uint8_t UART_DebugInstance = 0;
 
 
 
@@ -35,451 +30,189 @@ UART_Type* UART_DebugPort = NULL;
 //! @{
 #if (!defined(GPIO_BASES))
 
-    #if (defined(MK60DZ10))
-        #define UART_BASES {UART0, UART1, UART2, UART3, UART4}
-    #elif
-		;
+    #if     (defined(MK60DZ10))
+    #define UART_BASES {UART0, UART1, UART2, UART3, UART4}
+    #elif   (defined(MK10D5))
+    #define UART_BASES {UART0, UART1, UART2}
     #endif
 
 #endif
 
 UART_Type * const UART_InstanceTable[] = UART_BASES;
-
-
-
-void UART_Init2(UART_InitTypeDef2* UART_InitStruct)
+#if (defined(MK60DZ10))
+static const uint32_t SIM_UARTClockGateTable[] =
 {
-    
-	
-	
-	
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void UART_DebugPortInit(UART_MapSelect_TypeDef UARTxMAP,uint32_t UART_BaudRate)
+    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
+    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
+    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
+    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART3_MASK},
+    {(uint32_t)&(SIM->SCGC1), SIM_SCGC1_UART4_MASK},
+};
+#elif (defined(MK10D5))
+static const RegisterManipulation_Type SIM_UARTClockGateTable[] =
 {
-    UART_InitTypeDef UART_DebugInitStruct1;
-    PeripheralMap_TypeDef *pUART_Map = (PeripheralMap_TypeDef*)&(UARTxMAP);
-    //配置默认的调试UART串口
-    UART_DebugInitStruct1.UART_BaudRate = UART_BaudRate;
-    UART_DebugInitStruct1.UARTxMAP = UARTxMAP;
-    //找出对应的UART端口
-    switch(pUART_Map->m_ModuleIndex)
-    {
-        case 0:
-            UART_DebugPort = UART0;
-            break;
-        case 1:
-            UART_DebugPort = UART1;
-            break;
-        case 2:
-            UART_DebugPort = UART2;
-            break;
-        case 3:
-            UART_DebugPort = UART3;
-            break;
-        case 4:
-            UART_DebugPort = UART4;
-            break;
-        default:
-            UART_DebugPort = NULL;
-            break;
-    }
-    UART_Init(&UART_DebugInitStruct1);
-}
-/***********************************************************************************************
- 功能：初始化串口
- 形参：UART_InitStruct UART初始化结构
- 返回：0
- 详解：0
-************************************************************************************************/
+    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
+    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
+    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
+};
+#endif
+
+
+
 void UART_Init(UART_InitTypeDef* UART_InitStruct)
 {
-    UART_Type* UARTx = NULL;
     uint16_t sbr;
     uint8_t brfa; 
     uint32_t clock;
-    uint8_t i;
-    PeripheralMap_TypeDef* pUART_Map = (PeripheralMap_TypeDef*)&(UART_InitStruct->UARTxMAP);
-    //检测参数
-    
-    //找出对应的UART端口
-    switch(pUART_Map->m_ModuleIndex)
-    {
-        case 0:
-            SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
-            UARTx = UART0;
-            break;
-        case 1:
-            SIM->SCGC4 |= SIM_SCGC4_UART1_MASK;
-            UARTx = UART1;
-            break;
-        case 2:
-            SIM->SCGC4 |= SIM_SCGC4_UART2_MASK;
-            UARTx = UART2;
-            break;
-        case 3:
-            SIM->SCGC4 |= SIM_SCGC4_UART3_MASK;
-            UARTx = UART3;
-            break;
-        case 4:
-            SIM->SCGC1 |= SIM_SCGC1_UART4_MASK;
-            UARTx = UART4;
-            break;
-        default:
-            UARTx = NULL;
-            break;
-    }
-    //配置传输频率
-		CLOCK_GetClockFrequency(kBusClock, &clock);
-    if((uint32_t)UARTx == UART0_BASE||(uint32_t)UARTx == UART1_BASE) 
+    // enable clock gate
+    size_t * SIM_SCGx = (void*) SIM_UARTClockGateTable[UART_InitStruct->instance].register_addr;
+    *SIM_SCGx |= SIM_UARTClockGateTable[UART_InitStruct->instance].mask;
+    //disable Tx Rx first
+    UART_InstanceTable[UART_InitStruct->instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    //get clock
+    CLOCK_GetClockFrequency(kBusClock, &clock);
+    if((UART_InitStruct->instance == 0) || (UART_InitStruct->instance == 1))
     {
         CLOCK_GetClockFrequency(kCoreClock, &clock); //UART0 UART1使用CoreClock
     }
-    sbr = (uint16_t)((clock)/((UART_InitStruct->UART_BaudRate)*16));
-    brfa = ((clock*2)/(UART_InitStruct->UART_BaudRate)-(sbr*32));
-    UARTx->BDH |= ((sbr>>8)&UART_BDH_SBR_MASK);//设置高5位的数据
-    UARTx->BDL = (sbr&UART_BDL_SBR_MASK);//设置低8位数据
-    UARTx->C4 |= brfa&(UART_BDL_SBR_MASK>>3);//设置小数位
-    //配置uart控制寄存器，实现基本的八位传输功能
-    UARTx->C2 &= ~(UART_C2_RE_MASK|UART_C2_TE_MASK);	 //禁止发送接受
-    UARTx->C1 &= ~UART_C1_M_MASK;                      //配置数据位数为8位
-    UARTx->C1 &= ~(UART_C1_PE_MASK);                   //配置为无奇偶校检位
-    UARTx->S2 &= ~UART_S2_MSBF_MASK;                   //配置为最低位优先传输
-    //使能接收器与发送器
-    UARTx->C2|=(UART_C2_RE_MASK|UART_C2_TE_MASK);	 //开启数据发送接受,参见手册1221页
-    //PinMux Config
-    for(i = 0; i < pUART_Map->m_PinCnt; i++)
+    sbr = (uint16_t)((clock)/((UART_InitStruct->baudrate)*16));
+    brfa = ((clock*2)/(UART_InitStruct->baudrate)-(sbr*32));
+    // config baudrate
+    UART_InstanceTable[UART_InitStruct->instance]->BDH |= ((sbr>>8)&UART_BDH_SBR_MASK);
+    UART_InstanceTable[UART_InitStruct->instance]->BDL = (sbr&UART_BDL_SBR_MASK);
+    UART_InstanceTable[UART_InitStruct->instance]->C4 |= brfa&(UART_BDL_SBR_MASK>>3);
+    // functional config
+    UART_InstanceTable[UART_InitStruct->instance]->C1 &= ~UART_C1_M_MASK; // 8bit
+    UART_InstanceTable[UART_InitStruct->instance]->C1 &= ~UART_C1_PE_MASK;// no parity check
+    UART_InstanceTable[UART_InitStruct->instance]->S2 &= ~UART_S2_MSBF_MASK; //LSB
+    // enable Tx Rx
+    UART_InstanceTable[UART_InitStruct->instance]->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+}
+
+
+
+
+/**
+ * @brief  UART send a byte(blocking function)
+ * @param  instance: GPIO instance
+ *         @arg HW_UART0
+ * @param  ch: byte to send
+ * @retval None
+ */
+void UART_SendByte(uint8_t instance, uint8_t ch)
+{
+    while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
+    UART_InstanceTable[instance]->D = (uint8_t)ch;
+}
+
+/**
+ * @brief  UART receive a byte(none blocking function)
+ * @param  instance: GPIO instance
+ *         @arg HW_LPUART0
+ * @param  ch: pointer of byte to received
+ * @retval 0:succ 1:fail
+ */
+uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
+{
+    if((UART_InstanceTable[instance]->S1 & UART_S1_RDRF_MASK) != 0)
     {
-				PORT_PinMuxConfig(pUART_Map->m_PortIndex, pUART_Map->m_PinBase+i, pUART_Map->m_Mux);
+        *ch = (uint8_t)(UART_InstanceTable[instance]->D);	
+        return 0; 		  
+    }
+    return 1;
+}
+
+void UART_putstr(uint8_t instance, const char *str)
+{
+    while(*str != '\0')
+    {
+        UART_SendByte(instance, *str++);
     }
 }
 
-
-void UART_Cmd(UART_Type* UARTx, FunctionalState NewState)
+void UART_putnstr(uint8_t instance, const char *str, uint32_t len)
 {
-	(ENABLE == NewState)?(UARTx->C2 |= (UART_C2_RE_MASK|UART_C2_TE_MASK)):(UARTx->C2 &= ~(UART_C2_RE_MASK|UART_C2_TE_MASK));
-}
-
-/***********************************************************************************************
- 功能：配置中断开启
- 形参：UART_Type 串口选择
-			 @arg  UART0: 串口0
-			 @arg  UART1: 串口1
-			 @arg  UART2: 串口2
-			 @arg  UART3: 串口3
-			 @arg  UART4: 串口4
-
-			 UART_IT : 支持的中断
- 返回：0
- 详解：0
-************************************************************************************************/
-void UART_ITConfig(UART_Type* UARTx, UART_ITSelect_TypeDef UART_IT, FunctionalState NewState)
-{
-    IRQn_Type  IRQn;
-    //参数检查
-   // //assert_param(IS_UART_ALL_PERIPH(UARTx));
-    //找出对应的UART端口
-    switch((uint32_t)UARTx)
+    while(len--)
     {
-        case (uint32_t)UART0:
-            IRQn = UART0_RX_TX_IRQn;
-            break;
-        case (uint32_t)UART1:
-            IRQn = UART1_RX_TX_IRQn;
-            break;
-        case (uint32_t)UART2:
-            IRQn = UART2_RX_TX_IRQn;
-            break;
-        case (uint32_t)UART3:
-            IRQn = UART3_RX_TX_IRQn;
-            break;
-        case (uint32_t)UART4:
-            IRQn = UART4_RX_TX_IRQn;
-            break;
-        default:
-            break;
+        UART_SendByte(instance, *str++);
     }
-    switch(UART_IT)
-    {
-        case kUART_IT_TDRE:
-            (ENABLE == NewState)?(UARTx->C2 |= UART_C2_TIE_MASK):(UARTx->C2 &= ~UART_C2_TIE_MASK);
-            break;
-        case kUART_IT_TC:
-            (ENABLE == NewState)?(UARTx->C2 |= UART_C2_TCIE_MASK):(UARTx->C2 &= ~UART_C2_TCIE_MASK);
-            break;
-        case kUART_IT_RDRF:
-            (ENABLE == NewState)?(UARTx->C2 |= UART_C2_RIE_MASK):(UARTx->C2 &= ~UART_C2_RIE_MASK);
-            break;
-        case kUART_IT_IDLE:
-            (ENABLE == NewState)?(UARTx->C2 |= UART_C2_ILIE_MASK):(UARTx->C2 &= ~UART_C2_ILIE_MASK);
-            break;
-        default:break;
-    }
-		(ENABLE == NewState)?(NVIC_EnableIRQ(IRQn)):(NVIC_DisableIRQ(IRQn));
-}
-/***********************************************************************************************
- 功能：获得中断标志
- 形参：UART_Type 串口选择
-			 @arg  UART0: 串口0
-			 @arg  UART1: 串口1
-			 @arg  UART2: 串口2
-			 @arg  UART3: 串口3
-			 @arg  UART4: 串口4
-
-			 UART_IT : 支持的中断
- 返回：0
- 详解：0
-************************************************************************************************/
-ITStatus UART_GetITStatus(UART_Type* UARTx, UART_ITSelect_TypeDef UART_IT)
-{
-    ITStatus retval;
-    //参数检查
- //   //assert_param(IS_UART_ALL_PERIPH(UARTx));
-    
-    switch(UART_IT)
-    {
-        case kUART_IT_TDRE:
-            (UARTx->S1 & UART_S1_TDRE_MASK)?(retval = SET):(retval = RESET);
-            break;
-        case kUART_IT_TC:
-            (UARTx->S1 & UART_S1_TC_MASK)?(retval = SET):(retval = RESET);
-            break;
-        case kUART_IT_RDRF:
-            (UARTx->S1 & UART_S1_RDRF_MASK)?(retval = SET):(retval = RESET);	
-            break;
-        case kUART_IT_IDLE:
-            (UARTx->S1 & UART_S1_IDLE_MASK)?(retval = SET):(retval = RESET);			
-            break;
-        default:break;
-    }
-    return retval;
-}
-
-
-/***********************************************************************************************
- 功能：串口发送一个字节
- 形参：UART_Type 串口选择
-			 @arg  UART0: 串口0
-			 @arg  UART1: 串口1
-			 @arg  UART2: 串口2
-			 @arg  UART3: 串口3
-			 @arg  UART4: 串口4
-
-			 Data : 0-0xFF 发送的数据
- 返回：0
- 详解：0
-************************************************************************************************/
-void UART_SendByte(UART_Type* UARTx, uint8_t Data)
-{
-    while(!(UARTx->S1 & UART_S1_TDRE_MASK));
-    UARTx->D = (uint8_t)Data;
-}
-
-void UART_SendByte_Async(UART_Type* UARTx, uint8_t Data)
-{
-    UARTx->D = (uint8_t)Data;
-}
-
-/***********************************************************************************************
- 功能：开启UART DMA支持s
- 形参：UART_Type 串口选择
-			 @arg  UART0: 串口0
-			 @arg  UART1: 串口1
-			 @arg  UART2: 串口2
-			 @arg  UART3: 串口3
-			 @arg  UART4: 串口4
-
-			 UART_DMAReq : DMA中断源
-
-			 NewState    : 使能或者关闭
-			 @arg  ENABLE : 使能
-			 @arg  DISABLE: 禁止
- 返回：0
- 详解：需要DMA构件的支持 需要使用DMA构件中的 Iscomplete函数判断是否发送完成
-************************************************************************************************/
-void UART_DMACmd(UART_Type* UARTx, UART_DMAReq_Select_TypeDef UART_DMAReq, FunctionalState NewState)
-{
-    //参数检查
-   // //assert_param(IS_UART_ALL_PERIPH(UARTx));
-	
-    switch(UART_DMAReq)
-    {
-        case kUART_DMAReq_TX:
-            (ENABLE == NewState)?(UARTx->C5 |= UART_C5_TDMAS_MASK):(UARTx->C5 &= ~UART_C5_TDMAS_MASK);
-            (ENABLE == NewState)?(UARTx->C2 |= UART_C2_TIE_MASK):(UARTx->C2 &= ~UART_C2_TIE_MASK);	
-            break;
-        case kUART_DMAReq_RX:
-            (ENABLE == NewState)?(UARTx->C5 |= UART_C5_RDMAS_MASK):(UARTx->C5 &= ~UART_C5_RDMAS_MASK);
-				    (ENABLE == NewState)?(UARTx->C2 |= UART_C2_RIE_MASK):(UARTx->C2 &= ~UART_C2_RIE_MASK);	
-            break;
-        default:break;
-    }
-}
-/***********************************************************************************************
- 功能：使用中断发送串口数据
- 形参：UART_Type 串口选择
-			 @arg  UART0: 串口0
-			 @arg  UART1: 串口1
-			 @arg  UART2: 串口2
-			 @arg  UART3: 串口3
-			 @arg  UART4: 串口4
-
-			 *DataBuf : 发送的数据 缓冲区指针
-			  Len     : 发送的数据长度
- 返回：0
- 详解：0
-************************************************************************************************/
-/*
-void UART_SendDataInt(UART_Type* UARTx,uint8_t* pBuffer,uint8_t NumberOfBytes)
-{
-    //参数检测
-    //assert_param(IS_UART_ALL_PERIPH(UARTx));
-	
-    //内存拷贝
-    memcpy(UART_TxIntStruct1.TxBuf,pBuffer,NumberOfBytes);
-    UART_TxIntStruct1.Length = NumberOfBytes;
-    UART_TxIntStruct1.Offset = 0;
-    UART_TxIntStruct1.IsComplete = FALSE;
-    //使用中断方式传输 不使用DMA
-    UARTx->C5 &= ~UART_C5_TDMAS_MASK; 
-    //使能传送中断
-    UARTx->C2 |= UART_C2_TIE_MASK;
-}
-*/
-/***********************************************************************************************
- 功能：使用中断方式 发送串口数据 中断过程
- 形参：UART_Type 串口选择
-			 @arg  UART0: 串口0
-			 @arg  UART1: 串口1
-			 @arg  UART2: 串口2
-			 @arg  UART3: 串口3
-			 @arg  UART4: 串口4
- 返回：0
- 详解：当开启串口中断发送时 在对应的串口中断中调用此过程
-************************************************************************************************/
-/*
-void UART_SendDataIntProcess(UART_Type* UARTx)
-{
-    if((UARTx->S1 & UART_S1_TDRE_MASK) && (UARTx->C2 & UART_C2_TIE_MASK))
-    {
-        if(UART_TxIntStruct1.IsComplete == FALSE)
-        {
-            UARTx->D = UART_TxIntStruct1.TxBuf[UART_TxIntStruct1.Offset++];
-            if(UART_TxIntStruct1.Offset >= UART_TxIntStruct1.Length)
-            {
-                UART_TxIntStruct1.IsComplete = TRUE;
-                //关闭发送中断
-                UARTx->C2 &= ~UART_C2_TIE_MASK;
-            }
-        } 
-    }
-}
-*/
-/***********************************************************************************************
- 功能：串口接收一个字节
- 形参：UART_Type 串口选择
-			 @arg  UART0: 串口0
-			 @arg  UART1: 串口1
-			 @arg  UART2: 串口2
-			 @arg  UART3: 串口3
-			 @arg  UART4: 串口4
-
-			 *ch : 接收到的字节 传递指针
- 返回：0 接收失败
-       1 接收成功
- 详解：0
-************************************************************************************************/
-
-
-uint8_t UART_ReceiveByte(UART_Type* UARTx, uint8_t *pData)
-{
-    while((UARTx->S1 & UART_S1_RDRF_MASK) == 0) {};
-    *pData = UARTx->D;
-    return TRUE;
-}
-
-uint8_t UART_ReceiveByte_Async(UART_Type* UARTx, uint8_t *pData)
-{
-    if((UARTx->S1 & UART_S1_RDRF_MASK)!= 0) //is buffer full
-		{
-        *pData = (UARTx->D);	//get data
-        return TRUE;
-		}
-		return FALSE;
 }
 
 int UART_printf(const char *format,...)
 {
+    /*
     int chars;
     int i;
     va_list ap;
     char printbuffer[UART_PRINTF_CMD_LENGTH];
     va_start(ap, format);
-    chars = vsnprintf(printbuffer, UART_PRINTF_CMD_LENGTH, format, ap);
+    chars = vsnprintf(printbuffer, UART_VSPRINT_MAX_LEN, format, ap);
     va_end(ap);
     for(i = 0; i < chars; i++)
     {
-        UART_SendByte(UART_DebugPort,printbuffer[i]);
+        UART_SendByte(UART_DebugInstance,printbuffer[i]);
     }
     return chars ;
+    */
 }
 
-
-
 /*
-static const PeripheralMap_TypeDef UART_Check_Maps[] = 
-{ 
-    {0, 0, 2, 1, 2}, //UART0_RX_PA01_TX_PA02
-    {0, 0, 3,14, 2}, //UART0_RX_PA14_TX_PA15
-    {0, 1, 3,16, 2}, //UART0_RX_PB16_TX_PB17
-    {0, 3, 3, 6, 2}, //UART0_RX_PD06_TX_PD07
-    {1, 4, 3, 0, 2}, //UART1_RX_PE00_TX_PE01
-    {1, 2, 3, 3, 2}, //UART1_RX_PC03_TX_PC04
-    {2, 3, 3, 2, 2}, //UART2_RX_PD02_TX_PD03
-    {3, 1, 3,10, 2}, //UART3_RX_PB10_TX_PB11
-    {3, 2, 3,16, 2}, //UART3_RX_PC16_TX_PC17
-    {3, 4, 3, 4, 2}, //UART3_RX_PE04_TX_PE05
-    {4, 4, 3,24, 2}, //UART4_RX_PE24_TX_PE25
-    {4, 2, 3,14, 2}, //UART4_RX_PC14_TX_PC15
-    {0, 0, 0, 0, 0}, //UART0_USER_DEFINE
-    {1, 0, 0, 0, 0}, //UART1_USER_DEFINE
-    {2, 0, 0, 0, 0}, //UART2_USER_DEFINE
-    {3, 0, 0, 0, 0}, //UART3_USER_DEFINE
-    {4, 0, 0, 0, 0}, //UART4_USER_DEFINE
+static const QuickInit_Type LPUART_QuickInitTable[] =
+{
+    { 1, 4, 3, 0, 2, 0}, //UART1_RX_PE01_TX_PE00
+    { 0, 5, 4,18, 2, 0}, //UART0_RX_PF17_TX_PF18 4
+    { 3, 4, 3, 4, 2, 0}, //UART3_RX_PE05_TX_PE04 3
+    { 5, 5, 4,19, 2, 0}, //UART5_RX_PF19_TX_PF20 4
+    { 5, 4, 3, 8, 2, 0}, //UART5_RX_PE09_TX_PE08 3
+    { 2, 4, 3,16, 2, 0}, //UART2_RX_PE17_TX_PE16 3
+    { 4, 4, 3,24, 2, 0}, //UART4_RX_PE25_TX_PE24 3
+    { 0, 0, 2, 1, 2, 0}, //UART0_RX_PA01_TX_PA02 2
+    { 0, 0, 3,14, 2, 0}, //UART0_RX_PA15_TX_PA14 3
+    { 3, 1, 3,10, 2, 0}, //UART3_RX_PB10_TX_PB11 3
+    { 0, 1, 3,16, 2, 0}, //UART0_RX_PB16_TX_PB17 3
+    { 1, 2, 3, 3, 2, 0}, //UART1_RX_PC03_TX_PC04 3
+    { 4, 2, 3,14, 2, 0}, //UART4_RX_PC14_TX_PC15 3
+    { 3, 2, 3,16, 2, 0}, //UART3_RX_PC16_TX_PC17 3
+    { 2, 3, 3, 2, 2, 0}, //UART2_RX_PD02_TX_PD03 3
+    { 0, 3, 3, 6, 2, 0}, //UART0_RX_PD06_TX_PD07 3
+    { 2, 5, 4,13, 2, 0}, //UART2_RX_PF13_TX_PF14 4
+    { 5, 3, 3, 8, 2, 0}, //UART5_RX_PD08_TX_PD09 3
 };
 
-void CalConstValue(void)
+void CalConst(const QuickInit_Type * table, uint32_t size)
 {
-	uint8_t i = 0;
+	uint8_t i =0;
 	uint32_t value = 0;
-	for(i = 0; i < sizeof(UART_Check_Maps)/sizeof(PeripheralMap_TypeDef); i++)
+	for(i = 0; i < size; i++)
 	{
-		value = UART_Check_Maps[i].m_ModuleIndex<<0;
-		value |= UART_Check_Maps[i].m_PortIndex<<3;
-		value |= UART_Check_Maps[i].m_Mux<<6;
-		value |= UART_Check_Maps[i].m_PinBase<<9;
-		value |= UART_Check_Maps[i].m_PinCnt<<14;
-		value |= UART_Check_Maps[i].m_Channel<<17;
-		UART_printf("(0x%08XU)\r\n",value);
+		value = table[i].ip_instance<<0;
+		value|= table[i].io_instance<<3;
+		value|= table[i].mux<<6;
+		value|= table[i].io_base<<9;
+		value|= table[i].io_offset<<14;
+		value|= table[i].channel<<19;
+		UART_printf("(0x%xU)\r\n",value);
 	}
 }
 */
+
+uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate)
+{
+    uint8_t i;
+    UART_InitTypeDef UART_InitStruct1;
+    QuickInit_Type * pUARTxMap = (QuickInit_Type*)&(UARTxMAP);
+    UART_InitStruct1.baudrate = baudrate;
+    UART_InitStruct1.instance = pUARTxMap->ip_instance;
+    UART_Init(&UART_InitStruct1);
+    // init pinmux
+    for(i = 0; i < pUARTxMap->io_offset; i++)
+    {
+        PORT_PinMuxConfig(pUARTxMap->io_instance, pUARTxMap->io_base + i, (PORT_PinMux_Type) pUARTxMap->mux); 
+    }
+    UART_DebugInstance = pUARTxMap->ip_instance;
+    return pUARTxMap->ip_instance;
+}
+
 
 
 //! @}

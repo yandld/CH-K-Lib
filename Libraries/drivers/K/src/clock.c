@@ -14,7 +14,7 @@
 #define MCGOUT_TO_SYSTEM_DIV_SET(x)      SIM_CLKDIV1_OUTDIV1(x)
 #define MCGOUT_TO_BUS_DIV_SET(x)         SIM_CLKDIV1_OUTDIV2(x)
 #define MCGOUT_TO_PERIPHERAL_DIV_SET(x)  SIM_CLKDIV1_OUTDIV2(x)
-#define MCGOUT_TO_FLEXBUS_DIV_SET(x)     SIM_CLKDIV1_OUTDIV3(x)
+//#define MCGOUT_TO_FLEXBUS_DIV_SET(x)     SIM_CLKDIV1_OUTDIV3(x)
 #define MCGOUT_TO_FLASH_DIV_SET(x)       SIM_CLKDIV1_OUTDIV4(x)
 
 
@@ -35,7 +35,7 @@ void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideVa
 				SIM->CLKDIV1 |= MCGOUT_TO_BUS_DIV_SET(dividerValue);
 				break;
 			case kMcgOut2FlexBusDivider:
-				SIM->CLKDIV1 |= MCGOUT_TO_FLEXBUS_DIV_SET(dividerValue);
+		//		SIM->CLKDIV1 |= MCGOUT_TO_FLEXBUS_DIV_SET(dividerValue);
 				break;
 			case kMcgOut2FlashDivider:
 				SIM->CLKDIV1 |= MCGOUT_TO_FLASH_DIV_SET(dividerValue);
@@ -64,7 +64,7 @@ void CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInH
 				*FrequenctInHz = MCGOutClock / MCGOUT_TO_BUS_DIVIDER;	
 				break;
 			case kFlexBusClock:
-				*FrequenctInHz = MCGOutClock / MCGOUT_TO_FLEXBUS_DIVIDER;		
+		//		*FrequenctInHz = MCGOutClock / MCGOUT_TO_FLEXBUS_DIVIDER;		
 				break;
 			case kFlashClock:
 				*FrequenctInHz = MCGOutClock / MCGOUT_TO_FLASH_DIVIDER;		

@@ -7,7 +7,7 @@ static mpu6050_device mpu6050_device1;
 static hmc5883_device hmc_device;
 static bmp180_device bmp180_device1;
 
-#define MPU6050_I2C_MAP I2C1_SCL_PC10_SDA_PC11
+#define MPU6050_I2C_MAP I2C0_SCL_PB00_SDA_PB01
 
 int DoMPU(int argc, char *const argv[])
 {

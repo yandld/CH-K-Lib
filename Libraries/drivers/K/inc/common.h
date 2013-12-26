@@ -117,6 +117,11 @@ typedef struct
     uint32_t channel:5;
 }QuickInit_Type;
 
+typedef struct
+{
+    uint32_t    register_addr;
+    uint32_t    mask;
+}RegisterManipulation_Type;
 /*! @brief Status return codes.*/
 
 

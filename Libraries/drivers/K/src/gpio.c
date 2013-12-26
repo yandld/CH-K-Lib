@@ -29,7 +29,10 @@
         #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
         #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
     #endif
-
+    #if (defined(MK10D5))
+        #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
+        #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
+    #endif
 #endif
 
 //!< Gloabl Const Table Defination

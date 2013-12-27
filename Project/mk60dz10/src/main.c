@@ -15,14 +15,14 @@ extern const cmd_tbl_t CommandFun_Help;
 
 static void Putc(uint8_t data)
 {
-	UART_SendByte(UART4, data);
+	UART_WriteByte(HW_UART4, data);
 }
 
 static uint8_t Getc(void)
 {
-	uint8_t ch;
-  while(UART_ReceiveByte(UART4, &ch) == FALSE);
-	return ch;
+    uint8_t ch;
+    while(UART_ReadByte(HW_UART4, &ch));
+    return ch;
 }
 
 
@@ -45,6 +45,25 @@ extern const cmd_tbl_t CommandFun_MPU6050;
 
 #pragma weak configure_uart_pin_mux
 extern void configure_uart_pin_mux(uint32_t instance);
+
+
+void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag)
+{
+    static uint8_t ch;
+    if(flag == kUART_IT_TxBTC)
+    {
+        *pbyteToSend = ch;
+        UART_ITDMAConfig(HW_UART4, kUART_IT_TxBTC, DISABLE);
+         GPIO_ToggleBit(HW_GPIOA, 5);
+    }
+    if(flag == kUART_IT_RxBTC)
+    {
+        UART_ITDMAConfig(HW_UART4, kUART_IT_TxBTC, ENABLE);
+        ch = byteReceived;
+        GPIO_ToggleBit(HW_GPIOA, 16);
+    }
+}
+
 static void GPIO_ISR(uint32_t pinArray);
 int main(void)
 {
@@ -55,8 +74,13 @@ int main(void)
     //定义GPIO初始化结构
   //  SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
 	  DelayInit();
-    UART_DebugPortInit(UART4_RX_PC14_TX_PC15, 115200);
-    UART_printf("HelloWorld!\r\n");
+    
+    
+    UART_CallbackInstall(UART_QuickInit(UART4_RX_PC14_TX_PC15, 115200), UART_ISR);
+    UART_WriteByte(HW_UART4, 'A');
+    UART_ITDMAConfig(HW_UART4, kUART_IT_RxBTC, ENABLE);
+  //  UART_printf("HelloWorld!\r\n");
+  while(1);
 	  configure_uart_pin_mux(1);
 
 	//	UART_printf("%d\r\n", &configure_uart_pin_mux);

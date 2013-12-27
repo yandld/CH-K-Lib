@@ -119,7 +119,7 @@ typedef struct
 
 typedef struct
 {
-    uint32_t    register_addr;
+    void * register_addr;
     uint32_t    mask;
 }RegisterManipulation_Type;
 /*! @brief Status return codes.*/

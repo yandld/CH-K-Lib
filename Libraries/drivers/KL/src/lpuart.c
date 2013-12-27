@@ -1,5 +1,4 @@
 #include "lpuart.h"
-#include "common.h"
 #include "clock.h"
 #include "gpio.h"
 

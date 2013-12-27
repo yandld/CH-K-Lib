@@ -14,7 +14,7 @@
 #include "stdarg.h"
 #include <stdio.h>
 
-static uint8_t UART_DebugInstance = 0;
+
 
 
 
@@ -37,16 +37,20 @@ static uint8_t UART_DebugInstance = 0;
     #endif
 
 #endif
-
+//!< Gloabl Const Table Defination
+#define UART0_RX_TX_IRQn_OFFSET 2
+static IRQn_Type   const UART_IRQRxTxBase = UART0_RX_TX_IRQn;
 UART_Type * const UART_InstanceTable[] = UART_BASES;
+static UART_CallBackType UART_CallBackTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
+static uint8_t UART_DebugInstance;
 #if (defined(MK60DZ10))
-static const uint32_t SIM_UARTClockGateTable[] =
+static const RegisterManipulation_Type SIM_UARTClockGateTable[] =
 {
-    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
-    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
-    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
-    {(uint32_t)&(SIM->SCGC4), SIM_SCGC4_UART3_MASK},
-    {(uint32_t)&(SIM->SCGC1), SIM_SCGC1_UART4_MASK},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART3_MASK},
+    {(void*)&(SIM->SCGC1), SIM_SCGC1_UART4_MASK},
 };
 #elif (defined(MK10D5))
 static const RegisterManipulation_Type SIM_UARTClockGateTable[] =
@@ -87,6 +91,8 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     UART_InstanceTable[UART_InitStruct->instance]->S2 &= ~UART_S2_MSBF_MASK; //LSB
     // enable Tx Rx
     UART_InstanceTable[UART_InitStruct->instance]->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    //link debug instance
+    UART_DebugInstance = UART_InitStruct->instance;
 }
 
 
@@ -99,7 +105,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
  * @param  ch: byte to send
  * @retval None
  */
-void UART_SendByte(uint8_t instance, uint8_t ch)
+void UART_WriteByte(uint8_t instance, uint8_t ch)
 {
     while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
     UART_InstanceTable[instance]->D = (uint8_t)ch;
@@ -108,7 +114,7 @@ void UART_SendByte(uint8_t instance, uint8_t ch)
 /**
  * @brief  UART receive a byte(none blocking function)
  * @param  instance: GPIO instance
- *         @arg HW_LPUART0
+ *         @arg HW_UART0
  * @param  ch: pointer of byte to received
  * @retval 0:succ 1:fail
  */
@@ -126,7 +132,7 @@ void UART_putstr(uint8_t instance, const char *str)
 {
     while(*str != '\0')
     {
-        UART_SendByte(instance, *str++);
+        UART_WriteByte(instance, *str++);
     }
 }
 
@@ -134,7 +140,42 @@ void UART_putnstr(uint8_t instance, const char *str, uint32_t len)
 {
     while(len--)
     {
-        UART_SendByte(instance, *str++);
+        UART_WriteByte(instance, *str++);
+    }
+}
+
+void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, FunctionalState newState)
+{
+    // disable interrupt and dma first
+    NVIC_DisableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET));
+    // disable DMA and IT
+    switch(config)
+    {
+        case kUART_ITDMA_Disable:
+            break;
+        case kUART_IT_TxBTC:
+            (ENABLE == newState)?(UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK):(UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK);
+            break;
+        case kUART_DMA_TxBTC:
+            break;
+        case kUART_IT_RxBTC:
+            (ENABLE == newState)?(UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK):(UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK);
+            break;
+        case kUART_DMA_RxBTC:
+            break;
+        default:
+            break;
+    }
+    NVIC_EnableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET));
+}
+
+
+//< this function should be called before ITDMAConfig function
+void UART_CallbackInstall(uint8_t instance, UART_CallBackType AppCBFun)
+{
+    if(AppCBFun != NULL)
+    {
+        UART_CallBackTable[instance] = AppCBFun;
     }
 }
 
@@ -157,7 +198,7 @@ int UART_printf(const char *format,...)
 }
 
 /*
-static const QuickInit_Type LPUART_QuickInitTable[] =
+static const QuickInit_Type UART_QuickInitTable[] =
 {
     { 1, 4, 3, 0, 2, 0}, //UART1_RX_PE01_TX_PE00
     { 0, 5, 4,18, 2, 0}, //UART0_RX_PF17_TX_PF18 4
@@ -209,12 +250,109 @@ uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate)
     {
         PORT_PinMuxConfig(pUARTxMap->io_instance, pUARTxMap->io_base + i, (PORT_PinMux_Type) pUARTxMap->mux); 
     }
-    UART_DebugInstance = pUARTxMap->ip_instance;
     return pUARTxMap->ip_instance;
 }
 
 
+void UART0_RX_TX_IRQHandler(void)
+{
+    // clear pending bit
+   uint8_t ch;
+   uint8_t dummy;
+   //Tx
+   if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_TIE_MASK))
+   {
+        if(UART_CallBackTable[HW_UART0])
+        {
+            UART_CallBackTable[HW_UART0](0, &ch, kUART_IT_TxBTC);
+        }
+        UART_InstanceTable[HW_UART0]->D = (uint8_t)ch;
+   }
+   //Rx
+   if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_RIE_MASK))
+   {
+        ch = (uint8_t)UART_InstanceTable[HW_UART0]->D;
+        if(UART_CallBackTable[HW_UART0])
+        {
+            UART_CallBackTable[HW_UART0](ch, &dummy, kUART_IT_RxBTC);
+        }    
+   }
+}
 
+void UART1_RX_TX_IRQHandler(void)
+{
+    // clear pending bit
+   uint8_t ch;
+   uint8_t dummy;
+   //Tx
+   if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_TIE_MASK))
+   {
+        if(UART_CallBackTable[HW_UART0])
+        {
+            UART_CallBackTable[HW_UART0](0, &ch, kUART_IT_TxBTC);
+        }
+        UART_InstanceTable[HW_UART0]->D = (uint8_t)ch;
+   }
+   //Rx
+   if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_RIE_MASK))
+   {
+        ch = (uint8_t)UART_InstanceTable[HW_UART0]->D;
+        if(UART_CallBackTable[HW_UART0])
+        {
+            UART_CallBackTable[HW_UART0](ch, &dummy, kUART_IT_RxBTC);
+        }    
+   }
+}
+
+void UART2_RX_TX_IRQHandler(void)
+{
+    // clear pending bit
+   uint8_t ch;
+   uint8_t dummy;
+   //Tx
+   if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_TIE_MASK))
+   {
+        if(UART_CallBackTable[HW_UART0])
+        {
+            UART_CallBackTable[HW_UART0](0, &ch, kUART_IT_TxBTC);
+        }
+        UART_InstanceTable[HW_UART0]->D = (uint8_t)ch;
+   }
+   //Rx
+   if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_RIE_MASK))
+   {
+        ch = (uint8_t)UART_InstanceTable[HW_UART0]->D;
+        if(UART_CallBackTable[HW_UART0])
+        {
+            UART_CallBackTable[HW_UART0](ch, &dummy, kUART_IT_RxBTC);
+        }    
+   }
+}
+
+void UART4_RX_TX_IRQHandler(void)
+{
+    // clear pending bit
+   uint8_t ch;
+   uint8_t dummy;
+   //Tx
+   if((UART_InstanceTable[HW_UART4]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART4]->C2 & UART_C2_TIE_MASK))
+   {
+        if(UART_CallBackTable[HW_UART4])
+        {
+            UART_CallBackTable[HW_UART4](0, &ch, kUART_IT_TxBTC);
+        }
+        UART_InstanceTable[HW_UART4]->D = (uint8_t)ch;
+   }
+   //Rx
+   if((UART_InstanceTable[HW_UART4]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART4]->C2 & UART_C2_RIE_MASK))
+   {
+        ch = (uint8_t)UART_InstanceTable[HW_UART4]->D;
+        if(UART_CallBackTable[HW_UART4])
+        {
+            UART_CallBackTable[HW_UART4](ch, &dummy, kUART_IT_RxBTC);
+        }    
+   }
+}
 //! @}
 
 //! @}

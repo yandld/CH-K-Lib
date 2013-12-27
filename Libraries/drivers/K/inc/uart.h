@@ -27,8 +27,10 @@
 //! @addtogroup UART_Exported_Types
 //! @{
 
-#define UART_VSPRINT_MAX_LEN  128
-     
+
+#ifdef UART_USE_STDIO
+#define UART_printf(fmt,args...)    printf (fmt ,##args)
+#endif
 
 #define HW_UART0  (0x00U)
 #define HW_UART1  (0x01U)
@@ -102,6 +104,8 @@ void UART_Init(UART_InitTypeDef * UART_InitStruct);
 int UART_printf(const char *format,...);
 uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch);
 void UART_WriteByte(uint8_t instance, uint8_t ch);
+void UART_CallbackInstall(uint8_t instance, UART_CallBackType AppCBFun);
+void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, FunctionalState newState);
 
 //! @}
 

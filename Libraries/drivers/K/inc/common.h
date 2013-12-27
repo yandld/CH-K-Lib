@@ -41,11 +41,10 @@
 //! @addtogroup COMMON_Config_Macros
 //! @{
 
-//! @brief Set to 1 to expanse the "assert_param" macro in the Lib drivers code 
+//! @brief expanse the "assert_param" macro in the Lib drivers code 
 #define USE_FULL_ASSERT         
-//! @brief Debug printf and shell max char len
-#define UART_PRINTF_CMD_LENGTH  (64)
-
+//! @brief means you can use printf
+#define UART_USE_STDIO
 
 
 //! @}
@@ -141,3 +140,21 @@ typedef struct
 //! @}
 
 //! @}
+
+/*
+void CalConst(const QuickInit_Type * table, uint32_t size)
+{
+	uint8_t i =0;
+	uint32_t value = 0;
+	for(i = 0; i < size; i++)
+	{
+		value = table[i].ip_instance<<0;
+		value|= table[i].io_instance<<3;
+		value|= table[i].mux<<6;
+		value|= table[i].io_base<<9;
+		value|= table[i].io_offset<<14;
+		value|= table[i].channel<<19;
+		UART_printf("(0x%xU)\r\n",value);
+	}
+}
+*/

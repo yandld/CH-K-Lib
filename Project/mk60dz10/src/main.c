@@ -67,8 +67,8 @@ void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag)
 static void GPIO_ISR(uint32_t pinArray);
 int main(void)
 {
-	  uint8_t ch;
-		char buf[10];
+    uint8_t ch;
+    char buf[10];
     uint32_t Req;
     uint8_t i;
     //定义GPIO初始化结构
@@ -76,8 +76,10 @@ int main(void)
 	  DelayInit();
     
     
-    UART_CallbackInstall(UART_QuickInit(UART4_RX_PC14_TX_PC15, 115200), UART_ISR);
-    UART_WriteByte(HW_UART4, 'A');
+    UART_QuickInit(UART4_RX_PC14_TX_PC15,115200);
+    UART_printf("   a!%d!\r\n", 123);
+    
+    UART_CallbackInstall(HW_UART4, UART_ISR);
     UART_ITDMAConfig(HW_UART4, kUART_IT_RxBTC, ENABLE);
   //  UART_printf("HelloWorld!\r\n");
   while(1);

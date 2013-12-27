@@ -104,6 +104,7 @@ static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
 #ifdef SHELL_CONFIG_USE_STDIO
 
 #ifdef __CC_ARM /* MDK Support */
+#pragma weak __stdout
 struct __FILE 
 { 
 	int handle; 
@@ -113,12 +114,14 @@ struct __FILE
 }; 
 /* FILE is typedef¡¯ d in stdio.h. */ 
 FILE __stdout; 
+
+#pragma weak fputc
 int fputc(int ch,FILE *f)
 {
 	sputc(ch);
 	return ch;
 }
-
+#pragma weak fgetc
 int fgetc(FILE *f)
 {
     return sgetc();

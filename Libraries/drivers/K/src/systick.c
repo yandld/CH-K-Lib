@@ -36,8 +36,8 @@ void SYSTICK_ITConfig(FunctionalState NewState)
 void SYSTICK_DelayInit()
 {
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; //! <Set ClockSource = busClock
-	  CLOCK_GetClockFrequency(kCoreClock, &fac_us);
-	  fac_us /= 1000000;
+    CLOCK_GetClockFrequency(kCoreClock, &fac_us);
+    fac_us /= 1000000;
     fac_ms = (uint32_t)fac_us*1000;
 }
 
@@ -89,6 +89,7 @@ void SYSTICK_SetCurrentCounter(uint32_t Value)
 uint32_t SYSTICK_SetReloadValue(uint32_t Value)
 {
     SysTick->LOAD = Value;
+    return 0;
 }
 
 //! @}

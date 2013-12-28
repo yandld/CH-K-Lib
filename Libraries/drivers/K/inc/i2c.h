@@ -16,25 +16,41 @@
 	 
 #include "common.h"
 
+typedef struct
+{
+    uint8_t instance;    //!< I2C pin select
+    uint32_t baudrate;   //!< baudrate some common baudrate: 48000Hz 76000Hz 96000Hz 376000Hz
+}I2C_InitTypeDef;
+
+//! @defgroup CHKinetis-K
+//! @{
+
+//! @defgroup I2C-K
+//! @brief I2C-K driver modules
+//! @{
+
+//! @addtogroup I2C-K_Exported_Macro
+//! @{
+
 #define HW_I2C0         (0x00U)
 #define HW_I2C1         (0x01U)
 #define HW_I2C2         (0x02U)
 
-typedef struct
-{
-    uint8_t instance;    //!< GPIO pin select
-    uint32_t baudrate;   //!< baudrate some common baudrate: 48000Hz 76000Hz 96000Hz 376000Hz
-}I2C_InitTypeDef;
-
 
 //!< I2C QuickInit macro
-#define I2C1_SCL_PE01_SDA_PE00       (0x000081a1U)
-#define I2C0_SCL_PB00_SDA_PB01       (0x00008088U)
-#define I2C0_SCL_PB02_SDA_PB03       (0x00008488U)
-#define I2C1_SCL_PC10_SDA_PC11       (0x00009491U)
+#define I2C1_SCL_PE01_SDA_PE00  (0x81a1U)
+#define I2C0_SCL_PE19_SDA_PE18  (0xa520U)
+#define I2C0_SCL_PF22_SDA_PF23  (0xaca8U)
+#define I2C0_SCL_PB00_SDA_PB01  (0x8088U)
+#define I2C0_SCL_PB02_SDA_PB03  (0x8488U)
+#define I2C1_SCL_PC10_SDA_PC11  (0x9491U)
+#define I2C0_SCL_PD08_SDA_PD09  (0x9098U)
 
-//!< param check
-#define IS_I2C_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(I2C_InstanceTable))
+//! @}
+
+
+//! @addtogroup I2C-K_Exported_Type
+//! @{
 
 typedef enum
 {
@@ -51,10 +67,15 @@ typedef enum
 }I2C_ITDMAConfig_Type;
 
 
+
 //!< I2C CallBack Type
 typedef void (*I2C_CallBackType)(void);
 
-//!< API functions
+//! @}
+
+//! @defgroup I2C-K_API_Functions
+//! @{
+
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
 uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate);
 void I2C_GenerateSTART(uint8_t instance);
@@ -68,6 +89,15 @@ void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalSt
 void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun);
 uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData);
 uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data);
+
+//! @}
+
+//! @}
+
+//! @}
+
+//!< param check
+#define IS_I2C_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(I2C_InstanceTable))
 
 #ifdef __cplusplus
 }

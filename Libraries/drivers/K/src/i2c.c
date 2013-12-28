@@ -23,10 +23,11 @@
 #endif
 
 //!< Gloabl Const Table Defination
+#define I2C_IRQn_OFFSET 1
 static IRQn_Type   const I2C_IRQBase = I2C0_IRQn;
 static I2C_Type * const I2C_InstanceTable[] = I2C_BASES;
 static I2C_CallBackType I2C_CallBackTable[ARRAY_SIZE(I2C_InstanceTable)] = {NULL};
-#if (defined(MK60DZ10))
+#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10))
 static const uint32_t SIM_I2CClockGateTable[] =
 {
     SIM_SCGC4_I2C0_MASK,
@@ -39,26 +40,19 @@ static const uint32_t SIM_I2CClockGateTable[] =
 };
 #endif
 
-
+//!< clock deiver struct (internal)
 typedef struct 
 {
-    uint8_t icr;            /*!< F register ICR value.*/
-    uint16_t sclDivider;    /*!< SCL clock divider.*/
+    uint8_t icr;            //!< F register ICR value.
+    uint16_t sclDivider;    //!< SCL clock divider.
 }_I2C_Divider_Type;
 
-/*******************************************************************************
- * Variables
- ******************************************************************************/
 
-/*! @brief I2C divider values.*/
-/*!*/
-/*! This table is taken from the I2C Divider and Hold values section of the*/
-/*! reference manual. In the original table there are, in some cases, multiple*/
-/*! entries with the same divider but different hold values. This table*/
-/*! includes only one entry for every divider, selecting the lowest hold value.*/
+
+//!< @brief I2C divider values.
 const _I2C_Divider_Type I2C_DiverTable[] =
 {
-    /* ICR  Divider*/
+    // ICR  Divider
     { 0x00, 20 },
     { 0x01, 22 },
     { 0x02, 24 },
@@ -111,10 +105,10 @@ const _I2C_Divider_Type I2C_DiverTable[] =
     { 0x3f, 3840 }
 };
 
-
+//!< set i2c baudrate
 void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
 {
-    /* Check if the requested frequency is greater than the max supported baud.*/
+    // Check if the requested frequency is greater than the max supported baud.
     if (baudrate > (sourceClockInHz / (1U * 20U)))
     {
         return;
@@ -124,13 +118,13 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
     uint32_t bestError = 0xffffffffu;
     uint32_t bestMult = 0u;
     uint32_t bestIcr = 0u;
-    /* Search for the settings with the lowest error.*/
-    /* mult is the MULT field of the I2C_F register, and ranges from 0-2. It selects the*/
-    /* multiplier factor for the divider.*/
+    // Search for the settings with the lowest error.
+    // mult is the MULT field of the I2C_F register, and ranges from 0-2. It selects the
+    // multiplier factor for the divider.
     for (mult = 0u; (mult <= 2u) && (bestError != 0); ++mult)
     {
         uint32_t multiplier = 1u << mult;
-        /* Scan table to find best match.*/
+        // Scan table to find best match.
         uint32_t i;
         for (i = 0u; i < ARRAY_SIZE(I2C_DiverTable); ++i)
         {
@@ -141,8 +135,8 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
                 bestMult = mult;
                 bestIcr = I2C_DiverTable[i].icr;
                 bestError = absError;
-                /* If the error is 0, then we can stop searching because we won't find a*/
-                /* better match.*/
+                // If the error is 0, then we can stop searching because we won't find a
+                // better match.
                 if (absError == 0)
                 {
                     break;
@@ -153,31 +147,16 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
     I2C_InstanceTable[instance]->F = (I2C_F_ICR(bestIcr)|I2C_F_MULT(bestMult));
 }
 
-/*
-static const QuickInit_Type I2C_QuickInitTable[] =
-{
-    { 1, 4, 6, 0, 2, 0}, //I2C1_SCL_PE01_SDA_PE00
-    { 0, 1, 2, 0, 2, 0}, //I2C0_SCL_PB00_SDA_PB01
-    { 0, 1, 2, 2, 2, 0}, //I2C0_SCL_PB02_SDA_PB03
-    { 1, 2, 2,10, 2, 0}, //I2C1_SCL_PC10_SDA_PC11
-};
 
-void CalConst(const QuickInit_Type * table, uint32_t size)
-{
-	uint8_t i =0;
-	uint32_t value = 0;
-	for(i = 0; i < size; i++)
-	{
-		value = table[i].ip_instance<<0;
-		value|= table[i].io_instance<<3;
-		value|= table[i].mux<<6;
-		value|= table[i].io_base<<9;
-		value|= table[i].io_offset<<14;
-		value|= table[i].channel<<19;
-		UART_printf("(0x%08xU)\r\n",value);
-	}
-}
-*/
+//! @defgroup CHKinetis-K
+//! @{
+
+//! @defgroup I2C-K
+//! @brief I2C-K driver modules
+//! @{
+
+//! @defgroup I2C-K_API_Functions
+//! @{
 
  /**
  * @brief  Quick init for user, do not need init struct
@@ -204,11 +183,12 @@ uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
     // init pinmux and  open drain and pull up
     for(i = 0; i < pI2CxMap->io_offset; i++)
     {
-        PORT_PinMuxConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, pI2CxMap->mux);
+        PORT_PinMuxConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, (PORT_PinMux_Type)pI2CxMap->mux);
         PORT_PinConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, kPullUp, ENABLE); 
     }
     return pI2CxMap->ip_instance;
 }
+
 /**
  * @brief  init I2C moudle
  * @param  I2C_InitStruct: init struct of I2C
@@ -243,6 +223,7 @@ void I2C_GenerateSTART(uint8_t instance)
     I2C_InstanceTable[instance]->C1 |= I2C_C1_TX_MASK;
     I2C_InstanceTable[instance]->C1 |= I2C_C1_MST_MASK;
 }
+
 /**
  * @brief  generate restart signal
  * @param  instance:
@@ -256,6 +237,7 @@ void I2C_GenerateRESTART(uint8_t instance)
     assert_param(IS_I2C_ALL_INSTANCE(instance));
     I2C_InstanceTable[instance]->C1 |= I2C_C1_RSTA_MASK;
 }
+
 /**
  * @brief  generate stop signal
  * @param  instance:
@@ -270,6 +252,7 @@ void I2C_GenerateSTOP(uint8_t instance)
 	I2C_InstanceTable[instance]->C1 &= ~I2C_C1_MST_MASK;
     I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TX_MASK;
 }
+
 /**
  * @brief  i2c send a byte
  * @param  instance:
@@ -283,6 +266,7 @@ void I2C_SendData(uint8_t instance, uint8_t data)
     assert_param(IS_I2C_ALL_INSTANCE(instance));
 	I2C_InstanceTable[instance]->D = data;
 }
+
 /**
  * @brief  i2c read a byte
  * @param  instance:
@@ -315,6 +299,7 @@ void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type d
 	(kI2C_Write == direction)?((address &= 0xFE)):(address |= 0x01);
 	I2C_InstanceTable[instance]->D = address;
 }
+
 /**
  * @brief  i2c wait ack. this function should be follow by senddata when using polling mode
  * @param  instance:
@@ -324,17 +309,24 @@ void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type d
  */
 uint8_t I2C_WaitAck(uint8_t instance)
 {
+    uint32_t timeout = 0;
 	//param check
     assert_param(IS_I2C_ALL_INSTANCE(instance));
     //wait for transfer complete
-    uint32_t timeout = 0x00FFFFF;
-    while (((I2C_InstanceTable[instance]->S & I2C_S_TCF_MASK) == 0) && (timeout--)) {};
+    timeout = 0;
+    while (((I2C_InstanceTable[instance]->S & I2C_S_TCF_MASK) == 0) && (timeout < 1000))
+    {
+        timeout++;
+    }
     //both TCF and IICIF indicate one byte trasnfer complete
-    timeout = 0x00FFFF;
-    while (((I2C_InstanceTable[instance]->S & I2C_S_IICIF_MASK) == 0) && (timeout--));
+    timeout = 0;
+    while (((I2C_InstanceTable[instance]->S & I2C_S_IICIF_MASK) == 0) && (timeout < 1000))
+    {
+        timeout++;
+    }
     //IICIF is a W1C Reg, so clear it!
     I2C_InstanceTable[instance]->S |= I2C_S_IICIF_MASK;
-    if(timeout < 10U)
+    if(timeout > 999)
     {
         return 2;
     }
@@ -405,26 +397,25 @@ void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalSt
 {
 	//param check
     assert_param(IS_I2C_ALL_INSTANCE(instance));
-    // disable interrupt and dma first
-    NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance));
-    I2C_InstanceTable[instance]->C1 &= ~I2C_C1_IICIE_MASK;
-    I2C_InstanceTable[instance]->C1 &= ~I2C_C1_DMAEN_MASK;
     switch(config)
     {
         case kI2C_ITDMA_Disable:
+            NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance*I2C_IRQn_OFFSET));
+            I2C_InstanceTable[instance]->C1 &= ~I2C_C1_IICIE_MASK;
+            I2C_InstanceTable[instance]->C1 &= ~I2C_C1_DMAEN_MASK;
             break;
         case kI2C_IT_BTC:
-            I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK;
+            (ENABLE == newState)?(I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK):(I2C_InstanceTable[instance]->C1 &= ~I2C_C1_IICIE_MASK);
+            (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(I2C_IRQBase + instance*I2C_IRQn_OFFSET))):(NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance*I2C_IRQn_OFFSET)));
             break;
         case kI2C_DMA_BTC:
-            I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK;
-            I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK; // Don't know if need to init IICIE
+            (ENABLE == newState)?(I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK):(I2C_InstanceTable[instance]->C1 &= ~I2C_C1_DMAEN_MASK);
             break;
         default:
             break;
     }
-    (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(I2C_IRQBase + instance))):(NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance)));
 }
+
 /**
  * @brief  install ISR callback
  * @param  instance:
@@ -440,6 +431,7 @@ void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
         I2C_CallBackTable[instance] = AppCBFun;
     }
 }
+
 /**
  * @brief  return 0 if line is busy
  * @param  instance:
@@ -457,7 +449,7 @@ uint8_t I2C_IsBusy(uint8_t instance)
 	else
 	{
 		return 1;
-	}  
+	}
 }
 
 /**
@@ -472,6 +464,7 @@ uint8_t I2C_IsBusy(uint8_t instance)
  */
 uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len)
 {
+    uint32_t time_out = 0;
     //Generate START signal
     I2C_GenerateSTART(instance);
     //Send 7bit Data with WRITE operation
@@ -479,7 +472,11 @@ uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer,
     if(I2C_WaitAck(instance))
     {
         I2C_GenerateSTOP(instance);
-        while(!I2C_IsBusy(instance));
+        time_out = 0;
+        while(!I2C_IsBusy(instance) && (time_out < 1000))
+        {
+            time_out++;
+        }
         return 1;
     }
     //Send All Data
@@ -489,12 +486,17 @@ uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer,
         if(I2C_WaitAck(instance))
         {
             I2C_GenerateSTOP(instance);
-            while(!I2C_IsBusy(instance));
+            time_out = 0;
+            while(!I2C_IsBusy(instance) && (time_out < 1000))
+            {
+                time_out++;
+            }
             return 2;
         }
     }
     //Generate stop and wait for line idle
     I2C_GenerateSTOP(instance);
+    time_out = 0;
     while(!I2C_IsBusy(instance));
     return 0;
 }
@@ -533,6 +535,7 @@ uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t
  */
 uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData)
 {
+    uint32_t time_out = 0;
     uint8_t data;
     //Generate START signal
     I2C_GenerateSTART(instance);
@@ -541,7 +544,11 @@ uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t 
     if(I2C_WaitAck(instance))
     {
         I2C_GenerateSTOP(instance);
-        while(!I2C_IsBusy(instance));
+        time_out = 0;
+        while(!I2C_IsBusy(instance) && (time_out < 1000))
+        {
+            time_out++;
+        }
         return 1;
     }
     //Send Reg Address
@@ -549,6 +556,7 @@ uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t 
     if(I2C_WaitAck(instance))
     {
         I2C_GenerateSTOP(instance);
+        time_out = 0;
         while(!I2C_IsBusy(instance));
         return 2;
     }
@@ -559,6 +567,7 @@ uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t 
     if(I2C_WaitAck(instance))
     {
         I2C_GenerateSTOP(instance);
+        time_out = 0;
         while(!I2C_IsBusy(instance));
         return 3;
     }
@@ -571,6 +580,7 @@ uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t 
     I2C_WaitAck(instance);
     //Generate stop and wait for line idle
     I2C_GenerateSTOP(instance);
+    time_out = 0;
     while(!I2C_IsBusy(instance));
     //actual read
     data = I2C_InstanceTable[instance]->D;
@@ -578,6 +588,10 @@ uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t 
     return 0;
 }
 
+//! @}
+
+//! @defgroup I2C-K_Internal_Functions
+//! @{
 
 void I2C0_IRQHandler(void)
 {
@@ -590,6 +604,7 @@ void I2C0_IRQHandler(void)
     
 }
 
+#if (!defined(MK10D5))
 void I2C1_IRQHandler(void)
 {
     // clear pending bit
@@ -599,4 +614,23 @@ void I2C1_IRQHandler(void)
         I2C_CallBackTable[HW_I2C1]();
     }
 }
+#endif
 
+//! @}
+
+//! @}
+
+//! @}
+
+/*
+static const QuickInit_Type I2C_QuickInitTable[] =
+{
+    { 1, 4, 6, 0, 2, 0}, //I2C1_SCL_PE01_SDA_PE00 6
+    { 0, 4, 4,18, 2, 0}, //I2C0_SCL_PE19_SDA_PE18 4
+    { 0, 5, 2,22, 2, 0}, //I2C0_SCL_PF22_SDA_PF23 2
+    { 0, 1, 2, 0, 2, 0}, //I2C0_SCL_PB00_SDA_PB01 2
+    { 0, 1, 2, 2, 2, 0}, //I2C0_SCL_PB02_SDA_PB03 2
+    { 1, 2, 2,10, 2, 0}, //I2C1_SCL_PC10_SDA_PC11 2
+    { 0, 3, 2, 8, 2, 0}, //I2C0_SCL_PD08_SDA_PD09 2
+};
+*/

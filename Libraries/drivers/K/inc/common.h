@@ -51,8 +51,8 @@
 
 //!< CH_Kinetis version information
 #define CHK_VERSION                   2L              //!< major version number
-#define CHK_SUBVERSION                4L              //!< minor version number
-#define CHK_REVISION                  1L              //!< revise version number
+#define CHK_SUBVERSION                5L              //!< minor version number
+#define CHK_REVISION                  0L              //!< revise version number
 
 /* CH_Kinetis version */
 #define FW_VERSION                ((CHK_VERSION * 10000) + \

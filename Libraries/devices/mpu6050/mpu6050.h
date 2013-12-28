@@ -5,7 +5,6 @@
 
 #define MPU6050_DEVICE_ADDR  (0x68)
 
-
 typedef struct mpu6050_device
 {
     const char* name;
@@ -167,8 +166,6 @@ It's difficient from the MPU-6000 */
 #define MPU_ACCEL_CONFIG_AFS_SEL_SHIFT			3
 #define MPU_ACCEL_CONFIG_AFS_SEL_DATA(x)	(((uint8_t)(((uint8_t)(x))<<MPU_ACCEL_CONFIG_AFS_SEL_SHIFT))&MPU_ACCEL_CONFIG_AFS_SEL_MASK)	
 /***********Device base address*************/
-
-
 
 
 //!< API function

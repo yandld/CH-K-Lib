@@ -26,7 +26,7 @@ typedef struct
 void SYSTICK_Init(SYSTICK_InitTypeDef* SYSTICK_InitStruct);
 void SYSTICK_Cmd(FunctionalState NewState);
 void SYSTICK_ITConfig(FunctionalState NewState);
-void SYSTICK_DelayInit();
+void SYSTICK_DelayInit(void);
 void SYSTICK_DelayUs(uint32_t us);
 void SYSTICK_DelayMs(uint32_t ms);
 

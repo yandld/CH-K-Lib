@@ -15,7 +15,7 @@ extern const cmd_tbl_t CommandFun_Help;
 
 static void Putc(uint8_t data)
 {
-    UART_SendByte(HW_UART1, data);
+    UART_WriteByte(HW_UART1, data);
 }
 
 static uint8_t Getc(void)
@@ -25,41 +25,41 @@ static uint8_t Getc(void)
     return ch;
 }
 
-
-
 shell_io_install_t Shell_IOInstallStruct1 = 
 {
 	.getc = Getc,
 	.putc = Putc,
 };
 
-
-
-
 extern const cmd_tbl_t CommandFun_CPU;
 extern const cmd_tbl_t CommandFun_Hist;
 extern const cmd_tbl_t CommandFun_GPIO;
 extern const cmd_tbl_t CommandFun_I2C;
-extern const cmd_tbl_t CommandFun_MPU6050;
+extern const cmd_tbl_t CommandFun_IMUHW;
 
 
-#pragma weak configure_uart_pin_mux
-extern void configure_uart_pin_mux(uint32_t instance);
-static void GPIO_ISR(uint32_t pinArray);
-
+void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag)
+{
+    static uint8_t ch;
+    if(flag == kUART_IT_TxBTC)
+    {
+        *pbyteToSend = ch;
+        UART_ITDMAConfig(HW_UART1, kUART_IT_TxBTC, DISABLE);
+    }
+    if(flag == kUART_IT_RxBTC)
+    {
+        UART_ITDMAConfig(HW_UART1, kUART_IT_TxBTC, ENABLE);
+        ch = byteReceived;
+    }
+}
 
 int main(void)
 {
-    uint8_t ch;
-    char buf[10];
-    uint32_t Req;
-    uint8_t i;
     //定义GPIO初始化结构
-  //  SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
-	  DelayInit();
+    //SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
+    DelayInit();
     UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);
-    UART_printf("HelloWorld\r\n");
-      
+    printf("HelloWorld\r\n");
       
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
@@ -67,19 +67,14 @@ int main(void)
     shell_register_function(&CommandFun_I2C);
     shell_register_function(&CommandFun_Hist);
     shell_register_function(&CommandFun_CPU);
-    shell_register_function(&CommandFun_MPU6050);
+    shell_register_function(&CommandFun_IMUHW);
 
-//    printf("When you see this string, It means that printf is OK!\r\n");
+    printf("When you see this string, It means that printf is OK!\r\n");
 		
 		
     GPIO_QuickInit(HW_GPIOA, 1 , kGPIO_Mode_OPP);
-
-   
-
-
- //   GPIO_CallbackInstall(HW_GPIOC, GPIO_ISR);
-		
-	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);
+    //GPIO_CallbackInstall(HW_GPIOC, GPIO_ISR);
+	//GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);
 	//SHELL_printf("%d\r\n", GPIO_ReadBit(HW_GPIOD, kGPIO_Pin0));
 	//SHELL_printf("%x\r\n", (uint32_t)PORTA_IRQHandler);
 
@@ -98,3 +93,8 @@ void assert_failed(char * file, uint32_t line)
 	while(1);
 }
 
+void DefaultISR(void)
+{
+	shell_printf("DefaultISR\r\n");
+    while(1);
+}

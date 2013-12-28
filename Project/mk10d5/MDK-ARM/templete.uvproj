@@ -399,25 +399,20 @@
           <GroupName>startup</GroupName>
           <Files>
             <File>
-              <FileName>system_MK60DZ10.c</FileName>
+              <FileName>system_MK10D5.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\startup\DeviceSupport\system_MK60DZ10.c</FilePath>
+              <FilePath>..\..\..\Libraries\startup\DeviceSupport\system_MK10D5.c</FilePath>
             </File>
             <File>
-              <FileName>startup_MK60DZ10.s</FileName>
+              <FileName>startup_MK10D5.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60DZ10.s</FilePath>
+              <FilePath>..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK10D5.s</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>user</GroupName>
           <Files>
-            <File>
-              <FileName>isr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\isr.c</FilePath>
-            </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
@@ -439,9 +434,9 @@
               <FilePath>..\src\cmd_i2c.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_mpu6050.c</FileName>
+              <FileName>cmd_imu_hw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\cmd_mpu6050.c</FilePath>
+              <FilePath>..\src\cmd_imu_hw.c</FilePath>
             </File>
           </Files>
         </Group>

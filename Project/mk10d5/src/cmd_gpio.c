@@ -26,7 +26,7 @@ int DoGPIO(int argc, char *const argv[])
     uint8_t i;
     uint32_t gpio_instance;
     uint32_t gpio_pinx;
-    GPIO_Mode_Type gpio_mode;
+    uint8_t gpio_mode;
     if(argc == 5 && (!strcmp(argv[1], "Init")))
     {
         switch(argv[2][0])
@@ -57,8 +57,9 @@ int DoGPIO(int argc, char *const argv[])
             }
         }
         shell_printf("%d %d %d \r\n", gpio_instance, gpio_pinx, gpio_mode);
-        GPIO_QuickInit(gpio_instance, gpio_pinx, gpio_mode);
+        GPIO_QuickInit(gpio_instance, gpio_pinx, (GPIO_Mode_Type)gpio_mode);
     }
+    return 0;
 }
 
 

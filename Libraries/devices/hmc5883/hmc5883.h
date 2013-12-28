@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 
-/*发送地址，写地址在其基础上加1即 0x3d*/
 #define HMC5883_SLAVE_ADDRESS	0x1E
 
 typedef struct hmc5883_device

@@ -30,7 +30,7 @@ uint8_t mpu6050_read_accel(mpu6050_device * device, int16_t* x, int16_t* y, int1
 uint8_t mpu6050_crtl(mpu6050_device * device, uint8_t cmd)
 {
     
-    
+    return 0;
 }
 
 //!< read gyro data
@@ -97,10 +97,5 @@ uint8_t mpu6050_init(mpu6050_device* device, uint32_t I2CxMap, const char * name
     
     return 0;
 }
-
-
-
-
-
 
 

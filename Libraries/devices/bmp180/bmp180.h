@@ -4,6 +4,21 @@
 
 #include <stdint.h>
 
+typedef struct bmp180_device
+{
+    const char* name;
+    uint32_t I2CxMAP;
+    uint8_t device_addr;
+    uint8_t i2c_instance;
+    uint8_t (*read_reg)(struct bmp180_device * device, uint8_t reg_addr, uint8_t *data);
+    uint8_t (*write_reg)(struct bmp180_device * device, uint8_t reg_addr, uint8_t data);
+    uint8_t (*read_temperature)(struct bmp180_device * device, int32_t* temperature);
+    uint8_t (*read_pressure)(struct bmp180_device * device, int32_t* pressure);
+    uint8_t (*start_conversion)(struct bmp180_device * device, uint8_t mode);
+    uint8_t (*ctrl)(struct bmp180_device * device, uint8_t cmd);
+    uint8_t (*probe)(struct bmp180_device * device);
+    void * bmp_data;
+}bmp180_device;
 
 /* BMP180 defines */
 #define BMP180_ADDR                     0x77 // BMP180 address
@@ -28,41 +43,17 @@
 #define BMP180_PARAM_MH                -7357
 #define BMP180_PARAM_MI                 3791
 
-
-/* Calibration parameters structure */
-
-typedef struct
-{
-	int16_t AC1;
-	int16_t AC2;
-	int16_t AC3;
-	uint16_t AC4;
-	uint16_t AC5;
-	uint16_t AC6;
-	int16_t B1;
-	int16_t B2;
-	int16_t MB;
-	int16_t MD;
-	int32_t B5;
-  //  int16_t MC;
-} BMP180_Calibration_TypeDef;
-
-
-
-typedef struct bmp180_device
-{
-    const char* name;
-    uint32_t I2CxMAP;
-    uint8_t device_addr;
-    uint8_t i2c_instance;
-    uint8_t (*read_reg)(struct bmp180_device * device, uint8_t reg_addr, uint8_t *data);
-    uint8_t (*write_reg)(struct bmp180_device * device, uint8_t reg_addr, uint8_t data);
-    uint8_t (*read_temperature)(struct bmp180_device * device, uint32_t* temperature);
-    uint8_t (*start_temperature_conversion)(struct bmp180_device * device);
-    uint8_t (*read_pressure)(struct bmp180_device * device, uint32_t pressure);
-    uint8_t (*ctrl)(struct bmp180_device * device, uint8_t cmd);
-    uint8_t (*probe)(struct bmp180_device * device);
-}bmp180_device;
+#define BMP180_REG_AC1 0xaa
+#define BMP180_REG_AC2 0xac
+#define BMP180_REG_AC3 0xae
+#define BMP180_REG_AC4 0xb0
+#define BMP180_REG_AC5 0xb2
+#define BMP180_REG_AC6 0xb4
+#define BMP180_REG_B1 0xb6
+#define BMP180_REG_B2 0xb8
+#define BMP180_REG_MB 0xba
+#define BMP180_REG_MC 0xbc
+#define BMP180_REG_MD 0xbe
 
 
 //!< API functions

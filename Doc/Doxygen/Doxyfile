@@ -743,7 +743,7 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ../../Libraries/drivers \
+INPUT                  = ../../Libraries/drivers/K \
                          ../platform/startup \
                          ../platform/devices \
                          ../platform/include \

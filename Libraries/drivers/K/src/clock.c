@@ -19,7 +19,6 @@
 
 
 
-
 void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideValue_Type dividerValue)
 {
     switch (clockDivName)

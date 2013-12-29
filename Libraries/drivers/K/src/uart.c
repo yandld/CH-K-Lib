@@ -464,7 +464,7 @@ void UART4_RX_TX_IRQHandler(void)
     }
 }
 
-
+#if (defined(MK70F12)|| defined(MK70F15))
 void UART5_RX_TX_IRQHandler(void)
 {
     // clear pending bit
@@ -489,7 +489,8 @@ void UART5_RX_TX_IRQHandler(void)
         }    
     }
 }
-#endif
+#endif // (defined(MK70F12)|| defined(MK70F15))
+#endif // (!defined(MK10D5))
 
 //! @}
 
@@ -510,7 +511,7 @@ static const QuickInit_Type UART_QuickInitTable[] =
     { 0, 0, 2, 1, 2, 0}, //UART0_RX_PA01_TX_PA02 2
     { 0, 0, 3,14, 2, 0}, //UART0_RX_PA15_TX_PA14 3
     { 3, 1, 3,10, 2, 0}, //UART3_RX_PB10_TX_PB11 3
-    { 0, 1, 3,16, 2, 0}, //UART0_RX_PB16_TX_PB17 3
+    { 0, 1, 3,16, 2,  0}, //UART0_RX_PB16_TX_PB17 3
     { 1, 2, 3, 3, 2, 0}, //UART1_RX_PC03_TX_PC04 3
     { 4, 2, 3,14, 2, 0}, //UART4_RX_PC14_TX_PC15 3
     { 3, 2, 3,16, 2, 0}, //UART3_RX_PC16_TX_PC17 3

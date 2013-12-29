@@ -16,22 +16,15 @@
 	 
 #include "common.h"
 
-//! @defgroup CH_Periph_Driver
+//! @defgroup CHKinetis-K
 //! @{
 
-//! @defgroup GPIO
-//! @brief GPIO driver modules
+//! @defgroup GPIO-K
+//! @brief GPIO-K driver modules
 //! @{
-
-typedef enum
-{
-    kGPIO_Mode_IFT = 0x00,            //!< input floating mode
-    kGPIO_Mode_IPD = 0x01,            //!< input pull down mode
-    kGPIO_Mode_IPU = 0x02,            //!< input pull up mode
-    kGPIO_Mode_OOD = 0x03,            //!< output open drain mode
-    kGPIO_Mode_OPP = 0x04,            //!< output push mode
-    kGPIO_ModeNameCount,
-}GPIO_Mode_Type;
+	 
+//! @addtogroup GPIO-K_Exported_Macro
+//! @{
 
 #define HW_GPIOA  (0x00U)
 #define HW_GPIOB  (0x01U)
@@ -39,6 +32,12 @@ typedef enum
 #define HW_GPIOD  (0x03U)
 #define HW_GPIOE  (0x04U)
 #define HW_GPIOF  (0x05U)
+
+
+//! @}
+
+//! @addtogroup GPIO-K_Exported_Type
+//! @{
 
 typedef enum
 {
@@ -61,6 +60,15 @@ typedef enum
     kPullNameCount,
 }PORT_Pull_Type;
 
+typedef enum
+{
+    kGPIO_Mode_IFT = 0x00,            //!< input floating mode
+    kGPIO_Mode_IPD = 0x01,            //!< input pull down mode
+    kGPIO_Mode_IPU = 0x02,            //!< input pull up mode
+    kGPIO_Mode_OOD = 0x03,            //!< output open drain mode
+    kGPIO_Mode_OPP = 0x04,            //!< output push mode
+    kGPIO_ModeNameCount,
+}GPIO_Mode_Type;
 
 typedef enum
 {
@@ -68,62 +76,6 @@ typedef enum
     kOutput,
     kPinConfigNameCount,
 }GPIO_PinConfig_Type;
-
-//位带操作,实现51类似的GPIO控制功能
-//IO口操作宏定义
-#define BITBAND(addr,bitnum) ((addr & 0xF0000000)+0x2000000+((addr &0xFFFFF)<<5)+(bitnum<<2)) 
-#define MEM_ADDR(addr)  *((volatile unsigned long  *)(addr)) 
-#define BIT_ADDR(addr, bitnum)   MEM_ADDR(BITBAND(addr, bitnum)) 
-//IO口地址映射
-#define GPIOA_ODR_Addr    (PTA_BASE+0) //0x4001080C 
-#define GPIOB_ODR_Addr    (PTB_BASE+0) //0x40010C0C 
-#define GPIOC_ODR_Addr    (PTC_BASE+0) //0x4001100C 
-#define GPIOD_ODR_Addr    (PTD_BASE+0) //0x4001140C 
-#define GPIOE_ODR_Addr    (PTE_BASE+0) //0x4001180C 
-#define GPIOF_ODR_Addr    (PTF_BASE+0) //0x40011A0C    
-#define GPIOG_ODR_Addr    (PTG_BASE+0) //0x40011E0C    
-
-#define GPIOA_IDR_Addr    (PTA_BASE+0x10) //0x40010808 
-#define GPIOB_IDR_Addr    (PTB_BASE+0x10) //0x40010C08 
-#define GPIOC_IDR_Addr    (PTC_BASE+0x10) //0x40011008 
-#define GPIOD_IDR_Addr    (PTD_BASE+0x10) //0x40011408 
-#define GPIOE_IDR_Addr    (PTE_BASE+0x10) //0x40011808 
-#define GPIOF_IDR_Addr    (PTF_BASE+0x10) //0x40011A08 
-#define GPIOG_IDR_Addr    (PTG_BASE+0x10) //0x40011E08 
-
-
-
-//! @addtogroup GPIO_Constants_Macros
-//! @{
-
-
-//IO口操作,只对单一的IO口!
-#define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  //! < output
-#define PAin(n)    BIT_ADDR(GPIOA_IDR_Addr,n)  //! < input
-  
-#define PBout(n)   BIT_ADDR(GPIOB_ODR_Addr,n)  //输出 
-#define PBin(n)    BIT_ADDR(GPIOB_IDR_Addr,n)  //输入 
-
-#define PCout(n)   BIT_ADDR(GPIOC_ODR_Addr,n)  //输出 
-#define PCin(n)    BIT_ADDR(GPIOC_IDR_Addr,n)  //输入 
-
-#define PDout(n)   BIT_ADDR(GPIOD_ODR_Addr,n)  //输出 
-#define PDin(n)    BIT_ADDR(GPIOD_IDR_Addr,n)  //输入 
-
-#define PEout(n)   BIT_ADDR(GPIOE_ODR_Addr,n)  //输出 
-#define PEin(n)    BIT_ADDR(GPIOE_IDR_Addr,n)  //输入
-
-#define PFout(n)   BIT_ADDR(GPIOF_ODR_Addr,n)  //输出 
-#define PFin(n)    BIT_ADDR(GPIOF_IDR_Addr,n)  //输入
-
-#define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)  //输出 
-#define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)  //输入
-
-//! @}
-
-//! @addtogroup GPIO_Exported_Types
-//! @{
-
 
 typedef enum
 {
@@ -147,15 +99,12 @@ typedef struct
     uint32_t               pinx;                 //!< pin index
 }GPIO_InitTypeDef;
 
-//!< param check
-#define IS_GPIO_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(GPIO_InstanceTable))
-#define IS_PORT_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(PORT_InstanceTable))
-#define IS_GPIO_ALL_PIN(PIN)  (PIN < 32)
-
 typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
+
 //! @}
 
-//! @defgroup GPIO_Exported_Functions
+
+//! @defgroup GPIO-K_API_Functions
 //! @{
 
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
@@ -172,7 +121,59 @@ void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data);
 void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, FunctionalState newState);
 void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun);
 
+//! @}
 
+//! @}
+
+//! @}
+
+//!< param check
+#define IS_GPIO_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(GPIO_InstanceTable))
+#define IS_PORT_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(PORT_InstanceTable))
+#define IS_GPIO_ALL_PIN(PIN)  (PIN < 32)
+
+//!< BitBand Operation
+#define BITBAND(addr,bitnum) ((addr & 0xF0000000)+0x2000000+((addr &0xFFFFF)<<5)+(bitnum<<2)) 
+#define MEM_ADDR(addr)  *((volatile unsigned long  *)(addr)) 
+#define BIT_ADDR(addr, bitnum)   MEM_ADDR(BITBAND(addr, bitnum)) 
+//IO Mapping
+#define GPIOA_ODR_Addr    (PTA_BASE+0) //0x4001080C 
+#define GPIOB_ODR_Addr    (PTB_BASE+0) //0x40010C0C 
+#define GPIOC_ODR_Addr    (PTC_BASE+0) //0x4001100C 
+#define GPIOD_ODR_Addr    (PTD_BASE+0) //0x4001140C 
+#define GPIOE_ODR_Addr    (PTE_BASE+0) //0x4001180C 
+#define GPIOF_ODR_Addr    (PTF_BASE+0) //0x40011A0C    
+#define GPIOG_ODR_Addr    (PTG_BASE+0) //0x40011E0C    
+
+#define GPIOA_IDR_Addr    (PTA_BASE+0x10) //0x40010808 
+#define GPIOB_IDR_Addr    (PTB_BASE+0x10) //0x40010C08 
+#define GPIOC_IDR_Addr    (PTC_BASE+0x10) //0x40011008 
+#define GPIOD_IDR_Addr    (PTD_BASE+0x10) //0x40011408 
+#define GPIOE_IDR_Addr    (PTE_BASE+0x10) //0x40011808 
+#define GPIOF_IDR_Addr    (PTF_BASE+0x10) //0x40011A08 
+#define GPIOG_IDR_Addr    (PTG_BASE+0x10) //0x40011E08 
+
+
+#define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  //! < output
+#define PAin(n)    BIT_ADDR(GPIOA_IDR_Addr,n)  //! < input
+  
+#define PBout(n)   BIT_ADDR(GPIOB_ODR_Addr,n)
+#define PBin(n)    BIT_ADDR(GPIOB_IDR_Addr,n)
+
+#define PCout(n)   BIT_ADDR(GPIOC_ODR_Addr,n)
+#define PCin(n)    BIT_ADDR(GPIOC_IDR_Addr,n)
+
+#define PDout(n)   BIT_ADDR(GPIOD_ODR_Addr,n)
+#define PDin(n)    BIT_ADDR(GPIOD_IDR_Addr,n)
+
+#define PEout(n)   BIT_ADDR(GPIOE_ODR_Addr,n)
+#define PEin(n)    BIT_ADDR(GPIOE_IDR_Addr,n)
+
+#define PFout(n)   BIT_ADDR(GPIOF_ODR_Addr,n)
+#define PFin(n)    BIT_ADDR(GPIOF_IDR_Addr,n)
+
+#define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)
+#define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)
 
 
 #ifdef __cplusplus
@@ -181,8 +182,4 @@ void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun);
 
 #endif
 
-//! @}
 
-//! @}
-
-//! @}

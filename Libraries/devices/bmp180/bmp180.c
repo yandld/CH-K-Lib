@@ -15,7 +15,7 @@ typedef struct
 	int16_t B2;
     int16_t B5;
 	int16_t MB;
-    int16_t MC;
+    int16_t M2C;
 	int16_t MD;
     uint8_t oss;
     int32_t pressure;
@@ -110,7 +110,7 @@ static uint8_t dump_calibration_data(bmp180_device * device)
     {
         err  = device->read_reg(device, BMP180_REG_MC, &data1);
         err += device->read_reg(device, BMP180_REG_MC+1, &data2);
-        bmp_data1.MC = (data1<<8)+data2;
+        bmp_data1.M2C = (data1<<8)+data2;
     }  
     if(!err)
     {
@@ -139,7 +139,7 @@ uint8_t bmp180_read_temperature(bmp180_device * device, int32_t * temperature)
     tem_data = (reg1<<8) | reg2;
     
 	x1 = (tem_data - bmp_data->AC6) * bmp_data->AC5 >> 15;
-	x2 = ((int32_t)bmp_data->MC << 11) / (x1 + bmp_data->MD);
+	x2 = ((int32_t)bmp_data->M2C << 11) / (x1 + bmp_data->MD);
     *temperature = ((x1 + x2) + 8) >> 4;
     bmp_data->temperature = *temperature;
     return 0;

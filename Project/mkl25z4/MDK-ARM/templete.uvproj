@@ -414,14 +414,14 @@
           <GroupName>user</GroupName>
           <Files>
             <File>
-              <FileName>isr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\isr.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_gpio.c</FilePath>
             </File>
           </Files>
         </Group>

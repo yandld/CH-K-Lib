@@ -10,14 +10,6 @@
 #include "gpio.h"
 
 
-
-
-
-
-
-
-
-
 //!< Leagacy Support for Kineis Z Version(Inital Version)
 #if (!defined(GPIO_BASES))
 
@@ -45,15 +37,15 @@ static const uint32_t SIM_GPIOClockGateTable[] =
     SIM_SCGC5_PORTE_MASK,
 };
 
-//! @defgroup CHKinetis-K
+//! @defgroup CHKinetis-KL
 //! @{
 
 
-//! @defgroup GPIO-K
-//! @brief GPIO driver modules
+//! @defgroup GPIO-KL
+//! @brief GPIO-KL driver modules
 //! @{
 
-//! @defgroup GPIO-K_API_Functions
+//! @defgroup GPIO-KL_API_Functions
 //! @{
 
  /**
@@ -233,8 +225,8 @@ void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
-		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pinIndex));
 }
  /**
@@ -254,17 +246,17 @@ uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
-		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     //!< input or output
     if(((GPIO_InstanceTable[instance]->PDDR) >> pinIndex) & 0x01)
-		{
+    {
         return ((GPIO_InstanceTable[instance]->PDOR >> pinIndex) & 0x01);
-		}
-		else
-		{
+    }
+    else
+    {
         return ((GPIO_InstanceTable[instance]->PDIR >> pinIndex) & 0x01);
-		}
+    }
 }
  /**
  * @brief  Toggle a GPIO single bit
@@ -281,8 +273,8 @@ void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
-		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     GPIO_InstanceTable[instance]->PTOR |= (1 << pinIndex);
 }
 
@@ -301,8 +293,8 @@ uint32_t GPIO_ReadByte(uint8_t instance, uint8_t pinIndex)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
-		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     return (GPIO_InstanceTable[instance]->PDIR);
 }
 /**
@@ -320,8 +312,8 @@ void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
-		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     GPIO_InstanceTable[instance]->PDOR = data;
 }
 
@@ -376,7 +368,7 @@ void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
 //! @}
 
 
-//! @defgroup GPIO-K_Internal_Functions
+//! @defgroup GPIO-KL_Internal_Functions
 //! @{
 
 void PORTA_IRQHandler(void)

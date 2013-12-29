@@ -33,8 +33,7 @@ int main(void)
     // UART_printf("HelloWorld!\r\n");
     //  configure_uart_pin_mux(1);
 
-    GPIO_QuickInit(HW_GPIOA, 5, kGPIO_Mode_OPP);
-    GPIO_QuickInit(HW_GPIOA, 16, kGPIO_Mode_OPP);
+    CMD_GPIO(1, NULL);
 	//	UART_printf("%d\r\n", &configure_uart_pin_mux);
     
     // UART_ITConfig(UART4, kUART_IT_RDRF, ENABLE);

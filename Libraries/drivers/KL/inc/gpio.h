@@ -16,14 +16,14 @@
 	 
 #include "common.h"
 
-//! @defgroup CHKinetis-K
+//! @defgroup CHKinetis-KL
 //! @{
 
-//! @defgroup GPIO-K
-//! @brief GPIO-K driver modules
+//! @defgroup GPIO-KL
+//! @brief GPIO-KL driver modules
 //! @{
 	 
-//! @addtogroup GPIO-K_Exported_Macro
+//! @addtogroup GPIO-KL_Exported_Macro
 //! @{
 
 #define HW_GPIOA  (0x00U)
@@ -36,7 +36,7 @@
 
 //! @}
 
-//! @addtogroup GPIO-K_Exported_Type
+//! @addtogroup GPIO-KL_Exported_Type
 //! @{
 
 typedef enum
@@ -104,7 +104,7 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 //! @}
 
 
-//! @defgroup GPIO-K_API_Functions
+//! @defgroup GPIO-KL_API_Functions
 //! @{
 
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);

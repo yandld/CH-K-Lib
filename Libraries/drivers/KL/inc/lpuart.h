@@ -5,6 +5,7 @@
 
 #define HW_LPUART0  (0x00U)
 
+
 //!< LPUART QuickInit macro
 #define UART0_RX_PE21_TX_PE20  (0xA920U)
 #define UART0_RX_PA01_TX_PA02  (0x8280U)
@@ -45,7 +46,7 @@ typedef struct
     uint32_t  baudrate;
     uint8_t   parityMode;
     uint8_t   stopBitCount;
-    uint32_t UARTxMAP;           //初始化结构
+    uint32_t UARTxMAP;
 } LPUART_InitTypeDef;
 
 
@@ -57,9 +58,9 @@ uint8_t LPUART_QuickInit(uint32_t LPUARTxMAP, uint32_t baudrate);
 void LPUART_Init(LPUART_InitTypeDef * LPUART_InitStruct);
 void LPUART_ITDMAConfig(uint8_t instance, LPUART_ITDMAConfig_Type config, FunctionalState newState);
 void LPUART_CallbackInstall(uint8_t instance, LPUART_CallBackType AppCBFun);
-void LPUART_SendByte(uint8_t instance, uint8_t ch);
-
-
+void LPUART_WriteByte(uint8_t instance, uint8_t ch);
+uint8_t LPUART_ReadByte(uint8_t instance, uint8_t *ch);
+int LPUART_printf(const char *fmt, ...);
 
 #endif
 

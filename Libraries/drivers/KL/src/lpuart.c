@@ -2,17 +2,38 @@
 #include "clock.h"
 #include "gpio.h"
 
+
 //!< Gloabl Const Table Defination
+#define LPUART_IRQn_OFFSET 1
 static IRQn_Type   const LPUART_IRQBase = UART0_IRQn;
 static UART0_Type * const LPUART_InstanceTable[] = UART0_BASES;
 static LPUART_CallBackType LPUART_CallBackTable[ARRAY_SIZE(LPUART_InstanceTable)] = {NULL};
+static uint8_t UART_DebugInstance;
 
 static const uint32_t SIM_LPUARTClockGateTable[] =
 {
     SIM_SCGC4_UART0_MASK,
 };
 
+#if (defined(UART_AUTO_LINK_CONSULT))
+static uint8_t LPUART_getc(void)
+{
+    uint8_t ch;
+    while(!LPUART_ReadByte(UART_DebugInstance, &ch));
+    return ch;
+}
+static void LPUART_putc(uint8_t ch)
+{
+    LPUART_WriteByte(UART_DebugInstance,ch);
+}
+#endif // UART_AUTO_LINK_CONSULT
 
+/**
+ * @brief  LPUART init: enable UART clock Tx and Rx
+ *         this function must be called before using uart
+ * @param  UART_InitStruct: init type for uart
+ * @retval None
+ */
 void LPUART_Init(LPUART_InitTypeDef * LPUART_InitStruct)
 {
     uint16_t sbr;
@@ -43,26 +64,33 @@ void LPUART_Init(LPUART_InitTypeDef * LPUART_InitStruct)
     LPUART_InstanceTable[LPUART_InitStruct->instance]->BDL = (sbr & UART_BDL_SBR_MASK);
     // enable UART Tx & Rx
     LPUART_InstanceTable[LPUART_InitStruct->instance]->C2 |=(UART_C2_TE_MASK  | UART_C2_RE_MASK );
+    //link debug instance
+    UART_DebugInstance = LPUART_InitStruct->instance;
+    // link consult
+#if (defined(UART_AUTO_LINK_CONSULT))
+    ConsultSelcet(LPUART_getc, LPUART_putc);
+#endif
 }
 
 /**
- * @brief  UART send a byte(blocking function)
- * @param  instance: GPIO instance
+ * @brief  LPUART send a byte(blocking function)
+ * @param  instance: UART instance
  *         @arg HW_LPUART0
+ *         @arg ...
  * @param  ch: byte to send
  * @retval None
  */
-void LPUART_SendByte(uint8_t instance, uint8_t ch)
+void LPUART_WriteByte(uint8_t instance, uint8_t ch)
 {
     while(!(LPUART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
     LPUART_InstanceTable[instance]->D = (uint8_t)ch;
 }
 
-
 /**
- * @brief  UART receive a byte(none blocking function)
- * @param  instance: GPIO instance
+ * @brief  LPUART receive a byte(none blocking function)
+ * @param  instance: UART instance
  *         @arg HW_LPUART0
+ *         @arg ...
  * @param  ch: pointer of byte to received
  * @retval 0:succ 1:fail
  */
@@ -77,89 +105,63 @@ uint8_t LPUART_ReadByte(uint8_t instance, uint8_t *ch)
 }
 
 
-void LPUART_putstr(uint8_t instance, const char *str)
-{
-    while(*str != '\0')
-    {
-        LPUART_SendByte(instance, *str++);
-    }
-}
 
-//内部函数为实现UART_printf
-static void printn(unsigned int n, unsigned int b)
-{
-	static char *ntab = "0123456789ABCDEF";
-	unsigned int a, m;
-	if (n / b)
-	{
-		a = n / b;
-		printn(a, b);  
-	}
-	m = n % b;
-	LPUART_SendByte(0, ntab[m]);
-}
-/***********************************************************************************************
- 功能：UART 格式化输出
- 形参：fmt 输入字符串指针          
- 返回：0
- 详解：类似于C标准库中的UART_printf 但是只支持 %d %l %o %x %s
-************************************************************************************************/
-void UART_printf(char *fmt, ...)
-{
-    char c;
-    unsigned int *adx = (unsigned int*)(void*)&fmt + 1;
-_loop:
-    while((c = *fmt++) != '%')
-		{
-        if (c == '\0') return;
-        LPUART_SendByte(0,c);
-    }
-    c = *fmt++;
-    if (c == 'd' || c == 'l')
-		{
-        printn(*adx, 10);
-    }
-    if (c == 'o' || c == 'x')
-		{
-        printn(*adx, c=='o'? 8:16 );
-    }
-    if (c == 's')
-		{
-			LPUART_putstr(0, (char*)*adx);
-    }
-    adx++;
-    goto _loop;
-}
-
-
-
-
+/**
+ * @brief  LPUART DMA and Interrupt config
+ * @param  instance: UART instance
+ *         @arg HW_LPUART0
+ *         @arg ...
+ * @param  config: config, see LPUART_ITDMAConfig_Type for more details
+ * @param  newState:
+ *         @arg ENABLE
+ *         @arg DISABLE
+ * @param  ch: pointer of byte to received
+ * @retval None
+ */
 void LPUART_ITDMAConfig(uint8_t instance, LPUART_ITDMAConfig_Type config, FunctionalState newState)
 {
-    // disable interrupt and dma first
-    NVIC_DisableIRQ((IRQn_Type)(LPUART_IRQBase + instance));
-    // disable DMA and IT
     switch(config)
     {
         case kLPUART_ITDMA_Disable:
+            NVIC_DisableIRQ((IRQn_Type)(LPUART_IRQBase + instance*LPUART_IRQn_OFFSET));
+            LPUART_InstanceTable[instance]->C2 &= ~UART0_C2_TIE_MASK;
+            LPUART_InstanceTable[instance]->C2 &= ~UART0_C2_RIE_MASK;
+            LPUART_InstanceTable[instance]->C4 &= ~UART_C4_TDMAS_MASK;
+            LPUART_InstanceTable[instance]->C4 &= ~UART_C4_RDMAS_MASK;
             break;
         case kLPUART_IT_TxBTC:
             (ENABLE == newState)?(LPUART_InstanceTable[instance]->C2 |= UART0_C2_TIE_MASK):(LPUART_InstanceTable[instance]->C2 &= ~UART0_C2_TIE_MASK);
+            if(ENABLE == newState)
+            {
+                NVIC_EnableIRQ((IRQn_Type)(LPUART_IRQBase + instance*LPUART_IRQn_OFFSET));
+            }
             break;
         case kLPUART_DMA_TxBTC:
+            (ENABLE == newState)?(LPUART_InstanceTable[instance]->C4 |= UART_C4_TDMAS_MASK):(LPUART_InstanceTable[instance]->C4 &= ~UART_C4_TDMAS_MASK);
             break;
         case kLPUART_IT_RxBTC:
             (ENABLE == newState)?(LPUART_InstanceTable[instance]->C2 |= UART0_C2_RIE_MASK):(LPUART_InstanceTable[instance]->C2 &= ~UART0_C2_RIE_MASK);
+            if(ENABLE == newState)
+            {
+                NVIC_EnableIRQ((IRQn_Type)(LPUART_IRQBase + instance*LPUART_IRQn_OFFSET));
+            }
             break;
         case kLPUART_DMA_RxBTC:
+            (ENABLE == newState)?(LPUART_InstanceTable[instance]->C4 |= UART_C4_RDMAS_MASK):(LPUART_InstanceTable[instance]->C4 &= ~UART_C4_RDMAS_MASK);
             break;
         default:
             break;
     }
-    NVIC_EnableIRQ((IRQn_Type)(LPUART_IRQBase + instance));
 }
-
-// this function should be called before ITDMAConfig function
+/**
+ * @brief  Install LPUART Tx Rx Callback function
+ *         this function should be called before ITDMAConfig function
+ * @param  instance: UART instance
+ *         @arg HW_LPUART0
+ *         @arg ...
+ * @param  AppCBFun: pointer of callback function
+ * @retval 0:succ 1:fail
+ */
 void LPUART_CallbackInstall(uint8_t instance, LPUART_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
@@ -167,7 +169,18 @@ void LPUART_CallbackInstall(uint8_t instance, LPUART_CallBackType AppCBFun)
         LPUART_CallBackTable[instance] = AppCBFun;
     }
 }
-
+ /**
+ * @brief  quick init for user, do not need init struct. 
+ * @code
+ *      // Init UART0 as 115200-N-8-N-1, Tx:PE20 Rx:PE21
+ *      GPIO_QuickInit(UART0_RX_PE21_TX_PE20, 115200);
+ * @endcode
+ * @param  instance: LPUART instance
+ *         @arg HW_LPUART0
+ *         @arg ...
+ * @param  baudrate: uart baudrate
+ * @retval None
+ */
 uint8_t LPUART_QuickInit(uint32_t LPUARTxMAP, uint32_t baudrate)
 {
     uint8_t i;
@@ -183,8 +196,6 @@ uint8_t LPUART_QuickInit(uint32_t LPUARTxMAP, uint32_t baudrate)
     }
     return pLPUARTxMap->ip_instance;
 }
-
-
 
 void UART0_IRQHandler(void)
 {
@@ -221,20 +232,5 @@ static const QuickInit_Type LPUART_QuickInitTable[] =
     { 0, 3, 3, 6, 2, 0}, //UART0_RX_PD06_TX_PD07
 };
 
-void CalConst(const QuickInit_Type * table, uint32_t size)
-{
-	uint8_t i =0;
-	uint32_t value = 0;
-	for(i = 0; i < size; i++)
-	{
-		value = table[i].ip_instance<<0;
-		value|= table[i].io_instance<<3;
-		value|= table[i].mux<<6;
-		value|= table[i].io_base<<9;
-		value|= table[i].io_offset<<14;
-		value|= table[i].channel<<19;
-		UART_printf("(0x%xU)\r\n",value);
-	}
-}
 */
 

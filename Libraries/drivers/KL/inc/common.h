@@ -21,17 +21,16 @@
 
 //! @brief Set to 1 to expanse the "assert_param" macro in the Lib drivers code 
 #define USE_FULL_ASSERT         
-//! @brief Debug printf and shell max char len
-#define UART_PRINTF_CMD_LENGTH  (64)
-
-
+//! @brief means you can use printf when uart has benn initalized
+#define USE_STDIO
+#define UART_AUTO_LINK_CONSULT
 
 //! @}
 
 //!< CH_Kinetis version information
 #define CHK_VERSION                   2L              //!< major version number
-#define CHK_SUBVERSION                4L              //!< minor version number
-#define CHK_REVISION                  1L              //!< revise version number
+#define CHK_SUBVERSION                5L              //!< minor version number
+#define CHK_REVISION                  0L              //!< revise version number
 
 /* CH_Kinetis version */
 #define FW_VERSION                ((CHK_VERSION * 10000) + \
@@ -106,6 +105,15 @@ typedef struct
 #define SystemSoftReset    NVIC_SystemReset
 #define OSEnterInt(x)
 #define OSExitInt(x)
+
+
+
+typedef uint8_t (*ConsultGetc_CallBackType)(void);
+typedef void (*ConsultPutc_CallBackType)(uint8_t ch);
+
+//API functions
+void ConsultSelcet(ConsultGetc_CallBackType  cgetc, ConsultPutc_CallBackType  cputc);
+int printf(const char *fmt, ...);
 
 #endif
 

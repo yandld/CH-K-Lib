@@ -14,9 +14,14 @@ int CMD_GPIO(int argc, char * const * argv)
        // for(i=0;i<10;i++)
         {
             // toggle those bit
-            GPIO_ToggleBit(HW_GPIOA,  5);
-            GPIO_ToggleBit(HW_GPIOA, 16);
+          //  GPIO_ToggleBit(HW_GPIOA,  5);
+          //  GPIO_ToggleBit(HW_GPIOA, 16);
         }
+    }
+    if(argc == 2)
+    {
+        
+        
     }
     return 0;
 }
@@ -29,6 +34,6 @@ const cmd_tbl_t CommandFun_GPIO =
     .cmd = CMD_GPIO,
     .usage = "GPIO",
     .complete = NULL,
-    .help = "\r\n"
+    .help = "\r\n" 
 };
 

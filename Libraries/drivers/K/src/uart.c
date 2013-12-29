@@ -96,7 +96,7 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
     /* Send data.*/
     while (size--)
     {
-        sputc(*buffer++);
+        UART_WriteByte(UART_DebugInstance, *buffer++);
         ++nChars;
     }
     return nChars;

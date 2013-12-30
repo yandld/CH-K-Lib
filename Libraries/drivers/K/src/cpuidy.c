@@ -29,9 +29,6 @@ static const char *CPUIDY_FamIDTable[8] =
     "K51 or K53",
 };
 
-
-
-
 char *CPUIDY_GetFamID(void)
 {
     return (char*)CPUIDY_FamIDTable[FAMID_FIELD];

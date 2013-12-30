@@ -40,7 +40,7 @@ extern const cmd_tbl_t CommandFun_CPU;
 extern const cmd_tbl_t CommandFun_Hist;
 extern const cmd_tbl_t CommandFun_GPIO;
 extern const cmd_tbl_t CommandFun_I2C;
-extern const cmd_tbl_t CommandFun_MPU6050;
+extern const cmd_tbl_t CommandFun_IMUHW;
 
 
 #pragma weak configure_uart_pin_mux
@@ -82,7 +82,6 @@ int main(void)
     UART_CallbackInstall(HW_UART4, UART_ISR);
     UART_ITDMAConfig(HW_UART4, kUART_IT_RxBTC, ENABLE);
   //  UART_printf("HelloWorld!\r\n");
-  while(1);
 	  configure_uart_pin_mux(1);
 
 	//	UART_printf("%d\r\n", &configure_uart_pin_mux);
@@ -103,7 +102,7 @@ int main(void)
     shell_register_function(&CommandFun_I2C);
     shell_register_function(&CommandFun_Hist);
     shell_register_function(&CommandFun_CPU);
-    shell_register_function(&CommandFun_MPU6050);
+    shell_register_function(&CommandFun_IMUHW);
     
     printf("When you see this string, It means that printf is OK!\r\n");
 		
@@ -112,11 +111,16 @@ int main(void)
     GPIO_QuickInit(HW_GPIOD, 7 , kGPIO_Mode_OPP);
     GPIO_QuickInit(HW_GPIOC, 17, kGPIO_Mode_IPU);
     GPIO_QuickInit(HW_GPIOC, 18, kGPIO_Mode_IPU);
-		
+    while(1)
+    {
+        GPIO_ToggleBit(HW_GPIOD, 7);
+        DelayUs(50000);
+    }
+
     GPIO_ITDMAConfig(HW_GPIOC, 17, kGPIO_IT_RisingEdge, ENABLE);
     GPIO_ITDMAConfig(HW_GPIOC, 18, kGPIO_IT_RisingEdge, ENABLE);
     GPIO_CallbackInstall(HW_GPIOC, GPIO_ISR);
-		
+    
     GPIO_WriteBit(HW_GPIOD, 0, 1);
 	//	GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);
 	//SHELL_printf("%d\r\n", GPIO_ReadBit(HW_GPIOD, kGPIO_Pin0));

@@ -1,10 +1,10 @@
 #include "systick.h"
 #include "sys.h"
 #include "clock.h"
-static uint32_t  fac_us = 0; //!< usDelay Mut
-static uint32_t fac_ms = 0; //!< msDelay Mut
+static uint32_t fac_us = 0;    //!< usDelay Mut
+static uint32_t fac_ms = 0;     //!< msDelay Mut
 
-//! @defgroup CH_Periph_Driver
+//! @defgroup CHKinetis-K
 //! @{
 
 //! @defgroup SYSTICK
@@ -12,21 +12,44 @@ static uint32_t fac_ms = 0; //!< msDelay Mut
 //! @{
 
 
-void SYSTICK_Init(SYSTICK_InitTypeDef* SYSTICK_InitStruct)
+void SYSTICK_QuickInit(SYSTICK_Mode_Type mode, uint32_t value)
 {
-    // Set ClockSource = busClock
+    // Set ClockSource = CoreClock
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; 
-	  CLOCK_GetClockFrequency(kCoreClock, &fac_us);
-	  fac_us /= 1000000;
+    CLOCK_GetClockFrequency(kCoreClock, &fac_us);
+    fac_us /= 1000000;
     fac_ms = (uint32_t)fac_us*1000;
-    SysTick->LOAD = (SYSTICK_InitStruct->SYSTICK_PeriodInUs)*fac_us;
+    switch(mode)
+    {
+        case kSYSTICK_RawValue:
+            if(value > SysTick_LOAD_RELOAD_Msk)
+            {
+                value = SysTick_LOAD_RELOAD_Msk;
+            }
+            SysTick->LOAD = value;
+            break;
+        case kSYSTICK_Us:
+            if((value*fac_us) > SysTick_LOAD_RELOAD_Msk)
+            {
+                value = SysTick_LOAD_RELOAD_Msk/fac_us;
+            }
+            SysTick->LOAD = fac_us*value;
+            break;
+        case kSYSTICK_Ms:
+            if((value*fac_ms) > SysTick_LOAD_RELOAD_Msk)
+            {
+                value = SysTick_LOAD_RELOAD_Msk/fac_ms;
+            }
+            SysTick->LOAD = fac_ms*value;     
+            break;
+    }
 }
+
 
 void SYSTICK_Cmd(FunctionalState NewState)
 {
     (ENABLE == NewState)?(SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk):(SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk);
 }
-
 
 void SYSTICK_ITConfig(FunctionalState NewState)
 {
@@ -35,10 +58,8 @@ void SYSTICK_ITConfig(FunctionalState NewState)
 
 void SYSTICK_DelayInit()
 {
-    SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; //! <Set ClockSource = busClock
-    CLOCK_GetClockFrequency(kCoreClock, &fac_us);
-    fac_us /= 1000000;
-    fac_ms = (uint32_t)fac_us*1000;
+    SYSTICK_QuickInit(kSYSTICK_RawValue, SysTick_LOAD_RELOAD_Msk);
+    SYSTICK_ITConfig(DISABLE);
 }
 
 void SYSTICK_DelayUs(uint32_t us)
@@ -57,38 +78,38 @@ void SYSTICK_DelayUs(uint32_t us)
 void SYSTICK_DelayMs(uint32_t ms)
 {
     uint32_t temp;
-    uint16_t i;
-		SysTick->LOAD = fac_ms; 	
+    uint32_t i;
+    SysTick->LOAD = fac_ms; 	
     SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
     for(i = 0; i < ms; i++)
     {
         SysTick->VAL = 0x00;
-		    do
-		    {
+        do
+        {
             temp = SysTick->CTRL;
-		    }
-		    while((temp & 0x01) && !(temp & SysTick_CTRL_COUNTFLAG_Msk));	//等待时间到达   
+        }
+        while((temp & 0x01) && !(temp & SysTick_CTRL_COUNTFLAG_Msk));	//等待时间到达   
     }
 }
 
-uint32_t SYSTICK_GetCurrentCounter(void)
+uint32_t SYSTICK_ReadCounter(void)
 {
      return (SysTick->VAL);  
 }
 
-uint32_t SYSTICK_GetReloadValue(void)
+uint32_t SYSTICK_ReadLoadCounter(void)
 {
      return (SysTick->LOAD);  
 }
 
-void SYSTICK_SetCurrentCounter(uint32_t Value)
+void SYSTICK_WriteCounter(uint32_t value)
 {
-    SysTick->VAL = Value;
+    SysTick->VAL = value;
 }
 
-uint32_t SYSTICK_SetReloadValue(uint32_t Value)
+uint32_t SYSTICK_WriteLoadCounter(uint32_t value)
 {
-    SysTick->LOAD = Value;
+    SysTick->LOAD = value;
     return 0;
 }
 

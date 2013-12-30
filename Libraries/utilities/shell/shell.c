@@ -713,8 +713,8 @@ static int readline (char * prompt)
         hist_init();
 #endif
         initted = 1;
-        printf("\r\nSHELL (build: %s)\r\n", __DATE__);
-        printf("Copyright (c) 2013 Freescale Semiconductor\r\n");
+        shell_printf("\r\nSHELL (build: %s)\r\n", __DATE__);
+        shell_printf("Copyright (c) 2013 Freescale Semiconductor\r\n");
     }
     if (prompt)
     {

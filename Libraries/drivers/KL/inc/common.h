@@ -9,7 +9,7 @@
 #endif
 
 
-//! @addtogroup CH_Periph_Driver
+//! @defgroup CHKinetis-KL
 //! @{
 
 //! @addtogroup COMMON

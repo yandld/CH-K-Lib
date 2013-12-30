@@ -31,7 +31,7 @@
 #define __SHELL_CONFIG_H__
 
 /* config if use standard output */
-#define SHELL_CONFIG_USE_STDIO
+//#define SHELL_CONFIG_USE_STDIO
 /* config if use auto complete */
 #define SHELL_CONFIG_AUTO_COMPLETE
 /* config if use history */

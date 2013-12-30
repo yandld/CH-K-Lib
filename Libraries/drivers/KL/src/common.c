@@ -1,5 +1,6 @@
 #include "common.h"
 
+//!< consult io install
 struct
 {
     ConsultGetc_CallBackType  cgetc;
@@ -23,6 +24,13 @@ void ConsultSelcet(ConsultGetc_CallBackType cgetc, ConsultPutc_CallBackType cput
 int fputc(int ch,FILE *f)
 {
     consult_io_t.cputc(ch);
+	return ch;
+}
+
+int fgetc(FILE *f)
+{
+    uint8_t ch;
+    ch = consult_io_t.cgetc();
 	return ch;
 }
 

@@ -1,19 +1,19 @@
 #include "common.h"
 #include "gpio.h"
-#include "lpuart.h"
+#include "uart.h"
 #include "shell.h"
 
-
+static uint8_t shell_instance;
 
 static void Putc(uint8_t data)
 {
-    LPUART_WriteByte(HW_LPUART0, data);
+    UART_WriteByte(shell_instance, data);
 }
 
 static uint8_t Getc(void)
 {
     uint8_t ch;
-    while(LPUART_ReadByte(HW_LPUART0, &ch));
+    while(UART_ReadByte(shell_instance, &ch));
     return ch;
 }
 
@@ -24,41 +24,28 @@ shell_io_install_t Shell_IOInstallStruct1 =
 };
 extern const cmd_tbl_t CommandFun_Hist;
 extern const cmd_tbl_t CommandFun_Help;
-extern const cmd_tbl_t CommandFun_LPUART;
+extern const cmd_tbl_t CommandFun_UART;
+extern const cmd_tbl_t CommandFun_GPIO;
 int main(void)
 {
     uint8_t i,ch;
     //定义GPIO初始化结构
-    //  SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
-    //  DelayInit();
-    // UART_DebugPortInit(UART4_RX_PC14_TX_PC15, 115200);
-    // UART_printf("HelloWorld!\r\n");
-    //  configure_uart_pin_mux(1);
-    ch = LPUART_QuickInit(UART0_RX_PA15_TX_PA14, 115200);
-    CMD_GPIO(1, NULL);
+    // use UART0_RX_PA15_TX_PA14 as shell output 
+   // ch = LPUART_QuickInit(UART0_RX_PA15_TX_PA14, 115200);
+   //UART2_RX_PE23_TX_PE22
+   //UART0_RX_PA15_TX_PA14
+    shell_instance = UART_QuickInit(UART2_RX_PE23_TX_PE22, 115200);
+
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
     shell_register_function(&CommandFun_Hist);
-    shell_register_function(&CommandFun_LPUART);
+    shell_register_function(&CommandFun_UART);
+    shell_register_function(&CommandFun_GPIO);
+    
 
     printf("When you see this string, It means that printf is OK!\r\n");
-	//	UART_printf("%d\r\n", &configure_uart_pin_mux);
-    
-    // UART_ITConfig(UART4, kUART_IT_RDRF, ENABLE);
-    //UART_ITConfig(UART4, kUART_IT_TC, ENABLE);
-    // while(1);
-    //GPIO_ITConfig(PTC,kGPIO_IT_Rising, kGPIO_Pin_18, ENABLE);
-   
-    //SHELL_register_function_array(MyCommand, ARRAY_SIZE(MyCommand));
-
-    
-   // ch = LPUART_QuickInit(UART0_RX_PA15_TX_PA14, 115200);
- //   LPUART_printf("HelloWorld\r\n");
-    
-
-  //  LPUART_ITDMAConfig(HW_LPUART0, kLPUART_IT_TxBTC, ENABLE);
-  //  LPUART_ITDMAConfig(HW_LPUART0, kLPUART_IT_RxBTC, ENABLE);
-    
+  //  UART_QuickInit(UART2_RX_PE23_TX_PE22, 115200);
+  //  printf("When you see this string, It means that printf is OK!\r\n");
    // UART_printf("HelloWorld,%d\r\n", ch);
     while(1)
     {
@@ -67,11 +54,7 @@ int main(void)
     
 }
 
-static void GPIO_ISR(uint32_t pinArray)
-{
-   // SHELL_printf(" array:0x%x\r\n", pinArray);
-	
-}
+
 
 
 void SysTick_Handler(void)

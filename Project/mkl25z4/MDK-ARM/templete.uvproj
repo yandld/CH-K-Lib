@@ -418,16 +418,6 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
-            <File>
-              <FileName>cmd_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_lpuart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_lpuart.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -447,11 +437,6 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\drivers\KL\src\uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>lpuart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\KL\src\lpuart.c</FilePath>
             </File>
             <File>
               <FileName>i2c.c</FileName>
@@ -492,6 +477,21 @@
               <FileName>shell_cmdhist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>testcmd</GroupName>
+          <Files>
+            <File>
+              <FileName>cmd_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\testcmd\cmd_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\testcmd\cmd_gpio.c</FilePath>
             </File>
           </Files>
         </Group>

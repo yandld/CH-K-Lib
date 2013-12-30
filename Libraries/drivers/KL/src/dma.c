@@ -28,7 +28,7 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
     DMA0->DMA[DMA_InitStruct->Channelx].DCR &= (DMA_DCR_SSIZE_MASK | DMA_DCR_DSIZE_MASK);
     DMA0->DMA[DMA_InitStruct->Channelx].DCR |= DMA_DCR_SSIZE(DMA_InitStruct->SourceDataSize);
     DMA0->DMA[DMA_InitStruct->Channelx].DCR |= DMA_DCR_DSIZE(DMA_InitStruct->DestDataSize);
-    //   config Source and dest auto inc  
+    // config Source and dest auto inc  
     (DMA_InitStruct->SourceInc == ENABLE)?(DMA0->DMA[DMA_InitStruct->Channelx].DCR |= DMA_DCR_SINC_MASK):(DMA0->DMA[DMA_InitStruct->Channelx].DCR &= ~DMA_DCR_SINC_MASK);
     (DMA_InitStruct->DestInc == ENABLE)?(DMA0->DMA[DMA_InitStruct->Channelx].DCR |= DMA_DCR_DINC_MASK):(DMA0->DMA[DMA_InitStruct->Channelx].DCR &= ~DMA_DCR_DINC_MASK);
     //  config  TransferBytes            

@@ -68,10 +68,10 @@ void SYSTICK_DelayUs(uint32_t us)
     SysTick->LOAD = us*fac_us; 					
     SysTick->VAL = 0x00;   							
     SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
-		do
-		{
-			temp = SysTick->CTRL;
-		}
+    do
+    {
+        temp = SysTick->CTRL;
+    }
     while((temp & 0x01) && !(temp & SysTick_CTRL_COUNTFLAG_Msk));	//等待时间到达   
 }
 
@@ -111,6 +111,18 @@ uint32_t SYSTICK_WriteLoadCounter(uint32_t value)
 {
     SysTick->LOAD = value;
     return 0;
+}
+
+void SYSTICK_StartTimer(void)
+{
+    SYSTICK_QuickInit(kSYSTICK_RawValue, SysTick_LOAD_RELOAD_Msk);
+    SYSTICK_ITConfig(DISABLE);
+    SYSTICK_Cmd(ENABLE);
+}
+
+uint32_t SYSTICK_ReadTimerInUs(void)
+{
+    return (SysTick->LOAD - SysTick->VAL)/fac_us;
 }
 
 //! @}

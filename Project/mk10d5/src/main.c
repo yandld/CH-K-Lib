@@ -55,6 +55,7 @@ void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag)
 
 int main(void)
 {
+    uint32_t i;
     //定义GPIO初始化结构
     //SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
     DelayInit();
@@ -73,6 +74,16 @@ int main(void)
 		
 		
     GPIO_QuickInit(HW_GPIOA, 1 , kGPIO_Mode_OPP);
+    
+    // time measure
+    //ATTATION: when use SYSTICK_StartTimer and ReadTimer, you can NO LONGER use delay Function(DelayMs DelayUs)
+    
+    SYSTICK_StartTimer();
+    for(i=0;i<100000;i++);
+    i = SYSTICK_ReadTimerInUs();
+    printf("time:%dUs\r\n",i);
+    while(1);
+    
     //GPIO_CallbackInstall(HW_GPIOC, GPIO_ISR);
 	//GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);
 	//SHELL_printf("%d\r\n", GPIO_ReadBit(HW_GPIOD, kGPIO_Pin0));

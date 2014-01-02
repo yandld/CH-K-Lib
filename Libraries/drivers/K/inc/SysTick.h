@@ -32,6 +32,8 @@ uint32_t SYSTICK_ReadCounter(void);
 uint32_t SYSTICK_ReadLoadCounter(void);
 void SYSTICK_WriteCounter(uint32_t value);
 uint32_t SYSTICK_WriteLoadCounter(uint32_t value);
+void SYSTICK_StartTimer(void);
+uint32_t SYSTICK_ReadTimerInUs(void);
 
 #endif
 

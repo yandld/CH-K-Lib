@@ -78,9 +78,9 @@ int main(void)
     // time measure
     //ATTATION: when use SYSTICK_StartTimer and ReadTimer, you can NO LONGER use delay Function(DelayMs DelayUs)
     
-    SYSTICK_StartTimer();
-    for(i=0;i<100000;i++);
-    i = SYSTICK_ReadTimerInUs();
+   // SYSTICK_StartTimer();
+   // for(i=0;i<100000;i++);
+   // i = SYSTICK_ReadTimerInUs();
     printf("time:%dUs\r\n",i);
     while(1);
     

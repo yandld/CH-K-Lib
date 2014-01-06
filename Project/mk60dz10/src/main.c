@@ -70,11 +70,10 @@ int main(void)
     uint8_t ch;
     char buf[10];
     uint32_t Req;
-    uint8_t i;
+    static unsigned long long last_cnt ;
     //定义GPIO初始化结构
   //  SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
 	  DelayInit();
-    
     
     UART_QuickInit(UART4_RX_PC14_TX_PC15,115200);
     UART_printf("   a!%d!\r\n", 123);
@@ -111,6 +110,12 @@ int main(void)
     GPIO_QuickInit(HW_GPIOD, 7 , kGPIO_Mode_OPP);
     GPIO_QuickInit(HW_GPIOC, 17, kGPIO_Mode_IPU);
     GPIO_QuickInit(HW_GPIOC, 18, kGPIO_Mode_IPU);
+    
+    while(1)
+    {
+        printf("%dms\r\n",SYSTICK_ReadLifeTimeCounter());
+        DelayMs(10000);
+    }
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOD, 7);
@@ -139,10 +144,7 @@ static void GPIO_ISR(uint32_t pinArray)
 }
 
 
-void SysTick_Handler(void)
-{
-	//GPIO_ToggleBit(PTD, kGPIO_Pin1);
-}
+
 
 
 void assert_failed(char * file, uint32_t line)

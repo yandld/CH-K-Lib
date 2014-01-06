@@ -125,7 +125,7 @@ typedef struct
 
 
 //! @brief DELAY Function Selection
-#define DelayInit              SYSTICK_DelayInit
+#define DelayInit              SYSTICK_Init
 #define DelayMs(x)             SYSTICK_DelayMs(x)
 #define DelayUs(x)             SYSTICK_DelayUs(x)
 #define EnableInterrupts   __enable_irq

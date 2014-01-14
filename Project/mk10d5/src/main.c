@@ -36,7 +36,7 @@ extern const cmd_tbl_t CommandFun_Hist;
 extern const cmd_tbl_t CommandFun_GPIO;
 extern const cmd_tbl_t CommandFun_I2C;
 extern const cmd_tbl_t CommandFun_IMUHW;
-
+extern const cmd_tbl_t CommandFun_DELAY;
 
 void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag)
 {
@@ -58,7 +58,7 @@ int main(void)
     uint32_t i;
     //定义GPIO初始化结构
     //SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
-    DelayInit();
+    SYSTICK_DelayInit();
     UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);
     printf("HelloWorld\r\n");
       
@@ -69,6 +69,7 @@ int main(void)
     shell_register_function(&CommandFun_Hist);
     shell_register_function(&CommandFun_CPU);
     shell_register_function(&CommandFun_IMUHW);
+    shell_register_function(&CommandFun_DELAY);
 
     printf("When you see this string, It means that printf is OK!\r\n");
 		
@@ -78,11 +79,7 @@ int main(void)
     // time measure
     //ATTATION: when use SYSTICK_StartTimer and ReadTimer, you can NO LONGER use delay Function(DelayMs DelayUs)
     
-   // SYSTICK_StartTimer();
-   // for(i=0;i<100000;i++);
-   // i = SYSTICK_ReadTimerInUs();
-    printf("time:%dUs\r\n",i);
-    while(1);
+
     
     //GPIO_CallbackInstall(HW_GPIOC, GPIO_ISR);
 	//GPIO_WriteBit(HW_GPIOD, kGPIO_Pin7, 0);

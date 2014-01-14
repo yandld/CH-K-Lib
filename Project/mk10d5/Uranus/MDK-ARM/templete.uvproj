@@ -357,7 +357,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK10D5</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\minishell;..\..\..\..\Libraries\utilities\shell;..\..\..\..\Libraries\devices\mpu6050;..\..\..\..\Libraries\devices\hmc5883;..\..\..\..\Libraries\devices\bmp180</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\minishell;..\..\..\..\Libraries\utilities\shell;..\..\..\..\Libraries\devices\mpu6050;..\..\..\..\Libraries\devices\hmc5883;..\..\..\..\Libraries\devices\bmp180;..\..\..\..\Libraries\utilities\imu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -419,29 +419,9 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_cpuinfo.c</FileName>
+              <FileName>trans.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\cmd_cpuinfo.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_imu_hw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_imu_hw.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_delay.c</FilePath>
+              <FilePath>..\src\trans.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -477,31 +457,6 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>utilities</GroupName>
-          <Files>
-            <File>
-              <FileName>shell.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell.c</FilePath>
-            </File>
-            <File>
-              <FileName>shell_autocomplete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_autocomplete.c</FilePath>
-            </File>
-            <File>
-              <FileName>shell_cmdhelp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhelp.c</FilePath>
-            </File>
-            <File>
-              <FileName>shell_cmdhist.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -207,7 +207,7 @@ uint8_t bmp_start_conversion(bmp180_device * device, uint8_t mode)
 //!< init
 uint8_t bmp180_init(bmp180_device* device, uint32_t I2CxMap, const char * name, uint32_t baudrate)
 {
-    uint8_t err;
+    uint8_t err = 0;
     static uint8_t init = 0;
     device->name = name;
     device->device_addr = BMP180_ADDR;

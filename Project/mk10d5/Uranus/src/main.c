@@ -9,10 +9,8 @@
 #include "mpu6050.h"
 #include "hmc5883.h"
 #include "bmp180.h"
-#include "shell.h"
-
-
-extern const cmd_tbl_t CommandFun_Help;
+#include "imu.h"
+#include "trans.h"
 
 static void Putc(uint8_t data)
 {
@@ -26,23 +24,41 @@ static uint8_t Getc(void)
     return ch;
 }
 
-shell_io_install_t Shell_IOInstallStruct1 = 
+trans_io_install_t TRANS_IOInstallStruct1 = 
 {
-	.getc = Getc,
-	.putc = Putc,
+	.trans_getc = Getc,
+	.trans_putc = Putc,
 };
-
-extern const cmd_tbl_t CommandFun_CPU;
-extern const cmd_tbl_t CommandFun_Hist;
-extern const cmd_tbl_t CommandFun_GPIO;
-extern const cmd_tbl_t CommandFun_I2C;
-extern const cmd_tbl_t CommandFun_IMUHW;
-extern const cmd_tbl_t CommandFun_DELAY;
-
 
 static mpu6050_device mpu6050_device1;
 static hmc5883_device hmc_device;
-static bmp180_device bmp180_device1;
+//static bmp180_device bmp180_device1;
+
+static uint32_t imu_get_mag(int16_t * mx, int16_t * my, int16_t *mz)
+{
+    hmc_device.read_data(&hmc_device, mx, my, mz);
+    return 0;
+}
+
+static uint32_t imu_get_accel(int16_t * ax, int16_t * ay, int16_t *az)
+{
+    mpu6050_device1.read_accel(&mpu6050_device1, ax,ay,az);
+    return 0;  
+}
+
+static uint32_t imu_get_gyro(int16_t * gx, int16_t * gy, int16_t * gz)
+{
+    mpu6050_device1.read_gyro(&mpu6050_device1, gx,gy,gz);
+    return 0;
+}
+
+static imu_io_install_t IMU_IOInstallStruct1 = 
+{
+    .imu_get_accel = imu_get_accel,
+    .imu_get_gyro = imu_get_gyro,
+    .imu_get_mag = imu_get_mag,
+};
+
 
 #define IMU_TEST_I2C_MAP I2C0_SCL_PE19_SDA_PE18
 
@@ -54,13 +70,14 @@ uint8_t InitSensor(void)
     {
         ret += mpu6050_init(&mpu6050_device1, IMU_TEST_I2C_MAP, "mpu6050", 96000);
         ret += hmc5883_init(&hmc_device, IMU_TEST_I2C_MAP, "hmc5883", 96000);
-        ret += bmp180_init(&bmp180_device1, IMU_TEST_I2C_MAP, "bmp180", 96000);
+     //   ret += bmp180_init(&bmp180_device1, IMU_TEST_I2C_MAP, "bmp180", 96000);
         init = 1;
     }
     if(ret)
     {
         return ret;
     }
+    return 0;
 }
 
 
@@ -68,53 +85,54 @@ int main(void)
 {
     uint32_t i;
     uint8_t ret;
+    uint32_t counter = 0;
+    imu_float_euler_angle_t angle;
     //SystemClockSetup(kClockSource_EX50M,kCoreClock_200M);
-    SYSTICK_DelayInit();
-    UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);
+    SYSTICK_DelayInit(); //Init Delay
+    UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);  //Init UART and printf
     GPIO_QuickInit(HW_GPIOA, 1 , kGPIO_Mode_OPP);   //Init LED
+    //Blink LED to indicate system is running
     for(i = 0; i < 10; i++)
     {
         GPIO_ToggleBit(HW_GPIOA, 1);
         DelayMs(50);
     }
+    //init sensor
     ret = InitSensor();
     if(ret)
     {
         printf("Sensor init failed! code:%d\r\n", ret);
     }
+    // install imu interface function
+    imu_io_install(&IMU_IOInstallStruct1);
+    // install trans uart for send data
+    trans_io_install(&TRANS_IOInstallStruct1);
     
-    shell_io_install(&Shell_IOInstallStruct1);
-    shell_register_function(&CommandFun_Help);
-    shell_register_function(&CommandFun_GPIO);
-    shell_register_function(&CommandFun_I2C);
-    shell_register_function(&CommandFun_Hist);
-    shell_register_function(&CommandFun_CPU);
-    shell_register_function(&CommandFun_IMUHW);
-    shell_register_function(&CommandFun_DELAY);
-
-    printf("When you see this string, It means that printf is OK!\r\n");
-		
-		
-
-    
-    printf("HelloWorld\r\n");
-    // time measure
-    
-    while(1);
-    
-
+    trans_user_data_t send_data;
     while(1)
     {
-        shell_main_loop("SHELL>>");
+        imu_get_euler_angle(&angle);
+        printf("%05d %05d %05d\r", (int16_t)angle.imu_pitch, (int16_t)angle.imu_roll, (int16_t)angle.imu_yaw);
+        
+        send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
+        send_data.trans_roll = (int16_t)angle.imu_roll*100;
+        send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
+        trans_send_pactket(send_data);
+        //blink the LED
+        counter++;
+        counter %= 10; 
+        if(!counter)
+        {
+            GPIO_ToggleBit(HW_GPIOA, 1);
+        }
     }
+
 }
-
-
 
 void assert_failed(char * file, uint32_t line)
 {
 	//∂œ—‘ ß∞‹ºÏ≤‚
-	shell_printf("assert_failed:line:%d %s\r\n",line,file);
+	//shell_printf("assert_failed:line:%d %s\r\n",line,file);
 	while(1);
 }
 

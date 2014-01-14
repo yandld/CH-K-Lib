@@ -357,7 +357,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK10D5</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\utilities\minishell;..\..\..\Libraries\utilities\shell;..\..\..\Libraries\devices\mpu6050;..\..\..\Libraries\devices\hmc5883;..\..\..\Libraries\devices\bmp180</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\minishell;..\..\..\..\Libraries\utilities\shell;..\..\..\..\Libraries\devices\mpu6050;..\..\..\..\Libraries\devices\hmc5883;..\..\..\..\Libraries\devices\bmp180</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -401,12 +401,12 @@
             <File>
               <FileName>system_MK10D5.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\startup\DeviceSupport\system_MK10D5.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\system_MK10D5.c</FilePath>
             </File>
             <File>
               <FileName>startup_MK10D5.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK10D5.s</FilePath>
+              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK10D5.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -451,37 +451,32 @@
             <File>
               <FileName>clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\clock.c</FilePath>
-            </File>
-            <File>
-              <FileName>gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\gpio.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\clock.c</FilePath>
             </File>
             <File>
               <FileName>cpuidy.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
             </File>
             <File>
-              <FileName>systick.c</FileName>
+              <FileName>gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
-            </File>
-            <File>
-              <FileName>sys.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\sys.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\gpio.c</FilePath>
             </File>
             <File>
               <FileName>i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>systick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -491,27 +486,22 @@
             <File>
               <FileName>shell.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\utilities\shell\shell.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\shell\shell.c</FilePath>
             </File>
             <File>
               <FileName>shell_autocomplete.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\utilities\shell\shell_autocomplete.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_autocomplete.c</FilePath>
             </File>
             <File>
               <FileName>shell_cmdhelp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\utilities\shell\shell_cmdhelp.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhelp.c</FilePath>
             </File>
             <File>
               <FileName>shell_cmdhist.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
-            </File>
-            <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\Libraries\utilities\shell\shell_config.h</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -519,19 +509,29 @@
           <GroupName>devices</GroupName>
           <Files>
             <File>
-              <FileName>mpu6050.c</FileName>
+              <FileName>bmp180.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\mpu6050\mpu6050.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\devices\bmp180\bmp180.c</FilePath>
             </File>
             <File>
               <FileName>hmc5883.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\hmc5883\hmc5883.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\devices\hmc5883\hmc5883.c</FilePath>
             </File>
             <File>
-              <FileName>bmp180.c</FileName>
+              <FileName>mpu6050.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\bmp180\bmp180.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\devices\mpu6050\mpu6050.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>imu</GroupName>
+          <Files>
+            <File>
+              <FileName>imu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\imu\imu.c</FilePath>
             </File>
           </Files>
         </Group>

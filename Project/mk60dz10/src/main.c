@@ -79,7 +79,7 @@ int main(void)
     UART_printf("   a!%d!\r\n", 123);
     
     UART_CallbackInstall(HW_UART4, UART_ISR);
-    UART_ITDMAConfig(HW_UART4, kUART_IT_RxBTC, ENABLE);
+  //  UART_ITDMAConfig(HW_UART4, kUART_IT_RxBTC, ENABLE);
   //  UART_printf("HelloWorld!\r\n");
 	  configure_uart_pin_mux(1);
 
@@ -111,15 +111,15 @@ int main(void)
     GPIO_QuickInit(HW_GPIOC, 17, kGPIO_Mode_IPU);
     GPIO_QuickInit(HW_GPIOC, 18, kGPIO_Mode_IPU);
     
-    while(1)
+  //  while(1)
     {
-        printf("%dms\r\n",SYSTICK_ReadLifeTimeCounter());
-        DelayMs(10000);
+       // printf("%dms\r\n",SYSTICK_ReadLifeTimeCounter());
+      //  DelayMs(10000);
     }
-    while(1)
+ //   while(1)
     {
-        GPIO_ToggleBit(HW_GPIOD, 7);
-        DelayUs(50000);
+   //     GPIO_ToggleBit(HW_GPIOD, 7);
+  //      DelayUs(50000);
     }
 
     GPIO_ITDMAConfig(HW_GPIOC, 17, kGPIO_IT_RisingEdge, ENABLE);

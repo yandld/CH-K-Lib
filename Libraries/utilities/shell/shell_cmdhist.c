@@ -43,14 +43,28 @@
 #ifdef SHELL_CONFIG_USE_HIST
 static int DoHist(int argc, char * const argv[])
 {
-    uint8_t num;
+    uint8_t num, cur_index;
     uint8_t i = 0;
-    char ** pplist = shell_get_hist_data_list(&num);
-    shell_printf("history:\r\n");
-    while (num--)
+    uint8_t index = 0;
+    char ** pplist = shell_get_hist_data_list(&num, &cur_index);
+    shell_printf("history: MAX:%d CUR:%d\r\n", num, cur_index);
+    if (cur_index >= num)
     {
-        shell_printf("(%d) %s\r\n", i, *pplist++);
-        i++;
+        return CMD_RET_SUCCESS;
+    }
+    for (i = cur_index; i < num; i++)
+    {
+        if(pplist[i] != NULL && pplist[i][0] != '\0')
+        {
+            shell_printf("(%d) %s\r\n", i - cur_index, pplist[i]); 
+        }       
+    }
+    for (i = 0; i < cur_index; i++)
+    {
+        if(pplist[i] != NULL && pplist[i][0] != '\0')
+        {
+            shell_printf("(%d) %s\r\n", num - cur_index + i, pplist[i]);  
+        }
     }
     return CMD_RET_SUCCESS;
 }

@@ -43,7 +43,7 @@
 #define SHELL_MAX_ARGS                (8)
 /* maximum number of user functions */
 #define SHELL_MAX_FUNCTION_NUM        (64)
-/* maximum number of histort record */
+/* maximum number of histort record. should not be too large for it cause large RAM consumption */
 #define HIST_MAX                      (10)
 /* size of each history record, usually define it as SHELL_CB_SIZE */
 #define HIST_SIZE                     SHELL_CB_SIZE

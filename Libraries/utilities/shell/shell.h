@@ -73,7 +73,7 @@ void shell_beep(void);
 const cmd_tbl_t *shell_find_command (const char * cmd);
 uint8_t shell_io_install(shell_io_install_t * IOInstallStruct);
 const cmd_tbl_t ** shell_get_cmd_tbl(void);
-char **shell_get_hist_data_list(uint8_t * num);
+char ** shell_get_hist_data_list(uint8_t * num, uint8_t * cur_index);
 void shell_main_loop(char * prompt);
 
 #endif

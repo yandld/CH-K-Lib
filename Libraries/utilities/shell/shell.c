@@ -338,9 +338,10 @@ static void cread_add_to_hist(char * line)
  /*!
  * @brief get history data list and also get number of the list
  */
-char ** shell_get_hist_data_list(uint8_t * num)
+char ** shell_get_hist_data_list(uint8_t * num, uint8_t * cur_index)
 {
-    *num = hist_max;
+    *num = hist_max + 1 ;
+    *cur_index = hist_cur;
     return  &hist_list[0];
 }
 

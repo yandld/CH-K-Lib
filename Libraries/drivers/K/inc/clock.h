@@ -15,10 +15,9 @@ typedef enum
 
 typedef enum
 {
-    kMcgOut2CoreDivider,           /* OUTDIV1*/
-    kMcgOut2SystemDivider,           /* OUTDIV1*/
+    kMcgOut2CoreDivider,
+    kMcgOut2SystemDivider,
     kMcgOut2BusDivider,
-    kMcgOut2FlexBusDivider,
     kMcgOut2FlashDivider,
     kClockDividerNameCount,
 }CLOCK_DividerSource_Type;
@@ -43,7 +42,7 @@ typedef enum
     kClockSimDiv16,
 }CLOCK_DivideValue_Type;
 
-void CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
+int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
 
 #endif
 

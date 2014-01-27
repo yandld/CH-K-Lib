@@ -37,27 +37,32 @@ static const uint32_t SIM_GPIOClockGateTable[] =
     SIM_SCGC5_PORTE_MASK,
 };
 
-//! @defgroup CHKinetis-K
+//! @defgroup CHKinetis
 //! @{
 
 
-//! @defgroup GPIO-K
-//! @brief GPIO driver modules
-//! @{
-
-//! @defgroup GPIO-K_API_Functions
+//! @defgroup GPIO
+//! @brief GPIO API functions
 //! @{
 
  /**
- * @brief  Config PinMux function. This function is used in many other drivers code
- * @param  instance: GPIO instance
+ * @brief  设置引脚复用功能 这个函数会被很多其他外设模块驱动程序调用
+ * 
+ * @code
+ *      // 将一个IO口复用功能设置为Mux1
+ *      PORT_PinMuxConfig(HW_GPIOA, 3, kPinAlt1);
+ * @endcode
+ * @param  instance: GPIO模块号 可选如下
  *         @arg HW_GPIOA
  *         @arg HW_GPIOB
  *         @arg HW_GPIOC
  *         @arg HW_GPIOD
  *         @arg HW_GPIOE
- * @param  pinIndex: 0-31
- * @param  pinMux:   0 - kPinAltNameCount different pinmux value indcatie different pin function. It's various form chip to chip.
+ * @param  pinIndex: 引脚号0-31
+ * @param  pinMux:   复用功能选项 不同的复用值代表不同的功能 比如 kPinAlt1 一般代表用做GPIO
+ *         @arg kPinAlt0
+ *         @arg ...
+ *         @arg kPinAlt7
  * @retval None
  */
 void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
@@ -90,12 +95,12 @@ void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, Fun
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
-		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-		(newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
+    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
     switch(pull)
-		{
+    {
         case kPullDisabled:
             PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_PE_MASK;
             break;
@@ -109,7 +114,7 @@ void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, Fun
             break;
         default:
             break;
-		}
+    }
 }
  /**
  * @brief  config GPIO pin input or output
@@ -129,8 +134,8 @@ void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
-		assert_param(IS_PORT_ALL_INSTANCE(instance));
-		assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_PORT_ALL_INSTANCE(instance));
+    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     (mode == kOutput) ? (GPIO_InstanceTable[instance]->PDDR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PDDR &= ~(1 << pinIndex));
 }
@@ -146,30 +151,30 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(GPIO_InitStruct->instance));
-		assert_param(IS_PORT_ALL_INSTANCE(GPIO_InitStruct->instance));
-		assert_param(IS_GPIO_ALL_PIN(GPIO_InitStruct->pinx));
-		//config state
-		switch(GPIO_InitStruct->mode)
-		{
+    assert_param(IS_PORT_ALL_INSTANCE(GPIO_InitStruct->instance));
+    assert_param(IS_GPIO_ALL_PIN(GPIO_InitStruct->pinx));
+    //config state
+    switch(GPIO_InitStruct->mode)
+    {
         case kGPIO_Mode_IFT:
             PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled, DISABLE);
-						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
+            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
             break;
         case kGPIO_Mode_IPD:
             PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDown, DISABLE);
-						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
+            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
             break;
         case kGPIO_Mode_IPU:
             PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp, DISABLE);
-						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
+            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInpput);
             break;
         case kGPIO_Mode_OOD:
             PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp, ENABLE);
-						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
+            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
             break;
         case kGPIO_Mode_OPP:
             PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled, DISABLE);
-						GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
+            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
             break;
         default:
             break;					
@@ -180,8 +185,9 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
  /**
  * @brief  Quick init for user, do not need init struct
  * @code
- *      // init PA3 a pin as output
+ *      // 初始化一个GPIO口为输出 并初始化为高电平
  *      GPIO_QuickInit(HW_GPIOA, 3, kGPIO_Mode_OPP);
+ *      GPIO_WriteBit(HW_GPIOA, 3, 1);
  * @endcode
  * @param  instance: GPIO instance
  *         @arg HW_GPIOA
@@ -368,8 +374,6 @@ void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
 //! @}
 
 
-//! @defgroup GPIO-K_Internal_Functions
-//! @{
 
 void PORTA_IRQHandler(void)
 {
@@ -451,8 +455,5 @@ void PORTF_IRQHandler(void)
 }
 #endif
 
-//! @}
-
-//! @}
 
 //! @}

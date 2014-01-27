@@ -1,44 +1,104 @@
 #include "shell.h"
 #include "gpio.h"
-#include "common.h"
 
-static void GPIO_ISR(uint32_t pinArray)
+char * const CMD_GPIOFunctionSelectTable[] = 
 {
-    shell_printf("GPIO ISR array:0x%x\r\n", pinArray);
-	
-}
+    "Init",
+    "WriteBit",
+    "ReadBit",
+    "ToggleBit",
+    "WriteData",
+    "ReadData",
+};
 
-int CMD_GPIO(int argc, char * const * argv)
+
+char * const CMD_GPIOModeSelectTable[] = 
 {
-    uint32_t i;
-    static uint8_t init;
-    if(!init)
+    "kGPIO_Mode_IFT",
+    "kGPIO_Mode_IPD",
+    "kGPIO_Mode_IPU",
+    "kGPIO_Mode_OOD",
+    "kGPIO_Mode_OPP",
+};
+
+int DoGPIO(int argc, char *const argv[])
+{
+    uint8_t i;
+    uint32_t gpio_instance;
+    uint32_t gpio_pinx;
+    uint8_t gpio_mode;
+    if(argc == 5 && (!strcmp(argv[1], "Init")))
     {
-        GPIO_QuickInit(HW_GPIOA, 16, kGPIO_Mode_OPP);
-        GPIO_QuickInit(HW_GPIOA,  5, kGPIO_Mode_OPP);
-        GPIO_QuickInit(HW_GPIOC,  3, kGPIO_Mode_IPU);
-        GPIO_QuickInit(HW_GPIOA,  4, kGPIO_Mode_IPU);
-        init = 1;
-    }
-    if(argc == 2)
-    {
-        if(!strcmp(argv[1], "TOGGLE"))
+        switch(argv[2][0])
         {
-            GPIO_ToggleBit(HW_GPIOA, 16);
-            GPIO_ToggleBit(HW_GPIOA,  5);
+            case 'A':
+                gpio_instance = HW_GPIOA;
+                break;
+            case 'B':
+                gpio_instance = HW_GPIOB;
+                break;
+            case 'C':
+                gpio_instance = HW_GPIOC;
+                break;
+            case 'D':
+                gpio_instance = HW_GPIOD;
+                break;
+            case 'E':
+                gpio_instance = HW_GPIOE;
+                break;
         }
-    }
-    if(argc == 2)
-    {
-        if(!strcmp(argv[1], "IT"))
+        gpio_pinx = strtoul(argv[3], 0, 0);
+        i = ARRAY_SIZE(CMD_GPIOModeSelectTable);
+        while(i--)
         {
-            GPIO_CallbackInstall(HW_GPIOA, GPIO_ISR);
-            GPIO_CallbackInstall(HW_GPIOC, GPIO_ISR);
-            GPIO_ITDMAConfig(HW_GPIOA, 4, kGPIO_IT_RisingEdge, ENABLE);
-            GPIO_ITDMAConfig(HW_GPIOC, 3, kGPIO_IT_RisingEdge, ENABLE);
+            if(!strcmp(argv[4], CMD_GPIOModeSelectTable[i]))
+            {
+                gpio_mode = i;
+            }
         }
+        shell_printf("%d %d %d \r\n", gpio_instance, gpio_pinx, gpio_mode);
+        GPIO_QuickInit(gpio_instance, gpio_pinx, (GPIO_Mode_Type)gpio_mode);
     }
     return 0;
+}
+
+
+
+int DoGPIOComplete(int argc, char * const argv[], char last_char, int maxv, char *cmdv[])
+{
+    uint8_t str_len;
+    uint8_t found = 0;
+    uint8_t i;
+    str_len = strlen(argv[argc-1]);
+    switch(argc)
+    {
+        case 2:
+            i = ARRAY_SIZE(CMD_GPIOFunctionSelectTable);
+            while(i--)
+            {
+                if(!strncmp(argv[argc-1], CMD_GPIOFunctionSelectTable[i], str_len))
+                {
+                    cmdv[found] = CMD_GPIOFunctionSelectTable[i];
+                    found++;
+                }
+            }
+            break;
+
+        case 5:
+            i = ARRAY_SIZE(CMD_GPIOModeSelectTable);
+            while(i--)
+            {
+                if(!strncmp(argv[argc-1], CMD_GPIOModeSelectTable[i], str_len))
+                {
+                    cmdv[found] = CMD_GPIOModeSelectTable[i];
+                    found++;
+                }
+            }
+            break;
+        default:
+            break;
+    }
+    return found;
 }
 
 const cmd_tbl_t CommandFun_GPIO = 
@@ -46,11 +106,11 @@ const cmd_tbl_t CommandFun_GPIO =
     .name = "GPIO",
     .maxargs = 5,
     .repeatable = 1,
-    .cmd = CMD_GPIO,
-    .usage = "GPIO <CMD> (CMD = TOGGLE,IT)",
-    .complete = NULL,
-    .help = "GPIO <TOGGLE>"
-            "GPIO <IT>"
-    ,
+    .cmd = DoGPIO,
+    .usage = "GPIO",
+    .complete = DoGPIOComplete,
+    .help = "\r\n"
+                "GPIO clock - print CPU clock\r\n"
+                "GPIO memory   - print CPU memory info"
 };
 

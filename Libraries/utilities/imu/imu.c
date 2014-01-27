@@ -13,18 +13,7 @@
 #define Gyro_Gr        0.0010653
 //#define SLIDING_FILTER_DEEP  10
    
-typedef struct 
-{
-    int16_t ax;
-    int16_t ay;
-    int16_t az;
-    int16_t gx;
-    int16_t gy;
-    int16_t gz;
-    int16_t mx;
-    int16_t my;
-    int16_t mz;
-}imu_raw_data_t;
+
 
 typedef struct 
 {
@@ -47,7 +36,6 @@ typedef struct
  * Variables
  ******************************************************************************/
 static imu_io_install_t * gpIOInstallStruct;   /* install struct	*/
-
  /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -130,19 +118,19 @@ static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * fil
 #endif
 
 //!< format data into float value
-static uint32_t imu_format_data(imu_raw_data_t raw_data, imu_float_data_t * float_data)
+static uint32_t imu_format_data(imu_raw_data_t * raw_data, imu_float_data_t * float_data)
 {
-    float_data->ax = (float)raw_data.ax;
-    float_data->ay = (float)raw_data.ay;
-    float_data->az = (float)raw_data.az;
+    float_data->ax = (float)raw_data->ax;
+    float_data->ay = (float)raw_data->ay;
+    float_data->az = (float)raw_data->az;
     
-    float_data->gx = (float)raw_data.gx;
-    float_data->gy = (float)raw_data.gy;
-    float_data->gz = (float)raw_data.gz;
+    float_data->gx = (float)raw_data->gx;
+    float_data->gy = (float)raw_data->gy;
+    float_data->gz = (float)raw_data->gz;
     
-    float_data->mx = (float)raw_data.mx;
-    float_data->my = (float)raw_data.my;
-    float_data->mz = (float)raw_data.mz;
+    float_data->mx = (float)raw_data->mx;
+    float_data->my = (float)raw_data->my;
+    float_data->mz = (float)raw_data->mz;
     return 0;
 }
 
@@ -234,29 +222,28 @@ void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float mx,f
 }
 
 //!< this functino must be called about every 2ms to get accurate eular angles
-uint32_t imu_get_euler_angle(imu_float_euler_angle_t * angle)
+uint32_t imu_get_euler_angle(imu_float_euler_angle_t * angle, imu_raw_data_t * raw_data)
 {
-    uint8_t err = 0;
+    uint8_t ret = 0;
     int16_t ax,ay,az,gx,gy,gz,mx,my,mz;
-    imu_raw_data_t raw_data;
 //    imu_raw_data_t filter_data;
     imu_float_data_t float_data;
-    err += gpIOInstallStruct->imu_get_accel(&ax, &ay, &az);
-    err += gpIOInstallStruct->imu_get_gyro(&gx, &gy, &gz); 
-    err += gpIOInstallStruct->imu_get_mag(&mx, &my, &mz);
-    if(err >0)
+    ret += gpIOInstallStruct->imu_get_accel(&ax, &ay, &az);
+    ret += gpIOInstallStruct->imu_get_gyro(&gx, &gy, &gz); 
+    ret += gpIOInstallStruct->imu_get_mag(&mx, &my, &mz);
+    if(ret >0)
     {
-      return 1;
+      return ret;
     }
-    raw_data.ax = ax;
-    raw_data.ay = ay;
-    raw_data.az = az;
-    raw_data.gx = gx;
-    raw_data.gy = gy;
-    raw_data.gz = gz;
-    raw_data.mx = mx;
-    raw_data.my = my;
-    raw_data.mz = mz;
+    raw_data->ax = ax;
+    raw_data->ay = ay;
+    raw_data->az = az;
+    raw_data->gx = gx;
+    raw_data->gy = gy;
+    raw_data->gz = gz;
+    raw_data->mx = mx;
+    raw_data->my = my;
+    raw_data->mz = mz;
 #if 0
     //I need rawdata I give you filtered data
     imu_sliding_filter(raw_data, &filter_data);

@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-
 #ifdef MK10D5
 #include "MK10D5.h"
 #endif
@@ -30,24 +29,12 @@
 #endif
 
 
-
-//! @addtogroup CH_Periph_Driver
-//! @{
-
-//! @addtogroup COMMON
-//! @brief Common typedef for CHLib
-//! @{
-
-//! @addtogroup COMMON_Config_Macros
-//! @{
-
 //! @brief expanse the "assert_param" macro in the Lib drivers code 
 #define USE_FULL_ASSERT         
 //! @brief means you can use printf
 #define UART_USE_STDIO
 
 
-//! @}
 
 //!< CH_Kinetis version information
 #define CHK_VERSION                   2L              //!< major version number
@@ -57,7 +44,6 @@
 /* CH_Kinetis version */
 #define FW_VERSION                ((CHK_VERSION * 10000) + \
                                   (CHK_SUBVERSION * 100) + CHK_REVISION)
-																				 
 
 
 //²ÎÊý¼ì²âÆ÷
@@ -77,9 +63,6 @@
   #define assert_param(expr) ((void)0)
 #endif /* USE_FULL_ASSERT */
 
-
-//! @addtogroup COMMON_Typedef
-//! @{
 
 typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
 typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
@@ -104,8 +87,7 @@ typedef enum {FALSE = 0, TRUE = !FALSE} ErrorState;
 	#define NULL 0
 #endif
 
-//! @}
-
+//!< 
 typedef struct
 {
     uint32_t ip_instance:3;
@@ -116,12 +98,12 @@ typedef struct
     uint32_t channel:5;
 }QuickInit_Type;
 
+//!< 
 typedef struct
 {
     void * register_addr;
     uint32_t    mask;
 }RegisterManipulation_Type;
-/*! @brief Status return codes.*/
 
 
 //! @brief DELAY Function Selection
@@ -137,9 +119,6 @@ typedef struct
 #endif
 
 
-//! @}
-
-//! @}
 
 /*
 void CalConst(const QuickInit_Type * table, uint32_t size)

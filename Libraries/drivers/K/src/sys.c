@@ -11,17 +11,6 @@
 #include "libconfig.h"
 
 
-//! @defgroup CH_Periph_Driver
-//! @{
-	
-//! @defgroup SYS
-//! @brief SYS driver modules
-//! @{
-	
-
-//! @defgroup SYS_Exported_Functions
-//! @{
-
 
 
 /**

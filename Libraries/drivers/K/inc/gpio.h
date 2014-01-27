@@ -16,16 +16,6 @@
 	 
 #include "common.h"
 
-//! @defgroup CHKinetis-K
-//! @{
-
-//! @defgroup GPIO-K
-//! @brief GPIO-K driver modules
-//! @{
-	 
-//! @addtogroup GPIO-K_Exported_Macro
-//! @{
-
 #define HW_GPIOA  (0x00U)
 #define HW_GPIOB  (0x01U)
 #define HW_GPIOC  (0x02U)
@@ -34,11 +24,7 @@
 #define HW_GPIOF  (0x05U)
 
 
-//! @}
-
-//! @addtogroup GPIO-K_Exported_Type
-//! @{
-
+//!< mcu select type
 typedef enum
 {
     kPinAlt0,
@@ -52,6 +38,7 @@ typedef enum
     kPinAltNameCount,
 }PORT_PinMux_Type;
 
+//!< port pull type
 typedef enum
 {
     kPullDisabled,
@@ -60,6 +47,7 @@ typedef enum
     kPullNameCount,
 }PORT_Pull_Type;
 
+//!< pin mode type
 typedef enum
 {
     kGPIO_Mode_IFT = 0x00,            //!< input floating mode
@@ -70,6 +58,7 @@ typedef enum
     kGPIO_ModeNameCount,
 }GPIO_Mode_Type;
 
+//!< ping config type
 typedef enum
 {
     kInpput,
@@ -77,6 +66,7 @@ typedef enum
     kPinConfigNameCount,
 }GPIO_PinConfig_Type;
 
+//!< ITDMAConfig type
 typedef enum
 {
     kGPIO_ITDMA_Disable = 0x00,
@@ -91,7 +81,7 @@ typedef enum
     kGPIO_ITDMAConfigNameCount,
 }GPIO_ITDMAConfig_Type;
 
-
+//!< init struct
 typedef struct
 {
     uint8_t                instance;             //!< GPIO pin select
@@ -99,14 +89,10 @@ typedef struct
     uint32_t               pinx;                 //!< pin index
 }GPIO_InitTypeDef;
 
+//!< call back type
 typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 
-//! @}
-
-
-//! @defgroup GPIO-K_API_Functions
-//! @{
-
+//!< API functions
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
 void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
 void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState);
@@ -120,12 +106,6 @@ uint32_t GPIO_ReadByte(uint8_t instance, uint8_t pinIndex);
 void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data);
 void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, FunctionalState newState);
 void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun);
-
-//! @}
-
-//! @}
-
-//! @}
 
 //!< param check
 #define IS_GPIO_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(GPIO_InstanceTable))

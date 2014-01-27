@@ -113,7 +113,9 @@ uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch);
 void UART_WriteByte(uint8_t instance, uint8_t ch);
 void UART_CallbackInstall(uint8_t instance, UART_CallBackType AppCBFun);
 void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, FunctionalState newState);
-
+#ifdef UART_USE_STDIO
+int printf(const char *fmt, ...);
+#endif
 //! @}
 
 //! @}

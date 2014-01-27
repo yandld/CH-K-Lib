@@ -10,6 +10,8 @@
 #ifndef __PIT_H__
 #define __PIT_H__
 
+#include "common.h"
+
 #define PIT_DELAY_CHL   PIT3
 
 
@@ -18,14 +20,8 @@
  extern "C" {
 #endif
 
-#include "sys.h"
 
-//! @defgroup CH_Periph_Driver
-//! @{
-	
-//! @defgroup PIT
-//! @brief PIT driver modules
-//! @{
+
 	 
 //可使用的UART初始化结构
 typedef enum
@@ -74,6 +70,4 @@ void PIT_DelayMs(uint32_t ms);
 #endif
 
 
-//! @}
 
-//! @}

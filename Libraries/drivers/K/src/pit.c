@@ -1,21 +1,15 @@
 #include "pit.h"
+#include "common.h"
 
 static uint8_t  fac_us = 0; //!< usDelay Mut
 static uint32_t fac_ms = 0; //!< msDelay Mut
-
-//! @defgroup CH_Periph_Driver
-//! @{
-	
-//! @defgroup PIT
-//! @brief PIT driver modules
-//! @{
 
 void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
 {
     // Enable Clock Gate
     SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
-    GetCPUInfo();
-    fac_us = CPUInfo.m_BusClockInHz/1000000;
+ //   GetCPUInfo();
+//    fac_us = CPUInfo.m_BusClockInHz/1000000;
     fac_ms = (uint32_t)fac_us*1000;
     // Set Load Value
     PIT->CHANNEL[PIT_InitStruct->PITxMap].LDVAL = (uint32_t)fac_us * PIT_InitStruct->PIT_PeriodInUs;
@@ -141,11 +135,6 @@ void PIT_DelayMs(uint32_t ms)
 	  PIT_Stop(PIT_DELAY_CHL);
 }
 
-
-
-//! @}
-
-//! @}
 
 
 

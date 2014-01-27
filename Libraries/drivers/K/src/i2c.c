@@ -38,6 +38,12 @@ static const uint32_t SIM_I2CClockGateTable[] =
 {
     SIM_SCGC4_I2C0_MASK,
 };
+#elif (defined(MK70F12) || defined(MK70F15))
+static const uint32_t SIM_I2CClockGateTable[] =
+{
+    SIM_SCGC4_IIC0_MASK,
+    SIM_SCGC4_IIC1_MASK,
+};
 #endif
 
 //!< clock deiver struct (internal)
@@ -587,6 +593,77 @@ uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t 
     *pData = data;
     return 0;
 }
+
+
+int32_t I2C_ReadMutipleRegister(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t * pData, uint32_t dataLen)
+{
+    uint32_t time_out = 0;
+    uint8_t i;
+    uint8_t * p = (uint8_t*)&subAddress;
+    //Generate START signal
+    I2C_GenerateSTART(instance);
+    //Send 7bit Data with WRITE operation
+    I2C_Send7bitAddress(instance, deviceAddress, kI2C_Write);
+    if(I2C_WaitAck(instance))
+    {
+        I2C_GenerateSTOP(instance);
+        time_out = 0;
+        while(!I2C_IsBusy(instance) && (time_out < 1000))
+        {
+            time_out++;
+        }
+        return 1;
+    }
+    //send sub address
+    for(i = 0; i < subAddressLen; i++)
+    {
+        //Send Reg Address
+        I2C_SendData(instance, *p++);
+        if(I2C_WaitAck(instance))
+        {
+            I2C_GenerateSTOP(instance);
+            time_out = 0;
+            while(!I2C_IsBusy(instance)  && (time_out < 1000))
+            {
+                time_out++;
+            }
+            return 2;
+        }  
+    }
+    //Generate RESTART Signal
+    I2C_GenerateRESTART(instance);
+    //Resend 7bit Address, This time we use READ Command
+    I2C_Send7bitAddress(instance, deviceAddress, kI2C_Read);
+    if(I2C_WaitAck(instance))
+    {
+        I2C_GenerateSTOP(instance);
+        time_out = 0;
+        while(!I2C_IsBusy(instance));
+        return 3;
+    }
+    //Set Master in slave mode
+    I2C_SetMasterMode(instance,kI2C_Read);
+    //dummy read
+    I2C_ReadData(instance); //dummy read
+	I2C_GenerateAck(instance);
+	I2C_WaitAck(instance);
+    //actually read
+	for(i = 0; i < dataLen - 1; i++)
+	{
+		*(pData++) = I2C_ReadData(instance);
+		I2C_GenerateAck(instance);
+        I2C_WaitAck(instance);
+	}
+    // read last
+	*pData = I2C_ReadData(instance);
+    //stop and finish
+    I2C_GenerateNAck(instance);
+    I2C_WaitAck(instance);
+    I2C_GenerateSTOP(instance);
+    while(!I2C_IsBusy(instance));
+    return 0;
+}
+
 
 //! @}
 

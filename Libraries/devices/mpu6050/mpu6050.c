@@ -50,10 +50,6 @@ uint8_t mpu6050_read_gyro(mpu6050_device * device, int16_t* x, int16_t* y, int16
 }
 
 
-
-
-
-
 //!< proble
 #define WHO_AM_I_VALUE  (0x68)
 uint8_t mpu6050_probe(mpu6050_device * device)

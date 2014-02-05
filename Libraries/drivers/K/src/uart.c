@@ -155,14 +155,12 @@ _loop:
 }
 #endif // UART_USE_STDIO
 
-//! @defgroup CHKinetis-K
+//! @defgroup CHKinetis
 //! @{
 
-//! @defgroup UART-K
-//! @brief UART-K driver modules
-//! @{
 
-//! @defgroup UART-K_API_Functions
+//! @defgroup UART
+//! @brief UART API functions
 //! @{
 
 /**
@@ -335,8 +333,7 @@ uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate)
 
 //! @}
 
-//! @defgroup UART-K_Internal_Functions
-//! @{
+//! @}
 
 void UART0_RX_TX_IRQHandler(void)
 {
@@ -493,11 +490,7 @@ void UART5_RX_TX_IRQHandler(void)
 #endif // (defined(MK70F12)|| defined(MK70F15))
 #endif // (!defined(MK10D5))
 
-//! @}
 
-//! @}
-
-//! @}
 
 /*
 static const QuickInit_Type UART_QuickInitTable[] =

@@ -96,6 +96,7 @@ typedef struct
     uint32_t io_base:5;
     uint32_t io_offset:5;
     uint32_t channel:5;
+    uint32_t reserved:8;
 }QuickInit_Type;
 
 //!< 

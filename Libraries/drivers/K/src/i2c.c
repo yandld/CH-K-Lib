@@ -154,15 +154,14 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
 }
 
 
-//! @defgroup CHKinetis-K
+//! @defgroup CHKinetis
 //! @{
 
-//! @defgroup I2C-K
-//! @brief I2C-K driver modules
+
+//! @defgroup I2C
+//! @brief I2C API functions
 //! @{
 
-//! @defgroup I2C-K_API_Functions
-//! @{
 
  /**
  * @brief  Quick init for user, do not need init struct
@@ -664,11 +663,9 @@ int32_t I2C_ReadMutipleRegister(uint8_t instance, uint8_t deviceAddress, uint32_
     return 0;
 }
 
-
 //! @}
 
-//! @defgroup I2C-K_Internal_Functions
-//! @{
+//! @}
 
 void I2C0_IRQHandler(void)
 {
@@ -693,11 +690,7 @@ void I2C1_IRQHandler(void)
 }
 #endif
 
-//! @}
 
-//! @}
-
-//! @}
 
 /*
 static const QuickInit_Type I2C_QuickInitTable[] =

@@ -16,15 +16,6 @@
 
 #include "common.h"
 	 
-//! @defgroup CHKinetis-K
-//! @{
-
-//! @defgroup UART-K
-//! @brief UART-K driver modules
-//! @{
-	 
-//! @addtogroup UART-K_Exported_Macro
-//! @{
 
 #ifdef UART_USE_STDIO
 #define UART_printf(fmt,args...)    printf (fmt ,##args)
@@ -58,10 +49,7 @@
 #define UART2_RX_PF13_TX_PF14   (0x9B2AU)
 #define UART5_RX_PD08_TX_PD09   (0x90DDU)
 
-//! @}
 
-//! @addtogroup UART-K_Exported_Type
-//! @{
 
 //!< UART paritySelect
 typedef enum
@@ -100,12 +88,8 @@ typedef struct
 //!< UART CallBack Type
 typedef void (*UART_CallBackType)(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag);
 
-//! @}
 
-
-//! @defgroup UART-K_API_Functions
-//! @{
-
+//!< API functions
 uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate);
 void UART_Init(UART_InitTypeDef * UART_InitStruct);
 int UART_printf(const char *format,...);
@@ -116,11 +100,7 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, Functional
 #ifdef UART_USE_STDIO
 int printf(const char *fmt, ...);
 #endif
-//! @}
 
-//! @}
-
-//! @}
 
 //!< param check
 #define IS_UART_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(UART_InstanceTable))

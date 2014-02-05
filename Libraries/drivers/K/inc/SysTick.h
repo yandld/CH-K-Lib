@@ -3,18 +3,7 @@
 
 #include "common.h"
 
-
-//! @defgroup CHKinetis-K
-//! @{
-
-//! @defgroup SYSTICK
-//! @brief SYSTICK driver modules
-//! @{
-
-
-//! @defgroup SYSTICK_Exported_Functions
-//! @{
-
+//API functions
 void SYSTICK_DelayInit(void);
 void SYSTICK_Init(uint32_t timeInUs);
 void SYSTICK_Cmd(FunctionalState NewState);
@@ -24,8 +13,3 @@ void SYSTICK_DelayMs(uint32_t ms);
 
 #endif
 
-//! @}
-
-//! @}
-
-//! @}

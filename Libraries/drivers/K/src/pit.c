@@ -1,140 +1,195 @@
+/**
+  ******************************************************************************
+  * @file    pit.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2013.12.25
+  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #include "pit.h"
 #include "common.h"
+#include "clock.h"
 
-static uint8_t  fac_us = 0; //!< usDelay Mut
-static uint32_t fac_ms = 0; //!< msDelay Mut
 
+static uint32_t  fac_us = 0; //!< usDelay Mut
+static uint32_t  fac_ms = 0; //!< msDelay Mut
+
+
+#if (!defined(PIT_BASES))
+
+    #if     (defined(MK60DZ10))
+    #define PIT_BASES {PIT}
+    #elif   (defined(MK10D5))
+    #define PIT_BASES {PIT}
+    #endif
+
+#endif
+
+PIT_Type * const PIT_InstanceTable[] = PIT_BASES;
+static PIT_CallBackType PIT_CallBackTable[4] = {NULL};
+#define PIT0_IRQn_OFFSET 1
+static IRQn_Type const PIT_IRQRxTxBase = PIT0_IRQn;
+
+//! @defgroup CHKinetis
+//! @{
+
+
+//! @defgroup PIT
+//! @brief PIT API functions
+//! @{
+
+ /**
+ * @brief  初始化PIT模块 推荐使用 PIT_QuickInit来进行快速初始化
+ * 
+ * @code
+ *      // 初始化PIT模块
+ *      PIT_InitTypeDef PIT_InitStruct1;
+ *      PIT_InitStruct1.instance = 0;
+ *      PIT_InitStruct1.chl = 0;
+ *      PIT_InitStruct1.timeInUs = 1000 //1ms
+ *      PIT_Init(&PIT_InitStruct1);
+ * @endcode
+ * @retval None
+ */
 void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
 {
-    // Enable Clock Gate
     SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
- //   GetCPUInfo();
-//    fac_us = CPUInfo.m_BusClockInHz/1000000;
-    fac_ms = (uint32_t)fac_us*1000;
-    // Set Load Value
-    PIT->CHANNEL[PIT_InitStruct->PITxMap].LDVAL = (uint32_t)fac_us * PIT_InitStruct->PIT_PeriodInUs;
-    // Enable PIT Moude
-    PIT->MCR &= ~PIT_MCR_MDIS_MASK;
-	  // Start Timer
-    PIT->CHANNEL[PIT_InitStruct->PITxMap].TCTRL |= (PIT_TCTRL_TEN_MASK);
+    //get clock
+    CLOCK_GetClockFrequency(kBusClock, &fac_us);
+    fac_us /= 1000000;
+    fac_ms = fac_us * 1000;
+    PIT_InstanceTable[PIT_InitStruct->instance]->CHANNEL[PIT_InitStruct->chl].LDVAL = fac_us * PIT_InitStruct->timeInUs;
+    PIT_StartCounting(PIT_InitStruct->chl);
+    PIT_Cmd(ENABLE);
+
 }
 
-
-void PIT_ITConfig(PIT_MapSelect_TypeDef PITx, FunctionalState NewState)
-{
-    IRQn_Type  IRQn;
-    // Find IRQ Number
-    switch((uint32_t)PITx)
-    {
-        case (uint32_t)PIT0:
-            IRQn = PIT0_IRQn;
-            break;
-        case (uint32_t)PIT1:
-            IRQn = PIT1_IRQn;
-            break;
-        case (uint32_t)PIT2:
-            IRQn = PIT2_IRQn;
-            break;
-        case (uint32_t)PIT3:
-            IRQn = PIT3_IRQn;
-            break;
-        default:
-            break;
-    }
-		// Clear IT Pending Bit First
-		if(ENABLE == NewState)
-		{
-			PIT->CHANNEL[PITx].TFLG |= PIT_TFLG_TIF_MASK;
-		}
-    (ENABLE == NewState)?(PIT->CHANNEL[PITx].TCTRL |= PIT_TCTRL_TIE_MASK):(PIT->CHANNEL[PITx].TCTRL &= ~PIT_TCTRL_TIE_MASK);
-		(ENABLE == NewState)?(NVIC_EnableIRQ(IRQn)):(NVIC_DisableIRQ(IRQn));
-}
-
-ITStatus PIT_GetITStates(PIT_MapSelect_TypeDef PITx)
-{
-    if(PIT->CHANNEL[PITx].TFLG & PIT_TFLG_TIF_MASK)
-    {
-        return SET;
-		}
-    else
-		{
-        return RESET;
-		}
-}
-
-void PIT_ClearITPendingBit(PIT_MapSelect_TypeDef PITx)
-{
-    PIT->CHANNEL[PITx].TFLG |= PIT_TFLG_TIF_MASK;
-}
-
-void PIT_ClearAllITPendingBit(void)
-{
-    PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
-    PIT->CHANNEL[1].TFLG |= PIT_TFLG_TIF_MASK;
-    PIT->CHANNEL[2].TFLG |= PIT_TFLG_TIF_MASK;
-    PIT->CHANNEL[3].TFLG |= PIT_TFLG_TIF_MASK;
-}
-
-void PIT_DelayInit(void)
+ /**
+ * @brief  初始化PIT模块 填入最重要的参数
+ * 
+ * @code
+ *      // 初始化PIT模块 0 通道 产生100MS中断 并开启中断 注册回调函数 在回调函数中打印调试信息
+ *      PIT_QuickInit(HW_PIT_CH0, 100000);
+ *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //注册回调函数
+ *      PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);            //开启中断
+ *      //中断回调函数
+ *      static void PIT0_CallBack(void)
+ *      {
+ *          printf("Enter PIT0 INt\r\n");    
+ *      }
+ * @endcode
+ * @param  chl 通道号
+ *         @arg HW_PIT0_CH0 
+ *         @arg HW_PIT0_CH1
+ *         @arg HW_PIT0_CH2 
+ *         @arg HW_PIT0_CH3 
+ * @param  timeInUs 产生中断的周期 \单位US
+ * @retval None
+ */
+void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
 {
     PIT_InitTypeDef PIT_InitStruct1;
-    PIT_InitStruct1.PITxMap = PIT_DELAY_CHL;
-    PIT_InitStruct1.PIT_PeriodInUs = 1000*1000;
+    PIT_InitStruct1.chl = chl;
+    PIT_InitStruct1.instance = 0;
+    PIT_InitStruct1.timeInUs = timeInUs;
     PIT_Init(&PIT_InitStruct1);
-    // Disable IT
-    PIT_ITConfig(PIT_DELAY_CHL, DISABLE);
-	  PIT_Stop(PIT_DELAY_CHL);
+    PIT_StartCounting(chl);
 }
 
-uint32_t PIT_GetReloadValue(PIT_MapSelect_TypeDef PITx)
+ /**
+ * @brief  设置PIT模块是否开启中断功能
+ * 
+ * @code
+ *      // 初始化PIT模块 0 通道 产生100MS中断 并开启中断 注册回调函数 在回调函数中打印调试信息
+ *      PIT_QuickInit(HW_PIT_CH0, 100000);
+ *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //注册回调函数
+ *      PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);            //开启中断
+ *      //中断回调函数
+ *      static void PIT0_CallBack(void)
+ *      {
+ *          printf("Enter PIT0 INt\r\n");    
+ *      }
+ * @endcode
+ * @param  chl 通道号
+ *         @arg HW_PIT0_CH0 
+ *         @arg HW_PIT0_CH1
+ *         @arg HW_PIT0_CH2 
+ *         @arg HW_PIT0_CH3 
+ * @param  NewState ENABLE 或DISABLE
+ * @retval None
+ */
+void PIT_ITDMAConfig(uint8_t chl, FunctionalState NewState)
 {
-    return 	PIT->CHANNEL[PITx].LDVAL;  
+    if(ENABLE == NewState)
+    {
+        PIT->CHANNEL[chl].TFLG |= PIT_TFLG_TIF_MASK;
+    }
+    (ENABLE == NewState)?(PIT->CHANNEL[chl].TCTRL |= PIT_TCTRL_TIE_MASK):(PIT->CHANNEL[chl].TCTRL &= ~PIT_TCTRL_TIE_MASK);
+    (ENABLE == NewState)?(NVIC_EnableIRQ((IRQn_Type)(PIT_IRQRxTxBase + PIT0_IRQn_OFFSET*chl))):(NVIC_DisableIRQ((IRQn_Type)(PIT_IRQRxTxBase + PIT0_IRQn_OFFSET*chl)));
 }
 
-void PIT_SetReloadValue(PIT_MapSelect_TypeDef PITx, uint32_t Value)
+
+void PIT_StartCounting(uint8_t chl)
 {
-    PIT->CHANNEL[PITx].LDVAL = Value;
+    PIT->CHANNEL[chl].TCTRL |= (PIT_TCTRL_TEN_MASK);
 }
 
-uint32_t PIT_GetCurrentCounter(PIT_MapSelect_TypeDef PITx)
+void PIT_StopCounting(uint8_t chl)
 {
-    return PIT->CHANNEL[PITx].CVAL;
+    PIT->CHANNEL[chl].TCTRL &= (~PIT_TCTRL_TEN_MASK);
 }
-
-void PIT_Start(PIT_MapSelect_TypeDef PITx)
-{
-    PIT->CHANNEL[PITx].TCTRL |= (PIT_TCTRL_TEN_MASK);
-}
-
-void PIT_Stop(PIT_MapSelect_TypeDef PITx)
-{
-    PIT->CHANNEL[PITx].TCTRL &= ~(PIT_TCTRL_TEN_MASK);
-}
-
 
 void PIT_Cmd(FunctionalState NewState)
 {
     (ENABLE == NewState)?(PIT->MCR &= ~PIT_MCR_MDIS_MASK):(PIT->MCR |= PIT_MCR_MDIS_MASK);
 }
 
-void PIT_DelayUs(uint32_t us)
+//! @}
+
+//! @}
+
+void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun)
 {
-    PIT_SetReloadValue(PIT_DELAY_CHL, us*fac_us);
-    PIT_Start(PIT_DELAY_CHL);
-    PIT_ClearITPendingBit(PIT_DELAY_CHL);
-    while(PIT_GetITStates(PIT_DELAY_CHL) == RESET);
-	  PIT_Stop(PIT_DELAY_CHL);
+    if(AppCBFun != NULL)
+    {
+        PIT_CallBackTable[chl] = AppCBFun;
+    }
 }
 
-void PIT_DelayMs(uint32_t ms)
+void PIT0_IRQHandler(void)
 {
-    PIT_SetReloadValue(PIT_DELAY_CHL, ms*fac_ms);
-    PIT_Start(PIT_DELAY_CHL);
-    PIT_ClearITPendingBit(PIT_DELAY_CHL);
-    while(PIT_GetITStates(PIT_DELAY_CHL) == RESET);
-	  PIT_Stop(PIT_DELAY_CHL);
+    PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
+    if(PIT_CallBackTable[0])
+    {
+        PIT_CallBackTable[0]();
+    }
 }
 
+void PIT1_IRQHandler(void)
+{
+    PIT->CHANNEL[1].TFLG |= PIT_TFLG_TIF_MASK;
+    if(PIT_CallBackTable[1])
+    {
+        PIT_CallBackTable[1]();
+    }
+}
 
+void PIT2_IRQHandler(void)
+{
+    PIT->CHANNEL[2].TFLG |= PIT_TFLG_TIF_MASK;
+    if(PIT_CallBackTable[2])
+    {
+        PIT_CallBackTable[2]();
+    }
+}
 
+void PIT3_IRQHandler(void)
+{
+    PIT->CHANNEL[3].TFLG |= PIT_TFLG_TIF_MASK;
+    if(PIT_CallBackTable[3])
+    {
+        PIT_CallBackTable[3]();
+    }
+}
 

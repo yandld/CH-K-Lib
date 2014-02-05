@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "shell/shell.h"
 #include "clock.h"
 #include "cpuidy.h"
 
@@ -7,7 +7,6 @@ const char* ClockSourceNameTable[] =
 	"CoreClock",
 	"SystemClock",
 	"BusClock",
-	"FlexBusClock",
 	"FlashClock"
 };
 
@@ -26,8 +25,8 @@ int DoCPUInfo(int argc, char *const argv[])
     uint8_t i;
     uint32_t val;
     CPUIDY_GetPinCount(&val);
-		if(argc == 1)
-		{
+    if(argc == 1)
+    {
         shell_printf("%-*s- %s - %dPin\r\n", 16, "CPU:", CPUIDY_GetFamID(), val);
         for(i=0;i< kClockNameCount; i++)
         {
@@ -40,45 +39,9 @@ int DoCPUInfo(int argc, char *const argv[])
             shell_printf("%-*s- %dKB\r\n", 16, MemNameTable[i],val);
         }
     }
-    if(argc == 2 && !strcmp(argv[1], "help"))
-		{
-			return CMD_RET_USAGE;
-		}
+    return 0;
 }
  
-int DoCPUComplete(int argc, char * const argv[], char last_char, int maxv, char *cmdv[])
-{
-    uint8_t str_len;
-    uint8_t found = 0;
-    uint8_t i;
-    str_len = strlen(argv[argc-1]);
-    switch(argc)
-    {
-        case 1:
-            break;
-        case 2:
-					  if(!strncmp(argv[argc-1], "clock", str_len))
-						{
-                cmdv[found] = "clock";
-                found++;
-						}
-					  if(!strncmp(argv[argc-1], "memory", str_len))
-						{
-                cmdv[found] = "memory";
-                found++;
-						}
-					  if(!strncmp(argv[argc-1], "help", str_len))
-						{
-                cmdv[found] = "help";
-                found++;
-						}
-            break;
-        default:
-            break;
-    }
-    return found;
-}
-
 const cmd_tbl_t CommandFun_CPU = 
 {
     .name = "CPU",
@@ -86,8 +49,7 @@ const cmd_tbl_t CommandFun_CPU =
     .repeatable = 1,
     .cmd = DoCPUInfo,
     .usage = "display CPU clock",
-    .complete = DoCPUComplete,
+    .complete = NULL,
     .help = "\r\n"
-		        "CPU clock - print CPU clock\r\n"
-						"CPU memory   - print CPU memory info"
+
 };

@@ -2,7 +2,6 @@
 #include "common.h"
 
 
-
 #define MCGOUT_TO_CORE_DIVIDER           (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
 #define MCGOUT_TO_SYSTEM_DIVIDER         (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
 #define MCGOUT_TO_BUS_DIVIDER            (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT) + 1)
@@ -22,7 +21,7 @@
 
 
 //! @defgroup CLOCK
-//! @brief CLOCK API functions
+//! @brief 时钟分频模块
 //! @{
 
  /**
@@ -37,7 +36,6 @@ void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideVa
     switch (clockDivName)
 		{
 			case kMcgOut2CoreDivider:
-			//	SIM->CLKDIV1 &= ~SIM_CLKDIV1_OUTDIV1_MASK;
 				SIM->CLKDIV1 |= MCGOUT_TO_CORE_DIV_SET(dividerValue);
 				break;
 			case kMcgOut2SystemDivider:
@@ -59,8 +57,8 @@ void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideVa
  *
  * @code
  *         //获得总线频率
- *         uint32_t SyClock;
- *         CLOCK_GetClockFrequency(kCoreClock, &SyClock);
+ *         uint32_t SysClock;
+ *         CLOCK_GetClockFrequency(kCoreClock, &SysClock);
  *         printf("CoreClock:%dHz\r\n", SysClock);
  * @endcode
  * @param  clockName:时钟名称

@@ -22,15 +22,6 @@ typedef struct
     uint32_t baudrate;   //!< baudrate some common baudrate: 48000Hz 76000Hz 96000Hz 376000Hz
 }I2C_InitTypeDef;
 
-//! @defgroup CHKinetis-K
-//! @{
-
-//! @defgroup I2C-K
-//! @brief I2C-K driver modules
-//! @{
-
-//! @addtogroup I2C-K_Exported_Macro
-//! @{
 
 #define HW_I2C0         (0x00U)
 #define HW_I2C1         (0x01U)
@@ -46,11 +37,6 @@ typedef struct
 #define I2C1_SCL_PC10_SDA_PC11  (0x9491U)
 #define I2C0_SCL_PD08_SDA_PD09  (0x9098U)
 
-//! @}
-
-
-//! @addtogroup I2C-K_Exported_Type
-//! @{
 
 typedef enum
 {
@@ -71,11 +57,7 @@ typedef enum
 //!< I2C CallBack Type
 typedef void (*I2C_CallBackType)(void);
 
-//! @}
-
-//! @defgroup I2C-K_API_Functions
-//! @{
-
+//!< API functions
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
 uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate);
 void I2C_GenerateSTART(uint8_t instance);
@@ -91,11 +73,7 @@ uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t 
 uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data);
 int32_t I2C_ReadMutipleRegister(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t * pData, uint32_t dataLen);
 
-//! @}
 
-//! @}
-
-//! @}
 
 //!< param check
 #define IS_I2C_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(I2C_InstanceTable))

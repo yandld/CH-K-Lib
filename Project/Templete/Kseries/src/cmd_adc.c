@@ -40,5 +40,4 @@ const cmd_tbl_t CommandFun_ADC =
     .usage = "ADC TEST",
     .complete = NULL,
     .help = "\r\n"
-
 };

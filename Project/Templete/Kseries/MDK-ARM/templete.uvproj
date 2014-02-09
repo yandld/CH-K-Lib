@@ -1052,6 +1052,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_flexbus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1096,6 +1101,11 @@
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2180,6 +2190,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_flexbus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2224,6 +2239,11 @@
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3308,6 +3328,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_flexbus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3352,6 +3377,11 @@
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4436,6 +4466,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_flexbus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4480,6 +4515,11 @@
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5564,6 +5604,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_flexbus.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5608,6 +5653,11 @@
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
             </File>
           </Files>
         </Group>

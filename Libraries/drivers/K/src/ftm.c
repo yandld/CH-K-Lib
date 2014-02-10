@@ -9,6 +9,7 @@
   */
 #include "ftm.h"
 
+#if 0
 /***********************************************************************************************
  功能：设置PWM工作模式
  形参：FTM_PWM_InitTypeDef:PWM初始化结构
@@ -311,11 +312,11 @@ void FTM_Init(FTM_InitTypeDef *FTM_InitStruct)
 	FTM_PORT->PCR[pFTM_Map->FTM_Pin_Index] &= ~PORT_PCR_MUX_MASK;
 	FTM_PORT->PCR[pFTM_Map->FTM_Pin_Index] |= PORT_PCR_MUX(pFTM_Map->FTM_Alt_Index);
   //计算分频和MODE参数 
-	prescaler = (CPUInfo.BusClock/(FTM_InitStruct->Frequency))/65535;
+//	prescaler = (CPUInfo.BusClock/(FTM_InitStruct->Frequency))/65535;
  //PS>4时总会出错
 	if(prescaler >= 4 ) prescaler = 4;
 	//计算MODE装载参数
-	mod = (CPUInfo.BusClock/((FTM_InitStruct->Frequency)*(1<<prescaler)));
+//	mod = (CPUInfo.BusClock/((FTM_InitStruct->Frequency)*(1<<prescaler)));
   //时钟源及分频选择
 	FTMx->SC &=~ FTM_SC_CLKS_MASK;
 	FTMx->SC &= ~FTM_SC_PS_MASK;
@@ -627,5 +628,5 @@ void FTM_ClearITPendingBit(FTM_Type *FTMx,uint16_t FTM_IT)
 
 
 
-
+#endif
 

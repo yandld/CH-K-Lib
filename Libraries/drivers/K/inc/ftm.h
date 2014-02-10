@@ -14,7 +14,7 @@
 	extern "C" {
 #endif
 
-#include "sys.h"
+#include "common.h"
 
 //可用的PWM单端输出端口
 //例: FTM0_CH0_PC1:  FTM0模块 0 通道 引脚为PTC1

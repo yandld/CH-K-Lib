@@ -55,7 +55,18 @@ static const IRQn_Type ADC_IRQnTable[] =
 //! @brief ADC API functions
 //! @{
 
-//0 not complete 1 complete
+/**
+ * @brief  判断转换是否结束
+ *         
+ * @param  instance: ADC 模块号
+ *         @arg HW_ADC0
+ *         @arg HW_ADC1
+ *         @arg ...
+ * @param  mux: ADC 转换器选择
+ *         @arg kADC_MuxA
+ *         @arg kADC_MuxB
+ * @retval 0:转换完成 1:转换失败或转换进行中
+ */
 static int32_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
 {
     return (((ADC_InstanceTable[instance]->SC1[mux]) & ADC_SC1_COCO_MASK) >> ADC_SC1_COCO_SHIFT);  
@@ -190,11 +201,6 @@ void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config
             break;
     }        
 }
-
-
-
-
-
 
  
 /**

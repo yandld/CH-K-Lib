@@ -17,6 +17,7 @@ extern const cmd_tbl_t CommandFun_UART;
 extern const cmd_tbl_t CommandFun_CPU;
 extern const cmd_tbl_t CommandFun_PIT;
 extern const cmd_tbl_t CommandFun_ADC;
+extern const cmd_tbl_t CommandFun_FLEXBUS;
 
 static void Putc(uint8_t data)
 {
@@ -94,6 +95,7 @@ int main(void)
     shell_register_function(&CommandFun_CPU);
     shell_register_function(&CommandFun_PIT);
     shell_register_function(&CommandFun_ADC);  
+    shell_register_function(&CommandFun_FLEXBUS); 
   //  CalConst(UART_QuickInitTable, ARRAY_SIZE(UART_QuickInitTable));
     while(1)
     {

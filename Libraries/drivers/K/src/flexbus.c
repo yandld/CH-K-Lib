@@ -10,6 +10,8 @@
 #include "flexbus.h"
 #include "common.h"
 
+#if (!defined(MK10D5))
+
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
 {
     uint32_t i;
@@ -51,6 +53,7 @@ void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
 }
 
 
+#endif
 
 
 

@@ -14,7 +14,7 @@ static void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag)
     }
     if(flag == kUART_IT_RxBTC)
     {
-        byteReceived = ch;
+        ch = byteReceived;
         UART_ITDMAConfig(instance, kUART_IT_TxBTC, ENABLE);
     }
 }
@@ -27,7 +27,9 @@ int CMD_UART(int argc, char * const * argv)
         instance = strtoul(argv[1], NULL, 0);
         shell_printf("UART instance is:%d\r\n", instance);
         UART_CallbackInstall(instance, UART_ISR);  
-        UART_ITDMAConfig(instance, kUART_IT_RxBTC, ENABLE);   
+        UART_ITDMAConfig(instance, kUART_IT_RxBTC, ENABLE); 
+        shell_printf("program will echo and will not return to shell mode\r\n");
+        while(1);
     }
     return 0;
 }
@@ -38,7 +40,7 @@ const cmd_tbl_t CommandFun_UART =
     .maxargs = 5,
     .repeatable = 1,
     .cmd = CMD_UART,
-    .usage = "UART <IT>",
+    .usage = "UART <instance>",
     .complete = NULL,
     .help = NULL,
 };

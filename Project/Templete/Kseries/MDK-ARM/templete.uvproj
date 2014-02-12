@@ -1057,6 +1057,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_flexbus.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_ftm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1106,6 +1111,11 @@
               <FileName>flexbus.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2195,6 +2205,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_flexbus.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_ftm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2244,6 +2259,11 @@
               <FileName>flexbus.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3333,6 +3353,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_flexbus.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_ftm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3382,6 +3407,11 @@
               <FileName>flexbus.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4471,6 +4501,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_flexbus.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_ftm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4520,6 +4555,11 @@
               <FileName>flexbus.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5609,6 +5649,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_flexbus.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_ftm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5658,6 +5703,11 @@
               <FileName>flexbus.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
             </File>
           </Files>
         </Group>

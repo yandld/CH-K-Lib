@@ -2,12 +2,103 @@
   ******************************************************************************
   * @file    ftm.c
   * @author  YANDLD
-  * @version V2.4
-  * @date    2013.5.23
-  * @brief   超核K60固件库 FTM 定时器 驱动 驱动文件
+  * @version V2.5
+  * @date    2013.12.25
+  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
   ******************************************************************************
   */
 #include "ftm.h"
+#include "clock.h"
+
+//!< Leagacy Support for Kineis Z Version(Inital Version)
+#if (!defined(FTM_BASES))
+
+    #if (defined(MK60DZ10))
+        #define FTM_BASES {FTM0, FTM1, FTM2}
+    #endif
+    #if (defined(MK10D5))
+        #define FTM_BASES {FTM0, FTM1}
+    #endif
+#endif
+
+FTM_Type * const FTM_InstanceTable[] = FTM_BASES;
+
+#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15))
+static const RegisterManipulation_Type SIM_FTMClockGateTable[] =
+{
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM0_MASK},
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM1_MASK},
+    {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM2_MASK},
+};
+#elif (defined(MK10D5))
+static const RegisterManipulation_Type SIM_FTMClockGateTable[] =
+{
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM0_MASK},
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM1_MASK},
+};
+
+#endif
+
+void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
+{
+    uint32_t pres;
+    uint8_t ps;
+    uint32_t i;
+    uint32_t input_clk;
+    uint32_t min_val = 0xFFFF;
+    // enable clock gate
+    uint32_t * SIM_SCGx = (void*) SIM_FTMClockGateTable[FTM_InitStruct->instance].register_addr;
+    *SIM_SCGx |= SIM_FTMClockGateTable[FTM_InitStruct->instance].mask;
+    // enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function)
+    FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK;
+    FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_FTMEN_MASK;
+    //set FTM clock to system clock
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(1);
+    // cal ps
+    CLOCK_GetClockFrequency(kBusClock, &input_clk);
+    pres = (input_clk/FTM_InitStruct->frequencyInHZ)/FTM_MOD_MOD_MASK;
+    printf("freq:%dHz\r\n", FTM_InitStruct->frequencyInHZ);
+    printf("input_clk:%d\r\n", input_clk);
+    printf("pres:%d\r\n", pres);
+    for(i=0;i<7;i++)
+    {
+        if((abs(pres - (1<<i))) < min_val)
+        {
+            ps = i;
+            min_val = abs(pres - (1<<i));
+        }
+    }
+    if(pres > (1<<ps)) ps++;
+    if(ps > 7) ps = 7;
+    // set ps
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_PS_MASK;
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_PS(ps);
+        printf("ps:%d\r\n", ps);
+    //set CNT and CNTIN
+    FTM_InstanceTable[FTM_InitStruct->instance]->CNT = 0;
+    FTM_InstanceTable[FTM_InitStruct->instance]->CNTIN = 0;
+    // set modulo
+    FTM_InstanceTable[FTM_InitStruct->instance]->MOD = (input_clk/(1<<ps))/FTM_InitStruct->frequencyInHZ;
+    FTM_InstanceTable[FTM_InitStruct->instance]->PWMLOAD |= FTM_PWMLOAD_LDOK_MASK;
+    printf("MOD:%d\r\n", FTM_InstanceTable[FTM_InitStruct->instance]->MOD);
+	//FTMx->MOD = mod;                     //计数器最大值
+    
+    /*
+//	prescaler = (CPUInfo.BusClock/(FTM_InitStruct->Frequency))/65535;
+ //PS>4时总会出错
+	if(prescaler >= 4 ) prescaler = 4;
+	//计算MODE装载参数
+//	mod = (CPUInfo.BusClock/((FTM_InitStruct->Frequency)*(1<<prescaler)));
+  //时钟源及分频选择
+	FTMx->SC &=~ FTM_SC_CLKS_MASK;
+	FTMx->SC &= ~FTM_SC_PS_MASK;
+	FTMx->SC |= (FTM_SC_CLKS(1)| FTM_SC_PS(prescaler));   
+*/    
+}
+
+
+
 
 #if 0
 /***********************************************************************************************

@@ -2,9 +2,9 @@
   ******************************************************************************
   * @file    ftm.h
   * @author  YANDLD
-  * @version V2.4
-  * @date    2013.5.23
-  * @brief   超核K60固件库 FTM 定时器 驱动 头文件
+  * @version V2.5
+  * @date    2013.12.25
+  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
   ******************************************************************************
   */
 #ifndef __FTM_H_
@@ -16,10 +16,74 @@
 
 #include "common.h"
 
+//FTM  模式选择
+typedef enum
+{
+	PWM_EdgeAligned,     //边沿对齐
+	PWM_CenterAligned,   //中心对齐 频率是边沿对齐的一半
+	PWM_Combine,         //组合模式
+	PWM_Complementary,   //互补模式
+    QuadratureDecoder,   //正交解码
+}FTM_Mode_Type;
+
+//单端PWM占空比输出 初始化结构
+typedef struct
+{
+    uint32_t        instance;
+    uint32_t        frequencyInHZ;
+    FTM_Mode_Type   mode;
+   // uint32_t Frequency;      //波特率
+	//uint32_t FTMxMAP;        //初始化结构
+	//uint32_t InitalDuty;     //初始占空比
+	//FTM_Mode_TypeDef  FTM_Mode;
+}FTM_InitTypeDef;
+
+#define FTM0_CH4_PB12  4
+#define FTM0_CH5_PB13  4
+#define FTM0_CH5_PA00  3
+#define FTM0_CH6_PA01  3
+#define FTM0_CH7_PA02  3
+#define FTM0_CH0_PA03  3
+#define FTM0_CH1_PA04  3
+#define FTM0_CH2_PA05  3
+#define FTM0_CH3_PA06  3
+#define FTM0_CH4_PA07  3
+#define FTM0_CH0_PC01  4
+#define FTM0_CH1_PC02  4
+#define FTM0_CH2_PC03  4
+#define FTM0_CH3_PC04  4
+#define FTM0_CH4_PD04  4
+#define FTM0_CH5_PD05  4
+#define FTM0_CH6_PD06  4
+#define FTM0_CH7_PD07  4
+#define FTM1_CH0_PB12  3
+#define FTM1_CH1_PB13  3
+#define FTM1_CH0_PA08  3
+#define FTM1_CH1_PA09  3
+#define FTM1_CH0_PA12  3
+#define FTM1_CH1_PA13  3
+#define FTM1_CH0_PB00  3
+#define FTM1_CH1_PB01  3
+#define FTM2_CH0_PA10  3
+#define FTM2_CH1_PA11  3
+#define FTM2_CH0_PB18  3
+#define FTM2_CH1_PB19  3
+
+
+
+
+
+
+
+
+
+
+
+#if 0
 //可用的PWM单端输出端口
 //例: FTM0_CH0_PC1:  FTM0模块 0 通道 引脚为PTC1
 #define FTM0_CH0_PC1    (0x00108100U)
-#define FTM0_CH0_PA3		(0x000c0300U)   //与TJAG冲突 慎用
+#define FTM0_CH0_PA3    (0x000c0300U)   //与TJAG冲突 慎用
 #define FTM0_CH1_PC2    (0x00108210U)
 #define FTM0_CH1_PA4    (0x000c0410U)
 #define FTM0_CH2_PC3    (0x00108320U)
@@ -43,27 +107,7 @@
 #define FTM1_QD_B00_PHA_B01_PHB    (0x6104001U)
 #define FTM2_QD_B18_PHA_B19_PHB    (0x614D202U)
 
-//参数检查器
-#define IS_FTM_PWM_MAP(MAP)  (((MAP) == FTM0_CH0_PC1)  || \
-                              ((MAP) == FTM0_CH0_PA3)  || \
-                              ((MAP) == FTM0_CH1_PC2)  || \
-                              ((MAP) == FTM0_CH1_PA4)  || \
-                              ((MAP) == FTM0_CH2_PC3)  || \
-                              ((MAP) == FTM0_CH2_PA5)  || \
-                              ((MAP) == FTM0_CH3_PC4)  || \
-                              ((MAP) == FTM0_CH4_PD4)  || \
-                              ((MAP) == FTM0_CH5_PD5)  || \
-                              ((MAP) == FTM0_CH5_PA0)  || \
-                              ((MAP) == FTM0_CH6_PD6)  || \
-															((MAP) == FTM0_CH6_PA1)  || \
-															((MAP) == FTM0_CH7_PD7)  || \
-															((MAP) == FTM0_CH7_PA2)  || \
-															((MAP) == FTM1_CH0_PA12) || \
-															((MAP) == FTM1_CH0_PB0)  || \
-															((MAP) == FTM1_CH1_PA13) || \
-															((MAP) == FTM1_CH1_PB1)  || \
-															((MAP) == FTM2_CH0_PB18) || \
-															((MAP) == FTM2_CH1_PB19))								
+						
 													
 //FTM_PWM映射
 typedef struct
@@ -149,8 +193,17 @@ void FTM_ClearITPendingBit(FTM_Type *FTMx,uint16_t FTM_IT);
 void FTM_QDInit(uint32_t FTM_QD_Maps);
 void FTM_QDGetData(FTM_Type *ftm,uint32_t* value, uint8_t* dir);
 
+
+
+#endif 
+
+
 #ifdef __cplusplus
 }
 #endif
+
+
+
+
 
 #endif

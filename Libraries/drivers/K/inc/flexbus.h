@@ -36,3 +36,8 @@ typedef struct
     uint32_t chipSelectChl;
     
 }FLEXBUS_InitTypeDef;
+
+
+//!< API functions
+void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct);
+

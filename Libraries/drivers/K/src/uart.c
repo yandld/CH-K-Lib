@@ -265,14 +265,20 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, Functional
             break;
         case kUART_IT_TxBTC:
             (ENABLE == newState)?(UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK):(UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK);
-            (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET))):(NVIC_DisableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET)));
+            if(ENABLE == newState)
+            {
+                NVIC_EnableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET));
+            }
             break;
         case kUART_DMA_TxBTC:
             (ENABLE == newState)?(UART_InstanceTable[instance]->C5 |= UART_C5_TDMAS_MASK):(UART_InstanceTable[instance]->C5 &= ~UART_C5_TDMAS_MASK);
             break;
         case kUART_IT_RxBTC:
             (ENABLE == newState)?(UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK):(UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK);
-            (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET))):(NVIC_DisableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET)));
+            if(ENABLE == newState)
+            {
+                NVIC_EnableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET));
+            }
             break;
         case kUART_DMA_RxBTC:
             (ENABLE == newState)?(UART_InstanceTable[instance]->C5 |= UART_C5_RDMAS_MASK):(UART_InstanceTable[instance]->C5 &= ~UART_C5_RDMAS_MASK);

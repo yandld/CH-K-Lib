@@ -49,9 +49,9 @@ void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB)
 		{
         case kPFlashSizeInKB:
             *memSizeInKB = CPUIDY_PFlashSizeTable[PFLASH_SIZE_FIELD];
-				    break;
+            break;
         case kDFlashSizeInKB:
-                *memSizeInKB = 0;
+            *memSizeInKB = 0;
             break;
         case kFlexNVMSizeInKB:
             *memSizeInKB = CPUIDY_NVMSizeTable[FLEXNVM_SIZE_FIELD];
@@ -62,7 +62,7 @@ void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB)
         case kRAMSizeInKB:
             *memSizeInKB = CPUIDY_RAMSizeTable[RAM_SIZE_FIELD];
             break;
-				default:
+        default:
             break;
 		}
 }

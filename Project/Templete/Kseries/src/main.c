@@ -19,7 +19,7 @@ extern const cmd_tbl_t CommandFun_PIT;
 extern const cmd_tbl_t CommandFun_ADC;
 extern const cmd_tbl_t CommandFun_FLEXBUS;
 extern const cmd_tbl_t CommandFun_FTM;
-
+extern const cmd_tbl_t CommandFun_RESET;
 static void Putc(uint8_t data)
 {
 	UART_WriteByte(UART_Instance, data);
@@ -38,46 +38,57 @@ shell_io_install_t Shell_IOInstallStruct1 =
 	.sh_getc = Getc,
 	.sh_putc = Putc,
 };
-const QuickInit_Type UART_QuickInitTable[] =
+
+static const QuickInit_Type FTM_QuickInitTable[] =
 {
-    { 0, 0, 0, 0, 0, 0, 0}, //ADC0_SE0_DP0
-    { 0, 0, 0, 0, 0, 1, 0}, //ADC0_SE1_DP1
-    { 0, 0, 0, 0, 0, 3, 0}, //ADC0_SE3_DP3
-    { 0, 2, 0, 2, 1, 4, 1}, //ADC0_SE4B_PC2
-    { 0, 3, 0, 1, 1, 5, 1}, //ADC0_SE5B_PD1
-    { 0, 3, 0, 5, 1, 6, 1}, //ADC0_SE6B_PD5
-    { 0, 3, 0, 6, 1, 7, 1}, //ADC0_SE7B_PD6
-    { 0, 1, 0, 0, 1, 8, 0}, //ADC0_SE8_PB0
-    { 0, 1, 0, 1, 1, 9, 0}, //ADC0_SE9_PB1
-    { 0, 1, 0, 2, 1, 12,0}, //ADC0_SE12_PB2
-    { 0, 1, 0, 3, 1, 13,0}, //ADC0_SE13_PB3
-    { 0, 2, 0, 0, 1, 14,0}, //ADC0_SE14_PC0
-    { 0, 2, 0, 0, 1, 15,0}, //ADC0_SE15_PC1
-    { 0, 4, 0,24, 1, 17,0}, //ADC0_SE17_E24
-    { 0, 4, 0,25, 1, 18,0}, //ADC0_SE18_E25
-    { 0, 0, 0, 0, 0, 19,0}, //ADC0_SE19_DM0
-    { 0, 0, 0, 0, 0, 20,0}, //ADC0_SE20_DM1
-    { 0, 0, 0, 0, 0, 26,0}, //ADC0_SE26_TEMP
-    { 1, 0, 0, 0, 0, 0, 0}, //ADC1_SE0_DP0
-    { 1, 0, 0, 0, 0, 1, 0}, //ADC1_SE1_DP1
-    { 1, 0, 0, 0, 0, 3, 0}, //ADC1_SE3_DP3
-    { 1, 4, 0, 0, 1, 4, 0}, //ADC1_SE4_PE0
-    { 1, 4, 0, 1, 1, 5, 0}, //ADC1_SE5_PE1
-    { 1, 4, 0, 2, 1, 6, 0}, //ADC1_SE6_PE2
-    { 1, 4, 0, 3, 1, 7, 0}, //ADC1_SE7_PE3
-    { 1, 2, 0, 8, 1, 4, 1}, //ADC1_SE4B_PC8
-    { 1, 2, 0, 9, 1, 5, 1}, //ADC1_SE5B_PC9
-    { 1, 2, 0,10, 1, 6, 1}, //ADC1_SE6B_PC10
-    { 1, 2, 0,11, 1, 7, 1}, //ADC1_SE7B_PC11
-    { 1, 1, 0, 0, 1, 8, 0}, //ADC1_SE8_PB0
-    { 1, 1, 0, 1, 1, 9, 0}, //ADC1_SE9_PB1
-    { 1, 1, 0,10, 1, 14,0}, //ADC1_SE14_PB10
-    { 1, 1, 0,11, 1, 15,0}, //ADC1_SE15_PB11
-    { 1, 0, 0,17, 1, 17,0}, //ADC1_SE17_PA17
-    { 1, 0, 0, 0, 0, 19,0}, //ADC1_SE19_DM0
-    { 1, 0, 0, 0, 0, 20,0}, //ADC1_SE20_DM1
-    { 1, 0, 0, 0, 0, 26,0}, //ADC1_SE26_TEMP
+    { 0, 1, 4, 12, 1, 4}, //FTM0_CH4_PB12 4
+    { 0, 1, 4, 13, 1, 5}, //FTM0_CH5_PB13  4
+    { 0, 0, 3,  0, 1, 5}, //FTM0_CH5_PA00  3
+    { 0, 0, 3,  1, 1, 6}, //FTM0_CH6_PA01  3
+    { 0, 0, 3,  2, 1, 7}, //FTM0_CH7_PA02  3
+    { 0, 0, 3,  3, 1, 0}, //FTM0_CH0_PA03  3
+    { 0, 0, 3,  4, 1, 1}, //FTM0_CH1_PA04  3
+    { 0, 0, 3,  5, 1, 2}, //FTM0_CH2_PA05  3
+    { 0, 0, 3,  6, 1, 3}, //FTM0_CH3_PA06  3
+    { 0, 0, 3,  7, 1, 4}, //FTM0_CH4_PA07  3
+    { 0, 2, 4,  1, 1, 0}, //FTM0_CH0_PC01  4
+    { 0, 2, 4,  2, 1, 1}, //FTM0_CH1_PC02  4
+    { 0, 2, 4,  3, 1, 2}, //FTM0_CH2_PC03  4
+    { 0, 2, 4,  4, 1, 3}, //FTM0_CH3_PC04  4
+    { 0, 3, 4,  4, 1, 4}, //FTM0_CH4_PD04  4
+    { 0, 3, 4,  5, 1, 5}, //FTM0_CH5_PD05  4
+    { 0, 3, 4,  6, 1, 6}, //FTM0_CH6_PD06  4
+    { 0, 3, 4,  7, 1, 7}, //FTM0_CH7_PD07  4
+    { 1, 1, 3, 12, 1, 0}, //FTM1_CH0_PB12  3
+    { 1, 1, 3, 13, 1, 1}, //FTM1_CH1_PB13  3
+    { 1, 0, 3,  8, 1, 0}, //FTM1_CH0_PA08  3
+    { 1, 0, 3,  9, 1, 1}, //FTM1_CH1_PA09  3
+    { 1, 0, 3, 12, 1, 0}, //FTM1_CH0_PA12  3
+    { 1, 0, 3, 12, 1, 1}, //FTM1_CH1_PA13  3
+    { 1, 1, 3,  0, 1, 0}, //FTM1_CH0_PB00  3
+    { 1, 1, 3,  1, 1, 1}, //FTM1_CH1_PB01  3
+    { 2, 0, 3, 10, 1, 0}, //FTM2_CH0_PA10  3
+    { 2, 0, 3, 11, 1, 1}, //FTM2_CH1_PA11  3
+    { 2, 1, 3, 18, 1, 0}, //FTM2_CH0_PB18  3
+    { 2, 1, 3, 19, 1, 1}, //FTM2_CH1_PB19  3
 };
+
+void CalConst(const QuickInit_Type * table, uint32_t size)
+{
+	uint8_t i =0;
+	uint32_t value = 0;
+	for(i = 0; i < size; i++)
+	{
+		value = table[i].ip_instance<<0;
+		value|= table[i].io_instance<<3;
+		value|= table[i].mux<<6;
+		value|= table[i].io_base<<9;
+		value|= table[i].io_offset<<14;
+		value|= table[i].channel<<19;
+		UART_printf("(0x%xU)\r\n",value);
+	}
+}
+
 int main(void)
 {
     DelayInit();
@@ -98,12 +109,14 @@ int main(void)
     shell_register_function(&CommandFun_ADC);  
     shell_register_function(&CommandFun_FLEXBUS); 
     shell_register_function(&CommandFun_FTM); 
-  //  CalConst(UART_QuickInitTable, ARRAY_SIZE(UART_QuickInitTable));
+    shell_register_function(&CommandFun_RESET); 
+    
+    //CalConst(FTM_QuickInitTable, ARRAY_SIZE(FTM_QuickInitTable));
     while(1)
     {
         shell_main_loop("SHELL>>");
         DelayMs(500);
-        UART_printf("I am CHK\r\n");
+     //   UART_printf("I am CHK\r\n");
         GPIO_ToggleBit(HW_GPIOA, 1);
         GPIO_ToggleBit(HW_GPIOD, 0);
     }

@@ -16,15 +16,41 @@
 
 #include "common.h"
 
+#define HW_FTM0    (0x00)
+#define HW_FTM1    (0x01) 
+#define HW_FTM2    (0x02) 
+
+#define HW_FTM_CH0 (0x00)
+#define HW_FTM_CH1 (0x01)
+#define HW_FTM_CH2 (0x02)
+#define HW_FTM_CH3 (0x03)
+#define HW_FTM_CH4 (0x04)
+#define HW_FTM_CH5 (0x05)
+#define HW_FTM_CH6 (0x06)
+#define HW_FTM_CH7 (0x07)
+
+
 //FTM  模式选择
 typedef enum
 {
-	PWM_EdgeAligned,     //边沿对齐
-	PWM_CenterAligned,   //中心对齐 频率是边沿对齐的一半
-	PWM_Combine,         //组合模式
-	PWM_Complementary,   //互补模式
-    QuadratureDecoder,   //正交解码
+	kPWM_EdgeAligned,     //边沿对齐
+	kPWM_CenterAligned,   //中心对齐 频率是边沿对齐的一半
+	kPWM_Combine,         //组合模式
+	kPWM_Complementary,   //互补模式
+    kQuadratureDecoder,   //正交解码
 }FTM_Mode_Type;
+
+
+//FTM  模式选择
+typedef enum
+{
+	kFTM_Combine,
+    kFTM_Complementary,
+    kFTM_DualEdgeCapture,
+    kFTM_DeadTime,
+    kFTM_Sync,
+    kFTM_FaultControl,
+}FTM_DualChlConfig_Type;
 
 //单端PWM占空比输出 初始化结构
 typedef struct
@@ -32,47 +58,45 @@ typedef struct
     uint32_t        instance;
     uint32_t        frequencyInHZ;
     FTM_Mode_Type   mode;
-   // uint32_t Frequency;      //波特率
-	//uint32_t FTMxMAP;        //初始化结构
-	//uint32_t InitalDuty;     //初始占空比
-	//FTM_Mode_TypeDef  FTM_Mode;
 }FTM_InitTypeDef;
 
-#define FTM0_CH4_PB12  4
-#define FTM0_CH5_PB13  4
-#define FTM0_CH5_PA00  3
-#define FTM0_CH6_PA01  3
-#define FTM0_CH7_PA02  3
-#define FTM0_CH0_PA03  3
-#define FTM0_CH1_PA04  3
-#define FTM0_CH2_PA05  3
-#define FTM0_CH3_PA06  3
-#define FTM0_CH4_PA07  3
-#define FTM0_CH0_PC01  4
-#define FTM0_CH1_PC02  4
-#define FTM0_CH2_PC03  4
-#define FTM0_CH3_PC04  4
-#define FTM0_CH4_PD04  4
-#define FTM0_CH5_PD05  4
-#define FTM0_CH6_PD06  4
-#define FTM0_CH7_PD07  4
-#define FTM1_CH0_PB12  3
-#define FTM1_CH1_PB13  3
-#define FTM1_CH0_PA08  3
-#define FTM1_CH1_PA09  3
-#define FTM1_CH0_PA12  3
-#define FTM1_CH1_PA13  3
-#define FTM1_CH0_PB00  3
-#define FTM1_CH1_PB01  3
-#define FTM2_CH0_PA10  3
-#define FTM2_CH1_PA11  3
-#define FTM2_CH0_PB18  3
-#define FTM2_CH1_PB19  3
+#define FTM0_CH4_PB12   (0x205908U)
+#define FTM0_CH5_PB13   (0x285b08U)
+#define FTM0_CH5_PA00   (0x2840c0U)
+#define FTM0_CH6_PA01   (0x3042c0U)
+#define FTM0_CH7_PA02   (0x3844c0U)
+#define FTM0_CH0_PA03   (0x46c0U)
+#define FTM0_CH1_PA04   (0x848c0U)
+#define FTM0_CH2_PA05   (0x104ac0U)
+#define FTM0_CH3_PA06   (0x184cc0U)
+#define FTM0_CH4_PA07   (0x204ec0U)
+#define FTM0_CH0_PC01   (0x4310U)
+#define FTM0_CH1_PC02   (0x84510U)
+#define FTM0_CH2_PC03   (0x104710U)
+#define FTM0_CH3_PC04   (0x184910U)
+#define FTM0_CH4_PD04   (0x204918U)
+#define FTM0_CH5_PD05   (0x284b18U)
+#define FTM0_CH6_PD06   (0x304d18U)
+#define FTM0_CH7_PD07   (0x384f18U)
+#define FTM1_CH0_PB12   (0x58c9U)
+#define FTM1_CH1_PB13   (0x85ac9U)
+#define FTM1_CH0_PA08   (0x50c1U)
+#define FTM1_CH1_PA09   (0x852c1U)
+#define FTM1_CH0_PA12   (0x58c1U)
+#define FTM1_CH1_PA13   (0x858c1U)
+#define FTM1_CH0_PB00   (0x40c9U)
+#define FTM1_CH1_PB01   (0x842c9U)
+#define FTM2_CH0_PA10   (0x54c2U)
+#define FTM2_CH1_PA11   (0x856c2U)
+#define FTM2_CH0_PB18   (0x64caU)
+#define FTM2_CH1_PB19   (0x866caU)
 
 
 
-
-
+//!< API functions
+void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty);
+uint8_t FTM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ);
+void FTM_Init(FTM_InitTypeDef* FTM_InitStruct);
 
 
 

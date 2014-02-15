@@ -1062,6 +1062,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_ftm.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_reset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_reset.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2209,6 +2214,11 @@
               <FileName>cmd_ftm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_ftm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_reset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_reset.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3358,6 +3368,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_ftm.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_reset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_reset.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4506,6 +4521,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_ftm.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_reset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_reset.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5653,6 +5673,11 @@
               <FileName>cmd_ftm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_ftm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_reset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_reset.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -204,13 +204,14 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
  *         @arg kGPIO_Mode_OPP
  * @retval None
  */
-void GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode)
+uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode)
 {
     GPIO_InitTypeDef GPIO_InitStruct1;
     GPIO_InitStruct1.instance = instance;
     GPIO_InitStruct1.mode = mode;
     GPIO_InitStruct1.pinx = pinx;
     GPIO_Init(&GPIO_InitStruct1);
+    return  instance;
 }
 
  /**

@@ -98,7 +98,7 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
 void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState);
 void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode);
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
-void GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode);
+uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode);
 void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data);
 uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex);
 void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex);

@@ -83,6 +83,7 @@ typedef enum {FALSE = 0, TRUE = !FALSE} ErrorState;
 #define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
 
+
 #if !defined(NULL)
 	#define NULL 0
 #endif

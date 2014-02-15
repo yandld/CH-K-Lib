@@ -9,6 +9,8 @@
   */
 #include "ftm.h"
 #include "clock.h"
+#include "gpio.h"
+#include "math.h"
 
 //!< Leagacy Support for Kineis Z Version(Inital Version)
 #if (!defined(FTM_BASES))
@@ -49,19 +51,23 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     // enable clock gate
     uint32_t * SIM_SCGx = (void*) SIM_FTMClockGateTable[FTM_InitStruct->instance].register_addr;
     *SIM_SCGx |= SIM_FTMClockGateTable[FTM_InitStruct->instance].mask;
+
+    //disable FTM, we must set CLKS(0) before config FTM!
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(0);
+    
     // enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function)
     FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK;
-    FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_FTMEN_MASK;
-    //set FTM clock to system clock
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(1);
+    // FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_FTMEN_MASK;
+    
     // cal ps
     CLOCK_GetClockFrequency(kBusClock, &input_clk);
     pres = (input_clk/FTM_InitStruct->frequencyInHZ)/FTM_MOD_MOD_MASK;
-    printf("freq:%dHz\r\n", FTM_InitStruct->frequencyInHZ);
-    printf("input_clk:%d\r\n", input_clk);
-    printf("pres:%d\r\n", pres);
-    for(i=0;i<7;i++)
+    if((input_clk/FTM_InitStruct->frequencyInHZ)/pres > FTM_MOD_MOD_MASK)
+    {
+        pres++;
+    }
+    for(i = 0; i < 7; i++)
     {
         if((abs(pres - (1<<i))) < min_val)
         {
@@ -71,33 +77,164 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     }
     if(pres > (1<<ps)) ps++;
     if(ps > 7) ps = 7;
-    // set ps
+    printf("freq:%dHz\r\n", FTM_InitStruct->frequencyInHZ);
+    printf("input_clk:%d\r\n", input_clk);
+    printf("pres:%d\r\n", pres);
+    // set ps, this must be done after set modulo
     FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_PS_MASK;
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_PS(ps);
-        printf("ps:%d\r\n", ps);
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_PS(ps); 
+    
     //set CNT and CNTIN
     FTM_InstanceTable[FTM_InitStruct->instance]->CNT = 0;
     FTM_InstanceTable[FTM_InitStruct->instance]->CNTIN = 0;
+    
     // set modulo
     FTM_InstanceTable[FTM_InitStruct->instance]->MOD = (input_clk/(1<<ps))/FTM_InitStruct->frequencyInHZ;
-    FTM_InstanceTable[FTM_InitStruct->instance]->PWMLOAD |= FTM_PWMLOAD_LDOK_MASK;
-    printf("MOD:%d\r\n", FTM_InstanceTable[FTM_InitStruct->instance]->MOD);
-	//FTMx->MOD = mod;                     //计数器最大值
+
+    // set LOCK bit to load MOD value
+    FTM_InstanceTable[FTM_InitStruct->instance]->PWMLOAD = 0xFFFFFFFF;
     
-    /*
-//	prescaler = (CPUInfo.BusClock/(FTM_InitStruct->Frequency))/65535;
- //PS>4时总会出错
-	if(prescaler >= 4 ) prescaler = 4;
-	//计算MODE装载参数
-//	mod = (CPUInfo.BusClock/((FTM_InitStruct->Frequency)*(1<<prescaler)));
-  //时钟源及分频选择
-	FTMx->SC &=~ FTM_SC_CLKS_MASK;
-	FTMx->SC &= ~FTM_SC_PS_MASK;
-	FTMx->SC |= (FTM_SC_CLKS(1)| FTM_SC_PS(prescaler));   
-*/    
+    printf("MOD Should be:%d\r\n",  (input_clk/(1<<ps))/FTM_InitStruct->frequencyInHZ);
+    printf("MOD acutall is:%d\r\n", FTM_InstanceTable[FTM_InitStruct->instance]->MOD);
+    printf("ps:%d\r\n", ps);
+	
+    //set FTM clock to system clock
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(1);
 }
 
 
+/*combine channel control*/
+/*dual capture control*/
+static uint32_t get_channel_pair_index(uint8_t channel)
+{
+    if((channel == HW_FTM_CH0) || (channel == HW_FTM_CH1))
+    {
+        return 0;
+    }
+    else if((channel == HW_FTM_CH2) || (channel == HW_FTM_CH3)) 
+    {
+        return 1;
+    }
+    else if((channel == HW_FTM_CH4) || (channel == HW_FTM_CH5)) 
+    {
+        return 2;
+    }
+    else 
+    {
+        return 3;
+    }
+}
+
+
+/*!
+ * @brief enable FTM peripheral timer channel pair output combine mode.
+ * @param instance The FTM peripheral instance number.
+ * @param channel  The FTM peripheral channel number.
+ * @param enable  true to enable channle pair to combine, false to disable.
+ */
+#define FTM_COMBINE_CHAN_CTRL_WIDTH  (8)
+static void FTM_DualChlConfig(uint8_t instance, uint8_t chl, FTM_DualChlConfig_Type mode, FunctionalState newState)
+{
+    uint32_t mask;
+    switch(mode)
+    {
+        case kFTM_Combine:
+            mask = FTM_COMBINE_COMBINE0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            break;
+        case kFTM_Complementary:
+            mask = FTM_COMBINE_COMP0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            break;    
+        case kFTM_DualEdgeCapture:
+            mask = FTM_COMBINE_DECAPEN0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            break;           
+        case kFTM_DeadTime:
+            mask = FTM_COMBINE_DTEN0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            break;    
+        case kFTM_Sync:
+            mask = FTM_COMBINE_SYNCEN0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            break;   
+        case kFTM_FaultControl:
+            mask = FTM_COMBINE_FAULTEN0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            break;    
+        default:
+            break;
+    } 
+    (newState == ENABLE)?(FTM_InstanceTable[instance]->COMBINE |= mask):(FTM_InstanceTable[instance]->COMBINE &= ~mask);
+}
+
+
+static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
+{
+    switch(mode)
+    {
+        case kPWM_EdgeAligned:
+            FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
+            FTM_InstanceTable[instance]->MODE &= ~FTM_QDCTRL_QUADEN_MASK;
+            FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;  
+            FTM_DualChlConfig(instance, chl, kFTM_Combine, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_DualEdgeCapture, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_DeadTime, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_Sync, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
+            break;
+        case kPWM_CenterAligned:
+            FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
+            FTM_InstanceTable[instance]->MODE &= ~FTM_QDCTRL_QUADEN_MASK;
+            FTM_InstanceTable[instance]->SC |= FTM_SC_CPWMS_MASK;  
+            break;
+        case kPWM_Combine:
+            break;
+        case kPWM_Complementary:
+            break;
+        case kQuadratureDecoder:
+            break;            
+        default:
+            break;
+    }
+    
+}
+
+
+uint8_t FTM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
+{
+    uint8_t i;
+    QuickInit_Type * pFTMxMap = (QuickInit_Type*)&(FTMxMAP);
+    FTM_InitTypeDef FTM_InitStruct1;
+    FTM_InitStruct1.instance = pFTMxMap->ip_instance;
+    FTM_InitStruct1.frequencyInHZ = frequencyInHZ;
+    FTM_InitStruct1.mode = kPWM_EdgeAligned;
+
+    FTM_Init(&FTM_InitStruct1);
+    printf("pFTMxMap->ip_instance:%d\r\n", pFTMxMap->ip_instance);
+    printf("pFTMxMap->io_instance:%d\r\n", pFTMxMap->io_instance);
+    printf("pFTMxMap->io_base:%d\r\n", pFTMxMap->io_base);
+    printf("pFTMxMap->io_offset:%d\r\n", pFTMxMap->io_offset);
+    printf("pFTMxMap->mux:%d\r\n", pFTMxMap->mux);
+    printf("pFTMxMap->channel:%d\r\n", pFTMxMap->channel);
+    // init pinmux
+    for(i = 0; i < pFTMxMap->io_offset; i++)
+    {
+        PORT_PinMuxConfig(pFTMxMap->io_instance, pFTMxMap->io_base + i, (PORT_PinMux_Type) pFTMxMap->mux); 
+    }
+    return pFTMxMap->ip_instance;
+}
+
+
+
+
+
+void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
+{
+	uint32_t cv = 0;
+    cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty)/10000;
+    
+    FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
+    FTM_InstanceTable[instance]->CONTROLS[chl].CnSC = 0;
+    FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_ELSB_MASK);
+    FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv;
+}
 
 
 #if 0
@@ -304,126 +441,7 @@ static void FTM_PWM_SetMode(FTM_InitTypeDef *FTM_InitStruct)
 			default:break;
 	}
 }
-/***********************************************************************************************
- 功能：改变PWM通道占空比
- 形参：FTMxMAP:PWM 通道选择
-			 @arg  FTM0_CH0_PC1: FTM0模块 0 通道 PC1引脚
-			 @arg  FTM0_CH0_PA3: FTM0模块 0 通道 PA3引脚
-			 @arg  ...
-			 PWMDuty: 占空比0-10000 对应0-100%
- 返回：0
- 详解：0
-************************************************************************************************/
-void FTM_PWM_ChangeDuty(uint32_t FTMxMAP,uint32_t PWMDuty)
-{
-	uint32_t cv = 0;
-	FTM_Type *FTMx = NULL;
-	FTM_PWM_MapTypeDef* pFTM_Map = (FTM_PWM_MapTypeDef*) &FTMxMAP;
-	//检测参数
-	assert_param(IS_FTM_PWM_MAP(FTMxMAP));
-	assert_param(IS_FTM_PWM_DUTY(PWMDuty));
-	
-	switch(pFTM_Map->FTM_Index)
-	{
-		case 0:
-			FTMx = FTM0;
-			break;
-		case 1:
-			FTMx = FTM1;
-			break;
-		case 2:
-			FTMx = FTM2;
-			break;
-		default:break;
-	}
-	cv = ((FTMx->MOD)*(PWMDuty))/10000; //计算比较值
-	FTMx->CONTROLS[pFTM_Map->FTM_CH_Index].CnV = cv; 
-}
-/***********************************************************************************************
- 功能：初始化PWM功能
- 形参：FTM_PWM_InitTypeDef PWM初始化结构
- 返回：0
- 详解：0
-************************************************************************************************/
-void FTM_Init(FTM_InitTypeDef *FTM_InitStruct)
-{
-	uint8_t prescaler;   //分频因数
-	uint32_t mod;
-	FTM_Type *FTMx = NULL;
-	PORT_Type *FTM_PORT = NULL;
-	FTM_PWM_MapTypeDef *pFTM_Map = (FTM_PWM_MapTypeDef*)&(FTM_InitStruct->FTMxMAP);
-	
-	//检测参数
-	assert_param(IS_FTM_PWM_MAP(FTM_InitStruct->FTMxMAP));
-	assert_param(IS_FTM_PWM_MODE(FTM_InitStruct->FTM_Mode));
-	assert_param(IS_FTM_PWM_DUTY(FTM_InitStruct->InitalDuty));
-	
-	//找出FTM口
-	switch(pFTM_Map->FTM_Index)
-	{
-		case 0:
-			SIM->SCGC6 |= SIM_SCGC6_FTM0_MASK;
-			FTMx = FTM0;
-			break;
-		case 1:
-			SIM->SCGC6 |= SIM_SCGC6_FTM1_MASK;
-			FTMx = FTM1;
-			break;
-		case 2:
-			SIM->SCGC3 |= SIM_SCGC3_FTM2_MASK;
-			FTMx = FTM2;
-			break;
-		default:break;	
-	}
-	//找出PORT端口
-	switch(pFTM_Map->FTM_GPIO_Index)
-	{
-		case 0:
-			FTM_PORT = PORTA;
-			SIM->SCGC5|=SIM_SCGC5_PORTA_MASK;
-			break;
-		case 1:
-			FTM_PORT = PORTB;
-			SIM->SCGC5|=SIM_SCGC5_PORTB_MASK;
-			break;	
-		case 2:
-			FTM_PORT = PORTC;
-			SIM->SCGC5|=SIM_SCGC5_PORTC_MASK;
-			break;
-		case 3:
-			FTM_PORT = PORTD;
-			SIM->SCGC5|=SIM_SCGC5_PORTD_MASK;
-			break;
-		case 4:
-			FTM_PORT = PORTE;
-			SIM->SCGC5|=SIM_SCGC5_PORTE_MASK;
-			break;
-	}
-	//设置对应的IO口为PWM模式
-	FTM_PORT->PCR[pFTM_Map->FTM_Pin_Index] &= ~PORT_PCR_MUX_MASK;
-	FTM_PORT->PCR[pFTM_Map->FTM_Pin_Index] |= PORT_PCR_MUX(pFTM_Map->FTM_Alt_Index);
-  //计算分频和MODE参数 
-//	prescaler = (CPUInfo.BusClock/(FTM_InitStruct->Frequency))/65535;
- //PS>4时总会出错
-	if(prescaler >= 4 ) prescaler = 4;
-	//计算MODE装载参数
-//	mod = (CPUInfo.BusClock/((FTM_InitStruct->Frequency)*(1<<prescaler)));
-  //时钟源及分频选择
-	FTMx->SC &=~ FTM_SC_CLKS_MASK;
-	FTMx->SC &= ~FTM_SC_PS_MASK;
-	FTMx->SC |= (FTM_SC_CLKS(1)| FTM_SC_PS(prescaler));         
-	
-  //设置PWM周期及占空比
-	FTMx->MOD = mod;                     //计数器最大值
-	FTMx->CNTIN = 0x0000u;	             //计数器初始化时的计数值
-	FTMx->CNT = 0x0000u;                 //计数器开始的值
-	//适当延时
-	for(mod=0;mod < 400000;mod++){}; //做适当延时 等待硬件模块启动操作
-	//设置各个通道的模式
-	 FTM_PWM_SetMode(FTM_InitStruct);
-  //设置初始占空比	
-	FTM_PWM_ChangeDuty(FTM_InitStruct->FTMxMAP,FTM_InitStruct->InitalDuty);
-}
+
 
 /***********************************************************************************************
  功能：FTM 获得正交编码数据
@@ -516,69 +534,6 @@ void FTM_QDInit(uint32_t FTM_QD_Maps)
 }
 
 
-/*
-
-static const FTM_QD_MapTypeDef FTM_PWM_Check_Maps[] = 
-{
-    {1, 0, 12 ,13, 0, 7}, //FTM1_QD_A12_PHA_A13_PHB
-    {1, 0,  0 , 1, 1, 6}, //FTM1_QD_B00_PHA_B01_PHB
-    {2, 0, 18 ,19, 1, 6}, //FTM2_QD_B18_PHA_B19_PHB
-};
-void PWM_CalConstValue(void)
-{
-	uint8_t i =0;
-	uint32_t value = 0;
-	for(i=0;i<sizeof(FTM_PWM_Check_Maps)/sizeof(FTM_QD_MapTypeDef);i++)
-	{
-		value = FTM_PWM_Check_Maps[i].FTM_Index<<0;
-		value|= FTM_PWM_Check_Maps[i].FTM_CH_Index<<4;
-		value|= FTM_PWM_Check_Maps[i].FTM_PHA_Index<<8;
-		value|= FTM_PWM_Check_Maps[i].FTM_PHB_Index<<14;
-		value|= FTM_PWM_Check_Maps[i].FTM_GPIO_Index<<20;
-		value|= FTM_PWM_Check_Maps[i].FTM_Alt_Index<<24;
-		UART_printf("(0x%xU)\r\n",value);
-	}
-}
-//生成
-static const FTM_PWM_MapTypeDef FTM_PWM_Check_Maps[] = 
-{ 
-    {0, 0, 1, 2, 4},  //FTM0_CH0_PC1
-    {0, 0, 3, 0, 3},  //FTM0_CH0_PA3
-    {0, 1, 2, 2, 4},  //FTM0_CH1_PC2
-    {0, 1, 4, 0, 3},  //FTM0_CH1_PA4
-    {0, 2, 3, 2, 4},  //FTM0_CH2_PC3
-    {0, 2, 5, 0, 3},  //FTM0_CH2_PA5
-    {0, 3, 4, 2, 4},  //FTM0_CH3_PC4
-    {0, 4, 4, 3, 4},  //FTM0_CH4_PD4
-    {0, 5, 5, 3, 4},  //FTM0_CH5_PD5
-    {0, 5, 0, 0, 3},  //FTM0_CH5_PA0
-    {0, 6, 6, 3, 4},  //FTM0_CH6_PD6
-    {0, 6, 1, 0, 3},  //FTM0_CH6_PA1
-    {0, 7, 7, 3, 4},  //FTM0_CH7_PD7
-    {0, 7, 2, 0, 3},  //FTM0_CH7_PA2
-    {1, 0,12, 0, 3},  //FTM1_CH0_PA12
-    {1, 0, 0, 1, 3},  //FTM1_CH0_PB0
-    {1, 1,13, 0, 3},  //FTM1_CH1_PA13
-    {1, 1, 1, 1, 3},  //FTM1_CH1_PB1
-    {2, 0,18, 1, 3},  //FTM2_CH0_PB18
-    {2, 1,19, 1, 3},  //FTM2_CH1_PB19
-};
-
-void PWM_CalConstValue(void)
-{
-	uint8_t i =0;
-	uint32_t value = 0;
-	for(i=0;i<sizeof(FTM_PWM_Check_Maps)/sizeof(FTM_PWM_MapTypeDef);i++)
-	{
-		value = FTM_PWM_Check_Maps[i].FTM_Index<<0;
-		value|= FTM_PWM_Check_Maps[i].FTM_CH_Index<<4;
-		value|= FTM_PWM_Check_Maps[i].FTM_Pin_Index<<8;
-		value|= FTM_PWM_Check_Maps[i].FTM_GPIO_Index<<14;
-		value|= FTM_PWM_Check_Maps[i].FTM_Alt_Index<<18;
-		printf("(0x%08xU)\r\n",value);
-	}
-}
-*/
 /***********************************************************************************************
  功能：FTM_ITConfig
  形参：FTMx : FTM模块通道 
@@ -718,6 +673,41 @@ void FTM_ClearITPendingBit(FTM_Type *FTMx,uint16_t FTM_IT)
 }
 
 
-
 #endif
+
+
+static const QuickInit_Type FTM_QuickInitTable[] =
+{
+    { 0, 1, 4, 12, 1, 4}, //FTM0_CH4_PB12 4
+    { 0, 1, 4, 13, 1, 5}, //FTM0_CH5_PB13  4
+    { 0, 0, 3,  0, 1, 5}, //FTM0_CH5_PA00  3
+    { 0, 0, 3,  1, 1, 6}, //FTM0_CH6_PA01  3
+    { 0, 0, 3,  2, 1, 7}, //FTM0_CH7_PA02  3
+    { 0, 0, 3,  3, 1, 0}, //FTM0_CH0_PA03  3
+    { 0, 0, 3,  4, 1, 1}, //FTM0_CH1_PA04  3
+    { 0, 0, 3,  5, 1, 2}, //FTM0_CH2_PA05  3
+    { 0, 0, 3,  6, 1, 3}, //FTM0_CH3_PA06  3
+    { 0, 0, 3,  7, 1, 4}, //FTM0_CH4_PA07  3
+    { 0, 2, 4,  1, 1, 0}, //FTM0_CH0_PC01  4
+    { 0, 2, 4,  2, 1, 1}, //FTM0_CH1_PC02  4
+    { 0, 2, 4,  3, 1, 2}, //FTM0_CH2_PC03  4
+    { 0, 2, 4,  4, 1, 3}, //FTM0_CH3_PC04  4
+    { 0, 3, 4,  4, 1, 4}, //FTM0_CH4_PD04  4
+    { 0, 3, 4,  5, 1, 5}, //FTM0_CH5_PD05  4
+    { 0, 3, 4,  6, 1, 6}, //FTM0_CH6_PD06  4
+    { 0, 3, 4,  7, 1, 7}, //FTM0_CH7_PD07  4
+    { 1, 1, 3, 12, 1, 0}, //FTM1_CH0_PB12  3
+    { 1, 1, 3, 13, 1, 1}, //FTM1_CH1_PB13  3
+    { 1, 0, 3,  8, 1, 0}, //FTM1_CH0_PA08  3
+    { 1, 0, 3,  9, 1, 1}, //FTM1_CH1_PA09  3
+    { 1, 0, 3, 12, 1, 0}, //FTM1_CH0_PA12  3
+    { 1, 0, 3, 12, 1, 1}, //FTM1_CH1_PA13  3
+    { 1, 1, 3,  0, 1, 0}, //FTM1_CH0_PB00  3
+    { 1, 1, 3,  1, 1, 1}, //FTM1_CH1_PB01  3
+    { 2, 0, 3, 10, 1, 0}, //FTM2_CH0_PA10  3
+    { 2, 0, 3, 11, 1, 1}, //FTM2_CH1_PA11  3
+    { 2, 1, 3, 18, 1, 0}, //FTM2_CH0_PB18  3
+    { 2, 1, 3, 19, 1, 1}, //FTM2_CH1_PB19  3
+};
+
 

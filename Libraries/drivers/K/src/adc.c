@@ -36,6 +36,19 @@ static const IRQn_Type ADC_IRQnTable[] =
     ADC0_IRQn,
     ADC1_IRQn,
 };
+#elif (defined(MK70F12) || defined(MK70F15))
+static const RegisterManipulation_Type SIM_ADCClockGateTable[] =
+{
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC0_MASK},
+    {(void*)&(SIM->SCGC3), SIM_SCGC3_ADC1_MASK},
+    {(void*)&(SIM->SCGC3), SIM_SCGC6_ADC2_MASK},
+};
+static const IRQn_Type ADC_IRQnTable[] = 
+{
+    ADC0_IRQn,
+    ADC1_IRQn,
+    ADC2_IRQn,
+};
 #elif (defined(MK10D5))
 static const RegisterManipulation_Type SIM_ADCClockGateTable[] =
 {

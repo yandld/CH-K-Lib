@@ -164,9 +164,9 @@ _loop:
 //! @{
 
 /**
- * @brief  UART init: enable UART clock Tx and Rx
- *         this function must be called before using uart
- * @param  UART_InitStruct: init type for uart
+ * @brief  初始化UART模块 同时会初始化Tx 和 Rx.在使用串口前一定要调用此函数
+ *
+ * @param  UART初始化结构体
  * @retval None
  */
 void UART_Init(UART_InitTypeDef* UART_InitStruct)

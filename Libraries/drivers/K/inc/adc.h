@@ -16,8 +16,9 @@
 
 #include "common.h"
 
-#define HW_ADC0 0 
-#define HW_ADC1 1
+#define HW_ADC0  (0) 
+#define HW_ADC1  (1)
+#define HW_ADC2  (2)
 
 
 //!< QuickInit map 

@@ -69,16 +69,16 @@ static const IRQn_Type ADC_IRQnTable[] =
 //! @{
 
 /**
- * @brief  åˆ¤æ–­è½¬æ¢æ˜¯å¦ç»“æŸ
+ * @brief  ÅĞ¶Ï×ª»»ÊÇ·ñ½áÊø
  *         
- * @param  instance: ADC æ¨¡å—å·
+ * @param  instance: ADC Ä£¿éºÅ
  *         @arg HW_ADC0
  *         @arg HW_ADC1
  *         @arg ...
- * @param  mux: ADC è½¬æ¢å™¨é€‰æ‹©
+ * @param  mux: ADC ×ª»»Æ÷Ñ¡Ôñ
  *         @arg kADC_MuxA
  *         @arg kADC_MuxB
- * @retval 0:è½¬æ¢å®Œæˆ 1:è½¬æ¢å¤±è´¥æˆ–è½¬æ¢è¿›è¡Œä¸­
+ * @retval 0:×ª»»Íê³É 1:×ª»»Ê§°Ü»ò×ª»»½øĞĞÖĞ
  */
 static int32_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
 {
@@ -121,6 +121,22 @@ static int32_t ADC_Calibration(uint32_t instance)
     return 0;
 }
 
+/**
+ * @brief  Í¨¹ı³õÊ¼»¯½á¹¹Ìå ³õÊ¼»¯ADCÄ£¿é
+ *
+ * @code
+ *   ADC_InitStruct1.chl = 1; //1Í¨µÀ
+ *   ADC_InitStruct1.clockDiv = kADC_ClockDiv8; //ADC×ª»»Ê±ÖÓÎªÊäÈëÊ±ÖÓ(Ä¬ÈÏBusClock) µÄ8·ÖÆµ
+ *   ADC_InitStruct1.instance = HW_ADC0;
+ *   ADC_InitStruct1.resolutionMode = kADC_SingleDiff8or9; //µ¥¶ËÄ£Ê½ÏÂ8Î»¾«¶È ²é·ÖÄ£Ê½ÏÂ9Î»¾«¶È
+ *   ADC_InitStruct1.SingleOrDifferential = kADC_Single;
+ *   ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;
+ *   //³õÊ¼»¯ADCÄ£¿é
+ *   ADC_Init(&ADC_InitStruct1);
+ * @endcode
+ * @param  ADC_InitStruct: ADC³õÊ¼»¯½á¹¹Ìå
+ * @retval 0:×ª»»Íê³É 1:×ª»»Ê§°Ü»ò×ª»»½øĞĞÖĞ
+ */
 void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 {
     // enable clock gate
@@ -217,14 +233,14 @@ void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config
 
  
 /**
- * @brief  Install ADC Tx Rx Callback function
- *         this function should be called before ITDMAConfig function
- * @param  instance: ADC instance
+ * @brief  °²×°ADC ÖĞ¶Ï»Øµ÷º¯Êı
+ *
+ * @param  instance: ADCÄ£¿éºÅ
  *         @arg HW_ADC0
  *         @arg HW_ADC1
  *         @arg ...
- * @param  AppCBFun: pointer of callback function
- * @retval 0:succ 1:fail
+ * @param  AppCBFun: ÓÃ»§ÖĞ¶Ï»Øµ÷º¯Êı
+ * @retval None
  */
 void ADC_CallbackInstall(uint8_t instance, ADC_CallBackType AppCBFun)
 {

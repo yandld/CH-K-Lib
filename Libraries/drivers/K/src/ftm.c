@@ -41,6 +41,14 @@ static const RegisterManipulation_Type SIM_FTMClockGateTable[] =
 
 #endif
 
+static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode);
+
+/**
+ * @brief  初始化FTM模块 、.在使用FTM前一定要调用此函数
+ *
+ * @param  FTM 初始化结构体
+ * @retval None
+ */
 void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
 {
     uint32_t pres;
@@ -98,9 +106,11 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     printf("MOD acutall is:%d\r\n", FTM_InstanceTable[FTM_InitStruct->instance]->MOD);
     printf("ps:%d\r\n", ps);
 	
-    //set FTM clock to system clock
+    // set FTM clock to system clock
     FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
     FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(1);
+    // set FTM mode
+    FTM_SetMode(FTM_InitStruct->instance, FTM_InitStruct->chl, FTM_InitStruct->mode);
 }
 
 
@@ -163,7 +173,7 @@ static void FTM_DualChlConfig(uint8_t instance, uint8_t chl, FTM_DualChlConfig_T
     (newState == ENABLE)?(FTM_InstanceTable[instance]->COMBINE |= mask):(FTM_InstanceTable[instance]->COMBINE &= ~mask);
 }
 
-
+//!< 设置FTM 工作模式
 static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
 {
     switch(mode)
@@ -194,18 +204,27 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
             break;
         case kInputCapture:
             FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_MSB_MASK|FTM_CnSC_ELSB_MASK);
+            FTM_DualChlConfig(instance, chl, kFTM_Combine, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_DualEdgeCapture, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_DeadTime, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_Sync, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
             break;
             
         case kPWM_Combine:
             break;
         case kPWM_Complementary:
+                FTM_InstanceTable[instance]->MODE |= FTM_MODE_WPDIS_MASK;
+				FTM_InstanceTable[instance]->MODE |= FTM_MODE_FTMEN_MASK;
+				FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+				FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
             break;
         case kQuadratureDecoder:
             break;            
         default:
             break;
     }
-    
 }
 
 

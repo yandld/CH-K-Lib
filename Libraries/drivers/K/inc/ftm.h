@@ -57,6 +57,7 @@ typedef enum
 typedef struct
 {
     uint32_t        instance;
+    uint32_t        chl;
     uint32_t        frequencyInHZ;
     FTM_Mode_Type   mode;
 }FTM_InitTypeDef;

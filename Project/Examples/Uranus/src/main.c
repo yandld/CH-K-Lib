@@ -97,21 +97,21 @@ int main(void)
     DelayInit(); //Init Delay
     UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);  //Init UART and printf
     GPIO_QuickInit(HW_GPIOA, 1 , kGPIO_Mode_OPP);   //Init LED
-    //Blink LED to indicate system is running
+    //闪一下LED 指示系统要运行了
     for(i = 0; i < 10; i++)
     {
         GPIO_ToggleBit(HW_GPIOA, 1);
         DelayMs(50);
     }
-    //init sensor
+    //初始化传感器
     ret = InitSensor();
     if(ret)
     {
         printf("Sensor init failed! code:%d\r\n", ret);
     }
-    // install imu interface function
+    //安装IMU 底层驱动函数
     imu_io_install(&IMU_IOInstallStruct1);
-    // install trans uart for send data
+    //安装数据传送模块底层回调函数
     trans_io_install(&TRANS_IOInstallStruct1);
     trans_user_data_t send_data;
     while(1)
@@ -147,7 +147,7 @@ int main(void)
         */
         //发送数据
         trans_send_pactket(send_data);
-        //blink the LED
+        //闪LED 说明系统运行
         counter++;
         counter %= 10; 
         if(!counter)

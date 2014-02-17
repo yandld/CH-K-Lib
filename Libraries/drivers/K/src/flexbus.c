@@ -18,7 +18,7 @@ void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
     //enable clock gate enable seruriy mode
     SIM->SOPT2 |= SIM_SOPT2_FBSL(3);
     SIM->SCGC7 |= SIM_SCGC7_FLEXBUS_MASK;
-    //AutoAck(AA) Config
+    //AutoAcknogement(AA) Config
     if(FLEXBUS_InitStruct->autoAckMode == kFLEXBUS_AutoAckEnable)
     {
         FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSCR |= FB_CSCR_AA_MASK;
@@ -27,7 +27,7 @@ void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
     {
         FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSCR &= ~FB_CSCR_AA_MASK;
     }
-    //address space
+    // address space
     i = (FLEXBUS_InitStruct->addressSpaceInByte - 1 - 0xFFFF)>>16;
     FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSMR = FB_CSMR_BAM(i);
     //port size
@@ -49,7 +49,6 @@ void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
   FB->CS[Fbx].CSMR = FB_CSMR_BAM(addr_space)  //????????128K???? =2^n(n=BAM+16)
                 | FB_CSMR_V_MASK;    //??CS??
                 */
-    
 }
 
 

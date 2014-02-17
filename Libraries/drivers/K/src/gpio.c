@@ -76,19 +76,24 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
     PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
 }
  /**
- * @brief  Config pin pull select and open drain enablement
- * @param  instance: GPIO instance
+ * @brief  设置一个引脚的属性 例如上拉下拉 复用选择 等 用户一般不必调用
+ *
+ * @code
+ *      // 将一个引脚设置为 配有上啦电阻 开漏输出开启
+ *      PORT_PinMuxConfig(HW_GPIOA, 3, kPullUp, ENABLE);
+ * @endcode
+ * @param  instance: GPIO模块号
  *         @arg HW_GPIOA
  *         @arg HW_GPIOB
  *         @arg HW_GPIOC
  *         @arg HW_GPIOD
  *         @arg HW_GPIOE
- * @param  pinIndex: 0-31
- * @param  pull: pull select
+ * @param  pinIndex: 0-31 引脚
+ * @param  pull: 模式选择
  *         @arg kPullDisabled
  *         @arg kPullUp
  *         @arg kPullDown
- * @param  newState: enable open drain or not. This select only vailid on K series.
+ * @param  newState: 是否开启开漏输出模式 这个选项只在Kinetis K系列上有效果.
  * @retval None
  */
 void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState)
@@ -117,15 +122,15 @@ void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, Fun
     }
 }
  /**
- * @brief  config GPIO pin input or output
- * @param  instance: GPIO instance
+ * @brief  config 设置引脚为输入还是输出 只有当引脚作为GPIO时候才有意义
+ * @param  instance: GPIO 模块号
  *         @arg HW_GPIOA
  *         @arg HW_GPIOB
  *         @arg HW_GPIOC
  *         @arg HW_GPIOD
  *         @arg HW_GPIOE
- * @param  pinIndex: 0-31
- * @param  mode: input or output
+ * @param  pinIndex: 0-31引脚号
+ * @param  mode: 输入或者输出
  *         @arg kInpput
  *         @arg kOutput
  * @retval None
@@ -141,8 +146,8 @@ void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode
 }
 
  /**
- * @brief  Initializes the GPIOx peripheral according to the specified
- *         parameters in the GPIO_InitStruct.
+ * @brief  通过填入初始化结构体 初始化GPIO
+ *
  * @param  GPIO_InitStruct: pointer to a GPIO_InitTypeDef structure that
  *         contains the configuration information for the specified GPIO peripheral.
  * @retval None
@@ -182,14 +187,15 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
     //config pinMux
     PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
 }
+
  /**
- * @brief  Quick init for user, do not need init struct
+ * @brief  快速初始化一个GPIO引脚 实际上是GPIO_Init的最简单配置
  * @code
  *      // 初始化一个GPIO口为输出 并初始化为高电平
  *      GPIO_QuickInit(HW_GPIOA, 3, kGPIO_Mode_OPP);
  *      GPIO_WriteBit(HW_GPIOA, 3, 1);
  * @endcode
- * @param  instance: GPIO instance
+ * @param  instance: GPIO模块号
  *         @arg HW_GPIOA
  *         @arg HW_GPIOB
  *         @arg HW_GPIOC
@@ -197,11 +203,11 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
  *         @arg HW_GPIOE
  * @param  pinIndex: 0-31
  * @param  mode: pin type
- *         @arg kGPIO_Mode_IFT
- *         @arg kGPIO_Mode_IPD
- *         @arg kGPIO_Mode_IPU
- *         @arg kGPIO_Mode_OOD
- *         @arg kGPIO_Mode_OPP
+ *         @arg kGPIO_Mode_IFT:悬空输入
+ *         @arg kGPIO_Mode_IPD:下拉输入
+ *         @arg kGPIO_Mode_IPU:上啦输入
+ *         @arg kGPIO_Mode_OOD:开漏输出
+ *         @arg kGPIO_Mode_OPP:推挽输出
  * @retval None
  */
 uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode)
@@ -325,15 +331,15 @@ void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data)
 }
 
 /**
- * @brief  GPIO dma and interrupt config
- * @param  instance: GPIO instance
+ * @brief  设置GPIO引脚中断 或者 引脚DMA功能
+ * @param  instance: GPIO模块号
  *         @arg HW_GPIOA
  *         @arg HW_GPIOB
  *         @arg HW_GPIOC
  *         @arg HW_GPIOD
  *         @arg HW_GPIOE
- * @param config: dma and interrupt config mode
- * @param newState: enable interrupt or disable it
+ * @param config: 配置模式
+ * @param newState: 使能或者禁止
  * @retval None
  */
 void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, FunctionalState newState)
@@ -351,14 +357,14 @@ void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type 
     NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
 }
 /**
- * @brief  install interrupt callback function
- * @param  instance: GPIO instance
+ * @brief  注册中断回调函数
+ * @param  instance: GPIO模块号
  *         @arg HW_GPIOA
  *         @arg HW_GPIOB
  *         @arg HW_GPIOC
  *         @arg HW_GPIOD
  *         @arg HW_GPIOE
- * @param AppCBFun: callback function pointer
+ * @param AppCBFun: 回调函数指针
  * @retval None
  */
 void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)

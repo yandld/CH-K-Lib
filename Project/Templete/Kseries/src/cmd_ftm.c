@@ -14,10 +14,10 @@ int CMD_FTM(int argc, char * const * argv)
     FTM_InitStruct1.frequencyInHZ = 32;
     FTM_InitStruct1.mode = kPWM_EdgeAligned;
     printf("FTM TEST\r\n");
-    if(argc == 1)
+    //Only one param
+    if(argc != 2)
     {
-        // FTM_Init(&FTM_InitStruct1);
-        instance = FTM_QuickInit(FTM2_CH1_PB19 ,600);  
+        return CMD_RET_USAGE;
     }
     if(argc == 2)
     {
@@ -30,14 +30,13 @@ int CMD_FTM(int argc, char * const * argv)
 
 
 
-
 const cmd_tbl_t CommandFun_FTM = 
 {
     .name = "FTM",
     .maxargs = 2,
     .repeatable = 1,
     .cmd = CMD_FTM,
-    .usage = "FTM TEST",
+    .usage = "FTM <requerency>",
     .complete = NULL,
     .help = "\r\n"
 };

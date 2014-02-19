@@ -204,12 +204,12 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
 }
 
 /**
- * @brief  UART send a byte(blocking function)
- * @param  instance: UART instance
+ * @brief  UART发送一个字节(阻塞式发送 只要发送完才会返回)
+ * @param  instance: UART 模块号
  *         @arg HW_UART0
  *         @arg HW_UART1
  *         @arg ...
- * @param  ch: byte to send
+ * @param  ch: 需要发送的字节
  * @retval None
  */
 void UART_WriteByte(uint8_t instance, uint8_t ch)
@@ -221,13 +221,13 @@ void UART_WriteByte(uint8_t instance, uint8_t ch)
 }
 
 /**
- * @brief  UART receive a byte(none blocking function)
- * @param  instance: UART instance
+ * @brief  UART接受一个字节(非阻塞式 立即返回)
+ * @param  instance: 模块号
  *         @arg HW_UART0
  *         @arg HW_UART1
  *         @arg ...
- * @param  ch: pointer of byte to received
- * @retval 0:succ 1:fail
+ * @param  ch: 接收到的数据指针
+ * @retval 0:成功接受到数据  非0:没有接受到数据
  */
 uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
 {
@@ -242,16 +242,16 @@ uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
 }
 
 /**
- * @brief  UART DMA and Interrupt config
- * @param  instance: UART instance
+ * @brief  配置UART模块的中断或者DMA属性
+ * @param  instance: UART 模块号
  *         @arg HW_UART0
  *         @arg HW_UART1
  *         @arg ...
- * @param  config: config, see UART_ITDMAConfig_Type for more details
- * @param  newState:
+ * @param  config: 模式选择
+ *
+ * @param  newState:开启或者关闭
  *         @arg ENABLE
  *         @arg DISABLE
- * @param  ch: pointer of byte to received
  * @retval None
  */
 void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, FunctionalState newState)
@@ -311,7 +311,7 @@ void UART_CallbackInstall(uint8_t instance, UART_CallBackType AppCBFun)
  /**
  * @brief  quick init for user, do not need init struct. 
  * @code
- *      // Init UART4 as 115200-N-8-N-1, Tx:PC15 Rx:PC14
+ *      // 初始化 UART4 属性: 115200-N-8-N-1, Tx:PC15 Rx:PC14
  *      GPIO_QuickInit(UART4_RX_PC14_TX_PC15, 115200);
  * @endcode
  * @param  instance: UART instance
@@ -365,7 +365,6 @@ void UART0_RX_TX_IRQHandler(void)
         }    
     }
 }
-
 
 void UART1_RX_TX_IRQHandler(void)
 {

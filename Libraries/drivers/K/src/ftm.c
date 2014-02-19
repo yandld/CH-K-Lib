@@ -41,6 +41,7 @@ static const RegisterManipulation_Type SIM_FTMClockGateTable[] =
 
 #endif
 
+//!< static functions declareation
 static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode);
 
 /**
@@ -251,9 +252,6 @@ uint8_t FTM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
     }
     return pFTMxMap->ip_instance;
 }
-
-
-
 
 
 void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)

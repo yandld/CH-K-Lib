@@ -13,12 +13,10 @@ typedef enum
     kMemNameCount,
 }CPUIDY_MemSize_Type;
 
-
 //!< API functions
 char *CPUIDY_GetFamID(void);
 void CPUIDY_GetPinCount(uint32_t *pinCount);
 void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB);
-
 
 
 #endif

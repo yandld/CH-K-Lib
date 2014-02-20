@@ -90,6 +90,7 @@ static int32_t ADC_Calibration(uint32_t instance)
     uint32_t PG, MG;
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_CALF_MASK; /* Clear the calibration's flag */
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_CAL_MASK;  /* Enable the calibration */
+    ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_EOF, DISABLE);
     while(ADC_IsConversionCompleted(instance, 0)) {};      /* Wait conversion is competed */
     if(ADC_InstanceTable[instance]->SC3 & ADC_SC3_CALF_MASK)
     {
@@ -154,7 +155,22 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
     ADC_Calibration(ADC_InitStruct->instance);
 }
 
-
+/**
+ * @brief  快速初始化一个ADC通道
+ *
+ * @code
+ *    uint32_t instance;
+ *    uint32_t value;
+ *    //初始化 ADC0 通道20 引脚DM1 单端 精度 12位
+ *    instance = ADC_QuickInit(ADC0_SE20_DM1, kADC_SingleDiff12or13);
+ *    //读取AD转换结果
+ *    value = ADC_QuickReadValue(ADC0_SE20_DM1);
+ *    printf("AD Value:%d\r\n", value);
+ * @endcode
+ * @param  ADCxMAP: 快速初始化宏
+ * @param  resolutionMode: 分辨率
+ * @retval ADC模块号
+ */
 uint8_t ADC_QuickInit(uint32_t ADCxMAP, uint32_t resolutionMode)
 {
     uint8_t i;

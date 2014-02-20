@@ -38,5 +38,5 @@ const cmd_tbl_t CommandFun_FTM =
     .cmd = CMD_FTM,
     .usage = "FTM <requerency>",
     .complete = NULL,
-    .help = "\r\n"
+    .help = "FTM <requerency>"
 };

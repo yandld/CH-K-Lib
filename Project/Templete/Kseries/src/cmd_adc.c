@@ -25,7 +25,7 @@ int CMD_ADC(int argc, char * const * argv)
     ADC_InitStruct1.SingleOrDifferential = kADC_Single;
     ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;
     //³õÊ¼»¯ADCÄ£¿é
-    ADC_Init(&ADC_InitStruct1);
+   ADC_Init(&ADC_InitStruct1);
     
     
     instance = ADC_QuickInit(ADC0_SE20_DM1, kADC_SingleDiff12or13);
@@ -36,7 +36,8 @@ int CMD_ADC(int argc, char * const * argv)
     {
         ADC_StartConversion(instance, 20, kADC_MuxA);
        // value = ADC_QuickReadValue(ADC0_SE20_DM1);
-      //  shell_printf("AD:%d\r", value);
+       // shell_printf("AD:%d\r\n", value);
+      
         DelayMs(50);
     }
     return 0;

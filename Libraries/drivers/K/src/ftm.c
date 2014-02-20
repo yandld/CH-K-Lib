@@ -45,7 +45,7 @@ static const RegisterManipulation_Type SIM_FTMClockGateTable[] =
 static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode);
 
 /**
- * @brief  初始化FTM模块 、.在使用FTM前一定要调用此函数
+ * @brief  初始化FTM模块 .在使用FTM前一定要调用此函数
  *
  * @param  FTM 初始化结构体
  * @retval None
@@ -62,8 +62,8 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     *SIM_SCGx |= SIM_FTMClockGateTable[FTM_InitStruct->instance].mask;
 
     //disable FTM, we must set CLKS(0) before config FTM!
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(0);
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC = 0;
+   // FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(0);
     
     // enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function)
     FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK;
@@ -89,9 +89,7 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     printf("freq:%dHz\r\n", FTM_InitStruct->frequencyInHZ);
     printf("input_clk:%d\r\n", input_clk);
     printf("pres:%d\r\n", pres);
-    // set ps, this must be done after set modulo
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_PS_MASK;
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_PS(ps); 
+
     
     //set CNT and CNTIN
     FTM_InstanceTable[FTM_InitStruct->instance]->CNT = 0;
@@ -106,10 +104,15 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     printf("MOD Should be:%d\r\n",  (input_clk/(1<<ps))/FTM_InitStruct->frequencyInHZ);
     printf("MOD acutall is:%d\r\n", FTM_InstanceTable[FTM_InitStruct->instance]->MOD);
     printf("ps:%d\r\n", ps);
-	
+
     // set FTM clock to system clock
     FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
     FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(1);
+    
+    // set ps, this must be done after set modulo
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_PS_MASK;
+    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_PS(ps); 
+    
     // set FTM mode
     FTM_SetMode(FTM_InitStruct->instance, FTM_InitStruct->chl, FTM_InitStruct->mode);
 }
@@ -151,22 +154,22 @@ static void FTM_DualChlConfig(uint8_t instance, uint8_t chl, FTM_DualChlConfig_T
     switch(mode)
     {
         case kFTM_Combine:
-            mask = FTM_COMBINE_COMBINE0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_COMBINE0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;
         case kFTM_Complementary:
-            mask = FTM_COMBINE_COMP0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_COMP0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;    
         case kFTM_DualEdgeCapture:
-            mask = FTM_COMBINE_DECAPEN0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_DECAPEN0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;           
         case kFTM_DeadTime:
-            mask = FTM_COMBINE_DTEN0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_DTEN0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;    
         case kFTM_Sync:
-            mask = FTM_COMBINE_SYNCEN0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_SYNCEN0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;   
         case kFTM_FaultControl:
-            mask = FTM_COMBINE_FAULTEN0_MASK + (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_FAULTEN0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;    
         default:
             break;
@@ -180,22 +183,23 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
     switch(mode)
     {
         case kPWM_EdgeAligned:
+            
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
-            FTM_InstanceTable[instance]->MODE &= ~FTM_QDCTRL_QUADEN_MASK;
+            FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK; 
-            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_ELSB_MASK);
             FTM_DualChlConfig(instance, chl, kFTM_Combine, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_DualEdgeCapture, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_DeadTime, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_Sync, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
             break;
         case kPWM_CenterAligned:
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
             FTM_InstanceTable[instance]->MODE &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->SC |= FTM_SC_CPWMS_MASK;  
-            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_ELSB_MASK);
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
             FTM_DualChlConfig(instance, chl, kFTM_Combine, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_DualEdgeCapture, DISABLE);
@@ -204,7 +208,7 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
             FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
             break;
         case kInputCapture:
-            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_MSB_MASK|FTM_CnSC_ELSB_MASK);
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
             FTM_DualChlConfig(instance, chl, kFTM_Combine, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_DualEdgeCapture, DISABLE);
@@ -237,14 +241,16 @@ uint8_t FTM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
     FTM_InitStruct1.instance = pFTMxMap->ip_instance;
     FTM_InitStruct1.frequencyInHZ = frequencyInHZ;
     FTM_InitStruct1.mode = kPWM_EdgeAligned;
+    FTM_InitStruct1.chl = pFTMxMap->channel;
 
-    FTM_Init(&FTM_InitStruct1);
     printf("pFTMxMap->ip_instance:%d\r\n", pFTMxMap->ip_instance);
     printf("pFTMxMap->io_instance:%d\r\n", pFTMxMap->io_instance);
     printf("pFTMxMap->io_base:%d\r\n", pFTMxMap->io_base);
     printf("pFTMxMap->io_offset:%d\r\n", pFTMxMap->io_offset);
     printf("pFTMxMap->mux:%d\r\n", pFTMxMap->mux);
     printf("pFTMxMap->channel:%d\r\n", pFTMxMap->channel);
+    
+    FTM_Init(&FTM_InitStruct1);
     // init pinmux
     for(i = 0; i < pFTMxMap->io_offset; i++)
     {
@@ -261,7 +267,7 @@ void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
     
     FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
     FTM_InstanceTable[instance]->CONTROLS[chl].CnSC = 0;
-    FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_ELSB_MASK);
+    FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
     FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv;
 }
 

@@ -30,8 +30,6 @@
 #endif
 
 //!< Gloabl Const Table Defination
-#define UART0_RX_TX_IRQn_OFFSET 2
-static IRQn_Type   const UART_IRQRxTxBase = UART0_RX_TX_IRQn;
 UART_Type * const UART_InstanceTable[] = UART_BASES;
 static UART_CallBackType UART_CallBackTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
 static uint8_t UART_DebugInstance;
@@ -44,12 +42,27 @@ static const RegisterManipulation_Type SIM_UARTClockGateTable[] =
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART3_MASK},
     {(void*)&(SIM->SCGC1), SIM_SCGC1_UART4_MASK},
 };
+static const IRQn_Type UART_IRQnTable[] = 
+{
+    UART0_RX_TX_IRQn,
+    UART1_RX_TX_IRQn,
+    UART2_RX_TX_IRQn,
+    UART3_RX_TX_IRQn,
+    UART4_RX_TX_IRQn,
+    UART5_RX_TX_IRQn,
+};
 #elif (defined(MK10D5))
 static const RegisterManipulation_Type SIM_UARTClockGateTable[] =
 {
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
+};
+static const IRQn_Type UART_IRQnTable[] = 
+{
+    UART0_RX_TX_IRQn,
+    UART1_RX_TX_IRQn,
+    UART2_RX_TX_IRQn,
 };
 #endif
 
@@ -259,7 +272,8 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, Functional
     switch(config)
     {
         case kUART_ITDMA_Disable:
-            NVIC_DisableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET));
+            
+            NVIC_DisableIRQ(UART_IRQnTable[instance]);
             UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK;
             UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK;
             break;
@@ -267,7 +281,7 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, Functional
             (ENABLE == newState)?(UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK):(UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK);
             if(ENABLE == newState)
             {
-                NVIC_EnableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET));
+                NVIC_EnableIRQ(UART_IRQnTable[instance]);
             }
             break;
         case kUART_DMA_TxBTC:
@@ -277,7 +291,7 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, Functional
             (ENABLE == newState)?(UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK):(UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK);
             if(ENABLE == newState)
             {
-                NVIC_EnableIRQ((IRQn_Type)(UART_IRQRxTxBase + instance * UART0_RX_TX_IRQn_OFFSET));
+                NVIC_EnableIRQ(UART_IRQnTable[instance]);
             }
             break;
         case kUART_DMA_RxBTC:

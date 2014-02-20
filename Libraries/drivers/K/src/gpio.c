@@ -311,14 +311,14 @@ uint32_t GPIO_ReadByte(uint8_t instance, uint8_t pinIndex)
     return (GPIO_InstanceTable[instance]->PDIR);
 }
 /**
- * @brief  write 32 bit data form whole GPIO port
- * @param  instance: GPIO instance
+ * @brief  向一个GPIO端口写入32位数据
+ * @param  instance: GPIO 模块号
  *         @arg HW_GPIOA
  *         @arg HW_GPIOB
  *         @arg HW_GPIOC
  *         @arg HW_GPIOD
  *         @arg HW_GPIOE
- * @param data: 32bit data to write
+ * @param data: 32位数据
  * @retval None
  */
 void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data)

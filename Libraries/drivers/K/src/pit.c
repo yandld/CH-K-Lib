@@ -26,10 +26,16 @@ static uint32_t  fac_ms = 0; //!< msDelay Mut
 
 #endif
 
+
 PIT_Type * const PIT_InstanceTable[] = PIT_BASES;
 static PIT_CallBackType PIT_CallBackTable[4] = {NULL};
-#define PIT0_IRQn_OFFSET 1
-static IRQn_Type const PIT_IRQRxTxBase = PIT0_IRQn;
+static const IRQn_Type PIT_IRQnTable[] = 
+{
+    PIT0_IRQn,
+    PIT1_IRQn,
+    PIT2_IRQn,
+    PIT3_IRQn,
+};
 
 //! @defgroup CHKinetis
 //! @{
@@ -126,7 +132,7 @@ void PIT_ITDMAConfig(uint8_t chl, FunctionalState NewState)
         PIT->CHANNEL[chl].TFLG |= PIT_TFLG_TIF_MASK;
     }
     (ENABLE == NewState)?(PIT->CHANNEL[chl].TCTRL |= PIT_TCTRL_TIE_MASK):(PIT->CHANNEL[chl].TCTRL &= ~PIT_TCTRL_TIE_MASK);
-    (ENABLE == NewState)?(NVIC_EnableIRQ((IRQn_Type)(PIT_IRQRxTxBase + PIT0_IRQn_OFFSET*chl))):(NVIC_DisableIRQ((IRQn_Type)(PIT_IRQRxTxBase + PIT0_IRQn_OFFSET*chl)));
+    (ENABLE == NewState)?(NVIC_EnableIRQ(PIT_IRQnTable[chl])):(NVIC_DisableIRQ(PIT_IRQnTable[chl]));
 }
 
 

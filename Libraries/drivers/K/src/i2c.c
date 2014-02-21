@@ -164,18 +164,18 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
 
 
  /**
- * @brief  Quick init for user, do not need init struct
+ * @brief  快速初始化I2C模块 无需调用I2C_Init
  * @code
- *      // init I2C1 pin: SCL:PC10 SDA:PC11 baudrate:47000Hz
+ *      // 初始化I2C模块: SCL:PC10 SDA:PC11 baudrate:47000Hz
  *      I2C_QuickInit(I2C1_SCL_PC10_SDA_PC11, 47000);
  * @endcode
- * @param  I2CxMAP: QuickInit Select
+ * @param  I2CxMAP: I2C快速初始化选择项
  *         @arg I2C1_SCL_PE01_SDA_PE00
  *         @arg I2C0_SCL_PB00_SDA_PB01
  *         @arg I2C0_SCL_PB02_SDA_PB03
  *         @arg I2C1_SCL_PC10_SDA_PC11
- * @param  baudrate: better to be 48000Hz 76000Hz 96000Hz 376000Hz
- * @retval moudle instance
+ * @param  baudrate: 建议为: 48000Hz 76000Hz 96000Hz 376000Hz
+ * @retval 模块号
  */
 uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
 {
@@ -195,7 +195,7 @@ uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
 }
 
 /**
- * @brief  init I2C moudle
+ * @brief  初始化I2C模块
  * @param  I2C_InitStruct: init struct of I2C
  * @retval None
  */

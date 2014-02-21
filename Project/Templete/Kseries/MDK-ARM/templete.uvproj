@@ -893,6 +893,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_reset.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_nvic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_nvic.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1871,6 +1876,11 @@
               <FileName>cmd_reset.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_reset.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_nvic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_nvic.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2851,6 +2861,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_reset.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_nvic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_nvic.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3829,6 +3844,11 @@
               <FileName>cmd_reset.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_reset.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_nvic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_nvic.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -21,6 +21,10 @@ extern const cmd_tbl_t CommandFun_FLEXBUS;
 extern const cmd_tbl_t CommandFun_FTM;
 extern const cmd_tbl_t CommandFun_RESET;
 extern const cmd_tbl_t CommandFun_NVIC;
+<<<<<<< HEAD
+=======
+
+>>>>>>> d6d2b9936bcb97b9e47bdbe319e86d3c8ad8a261
 static void Putc(uint8_t data)
 {
 	UART_WriteByte(UART_Instance, data);
@@ -112,6 +116,10 @@ int main(void)
     shell_register_function(&CommandFun_FTM); 
     shell_register_function(&CommandFun_RESET); 
     shell_register_function(&CommandFun_NVIC); 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> d6d2b9936bcb97b9e47bdbe319e86d3c8ad8a261
     //CalConst(FTM_QuickInitTable, ARRAY_SIZE(FTM_QuickInitTable));
     while(1)
     {

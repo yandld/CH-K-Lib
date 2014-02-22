@@ -197,7 +197,7 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
             break;
         case kPWM_CenterAligned:
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
-            FTM_InstanceTable[instance]->MODE &= ~FTM_QDCTRL_QUADEN_MASK;
+            FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->SC |= FTM_SC_CPWMS_MASK;  
             FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
             FTM_DualChlConfig(instance, chl, kFTM_Combine, DISABLE);
@@ -268,6 +268,7 @@ void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
     FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
     FTM_InstanceTable[instance]->CONTROLS[chl].CnSC = 0;
     FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
+    FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= FTM_CnSC_ELSB_MASK;
     FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv;
 }
 

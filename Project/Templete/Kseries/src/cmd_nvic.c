@@ -1,10 +1,29 @@
 #include "common.h"
 #include "shell/shell.h"
+<<<<<<< HEAD
 
 
 int CMD_NVIC(int argc, char * const * argv)
 {
     SystemSoftReset();
+=======
+#include "stdio.h"
+
+int CMD_NVIC(int argc, char * const * argv)
+{
+    printf("NVIC Test\r\n");
+    uint32_t PreemptPriority, SubPriority;
+    NVIC_SetPriorityGrouping(NVIC_PriorityGroup_2);
+    printf("SystemPrioirityGroup:%d\r\n", NVIC_GetPriorityGrouping());
+    
+    NVIC_SetPriority(PORTA_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 2, 1));
+    NVIC_DecodePriority(NVIC_GetPriority(PORTA_IRQn), NVIC_GetPriorityGrouping(), &PreemptPriority, &SubPriority);
+    printf("IRQn:%d PreemptPriority:%d SubPriority:%d\r\n", (uint32_t)PORTA_IRQn, PreemptPriority, SubPriority);
+    
+    NVIC_SetPriority(PORTB_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 2, 2));
+    NVIC_DecodePriority(NVIC_GetPriority(PORTB_IRQn), NVIC_GetPriorityGrouping(), &PreemptPriority, &SubPriority);
+    printf("IRQn:%d PreemptPriority:%d SubPriority:%d\r\n", (uint32_t)PORTA_IRQn, PreemptPriority, SubPriority);
+>>>>>>> d6d2b9936bcb97b9e47bdbe319e86d3c8ad8a261
     return 0;
 }
 

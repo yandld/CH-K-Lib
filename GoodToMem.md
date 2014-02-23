@@ -1,3 +1,121 @@
+中通快递:
+新区 候幸川 13912610863  68085513
+
+
+# Useful Items #
+1. mcu-sdk
+git clone git://sw-git.freescale.net/mcu-sdk.git
+git push ssh://b47088@sw-git01-tx30.am.freescale.net/git/sw_git/repos/mcu-sdk
+2. payroll
+http://kronos.freescale.net/wfc/logon 
+
+3. ke drive lib
+git clone git://sw-git.freescale.net/ke_drv_lib.git
+git push ssh://sw-git.freescale.net/git/sw_git/repos/ke_drv_lib.git
+git checkout --track -b ke_drv_lib_ke06_alpha_RC1 origin/ke_drv_lib_ke06_alpha_RC1
+
+4. local server: \\r65119-02\SW_CSC\Shared
+
+5. http://wiki.freescale.net/display/mcusw/SDK+Development+for+Apps+Team
+6. Doxygen on line
+http://tengoku.am.freescale.net/docs/kpsdk/apps_html/
+http://tengoku.am.freescale.net/docs/kpsdk/lib_html/
+
+
+操作系统：设计与实现 Prentice Hall公司出版
+数据结构与算法分析
+Prentice Hall公司出版
+
+打印:  \\10.193.101.1
+IAR Lic:  10.192.224.202
+8. send patch to review
+git send-email --no-chain-reply-to --no-signed-off-by-cc --suppress-cc all --smtp-server remotesmtp.freescale.net --to b03824@freescale.com --to kpsdkae@freescale.com <patch files>
+
+//IT 自助
+http://hclfslitsm.service-now.com/
+//我的ISSUE查看
+http://sw-jira.freescale.net/secure/Dashboard.jspa
+
+
+For cygwin or git bash, direct edit the ~/.gitconfig like:
+
+[user]
+        email = xinyu.chen@freescale.com
+        name = Xinyu Chen
+[color]
+        ui = auto
+        branch = auto
+        status = auto
+        diff = auto
+[core]
+        pager = less
+[sendemail]
+        smtpserver = remotesmtp.freescale.net
+
+
+比如打上海: 917909 + 0 +  021 28937139 #
+我电话0512- 68056613
+Dept #: Dept Name: S2813
+PID 65017220
+会议：9 8008190233 
+
+
+
+Here is the L0PA Alpha site: http://compass.freescale.net/livelink/livelink?func=ll&objId=228449317&objAction=browse&viewType=1
+
+电话会议
+8008190233 +CID+#
+CID是点到Calaner 里面那个 
+
+## EMAIL List: ##
+If you have not registered to the email list: Platform SDK Kinetis-KPSDK, please join in through summit.freescale.net -> IT -> Email list by yourself.
+
+
+WangPeiliang:  6889 IT服务
+我的HR:7469
+
+
+
+嘉立创
+23447A 
+030710a
+顺益杰
+03853A
+543433
+
+西方美学史
+百年孤独
+明朝那些事
+西方哲学史
+激荡30年
+
+
+http://pan.baidu.com/share/home?uk=2870907047 
+
+操作系统：设计与实现 Prentice Hall公司出版
+数据结构与算法分析
+Prentice Hall公司出版
+
+git config -l 查看所有设置
+
+管理员账号 admin 密码adminyqhl
+
+FTP用户名：buythings001 　服务器IP为： 182.16.27.2  
+FTP密码：  
+
+苏州工资卡： 622202 1102067924376
+青岛农行银行卡号： 6222021102067924376
+
+
+##北京HR
+Polly Pu 
+Human Resources
+Freescale Semiconductor (China) Ltd.
+Office: 010-5879 8082 / Mobile: 13910691412
+
+
+
+
 # 成语古诗词 #
 ----------
 1. 形容人口才好 ：天花乱坠  口若悬河  妙语连珠
@@ -207,3 +325,5 @@ Ctrl+R 历史命令搜索
 File+文件名 ： 显示文件信息
 Cp 文件拷贝 –r拷贝目录 –v显示显示详细信息
 离风启动：空调被风吹的时候 风扇再转，倒转启动问题。
+chmod -R(递归) 777(rwe)
+mkdir rmdir file(看文件属性)

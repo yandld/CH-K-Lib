@@ -274,8 +274,9 @@ void ADC0_IRQHandler(void)
 {
     uint32_t dummy;
     /* clear COCO bit */
-    dummy = ADC_InstanceTable[HW_ADC0]->R[0];
-    dummy = ADC_InstanceTable[HW_ADC0]->R[1];
+    dummy = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxA];
+    dummy = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxB];
+    dummy = dummy; /* avoid compiler warnning */
     if(ADC_CallBackTable[HW_ADC0] != NULL)
     {
         ADC_CallBackTable[HW_ADC0]();
@@ -287,8 +288,9 @@ void ADC1_IRQHandler(void)
 {
     uint32_t dummy;
     /* clear COCO bit */
-    dummy = ADC_InstanceTable[HW_ADC1]->R[0];
-    dummy = ADC_InstanceTable[HW_ADC1]->R[1];
+    dummy = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxA];
+    dummy = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxB];
+    dummy = dummy; /* avoid compiler warnning */
     if(ADC_CallBackTable[HW_ADC1] != NULL)
     {
         ADC_CallBackTable[HW_ADC1]();

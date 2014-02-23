@@ -1,6 +1,6 @@
 #include "shell/shell.h"
 #include "gpio.h"
-
+#include "common.h"
 
 int DoGPIO(int argc, char *const argv[])
 {

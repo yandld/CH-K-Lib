@@ -187,14 +187,15 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK; 
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
             FTM_DualChlConfig(instance, chl, kFTM_Combine, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_DualEdgeCapture, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_DeadTime, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_Sync, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
-            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
             break;
+            
         case kPWM_CenterAligned:
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
@@ -207,7 +208,21 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
             FTM_DualChlConfig(instance, chl, kFTM_Sync, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
             break;
-        case kInputCapture:
+            
+        case kInputCaptureFallingEdge:   
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_ELSB_MASK);
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSA_MASK);
+            
+        case kInputCaptureRisingEdge: 
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSB_MASK);
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_ELSA_MASK);
+            
+        case kInputCaptureBothEdge:  
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSB_MASK|FTM_CnSC_ELSA_MASK);
+            /* all configuration */
+            FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+            FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
+            FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK; 
             FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
             FTM_DualChlConfig(instance, chl, kFTM_Combine, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);

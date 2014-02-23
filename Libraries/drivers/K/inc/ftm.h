@@ -33,12 +33,14 @@
 //FTM  模式选择
 typedef enum
 {
-	kPWM_EdgeAligned,     //边沿对齐
-	kPWM_CenterAligned,   //中心对齐 频率是边沿对齐的一半
-	kPWM_Combine,         //组合模式
-    kInputCapture,
-	kPWM_Complementary,   //互补模式
-    kQuadratureDecoder,   //正交解码
+	kPWM_EdgeAligned,           //边沿对齐
+	kPWM_CenterAligned,         //中心对齐 频率是边沿对齐的一半
+	kPWM_Combine,               //组合模式
+    kInputCaptureFallingEdge,   //
+    kInputCaptureRisingEdge,    //
+    kInputCaptureBothEdge,      //
+	kPWM_Complementary,         //互补模式
+    kQuadratureDecoder,         //正交解码
 }FTM_Mode_Type;
 
 

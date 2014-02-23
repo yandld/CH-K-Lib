@@ -12,14 +12,18 @@ int CMD_FTM(int argc, char * const * argv)
     FTM_InitTypeDef FTM_InitStruct1;
     FTM_InitStruct1.instance = 0;
     FTM_InitStruct1.frequencyInHZ = 32;
+    FTM_InitStruct1.chl = HW_FTM_CH1;
     FTM_InitStruct1.mode = kPWM_EdgeAligned;
+    
+    FTM_Init(&FTM_InitStruct1);
+    
     printf("FTM TEST\r\n");
     //Only one param
     if(argc != 2)
     {
         return CMD_RET_USAGE;
     }
-    if(argc == 2)
+    if(argc == 2) 
     {
         req = strtoul(argv[1], 0, 0);
         instance = FTM_QuickInit(FTM2_CH1_PB19 ,req);

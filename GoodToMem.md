@@ -1,6 +1,25 @@
 中通快递:
 新区 候幸川 13912610863  68085513
 
+Working with you guys are the most happy experience of my life.
+It really bordened my horizion and enriched my knowledges. I readlly DO learned a lot from every one of you!
+Xinyu's exerially leadership 
+
+Frienkly speaking, I'm also every foruntate because I still have half year's school life~
+Those half year's experence of Inership combined with the coming half year's school life. Must be the most excitenting parts of my life.
+
+
+MP:15192749587  QQ:1453363089  Email:yandld@126.com 
+My Taobao~~ :  http://upcmcu.taobao.com 
+I will be work as an empleyee in Beijing branch in July. See you there~ See you in July.
+At last. Allow me to share one corina song for every one: 
+         Original View of Hometown
+http://v.youku.com/v_show/id_XOTQwODA3ODA=.html
+ Wish one have a happy time 
+Application.Exit();
+Thread.Sleep();
+
+
 
 # Useful Items #
 1. mcu-sdk

@@ -67,7 +67,6 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     
     // enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function)
     FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK;
-    // FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_FTMEN_MASK;
     
     // cal ps
     CLOCK_GetClockFrequency(kBusClock, &input_clk);
@@ -90,7 +89,6 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     printf("input_clk:%d\r\n", input_clk);
     printf("pres:%d\r\n", pres);
 
-    
     //set CNT and CNTIN
     FTM_InstanceTable[FTM_InitStruct->instance]->CNT = 0;
     FTM_InstanceTable[FTM_InitStruct->instance]->CNTIN = 0;
@@ -175,6 +173,7 @@ static void FTM_DualChlConfig(uint8_t instance, uint8_t chl, FTM_DualChlConfig_T
             break;
     } 
     (newState == ENABLE)?(FTM_InstanceTable[instance]->COMBINE |= mask):(FTM_InstanceTable[instance]->COMBINE &= ~mask);
+    printf("COMBINE:0x%x\r\n", FTM_InstanceTable[instance]->COMBINE);
 }
 
 //!< 设置FTM 工作模式
@@ -187,6 +186,7 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK; 
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= FTM_CnSC_ELSB_MASK;
             FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
             FTM_DualChlConfig(instance, chl, kFTM_Combine, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);
@@ -219,7 +219,7 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
             
         case kInputCaptureBothEdge:  
             FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSB_MASK|FTM_CnSC_ELSA_MASK);
-            /* all configuration */
+            /* all configuration on input capture*/
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
             FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK; 
@@ -233,7 +233,24 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
             break;
             
         case kPWM_Combine:
+            FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
+            FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
+            
+            FTM_InstanceTable[instance]->MODE |= FTM_MODE_WPDIS_MASK;
+            FTM_InstanceTable[instance]->MODE |= FTM_MODE_FTMEN_MASK;
+            FTM_DualChlConfig(instance, chl, kFTM_Combine, ENABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_DualEdgeCapture, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_DeadTime, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_Sync, ENABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
+            
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= FTM_CnSC_ELSB_MASK;
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
+            FTM_InstanceTable[instance]->SYNC = FTM_SYNC_CNTMIN_MASK|FTM_SYNC_CNTMAX_MASK;
+			FTM_InstanceTable[instance]->SYNC |= FTM_SYNC_SWSYNC_MASK;
             break;
+            
         case kPWM_Complementary:
                 FTM_InstanceTable[instance]->MODE |= FTM_MODE_WPDIS_MASK;
 				FTM_InstanceTable[instance]->MODE |= FTM_MODE_FTMEN_MASK;
@@ -278,13 +295,9 @@ uint8_t FTM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
 void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
 {
 	uint32_t cv = 0;
-    cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty)/10000;
-    
-    FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
-    FTM_InstanceTable[instance]->CONTROLS[chl].CnSC = 0;
-    FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_MSB_MASK|FTM_CnSC_MSA_MASK);
-    FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= FTM_CnSC_ELSB_MASK;
+    cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty) / 10000;
     FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv;
+    FTM_InstanceTable[instance]->CONTROLS[chl-1].CnV = cv - 400;
 }
 
 

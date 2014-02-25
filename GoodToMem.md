@@ -1,25 +1,6 @@
 中通快递:
 新区 候幸川 13912610863  68085513
 
-Working with you guys are the most happy experience of my life.
-It really bordened my horizion and enriched my knowledges. I readlly DO learned a lot from every one of you!
-Xinyu's exerially leadership 
-
-Frienkly speaking, I'm also every foruntate because I still have half year's school life~
-Those half year's experence of Inership combined with the coming half year's school life. Must be the most excitenting parts of my life.
-
-
-MP:15192749587  QQ:1453363089  Email:yandld@126.com 
-My Taobao~~ :  http://upcmcu.taobao.com 
-I will be work as an empleyee in Beijing branch in July. See you there~ See you in July.
-At last. Allow me to share one corina song for every one: 
-         Original View of Hometown
-http://v.youku.com/v_show/id_XOTQwODA3ODA=.html
- Wish one have a happy time 
-Application.Exit();
-Thread.Sleep();
-
-
 
 # Useful Items #
 1. mcu-sdk
@@ -162,7 +143,7 @@ Office: 010-5879 8082 / Mobile: 13910691412
 7. 外企基本上是阳光普照，但大家是隔了玻璃在晒太阳
 国企是局部地区有阳光，而且这的阳光是非常的好，阳光的位置是固定的，谁都知道在哪里，可是很难挤的过去。
 民企是局部地区有阳光，但是这里的阳光照在哪里不是很固定，今天可能照在你的头上，明天不一定到哪里去了。
- 
+7. 我的生活从此以后多了一个你，有时天晴有时下雨
 8. 是金子总会发光法亮然后爆掉的
 9. 千言万语汇成一句话  : 呵呵.
 10. 以中国现有医疗水平，小病自我诊断 大病自我了断

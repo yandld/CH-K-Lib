@@ -16,12 +16,13 @@
 
 #include "common.h"
 
+//!< ADC模块号
 #define HW_ADC0  (0) 
 #define HW_ADC1  (1)
 #define HW_ADC2  (2)
 
 
-//!< QuickInit map 
+//!< ADC 快速初始化宏
 #define ADC0_SE0_DP0  (0x0U)
 #define ADC0_SE1_DP1  (0x80000U)
 #define ADC0_SE3_DP3  (0x180000U)
@@ -60,27 +61,31 @@
 #define ADC1_SE20_DM1   (0xa00001U)
 #define ADC1_SE26_TEMP  (0xd00001U)
 
-
+//!< ADC 转换时钟分频因子
 #define kADC_ClockDiv1    (0x00)
 #define kADC_ClockDiv2    (0x01)
 #define kADC_ClockDiv4    (0x02)
 #define kADC_ClockDiv8    (0x03)
 
+//!< ADC转换精度定义
 #define kADC_SingleDiff8or9      (0x00)  /*!<  8-bits in single-end or  9-bits in differential*/
 #define kADC_SingleDiff12or13    (0x01)
 #define kADC_SingleDiff10or11    (0x02)
 #define kADC_SingleDIff16        (0x03)
 
+//!< ADC 触发方式定义
 #define kADC_TriggleSoftware     (0x00)
 #define kADC_TriggerHardware     (0x01)
 
+//!< 单端ADC还是查分ADC
 #define kADC_Single              (0x00)
 #define kADC_Differential        (0x01)
 
+//!< ADC通道复用选择(每个ADC通道有2个ADC转换器 为MuxA 和 MuxB)
 #define kADC_MuxA                (0x00)
 #define kADC_MuxB                (0x01)
 
-//!< interrupt and DMA select
+//!< ADC中断及DMA配置选择
 typedef enum
 {
     kADC_ITDMA_Disable,
@@ -88,9 +93,10 @@ typedef enum
     kADC_DMA_EOF,
 }ADC_ITDMAConfig_Type;
 
-//!< UART CallBack Type
+//!< ADC 回调函数定义
 typedef void (*ADC_CallBackType)(void);
 
+//!< ADC 初始化结构
 typedef struct
 {
     uint32_t instance; 
@@ -109,7 +115,7 @@ void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config
 int32_t ADC_QuickReadValue(uint32_t ADCxMAP);
 int32_t ADC_ReadValue(uint32_t instance, uint32_t mux);
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux);
-
+int32_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux);
 
 
 

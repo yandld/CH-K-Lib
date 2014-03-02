@@ -118,6 +118,35 @@ void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB)
 		}
 }
 
+/**
+ * @brief  获得芯片UID信息(全球唯一识别码)
+ *
+ * @code
+ *      // 打印芯片UID
+ *      uint32_t UID[4];
+ *      CPUIDY_GetUID(UID);
+ *      for(i = 0; i < 4; i++)
+ *      {
+ *          printf("UID[i]:0x%d", UID[i]);
+ *      }
+ * @endcode
+ * @param  memSizeName: 存储器类型
+ *         @arg kPFlashSizeInKB
+ *         @arg kDFlashSizeInKB  
+ *         @arg kFlexNVMSizeInKB
+ *         @arg kEEPORMSizeInByte
+ *         @arg kRAMSizeInKB
+ * @param  memSizeInKB: 存储器大小 单位KB
+ * @retval None
+ */
+void CPUIDY_GetUID(uint32_t * UIDArray)
+{
+    UIDArray[0] = SIM->UIDL;
+    UIDArray[1] = SIM->UIDML;
+    UIDArray[2] = SIM->UIDMH;
+    UIDArray[3] = SIM->UIDH;
+}
+
 //! @}
 
 //! @}

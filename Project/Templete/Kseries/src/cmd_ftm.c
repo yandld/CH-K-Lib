@@ -1,5 +1,5 @@
 #include "ftm.h"
-#include "shell/shell.h"
+#include "shell.h"
 #include "gpio.h"
 
 

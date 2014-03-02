@@ -898,6 +898,26 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_nvic.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_i2c.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -978,15 +998,22 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
             </File>
-            <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_config.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\ili9320\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\sram\sram.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
@@ -1341,7 +1368,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60DZ10</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities;..\..\..\..\Libraries\devices</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1882,6 +1909,26 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_nvic.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_i2c.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1962,15 +2009,22 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
             </File>
-            <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_config.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\ili9320\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\sram\sram.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
@@ -2866,6 +2920,26 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_nvic.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_i2c.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2946,15 +3020,22 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
             </File>
-            <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_config.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\ili9320\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\sram\sram.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
@@ -3850,6 +3931,26 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_nvic.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_i2c.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3930,15 +4031,22 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
             </File>
-            <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_config.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\ili9320\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\sram\sram.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

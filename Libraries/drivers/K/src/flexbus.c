@@ -14,43 +14,50 @@
 
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
 {
-    uint32_t i;
-    //enable clock gate enable seruriy mode
+    // enable clock gate enable seruriy mode
     SIM->SOPT2 |= SIM_SOPT2_FBSL(3);
     SIM->SCGC7 |= SIM_SCGC7_FLEXBUS_MASK;
-    //AutoAcknogement(AA) Config
+    // we must set V_MASK in CS0, because CS0.CSMR.V_MASK act as a global CS
+    FB->CS[0].CSMR |= FB_CSMR_V_MASK; 
+    // clear registers
+    FB->CS[FLEXBUS_InitStruct->CSn].CSCR = 0;
+    // base address
+    FB->CS[FLEXBUS_InitStruct->CSn].CSAR = FLEXBUS_InitStruct->baseAddress;
+    // address space
+    FB->CS[FLEXBUS_InitStruct->CSn].CSMR = FB_CSMR_BAM(FLEXBUS_InitStruct->ADSpaceMask) | FB_CSMR_V_MASK;
+    //port size
+    FB->CS[FLEXBUS_InitStruct->CSn].CSCR &= FB_CSCR_PS_MASK;
+    FB->CS[FLEXBUS_InitStruct->CSn].CSCR |= FB_CSCR_PS(FLEXBUS_InitStruct->dataWidth);
+    // AutoAcknogement(AA) Config
     if(FLEXBUS_InitStruct->autoAckMode == kFLEXBUS_AutoAckEnable)
     {
-        FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSCR |= FB_CSCR_AA_MASK;
+        FB->CS[FLEXBUS_InitStruct->CSn].CSCR |= FB_CSCR_AA_MASK;
     }
     else
     {
-        FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSCR &= ~FB_CSCR_AA_MASK;
+        FB->CS[FLEXBUS_InitStruct->CSn].CSCR &= ~FB_CSCR_AA_MASK;
     }
-    // address space
-    i = (FLEXBUS_InitStruct->addressSpaceInByte - 1 - 0xFFFF)>>16;
-    FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSMR = FB_CSMR_BAM(i);
-    //port size
-    FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSCR &= FB_CSCR_PS_MASK;
-    FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSCR |= FB_CSCR_PS(FLEXBUS_InitStruct->portSize);
     // data align
     if(FLEXBUS_InitStruct->dataAlignMode == kFLEXBUS_DataLeftAligned)
     {
-        FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSCR &= ~FB_CSCR_BLS_MASK;
+        FB->CS[FLEXBUS_InitStruct->CSn].CSCR &= ~FB_CSCR_BLS_MASK;
     }
     else
     {
-        FB->CS[FLEXBUS_InitStruct->chipSelectChl].CSCR |= FB_CSCR_BLS_MASK;
+        FB->CS[FLEXBUS_InitStruct->CSn].CSCR |= FB_CSCR_BLS_MASK;
     }
-    printf("i:%d\r\n" ,i);
-    /*
-  //???????????????
-  addr_space = (addr_space-1)>>16;
-  FB->CS[Fbx].CSMR = FB_CSMR_BAM(addr_space)  //????????128K???? =2^n(n=BAM+16)
-                | FB_CSMR_V_MASK;    //??CS??
-                */
+    // byte enable mode
+    if(FLEXBUS_InitStruct->ByteEnableMode == kFLEXBUS_BE_AssertedWrite)
+    {
+        FB->CS[FLEXBUS_InitStruct->CSn].CSCR &= ~FB_CSCR_BEM_MASK;
+    }
+    else
+    {
+        FB->CS[FLEXBUS_InitStruct->CSn].CSCR |= FB_CSCR_BEM_MASK;
+    }
+    // CS Port Multiplexing Cotrol
+    FB->CSPMCR = FLEXBUS_InitStruct->CSPortMultiplexingCotrol;
 }
-
 
 #endif
 

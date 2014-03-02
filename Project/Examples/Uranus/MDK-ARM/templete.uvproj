@@ -357,7 +357,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK10D5</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices;..\..\..\..\Libraries\utilities</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

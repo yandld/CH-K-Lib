@@ -1,5 +1,5 @@
 #include "common.h"
-#include "shell/shell.h"
+#include "shell.h"
 
 
 int CMD_RESET(int argc, char * const * argv)

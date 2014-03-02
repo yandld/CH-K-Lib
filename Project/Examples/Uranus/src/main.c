@@ -8,10 +8,10 @@
 #include "common.h"
 
 //包含 姿态模块所需的头文件
-#include "mpu6050/mpu6050.h"
-#include "hmc5883/hmc5883.h"
-#include "bmp180/bmp180.h"
-#include "imu/imu.h"
+#include "mpu6050.h"
+#include "hmc5883.h"
+#include "bmp180.h"
+#include "imu.h"
 #include "trans.h"
 
 #define I2C_MAP_URANUS     I2C0_SCL_PE19_SDA_PE18

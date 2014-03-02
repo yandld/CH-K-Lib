@@ -1,4 +1,4 @@
-#include "shell/shell.h"
+#include "shell.h"
 #include "uart.h"
 #include "common.h"
 

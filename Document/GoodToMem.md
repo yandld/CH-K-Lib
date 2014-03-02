@@ -26,7 +26,6 @@ http://tengoku.am.freescale.net/docs/kpsdk/lib_html/
 数据结构与算法分析
 Prentice Hall公司出版
 
-打印:  \\10.193.101.1
 IAR Lic:  10.192.224.202
 8. send patch to review
 git send-email --no-chain-reply-to --no-signed-off-by-cc --suppress-cc all --smtp-server remotesmtp.freescale.net --to b03824@freescale.com --to kpsdkae@freescale.com <patch files>
@@ -35,7 +34,6 @@ git send-email --no-chain-reply-to --no-signed-off-by-cc --suppress-cc all --smt
 http://hclfslitsm.service-now.com/
 //我的ISSUE查看
 http://sw-jira.freescale.net/secure/Dashboard.jspa
-
 
 For cygwin or git bash, direct edit the ~/.gitconfig like:
 
@@ -93,12 +91,12 @@ WangPeiliang:  6889 IT服务
 http://pan.baidu.com/share/home?uk=2870907047 
 
 操作系统：设计与实现 Prentice Hall公司出版
-数据结构与算法分析
+数据结构与算法分析 
 Prentice Hall公司出版
 
 git config -l 查看所有设置
 
-管理员账号 admin 密码adminyqhl
+管理员账号 admin 密码 adminyqhl
 
 FTP用户名：buythings001 　服务器IP为： 182.16.27.2  
 FTP密码：  
@@ -190,7 +188,6 @@ Office: 010-5879 8082 / Mobile: 13910691412
  -  家有椿庭萱（xuan,指父母）堂，已知天命
  -  牵挂于陋室之中，思切于千里之外。
  -  临书涕零，不知所云。
- -  丁府妙女美无比，文武双全无人及，双眸含情待佳人，我心静静随波移，爱涓潺潺永不息，你我心心紧相依。
 
  -  事无巨细，悉究本末；满腹经纶，学贯东西，治学严谨倍感其恩。
  -  陶韵留香惹风醉，笛音落雪暖梅开
@@ -202,35 +199,10 @@ Office: 010-5879 8082 / Mobile: 13910691412
  -  弃我去者，昨日之日不可留；乱我心者，今日之日多烦忧。长风万里送秋雁，对此可以酣高楼。蓬莱文章建安骨，中间小谢又清发
  -  **山居秋暝 空山新雨后，天气晚来秋。明月松间照，清泉石上流。**
 **竹喧归浣女，莲动下渔舟。随意春芳歇，王孙自可留。**
- -  陶韵留香惹风醉，笛音落雪暖梅开
  - 回眸一笑百媚生，六宫粉黛无颜色
- - 君不见黄河之水天上来，奔流到海不复回。 君不见高堂明镜悲白发，朝    如青丝暮成雪
+ - 君不见黄河之水天上来，奔流到海不复回。 君不见高堂明镜悲白发，朝如青丝暮成雪
  - 古来圣贤皆寂寞，惟有饮者留其名
  - 月落乌啼霜满天 江枫渔火对愁眠。 姑苏城外寒山寺，夜半钟声到客船
-
-
-
-
-# 常用书面 商业用语 #
-
-----------
-
-
-1.
-尊敬的郭主任：
-您好！ 我是中国石油大学（华东）的张建，非常感激能有一次安标国家中心的面试机会，虽然我最终未能得到在贵中心的工作职位，但您的工作热情和敬业精神让我受益良多。
-如果以后还能够有机会，我还希望能够向您请教学习。
-祝：工作顺利，万事如意！
-此致
-敬礼
-张建
-附: 个人银行卡号是   （中国农业银行，开户 杨曦）
-自北京至中国石油大学（华东）黄岛校区的车票总额为270元。再次表示衷心的感谢！
-2．
-信件最后
-即颂，
-冬安
-
 
 
 
@@ -272,7 +244,7 @@ Office: 010-5879 8082 / Mobile: 13910691412
 
 # 专业知识 #
 1. Hungarian Notation: 匈牙利命名法
-2. It a Really a changing issue.
+2. It a really a changing issue.
 3. with Accelerometer, Gyroscope, Magnetic and Barometer 
 
 # Linux #

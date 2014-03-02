@@ -90,9 +90,9 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
  *         @arg HW_GPIOE
  * @param  pinIndex: 0-31 引脚
  * @param  pull: 模式选择
- *         @arg kPullDisabled
- *         @arg kPullUp
- *         @arg kPullDown
+ *         @arg kPullDisabled:禁止上下拉
+ *         @arg kPullUp: 上拉
+ *         @arg kPullDown:下拉
  * @param  newState: 是否开启开漏输出模式 这个选项只在Kinetis K系列上有效果.
  * @retval None
  */
@@ -148,7 +148,22 @@ void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode
  /**
  * @brief  通过填入初始化结构体 初始化GPIO
  *
- * @param  GPIO_InitStruct: pointer to a GPIO_InitTypeDef structure that
+ * @code
+ *       //初始化引脚作为GPIO功能(PTB10) 推挽输出 并翻转该引脚的电平
+ *  GPIO_InitTypeDef GPIO_InitStruct1;
+ *  GPIO_InitStruct1.instance = HW_GPIOB;
+ *  GPIO_InitStruct1.mode = kGPIO_Mode_OPP; //推挽输出
+ *  GPIO_InitStruct1.pinx = 10;
+ *  //初始化GPIO 
+ *  GPIO_Init(&GPIO_InitStruct1);
+ *  while(1)
+ *  {
+ *      DelayMs(200); //延时200m
+ *      //翻转该引脚电平
+ *      GPIO_ToggleBit(HW_GPIOB, 10);
+ *  }
+ * @endcode
+ * @param  GPIO_InitStruct: GPIO初始化结构
  *         contains the configuration information for the specified GPIO peripheral.
  * @retval None
  */
@@ -221,8 +236,8 @@ uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode)
 }
 
  /**
- * @brief  Write a data bit to GPIO
- * @param  instance: GPIO instance
+ * @brief  输出高电平或者低电平(假设此引脚为输出功能)
+ * @param  instance: GPIO模块号
  *         @arg HW_GPIOA
  *         @arg HW_GPIOB
  *         @arg HW_GPIOC
@@ -230,8 +245,8 @@ uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode)
  *         @arg HW_GPIOE
  * @param  pinIndex: 0-31
  * @param  data:
- *         @arg 0 : low state
- *         @arg 1 : high state
+ *         @arg 0 : 低电平 
+ *         @arg 1 : 高电平
  * @retval None
  */
 void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data)
@@ -243,8 +258,8 @@ void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data)
     (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pinIndex));
 }
  /**
- * @brief  read a data bit from GPIO
- * @param  instance: GPIO instance
+ * @brief  读取一个引脚上的电平状态
+ * @param  instance: GPIO模块号
  *         @arg HW_GPIOA
  *         @arg HW_GPIOB
  *         @arg HW_GPIOC
@@ -252,8 +267,8 @@ void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data)
  *         @arg HW_GPIOE
  * @param  pinIndex: 0-31
  * @retval 
- *         @arg 0 : low state
- *         @arg 1 : high state
+ *         @arg 0 : 低电平
+ *         @arg 1 : 高电平
  */
 uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex)
 {

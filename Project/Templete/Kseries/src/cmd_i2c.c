@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "i2c.h"
 
-#define I2C_QUICK_INIT  I2C0_SCL_PE19_SDA_PE18
+#define I2C_QUICK_INIT  I2C0_SCL_PB02_SDA_PB03
 
 typedef struct
 {
@@ -31,7 +31,7 @@ static int _do_i2c_scan(int argc, char *const argv[])
     for(j = 0; j < ARRAY_SIZE(I2C_TestSpeedTable); j++)
     {
         gI2C_Instance = I2C_QuickInit(I2C_QUICK_INIT, I2C_TestSpeedTable[j]);
-        shell_printf("scanning i2c bus at:%dHz\r\n", I2C_TestSpeedTable[j]);
+        shell_printf("scanning i2c%d bus at:%dHz\r\n",gI2C_Instance,  I2C_TestSpeedTable[j]);
         for(i=0;i<127;i++)
         {
             I2C_GenerateSTART(gI2C_Instance);
@@ -45,7 +45,7 @@ static int _do_i2c_scan(int argc, char *const argv[])
             {
                 I2C_GenerateSTOP(gI2C_Instance);
                 while(!I2C_IsBusy(gI2C_Instance)); 
-                shell_printf("address:0x%x found!\r\n", i);
+                shell_printf("address:0x%X(0x%X) found!\r\n", i, i<<1);
             }
         }
     }
@@ -81,27 +81,12 @@ int DoI2C(int argc, char *const argv[])
     uint8_t i;
     static uint8_t init = 0;
 
-    for(i=0;i<ARRAY_SIZE(CMD_I2CxMAPTable);i++)
-    {
-        if(!strcmp(argv[1], CMD_I2CxMAPTable[i].name))
-        {
-            if(!init)
-            {
-                gI2C_Instance = I2C_QuickInit(CMD_I2CxMAPTable[i].I2CxMAP, 96*1000);
-                init = 1;
-            }
-        }
-    }
-    if(!init)
-    {
-        return -1;
-    }
-    if(!strcmp("scan", argv[2]))
+    if(!strcmp("scan", argv[1]))
     {
         _do_i2c_scan(argc, argv);
         return 0;
     }
-    if(!strcmp("it", argv[2]))
+    if(!strcmp("it", argv[1]))
     {
         _do_i2c_it(argc, argv);
         return 0;
@@ -109,29 +94,6 @@ int DoI2C(int argc, char *const argv[])
     return 0;
 }
 
-static int DoI2CComplete(int argc, char * const argv[], char last_char, int maxv, char * cmdv[])
-{
-    uint8_t str_len;
-    uint8_t found = 0;
-    uint8_t i = 0;
-    str_len = strlen(argv[argc-1]);
-    switch(argc)
-    {
-        case 2:
-            for(i = 0; i < ARRAY_SIZE(CMD_I2CxMAPTable); i++)
-            {
-                if(!strncmp(argv[argc-1], CMD_I2CxMAPTable[i].name, str_len))
-                {
-                    cmdv[found] = (char *)CMD_I2CxMAPTable[i].name;
-                    found++;
-                }
-            }
-            break;
-        default:
-            break;
-    }
-    return found;
-}
 
 const cmd_tbl_t CommandFun_I2C = 
 {
@@ -139,11 +101,11 @@ const cmd_tbl_t CommandFun_I2C =
     .maxargs = 5,
     .repeatable = 1,
     .cmd = DoI2C,
-    .usage = "I2C <MAP> <CMD>",
-    .complete = DoI2CComplete,
+    .usage = "I2C <CMD>",
+    .complete = NULL,
     .help = "\r\n"
-    "I2C <MAP> <CMD>\r\n"
-    "eg: I2C I2C1_SCL_PE01_SDA_PE00 scan"
+    "I2C <CMD>\r\n"
+    "eg: I2C scan"
 };
 
 

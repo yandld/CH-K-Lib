@@ -4,10 +4,10 @@
 #include "i2c.h"
 #include "systick.h"
 #include "cpuidy.h"
-#include "stdio.h"
+#include "stdio.h" 
 #include "common.h"
 
-#include "shell/shell.h"
+#include "shell.h"
 
 static uint8_t UART_Instance;
 
@@ -21,6 +21,10 @@ extern const cmd_tbl_t CommandFun_FLEXBUS;
 extern const cmd_tbl_t CommandFun_FTM;
 extern const cmd_tbl_t CommandFun_RESET;
 extern const cmd_tbl_t CommandFun_NVIC;
+extern const cmd_tbl_t CommandFun_SRAM;
+extern const cmd_tbl_t CommandFun_LCD;
+extern const cmd_tbl_t CommandFun_Hist;
+extern const cmd_tbl_t CommandFun_I2C;
 
 static void Putc(uint8_t data)
 {
@@ -93,15 +97,23 @@ void CalConst(const QuickInit_Type * table, uint32_t size)
 
 int main(void)
 {
+    uint32_t i;
     DelayInit();
     //初始化 PC3 PC4 为UART1引脚 波特率115200
    // UART_Instance = UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);
-    UART_Instance = UART_QuickInit(UART4_RX_PC14_TX_PC15,115200);
+   // UART_Instance = UART_QuickInit(UART4_RX_PC14_TX_PC15,115200);
+    UART_Instance = UART_QuickInit(UART0_RX_PD06_TX_PD07,115200);
+    
     UART_printf("HelloWorld\r\n");
       
-    GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     GPIO_QuickInit(HW_GPIOD, 0, kGPIO_Mode_OPP);
-    
+    for(i=0;i<40;i++)
+    {
+        GPIO_ToggleBit(HW_GPIOE, 6);
+        DelayMs(10);
+    }
+   // SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(14);
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
     shell_register_function(&CommandFun_GPIO);
@@ -113,6 +125,10 @@ int main(void)
     shell_register_function(&CommandFun_FTM); 
     shell_register_function(&CommandFun_RESET); 
     shell_register_function(&CommandFun_NVIC); 
+    shell_register_function(&CommandFun_SRAM); 
+    shell_register_function(&CommandFun_LCD); 
+    shell_register_function(&CommandFun_Hist);
+    shell_register_function(&CommandFun_I2C);
 
     //CalConst(FTM_QuickInitTable, ARRAY_SIZE(FTM_QuickInitTable));
     while(1)
@@ -125,7 +141,11 @@ int main(void)
     }
 }
 
-
+void NMI_Handler(void)
+{
+    printf("NMI Enter\r\n");
+    
+}
 
 #ifdef USE_FULL_ASSERT
 void assert_failed(char * file, uint32_t line)

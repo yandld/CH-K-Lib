@@ -303,14 +303,41 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, Functional
 }
 
 /**
- * @brief  Install UART Tx Rx Callback function
- *         this function should be called before ITDMAConfig function
- * @param  instance: UART instance
+ * @brief  设置UART中断回调函数(发送 接收共用一个回调函数)
+ * @code
+ *      //初始化UART串口 波特率115200 开启接收中断
+ *      uint32_t UART_Instance;
+ *      //声明中断回调函数
+ *      static void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag);
+ *      UART_Instance = UART_QuickInit(UART4_RX_PC14_TX_PC15,115200);
+ *      UART_CallbackInstall(instance, UART_ISR);  
+ *      UART_ITDMAConfig(instance, kUART_IT_RxBTC, ENABLE); 
+ *      //中断回调函数
+ *      static void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag)
+ *      {
+ *          static uint8_t ch;
+ *          // 发送完成中断
+ *          if(flag == kUART_IT_TxBTC)
+ *          {
+ *              *pbyteToSend = ch;
+ *              UART_ITDMAConfig(instance, kUART_IT_TxBTC, DISABLE);
+ *          }
+ *          //接收字节中断
+ *          if(flag == kUART_IT_RxBTC)
+ *          {
+ *              ch = byteReceived;
+ *              UART_ITDMAConfig(instance, kUART_IT_TxBTC, ENABLE);
+ *          }
+ *      }
+ * @endcode
+ * @param  instance: UART模块号
  *         @arg HW_UART0
  *         @arg HW_UART1
  *         @arg ...
- * @param  AppCBFun: pointer of callback function
+ * @param  AppCBFun: 回调函数指针
  * @retval 0:succ 1:fail
+ *         @arg 0:成功
+ *         @arg 1:失败
  */
 void UART_CallbackInstall(uint8_t instance, UART_CallBackType AppCBFun)
 {

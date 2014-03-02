@@ -13,8 +13,6 @@
 #include "common.h"
 
 
-
-
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -25,8 +23,6 @@
 #define HW_PIT0_CH1   (0x01U)
 #define HW_PIT0_CH2   (0x02U)
 #define HW_PIT0_CH3   (0x03U)
-
-	 
 
 //!< UART CallBack Type
 typedef void (*PIT_CallBackType)(void);
@@ -53,6 +49,4 @@ void PIT_ITDMAConfig(uint8_t chl, FunctionalState NewState);
 #endif
 
 #endif
-
-
 

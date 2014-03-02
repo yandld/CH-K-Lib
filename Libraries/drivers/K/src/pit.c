@@ -11,18 +11,18 @@
 #include "common.h"
 #include "clock.h"
 
-
-static uint32_t  fac_us = 0; //!< usDelay Mut
-static uint32_t  fac_ms = 0; //!< msDelay Mut
+//!< Internal vars
+static uint32_t fac_us; //!< usDelay Mut
+static uint32_t fac_ms; //!< msDelay Mut
 
 
 #if (!defined(PIT_BASES))
 
-    #if     (defined(MK60DZ10))
-    #define PIT_BASES {PIT}
-    #elif   (defined(MK10D5))
-    #define PIT_BASES {PIT}
-    #endif
+#if     (defined(MK60DZ10))
+#define PIT_BASES {PIT}
+#elif   (defined(MK10D5))
+#define PIT_BASES {PIT}
+#endif
 
 #endif
 
@@ -64,7 +64,8 @@ void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
     //get clock
     CLOCK_GetClockFrequency(kBusClock, &fac_us);
     fac_us /= 1000000;
-    fac_ms = fac_us * 1000;
+    fac_ms = (fac_us * 1000);
+    fac_ms = fac_ms;
     PIT_InstanceTable[PIT_InitStruct->instance]->CHANNEL[PIT_InitStruct->chl].LDVAL = fac_us * PIT_InitStruct->timeInUs;
     PIT_StartCounting(PIT_InitStruct->chl);
     PIT_Cmd(ENABLE);
@@ -76,6 +77,9 @@ void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
  * 
  * @code
  *      // 初始化PIT模块 0 通道 产生100MS中断 并开启中断 注册回调函数 在回调函数中打印调试信息
+ *      //声明中断回调函数
+ *      static void PIT0_CallBack(void);
+ *      //初始化PIT
  *      PIT_QuickInit(HW_PIT_CH0, 100000);
  *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //注册回调函数
  *      PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);            //开启中断
@@ -108,6 +112,9 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
  * 
  * @code
  *      // 初始化PIT模块 0 通道 产生100MS中断 并开启中断 注册回调函数 在回调函数中打印调试信息
+ *      //声明中断回调函数
+ *      static void PIT0_CallBack(void);
+ *      //初始化PIT
  *      PIT_QuickInit(HW_PIT_CH0, 100000);
  *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //注册回调函数
  *      PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);            //开启中断
@@ -135,17 +142,44 @@ void PIT_ITDMAConfig(uint8_t chl, FunctionalState NewState)
     (ENABLE == NewState)?(NVIC_EnableIRQ(PIT_IRQnTable[chl])):(NVIC_DisableIRQ(PIT_IRQnTable[chl]));
 }
 
-
+ /**
+ * @brief  PIT 定时器开始计数
+ * 
+ * @param  chl 通道号
+ *         @arg HW_PIT0_CH0 
+ *         @arg HW_PIT0_CH1
+ *         @arg HW_PIT0_CH2 
+ *         @arg HW_PIT0_CH3 
+ * @retval None
+ */
 void PIT_StartCounting(uint8_t chl)
 {
     PIT->CHANNEL[chl].TCTRL |= (PIT_TCTRL_TEN_MASK);
 }
 
+ /**
+ * @brief  PIT 定时器停止计数
+ * 
+ * @param  chl 通道号
+ *         @arg HW_PIT0_CH0 
+ *         @arg HW_PIT0_CH1
+ *         @arg HW_PIT0_CH2 
+ *         @arg HW_PIT0_CH3 
+ * @retval None
+ */
 void PIT_StopCounting(uint8_t chl)
 {
     PIT->CHANNEL[chl].TCTRL &= (~PIT_TCTRL_TEN_MASK);
 }
 
+ /**
+ * @brief  开启 或 关闭PIT模块 在初始化后默认开启
+ * 
+ * @param  NewState
+ *         @arg ENABLE: 开启
+ *         @arg ENABLE: 关闭
+ * @retval None
+ */
 void PIT_Cmd(FunctionalState NewState)
 {
     (ENABLE == NewState)?(PIT->MCR &= ~PIT_MCR_MDIS_MASK):(PIT->MCR |= PIT_MCR_MDIS_MASK);

@@ -1,7 +1,7 @@
 
 #include "flexbus.h"
-#include "shell/shell.h"
-
+#include "shell.h"
+#include "ili9320.h"
 
 
 int CMD_FLEXBUS(int argc, char * const * argv)
@@ -12,14 +12,9 @@ int CMD_FLEXBUS(int argc, char * const * argv)
     shell_printf("NOT SUPPORTED FEATURE\r\n");
     
 #else
-    FLEXBUS_InitTypeDef FLEXBUS_InitStruct;
-    FLEXBUS_InitStruct.addressSpaceInByte = 512*1024;
-    FLEXBUS_InitStruct.autoAckMode = kFLEXBUS_AutoAckEnable;
-    FLEXBUS_InitStruct.chipSelectChl = kFLEXBUS_CS0;
-    FLEXBUS_InitStruct.dataAlignMode = kFLEXBUS_DataLeftAligned;
-    FLEXBUS_InitStruct.portSize = kFLEXBUS_PortSize_16Bit;
-    FLEXBUS_InitStruct.chipSelectAddress = 0x60000000;
-    FLEXBUS_Init(&FLEXBUS_InitStruct);
+    
+   // ili9320_Init();
+  //  SRAM_Init();
 #endif
 
     return 0;

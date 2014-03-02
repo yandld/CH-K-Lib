@@ -1,4 +1,4 @@
-#include "shell/shell.h"
+#include "shell.h"
 #include "gpio.h"
 #include "common.h"
 
@@ -6,13 +6,13 @@ int DoGPIO(int argc, char *const argv[])
 {
     uint8_t i;
 
-    GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);
-    GPIO_QuickInit(HW_GPIOD, 0, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOE, 7, kGPIO_Mode_OPP);
  
     for(i=0;i<10;i++)
     {
-        GPIO_ToggleBit(HW_GPIOA, 1);
-        GPIO_ToggleBit(HW_GPIOD, 0); 
+        GPIO_ToggleBit(HW_GPIOE, 6);
+        GPIO_ToggleBit(HW_GPIOE, 7); 
         DelayMs(100);
     }
     return 0;

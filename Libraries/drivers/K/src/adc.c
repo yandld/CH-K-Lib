@@ -64,7 +64,7 @@ static const IRQn_Type ADC_IRQnTable[] =
 //! @{
 
 
-//! @defgroup ADC
+//! @defgroup ADC(模数转换模块)
 //! @brief ADC API functions
 //! @{
 
@@ -75,12 +75,14 @@ static const IRQn_Type ADC_IRQnTable[] =
  *         @arg HW_ADC0
  *         @arg HW_ADC1
  *         @arg ...
- * @param  mux: ADC 转换器选择
+ * @param  mux: ADC 转换器通道 复用 选择
  *         @arg kADC_MuxA
  *         @arg kADC_MuxB
- * @retval 0:转换完成 1:转换失败或转换进行中
+ * @retval 
+ *         @arg 0:转换完成
+ *         @arg 1:转换失败
  */
-static int32_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
+int32_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
 {
     return (((ADC_InstanceTable[instance]->SC1[mux]) & ADC_SC1_COCO_MASK) >> ADC_SC1_COCO_SHIFT);  
 }
@@ -210,11 +212,29 @@ void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux)
 
 }
 
+/**
+ * @brief  读取ADC转换数据(non-block函数 立即返回读取结果)
+ *         
+ * @param  instance: ADC 模块号
+ *         @arg HW_ADC0
+ *         @arg HW_ADC1
+ *         @arg ...
+ * @param  mux: ADC 转换器通道 复用 选择
+ *         @arg kADC_MuxA
+ *         @arg kADC_MuxB
+ * @retval :读取结果 如果当前还未完成转换 则返回上一次结果
+ */
 int32_t ADC_ReadValue(uint32_t instance, uint32_t mux)
 {
     return ADC_InstanceTable[instance]->R[mux];
 }
 
+/**
+ * @brief  读取ADC转换结果 只需填入ADC快速初始化宏即可
+ *         
+ * @param  ADCxMAP: ADC 快速初始化宏
+ * @retval 转换结果
+ */
 int32_t ADC_QuickReadValue(uint32_t ADCxMAP)
 {
     QuickInit_Type * pADCxMap = (QuickInit_Type*)&(ADCxMAP);
@@ -222,10 +242,22 @@ int32_t ADC_QuickReadValue(uint32_t ADCxMAP)
     uint32_t chl = pADCxMap->channel;
     uint32_t mux = pADCxMap->reserved;
     ADC_StartConversion(instance, chl, mux);
+    // waiting for ADC complete
     while(ADC_IsConversionCompleted(instance, mux)) {};
     return ADC_ReadValue(instance, mux);
 }
 
+/**
+ * @brief  ADC 中断及DMA配置
+ *         
+ * @param  instance: ADC 模块号     
+ * @param  mux:      ADC 通道复用选择
+ * @param  config:   ADC 中断及DMA配置
+ * @param  newStateg:   ADC 中断及DMA配置
+ *         @arg ENABLE:使能
+ *         @arg DISABLE:禁止
+ * @retval None
+ */
 void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config, FunctionalState newState)
 {
     switch(config)

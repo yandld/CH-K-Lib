@@ -909,14 +909,14 @@
               <FilePath>..\src\cmd_lcd.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1366,7 +1366,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60DZ10</Define>
+              <Define>MK60DZ10 CHK60EVB2</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src</IncludePath>
             </VariousControls>
@@ -1920,14 +1920,14 @@
               <FilePath>..\src\cmd_lcd.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2931,14 +2931,14 @@
               <FilePath>..\src\cmd_lcd.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -3942,14 +3942,14 @@
               <FilePath>..\src\cmd_lcd.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>

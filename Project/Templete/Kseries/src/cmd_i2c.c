@@ -1,24 +1,6 @@
 #include "shell.h"
 #include "i2c.h"
-
-#define I2C_QUICK_INIT  I2C0_SCL_PB02_SDA_PB03
-
-typedef struct
-{
-    const char * name;
-    uint32_t I2CxMAP;
-}CMD_I2CxMAP_Type;
-
-static const CMD_I2CxMAP_Type CMD_I2CxMAPTable[] = 
-{
-    {"I2C1_SCL_PE01_SDA_PE00", I2C1_SCL_PE01_SDA_PE00},
-    {"I2C0_SCL_PE19_SDA_PE18", I2C0_SCL_PE19_SDA_PE18},
-    {"I2C0_SCL_PF22_SDA_PF23", I2C0_SCL_PF22_SDA_PF23},
-    {"I2C0_SCL_PB00_SDA_PB01", I2C0_SCL_PB00_SDA_PB01},
-    {"I2C0_SCL_PB02_SDA_PB03", I2C0_SCL_PB02_SDA_PB03},
-    {"I2C1_SCL_PC10_SDA_PC11", I2C1_SCL_PC10_SDA_PC11},
-    {"I2C0_SCL_PD08_SDA_PD09", I2C0_SCL_PD08_SDA_PD09},
-};
+#include "board.h"
 
 static uint8_t gI2C_Instance = 0;
 
@@ -30,7 +12,7 @@ static int _do_i2c_scan(int argc, char *const argv[])
     
     for(j = 0; j < ARRAY_SIZE(I2C_TestSpeedTable); j++)
     {
-        gI2C_Instance = I2C_QuickInit(I2C_QUICK_INIT, I2C_TestSpeedTable[j]);
+        gI2C_Instance = I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, I2C_TestSpeedTable[j]);
         shell_printf("scanning i2c%d bus at:%dHz\r\n",gI2C_Instance,  I2C_TestSpeedTable[j]);
         for(i=0;i<127;i++)
         {
@@ -80,7 +62,10 @@ int DoI2C(int argc, char *const argv[])
 {
     uint8_t i;
     static uint8_t init = 0;
-
+    if(argc == 1)
+    {
+        return CMD_RET_USAGE;
+    }
     if(!strcmp("scan", argv[1]))
     {
         _do_i2c_scan(argc, argv);

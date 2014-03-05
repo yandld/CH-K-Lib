@@ -8,6 +8,7 @@
 #include "common.h"
 
 #include "shell.h"
+#include "board.h"
 
 static uint8_t UART_Instance;
 
@@ -100,19 +101,12 @@ int main(void)
     uint32_t i;
     DelayInit();
     //初始化 PC3 PC4 为UART1引脚 波特率115200
-   // UART_Instance = UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);
-   // UART_Instance = UART_QuickInit(UART4_RX_PC14_TX_PC15,115200);
-    UART_Instance = UART_QuickInit(UART0_RX_PD06_TX_PD07,115200);
+    UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
     
     UART_printf("HelloWorld\r\n");
       
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     GPIO_QuickInit(HW_GPIOD, 0, kGPIO_Mode_OPP);
-    for(i=0;i<40;i++)
-    {
-        GPIO_ToggleBit(HW_GPIOE, 6);
-        DelayMs(10);
-    }
    // SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(14);
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);

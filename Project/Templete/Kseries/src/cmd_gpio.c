@@ -1,19 +1,26 @@
 #include "shell.h"
 #include "gpio.h"
 #include "common.h"
+#include "board.h"
 
 int DoGPIO(int argc, char *const argv[])
 {
-    uint8_t i;
-
-    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    GPIO_QuickInit(HW_GPIOE, 7, kGPIO_Mode_OPP);
- 
-    for(i=0;i<10;i++)
+    uint32_t i,j;
+    uint32_t LED_GPIOInstanceTable[] = BOARD_LED_GPIO_BASES;
+    uint32_t led_num = ARRAY_SIZE(LED_GPIOInstanceTable);
+    uint32_t LED_PinTable[] = BOARD_LED_PIN_BASES;
+    
+    for(i = 0; i < led_num; i++)
     {
-        GPIO_ToggleBit(HW_GPIOE, 6);
-        GPIO_ToggleBit(HW_GPIOE, 7); 
-        DelayMs(100);
+        GPIO_QuickInit(LED_GPIOInstanceTable[i], LED_PinTable[i], kGPIO_Mode_OPP);  
+    }
+    for(i = 0; i < 20; i++)
+    {
+        for(j = 0; j < led_num; j++)
+        {
+            GPIO_ToggleBit(LED_GPIOInstanceTable[j], LED_PinTable[j]);
+        }
+        DelayMs(40);
     }
     return 0;
 }

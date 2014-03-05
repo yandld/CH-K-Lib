@@ -138,7 +138,7 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>0</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>7</TargetSelection>
@@ -355,7 +355,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK10D5</Define>
+              <Define>MK10D5 URANUS</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\inc</IncludePath>
             </VariousControls>
@@ -489,19 +489,19 @@
           <GroupName>devices</GroupName>
           <Files>
             <File>
-              <FileName>hmc5883.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\hmc5883\hmc5883.c</FilePath>
-            </File>
-            <File>
               <FileName>bmp180.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\bmp180\bmp180.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\devices\src\bmp180.c</FilePath>
+            </File>
+            <File>
+              <FileName>hmc5883.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\hmc5883.c</FilePath>
             </File>
             <File>
               <FileName>mpu6050.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\mpu6050\mpu6050.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\devices\src\mpu6050.c</FilePath>
             </File>
           </Files>
         </Group>

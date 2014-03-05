@@ -40,7 +40,7 @@ static uint8_t Getc(void)
 }
 
 
-shell_io_install_t Shell_IOInstallStruct1 = 
+static shell_io_install_t Shell_IOInstallStruct1 = 
 {
 	.sh_getc = Getc,
 	.sh_putc = Putc,
@@ -100,13 +100,8 @@ int main(void)
 {
     uint32_t i;
     DelayInit();
-    //初始化 PC3 PC4 为UART1引脚 波特率115200
     UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
-    
-    UART_printf("HelloWorld\r\n");
-      
-    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    GPIO_QuickInit(HW_GPIOD, 0, kGPIO_Mode_OPP);
+    printf("HelloWorld\r\n");
    // SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(14);
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
@@ -128,17 +123,12 @@ int main(void)
     while(1)
     {
         shell_main_loop("SHELL>>");
-        DelayMs(500);
-     //   UART_printf("I am CHK\r\n");
-        GPIO_ToggleBit(HW_GPIOA, 1);
-        GPIO_ToggleBit(HW_GPIOD, 0);
     }
 }
 
 void NMI_Handler(void)
 {
     printf("NMI Enter\r\n");
-    
 }
 
 #ifdef USE_FULL_ASSERT

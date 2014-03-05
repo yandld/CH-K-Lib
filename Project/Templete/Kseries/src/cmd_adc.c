@@ -25,7 +25,7 @@ int CMD_ADC(int argc, char * const * argv)
     ADC_InitStruct1.SingleOrDifferential = kADC_Single;
     ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;
     //³õÊ¼»¯ADCÄ£¿é
-   ADC_Init(&ADC_InitStruct1);
+    ADC_Init(&ADC_InitStruct1);
     
     
     instance = ADC_QuickInit(ADC0_SE20_DM1, kADC_SingleDiff12or13);

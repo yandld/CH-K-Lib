@@ -60,14 +60,11 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     // enable clock gate
     uint32_t * SIM_SCGx = (void*) SIM_FTMClockGateTable[FTM_InitStruct->instance].register_addr;
     *SIM_SCGx |= SIM_FTMClockGateTable[FTM_InitStruct->instance].mask;
-
     //disable FTM, we must set CLKS(0) before config FTM!
     FTM_InstanceTable[FTM_InitStruct->instance]->SC = 0;
-   // FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(0);
-    
+    // FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(0);
     // enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function)
     FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK;
-    
     // cal ps
     CLOCK_GetClockFrequency(kBusClock, &input_clk);
     pres = (input_clk/FTM_InitStruct->frequencyInHZ)/FTM_MOD_MOD_MASK;
@@ -92,25 +89,19 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     //set CNT and CNTIN
     FTM_InstanceTable[FTM_InitStruct->instance]->CNT = 0;
     FTM_InstanceTable[FTM_InitStruct->instance]->CNTIN = 0;
-    
     // set modulo
     FTM_InstanceTable[FTM_InitStruct->instance]->MOD = (input_clk/(1<<ps))/FTM_InitStruct->frequencyInHZ;
-
     // set LOCK bit to load MOD value
     FTM_InstanceTable[FTM_InitStruct->instance]->PWMLOAD = 0xFFFFFFFF;
-    
     printf("MOD Should be:%d\r\n",  (input_clk/(1<<ps))/FTM_InitStruct->frequencyInHZ);
     printf("MOD acutall is:%d\r\n", FTM_InstanceTable[FTM_InitStruct->instance]->MOD);
     printf("ps:%d\r\n", ps);
-
     // set FTM clock to system clock
     FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
     FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(1);
-    
     // set ps, this must be done after set modulo
     FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_PS_MASK;
     FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_PS(ps); 
-    
     // set FTM mode
     FTM_SetMode(FTM_InitStruct->instance, FTM_InitStruct->chl, FTM_InitStruct->mode);
 }
@@ -274,13 +265,6 @@ uint8_t FTM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
     FTM_InitStruct1.frequencyInHZ = frequencyInHZ;
     FTM_InitStruct1.mode = kPWM_EdgeAligned;
     FTM_InitStruct1.chl = pFTMxMap->channel;
-
-    printf("pFTMxMap->ip_instance:%d\r\n", pFTMxMap->ip_instance);
-    printf("pFTMxMap->io_instance:%d\r\n", pFTMxMap->io_instance);
-    printf("pFTMxMap->io_base:%d\r\n", pFTMxMap->io_base);
-    printf("pFTMxMap->io_offset:%d\r\n", pFTMxMap->io_offset);
-    printf("pFTMxMap->mux:%d\r\n", pFTMxMap->mux);
-    printf("pFTMxMap->channel:%d\r\n", pFTMxMap->channel);
     
     FTM_Init(&FTM_InitStruct1);
     // init pinmux

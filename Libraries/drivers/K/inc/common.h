@@ -5,27 +5,24 @@
 #include <stdbool.h>
 #ifdef MK10D5
 #include "MK10D5.h"
-#endif
-#ifdef MK10D10
+#elif MK10D10
 #include "MK10D10.h"
-#endif
-#ifdef MK20D10
+#elif MK20D10
 #include "MK20D10.h"
-#endif
-#ifdef MK40D10
+#elif MK40D10
 #include "MK40D10.h"
-#endif
-#ifdef MK60D10
+#elif MK60D10
 #include "MK60D10.h"
-#endif
-#ifdef MK60DZ10
+#elif MK60DZ10
 #include "MK60DZ10.h"
-#endif
-#ifdef MK70F12
+#elif MK70F12
 #include "MK70F12.h"
-#endif
-#ifdef MK70F15
+#elif MK70F15
 #include "MK70F15.h"
+
+#else
+#error "No CPU defined!"
+
 #endif
 
 

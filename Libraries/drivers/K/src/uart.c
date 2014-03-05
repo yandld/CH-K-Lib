@@ -261,7 +261,10 @@ uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
  *         @arg HW_UART1
  *         @arg ...
  * @param  config: 模式选择
- *
+ *         @arg kUART_IT_TxBTC: 发送一个字节完成中断
+ *         @arg kUART_DMA_TxBTC:发送一个字节完成触发DMA传输
+ *         @arg kUART_IT_RxBTC :接收一个字节完成中断
+ *         @arg kUART_DMA_RxBTC :接收一个字节完成触发DMA
  * @param  newState:开启或者关闭
  *         @arg ENABLE
  *         @arg DISABLE
@@ -271,12 +274,6 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, Functional
 {
     switch(config)
     {
-        case kUART_ITDMA_Disable:
-            
-            NVIC_DisableIRQ(UART_IRQnTable[instance]);
-            UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK;
-            UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK;
-            break;
         case kUART_IT_TxBTC:
             (ENABLE == newState)?(UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK):(UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK);
             if(ENABLE == newState)

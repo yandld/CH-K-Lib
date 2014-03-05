@@ -4,6 +4,10 @@
 
 int CMD_SRAM(int argc, char * const * argv)
 {
+#if (defined(MK10D5))
+    shell_printf("NOT SUPPORTED\r\n");
+    return 0;
+#else
     uint32_t err_cnt;
     SRAM_Init();
     err_cnt = SRAM_SelfTest();
@@ -16,6 +20,7 @@ int CMD_SRAM(int argc, char * const * argv)
         shell_printf("SRAM TEST PASSED\r\n");
     }
     return 0;
+#endif
 }
 
 const cmd_tbl_t CommandFun_SRAM = 

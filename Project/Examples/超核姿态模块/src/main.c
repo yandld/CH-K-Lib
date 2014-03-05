@@ -5,7 +5,7 @@
 #include "i2c.h"
 #include "systick.h"
 #include "stdio.h"
-#include "common.h"
+#include "board.h"
 
 //包含 姿态模块所需的头文件
 #include "mpu6050.h"
@@ -14,7 +14,6 @@
 #include "imu.h"
 #include "trans.h"
 
-#define I2C_MAP_URANUS     I2C0_SCL_PE19_SDA_PE18
 #define I2C_SPEED_URANUS   (376*1000)
 
 //实习协议传输组件的回调 并连接回调
@@ -72,8 +71,8 @@ uint8_t InitSensor(void)
     uint8_t ret = 0;
     if(!init)
     {
-        ret += mpu6050_init(&mpu6050_device1, I2C_MAP_URANUS, "mpu6050", I2C_SPEED_URANUS);
-        ret += hmc5883_init(&hmc_device, I2C_MAP_URANUS, "hmc5883", I2C_SPEED_URANUS);
+        ret += mpu6050_init(&mpu6050_device1, BOARD_I2C_MAP, "mpu6050", I2C_SPEED_URANUS);
+        ret += hmc5883_init(&hmc_device, BOARD_I2C_MAP, "hmc5883", I2C_SPEED_URANUS);
         ret += bmp180_init(&bmp180_device1, HW_I2C0, 0x77, I2C_SPEED_URANUS);
         init = 1;
     }
@@ -90,17 +89,25 @@ int main(void)
     uint32_t i;
     uint8_t ret;
     uint32_t counter = 0;
+    uint32_t LED_instanceTable[] = BOARD_LED_GPIO_BASES;
+    uint32_t LED_PinTable[] = BOARD_LED_PIN_BASES;
+    uint32_t led_num = ARRAY_SIZE(LED_instanceTable);
     //int32_t temperature;
     //int32_t pressure;
     imu_float_euler_angle_t angle;
     imu_raw_data_t raw_data;
     DelayInit(); //Init Delay
-    UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);  //Init UART and printf
-    GPIO_QuickInit(HW_GPIOA, 1 , kGPIO_Mode_OPP);   //Init LED
+    // init UART and printf
+    UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
+    // init LED
+    for(i = 0; i < led_num; i++)
+    {
+        GPIO_QuickInit(LED_instanceTable[i], LED_PinTable[i], kGPIO_Mode_OPP);  
+    }
     //闪一下LED 指示系统要运行了
     for(i = 0; i < 10; i++)
     {
-        GPIO_ToggleBit(HW_GPIOA, 1);
+        GPIO_ToggleBit(LED_instanceTable[0], LED_PinTable[0]);
         DelayMs(50);
     }
     //初始化传感器
@@ -152,7 +159,7 @@ int main(void)
         counter %= 10; 
         if(!counter)
         {
-            GPIO_ToggleBit(HW_GPIOA, 1);
+            GPIO_ToggleBit(LED_instanceTable[0], LED_PinTable[0]);
         }
     }
 }

@@ -69,7 +69,6 @@ typedef enum
 //!< interrupt and DMA select
 typedef enum
 {
-    kUART_ITDMA_Disable,      //!< Disable Interrupt and DMA
     kUART_IT_TxBTC,           //!< Byte Transfer Complete Interrupt for Tx
     kUART_DMA_TxBTC,          //!< DMA Trigger On Byte Transfer Complete for Tx
     kUART_IT_RxBTC,           //!< Byte Transfer Complete Interrupt for Rx

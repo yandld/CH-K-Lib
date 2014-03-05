@@ -12,8 +12,8 @@ static int _do_i2c_scan(int argc, char *const argv[])
     
     for(j = 0; j < ARRAY_SIZE(I2C_TestSpeedTable); j++)
     {
-        gI2C_Instance = I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, I2C_TestSpeedTable[j]);
-        shell_printf("scanning i2c%d bus at:%dHz\r\n",gI2C_Instance,  I2C_TestSpeedTable[j]);
+        gI2C_Instance = I2C_QuickInit(BOARD_I2C_MAP, I2C_TestSpeedTable[j]);
+        shell_printf("Scanning I2C%d bus at:%dHz\r\n",gI2C_Instance,  I2C_TestSpeedTable[j]);
         for(i=0;i<127;i++)
         {
             I2C_GenerateSTART(gI2C_Instance);
@@ -40,21 +40,17 @@ void I2C_ISR(void)
 
 static int _do_i2c_it(int argc, char *const argv[])
 {
-    shell_printf("i2c it test...\r\n");
+    gI2C_Instance = I2C_QuickInit(BOARD_I2C_MAP, 47000);
+    shell_printf("Scanning I2C%d bus at:%dHz\r\n",gI2C_Instance, 47000);
+    uint8_t i2c_7bit_address = strtoul(argv[2], 0, 0);
+    shell_printf("i2c it test Address:0x%x(%d)\r\n", i2c_7bit_address, i2c_7bit_address);
     I2C_CallbackInstall(gI2C_Instance, I2C_ISR);
     I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_BTC, ENABLE);
     I2C_GenerateSTART(gI2C_Instance);
-    I2C_Send7bitAddress(gI2C_Instance, 0x33, kI2C_Write);
-    if(I2C_WaitAck(gI2C_Instance))
-    {
-        I2C_GenerateSTOP(gI2C_Instance);
-        while(!I2C_IsBusy(gI2C_Instance));
-    }
-    else
-    {
-        I2C_GenerateSTOP(gI2C_Instance);
-        while(!I2C_IsBusy(gI2C_Instance));    
-    }
+    I2C_Send7bitAddress(gI2C_Instance, i2c_7bit_address, kI2C_Write);
+    shell_printf("waitting for IT...\r\n");
+    DelayMs(200);
+    I2C_GenerateSTOP(gI2C_Instance);
     I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_BTC, DISABLE);
 }
 
@@ -66,15 +62,19 @@ int DoI2C(int argc, char *const argv[])
     {
         return CMD_RET_USAGE;
     }
-    if(!strcmp("scan", argv[1]))
+    if(!strcmp("SCAN", argv[1]))
     {
         _do_i2c_scan(argc, argv);
         return 0;
     }
-    if(!strcmp("it", argv[1]))
+    if(!strcmp("IT", argv[1]) && (argc == 3))
     {
         _do_i2c_it(argc, argv);
         return 0;
+    }
+    else
+    {
+        return CMD_RET_USAGE;
     }
     return 0;
 }

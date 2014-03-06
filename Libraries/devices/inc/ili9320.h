@@ -1,9 +1,9 @@
 #include "common.h"
 
 //FlexBus总线定义
-#define FLEXBUS_BASE_ADDRESS  0xA0000000
-#define LCD_COMMAND_ADDRESS		*(unsigned short *)0xA0000000
-#define LCD_DATA_ADDRESS		  *(unsigned short *)0xA8000000
+#define FLEXBUS_BASE_ADDRESS        0x70000000
+#define LCD_COMMAND_ADDRESS         *(unsigned short *)0x70000000
+#define LCD_DATA_ADDRESS            *(unsigned short *)0x78000000
 
 //写数据，写命令
 #define WMLCDCOM(cmd)	   {LCD_COMMAND_ADDRESS = cmd;}
@@ -42,5 +42,5 @@
 
 //!< API functions
 void ili9320_Init(void);
-
+uint32_t ILI9320_GetDeivceID(void);
 

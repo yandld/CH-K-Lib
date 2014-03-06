@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "clock.h"
 #include "adc.h"
+#include "board.h"
 
 static uint8_t instance;
 static void ADC_CallBack(void)
@@ -28,13 +29,13 @@ int CMD_ADC(int argc, char * const * argv)
     ADC_Init(&ADC_InitStruct1);
     
     
-    instance = ADC_QuickInit(ADC0_SE20_DM1, kADC_SingleDiff12or13);
+    instance = ADC_QuickInit(BOARD_ADC_MAP, kADC_SingleDiff12or13);
     ADC_CallbackInstall(instance, ADC_CallBack);
     
     ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_EOF, ENABLE);
     while(1)
     {
-        ADC_StartConversion(instance, 20, kADC_MuxA);
+        ADC_StartConversion(instance, 19, kADC_MuxA);
        // value = ADC_QuickReadValue(ADC0_SE20_DM1);
        // shell_printf("AD:%d\r\n", value);
       

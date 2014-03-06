@@ -7,6 +7,10 @@
   * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
   ******************************************************************************
   */
+#ifndef __FLEXBUS_H__
+#define __FLEXBUS_H__
+
+
 #include "common.h"
 
 //!< Flexbus 数据对其方式选择
@@ -74,4 +78,8 @@ typedef struct
 
 //!< API functions
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct);
+
+
+
+#endif
 

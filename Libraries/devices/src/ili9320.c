@@ -10,8 +10,13 @@
 
  uint16_t LCD_ReadRegister(uint16_t RegisterIndex)
 {
-    WMLCDCOM(RegisterIndex);	
+    WMLCDCOM(RegisterIndex);
     return (*(uint32_t*)(&LCD_DATA_ADDRESS));
+}
+
+uint32_t ILI9320_GetDeivceID(void)
+{
+    return LCD_ReadRegister(0x00);
 }
 
 void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos)
@@ -52,11 +57,10 @@ void ili9320_Init(void)
     //Flexbus Init
     SIM->SCGC5 |= (SIM_SCGC5_PORTA_MASK | SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTE_MASK);
     //control signals
-    PORTB->PCR[19] = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;          // fb_oe_b
-    PORTD->PCR[1]  = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;          // fb_cs0_b
+    PORTB->PCR[19] = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;          // FB_OE
+    PORTD->PCR[1]  = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;          // CS0
     PORTA->PCR[26] = PORT_PCR_MUX(6)|PORT_PCR_DSE_MASK;          // A27
     PORTC->PCR[16] = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;          // FB_BE_23_16
-    
     
     /*
     PORTB->PCR[18] = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;           //  FB_AD15
@@ -100,9 +104,9 @@ void ili9320_Init(void)
     FLEXBUS_InitStruct.CSn = kFLEXBUS_CS0;
     FLEXBUS_InitStruct.dataAlignMode = kFLEXBUS_DataLeftAligned;
     FLEXBUS_InitStruct.dataWidth = kFLEXBUS_PortSize_16Bit;
-    FLEXBUS_InitStruct.baseAddress = 0xA0000000;
+    FLEXBUS_InitStruct.baseAddress = FLEXBUS_BASE_ADDRESS;
+    FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
     FLEXBUS_InitStruct.CSPortMultiplexingCotrol = FB_CSPMCR_GROUP3(kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
-    
     FLEXBUS_Init(&FLEXBUS_InitStruct);
     
     // Back light

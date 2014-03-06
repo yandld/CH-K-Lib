@@ -1,18 +1,25 @@
 #ifndef __BOARDS_H__
 #define __BOARDS_H__
 
+//!< 这个文件定义不同开发板上的硬件资源
 
 #ifdef CHK60EVB2
 
+//!< LED 端口 及 引脚
 #define BOARD_LED_GPIO_BASES  {HW_GPIOE, HW_GPIOE, HW_GPIOE, HW_GPIOE}
 #define BOARD_LED_PIN_BASES   {6, 7, 11, 12}
+//!< 板子默认的串口
 #define BOARD_UART_DEBUG_MAP  UART0_RX_PD06_TX_PD07
+//!< 板子默认的I2C总线接口
 #define BOARD_I2C_MAP         I2C0_SCL_PB02_SDA_PB03
+//!< 板子上的 按键
 #define BOARD_KEY_GPIO_BASES  {HW_GPIOE, HW_GPIOE, HW_GPIOE}
 #define BOARD_KEY_PIN_BASES   {26, 27, 28}
+//!< ADC
+#define BOARD_ADC_MAP         ADC0_SE19_DM0
+
 
 #elif CHK60EVB1
-
 
 #define BOARD_UART_DEBUG_MAP  UART4_RX_PC14_TX_PC15
 
@@ -25,7 +32,7 @@
 
 #else
 
-#error  "Please Define a Board"
+#warning  "Please Define a Board"
 
 #endif
 

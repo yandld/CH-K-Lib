@@ -69,11 +69,13 @@ void SRAM_Init(void)
 uint32_t SRAM_SelfTest(void)
 {
     uint32_t i;
+    uint32_t test;
     uint32_t err_cnt = 0;
     char * SRAM_START_ADDR = SRAM_START_ADDRESS;
     for(i = 0; i < SRAM_SIZE; i++)
     {
         SRAM_START_ADDR[i] = i%0xFF;
+        test = SRAM_START_ADDR[i];
         if((SRAM_START_ADDR[i]) != (i%0xFF))
         {
             err_cnt++;

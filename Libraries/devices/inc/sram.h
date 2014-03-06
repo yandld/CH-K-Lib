@@ -2,7 +2,7 @@
 #define __SRAM_H__
 #include "flexbus.h"
 
-#define SDRAM_ADDRESS_BASE   (0x70000000)
+#define SDRAM_ADDRESS_BASE   (0x60000000)
 #define SRAM_SIZE            (512*1024)
 
 #define SRAM_START_ADDRESS	(volatile uint8_t *)(SDRAM_ADDRESS_BASE)

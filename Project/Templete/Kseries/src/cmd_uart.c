@@ -10,6 +10,7 @@ static void UART_TxISR(uint8_t * pbyteToSend)
 {
     static uint8_t ch;
     *pbyteToSend = gReceicedChar;
+    //发送完成后关闭发送完成中断 否则总是会进入发送完成中断
     UART_ITDMAConfig(instance, kUART_IT_Tx_Disable);
 }
 
@@ -18,7 +19,6 @@ static uint8_t UART_RxISR(uint8_t pbyteReceived)
 {
     gReceicedChar = pbyteReceived;
     UART_ITDMAConfig(instance, kUART_IT_Tx);
-    
 }
 
 int CMD_UART(int argc, char * const * argv)

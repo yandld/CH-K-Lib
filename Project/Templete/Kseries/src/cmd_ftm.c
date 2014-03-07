@@ -15,31 +15,43 @@ int CMD_FTM(int argc, char * const * argv)
     if(!strcmp(argv[1], "-q"))
     {
         req = strtoul(argv[2], 0, 0);
-        instance = FTM_QuickInit(FTM2_CH1_PB19 ,req);
+        instance = FTM_PWM_QuickInit(FTM2_CH1_PB19 ,req);
+        //FTM_PWM_InvertPolarity(instance, HW_FTM_CH1, kFTM_PWM_LowTrue);
         FTM_PWM_ChangeDuty(instance, 1, 3000); 
+        DelayMs(100);
+        FTM_PWM_ChangeDuty(instance, 1, 5000); 
     }
     //combie
     if(!strcmp(argv[1], "-c"))
     {
         req = strtoul(argv[2], 0, 0);
-        FTM_InitTypeDef FTM_InitStruct1;
+        FTM_PWM_InitTypeDef FTM_InitStruct1;
         instance = HW_FTM2;
         FTM_InitStruct1.instance = instance;
         FTM_InitStruct1.frequencyInHZ = req;
         FTM_InitStruct1.chl = HW_FTM_CH1;
-        FTM_InitStruct1.mode = kPWM_Combine;
-        FTM_Init(&FTM_InitStruct1);
+        FTM_InitStruct1.mode = kPWM_Complementary;
+        FTM_PWM_Init(&FTM_InitStruct1);
         
         FTM_InitStruct1.instance = instance;
         FTM_InitStruct1.frequencyInHZ = req;
         FTM_InitStruct1.chl = HW_FTM_CH0;
-        FTM_InitStruct1.mode = kPWM_Combine;
-        FTM_Init(&FTM_InitStruct1);
+        FTM_InitStruct1.mode = kPWM_Complementary;
+        
+        FTM_PWM_Init(&FTM_InitStruct1);
         
         PORT_PinMuxConfig(HW_GPIOB, 18, kPinAlt3);
         PORT_PinMuxConfig(HW_GPIOB, 19, kPinAlt3);
-        
-        FTM_PWM_ChangeDuty(instance, HW_FTM_CH1, 9990); 
+       // FTM_PWM_InvertPolarity(instance, HW_FTM_CH0, kFTM_PWM_HighTrue);
+        FTM_PWM_ChangeDuty(instance, HW_FTM_CH0, 7500);
+        DelayMs(100);
+        FTM_PWM_ChangeDuty(instance, HW_FTM_CH1, 3500);
+    }
+    //combie
+    if(!strcmp(argv[1], "-qd"))
+    {
+        PORT_PinConfig(HW_GPIOB, 0, kPullUp, ENABLE);
+        PORT_PinConfig(HW_GPIOB, 1, kPullUp, ENABLE);
     }
     return 0;
 }

@@ -25,8 +25,8 @@ int CMD_BUZZER(int argc, char * const * argv)
     }
     
     req = strtoul(argv[1], 0, 0);
-    instance = FTM_QuickInit(BOARD_BUZZER_FTM_MAP ,req);
-    FTM_PWM_ChangeDuty(instance, FTM_GetChlFormQuickMAP(BOARD_BUZZER_FTM_MAP), 5000); 
+    instance = FTM_PWM_QuickInit(BOARD_BUZZER_FTM_MAP ,req);
+    FTM_PWM_ChangeDuty(instance, FTM_PWM_GetChlFormMAP(BOARD_BUZZER_FTM_MAP), 5000); 
     return 0;
 }
 

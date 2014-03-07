@@ -47,6 +47,31 @@ static shell_io_install_t Shell_IOInstallStruct1 =
 	.sh_putc = Putc,
 };
 
+void CalConst(const QuickInit_Type * table, uint32_t size)
+{
+	uint8_t i =0;
+	uint32_t value = 0;
+	for(i = 0; i < size; i++)
+	{
+		value = table[i].ip_instance<<0;
+		value|= table[i].io_instance<<3;
+		value|= table[i].mux<<6;
+		value|= table[i].io_base<<9;
+		value|= table[i].io_offset<<14;
+		value|= table[i].channel<<19;
+		UART_printf("(0x%xU)\r\n",value);
+	}
+}
+
+static const QuickInit_Type FTM_QD_QuickInitTable[] = 
+{
+    { 1, 0, 6,  8, 2, 0}, //FTM1_QD_PHA_PA08_PHB_PA09 6
+    { 1, 0, 7, 12, 2, 0}, //FTM1_QD_PHA_PA12_PHB_PA13  7
+    { 1, 1, 6,  0, 2, 0}, //FTM1_QD_PHA_PB00_PHB_PB01  6
+    { 2, 0, 6, 10, 2, 0}, //FTM2_QD_PHA_PA10_PHB_PA11  6
+    { 2, 1, 6, 18, 2, 0}, //FTM2_QD_PHA_PB18_PHB_PB19 6
+};
+
 int main(void)
 {
     uint32_t i;
@@ -72,7 +97,7 @@ int main(void)
     shell_register_function(&CommandFun_KEY);
     shell_register_function(&CommandFun_BUZZER);
 
-    //CalConst(FTM_QuickInitTable, ARRAY_SIZE(FTM_QuickInitTable));
+    CalConst(FTM_QD_QuickInitTable, ARRAY_SIZE(FTM_QD_QuickInitTable));
     while(1)
     {
         shell_main_loop("SHELL>>");

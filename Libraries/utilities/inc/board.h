@@ -6,6 +6,9 @@
 #ifdef CHK60EVB2
 
 //!< LED 端口 及 引脚
+#define BOARD_BUZZER_GPIO_BASES     {HW_GPIOA}
+#define BOARD_BUZZER_PIN_BASES      {6}
+#define BOARD_BUZZER_FTM_MAP        FTM0_CH3_PA06
 #define BOARD_LED_GPIO_BASES  {HW_GPIOE, HW_GPIOE, HW_GPIOE, HW_GPIOE}
 #define BOARD_LED_PIN_BASES   {6, 7, 11, 12}
 //!< 板子默认的串口
@@ -17,7 +20,8 @@
 #define BOARD_KEY_PIN_BASES   {26, 27, 28}
 //!< ADC
 #define BOARD_ADC_MAP         ADC0_SE19_DM0
-
+//!< PWM
+#define BOARD_PWM_MAP
 
 #elif CHK60EVB1
 
@@ -29,6 +33,10 @@
 #define BOARD_LED_PIN_BASES  {1}
 #define BOARD_I2C_MAP         I2C0_SCL_PE19_SDA_PE18
 #define BOARD_UART_DEBUG_MAP  UART1_RX_PC03_TX_PC04
+//!< 板子上的 按键
+#define BOARD_KEY_GPIO_BASES  {HW_GPIOA}
+#define BOARD_KEY_PIN_BASES   {0}
+#define BOARD_ADC_MAP         ADC0_SE19_DM0
 
 #else
 

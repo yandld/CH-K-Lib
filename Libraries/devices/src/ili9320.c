@@ -1,6 +1,7 @@
 #include "ili9320.h"
 #include "gpio.h"
 #include "flexbus.h"
+#include "systick.h"
 
  void LCD_WriteRegister(uint16_t RegisterIndex, uint16_t Data)
 {

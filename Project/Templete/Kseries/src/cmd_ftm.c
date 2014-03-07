@@ -1,8 +1,8 @@
 #include "ftm.h"
 #include "shell.h"
 #include "gpio.h"
-
-
+#include <stdlib.h>
+#include <stdio.h>
 
 
 int CMD_FTM(int argc, char * const * argv)
@@ -25,13 +25,13 @@ int CMD_FTM(int argc, char * const * argv)
         FTM_InitTypeDef FTM_InitStruct1;
         instance = HW_FTM2;
         FTM_InitStruct1.instance = instance;
-        FTM_InitStruct1.frequencyInHZ = 320;
+        FTM_InitStruct1.frequencyInHZ = req;
         FTM_InitStruct1.chl = HW_FTM_CH1;
         FTM_InitStruct1.mode = kPWM_Combine;
         FTM_Init(&FTM_InitStruct1);
         
         FTM_InitStruct1.instance = instance;
-        FTM_InitStruct1.frequencyInHZ = 320;
+        FTM_InitStruct1.frequencyInHZ = req;
         FTM_InitStruct1.chl = HW_FTM_CH0;
         FTM_InitStruct1.mode = kPWM_Combine;
         FTM_Init(&FTM_InitStruct1);
@@ -39,9 +39,8 @@ int CMD_FTM(int argc, char * const * argv)
         PORT_PinMuxConfig(HW_GPIOB, 18, kPinAlt3);
         PORT_PinMuxConfig(HW_GPIOB, 19, kPinAlt3);
         
-        FTM_PWM_ChangeDuty(instance, 1, 3000); 
+        FTM_PWM_ChangeDuty(instance, HW_FTM_CH1, 9990); 
     }
-   
     return 0;
 }
 

@@ -101,7 +101,7 @@ typedef struct
 void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty);
 uint8_t FTM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ);
 void FTM_Init(FTM_InitTypeDef* FTM_InitStruct);
-
+uint8_t FTM_GetChlFormQuickMAP(uint32_t FTMxMAP);
 
 
 

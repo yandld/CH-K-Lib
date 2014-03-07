@@ -9,7 +9,6 @@ static void ADC_CallBack(void)
     static uint32_t cnt;
     cnt =  ADC_ReadValue(instance, kADC_MuxA);
     shell_printf("Enter ADC ISR:%d\r", cnt);
-  //  cnt++;
 }
 
 int CMD_ADC(int argc, char * const * argv)
@@ -32,7 +31,7 @@ int CMD_ADC(int argc, char * const * argv)
     instance = ADC_QuickInit(BOARD_ADC_MAP, kADC_SingleDiff12or13);
     ADC_CallbackInstall(instance, ADC_CallBack);
     
-    ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_EOF, ENABLE);
+    ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_EOF);
     while(1)
     {
         ADC_StartConversion(instance, 19, kADC_MuxA);

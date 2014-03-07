@@ -23,8 +23,6 @@
 #endif
 
 //!< Gloabl Const Table Defination
-#define I2C_IRQn_OFFSET 1
-static IRQn_Type   const I2C_IRQBase = I2C0_IRQn;
 static I2C_Type * const I2C_InstanceTable[] = I2C_BASES;
 static I2C_CallBackType I2C_CallBackTable[ARRAY_SIZE(I2C_InstanceTable)] = {NULL};
 #if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10))
@@ -33,16 +31,30 @@ static const uint32_t SIM_I2CClockGateTable[] =
     SIM_SCGC4_I2C0_MASK,
     SIM_SCGC4_I2C1_MASK,
 };
+static const IRQn_Type I2C_IRQnTable[] = 
+{
+    I2C0_IRQn,
+    I2C1_IRQn,
+};
 #elif (defined(MK10D5))
 static const uint32_t SIM_I2CClockGateTable[] =
 {
     SIM_SCGC4_I2C0_MASK,
+};
+static const IRQn_Type I2C_IRQnTable[] = 
+{
+    I2C0_IRQn,
 };
 #elif (defined(MK70F12) || defined(MK70F15))
 static const uint32_t SIM_I2CClockGateTable[] =
 {
     SIM_SCGC4_IIC0_MASK,
     SIM_SCGC4_IIC1_MASK,
+};
+static const IRQn_Type I2C_IRQnTable[] = 
+{
+    I2C0_IRQn,
+    I2C1_IRQn,
 };
 #endif
 
@@ -398,23 +410,25 @@ void I2C_GenerateAck(uint8_t instance)
  *         @arg kI2C_DMA_BTC : trigger dma when byte transfer complete
  * @retval None
  */
-void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalState newState)
+void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config)
 {
 	//param check
     assert_param(IS_I2C_ALL_INSTANCE(instance));
     switch(config)
     {
-        case kI2C_ITDMA_Disable:
-            NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance*I2C_IRQn_OFFSET));
+        case kI2C_IT_Disable:
+            NVIC_DisableIRQ(I2C_IRQnTable[instance]);
             I2C_InstanceTable[instance]->C1 &= ~I2C_C1_IICIE_MASK;
+            break;
+        case kI2C_DMA_Disable: 
             I2C_InstanceTable[instance]->C1 &= ~I2C_C1_DMAEN_MASK;
             break;
         case kI2C_IT_BTC:
-            (ENABLE == newState)?(I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK):(I2C_InstanceTable[instance]->C1 &= ~I2C_C1_IICIE_MASK);
-            (ENABLE == newState)?(NVIC_EnableIRQ((IRQn_Type)(I2C_IRQBase + instance*I2C_IRQn_OFFSET))):(NVIC_DisableIRQ((IRQn_Type)(I2C_IRQBase + instance*I2C_IRQn_OFFSET)));
+            NVIC_EnableIRQ(I2C_IRQnTable[instance]);
+            I2C_InstanceTable[instance]->C1 |= I2C_C1_IICIE_MASK;
             break;
         case kI2C_DMA_BTC:
-            (ENABLE == newState)?(I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK):(I2C_InstanceTable[instance]->C1 &= ~I2C_C1_DMAEN_MASK);
+            I2C_InstanceTable[instance]->C1 |= I2C_C1_DMAEN_MASK;
             break;
         default:
             break;

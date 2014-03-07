@@ -62,7 +62,6 @@ void FTM_Init(FTM_InitTypeDef* FTM_InitStruct)
     *SIM_SCGx |= SIM_FTMClockGateTable[FTM_InitStruct->instance].mask;
     //disable FTM, we must set CLKS(0) before config FTM!
     FTM_InstanceTable[FTM_InitStruct->instance]->SC = 0;
-    // FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(0);
     // enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function)
     FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK;
     // cal ps
@@ -164,7 +163,6 @@ static void FTM_DualChlConfig(uint8_t instance, uint8_t chl, FTM_DualChlConfig_T
             break;
     } 
     (newState == ENABLE)?(FTM_InstanceTable[instance]->COMBINE |= mask):(FTM_InstanceTable[instance]->COMBINE &= ~mask);
-    printf("COMBINE:0x%x\r\n", FTM_InstanceTable[instance]->COMBINE);
 }
 
 //!< 设置FTM 工作模式
@@ -210,7 +208,7 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
             
         case kInputCaptureBothEdge:  
             FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSB_MASK|FTM_CnSC_ELSA_MASK);
-            /* all configuration on input capture*/
+            /* all configuration on input capture */
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
             FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK; 
@@ -249,6 +247,7 @@ static void FTM_SetMode(uint8_t instance, uint8_t chl, FTM_Mode_Type mode)
 				FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
             break;
         case kQuadratureDecoder:
+            
             break;            
         default:
             break;
@@ -276,12 +275,36 @@ uint8_t FTM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
 }
 
 
+uint8_t FTM_GetChlFormQuickMAP(uint32_t FTMxMAP)
+{
+    QuickInit_Type * pFTMxMap = (QuickInit_Type*)&(FTMxMAP);
+    return pFTMxMap->channel;
+}
+
+
 void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
 {
-	uint32_t cv = 0;
-    cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty) / 10000;
-    FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv;
-    FTM_InstanceTable[instance]->CONTROLS[chl-1].CnV = cv - 400;
+    uint32_t cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty) / 10000;
+    // combine mode
+    if(FTM_InstanceTable[instance]->COMBINE & (FTM_COMBINE_COMBINE0_MASK|FTM_COMBINE_COMBINE1_MASK|FTM_COMBINE_COMBINE2_MASK|FTM_COMBINE_COMBINE3_MASK))
+    { 
+        if(chl%2)
+        {
+            FTM_InstanceTable[instance]->CONTROLS[chl-1].CnV = 0;
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv;
+        }
+        else
+        {
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnV = 0;
+            FTM_InstanceTable[instance]->CONTROLS[chl+1].CnV = cv;  
+        }
+    }
+    else
+    {
+    //single chl
+    FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv; 
+    }
+
 }
 
 

@@ -31,7 +31,8 @@
 
 //!< Gloabl Const Table Defination
 UART_Type * const UART_InstanceTable[] = UART_BASES;
-static UART_CallBackType UART_CallBackTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
+static UART_CallBackTxType UART_CallBackTxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
+static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
 static uint8_t UART_DebugInstance;
 #if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15))
 static const RegisterManipulation_Type SIM_UARTClockGateTable[] =
@@ -261,70 +262,83 @@ uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
  *         @arg HW_UART1
  *         @arg ...
  * @param  config: 模式选择
- *         @arg kUART_IT_TxBTC: 发送一个字节完成中断
- *         @arg kUART_DMA_TxBTC:发送一个字节完成触发DMA传输
- *         @arg kUART_IT_RxBTC :接收一个字节完成中断
- *         @arg kUART_DMA_RxBTC :接收一个字节完成触发DMA
+ *         @arg kUART_IT_Tx_Disable: 
+ *         @arg kUART_IT_Rx_Disable:
+ *         @arg kUART_DMA_Tx_Disable:
+ *         @arg kUART_DMA_Rx_Disable:
+ *         @arg kUART_IT_Tx:
+ *         @arg kUART_DMA_Tx:
+ *         @arg kUART_IT_Rx:
+ *         @arg kUART_DMA_Rx:
  * @param  newState:开启或者关闭
  *         @arg ENABLE
  *         @arg DISABLE
  * @retval None
  */
-void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, FunctionalState newState)
+void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config)
 {
     switch(config)
     {
-        case kUART_IT_TxBTC:
-            (ENABLE == newState)?(UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK):(UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK);
-            if(ENABLE == newState)
-            {
-                NVIC_EnableIRQ(UART_IRQnTable[instance]);
-            }
+        case kUART_IT_Tx_Disable:
+            UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK;
             break;
-        case kUART_DMA_TxBTC:
-            (ENABLE == newState)?(UART_InstanceTable[instance]->C5 |= UART_C5_TDMAS_MASK):(UART_InstanceTable[instance]->C5 &= ~UART_C5_TDMAS_MASK);
+        case kUART_IT_Rx_Disable:
+            UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK;
             break;
-        case kUART_IT_RxBTC:
-            (ENABLE == newState)?(UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK):(UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK);
-            if(ENABLE == newState)
-            {
-                NVIC_EnableIRQ(UART_IRQnTable[instance]);
-            }
+        case kUART_DMA_Tx_Disable:
+            UART_InstanceTable[instance]->C5 &= ~UART_C5_TDMAS_MASK;
             break;
-        case kUART_DMA_RxBTC:
-            (ENABLE == newState)?(UART_InstanceTable[instance]->C5 |= UART_C5_RDMAS_MASK):(UART_InstanceTable[instance]->C5 &= ~UART_C5_RDMAS_MASK);
+        case kUART_DMA_Rx_Disable:
+            UART_InstanceTable[instance]->C5 &= ~UART_C5_RDMAS_MASK;
+            break;
+        case kUART_IT_Tx:
+            UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK;
+            NVIC_EnableIRQ(UART_IRQnTable[instance]);
+            break; 
+        case kUART_IT_Rx:
+            UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK;
+            NVIC_EnableIRQ(UART_IRQnTable[instance]);
+            break;
+        case kUART_DMA_Tx:
+            UART_InstanceTable[instance]->C5 |= UART_C5_TDMAS_MASK;
+            break;
+        case kUART_DMA_Rx:
+            UART_InstanceTable[instance]->C5 |= UART_C5_RDMAS_MASK;
             break;
         default:
             break;
     }
 }
 
+
+void UART_CallbackTxInstall(uint8_t instance, UART_CallBackTxType AppCBFun)
+{
+	//param check
+    assert_param(IS_UART_ALL_INSTANCE(instance));
+    if(AppCBFun != NULL)
+    {
+        UART_CallBackTxTable[instance] = AppCBFun;
+    }
+}
+
 /**
- * @brief  设置UART中断回调函数(发送 接收共用一个回调函数)
+ * @brief  设置UART中断回调函数
  * @code
  *      //初始化UART串口 波特率115200 开启接收中断
  *      uint32_t UART_Instance;
  *      //声明中断回调函数
- *      static void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag);
+ *      static void UART_RxISR(uint8_t byteReceived);
  *      UART_Instance = UART_QuickInit(UART4_RX_PC14_TX_PC15,115200);
- *      UART_CallbackInstall(instance, UART_ISR);  
- *      UART_ITDMAConfig(instance, kUART_IT_RxBTC, ENABLE); 
+ *      //打开接收中断回调函数
+ *      UART_CallbackRxInstall(instance, UART_RxISR);
+ *      //开启中断开关
+ *      UART_ITDMAConfig(instance, kUART_IT_Rx); 
  *      //中断回调函数
- *      static void UART_ISR(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag)
+ *      static void UART_RxISR(uint8_t byteReceived)
  *      {
  *          static uint8_t ch;
- *          // 发送完成中断
- *          if(flag == kUART_IT_TxBTC)
- *          {
- *              *pbyteToSend = ch;
- *              UART_ITDMAConfig(instance, kUART_IT_TxBTC, DISABLE);
- *          }
- *          //接收字节中断
- *          if(flag == kUART_IT_RxBTC)
- *          {
- *              ch = byteReceived;
- *              UART_ITDMAConfig(instance, kUART_IT_TxBTC, ENABLE);
- *          }
+ *          ch = byteReceived;
+ *          printf("ch:%d\r\n", ch);
  *      }
  * @endcode
  * @param  instance: UART模块号
@@ -332,17 +346,15 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, Functional
  *         @arg HW_UART1
  *         @arg ...
  * @param  AppCBFun: 回调函数指针
- * @retval 0:succ 1:fail
- *         @arg 0:成功
- *         @arg 1:失败
+ * @retval None
  */
-void UART_CallbackInstall(uint8_t instance, UART_CallBackType AppCBFun)
+void UART_CallbackRxInstall(uint8_t instance, UART_CallBackRxType AppCBFun)
 {
 	//param check
     assert_param(IS_UART_ALL_INSTANCE(instance));
     if(AppCBFun != NULL)
     {
-        UART_CallBackTable[instance] = AppCBFun;
+        UART_CallBackRxTable[instance] = AppCBFun;
     }
 }
 
@@ -381,15 +393,13 @@ uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate)
 
 void UART0_RX_TX_IRQHandler(void)
 {
-    // clear pending bit
     uint8_t ch;
-    uint8_t dummy;
     // Tx
     if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_TIE_MASK))
     {
-        if(UART_CallBackTable[HW_UART0])
+        if(UART_CallBackTxTable[HW_UART0])
         {
-            UART_CallBackTable[HW_UART0](0, &ch, kUART_IT_TxBTC);
+            UART_CallBackTxTable[HW_UART0](&ch);
         }
         UART_InstanceTable[HW_UART0]->D = (uint8_t)ch;
     }
@@ -397,34 +407,32 @@ void UART0_RX_TX_IRQHandler(void)
     if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_RIE_MASK))
     {
         ch = (uint8_t)UART_InstanceTable[HW_UART0]->D;
-        if(UART_CallBackTable[HW_UART0])
+        if(UART_CallBackRxTable[HW_UART0])
         {
-            UART_CallBackTable[HW_UART0](ch, &dummy, kUART_IT_RxBTC);
+            UART_CallBackRxTable[HW_UART0](ch);
         }    
     }
 }
 
 void UART1_RX_TX_IRQHandler(void)
 {
-    // clear pending bit
     uint8_t ch;
-    uint8_t dummy;
-    //Tx
+    // Tx
     if((UART_InstanceTable[HW_UART1]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART1]->C2 & UART_C2_TIE_MASK))
     {
-        if(UART_CallBackTable[HW_UART1])
+        if(UART_CallBackTxTable[HW_UART1])
         {
-            UART_CallBackTable[HW_UART1](0, &ch, kUART_IT_TxBTC);
+            UART_CallBackTxTable[HW_UART1](&ch);
         }
         UART_InstanceTable[HW_UART1]->D = (uint8_t)ch;
     }
-    //Rx
+    // Rx
     if((UART_InstanceTable[HW_UART1]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART1]->C2 & UART_C2_RIE_MASK))
     {
         ch = (uint8_t)UART_InstanceTable[HW_UART1]->D;
-        if(UART_CallBackTable[HW_UART1])
+        if(UART_CallBackRxTable[HW_UART1])
         {
-            UART_CallBackTable[HW_UART1](ch, &dummy, kUART_IT_RxBTC);
+            UART_CallBackRxTable[HW_UART1](ch);
         }    
     }
 }
@@ -432,75 +440,69 @@ void UART1_RX_TX_IRQHandler(void)
 #if (!defined(MK10D5))
 void UART2_RX_TX_IRQHandler(void)
 {
-    // clear pending bit
     uint8_t ch;
-    uint8_t dummy;
-    //Tx
+    // Tx
     if((UART_InstanceTable[HW_UART2]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART2]->C2 & UART_C2_TIE_MASK))
     {
-        if(UART_CallBackTable[HW_UART2])
+        if(UART_CallBackTxTable[HW_UART2])
         {
-            UART_CallBackTable[HW_UART2](0, &ch, kUART_IT_TxBTC);
+            UART_CallBackTxTable[HW_UART2](&ch);
         }
         UART_InstanceTable[HW_UART2]->D = (uint8_t)ch;
     }
-    //Rx
+    // Rx
     if((UART_InstanceTable[HW_UART2]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART2]->C2 & UART_C2_RIE_MASK))
     {
         ch = (uint8_t)UART_InstanceTable[HW_UART2]->D;
-        if(UART_CallBackTable[HW_UART2])
+        if(UART_CallBackRxTable[HW_UART2])
         {
-            UART_CallBackTable[HW_UART2](ch, &dummy, kUART_IT_RxBTC);
+            UART_CallBackRxTable[HW_UART2](ch);
         }    
     }
 }
 
 void UART3_RX_TX_IRQHandler(void)
 {
-    // clear pending bit
     uint8_t ch;
-    uint8_t dummy;
-    //Tx
+    // Tx
     if((UART_InstanceTable[HW_UART3]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART3]->C2 & UART_C2_TIE_MASK))
     {
-        if(UART_CallBackTable[HW_UART3])
+        if(UART_CallBackTxTable[HW_UART3])
         {
-            UART_CallBackTable[HW_UART3](0, &ch, kUART_IT_TxBTC);
+            UART_CallBackTxTable[HW_UART3](&ch);
         }
         UART_InstanceTable[HW_UART3]->D = (uint8_t)ch;
     }
-    //Rx
+    // Rx
     if((UART_InstanceTable[HW_UART3]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART3]->C2 & UART_C2_RIE_MASK))
     {
-        ch = (uint8_t)UART_InstanceTable[HW_UART2]->D;
-        if(UART_CallBackTable[HW_UART3])
+        ch = (uint8_t)UART_InstanceTable[HW_UART3]->D;
+        if(UART_CallBackRxTable[HW_UART3])
         {
-            UART_CallBackTable[HW_UART3](ch, &dummy, kUART_IT_RxBTC);
+            UART_CallBackRxTable[HW_UART3](ch);
         }    
     }
 }
 
 void UART4_RX_TX_IRQHandler(void)
 {
-    // clear pending bit
     uint8_t ch;
-    uint8_t dummy;
-    //Tx
+    // Tx
     if((UART_InstanceTable[HW_UART4]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART4]->C2 & UART_C2_TIE_MASK))
     {
-        if(UART_CallBackTable[HW_UART4])
+        if(UART_CallBackTxTable[HW_UART4])
         {
-            UART_CallBackTable[HW_UART4](0, &ch, kUART_IT_TxBTC);
+            UART_CallBackTxTable[HW_UART4](&ch);
         }
         UART_InstanceTable[HW_UART4]->D = (uint8_t)ch;
     }
-    //Rx
+    // Rx
     if((UART_InstanceTable[HW_UART4]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART4]->C2 & UART_C2_RIE_MASK))
     {
         ch = (uint8_t)UART_InstanceTable[HW_UART4]->D;
-        if(UART_CallBackTable[HW_UART4])
+        if(UART_CallBackRxTable[HW_UART4])
         {
-            UART_CallBackTable[HW_UART4](ch, &dummy, kUART_IT_RxBTC);
+            UART_CallBackRxTable[HW_UART4](ch);
         }    
     }
 }
@@ -508,25 +510,23 @@ void UART4_RX_TX_IRQHandler(void)
 #if (defined(MK70F12)|| defined(MK70F15))
 void UART5_RX_TX_IRQHandler(void)
 {
-    // clear pending bit
     uint8_t ch;
-    uint8_t dummy;
-    //Tx
+    // Tx
     if((UART_InstanceTable[HW_UART5]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART5]->C2 & UART_C2_TIE_MASK))
     {
-        if(UART_CallBackTable[HW_UART5])
+        if(UART_CallBackTxTable[HW_UART5])
         {
-            UART_CallBackTable[HW_UART5](0, &ch, kUART_IT_TxBTC);
+            UART_CallBackTxTable[HW_UART5](&ch);
         }
         UART_InstanceTable[HW_UART5]->D = (uint8_t)ch;
     }
-    //Rx
+    // Rx
     if((UART_InstanceTable[HW_UART5]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART5]->C2 & UART_C2_RIE_MASK))
     {
         ch = (uint8_t)UART_InstanceTable[HW_UART5]->D;
-        if(UART_CallBackTable[HW_UART5])
+        if(UART_CallBackRxTable[HW_UART5])
         {
-            UART_CallBackTable[HW_UART5](ch, &dummy, kUART_IT_RxBTC);
+            UART_CallBackRxTable[HW_UART5](ch);
         }    
     }
 }

@@ -69,10 +69,14 @@ typedef enum
 //!< interrupt and DMA select
 typedef enum
 {
-    kUART_IT_TxBTC,           //!< Byte Transfer Complete Interrupt for Tx
-    kUART_DMA_TxBTC,          //!< DMA Trigger On Byte Transfer Complete for Tx
-    kUART_IT_RxBTC,           //!< Byte Transfer Complete Interrupt for Rx
-    kUART_DMA_RxBTC,          //!< DMA Trigger On Byte Transfer Complete for Rx
+    kUART_IT_Tx_Disable,       //!< Disable Tx Interrupt
+    kUART_IT_Rx_Disable,       //!< Disable Rx Interrupt
+    kUART_DMA_Tx_Disable,      //!< Disable Tx DMA
+    kUART_DMA_Rx_Disable,      //!< Disable Rx DMA
+    kUART_IT_Tx,           //!< Byte Transfer Complete Interrupt for Tx
+    kUART_DMA_Tx,          //!< DMA Trigger On Byte Transfer Complete for Tx
+    kUART_IT_Rx,           //!< Byte Transfer Complete Interrupt for Rx
+    kUART_DMA_Rx,          //!< DMA Trigger On Byte Transfer Complete for Rx
 }UART_ITDMAConfig_Type;
 
 //!< UART Init type
@@ -86,7 +90,8 @@ typedef struct
 
 //!< UART CallBack Type
 typedef void (*UART_CallBackType)(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag);
-
+typedef void (*UART_CallBackTxType)(uint8_t * pbyteToSend);
+typedef void (*UART_CallBackRxType)(uint8_t byteReceived);
 
 //!< API functions
 uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate);
@@ -94,8 +99,9 @@ void UART_Init(UART_InitTypeDef * UART_InitStruct);
 int UART_printf(const char *format,...);
 uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch);
 void UART_WriteByte(uint8_t instance, uint8_t ch);
-void UART_CallbackInstall(uint8_t instance, UART_CallBackType AppCBFun);
-void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config, FunctionalState newState);
+void UART_CallbackTxInstall(uint8_t instance, UART_CallBackTxType AppCBFun);
+void UART_CallbackRxInstall(uint8_t instance, UART_CallBackRxType AppCBFun);
+void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config);
 #ifdef UART_USE_STDIO
 int printf(const char *fmt, ...);
 #endif

@@ -26,6 +26,8 @@ extern const cmd_tbl_t CommandFun_SRAM;
 extern const cmd_tbl_t CommandFun_LCD;
 extern const cmd_tbl_t CommandFun_Hist;
 extern const cmd_tbl_t CommandFun_I2C;
+extern const cmd_tbl_t CommandFun_KEY;
+extern const cmd_tbl_t CommandFun_BUZZER;
 
 static void Putc(uint8_t data)
 {
@@ -67,6 +69,8 @@ int main(void)
     shell_register_function(&CommandFun_LCD); 
     shell_register_function(&CommandFun_Hist);
     shell_register_function(&CommandFun_I2C);
+    shell_register_function(&CommandFun_KEY);
+    shell_register_function(&CommandFun_BUZZER);
 
     //CalConst(FTM_QuickInitTable, ARRAY_SIZE(FTM_QuickInitTable));
     while(1)

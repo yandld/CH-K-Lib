@@ -24,7 +24,6 @@
 #endif
 
 //!< Gloabl Const Table Defination
-static IRQn_Type   const GPIO_IRQBase = PORTA_IRQn;
 static GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
 static PORT_Type * const PORT_InstanceTable[] = PORT_BASES;
 static GPIO_CallBackType GPIO_CallBackTable[ARRAY_SIZE(PORT_InstanceTable)] = {NULL};
@@ -35,6 +34,14 @@ static const uint32_t SIM_GPIOClockGateTable[] =
     SIM_SCGC5_PORTC_MASK,
     SIM_SCGC5_PORTD_MASK,
     SIM_SCGC5_PORTE_MASK,
+};
+static const IRQn_Type GPIO_IRQnTable[] = 
+{
+    PORTA_IRQn,
+    PORTB_IRQn,
+    PORTC_IRQn,
+    PORTD_IRQn,
+    PORTE_IRQn,
 };
 
 //! @defgroup CHKinetis
@@ -357,19 +364,53 @@ void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data)
  * @param newState: 使能或者禁止
  * @retval None
  */
-void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, FunctionalState newState)
+void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
-    // disable interrupt first
-    NVIC_DisableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
-    PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] &= ~PORT_PCR_IRQC_MASK;
-    //config
-    (ENABLE == newState)?(PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] |= PORT_PCR_IRQC(config)):(PORT_InstanceTable[instance]->PCR[(uint8_t)pinIndex] &= ~PORT_PCR_IRQC_MASK);
-    //enable interrupt
-    NVIC_EnableIRQ((IRQn_Type)(GPIO_IRQBase + instance));
+    
+    PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
+    switch(config)
+    {
+        case kGPIO_IT_Disable:
+            NVIC_DisableIRQ(GPIO_IRQnTable[instance]);
+            break;
+        case kGPIO_DMA_Disable:
+            break;
+        case kGPIO_DMA_RisingEdge:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(1);
+            break;
+        case kGPIO_DMA_FallingEdge:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(2);
+            break;
+        case kGPIO_DMA_RisingFallingEdge:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(3);
+            break;
+        case kGPIO_IT_Low:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(8);
+            NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
+            break;
+        case kGPIO_IT_RisingEdge:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(9);
+            NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
+            break;
+        case kGPIO_IT_FallingEdge:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(10);
+            NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
+            break;
+        case kGPIO_IT_RisingFallingEdge:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(11);
+            NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
+            break;
+        case kGPIO_IT_High:
+            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(12);
+            NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
+            break;
+        default:
+            break;
+    }
 }
 /**
  * @brief  注册中断回调函数

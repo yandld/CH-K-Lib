@@ -92,7 +92,7 @@ static int32_t ADC_Calibration(uint32_t instance)
     uint32_t PG, MG;
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_CALF_MASK; /* Clear the calibration's flag */
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_CAL_MASK;  /* Enable the calibration */
-    ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_EOF, DISABLE);
+    ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_Disable);
     while(ADC_IsConversionCompleted(instance, 0)) {};      /* Wait conversion is competed */
     if(ADC_InstanceTable[instance]->SC3 & ADC_SC3_CALF_MASK)
     {
@@ -253,30 +253,29 @@ int32_t ADC_QuickReadValue(uint32_t ADCxMAP)
  * @param  instance: ADC 模块号     
  * @param  mux:      ADC 通道复用选择
  * @param  config:   ADC 中断及DMA配置
- * @param  newStateg:   ADC 中断及DMA配置
- *         @arg ENABLE:使能
- *         @arg DISABLE:禁止
  * @retval None
  */
-void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config, FunctionalState newState)
+void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config)
 {
     switch(config)
     {
-        case kADC_ITDMA_Disable:
+        case kADC_IT_Disable:
             NVIC_DisableIRQ(ADC_IRQnTable[instance]);
             ADC_InstanceTable[instance]->SC1[mux] &= ~ADC_SC1_AIEN_MASK;
+            break;
+        case kADC_DMA_Disable:
             ADC_InstanceTable[instance]->SC2 &= ~ADC_SC2_DMAEN_MASK;
             break;
         case kADC_IT_EOF:
-            (ENABLE == newState)?(ADC_InstanceTable[instance]->SC1[mux] |= ADC_SC1_AIEN_MASK):(ADC_InstanceTable[instance]->SC1[mux] &= ~ADC_SC1_AIEN_MASK);
-            (ENABLE == newState)?(NVIC_EnableIRQ(ADC_IRQnTable[instance])):(NVIC_DisableIRQ(ADC_IRQnTable[instance]));
-            break;
+            ADC_InstanceTable[instance]->SC1[mux] |= ADC_SC1_AIEN_MASK;
+            NVIC_EnableIRQ(ADC_IRQnTable[instance]);
+            break; 
         case kADC_DMA_EOF:
-            (ENABLE == newState)?(ADC_InstanceTable[instance]->SC2 |= ADC_SC2_DMAEN_MASK):(ADC_InstanceTable[instance]->SC2 &= ~ADC_SC2_DMAEN_MASK);
+            ADC_InstanceTable[instance]->SC2 |= ADC_SC2_DMAEN_MASK;
             break;
         default:
             break;
-    }        
+    }
 }
 
  

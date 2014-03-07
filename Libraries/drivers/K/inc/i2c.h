@@ -47,7 +47,8 @@ typedef enum
 
 typedef enum
 {
-    kI2C_ITDMA_Disable,     //!< Disable Interrupt and DMA
+    kI2C_IT_Disable,        //!< Disable Interrupt
+    kI2C_DMA_Disable,       //!< Disable DMA
     kI2C_IT_BTC,            //!< Byte Transfer Complete Interrupt
     kI2C_DMA_BTC,           //!< DMA Trigger On Byte Transfer Complete
 }I2C_ITDMAConfig_Type;
@@ -67,7 +68,7 @@ void I2C_SendData(uint8_t instance, uint8_t data);
 void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type direction);
 uint8_t I2C_WaitAck(uint8_t instance);
 uint8_t I2C_IsBusy(uint8_t instance);
-void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config, FunctionalState newState);
+void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config);
 void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun);
 uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData);
 uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data);

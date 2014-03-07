@@ -24,7 +24,6 @@ static void PIT2_CallBack(void)
 static void PIT3_CallBack(void)
 {
     shell_printf("Enter PIT3 INt\r\n");
-    
 }
 
 
@@ -33,19 +32,19 @@ int CMD_PIT(int argc, char * const * argv)
     shell_printf("PIT Test CMD\r\n");
     PIT_QuickInit(HW_PIT0_CH0, 1000*500);
     PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack);
-    PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);
+    PIT_ITDMAConfig(HW_PIT0_CH0, kPIT_IT_TOF);
     
     PIT_QuickInit(HW_PIT0_CH1, 1000*1000);
     PIT_CallbackInstall(HW_PIT0_CH1, PIT1_CallBack);
-    PIT_ITDMAConfig(HW_PIT0_CH1, ENABLE);
+    PIT_ITDMAConfig(HW_PIT0_CH1, kPIT_IT_TOF);
     
     PIT_QuickInit(HW_PIT0_CH2, 1000*2000);
     PIT_CallbackInstall(HW_PIT0_CH2, PIT2_CallBack);
-    PIT_ITDMAConfig(HW_PIT0_CH2, ENABLE);
+    PIT_ITDMAConfig(HW_PIT0_CH2, kPIT_IT_TOF);
     
     PIT_QuickInit(HW_PIT0_CH3, 1000*4000);
     PIT_CallbackInstall(HW_PIT0_CH3, PIT3_CallBack);
-    PIT_ITDMAConfig(HW_PIT0_CH3, ENABLE);
+    PIT_ITDMAConfig(HW_PIT0_CH3, kPIT_IT_TOF);
     return 0;
 }
 

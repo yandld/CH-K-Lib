@@ -88,7 +88,8 @@
 //!< ADCÖÐ¶Ï¼°DMAÅäÖÃÑ¡Ôñ
 typedef enum
 {
-    kADC_ITDMA_Disable,
+    kADC_IT_Disable,
+    kADC_DMA_Disable,
     kADC_IT_EOF,
     kADC_DMA_EOF,
 }ADC_ITDMAConfig_Type;
@@ -111,7 +112,7 @@ typedef struct
 void ADC_CallbackInstall(uint8_t instance, ADC_CallBackType AppCBFun);
 void ADC_Init(ADC_InitTypeDef* ADC_InitStruct);
 uint8_t ADC_QuickInit(uint32_t ADCxMAP, uint32_t resolutionMode);
-void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config, FunctionalState newState);
+void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config);
 int32_t ADC_QuickReadValue(uint32_t ADCxMAP);
 int32_t ADC_ReadValue(uint32_t instance, uint32_t mux);
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux);

@@ -45,13 +45,13 @@ static int _do_i2c_it(int argc, char *const argv[])
     uint8_t i2c_7bit_address = strtoul(argv[2], 0, 0);
     shell_printf("i2c it test Address:0x%x(%d)\r\n", i2c_7bit_address, i2c_7bit_address);
     I2C_CallbackInstall(gI2C_Instance, I2C_ISR);
-    I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_BTC, ENABLE);
+    I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_BTC);
     I2C_GenerateSTART(gI2C_Instance);
     I2C_Send7bitAddress(gI2C_Instance, i2c_7bit_address, kI2C_Write);
     shell_printf("waitting for IT...\r\n");
     DelayMs(200);
     I2C_GenerateSTOP(gI2C_Instance);
-    I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_BTC, DISABLE);
+    I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_Disable);
 }
 
 int DoI2C(int argc, char *const argv[])
@@ -90,7 +90,8 @@ const cmd_tbl_t CommandFun_I2C =
     .complete = NULL,
     .help = "\r\n"
     "I2C <CMD>\r\n"
-    "eg: I2C scan"
+    "eg: I2C SCAN\r\n"
+    "eg: I2C IT 55\r\n"
 };
 
 

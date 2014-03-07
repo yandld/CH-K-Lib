@@ -132,14 +132,21 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
  * @param  NewState ENABLE »òDISABLE
  * @retval None
  */
-void PIT_ITDMAConfig(uint8_t chl, FunctionalState NewState)
+void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
 {
-    if(ENABLE == NewState)
+    switch (config)
     {
-        PIT->CHANNEL[chl].TFLG |= PIT_TFLG_TIF_MASK;
+        case kPIT_IT_Disable:
+            NVIC_DisableIRQ(PIT_IRQnTable[chl]);
+            PIT->CHANNEL[chl].TCTRL &= ~PIT_TCTRL_TIE_MASK;
+            break;
+        case kPIT_IT_TOF:
+            NVIC_EnableIRQ(PIT_IRQnTable[chl]);
+            PIT->CHANNEL[chl].TCTRL |= PIT_TCTRL_TIE_MASK;
+            break;
+        default:
+            break;
     }
-    (ENABLE == NewState)?(PIT->CHANNEL[chl].TCTRL |= PIT_TCTRL_TIE_MASK):(PIT->CHANNEL[chl].TCTRL &= ~PIT_TCTRL_TIE_MASK);
-    (ENABLE == NewState)?(NVIC_EnableIRQ(PIT_IRQnTable[chl])):(NVIC_DisableIRQ(PIT_IRQnTable[chl]));
 }
 
  /**

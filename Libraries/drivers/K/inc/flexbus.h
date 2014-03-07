@@ -61,8 +61,7 @@
 #define kFLEXBUS_CSPMCR_GROUP5_CS3      (0x01)
 #define kFLEXBUS_CSPMCR_GROUP5_BE_7_0   (0x02)
 
-
-
+//!< FLEXBUS初始化结构体
 typedef struct
 {
     uint32_t dataWidth;
@@ -74,7 +73,6 @@ typedef struct
     uint32_t CSn;
     uint32_t CSPortMultiplexingCotrol;
 }FLEXBUS_InitTypeDef;
-
 
 //!< API functions
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct);

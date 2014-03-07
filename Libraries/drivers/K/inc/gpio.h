@@ -69,15 +69,16 @@ typedef enum
 //!< ITDMAConfig type
 typedef enum
 {
-    kGPIO_ITDMA_Disable = 0x00,
-    kGPIO_DMA_RisingEdge = 0x01,	
-    kGPIO_DMA_FallingEdge = 0x02,
-    kGPIO_DMA_RisingFallingEdge = 0x03,
-    kGPIO_IT_Low = 0x08,
-    kGPIO_IT_RisingEdge = 0x09,
-    kGPIO_IT_FallingEdge = 0x0A,
-    kGPIO_IT_RisingFallingEdge = 0x0B,
-    kGPIO_IT_High = 0x0C,
+    kGPIO_IT_Disable,
+    kGPIO_DMA_Disable,
+    kGPIO_DMA_RisingEdge,	
+    kGPIO_DMA_FallingEdge,
+    kGPIO_DMA_RisingFallingEdge,
+    kGPIO_IT_Low,
+    kGPIO_IT_RisingEdge,
+    kGPIO_IT_FallingEdge,
+    kGPIO_IT_RisingFallingEdge,
+    kGPIO_IT_High,
     kGPIO_ITDMAConfigNameCount,
 }GPIO_ITDMAConfig_Type;
 
@@ -104,7 +105,7 @@ uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex);
 void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex);
 uint32_t GPIO_ReadByte(uint8_t instance, uint8_t pinIndex);
 void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data);
-void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, FunctionalState newState);
+void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config);
 void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun);
 
 //!< param check

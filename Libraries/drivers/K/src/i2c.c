@@ -242,7 +242,7 @@ void I2C_GenerateSTART(uint8_t instance)
 }
 
 /**
- * @brief  generate restart signal
+ * @brief  产生RESTART信号
  * @param  instance:
  *         @arg HW_I2C0
  *         @arg HW_I2C1
@@ -256,7 +256,7 @@ void I2C_GenerateRESTART(uint8_t instance)
 }
 
 /**
- * @brief  generate stop signal
+ * @brief  产生STOP信号
  * @param  instance:
  *         @arg HW_I2C0
  *         @arg HW_I2C1
@@ -318,7 +318,7 @@ void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type d
 }
 
 /**
- * @brief  i2c wait ack. this function should be follow by senddata when using polling mode
+ * @brief  等待应答信号 此函数一般在使用SendData函数后调用 用于等待应答信号
  * @param  instance:
  *         @arg HW_I2C0
  *         @arg HW_I2C1
@@ -331,19 +331,21 @@ uint8_t I2C_WaitAck(uint8_t instance)
     assert_param(IS_I2C_ALL_INSTANCE(instance));
     //wait for transfer complete
     timeout = 0;
-    while (((I2C_InstanceTable[instance]->S & I2C_S_TCF_MASK) == 0) && (timeout < 1000))
+    while (((I2C_InstanceTable[instance]->S & I2C_S_TCF_MASK) == 0) && (timeout < 5000))
     {
         timeout++;
+        __NOP();
     }
     //both TCF and IICIF indicate one byte trasnfer complete
     timeout = 0;
-    while (((I2C_InstanceTable[instance]->S & I2C_S_IICIF_MASK) == 0) && (timeout < 1000))
+    while (((I2C_InstanceTable[instance]->S & I2C_S_IICIF_MASK) == 0) && (timeout < 5000))
     {
         timeout++;
+        __NOP();
     }
     //IICIF is a W1C Reg, so clear it!
     I2C_InstanceTable[instance]->S |= I2C_S_IICIF_MASK;
-    if(timeout > 999)
+    if(timeout > 4990)
     {
         return 2;
     }

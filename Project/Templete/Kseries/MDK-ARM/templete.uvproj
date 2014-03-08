@@ -1019,6 +1019,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
             </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2162,6 +2167,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
             </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3219,6 +3229,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
             </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4275,6 +4290,11 @@
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
             </File>
           </Files>
         </Group>

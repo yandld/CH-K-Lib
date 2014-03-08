@@ -82,7 +82,7 @@ int main(void)
     SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
-    shell_register_function(&CommandFun_GPIO);
+    shell_register_function(&CommandFun_GPIO); //GPIO√¸¡Ó ≤‚ ‘GPIO
     shell_register_function(&CommandFun_UART);
     shell_register_function(&CommandFun_CPU);
     shell_register_function(&CommandFun_PIT);
@@ -106,6 +106,7 @@ CalConst(LPTMR_QuickInitTable, ARRAY_SIZE(LPTMR_QuickInitTable));
     }
 }
 
+//!< None Maskable Interrupt
 void NMI_Handler(void)
 {
     printf("NMI Enter\r\n");

@@ -16,6 +16,7 @@ static int _do_i2c_scan(int argc, char *const argv[])
         shell_printf("Scanning I2C%d bus at:%dHz\r\n",gI2C_Instance,  I2C_TestSpeedTable[j]);
         for(i=0;i<127;i++)
         {
+           
             I2C_GenerateSTART(gI2C_Instance);
             I2C_Send7bitAddress(gI2C_Instance, i, kI2C_Write);
             if(I2C_WaitAck(gI2C_Instance))

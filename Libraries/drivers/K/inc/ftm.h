@@ -38,7 +38,6 @@ typedef enum
     kPWM_Complementary,         //互补模式 类似组合模式 但是Chl(n) 和 Chl(n+1) 是互补输出
     #if 0
     kPWM_CenterAligned,         //中心对齐 频率是边沿对齐的一半
-    kQuadratureDecoder,         //正交解码
     #endif
 }FTM_PWM_Mode_Type;
 
@@ -49,9 +48,9 @@ typedef enum
 //单端PWM占空比输出 初始化结构
 typedef struct
 {
-    uint32_t        instance;
-    uint32_t        chl;
-    uint32_t        frequencyInHZ;
+    uint32_t            instance;
+    uint32_t            chl;
+    uint32_t            frequencyInHZ;
     FTM_PWM_Mode_Type   mode;
 }FTM_PWM_InitTypeDef;
 

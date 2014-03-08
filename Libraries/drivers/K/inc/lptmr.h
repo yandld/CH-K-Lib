@@ -1,15 +1,63 @@
 #ifndef __LPTMR_H__
 #define __LPTMR_H__
 
-#include "sys.h"
+#include "common.h"
 
-//PIT 初始化结构
+#define HW_LPTMR0   (0x00)
+
+//!< LPTMR 回调函数声明
+typedef void (*LPTMR_CallBackType)(void);
+
+//!< LPTMR 中断DMA配置
+typedef enum
+{
+    kLPTMR_IT_Disable,        //!< Disable Interrupt
+    kLPTMR_IT_TOF,            //!< Enable time overflow flag
+}LPTMR_ITDMAConfig_Type;
+
+//!< LPTMR 定时器功能 初始化
 typedef struct
 {
-//PIT_MapSelect_TypeDef  PITxMap;             //!< PIT Module and pinmux select 
-    uint32_t LPTMR_PeriodInUs;                    //!< Tick Period Us
-}LPTMR_InitTypeDef;
+    uint32_t        instance;
+    uint16_t        timeInMs;
+}LPTMR_TC_InitTypeDef;
 
+//!< LPTMR 脉冲计数源选择
+typedef enum
+{
+    kLPTMR_PC_InputSource_CMP0, //!< CMP0 作为脉冲计数时钟源
+    kLPTMR_PC_InputSource_ALT1, //!< 外部引脚LPTMR_ALT1作为外部计数时钟源
+    kLPTMR_PC_InputSource_ALT2, //!< 外部引脚LPTMR_ALT2作为外部计数时钟源
+}LPTMR_PC_IntputSource_Type;
+
+//!< LPTMR 外部引脚作为计数时 触发极性选择
+typedef enum
+{
+    kLPTMR_PC_PinPolarity_RigsingEdge,
+    kLPTMR_PC_PinPolarity_FallingEdge,
+}LPTMR_PC_PinPolarity_Type;
+
+//!< LPTMR 用作外部单路脉冲技术 初始化
+typedef struct
+{
+    uint32_t                        instance;
+    uint16_t                        counterOverflowValue;
+    LPTMR_PC_IntputSource_Type      inputSource;
+    LPTMR_PC_PinPolarity_Type       pinPolarity;
+}LPTMR_PC_InitTypeDef;
+
+//!< 快速初始化结构
+#define LPTMR_ALT1_PA19   (0x86780U)
+#define LPTMR_ALT2_PC05   (0x104b10U)
+
+//!< API functions
+void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct);
+void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct);
+void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config);
+void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun);
+uint32_t LPTMR_PC_ReadCounter(void);
+uint32_t LPTMR_PC_QuickInit(uint32_t LPTMRxMAP);
+void LPTMR_ClearCount(void);
 
 #endif
 

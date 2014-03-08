@@ -24,7 +24,7 @@
 #define HW_PIT0_CH2   (0x02U)
 #define HW_PIT0_CH3   (0x03U)
 
-//!< UART CallBack Type
+//!< PIT CallBack Type
 typedef void (*PIT_CallBackType)(void);
 
 //PIT 初始化结构

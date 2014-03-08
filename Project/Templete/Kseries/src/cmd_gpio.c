@@ -1,6 +1,6 @@
 #include "shell.h"
 #include "gpio.h"
-#include "common.h"
+#include "systick.h"
 #include "board.h"
 
 int DoGPIO(int argc, char *const argv[])

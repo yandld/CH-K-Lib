@@ -230,8 +230,16 @@ uint8_t ADC_QuickInit(uint32_t ADCxMAP, uint32_t resolutionMode)
     return pADCxMap->ip_instance;
 }
   
-
-
+/**
+ * @brief  ADC开始一次转换 立即返回
+ *
+ * @param  instance: ADC模块号
+ * @param  chl: ADC通道号
+ * @param  mux: 通道内转换通道
+ *         @arg kADC_MuxA
+ *         @arg kADC_MuxB
+ * @retval None
+ */
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux)
 {
     if(kADC_MuxA ==  mux)
@@ -338,27 +346,36 @@ void ADC_CallbackInstall(uint8_t instance, ADC_CallBackType AppCBFun)
 
 void ADC0_IRQHandler(void)
 {
-    uint32_t dummy;
-    /* clear COCO bit */
-    dummy = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxA];
-    dummy = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxB];
-    dummy = dummy; /* avoid compiler warnning */
+    uint32_t value;
+    /* clear COCO bit and read value*/
+    if(!(ADC_InstanceTable[HW_ADC0]->CFG2 & ADC_CFG2_MUXSEL_MASK))
+    {
+        value = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxA];
+    }
+    else
+    {
+        value = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxB];
+    }
     if(ADC_CallBackTable[HW_ADC0] != NULL)
     {
-        ADC_CallBackTable[HW_ADC0]();
+        ADC_CallBackTable[HW_ADC0](value);
     }
-    
 }
 
 void ADC1_IRQHandler(void)
 {
-    uint32_t dummy;
-    /* clear COCO bit */
-    dummy = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxA];
-    dummy = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxB];
-    dummy = dummy; /* avoid compiler warnning */
+    uint32_t value;
+    /* clear COCO bit and read value*/
+    if(!(ADC_InstanceTable[HW_ADC1]->CFG2 & ADC_CFG2_MUXSEL_MASK))
+    {
+        value = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxA];
+    }
+    else
+    {
+        value = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxB];
+    }
     if(ADC_CallBackTable[HW_ADC1] != NULL)
     {
-        ADC_CallBackTable[HW_ADC1]();
-    } 
+        ADC_CallBackTable[HW_ADC1](value);
+    }
 }

@@ -4,11 +4,11 @@
 #include "board.h"
 
 static uint8_t instance;
-static void ADC_CallBack(void)
+static void ADC_CallBack(uint32_t readValue)
 {
     static uint32_t cnt;
-    cnt =  ADC_ReadValue(instance, kADC_MuxA);
-    shell_printf("Enter ADC ISR:%d\r", cnt);
+   // cnt =  ADC_ReadValue(instance, kADC_MuxA);
+    shell_printf("Enter ADC ISR:%d\r", readValue);
 }
 
 int CMD_ADC(int argc, char * const * argv)

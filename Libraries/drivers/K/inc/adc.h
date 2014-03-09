@@ -108,7 +108,7 @@ typedef enum
 }ADC_ITDMAConfig_Type;
 
 //!< ADC 回调函数定义
-typedef void (*ADC_CallBackType)(void);
+typedef void (*ADC_CallBackType)(uint32_t conversionValue);
 
 //!< ADC 初始化结构
 typedef struct

@@ -945,14 +945,14 @@
               <FilePath>..\src\cmd_buzzer.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_lptmr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_lptmr.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2093,14 +2093,14 @@
               <FilePath>..\src\cmd_buzzer.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_lptmr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_lptmr.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -3155,14 +3155,14 @@
               <FilePath>..\src\cmd_buzzer.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_lptmr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_lptmr.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -4217,14 +4217,14 @@
               <FilePath>..\src\cmd_buzzer.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_lptmr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_lptmr.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>

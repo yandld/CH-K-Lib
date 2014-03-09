@@ -77,6 +77,10 @@
 #define kADC_TriggleSoftware     (0x00)
 #define kADC_TriggerHardware     (0x01)
 
+//!< 是否连续转换
+#define kADC_ContinueConversionEnable   (0x00)
+#define kADC_ContinueConversionDisable  (0x01)
+
 //!< 单端ADC还是查分ADC
 #define kADC_Single              (0x00)
 #define kADC_Differential        (0x01)
@@ -85,13 +89,22 @@
 #define kADC_MuxA                (0x00)
 #define kADC_MuxB                (0x01)
 
+//!< 硬件平均
+#define kADC_HardwareAverageDisable     (0x00)
+#define kADC_HardwareAverage_4          (0x01)
+#define kADC_HardwareAverage_8          (0x02)
+#define kADC_HardwareAverage_16         (0x03)
+#define kADC_HardwareAverage_32         (0x04)
+
+
+
 //!< ADC中断及DMA配置选择
 typedef enum
 {
-    kADC_IT_Disable,
-    kADC_DMA_Disable,
-    kADC_IT_EOF,
-    kADC_DMA_EOF,
+    kADC_IT_Disable,        //!< AD中断功能禁止
+    kADC_DMA_Disable,       //!< ADC DMA功能禁止
+    kADC_IT_EOF,            //!< 打开ADC 转换完成中断
+    kADC_DMA_EOF,           //!< 打开ADC DMA 完成中断
 }ADC_ITDMAConfig_Type;
 
 //!< ADC 回调函数定义
@@ -105,8 +118,11 @@ typedef struct
     uint32_t triggerMode;
     uint32_t clockDiv; 
     uint32_t resolutionMode;
-    uint32_t SingleOrDifferential;
+    uint32_t singleOrDifferential;
+    uint32_t continueConversionMode;
+    uint32_t hardwareAverageSelect;
 }ADC_InitTypeDef;
+
 
 //!< API functions
 void ADC_CallbackInstall(uint8_t instance, ADC_CallBackType AppCBFun);

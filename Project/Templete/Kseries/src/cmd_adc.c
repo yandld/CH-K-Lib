@@ -22,24 +22,16 @@ int CMD_ADC(int argc, char * const * argv)
     ADC_InitStruct1.clockDiv = kADC_ClockDiv8; //ADC转换时钟为输入时钟(默认BusClock) 的8分频
     ADC_InitStruct1.instance = HW_ADC0;
     ADC_InitStruct1.resolutionMode = kADC_SingleDiff8or9; //单端模式下8位精度 查分模式下9位精度
-    ADC_InitStruct1.SingleOrDifferential = kADC_Single;
+    ADC_InitStruct1.singleOrDifferential = kADC_Single;
     ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;
     //初始化ADC模块
-    ADC_Init(&ADC_InitStruct1);
+  //  ADC_Init(&ADC_InitStruct1);
     
-    
-    instance = ADC_QuickInit(BOARD_ADC_MAP, kADC_SingleDiff12or13);
+    instance = ADC_QuickInit(BOARD_ADC_MAP, kADC_SingleDiff10or11);
     ADC_CallbackInstall(instance, ADC_CallBack);
-    
     ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_EOF);
-    while(1)
-    {
-        ADC_StartConversion(instance, 19, kADC_MuxA);
-       // value = ADC_QuickReadValue(ADC0_SE20_DM1);
-       // shell_printf("AD:%d\r\n", value);
-      
-        DelayMs(50);
-    }
+    ADC_StartConversion(instance, 19, kADC_MuxA);
+
     return 0;
 }
 

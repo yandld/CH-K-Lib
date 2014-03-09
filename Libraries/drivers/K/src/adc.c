@@ -90,6 +90,11 @@ int32_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
 static int32_t ADC_Calibration(uint32_t instance)
 {
     uint32_t PG, MG;
+    // set max avarage to get the best cal results
+    ADC_InstanceTable[instance]->SC3 |= ADC_SC3_AVGS_MASK;
+    ADC_InstanceTable[instance]->SC3 |= ADC_SC3_AVGS(3);
+	ADC_InstanceTable[instance]->CFG1 |=  ADC_CFG1_ADICLK(3); 
+    
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_CALF_MASK; /* Clear the calibration's flag */
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_CAL_MASK;  /* Enable the calibration */
     ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_Disable);
@@ -145,7 +150,9 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
     // enable clock gate
     uint32_t * SIM_SCGx = (void*) SIM_ADCClockGateTable[ADC_InitStruct->instance].register_addr;
     *SIM_SCGx |= SIM_ADCClockGateTable[ADC_InitStruct->instance].mask;
-	// set clock configuratiom
+    // do calibration
+    ADC_Calibration(ADC_InitStruct->instance);
+	// set clock configuration
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~ADC_CFG1_ADICLK_MASK;
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |=  ADC_CFG1_ADICLK(ADC_InitStruct->clockDiv); 
     // resolutionMode
@@ -153,8 +160,33 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |= ADC_CFG1_MODE(ADC_InitStruct->resolutionMode);
     // trigger mode
     (kADC_TriggerHardware == ADC_InitStruct->triggerMode)?(ADC_InstanceTable[ADC_InitStruct->instance]->SC2 |=  ADC_SC2_ADTRG_MASK):(ADC_InstanceTable[ADC_InitStruct->instance]->SC2 &=  ADC_SC2_ADTRG_MASK);
-    // do cal
-    ADC_Calibration(ADC_InitStruct->instance);
+    // continues conversion
+    (kADC_ContinueConversionEnable == ADC_InitStruct->continueConversionMode)?(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_ADCO_MASK):(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_ADCO_MASK);
+    // hardware average
+    switch(ADC_InitStruct->hardwareAverageSelect)
+    {
+        case kADC_HardwareAverageDisable:
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
+            break;
+        case kADC_HardwareAverage_4:
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS_MASK;
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(0);
+            break;
+        case kADC_HardwareAverage_8:
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS_MASK;
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(1);
+            break;
+        case kADC_HardwareAverage_16:
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS_MASK;
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(2);
+            break;
+        case kADC_HardwareAverage_32:
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS_MASK;
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(3);
+            break;
+        default:
+            break;
+    }
 }
 
 /**
@@ -184,7 +216,10 @@ uint8_t ADC_QuickInit(uint32_t ADCxMAP, uint32_t resolutionMode)
     AD_InitStruct1.clockDiv = kADC_ClockDiv8;
     AD_InitStruct1.resolutionMode = resolutionMode;
     AD_InitStruct1.triggerMode = kADC_TriggleSoftware;
-    AD_InitStruct1.SingleOrDifferential = kADC_Single;
+    AD_InitStruct1.singleOrDifferential = kADC_Single;
+    AD_InitStruct1.continueConversionMode = kADC_ContinueConversionEnable;
+    AD_InitStruct1.hardwareAverageSelect = kADC_HardwareAverageDisable;
+    
     ADC_Init(&AD_InitStruct1);
     // init pinmux
     for(i = 0; i < pADCxMap->io_offset; i++)

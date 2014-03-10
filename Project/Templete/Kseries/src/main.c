@@ -29,6 +29,7 @@ extern const cmd_tbl_t CommandFun_I2C;
 extern const cmd_tbl_t CommandFun_KEY;
 extern const cmd_tbl_t CommandFun_BUZZER;
 extern const cmd_tbl_t CommandFun_LPTMR;
+extern const cmd_tbl_t CommandFun_SPI;
 
 
 static const QuickInit_Type LPTMR_QuickInitTable[] = 
@@ -98,7 +99,7 @@ int main(void)
     DelayInit();
     UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
     printf("HelloWorld\r\n");
-    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
+   // SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
     shell_register_function(&CommandFun_GPIO); //GPIO√¸¡Ó ≤‚ ‘GPIO
@@ -117,6 +118,10 @@ int main(void)
     shell_register_function(&CommandFun_KEY);
     shell_register_function(&CommandFun_BUZZER);
     shell_register_function(&CommandFun_LPTMR);
+    shell_register_function(&CommandFun_SPI);
+
+
+
 
 CalConst(LPTMR_QuickInitTable, ARRAY_SIZE(LPTMR_QuickInitTable));
     while(1)

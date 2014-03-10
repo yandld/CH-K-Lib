@@ -950,6 +950,11 @@
               <FilePath>..\src\cmd_lptmr.c</FilePath>
             </File>
             <File>
+              <FileName>cmd_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_spi.c</FilePath>
+            </File>
+            <File>
               <FileName>shell_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
@@ -1149,6 +1154,16 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>i2c_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\i2c_abstraction.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2098,6 +2113,11 @@
               <FilePath>..\src\cmd_lptmr.c</FilePath>
             </File>
             <File>
+              <FileName>cmd_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_spi.c</FilePath>
+            </File>
+            <File>
               <FileName>shell_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
@@ -2211,6 +2231,16 @@
               <FileName>sram.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\i2c_abstraction.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3160,6 +3190,11 @@
               <FilePath>..\src\cmd_lptmr.c</FilePath>
             </File>
             <File>
+              <FileName>cmd_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_spi.c</FilePath>
+            </File>
+            <File>
               <FileName>shell_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
@@ -3273,6 +3308,16 @@
               <FileName>sram.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\i2c_abstraction.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4222,6 +4267,11 @@
               <FilePath>..\src\cmd_lptmr.c</FilePath>
             </File>
             <File>
+              <FileName>cmd_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_spi.c</FilePath>
+            </File>
+            <File>
               <FileName>shell_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
@@ -4335,6 +4385,16 @@
               <FileName>sram.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\i2c_abstraction.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
             </File>
           </Files>
         </Group>

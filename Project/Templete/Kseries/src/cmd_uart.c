@@ -18,6 +18,7 @@ static void UART_TxISR(uint8_t * pbyteToSend)
 static uint8_t UART_RxISR(uint8_t pbyteReceived)
 {
     gReceicedChar = pbyteReceived;
+    //¿ªÆô·¢ËÍÖÐ¶Ï
     UART_ITDMAConfig(instance, kUART_IT_Tx);
 }
 

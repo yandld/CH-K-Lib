@@ -22,6 +22,15 @@
 #define BOARD_ADC_MAP         ADC0_SE19_DM0
 //!< PWM
 #define BOARD_PWM_MAP
+//!< SPI 
+#define BOARD_SPI_INSTANCE   HW_SPI2
+#define BOARD_SPI_PCS        (1)
+
+
+
+
+
+
 
 #elif CHK60EVB1
 
@@ -37,7 +46,9 @@
 #define BOARD_KEY_GPIO_BASES  {HW_GPIOA}
 #define BOARD_KEY_PIN_BASES   {0}
 #define BOARD_ADC_MAP         ADC0_SE19_DM0
-
+#define BOARD_BUZZER_GPIO_BASES     {HW_GPIOA}
+#define BOARD_BUZZER_PIN_BASES      {6}
+#define BOARD_BUZZER_FTM_MAP        FTM0_CH3_PA06
 #else
 
 #warning  "Please Define a Board"

@@ -143,7 +143,7 @@ static int32_t ADC_Calibration(uint32_t instance)
  *   ADC_Init(&ADC_InitStruct1);
  * @endcode
  * @param  ADC_InitStruct: ADC初始化结构体
- * @retval 0:转换完成 1:转换失败或转换进行中
+ * @retval None
  */
 void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 {

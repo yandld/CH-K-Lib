@@ -61,7 +61,7 @@ typedef enum
 //!< ping config type
 typedef enum
 {
-    kInpput,
+    kInput,
     kOutput,
     kPinConfigNameCount,
 }GPIO_PinConfig_Type;
@@ -92,21 +92,6 @@ typedef struct
 
 //!< call back type
 typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
-
-//!< API functions
-void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
-void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
-void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState);
-void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode);
-void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
-uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode);
-void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data);
-uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex);
-void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex);
-uint32_t GPIO_ReadByte(uint8_t instance, uint8_t pinIndex);
-void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data);
-void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config);
-void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun);
 
 //!< param check
 #define IS_GPIO_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(GPIO_InstanceTable))
@@ -155,6 +140,21 @@ void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun);
 
 #define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)
 #define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)
+
+//!< API functions
+void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
+void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
+void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState);
+void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode);
+void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
+uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode);
+void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data);
+uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex);
+void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex);
+uint32_t GPIO_ReadByte(uint8_t instance, uint8_t pinIndex);
+void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data);
+void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config);
+void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun);
 
 
 #ifdef __cplusplus

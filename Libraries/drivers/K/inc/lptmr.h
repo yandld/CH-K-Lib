@@ -40,13 +40,13 @@ typedef enum
 //!< LPTMR 用作外部单路脉冲技术 初始化
 typedef struct
 {
-    uint32_t                        instance;
-    uint16_t                        counterOverflowValue;
-    LPTMR_PC_IntputSource_Type      inputSource;
-    LPTMR_PC_PinPolarity_Type       pinPolarity;
+    uint32_t                        instance;               //!<模块号
+    uint16_t                        counterOverflowValue;   //!<脉冲累加器溢出阀值 最大0xFFFF
+    LPTMR_PC_IntputSource_Type      inputSource;            //!< 输入源选择
+    LPTMR_PC_PinPolarity_Type       pinPolarity;            //!< 输入捕捉极性选择
 }LPTMR_PC_InitTypeDef;
 
-//!< 快速初始化结构
+//!< 快速初始化结构 用于单路脉冲计数
 #define LPTMR_ALT1_PA19   (0x86780U)
 #define LPTMR_ALT2_PC05   (0x104b10U)
 

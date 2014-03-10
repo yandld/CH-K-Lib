@@ -54,14 +54,12 @@ typedef enum
 typedef enum
 {
     kSPI_IT_TCF_Disable,    //!< 禁止TCF中断(TCF:传输一次完成)
-    kSPI_DMA_TCF_Disable,   //!< 禁止TCF标准位中断
     kSPI_IT_TCF,            //!< SPI传输一次完成中断使能
-    kSPI_DMA_TCF,           //!< SPI传输一次完成中断启动DMA
 }SPI_ITDMAConfig_Type;
 
 
 #define kSPI_PCS_ReturnInactive   (0x00)      //!< 传输完成后CS信号保持片选中状态
-#define kSPI_PCS_KeepAsserted  (0x01)      //!< 传输完成后CS信号保持未选中状态
+#define kSPI_PCS_KeepAsserted     (0x01)      //!< 传输完成后CS信号保持未选中状态
 
 //!< 初始化结构
 typedef struct
@@ -74,12 +72,14 @@ typedef struct
     uint8_t                 dataSizeInBit;          //!< 每帧数据有多少位 通常为8或16
 }SPI_InitTypeDef;
 
+//!< Callback Type
+typedef void (*SPI_CallBackType)(void);
 
 //!< API functions
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct);
 uint16_t SPI_ReadWriteByte(uint32_t instance, uint16_t data, uint16_t CSn, uint16_t csState);
-
-
+void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config);
+void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
 
 
 

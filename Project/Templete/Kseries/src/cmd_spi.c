@@ -4,6 +4,25 @@
 #include "gpio.h"
 #include "board.h"
 
+static uint8_t W25QXX_READ_ID_TABLE[] = {0x90, 0x00, 0x00, 0x00, 0xFF, 0xFF};
+static uint8_t test_buffer[8];
+void SPI_ISR(void)
+{
+    static uint8_t i = 1;
+    static uint16_t temp = 0;
+    if(i == 7)
+    {
+        SPI_ITDMAConfig(BOARD_SPI_INSTANCE, kSPI_IT_TCF_Disable);
+        shell_printf("ID:0x%X\r\n", temp);
+        return ;
+    }
+    if(i == 6)
+    {
+        temp <<= 8;
+    }
+    temp |= SPI_ReadWriteByte(BOARD_SPI_INSTANCE, W25QXX_READ_ID_TABLE[i], 1, kSPI_PCS_KeepAsserted);
+    i++;
+}
 
 int CMD_SPI(int argc, char * const * argv)
 {
@@ -19,21 +38,16 @@ int CMD_SPI(int argc, char * const * argv)
     SPI_InitStruct1.mode = kSPI_Master;
     
     SPI_Init(&SPI_InitStruct1);
+    SPI_CallbackInstall(BOARD_SPI_INSTANCE, SPI_ISR);
+    SPI_ITDMAConfig(BOARD_SPI_INSTANCE, kSPI_IT_TCF);
     
     PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2);
     PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2);
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2);
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2);
-    
-    SPI_ReadWriteByte(BOARD_SPI_INSTANCE, 0x90, 1, kSPI_PCS_KeepAsserted);
-    SPI_ReadWriteByte(BOARD_SPI_INSTANCE, 0x00, 1, kSPI_PCS_KeepAsserted);
-    SPI_ReadWriteByte(BOARD_SPI_INSTANCE, 0x00, 1, kSPI_PCS_KeepAsserted);
-    SPI_ReadWriteByte(BOARD_SPI_INSTANCE, 0x00, 1, kSPI_PCS_KeepAsserted);
-    temp |= SPI_ReadWriteByte(BOARD_SPI_INSTANCE, 0xFF, 1, kSPI_PCS_KeepAsserted)<<8;
-    temp |= SPI_ReadWriteByte(BOARD_SPI_INSTANCE, 0xFF, 1, kSPI_PCS_ReturnInactive);
-    shell_printf("ID:0x%X\r\n", temp);
+    // start transfer
+    SPI_ReadWriteByte(BOARD_SPI_INSTANCE, W25QXX_READ_ID_TABLE[0], 1, kSPI_PCS_KeepAsserted);
 
-    
     return 0;
 }
 

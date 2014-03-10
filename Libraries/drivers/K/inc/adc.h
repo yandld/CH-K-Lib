@@ -113,14 +113,14 @@ typedef void (*ADC_CallBackType)(uint32_t conversionValue);
 //!< ADC 初始化结构
 typedef struct
 {
-    uint32_t instance; 
-    uint32_t chl; 
-    uint32_t triggerMode;
-    uint32_t clockDiv; 
-    uint32_t resolutionMode;
-    uint32_t singleOrDifferential;
-    uint32_t continueConversionMode;
-    uint32_t hardwareAverageSelect;
+    uint32_t instance;                  //!< 模块号
+    uint32_t chl;                       //!< ADC通道号
+    uint32_t triggerMode;               //!< 触发模式 软件触发 或 硬件触发
+    uint32_t clockDiv;                  //!< ADC时钟分频
+    uint32_t resolutionMode;            //!< 分频率选择 8 10 12 16位精度等
+    uint32_t singleOrDifferential;      //!< 单端 还是 差分输入
+    uint32_t continueConversionMode;    //!< 是否启动连续转换
+    uint32_t hardwareAverageSelect;     //!< 硬件平均功能选择
 }ADC_InitTypeDef;
 
 

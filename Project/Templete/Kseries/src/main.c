@@ -123,9 +123,8 @@ int main(void)
     shell_register_function(&CommandFun_SPI);
     shell_register_function(&CommandFun_DMA);
 
-
-
-CalConst(LPTMR_QuickInitTable, ARRAY_SIZE(LPTMR_QuickInitTable));
+    OV7620_Init();
+    while(1);
     while(1)
     {
         shell_main_loop("SHELL>>");

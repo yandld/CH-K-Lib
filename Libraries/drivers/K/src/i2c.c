@@ -495,7 +495,7 @@ uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer,
     {
         I2C_GenerateSTOP(instance);
         time_out = 0;
-        while(!I2C_IsBusy(instance) && (time_out < 1000))
+        while(!I2C_IsBusy(instance) && (time_out < 10000))
         {
             time_out++;
         }
@@ -509,7 +509,7 @@ uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer,
         {
             I2C_GenerateSTOP(instance);
             time_out = 0;
-            while(!I2C_IsBusy(instance) && (time_out < 1000))
+            while(!I2C_IsBusy(instance) && (time_out < 10000))
             {
                 time_out++;
             }
@@ -567,7 +567,7 @@ uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t 
     {
         I2C_GenerateSTOP(instance);
         time_out = 0;
-        while(!I2C_IsBusy(instance) && (time_out < 1000))
+        while(!I2C_IsBusy(instance) && (time_out < 10000))
         {
             time_out++;
         }
@@ -624,7 +624,7 @@ int32_t I2C_ReadMutipleRegister(uint8_t instance, uint8_t deviceAddress, uint32_
     {
         I2C_GenerateSTOP(instance);
         time_out = 0;
-        while(!I2C_IsBusy(instance) && (time_out < 1000))
+        while(!I2C_IsBusy(instance) && (time_out < 10000))
         {
             time_out++;
         }
@@ -639,7 +639,7 @@ int32_t I2C_ReadMutipleRegister(uint8_t instance, uint8_t deviceAddress, uint32_
         {
             I2C_GenerateSTOP(instance);
             time_out = 0;
-            while(!I2C_IsBusy(instance)  && (time_out < 1000))
+            while(!I2C_IsBusy(instance)  && (time_out < 10000))
             {
                 time_out++;
             }

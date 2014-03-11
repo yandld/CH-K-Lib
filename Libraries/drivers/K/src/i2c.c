@@ -201,7 +201,8 @@ uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
     for(i = 0; i < pI2CxMap->io_offset; i++)
     {
         PORT_PinMuxConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, (PORT_PinMux_Type)pI2CxMap->mux);
-        PORT_PinConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, kPullUp, ENABLE); 
+        PORT_PinPullConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, kPullUp); 
+        PORT_PinOpenDrainConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, ENABLE);
     }
     return pI2CxMap->ip_instance;
 }

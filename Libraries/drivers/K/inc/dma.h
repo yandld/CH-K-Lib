@@ -79,6 +79,7 @@ typedef enum
     kDMA_TriggerSource_Periodic, 
 }DMA_TriggerSource_Type;
 
+//!< DMA搬运数据端口位宽设置
 typedef enum
 {
     kDMA_DataWidthBit_8,

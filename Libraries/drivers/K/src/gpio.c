@@ -103,14 +103,13 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
  * @param  newState: 是否开启开漏输出模式 这个选项只在Kinetis K系列上有效果.
  * @retval None
  */
-void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, FunctionalState newState)
+void PORT_PinPullConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
     switch(pull)
     {
         case kPullDisabled:
@@ -128,6 +127,13 @@ void PORT_PinConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull, Fun
             break;
     }
 }
+
+void PORT_PinOpenDrainConfig(uint8_t instance, uint8_t pinIndex, FunctionalState newState)
+{
+    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
+    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
+}
+
  /**
  * @brief  config 设置引脚为输入还是输出 只有当引脚作为GPIO时候才有意义
  * @param  instance: GPIO 模块号
@@ -184,23 +190,28 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
     switch(GPIO_InitStruct->mode)
     {
         case kGPIO_Mode_IFT:
-            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled, DISABLE);
+            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled);
+            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, DISABLE);
             GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInput);
             break;
         case kGPIO_Mode_IPD:
-            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDown, DISABLE);
+            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDown);
+            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, DISABLE);
             GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInput);
             break;
         case kGPIO_Mode_IPU:
-            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp, DISABLE);
+            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp);
+            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, DISABLE);
             GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInput);
             break;
         case kGPIO_Mode_OOD:
-            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp, ENABLE);
+            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp);
+            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, ENABLE);
             GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
             break;
         case kGPIO_Mode_OPP:
-            PORT_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled, DISABLE);
+            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled);
+            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, DISABLE);
             GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
             break;
         default:

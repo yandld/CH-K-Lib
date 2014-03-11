@@ -50,8 +50,10 @@ int CMD_FTM(int argc, char * const * argv)
     //combie
     if(!strcmp(argv[1], "-qd"))
     {
-        PORT_PinConfig(HW_GPIOB, 0, kPullUp, ENABLE);
-        PORT_PinConfig(HW_GPIOB, 1, kPullUp, ENABLE);
+        PORT_PinPullConfig(HW_GPIOB, 0, kPullUp);
+        PORT_PinPullConfig(HW_GPIOB, 1, kPullUp);
+        PORT_PinOpenDrainConfig(HW_GPIOB, 1,ENABLE);
+        PORT_PinOpenDrainConfig(HW_GPIOB, 0,ENABLE);
     }
     return 0;
 }

@@ -176,7 +176,8 @@ uint32_t FTM_QD_QuickInit(uint32_t FTMxMAP)
     for(i = 0; i < pFTMxMap->io_offset; i++)
     {
         PORT_PinMuxConfig(pFTMxMap->io_instance, pFTMxMap->io_base + i, (PORT_PinMux_Type) pFTMxMap->mux);
-        PORT_PinConfig(pFTMxMap->io_instance, pFTMxMap->io_base + i, kPullUp, ENABLE);
+        PORT_PinPullConfig(pFTMxMap->io_instance, pFTMxMap->io_base + i, kPullUp);
+        PORT_PinOpenDrainConfig(pFTMxMap->io_instance, pFTMxMap->io_base + i, ENABLE);
     }
     return pFTMxMap->ip_instance;
 }

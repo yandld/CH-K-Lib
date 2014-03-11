@@ -225,7 +225,8 @@ uint8_t ADC_QuickInit(uint32_t ADCxMAP, uint32_t resolutionMode)
     for(i = 0; i < pADCxMap->io_offset; i++)
     {
         PORT_PinMuxConfig(pADCxMap->io_instance, pADCxMap->io_base + i, (PORT_PinMux_Type) pADCxMap->mux);
-        PORT_PinConfig(pADCxMap->io_instance, pADCxMap->io_base + i, kPullDisabled, DISABLE);
+        PORT_PinPullConfig(pADCxMap->io_instance, pADCxMap->io_base + i, kPullDisabled);
+        
     }
     return pADCxMap->ip_instance;
 }

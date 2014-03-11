@@ -1170,6 +1170,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
             </File>
+            <File>
+              <FileName>ov7620.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ov7620.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -1180,14 +1185,14 @@
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
-          <Device>MK60DN256xxx10</Device>
+          <Device>MK60DN512xxx10</Device>
           <Vendor>Freescale Semiconductor</Vendor>
-          <Cpu>IRAM(0x1FFF8000-0x1FFFFFFF) IRAM2(0x20000000-0x20007FFF) IROM(0x0-0x4FFFF) CLOCK(12000000) CPUTYPE("Cortex-M4") ELITTLE</Cpu>
+          <Cpu>IROM(0x00000000,0x80000) IRAM(0x20000000,0x10000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") CLOCK(100000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
-          <StartupFile>"STARTUP\Freescale\Kinetis\startup_MK60D10.s" ("Freescale MK60Xxxxxxx10 Startup Code")</StartupFile>
-          <FlashDriverDll>ULP2CM3(-O2510 -S0 -C0 -FO15 -FD20000000 -FC4000 -FN1 -FF0MK_P256 -FS00 -FL040000)</FlashDriverDll>
-          <DeviceId>5855</DeviceId>
-          <RegisterFile>MK60D10.H</RegisterFile>
+          <StartupFile></StartupFile>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0MK_P512 -FS00 -FL080000 -FP0($$Device:MK60DN512xxx10$Flash\MK_P512.FLM))</FlashDriverDll>
+          <DeviceId>5854</DeviceId>
+          <RegisterFile>$$Device:MK60DN512xxx10$Device\Include\MK60D10.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -1197,14 +1202,14 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>SFD\Freescale\Kinetis\MK60D10.sfr</SFDFile>
+          <SFDFile>$$Device:MK60DN512xxx10$SVD\MK60D10.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
           <IncludePath></IncludePath>
           <LibPath></LibPath>
-          <RegisterFilePath>Freescale\Kinetis\</RegisterFilePath>
-          <DBRegisterFilePath>Freescale\Kinetis\</DBRegisterFilePath>
+          <RegisterFilePath></RegisterFilePath>
+          <DBRegisterFilePath></DBRegisterFilePath>
           <TargetStatus>
             <Error>0</Error>
             <ExitCodeStop>0</ExitCodeStop>
@@ -1270,11 +1275,11 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments>-MPU</SimDllArguments>
+          <SimDllArguments> </SimDllArguments>
           <SimDlgDll>DCM.DLL</SimDlgDll>
           <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments>-MPU</TargetDllArguments>
+          <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
           <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
         </DllOption>
@@ -1300,7 +1305,7 @@
           <Target>
             <UseTarget>1</UseTarget>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
-            <RunToMain>1</RunToMain>
+            <RunToMain>0</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
             <RestoreWatchpoints>1</RestoreWatchpoints>
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
@@ -1311,7 +1316,7 @@
             <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>7</TargetSelection>
+          <TargetSelection>1</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -1325,7 +1330,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>Segger\JL2CM3.dll</Driver>
+            <Driver>BIN\UL2CM3.DLL</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -1338,8 +1343,8 @@
             <DriverSelection>4100</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>BIN\ULP2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -1443,13 +1448,13 @@
               </Ocm6>
               <IRAM>
                 <Type>0</Type>
-                <StartAddress>0x1fff8000</StartAddress>
-                <Size>0x8000</Size>
+                <StartAddress>0x20000000</StartAddress>
+                <Size>0x10000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x50000</Size>
+                <Size>0x80000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -1474,7 +1479,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x50000</Size>
+                <Size>0x80000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -1498,13 +1503,13 @@
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
-                <StartAddress>0x1fff8000</StartAddress>
-                <Size>0x8000</Size>
+                <StartAddress>0x20000000</StartAddress>
+                <Size>0x10000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
-                <Size>0x8000</Size>
+                <StartAddress>0x1fff0000</StartAddress>
+                <Size>0x10000</Size>
               </OCR_RVCT10>
             </OnChipMemories>
             <RvctStartVector></RvctStartVector>
@@ -2251,6 +2256,11 @@
               <FileName>spi_abstraction.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
+            </File>
+            <File>
+              <FileName>ov7620.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ov7620.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3334,6 +3344,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
             </File>
+            <File>
+              <FileName>ov7620.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ov7620.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -4415,6 +4430,11 @@
               <FileName>spi_abstraction.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
+            </File>
+            <File>
+              <FileName>ov7620.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ov7620.c</FilePath>
             </File>
           </Files>
         </Group>

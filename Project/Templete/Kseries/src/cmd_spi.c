@@ -36,9 +36,11 @@ int CMD_SPI(int argc, char * const * argv)
     SPI_InitStruct1.dataSizeInBit = 8;
     SPI_InitStruct1.instance = BOARD_SPI_INSTANCE;
     SPI_InitStruct1.mode = kSPI_Master;
-    
+    //初始化SPI
     SPI_Init(&SPI_InitStruct1);
+    //安装回调函数
     SPI_CallbackInstall(BOARD_SPI_INSTANCE, SPI_ISR);
+    //开启SPI中断 
     SPI_ITDMAConfig(BOARD_SPI_INSTANCE, kSPI_IT_TCF);
     
     PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2);

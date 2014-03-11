@@ -30,6 +30,8 @@ extern const cmd_tbl_t CommandFun_KEY;
 extern const cmd_tbl_t CommandFun_BUZZER;
 extern const cmd_tbl_t CommandFun_LPTMR;
 extern const cmd_tbl_t CommandFun_SPI;
+extern const cmd_tbl_t CommandFun_DMA;
+
 
 
 static const QuickInit_Type LPTMR_QuickInitTable[] = 
@@ -119,7 +121,7 @@ int main(void)
     shell_register_function(&CommandFun_BUZZER);
     shell_register_function(&CommandFun_LPTMR);
     shell_register_function(&CommandFun_SPI);
-
+    shell_register_function(&CommandFun_DMA);
 
 
 

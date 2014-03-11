@@ -1,3 +1,12 @@
+/**
+  ******************************************************************************
+  * @file    lptmr.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2013.12.25
+  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #include "lptmr.h"
 #include "gpio.h"
 

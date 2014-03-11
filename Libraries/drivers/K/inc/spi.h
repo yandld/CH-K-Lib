@@ -7,7 +7,10 @@
   * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
   ******************************************************************************
   */
-  
+
+#ifndef __SPI_H__
+#define __SPI_H__
+
 #include "common.h"
   
 #define HW_SPI0     (0x00)
@@ -83,5 +86,5 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
 
 
 
-
+#endif
 

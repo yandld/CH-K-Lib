@@ -959,6 +959,11 @@
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
             </File>
+            <File>
+              <FileName>cmd_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_dma.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2122,6 +2127,11 @@
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
             </File>
+            <File>
+              <FileName>cmd_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_dma.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3199,6 +3209,11 @@
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
             </File>
+            <File>
+              <FileName>cmd_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_dma.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4275,6 +4290,11 @@
               <FileName>shell_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_dma.c</FilePath>
             </File>
           </Files>
         </Group>

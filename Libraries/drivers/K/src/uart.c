@@ -31,6 +31,7 @@
 
 //!< Gloabl Const Table Defination
 UART_Type * const UART_InstanceTable[] = UART_BASES;
+//!< Callback function slot
 static UART_CallBackTxType UART_CallBackTxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
 static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
 static uint8_t UART_DebugInstance;
@@ -287,9 +288,11 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config)
             break;
         case kUART_DMA_Tx_Disable:
             UART_InstanceTable[instance]->C5 &= ~UART_C5_TDMAS_MASK;
+            UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK;
             break;
         case kUART_DMA_Rx_Disable:
             UART_InstanceTable[instance]->C5 &= ~UART_C5_RDMAS_MASK;
+            UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK;
             break;
         case kUART_IT_Tx:
             UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK;
@@ -300,9 +303,11 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config)
             NVIC_EnableIRQ(UART_IRQnTable[instance]);
             break;
         case kUART_DMA_Tx:
+            UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK;
             UART_InstanceTable[instance]->C5 |= UART_C5_TDMAS_MASK;
             break;
         case kUART_DMA_Rx:
+            UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK;
             UART_InstanceTable[instance]->C5 |= UART_C5_RDMAS_MASK;
             break;
         default:

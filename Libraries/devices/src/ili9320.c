@@ -33,10 +33,18 @@ void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos)
 #endif
 }
 
- void LCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint16_t Color)
+void LCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint16_t Color)
 {
-    LCD_SetCursor(XPos, YPos);//设置光标位置 
-    LCD_WriteRegister(0x22, Color);
+   // LCD_SetCursor(XPos, YPos);//设置光标位置
+  //  LCD_WriteRegister(0x20, XPos);
+    
+    //加速
+    WMLCDCOM(0x20);
+    WMLCDDATA(XPos);
+    WMLCDCOM(0x21);
+    WMLCDDATA(YPos);
+    WMLCDCOM(0x22);
+    WMLCDDATA(Color);
 }
 
 void LCD_Clear(uint16_t color)
@@ -193,7 +201,7 @@ void ili9320_Init(void)
     //开启显示   
     LCD_WriteRegister(0x07,0x0173);
    
-    LCD_Clear(BLUE);
+    LCD_Clear(WHITE);
 }
 
 

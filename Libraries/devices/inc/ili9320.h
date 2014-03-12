@@ -1,7 +1,7 @@
 #include "common.h"
 
 //FlexBus总线定义
-#define FLEXBUS_BASE_ADDRESS        0x70000000
+#define FLEXBUS_BASE_ADDRESS        (0x70000000)
 #define LCD_COMMAND_ADDRESS         *(unsigned short *)0x70000000
 #define LCD_DATA_ADDRESS            *(unsigned short *)0x78000000
 
@@ -43,4 +43,4 @@
 //!< API functions
 void ili9320_Init(void);
 uint32_t ILI9320_GetDeivceID(void);
-
+void LCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint16_t Color);

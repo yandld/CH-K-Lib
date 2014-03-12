@@ -72,6 +72,12 @@
 #define DMA_MUX3          60
 
 
+//!< DMA通道
+#define HW_DMA_CH0    (0x00)
+#define HW_DMA_CH1    (0x01)
+#define HW_DMA_CH2    (0x02)
+#define HW_DMA_CH3    (0x03)
+
 //!< 触发模式选择
 typedef enum
 {
@@ -126,7 +132,8 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct);
 uint8_t DMA_IsTransferComplete(uint8_t chl);
 void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config);
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun);
-  
+void DMA_CancelTransfer(uint8_t chl);
+
 #endif
   
   

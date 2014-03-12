@@ -31,7 +31,7 @@ extern const cmd_tbl_t CommandFun_BUZZER;
 extern const cmd_tbl_t CommandFun_LPTMR;
 extern const cmd_tbl_t CommandFun_SPI;
 extern const cmd_tbl_t CommandFun_DMA;
-
+extern const cmd_tbl_t CommandFun_OV7620;
 
 
 static const QuickInit_Type LPTMR_QuickInitTable[] = 
@@ -101,7 +101,7 @@ int main(void)
     DelayInit();
     UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
     printf("HelloWorld\r\n");
-   // SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
     shell_register_function(&CommandFun_GPIO); //GPIOÃüÁî ²âÊÔGPIO
@@ -122,9 +122,8 @@ int main(void)
     shell_register_function(&CommandFun_LPTMR);
     shell_register_function(&CommandFun_SPI);
     shell_register_function(&CommandFun_DMA);
+    shell_register_function(&CommandFun_OV7620);
 
-    OV7620_Init();
-    while(1);
     while(1)
     {
         shell_main_loop("SHELL>>");

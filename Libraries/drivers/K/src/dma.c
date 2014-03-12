@@ -38,6 +38,8 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 	// enable DMA and DMAMUX clock
 	SIM->SCGC6 |= SIM_SCGC6_DMAMUX_MASK;    
 	SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;
+    //disable chl first
+    DMA0->ERQ |= (1<<(DMA_InitStruct->chl));
     // dma chl source config
     DMAMUX->CHCFG[DMA_InitStruct->chl] = DMAMUX_CHCFG_SOURCE(DMA_InitStruct->chlTriggerSource);
     // trigger mode
@@ -125,6 +127,11 @@ uint8_t DMA_IsTransferComplete(uint8_t chl)
     {
         return 1;
     }
+}
+
+void DMA_CancelTransfer(uint8_t chl)
+{
+    DMA0->CR |= DMA_CR_CX_MASK;
 }
 
 void DMA0_IRQHandler(void)

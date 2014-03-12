@@ -955,14 +955,19 @@
               <FilePath>..\src\cmd_spi.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_ov7620.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_ov7620.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2128,14 +2133,19 @@
               <FilePath>..\src\cmd_spi.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_ov7620.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_ov7620.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -3215,14 +3225,19 @@
               <FilePath>..\src\cmd_spi.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_ov7620.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_ov7620.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -4302,14 +4317,19 @@
               <FilePath>..\src\cmd_spi.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_ov7620.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_ov7620.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>

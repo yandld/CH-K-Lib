@@ -58,6 +58,9 @@ typedef enum
 //!< I2C CallBack Type
 typedef void (*I2C_CallBackType)(void);
 
+//!< param check
+#define IS_I2C_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(I2C_InstanceTable))
+
 //!< API functions
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
 uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate);
@@ -70,14 +73,13 @@ uint8_t I2C_WaitAck(uint8_t instance);
 uint8_t I2C_IsBusy(uint8_t instance);
 void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config);
 void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun);
+// higher level functions
+uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len);
 uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData);
 uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data);
 int32_t I2C_ReadMutipleRegister(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t * pData, uint32_t dataLen);
 
 
-
-//!< param check
-#define IS_I2C_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(I2C_InstanceTable))
 
 #ifdef __cplusplus
 }

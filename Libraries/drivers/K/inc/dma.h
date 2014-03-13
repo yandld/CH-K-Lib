@@ -134,7 +134,7 @@ void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config);
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun);
 void DMA_CancelTransfer(uint8_t chl);
 void DMA_SetDestAddress(uint8_t chl, uint32_t address);
-
+void DMA_SetSourceAddress(uint8_t chl, uint32_t address);
 
 
 

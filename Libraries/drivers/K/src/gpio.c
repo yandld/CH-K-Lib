@@ -372,7 +372,16 @@ void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data)
  *         @arg HW_GPIOD
  *         @arg HW_GPIOE
  * @param config: 配置模式
- * @param newState: 使能或者禁止
+ *         @arg kGPIO_IT_Disable 禁止中断功能
+ *         @arg kGPIO_DMA_Disable 禁止DMA功能
+ *         @arg kGPIO_DMA_RisingEdge DMA上升沿触发
+ *         @arg kGPIO_DMA_FallingEdge DMA下降沿触发
+ *         @arg kGPIO_DMA_RisingFallingEdge DMA上升和下降沿都触发
+ *         @arg kGPIO_IT_Low 低电平触发中断
+ *         @arg kGPIO_IT_RisingEdge 上升沿触发中断
+ *         @arg kGPIO_IT_FallingEdge 下降沿触发中断
+ *         @arg kGPIO_IT_RisingFallingEdge 上升和下降沿都触发中断
+ *         @arg kGPIO_IT_High 高电平触发中断
  * @retval None
  */
 void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config)

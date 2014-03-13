@@ -12,6 +12,7 @@
 
 static DMA_CallBackType DMA_CallBackTable[16] = {NULL};
 
+//!< DMA IRQn Table
 static const IRQn_Type DMA_IRQnTable[] = 
 {
     DMA0_IRQn,
@@ -77,13 +78,34 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 	DMAMUX->CHCFG[DMA_InitStruct->chl] |= DMAMUX_CHCFG_ENBL_MASK;
 }
 
-//!< Start transfer
+/**
+ * @brief  开始一次DMA传输
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @retval None
+ */
 void DMA_StartTransfer(uint8_t chl)
 {
     DMA0->ERQ |= (1<<chl);
 }
 
-
+/**
+ * @brief  设置DMA传输完成中断
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @param config: 配置模式
+ *         @arg kDMA_IT_Half_Disable 禁止DMA传输一半中断触发
+ *         @arg kDMA_IT_Major_Disable 禁止DMA传输完成中断触发
+ *         @arg kDMA_IT_Half 开启DMA传输一半中断触发
+ *         @arg kDMA_IT_Major 开启DMA传世完成中断触发
+ * @retval None
+ */
 void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config)
 {
     switch(config)
@@ -107,6 +129,16 @@ void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config)
     }
 }
 
+/**
+ * @brief  注册中断回调函数
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @param AppCBFun: 回调函数指针
+ * @retval None
+ */
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
@@ -132,6 +164,11 @@ uint8_t DMA_IsTransferComplete(uint8_t chl)
 void DMA_SetDestAddress(uint8_t chl, uint32_t address)
 {
     DMA0->TCD[chl].DADDR = address;
+}
+
+void DMA_SetSourceAddress(uint8_t chl, uint32_t address)
+{
+    DMA0->TCD[chl].SADDR = address;
 }
 
 void DMA_CancelTransfer(uint8_t chl)

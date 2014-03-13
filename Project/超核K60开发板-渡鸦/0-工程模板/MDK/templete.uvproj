@@ -644,6 +644,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
             </File>
+            <File>
+              <FileName>24cxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\24cxx.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

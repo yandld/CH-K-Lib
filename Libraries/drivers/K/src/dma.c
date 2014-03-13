@@ -39,7 +39,7 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 	SIM->SCGC6 |= SIM_SCGC6_DMAMUX_MASK;    
 	SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;
     //disable chl first
-    DMA0->ERQ |= (1<<(DMA_InitStruct->chl));
+    DMA0->ERQ &= ~(1<<(DMA_InitStruct->chl));
     // dma chl source config
     DMAMUX->CHCFG[DMA_InitStruct->chl] = DMAMUX_CHCFG_SOURCE(DMA_InitStruct->chlTriggerSource);
     // trigger mode
@@ -129,10 +129,17 @@ uint8_t DMA_IsTransferComplete(uint8_t chl)
     }
 }
 
+void DMA_SetDestAddress(uint8_t chl, uint32_t address)
+{
+    DMA0->TCD[chl].DADDR = address;
+}
+
 void DMA_CancelTransfer(uint8_t chl)
 {
     DMA0->CR |= DMA_CR_CX_MASK;
 }
+
+
 
 void DMA0_IRQHandler(void)
 {

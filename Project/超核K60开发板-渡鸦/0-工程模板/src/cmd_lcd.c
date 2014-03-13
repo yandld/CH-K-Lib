@@ -9,6 +9,7 @@ int CMD_LCD(int argc, char * const * argv)
     return 0;
 #else
     uint32_t err_cnt;
+    shell_printf("PLEASE INIT FLEXBUS FIRST\r\n");
     ili9320_Init();
     shell_printf("LCD ID:0x%X\r\n", ILI9320_GetDeivceID());
     

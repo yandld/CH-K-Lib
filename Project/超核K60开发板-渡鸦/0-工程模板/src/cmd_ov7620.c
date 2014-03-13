@@ -22,11 +22,13 @@ uint16_t RGB2COLOR(uint8_t RR,uint8_t GG,uint8_t BB)
 static void OV7620_ISR(char ** image)
 {
     uint32_t i,j;
-    for(i=0;i<240;i++)
+    static uint32_t cnt;
+    printf("cnt:%d\r\n", cnt++);
+    for(i=0;i<OV7620_H;i++)
     {
-        for(j=0;j<240;j++)
+        for(j=0;j<OV7620_W;j++)
         {
-            LCD_DrawPoint(j, 240-i, RGB2COLOR(CCDBuffer[i][j], CCDBuffer[i][j], CCDBuffer[i][j]));
+            LCD_DrawPoint(OV7620_H-i, j, RGB2COLOR(CCDBuffer[i][j], CCDBuffer[i][j], CCDBuffer[i][j]));
         }
     }
 }
@@ -34,7 +36,8 @@ static void OV7620_ISR(char ** image)
 int CMD_BOV7620(int argc, char * const * argv)
 {
     printf("OV7620 TEST\r\n");
-    ili9320_Init();
+    printf("INIT FLEXBUS FIRST\r\n");
+   // ili9320_Init();
     OV7620_CallbackInstall(OV7620_ISR);
     OV7620_Init();
     return 0;

@@ -85,6 +85,7 @@ int CMD_FLEXBUS(int argc, char * const * argv)
     //FLEXBUS_InitStruct.CSPortMultiplexingCotrol = FB_CSPMCR_GROUP3(kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
     FLEXBUS_Init(&FLEXBUS_InitStruct);
     
+    ili9320_Init();
     err_cnt = SRAM_SelfTest();
     if(err_cnt)
     {
@@ -95,7 +96,6 @@ int CMD_FLEXBUS(int argc, char * const * argv)
         shell_printf("SRAM TEST PASSED\r\n");
     }
     
-    ili9320_Init();
     shell_printf("LCD ID:0x%X\r\n", ILI9320_GetDeivceID());
     
 #endif

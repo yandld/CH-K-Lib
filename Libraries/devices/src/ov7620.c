@@ -13,45 +13,48 @@ static const uint32_t PORT_DataAddressTable[] =
     (uint32_t)&PTE->PDIR,
 };
 
-uint8_t CCDBufferPool[OV7620_W*OV7620_H];
-//uint8_t * CCDBufferPool = SRAM_START_ADDRESS;
+
+//状态机
+#define TRANSFER_IN_PROCESS  (0x00)
+#define USER_IN_PROCESS      (0x01)
+#define NEXT_FRAME  (0x02)
+
+static uint8_t status = TRANSFER_IN_PROCESS;  
+
+//uint8_t CCDBufferPool[OV7620_W*OV7620_H];   //使用内部RAM
+uint8_t * CCDBufferPool = SRAM_START_ADDRESS; //使用外部SRAM
 uint8_t * CCDBuffer[OV7620_H];
 static OV7620_CallBackType OV7620_CallBackTable[1] = {NULL};
-static uint32_t gHREF_RecievedCnt;
 //包括场中断和 行中断
 static void OV7620_ISR(uint32_t pinArray)
 {
     uint16_t i,j;
-    if(pinArray & (1<<BOARD_OV7620_VSYNC_PIN))
+    switch(status)
     {
-        if(gHREF_RecievedCnt >= OV7620_H)
-        {
-            DMA_CancelTransfer(HW_DMA_CH2);
-            GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_Disable);
-            GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_Disable);
-            if(OV7620_CallBackTable[0])
+        case TRANSFER_IN_PROCESS:
+            if(DMA_IsTransferComplete(HW_DMA_CH2) == 0)
             {
-                OV7620_CallBackTable[0]();
+                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_Disable);
+                if(OV7620_CallBackTable[0])
+                {
+                    OV7620_CallBackTable[0]();
+                }
+                status = NEXT_FRAME;
+                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);  
             }
-        }
-        gHREF_RecievedCnt = 0;
-        GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_RisingEdge);
-        GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);
+            else
+            {
+                status = TRANSFER_IN_PROCESS;
+            }
+            break;
+        case NEXT_FRAME:
+            DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[0]);
+            DMA_StartTransfer(HW_DMA_CH2); 
+            status =  TRANSFER_IN_PROCESS;
+            break;
+        default:
+            break;
     }
-    if(pinArray & (1<<BOARD_OV7620_HREF_PIN))
-    {
-        DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[gHREF_RecievedCnt]);
-        DMA_StartTransfer(HW_DMA_CH2); 
-        gHREF_RecievedCnt++;
-    }
-}
-
-void HardFault_Handler(void)
-{
-    printf("HardFault_Handler\r\n");
-    printf("gHREF_RecievedCnt:%d\r\n", gHREF_RecievedCnt);
-    while(1);
-    
 }
 
 void OV7620_CallbackInstall(OV7620_CallBackType AppCBFun)
@@ -67,6 +70,7 @@ void OV7620_Init(void)
     DMA_InitTypeDef DMA_InitStruct1;
     uint32_t i;
     uint32_t err_cnt;
+    //把开辟的内存池付给指针
     for(i=0;i< OV7620_H;i++)
     {
         CCDBuffer[i] = &CCDBufferPool[i*OV7620_W];
@@ -81,16 +85,15 @@ void OV7620_Init(void)
     }
     
     GPIO_CallbackInstall(BOARD_OV7620_VSYNC_PORT, OV7620_ISR); 
-    GPIO_CallbackInstall(BOARD_OV7620_HREF_PORT, OV7620_ISR); 
-    GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_RisingEdge);
+    GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_DMA_RisingEdge);
     GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);
-    GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge); //实际并没有用到
-    
+  //  GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge); //实际并没有用到
+    //初始化DMA
     DMA_InitStruct1.chl = HW_DMA_CH2;
-    DMA_InitStruct1.chlTriggerSource = DMA_MUX1; //尽最大努力采集
+    DMA_InitStruct1.chlTriggerSource = PORTA_DMAREQ;
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
     DMA_InitStruct1.minorByteTransferCount = OV7620_W;
-    DMA_InitStruct1.majorTransferCount = 1;
+    DMA_InitStruct1.majorTransferCount = OV7620_H;
     
     DMA_InitStruct1.sourceAddress = (uint32_t)PORT_DataAddressTable[BOARD_OV7620_DATA_PORT] + BOARD_OV7620_DATA_OFFSET/8;
     DMA_InitStruct1.sourceAddressMajorAdj = 0;
@@ -101,5 +104,8 @@ void OV7620_Init(void)
     DMA_InitStruct1.destAddressMajorAdj = 0;
     DMA_InitStruct1.destAddressMinorAdj = 1;
     DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8;
+    //初始化DMA
     DMA_Init(&DMA_InitStruct1);
+    //开始传输
+    DMA_StartTransfer(HW_DMA_CH2); 
 }

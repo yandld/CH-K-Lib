@@ -7,7 +7,7 @@
 
 
 #define OV7620_W    (320) // 每行有多少像素
-#define OV7620_H    (200) //高度 有多少行
+#define OV7620_H    (240) //高度 有多少行
 extern uint8_t * CCDBuffer[OV7620_H];
 //!< Callback Type
 typedef void (*OV7620_CallBackType)(void);

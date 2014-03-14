@@ -589,7 +589,7 @@ uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddr
             {
                 time_out++;
             }
-            return 2;
+            return 3;
         }
     }
     //Generate stop and wait for line idle

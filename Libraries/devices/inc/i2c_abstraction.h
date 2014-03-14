@@ -37,6 +37,7 @@ typedef enum
 //!< API funtctions
 int I2C_ABS_Init(int speed);
 int I2C_ABS_DeInit(void);
+int I2C_ABS_Probe(uint8_t chipAddress);
 int I2C_ABS_AbortTransfer(void);
 int I2C_ABS_ReadByte(uint8_t chipAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buffer, uint32_t len);
 int I2C_ABS_WriteByte(uint8_t chipAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buffer, uint32_t len);

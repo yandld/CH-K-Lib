@@ -1,11 +1,12 @@
 #include "shell.h"
 #include "i2c.h"
 #include "board.h"
-#include "24cxx.h"
+#include "at24cxx.h"
+#include "i2c_abstraction.h"
 
-static uint8_t gI2C_Instance = 0;
 
 static const uint32_t I2C_TestSpeedTable[] = {47000, 76000, 96000, 376000};
+static uint32_t gI2C_Instance;
 
 static int _do_i2c_scan(int argc, char *const argv[])
 {
@@ -13,22 +14,12 @@ static int _do_i2c_scan(int argc, char *const argv[])
     
     for(j = 0; j < ARRAY_SIZE(I2C_TestSpeedTable); j++)
     {
-        gI2C_Instance = I2C_QuickInit(BOARD_I2C_MAP, I2C_TestSpeedTable[j]);
+        I2C_ABS_Init(kI2C_ABS_SpeedStandard);
         shell_printf("Scanning I2C%d bus at:%dHz\r\n",gI2C_Instance,  I2C_TestSpeedTable[j]);
         for(i=0;i<127;i++)
         {
-           
-            I2C_GenerateSTART(gI2C_Instance);
-            I2C_Send7bitAddress(gI2C_Instance, i, kI2C_Write);
-            if(I2C_WaitAck(gI2C_Instance))
+            if(I2C_ABS_Probe(i) == kI2C_ABS_StatusOK)
             {
-                I2C_GenerateSTOP(gI2C_Instance);
-                while(!I2C_IsBusy(gI2C_Instance));
-            }
-            else
-            {
-                I2C_GenerateSTOP(gI2C_Instance);
-                while(!I2C_IsBusy(gI2C_Instance)); 
                 shell_printf("address:0x%X(0x%X) found!\r\n", i, i<<1);
             }
         }
@@ -64,20 +55,16 @@ static int _do_i2c_at24cxx(int argc, char *const argv[])
     uint8_t buffer[256];
     uint32_t i = 0;
     AT24CXX_Init(kAT24C02);
-    printf("SIZE:%dByte\r\n", AT24CXX_GetTotalSize(kAT24C02));
-    memset(buffer, 'G', sizeof(buffer));
-    AT24CXX_WriteByte(0, buffer, sizeof(buffer));
-    printf("ret:%d\r\n", ret);
-    memset(buffer, '0', sizeof(buffer));
-    AT24CXX_ReadByte(0, buffer, sizeof(buffer));
-    //I2C_ReadSingleRegister(HW_I2C0,0x50,0,buffer);
-    printf("ret:%d\r\n", ret);
-    for(i=0;i< sizeof(buffer);i++)
+    ret = AT24CXX_SelfTest();
+    if(ret)
     {
-        printf("[%d]:%c\r\n", i, buffer[i]);
+        shell_printf("AT24CXX FAILED:%d\r\n", ret);
+    }
+    else
+    {
+        shell_printf("AT24CXX OK\r\n", ret);   
     }
 }
-
 
 int DoI2C(int argc, char *const argv[])
 {
@@ -123,6 +110,4 @@ const cmd_tbl_t CommandFun_I2C =
     "eg: I2C SCAN\r\n"
     "eg: I2C IT 55\r\n"
 };
-
-
 

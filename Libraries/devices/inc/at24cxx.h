@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    24cxx.h
+  * @file    at24cxx.h
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
@@ -24,10 +24,11 @@ typedef enum
 }AT24CXX_Device_Type;
 
 //API funtctions
-void AT24CXX_Init(int type);
-void AT24CXX_ReadByte(uint32_t address, uint8_t *buffer, uint32_t len);
-void AT24CXX_WriteByte(uint32_t address, uint8_t *buffer, uint32_t len);
-uint32_t AT24CXX_GetTotalSize(AT24CXX_Device_Type type);
+int AT24CXX_Init(int type);
+int AT24CXX_ReadByte(uint32_t address, uint8_t *buffer, uint32_t len);
+int AT24CXX_WriteByte(uint32_t address, uint8_t *buffer, uint32_t len);
+int AT24CXX_GetTotalSize(void);
+int AT24CXX_SelfTest(void);
 
 
 #endif

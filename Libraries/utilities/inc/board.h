@@ -25,20 +25,15 @@
 //!< SPI 
 #define BOARD_SPI_INSTANCE   HW_SPI2
 #define BOARD_SPI_PCS        (1)
-
+//!< CCD
 #define BOARD_OV7620_PCLK_PORT      HW_GPIOA
 #define BOARD_OV7620_PCLK_PIN       (7)
-
 #define BOARD_OV7620_VSYNC_PORT     HW_GPIOA
 #define BOARD_OV7620_VSYNC_PIN      (16)
-
 #define BOARD_OV7620_HREF_PORT      HW_GPIOA
 #define BOARD_OV7620_HREF_PIN       (17)
-
-#define BOARD_OV7620_DATA_PORT      HW_GPIOA
+#define BOARD_OV7620_DATA_PORT      HW_GPIOA //PA8-15
 #define BOARD_OV7620_DATA_OFFSET    (8)
-
-
 
 
 

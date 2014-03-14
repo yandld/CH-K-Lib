@@ -4,13 +4,13 @@
 #include "dma.h"
 #include "sram.h"
 
-static const uint32_t PORT_DataAddressTable[] = 
+static const void* PORT_DataAddressTable[] = 
 {
-    (uint32_t)&PTA->PDIR,
-    (uint32_t)&PTB->PDIR,
-    (uint32_t)&PTC->PDIR,
-    (uint32_t)&PTD->PDIR,
-    (uint32_t)&PTE->PDIR,
+    (void*)&PTA->PDIR,
+    (void*)&PTB->PDIR,
+    (void*)&PTC->PDIR,
+    (void*)&PTD->PDIR,
+    (void*)&PTE->PDIR,
 };
 
 
@@ -28,7 +28,6 @@ static OV7620_CallBackType OV7620_CallBackTable[1] = {NULL};
 //包括场中断和 行中断
 static void OV7620_ISR(uint32_t pinArray)
 {
-    uint16_t i,j;
     switch(status)
     {
         case TRANSFER_IN_PROCESS:

@@ -29,23 +29,13 @@ int CMD_SPI(int argc, char * const * argv)
     uint32_t i;
     uint16_t temp = 0;
     shell_printf("SPI TEST CMD\r\n");
-    SPI_InitTypeDef SPI_InitStruct1;
-    SPI_InitStruct1.baudrateDivSelect = kSPI_BaudrateDiv_128;
-    SPI_InitStruct1.CPHA = kSPI_CPHA_1Edge;
-    SPI_InitStruct1.CPOL = kSPI_CPOL_InactiveLow;
-    SPI_InitStruct1.dataSizeInBit = 8;
-    SPI_InitStruct1.instance = BOARD_SPI_INSTANCE;
-    SPI_InitStruct1.mode = kSPI_Master;
     //初始化SPI
-    SPI_Init(&SPI_InitStruct1);
+    SPI_QuickInit(SPI2_SCK_PD12_SOUT_PD13_SIN_PD14);
     //安装回调函数
     SPI_CallbackInstall(BOARD_SPI_INSTANCE, SPI_ISR);
     //开启SPI中断 
     SPI_ITDMAConfig(BOARD_SPI_INSTANCE, kSPI_IT_TCF);
-    
-    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2);
-    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2);
-    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2);
+    //Init CS
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2);
     // start transfer
     SPI_ReadWriteByte(BOARD_SPI_INSTANCE, W25QXX_READ_ID_TABLE[0], 1, kSPI_PCS_KeepAsserted);

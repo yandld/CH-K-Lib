@@ -75,6 +75,15 @@ typedef struct
     uint8_t                 dataSizeInBit;          //!< 每帧数据有多少位 通常为8或16
 }SPI_InitTypeDef;
 
+//!< 快速初始化结构
+
+#define SPI0_SCK_PC05_SOUT_PC06_SIN_PC07   (0xca90U)
+#define SPI0_SCK_PD01_SOUT_PD02_SIN_PD03   (0xc298U)
+#define SPI1_SCK_PE02_SOUT_PE01_SIN_PE03   (0xc2a1U)
+#define SPI0_SCK_PA15_SOUT_PA16_SIN_PA17   (0xde80U)
+#define SPI2_SCK_PB21_SOUT_PB22_SIN_PB23   (0xea8aU)
+#define SPI2_SCK_PD12_SOUT_PD13_SIN_PD14   (0xd89aU)
+
 //!< Callback Type
 typedef void (*SPI_CallBackType)(void);
 
@@ -83,7 +92,7 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct);
 uint16_t SPI_ReadWriteByte(uint32_t instance, uint16_t data, uint16_t CSn, uint16_t csState);
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config);
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
-
+uint32_t SPI_QuickInit(uint32_t SPIxMAP);
 
 
 #endif

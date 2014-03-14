@@ -29,7 +29,7 @@ static int AT24CXX_Type;
 int AT24CXX_Init(int type)
 {
     AT24CXX_Type = (int)type;
-    return I2C_ABS_Init(kI2C_ABS_SpeedLow);
+    return I2C_ABS_Init(kI2C_ABS_SpeedFast);
 }
 
 int AT24CXX_GetTotalSize(void)
@@ -130,3 +130,5 @@ int AT24CXX_SelfTest(void)
     }
     return kI2C_ABS_StatusOK;
 }
+
+

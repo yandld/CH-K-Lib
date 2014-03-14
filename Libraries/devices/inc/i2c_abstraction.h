@@ -16,10 +16,10 @@
 
 typedef enum
 {
-    kI2C_ABS_SpeedLow,                ///< I2C Bus: Low Speed      ( 10kHz)
-    kI2C_ABS_SpeedStandard,           ///< I2C Bus: Standard Speed (100kHz)
-    kI2C_ABS_SpeedFast,               ///< I2C Bus: Fast Speed     (400kHz)
-    kI2C_ABS_SpeedHigh,                ///< I2C Bus: Fast+ Speed    (  1MHz)
+    kI2C_ABS_SpeedLow,          //!< I2C Bus: Low Speed      ( 10kHz)
+    kI2C_ABS_SpeedStandard,     //!< I2C Bus: Standard Speed (100kHz)
+    kI2C_ABS_SpeedFast,         //!< I2C Bus: Fast Speed     (400kHz)
+    kI2C_ABS_SpeedHigh,         //!< I2C Bus: Fast+ Speed    (  1MHz)
 }I2C_ABS_Speed_Type;
 
 typedef enum
@@ -45,3 +45,4 @@ int I2C_ABS_WriteByte(uint8_t chipAddress, uint32_t subAddress, uint32_t subAddr
 
 
 #endif
+

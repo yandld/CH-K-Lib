@@ -32,7 +32,6 @@ int I2C_ABS_Init(int speed)
             instance = I2C_QuickInit(BOARD_I2C_MAP, 1000*1000);
             break;
         default:
-            return kI2C_ABS_StatusError;
         break;
     }
     return kI2C_ABS_StatusOK;
@@ -74,6 +73,7 @@ int I2C_ABS_ReadByte(uint8_t chipAddress, uint32_t subAddress, uint32_t subAddre
     {
         return kI2C_ABS_StatusError; 
     }
+    return kI2C_ABS_StatusOK;
 }
 
 int I2C_ABS_WriteByte(uint8_t chipAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buffer, uint32_t len)
@@ -83,6 +83,7 @@ int I2C_ABS_WriteByte(uint8_t chipAddress, uint32_t subAddress, uint32_t subAddr
     {
         return kI2C_ABS_StatusError; 
     }
+    return kI2C_ABS_StatusOK;
 }
 
 

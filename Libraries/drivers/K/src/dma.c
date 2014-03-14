@@ -11,7 +11,7 @@
 #include "dma.h"
 
 static DMA_CallBackType DMA_CallBackTable[16] = {NULL};
-
+#if     (defined(MK60DZ10) || defined(MK60D10))
 //!< DMA IRQn Table
 static const IRQn_Type DMA_IRQnTable[] = 
 {
@@ -32,6 +32,16 @@ static const IRQn_Type DMA_IRQnTable[] =
     DMA14_IRQn,
     DMA15_IRQn,
 };
+#elif   (defined(MK10D5))
+static const IRQn_Type DMA_IRQnTable[] = 
+{
+    DMA0_IRQn,
+    DMA1_IRQn,
+    DMA2_IRQn,
+    DMA3_IRQn,
+};
+#endif
+
 
 
 void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)

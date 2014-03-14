@@ -3,9 +3,9 @@
 #include "common.h"
 
 static trans_io_install_t * gpIOInstallStruct;   /* install struct	*/
-
+//数据头
 const char trans_header_table[3] = {0x88, 0xAF, 0x1C};
-
+//数据内容
 typedef __packed struct
 {
     uint8_t trans_header[3];
@@ -14,13 +14,14 @@ typedef __packed struct
     uint8_t sum;
 }trans_packet_t;
 
-
+//安装回调函数
 uint8_t trans_io_install(trans_io_install_t * IOInstallStruct)
 {
     gpIOInstallStruct = IOInstallStruct;
     return 0;
 }
 
+//发送数据包
 uint32_t trans_send_pactket(trans_user_data_t data)
 {
     trans_packet_t packet;

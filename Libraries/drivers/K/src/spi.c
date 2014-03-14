@@ -114,7 +114,6 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
         default:
             break;
     }
-    
     // clear all flags
     SPI_InstanceTable[SPI_InitStruct->instance]->SR = SPI_SR_EOQF_MASK   
             | SPI_SR_TFUF_MASK    
@@ -126,7 +125,25 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
     SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_HALT_MASK;
 }
  
-
+uint32_t SPI_QuickInit(uint32_t SPIxMAP)
+{
+    uint32_t i;
+    QuickInit_Type * pSPIxMap = (QuickInit_Type*)&(SPIxMAP);
+    SPI_InitTypeDef SPI_InitStruct1;
+    SPI_InitStruct1.baudrateDivSelect = kSPI_BaudrateDiv_128;
+    SPI_InitStruct1.CPHA = kSPI_CPHA_1Edge;
+    SPI_InitStruct1.CPOL = kSPI_CPOL_InactiveLow;
+    SPI_InitStruct1.dataSizeInBit = 8;
+    SPI_InitStruct1.instance = pSPIxMap->ip_instance;
+    SPI_InitStruct1.mode = kSPI_Master;
+    SPI_Init(&SPI_InitStruct1);
+    // init pinmux
+    for(i = 0; i < pSPIxMap->io_offset; i++)
+    {
+        PORT_PinMuxConfig(pSPIxMap->io_instance, pSPIxMap->io_base + i, (PORT_PinMux_Type) pSPIxMap->mux); 
+    }
+    return pSPIxMap->ip_instance;
+}
 
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config)
 {
@@ -198,3 +215,17 @@ void SPI2_IRQHandler(void)
         SPI_CallBackTable[HW_SPI2]();
     }
 }
+
+
+/*
+
+static const QuickInit_Type SPI_QuickInitTable[] =
+{
+    { 0, 2, 2, 5, 3, 0}, //SPI0_SCK_PC05_SOUT_PC06_SIN_PC07 2
+    { 0, 3, 2, 1, 3, 0}, //SPI0_SCK_PD01_SOUT_PD02_SIN_PD03 2
+    { 1, 4, 2, 1, 3, 0}, //SPI1_SCK_PE02_SOUT_PE01_SIN_PE03 2
+    { 0, 0, 2,15, 3, 0}, //SPI0_SCK_PA15_SOUT_PA16_SIN_PA17 2
+    { 2, 1, 2,21, 3, 0}, //SPI2_SCK_PB21_SOUT_PB22_SIN_PB23 2
+    { 2, 3, 2,12, 3, 0}, //SPI2_SCK_PD12_SOUT_PD13_SIN_PD14 2
+};
+*/

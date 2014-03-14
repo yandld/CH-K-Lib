@@ -89,6 +89,7 @@ int main(void)
     uint32_t i;
     uint8_t ret;
     uint32_t counter = 0;
+    trans_user_data_t send_data;
     uint32_t LED_instanceTable[] = BOARD_LED_GPIO_BASES;
     uint32_t LED_PinTable[] = BOARD_LED_PIN_BASES;
     uint32_t led_num = ARRAY_SIZE(LED_instanceTable);
@@ -96,10 +97,11 @@ int main(void)
     //int32_t pressure;
     imu_float_euler_angle_t angle;
     imu_raw_data_t raw_data;
-    DelayInit(); //Init Delay
-    // init UART and printf
+    //初始化Delay
+    DelayInit();
+    // 初始化UART和printf
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
-    // init LED
+    // 初始化LED
     for(i = 0; i < led_num; i++)
     {
         GPIO_QuickInit(LED_instanceTable[i], LED_PinTable[i], kGPIO_Mode_OPP);  
@@ -120,7 +122,6 @@ int main(void)
     imu_io_install(&IMU_IOInstallStruct1);
     //安装数据传送模块底层回调函数
     trans_io_install(&TRANS_IOInstallStruct1);
-    trans_user_data_t send_data;
     while(1)
     {
         //获取欧拉角 获取原始角度

@@ -649,6 +649,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\at24cxx.c</FilePath>
             </File>
+            <File>
+              <FileName>adxl345.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\adxl345.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

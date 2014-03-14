@@ -177,7 +177,7 @@ int32_t bmp180_read_temperature(bmp180_device * device, int32_t * temperature)
 static int32_t dump_calibration_data(bmp180_device * device)
 {
     uint8_t ret = 0;
-    ret = I2C_ReadMutipleRegister(device->i2c_instance, device->device_addr, BMP180_PROM_START_ADDR, 1, (uint8_t*)&device->data, BMP180_PROM_DATA_LEN);
+    ret = I2C_BurstRead(device->i2c_instance, device->device_addr, BMP180_PROM_START_ADDR, 1, (uint8_t*)&device->data, BMP180_PROM_DATA_LEN);
     if(ret)
     {
       return 1;

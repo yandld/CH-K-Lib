@@ -40,6 +40,16 @@
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
 
 
+static inline void LCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint16_t Color)
+{
+    WMLCDCOM(0x20);
+    WMLCDDATA(XPos);
+    WMLCDCOM(0x21);
+    WMLCDDATA(YPos);
+    WMLCDCOM(0x22);
+    WMLCDDATA(Color);
+}
+
 //!< API functions
 void ili9320_Init(void);
 uint32_t ILI9320_GetDeivceID(void);

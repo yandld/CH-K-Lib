@@ -474,144 +474,8 @@ uint8_t I2C_IsBusy(uint8_t instance)
 	}
 }
 
-/**
- * @brief  I2C genereal write bytes to slave
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @param  DeviceAddress: device address 0-127
- * @param  pBuffer: send data pointer
- * @param  len: len of data to send
- * @retval 0:succ  1:address send fail 2:data send fail
- */
-uint8_t I2C_WriteByte(uint8_t instance ,uint8_t DeviceAddress, uint8_t *pBuffer, uint32_t len)
-{
-    uint32_t time_out = 0;
-    //Generate START signal
-    I2C_GenerateSTART(instance);
-    //Send 7bit Data with WRITE operation
-    I2C_Send7bitAddress(instance, DeviceAddress, kI2C_Write);
-    if(I2C_WaitAck(instance))
-    {
-        I2C_GenerateSTOP(instance);
-        time_out = 0;
-        while(!I2C_IsBusy(instance) && (time_out < 10000))
-        {
-            time_out++;
-        }
-        return 1;
-    }
-    //Send All Data
-    while(len--)
-    {
-        I2C_SendData(instance, *(pBuffer++));
-        if(I2C_WaitAck(instance))
-        {
-            I2C_GenerateSTOP(instance);
-            time_out = 0;
-            while(!I2C_IsBusy(instance) && (time_out < 10000))
-            {
-                time_out++;
-            }
-            return 2;
-        }
-    }
-    //Generate stop and wait for line idle
-    I2C_GenerateSTOP(instance);
-    time_out = 0;
-    while(!I2C_IsBusy(instance));
-    return 0;
-}
 
-/**
- * @brief  I2C genereal write a single register to slave
- *         general to use for write a single register to slave
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @param  DeviceAddress: device address 0-127
- * @param  RegisterAddress: register address offest in slave
- * @param  Data: data
- * @retval 0:succ  1:address send fail 2:data send fail
- */
-uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t Data)
-{
-    uint8_t ret;
-    uint8_t buf[2];
-    buf[0] = RegisterAddress;
-    buf[1] = Data;
-    ret = I2C_WriteByte(instance, DeviceAddress, buf, sizeof(buf));
-    return ret;
-}
-
-/**
- * @brief  I2C genereal read a single register to slave
- *         general to use for read a single register to slave
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @param  DeviceAddress: device address 0-127
- * @param  RegisterAddress: register address offest in slave
- * @param  pData: pointer of read data
- * @retval 0:succ  1:address send fail 2:data send fail
- */
-uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t DeviceAddress, uint8_t RegisterAddress, uint8_t* pData)
-{
-    uint32_t time_out = 0;
-    uint8_t data;
-    //Generate START signal
-    I2C_GenerateSTART(instance);
-    //Send 7bit Data with WRITE operation
-    I2C_Send7bitAddress(instance, DeviceAddress, kI2C_Write);
-    if(I2C_WaitAck(instance))
-    {
-        I2C_GenerateSTOP(instance);
-        time_out = 0;
-        while(!I2C_IsBusy(instance) && (time_out < 10000))
-        {
-            time_out++;
-        }
-        return 1;
-    }
-    //Send Reg Address
-    I2C_SendData(instance, RegisterAddress);
-    if(I2C_WaitAck(instance))
-    {
-        I2C_GenerateSTOP(instance);
-        time_out = 0;
-        while(!I2C_IsBusy(instance));
-        return 2;
-    }
-    //Generate RESTART Signal
-    I2C_GenerateRESTART(instance);
-    //Resend 7bit Address, This time we use READ Command
-    I2C_Send7bitAddress(instance, DeviceAddress, kI2C_Read);
-    if(I2C_WaitAck(instance))
-    {
-        I2C_GenerateSTOP(instance);
-        time_out = 0;
-        while(!I2C_IsBusy(instance));
-        return 3;
-    }
-    //Set Master in slave mode
-    I2C_SetMasterMode(instance,kI2C_Read);
-    //Dummy Read in order to generate SCL clock
-    data = I2C_InstanceTable[instance]->D;
-    I2C_GenerateNAck(instance);
-    //This time, We just wait for masters receive byte transfer complete
-    I2C_WaitAck(instance);
-    //Generate stop and wait for line idle
-    I2C_GenerateSTOP(instance);
-    time_out = 0;
-    while(!I2C_IsBusy(instance));
-    //actual read
-    data = I2C_InstanceTable[instance]->D;
-    *pData = data;
-    return 0;
-}
-
-
-int32_t I2C_ReadMutipleRegister(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t * pData, uint32_t dataLen)
+int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* pData, uint32_t dataLen)
 {
     uint32_t time_out = 0;
     uint8_t i;
@@ -644,7 +508,7 @@ int32_t I2C_ReadMutipleRegister(uint8_t instance, uint8_t deviceAddress, uint32_
                 time_out++;
             }
             return 2;
-        }  
+        }
     }
     //Generate RESTART Signal
     I2C_GenerateRESTART(instance);
@@ -678,6 +542,94 @@ int32_t I2C_ReadMutipleRegister(uint8_t instance, uint8_t deviceAddress, uint32_
     I2C_GenerateSTOP(instance);
     while(!I2C_IsBusy(instance));
     return 0;
+}
+
+uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *pData, uint32_t dataLen)
+{
+    uint32_t time_out = 0;
+    uint8_t * p = (uint8_t*)&subAddress;
+    //Generate START signal
+    I2C_GenerateSTART(instance);
+    //Send 7bit Data with WRITE operation
+    I2C_Send7bitAddress(instance, deviceAddress, kI2C_Write);
+    if(I2C_WaitAck(instance))
+    {
+        I2C_GenerateSTOP(instance);
+        time_out = 0;
+        while(!I2C_IsBusy(instance) && (time_out < 10000))
+        {
+            time_out++;
+        }
+        return 1;
+    }
+    // send all address
+    while(subAddressLen--)
+    {
+        I2C_SendData(instance, *(p++));
+        if(I2C_WaitAck(instance))
+        {
+            I2C_GenerateSTOP(instance);
+            time_out = 0;
+            while(!I2C_IsBusy(instance) && (time_out < 10000))
+            {
+                time_out++;
+            }
+            return 2;
+        }
+    }
+    // send all data
+    while(dataLen--)
+    {
+        I2C_SendData(instance, *(pData++));
+        if(I2C_WaitAck(instance))
+        {
+            I2C_GenerateSTOP(instance);
+            time_out = 0;
+            while(!I2C_IsBusy(instance) && (time_out < 10000))
+            {
+                time_out++;
+            }
+            return 2;
+        }
+    }
+    //Generate stop and wait for line idle
+    I2C_GenerateSTOP(instance);
+    time_out = 0;
+    while(!I2C_IsBusy(instance));
+    return 0;
+}
+
+
+/**
+ * @brief  写一个从机寄存器(寄存器地址在从机中必须为8位地址 如MMA845x等传感器设备)
+ *
+ * @param  instance: 模块号
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @param  deviceAddress: 7bit地址0-127
+ * @param  registerAddress: 寄存器在从机中的地址
+ * @param  Data: 需要写入的数据
+ * @retval 0:succ  1:address send fail 2:data send fail
+ */
+uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data)
+{
+    return I2C_BurstWrite(instance ,deviceAddress, registerAddress, 1, &data, 1);
+}
+
+/**
+ * @brief  读取一个从机寄存器(寄存器地址在从机中必须为8位地址 如MMA845x等传感器设备)
+ *         
+ * @param  instance: 模块号
+ *         @arg HW_I2C0
+ *         @arg HW_I2C1
+ * @param  deviceAddress: 7bit地址0-127
+ * @param  registerAddress: 寄存器在从机中的地址
+ * @param  pData: 数据指针
+ * @retval 0:succ  1:address send fail 2:data send fail
+ */
+uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData)
+{
+    return I2C_BurstRead(instance, deviceAddress, registerAddress, 1, pData, 1);
 }
 
 //! @}

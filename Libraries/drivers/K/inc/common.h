@@ -21,7 +21,10 @@
 #include "MK70F15.h"
 
 #else
-#error "No CPU defined!"
+#define MK60DZ10
+#include "MK60DZ10.h"
+#warning "No CPU defined!"
+#warning "Default: MK60DZ10"
 
 #endif
 

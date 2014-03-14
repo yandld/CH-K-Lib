@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "i2c.h"
 #include "board.h"
+#include "24cxx.h"
 
 static uint8_t gI2C_Instance = 0;
 
@@ -55,6 +56,29 @@ static int _do_i2c_it(int argc, char *const argv[])
     I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_Disable);
 }
 
+
+
+static int _do_i2c_at24cxx(int argc, char *const argv[])
+{
+    uint32_t ret;
+    uint8_t buffer[256];
+    uint32_t i = 0;
+    AT24CXX_Init(kAT24C02);
+    printf("SIZE:%dByte\r\n", AT24CXX_GetTotalSize(kAT24C02));
+    memset(buffer, 'G', sizeof(buffer));
+    AT24CXX_WriteByte(0, buffer, sizeof(buffer));
+    printf("ret:%d\r\n", ret);
+    memset(buffer, '0', sizeof(buffer));
+    AT24CXX_ReadByte(0, buffer, sizeof(buffer));
+    //I2C_ReadSingleRegister(HW_I2C0,0x50,0,buffer);
+    printf("ret:%d\r\n", ret);
+    for(i=0;i< sizeof(buffer);i++)
+    {
+        printf("[%d]:%c\r\n", i, buffer[i]);
+    }
+}
+
+
 int DoI2C(int argc, char *const argv[])
 {
     uint8_t i;
@@ -71,6 +95,11 @@ int DoI2C(int argc, char *const argv[])
     if(!strcmp("IT", argv[1]) && (argc == 3))
     {
         _do_i2c_it(argc, argv);
+        return 0;
+    }
+    if(!strcmp("AT24CXX", argv[1]))
+    {
+        _do_i2c_at24cxx(argc, argv);
         return 0;
     }
     else

@@ -106,7 +106,7 @@
           <SimDlgDll>DCM.DLL</SimDlgDll>
           <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments>-MPU</TargetDllArguments>
+          <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>TCM.DLL</TargetDlgDll>
           <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
         </DllOption>
@@ -171,7 +171,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\ULP2CM3.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -241,7 +241,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>1</Im2Chk>
+            <Im2Chk>0</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -508,6 +508,16 @@
               <FileName>24l01.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\devices\src\24l01.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\devices\src\i2c_abstraction.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_abstraction.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
             </File>
           </Files>
         </Group>

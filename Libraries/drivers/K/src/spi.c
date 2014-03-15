@@ -90,27 +90,37 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
     SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] = (SPI_CTAR_DBR_MASK|SPI_CTAR_PBR(0)|SPI_CTAR_BR(SPI_InitStruct->baudrateDivSelect));
     // data size
     SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] |= SPI_CTAR_FMSZ(SPI_InitStruct->dataSizeInBit-1);
-    // CPOL
-    switch(SPI_InitStruct->CPOL)
+    // bit order
+    switch(SPI_InitStruct->bitOrder)
     {
-        case kSPI_CPOL_InactiveLow:
-            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] &= ~SPI_CTAR_CPHA_MASK;
+        case kSPI_MSBFirst:
+            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] &= ~SPI_CTAR_LSBFE_MASK;
             break;
-        case kSPI_CPOL_InactiveHigh:
-            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] |= SPI_CTAR_CPHA_MASK;
+        case kSPI_LSBFirst:
+            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] |= SPI_CTAR_LSBFE_MASK;
             break;
         default:
             break;
     }
-    //CPHA
-    switch(SPI_InitStruct->CPHA)
+    // frame format
+    switch(SPI_InitStruct->frameFormat)
     {
-        case kSPI_CPHA_1Edge:
+        case kSPI_CPOL0_CPHA0:
+            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] &= ~SPI_CTAR_CPOL_MASK;
             SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] &= ~SPI_CTAR_CPHA_MASK;
             break;
-        case kSPI_CPHA_2Edge:
+        case kSPI_CPOL0_CPHA1:
+            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] &= ~SPI_CTAR_CPOL_MASK;
             SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] |= SPI_CTAR_CPHA_MASK;
-            break;
+            break;   
+        case kSPI_CPOL1_CPHA0:
+            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] |= SPI_CTAR_CPOL_MASK;
+            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] &= ~SPI_CTAR_CPHA_MASK;
+            break;  
+        case kSPI_CPOL1_CPHA1:
+            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] |= SPI_CTAR_CPOL_MASK;
+            SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] |= SPI_CTAR_CPHA_MASK;  
+            break;  
         default:
             break;
     }
@@ -125,17 +135,17 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
     SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_HALT_MASK;
 }
  
-uint32_t SPI_QuickInit(uint32_t SPIxMAP)
+uint32_t SPI_QuickInit(uint32_t SPIxMAP, uint32_t frameFormat)
 {
     uint32_t i;
     QuickInit_Type * pSPIxMap = (QuickInit_Type*)&(SPIxMAP);
     SPI_InitTypeDef SPI_InitStruct1;
     SPI_InitStruct1.baudrateDivSelect = kSPI_BaudrateDiv_128;
-    SPI_InitStruct1.CPHA = kSPI_CPHA_1Edge;
-    SPI_InitStruct1.CPOL = kSPI_CPOL_InactiveLow;
+    SPI_InitStruct1.frameFormat = frameFormat;
     SPI_InitStruct1.dataSizeInBit = 8;
     SPI_InitStruct1.instance = pSPIxMap->ip_instance;
     SPI_InitStruct1.mode = kSPI_Master;
+    SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
     SPI_Init(&SPI_InitStruct1);
     // init pinmux
     for(i = 0; i < pSPIxMap->io_offset; i++)

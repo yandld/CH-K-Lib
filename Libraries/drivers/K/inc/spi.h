@@ -17,19 +17,13 @@
 #define HW_SPI1     (0x01)
 #define HW_SPI2     (0x02)
   
-//!< CPHA
 typedef enum
 {
-    kSPI_CPHA_1Edge,
-    kSPI_CPHA_2Edge,
-} SPI_CPHA_Type;
-
-//!< CPOL
-typedef enum
-{
-    kSPI_CPOL_InactiveLow,
-    kSPI_CPOL_InactiveHigh,
-} SPI_CPOL_Type;
+    kSPI_CPOL0_CPHA0,
+    kSPI_CPOL0_CPHA1,
+    kSPI_CPOL1_CPHA0,
+    kSPI_CPOL1_CPHA1
+}SPI_FrameFormat_Type;
 
 typedef enum
 {
@@ -64,15 +58,18 @@ typedef enum
 #define kSPI_PCS_ReturnInactive   (0x00)      //!< 传输完成后CS信号保持片选中状态
 #define kSPI_PCS_KeepAsserted     (0x01)      //!< 传输完成后CS信号保持未选中状态
 
+#define kSPI_MSBFirst             (0x00)      //!< 先发送最高位
+#define kSPI_LSBFirst             (0x01)      //!< 先发送最低位
+
 //!< 初始化结构
 typedef struct
 {
     uint32_t                instance;               //!< 模块号
-    SPI_CPHA_Type           CPHA;                   //!< 时钟相位
-    SPI_CPOL_Type           CPOL;                   //!< 时钟极性
 	SPI_Mode_Type           mode;                   //!< 主从模式
     SPI_BaudrateDiv_Type    baudrateDivSelect;      //!< 波特率分频选择   
     uint8_t                 dataSizeInBit;          //!< 每帧数据有多少位 通常为8或16
+    uint8_t                 bitOrder;               //!< 先发高位还是先发地位
+    SPI_FrameFormat_Type    frameFormat;            //!< 四种帧格式选择
 }SPI_InitTypeDef;
 
 //!< 快速初始化结构
@@ -92,7 +89,7 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct);
 uint16_t SPI_ReadWriteByte(uint32_t instance, uint16_t data, uint16_t CSn, uint16_t csState);
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config);
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
-uint32_t SPI_QuickInit(uint32_t SPIxMAP);
+uint32_t SPI_QuickInit(uint32_t SPIxMAP, uint32_t frameFormat);
 
 
 #endif

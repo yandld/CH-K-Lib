@@ -1,8 +1,7 @@
 #include "trans.h"
 #include <string.h>
-#include "common.h"
+#include "dma.h"
 
-static trans_io_install_t * gpIOInstallStruct;   /* install struct	*/
 //数据头
 const char trans_header_table[3] = {0x88, 0xAF, 0x1C};
 //数据内容
@@ -14,17 +13,36 @@ typedef __packed struct
     uint8_t sum;
 }trans_packet_t;
 
+trans_packet_t packet;
+
 //安装回调函数
-uint8_t trans_io_install(trans_io_install_t * IOInstallStruct)
+uint8_t trans_init(void)
 {
-    gpIOInstallStruct = IOInstallStruct;
+    
+    DMA_InitTypeDef DMA_InitStruct1;
+    DMA_InitStruct1.chl = HW_DMA_CH1;
+    DMA_InitStruct1.chlTriggerSource = UART1_TRAN_DMAREQ;
+    DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
+    DMA_InitStruct1.minorByteTransferCount = 1;
+    DMA_InitStruct1.majorTransferCount = sizeof(packet);
+        
+    DMA_InitStruct1.sourceAddress = (uint32_t)&packet;
+    DMA_InitStruct1.sourceAddressMajorAdj = -sizeof(packet);
+    DMA_InitStruct1.sourceAddressMinorAdj = 1;
+    DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8;
+        
+    DMA_InitStruct1.destAddress = (uint32_t)&UART1->D;
+    DMA_InitStruct1.destAddressMajorAdj = 0;
+    DMA_InitStruct1.destAddressMinorAdj = 0;
+    DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8;
+    DMA_Init(&DMA_InitStruct1);
     return 0;
 }
+
 
 //发送数据包
 uint32_t trans_send_pactket(trans_user_data_t data)
 {
-    trans_packet_t packet;
     uint8_t i;
     char *p = (char*)&packet;
     uint8_t sum = 0;
@@ -46,10 +64,7 @@ uint32_t trans_send_pactket(trans_user_data_t data)
     }
     packet.sum = sum;
     p = (char*)&packet;
-    for(i = 0; i < sizeof(packet); i++)
-    {
-      gpIOInstallStruct->trans_putc(*p++);
-    }
+    DMA_StartTransfer(HW_DMA_CH1);
     return 0;
 }
 

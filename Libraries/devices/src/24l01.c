@@ -10,12 +10,20 @@
   
 #include "24l01.h"
 #include "spi.h"
-
-
-
-
+#include "board.h"
+#include "gpio.h"
+/*
+#define BOARD_SPI_CS_PORT           HW_GPIOC
+#define BOARD_SPI_CS_PIN            (2)
+#define BOARD_NRF2401_CE_PORT       HW_GPIOB
+#define BOARD_NRF2401_CE_PIN        (0)
+#define BOARD_NRF2401_IRQ_PORT      HW_GPIOB
+#define BOARD_NRF2401_IRQ_PIN       (1)
+*/
 uint8_t NRF2401_Init(void)
 {
+    SPI_QuickInit(BOARD_SPI_MAP, kSPI_CPOL0_CPHA0);
+	GPIO_QuickInit(BOARD_SPI_CS_PORT, BOARD_SPI_CS_PIN , kGPIO_Mode_OPP);   //Init CS
     /*
 	SPI_InitTypeDef SPI_InitStruct1;
 	//CEÒý½Å³õÊ¼»¯

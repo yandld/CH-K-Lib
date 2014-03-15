@@ -13,27 +13,9 @@
 #include "bmp180.h"
 #include "imu.h"
 #include "trans.h"
+#include "dma.h"
 
-#define I2C_SPEED_URANUS   (376*1000)
-
-//实习协议传输组件的回调 并连接回调
-static void Putc(uint8_t data)
-{
-    UART_WriteByte(HW_UART1, data);
-}
-
-static uint8_t Getc(void)
-{
-    uint8_t ch;
-    while(UART_ReadByte(HW_UART1, &ch));
-    return ch;
-}
-
-trans_io_install_t TRANS_IOInstallStruct1 = 
-{
-	.trans_getc = Getc,
-	.trans_putc = Putc,
-};
+#define I2C_SPEED_URANUS   (400*1000)
 
 static mpu6050_device mpu6050_device1;
 static hmc5883_device hmc_device;
@@ -88,6 +70,7 @@ int main(void)
 {
     uint32_t i;
     uint8_t ret;
+    uint8_t instance;
     uint32_t counter = 0;
     trans_user_data_t send_data;
     uint32_t LED_instanceTable[] = BOARD_LED_GPIO_BASES;
@@ -100,17 +83,13 @@ int main(void)
     //初始化Delay
     DelayInit();
     // 初始化UART和printf
-    UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
+    instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
+    printf("UART Init OK!\r\n");
     // 初始化LED
+    
     for(i = 0; i < led_num; i++)
     {
         GPIO_QuickInit(LED_instanceTable[i], LED_PinTable[i], kGPIO_Mode_OPP);  
-    }
-    //闪一下LED 指示系统要运行了
-    for(i = 0; i < 10; i++)
-    {
-        GPIO_ToggleBit(LED_instanceTable[0], LED_PinTable[0]);
-        DelayMs(50);
     }
     //初始化传感器
     ret = InitSensor();
@@ -120,14 +99,14 @@ int main(void)
     }
     //安装IMU 底层驱动函数
     imu_io_install(&IMU_IOInstallStruct1);
-    //安装数据传送模块底层回调函数
-    trans_io_install(&TRANS_IOInstallStruct1);
+    trans_init();
+    UART_ITDMAConfig(instance, kUART_DMA_Tx);
     while(1)
     {
         //获取欧拉角 获取原始角度
         imu_get_euler_angle(&angle, &raw_data);
         //printf("%05d %05d %05d\r", (int16_t)angle.imu_pitch, (int16_t)angle.imu_roll, (int16_t)angle.imu_yaw);
-        //将数据送给发送构建
+        //将数据整合打包 变成上位机协议格式
         send_data.trans_accel[0] = raw_data.ax;
         send_data.trans_accel[1] = raw_data.ay;
         send_data.trans_accel[2] = raw_data.az;
@@ -153,8 +132,12 @@ int main(void)
             printf("T:%05d P:%05d\r\n", temperature, pressure);
         }
         */
-        //发送数据
-        trans_send_pactket(send_data);
+        //如果DMA空闲 则 启动发送数据
+        if(DMA_IsTransferComplete(HW_DMA_CH1) == 0)
+        {
+            trans_send_pactket(send_data);
+            DelayMs(1);
+        }
         //闪LED 说明系统运行
         counter++;
         counter %= 10; 

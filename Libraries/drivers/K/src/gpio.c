@@ -335,12 +335,11 @@ void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex)
  *         @arg HW_GPIOE
  * @retval prot data(32 bit)
  */
-uint32_t GPIO_ReadByte(uint8_t instance, uint8_t pinIndex)
+uint32_t GPIO_ReadPort(uint8_t instance)
 {
     //param check
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pinIndex));
     return (GPIO_InstanceTable[instance]->PDIR);
 }
 /**

@@ -273,7 +273,7 @@
 
   <Group>
     <GroupName>user</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -285,7 +285,7 @@
       <Focus>0</Focus>
       <ColumnNumber>5</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>126</TopLine>
+      <TopLine>133</TopLine>
       <CurrentLine>134</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
@@ -429,7 +429,7 @@
       <Focus>0</Focus>
       <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>18</TopLine>
+      <TopLine>10</TopLine>
       <CurrentLine>11</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\cmd_nvic.c</PathWithFileName>
@@ -461,7 +461,7 @@
       <Focus>0</Focus>
       <ColumnNumber>13</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>5</TopLine>
+      <TopLine>15</TopLine>
       <CurrentLine>16</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\cmd_lcd.c</PathWithFileName>
@@ -539,10 +539,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>50</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>10</TopLine>
-      <CurrentLine>42</CurrentLine>
+      <TopLine>22</TopLine>
+      <CurrentLine>33</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\cmd_spi.c</PathWithFileName>
       <FilenameWithoutPath>cmd_spi.c</FilenameWithoutPath>
@@ -645,7 +645,7 @@
       <Focus>0</Focus>
       <ColumnNumber>29</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>79</TopLine>
+      <TopLine>139</TopLine>
       <CurrentLine>146</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</PathWithFileName>
@@ -709,7 +709,7 @@
       <Focus>0</Focus>
       <ColumnNumber>17</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>261</TopLine>
+      <TopLine>169</TopLine>
       <CurrentLine>170</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\gpio.c</PathWithFileName>
@@ -725,7 +725,7 @@
       <Focus>0</Focus>
       <ColumnNumber>24</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>531</TopLine>
+      <TopLine>540</TopLine>
       <CurrentLine>541</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\i2c.c</PathWithFileName>
@@ -757,7 +757,7 @@
       <Focus>0</Focus>
       <ColumnNumber>3</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>106</TopLine>
+      <TopLine>188</TopLine>
       <CurrentLine>189</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\pit.c</PathWithFileName>
@@ -773,7 +773,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>129</TopLine>
+      <TopLine>142</TopLine>
       <CurrentLine>143</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\spi.c</PathWithFileName>
@@ -805,7 +805,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>384</TopLine>
+      <TopLine>386</TopLine>
       <CurrentLine>387</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\uart.c</PathWithFileName>
@@ -829,7 +829,7 @@
       <Focus>0</Focus>
       <ColumnNumber>13</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>706</TopLine>
+      <TopLine>711</TopLine>
       <CurrentLine>712</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\shell\shell.c</PathWithFileName>
@@ -933,7 +933,7 @@
       <Focus>0</Focus>
       <ColumnNumber>23</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>96</TopLine>
+      <TopLine>23</TopLine>
       <CurrentLine>24</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\ov7620.c</PathWithFileName>
@@ -947,10 +947,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>20</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>6</TopLine>
+      <CurrentLine>14</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\spi_abstraction.c</PathWithFileName>
       <FilenameWithoutPath>spi_abstraction.c</FilenameWithoutPath>
@@ -965,7 +965,7 @@
       <Focus>0</Focus>
       <ColumnNumber>22</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
+      <TopLine>12</TopLine>
       <CurrentLine>13</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\sram.c</PathWithFileName>

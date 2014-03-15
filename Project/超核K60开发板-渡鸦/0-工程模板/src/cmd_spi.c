@@ -30,7 +30,7 @@ int CMD_SPI(int argc, char * const * argv)
     uint16_t temp = 0;
     shell_printf("SPI TEST CMD\r\n");
     //初始化SPI
-    SPI_QuickInit(SPI2_SCK_PD12_SOUT_PD13_SIN_PD14);
+    SPI_QuickInit(SPI2_SCK_PD12_SOUT_PD13_SIN_PD14, kSPI_CPOL0_CPHA1);
     //安装回调函数
     SPI_CallbackInstall(BOARD_SPI_INSTANCE, SPI_ISR);
     //开启SPI中断 

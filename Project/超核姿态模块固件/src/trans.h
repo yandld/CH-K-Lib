@@ -13,13 +13,8 @@ typedef __packed struct
     int16_t trans_yaw;
 }trans_user_data_t;
 
-typedef struct
-{
-    uint8_t (*trans_getc)(void);
-    void    (*trans_putc)(uint8_t ch);
-}trans_io_install_t;
 
-uint8_t trans_io_install(trans_io_install_t * IOInstallStruct);
 uint32_t trans_send_pactket(trans_user_data_t data);
+uint8_t trans_init(void);
 
 #endif

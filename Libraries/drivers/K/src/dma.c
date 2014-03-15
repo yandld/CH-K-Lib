@@ -159,16 +159,21 @@ void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun)
 
 uint8_t DMA_IsTransferComplete(uint8_t chl)
 {
-    if(DMA0->TCD[chl].CSR & DMA_CSR_DONE_MASK)
+    if(DMA0->TCD[chl].CSR & (1<<chl))
     {
-        // clear this bit
-        DMA0->TCD[chl].CSR &= ~DMA_CSR_DONE_MASK;
-        return 0;
+        if(DMA0->TCD[chl].CSR & DMA_CSR_DONE_MASK)
+        {
+            // clear this bit
+            DMA0->TCD[chl].CSR &= ~DMA_CSR_DONE_MASK;
+            return 0;
+        }
+        else
+        {
+            return 1;
+        } 
     }
-    else
-    {
-        return 1;
-    }
+    // this chl is idle, so return 0;
+    return 0;
 }
 
 void DMA_SetDestAddress(uint8_t chl, uint32_t address)

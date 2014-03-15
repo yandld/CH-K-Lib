@@ -8,10 +8,10 @@
 #define PI             3.14159
 #define Kp             100.0f     // proportional gain governs rate of convergence to accelerometer/magnetometer
 #define Ki             0.008f     // integral gain governs rate of convergence of gyroscope biases
-#define halfT          0.001f
+#define halfT          0.002f
 #define Gyro_G         0.0610351
 #define Gyro_Gr        0.0010653
-//#define SLIDING_FILTER_DEEP  10
+#define SLIDING_FILTER_DEEP  5
    
 
 
@@ -46,10 +46,9 @@ uint32_t imu_io_install(imu_io_install_t * IOInstallStruct)
     return 0;
 }
 
-#if 0
+
 static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * filter_data)
 {
-    uint8_t i;
     int32_t sum_accel_x =  0;
     int32_t sum_accel_y =  0;
     int32_t sum_accel_z =  0;
@@ -114,8 +113,9 @@ static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * fil
     filter_data->mx = raw_data.mx;
     filter_data->my = raw_data.my;
     filter_data->mz = raw_data.mz; 
+    return 0;
 }
-#endif
+
 
 //!< format data into float value
 static uint32_t imu_format_data(imu_raw_data_t * raw_data, imu_float_data_t * float_data)
@@ -226,7 +226,7 @@ uint32_t imu_get_euler_angle(imu_float_euler_angle_t * angle, imu_raw_data_t * r
 {
     uint8_t ret = 0;
     int16_t ax,ay,az,gx,gy,gz,mx,my,mz;
-//    imu_raw_data_t filter_data;
+    imu_raw_data_t filter_data;
     imu_float_data_t float_data;
     ret += gpIOInstallStruct->imu_get_accel(&ax, &ay, &az);
     ret += gpIOInstallStruct->imu_get_gyro(&gx, &gy, &gz); 
@@ -244,10 +244,10 @@ uint32_t imu_get_euler_angle(imu_float_euler_angle_t * angle, imu_raw_data_t * r
     raw_data->mx = mx;
     raw_data->my = my;
     raw_data->mz = mz;
-#if 0
+
     //I need rawdata I give you filtered data
-    imu_sliding_filter(raw_data, &filter_data);
-#endif
+    imu_sliding_filter(*raw_data, &filter_data);
+
     // I need filtered data I give you float data
     imu_format_data(raw_data, &float_data);
     //I need float data I give you euler angles

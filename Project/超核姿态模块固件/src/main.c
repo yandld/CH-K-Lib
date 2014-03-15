@@ -5,6 +5,8 @@
 #include "i2c.h"
 #include "systick.h"
 #include "stdio.h"
+#include "pit.h"
+#include "24l01.h"
 #include "board.h"
 
 //包含 姿态模块所需的头文件
@@ -20,6 +22,10 @@
 static mpu6050_device mpu6050_device1;
 static hmc5883_device hmc_device;
 static bmp180_device bmp180_device1;
+static trans_user_data_t send_data;
+static uint8_t NRF2401RXBuffer[32];//无线接收数据
+imu_float_euler_angle_t angle;
+imu_raw_data_t raw_data;
 //实现姿态解算的回调并连接回调
 static uint32_t imu_get_mag(int16_t * mx, int16_t * my, int16_t *mz)
 {
@@ -65,31 +71,54 @@ uint8_t InitSensor(void)
     return 0;
 }
 
+//中断服务
+static void PIT_CH0_ISR(void)
+{
+    //获取欧拉角 获取原始角度
+    imu_get_euler_angle(&angle, &raw_data);
+    send_data.trans_accel[0] = raw_data.ax;
+    send_data.trans_accel[1] = raw_data.ay;
+    send_data.trans_accel[2] = raw_data.az;
+    send_data.trans_gyro[0] = raw_data.gx;
+    send_data.trans_gyro[1] = raw_data.gy;
+    send_data.trans_gyro[2] = raw_data.gz;
+    send_data.trans_mag[0] = raw_data.mx;
+    send_data.trans_mag[1] = raw_data.my;
+    send_data.trans_mag[2] = raw_data.mz;     
+    send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
+    send_data.trans_roll = (int16_t)angle.imu_roll*100;
+    send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
+}
+
+//中断服务
+static void PIT_CH1_ISR(void)
+{
+    trans_send_pactket(send_data, TRANS_WITH_NRF2401);
+    GPIO_ToggleBit(HW_GPIOA, 1);
+}
 
 int main(void)
 {
     uint32_t i;
     uint8_t ret;
-    uint8_t instance;
-    uint32_t counter = 0;
-    trans_user_data_t send_data;
-    uint32_t LED_instanceTable[] = BOARD_LED_GPIO_BASES;
-    uint32_t LED_PinTable[] = BOARD_LED_PIN_BASES;
-    uint32_t led_num = ARRAY_SIZE(LED_instanceTable);
     //int32_t temperature;
     //int32_t pressure;
-    imu_float_euler_angle_t angle;
-    imu_raw_data_t raw_data;
-    //初始化Delay
     DelayInit();
-    // 初始化UART和printf
-    instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
+    GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
+    UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
     printf("UART Init OK!\r\n");
+   
     // 初始化LED
-    
-    for(i = 0; i < led_num; i++)
+    ret = NRF2401_Init();
+    if(ret)
     {
-        GPIO_QuickInit(LED_instanceTable[i], LED_PinTable[i], kGPIO_Mode_OPP);  
+        printf("NRF2401 ERROR\r\n");
+        DelayMs(300);
+    }
+    for(i = 0; i < 10; i++)
+    {
+        GPIO_ToggleBit(HW_GPIOA, 1);
+        DelayMs(50);
     }
     //初始化传感器
     ret = InitSensor();
@@ -99,26 +128,19 @@ int main(void)
     }
     //安装IMU 底层驱动函数
     imu_io_install(&IMU_IOInstallStruct1);
+    //初始化发送器
     trans_init();
-    UART_ITDMAConfig(instance, kUART_DMA_Tx);
+    //开PIT0
+    PIT_QuickInit(HW_PIT0_CH0, 1000*4);
+    PIT_CallbackInstall(HW_PIT0_CH0, PIT_CH0_ISR);
+    PIT_ITDMAConfig(HW_PIT0_CH0, kPIT_IT_TOF);
+    //开PIT1
+    PIT_QuickInit(HW_PIT0_CH1, 1000*20);
+    PIT_CallbackInstall(HW_PIT0_CH1, PIT_CH1_ISR);
+    PIT_ITDMAConfig(HW_PIT0_CH1, kPIT_IT_TOF);
+    
     while(1)
     {
-        //获取欧拉角 获取原始角度
-        imu_get_euler_angle(&angle, &raw_data);
-        //printf("%05d %05d %05d\r", (int16_t)angle.imu_pitch, (int16_t)angle.imu_roll, (int16_t)angle.imu_yaw);
-        //将数据整合打包 变成上位机协议格式
-        send_data.trans_accel[0] = raw_data.ax;
-        send_data.trans_accel[1] = raw_data.ay;
-        send_data.trans_accel[2] = raw_data.az;
-        send_data.trans_gyro[0] = raw_data.gx;
-        send_data.trans_gyro[1] = raw_data.gy;
-        send_data.trans_gyro[2] = raw_data.gz;
-        send_data.trans_mag[0] = raw_data.mx;
-        send_data.trans_mag[1] = raw_data.my;
-        send_data.trans_mag[2] = raw_data.mz;     
-        send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
-        send_data.trans_roll = (int16_t)angle.imu_roll*100;
-        send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
         //压力采集程序 由于上位机不传送压力，所以先注释掉
         /*
         while(1)
@@ -135,16 +157,15 @@ int main(void)
         //如果DMA空闲 则 启动发送数据
         if(DMA_IsTransferComplete(HW_DMA_CH1) == 0)
         {
-            trans_send_pactket(send_data);
+            trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
+            //延时1MS以免发的太快上位机受不了
             DelayMs(1);
         }
-        //闪LED 说明系统运行
-        counter++;
-        counter %= 10; 
-        if(!counter)
+        NRF2401_SetRXMode(); //设置为接收模式
+        if(NRF2401_RecPacket(NRF2401RXBuffer) != NRF_OK) //接收到了数据
         {
-            GPIO_ToggleBit(LED_instanceTable[0], LED_PinTable[0]);
-        }
+            //目前这个版本不做任何处理
+        }	
     }
 }
 

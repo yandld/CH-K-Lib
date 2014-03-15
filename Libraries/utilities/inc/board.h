@@ -51,17 +51,13 @@
 #define BOARD_SPI_MAP               SPI0_SCK_PC05_SOUT_PC06_SIN_PC07
 #define BOARD_SPI_CS_PORT           HW_GPIOC
 #define BOARD_SPI_CS_PIN            (2)
+#define BOARD_SPI_NRF2401_CSn       (2)
 #define BOARD_NRF2401_CE_PORT       HW_GPIOB
 #define BOARD_NRF2401_CE_PIN        (0)
 #define BOARD_NRF2401_IRQ_PORT      HW_GPIOB
 #define BOARD_NRF2401_IRQ_PIN       (1)
 #define BOARD_UART_DEBUG_MAP        UART1_RX_PC03_TX_PC04
-#define BOARD_KEY_GPIO_BASES        {HW_GPIOA}
-#define BOARD_KEY_PIN_BASES         {0}
-#define BOARD_ADC_MAP               ADC0_SE19_DM0
-#define BOARD_BUZZER_GPIO_BASES     {HW_GPIOA}
-#define BOARD_BUZZER_PIN_BASES      {6}
-#define BOARD_BUZZER_FTM_MAP        FTM0_CH3_PA06
+#define BOARD_UART_INSTANCE         (HW_UART1)
 
 
 #else

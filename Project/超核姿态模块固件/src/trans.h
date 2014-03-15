@@ -14,7 +14,10 @@ typedef __packed struct
 }trans_user_data_t;
 
 
-uint32_t trans_send_pactket(trans_user_data_t data);
+#define  TRANS_UART_WITH_DMA        (0x00)
+#define  TRANS_WITH_NRF2401              (0x01)
+
+uint32_t trans_send_pactket(trans_user_data_t data, uint8_t mode);
 uint8_t trans_init(void);
 
 #endif

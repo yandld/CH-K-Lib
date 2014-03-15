@@ -61,7 +61,6 @@ void CalConst(const QuickInit_Type * table, uint32_t size)
 }
 
 
-
 static void Putc(uint8_t data)
 {
 	UART_WriteByte(UART_Instance, data);

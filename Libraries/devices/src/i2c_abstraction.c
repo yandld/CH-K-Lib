@@ -12,9 +12,18 @@
 #include "i2c.h"
 #include "board.h"
 
-
 static uint8_t instance;
 
+ /**
+ * @brief  I2C 通用抽象层接口 I2C 初始化
+ * 
+ * @param  speed: 波特率
+ *         @arg kI2C_ABS_SpeedLow:10KHZ
+ *         @arg kI2C_ABS_SpeedStandard:100KHZ
+ *         @arg kI2C_ABS_SpeedFast:400KHZ
+ *         @arg kI2C_ABS_SpeedHigh:1MHZ
+ * @retval None
+ */
 int I2C_ABS_Init(int speed)
 {
     switch((I2C_ABS_Speed_Type)speed)

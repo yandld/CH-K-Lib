@@ -39,9 +39,8 @@ typedef enum
 
 //!< API functions
 int SPI_ABS_Init(int frameFormat, int baudrate);
+int SPI_ABS_ReadWriteByte(uint8_t data, uint32_t cs, uint16_t csState);
 int SPI_ABS_xfer(uint8_t *dataSend, uint8_t *dataReceived, uint32_t cs, uint16_t csState, uint32_t len);
-
-
 
 
 

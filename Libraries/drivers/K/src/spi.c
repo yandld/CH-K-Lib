@@ -35,8 +35,7 @@ static const RegisterManipulation_Type SIM_SPIClockGateTable[] =
 };
 static const IRQn_Type SPI_IRQnTable[] = 
 {
-    SPI0_IRQn,
-    SPI1_IRQn,
+    SPI0_IRQn,    SPI1_IRQn,
     SPI2_IRQn,
 };
 
@@ -159,6 +158,7 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
             SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_MSTR_MASK;
             break;
         default:
+            break;
     }
     //enable SPI clock
     SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_MDIS_MASK;
@@ -227,7 +227,7 @@ uint32_t SPI_QuickInit(uint32_t SPIxMAP, uint32_t frameFormat, uint32_t baudrate
     QuickInit_Type * pSPIxMap = (QuickInit_Type*)&(SPIxMAP);
     SPI_InitTypeDef SPI_InitStruct1;
     SPI_InitStruct1.baudrate = baudrate;
-    SPI_InitStruct1.frameFormat = frameFormat;
+    SPI_InitStruct1.frameFormat = (SPI_FrameFormat_Type)frameFormat;
     SPI_InitStruct1.dataSizeInBit = 8;
     SPI_InitStruct1.instance = pSPIxMap->ip_instance;
     SPI_InitStruct1.mode = kSPI_Master;

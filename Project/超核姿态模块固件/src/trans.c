@@ -1,6 +1,9 @@
 #include "trans.h"
 #include <string.h>
 #include "dma.h"
+#include "24l01.h"
+#include "board.h"
+#include "uart.h"
 
 //数据头
 const char trans_header_table[3] = {0x88, 0xAF, 0x1C};
@@ -41,10 +44,11 @@ uint8_t trans_init(void)
 
 
 //发送数据包
-uint32_t trans_send_pactket(trans_user_data_t data)
+uint32_t trans_send_pactket(trans_user_data_t data, uint8_t mode)
 {
     uint8_t i;
-    char *p = (char*)&packet;
+    uint8_t *p = (uint8_t*)&packet;
+    trans_packet_t packet_copy;
     uint8_t sum = 0;
     memcpy(packet.trans_header, trans_header_table, sizeof(trans_header_table));
     for(i=0;i<3;i++)
@@ -63,8 +67,21 @@ uint32_t trans_send_pactket(trans_user_data_t data)
       sum += *p++;
     }
     packet.sum = sum;
-    p = (char*)&packet;
-    DMA_StartTransfer(HW_DMA_CH1);
+    packet_copy = packet;
+    switch(mode)
+    {
+        case TRANS_UART_WITH_DMA:
+            UART_ITDMAConfig(BOARD_UART_INSTANCE, kUART_DMA_Tx);
+            DMA_StartTransfer(HW_DMA_CH1);
+            break;
+        case TRANS_WITH_NRF2401:
+            NRF2401_SetTXMode();//配置到发送模式
+            NRF2401_SendPacket((uint8_t*)&packet_copy,sizeof(packet_copy));
+            break;
+        default:
+            break;
+        
+    }
     return 0;
 }
 

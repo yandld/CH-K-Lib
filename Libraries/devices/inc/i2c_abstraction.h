@@ -43,6 +43,6 @@ int I2C_ABS_ReadByte(uint8_t chipAddress, uint32_t subAddress, uint32_t subAddre
 int I2C_ABS_WriteByte(uint8_t chipAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buffer, uint32_t len);
 
 
-
 #endif
+
 

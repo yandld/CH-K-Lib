@@ -474,6 +474,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
             </File>
+            <File>
+              <FileName>pit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\drivers\K\src\pit.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

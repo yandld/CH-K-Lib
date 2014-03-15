@@ -721,7 +721,7 @@ static int readline (char * prompt)
 #endif
         initted = 1;
         printf("\r\nSHELL (build: %s)\r\n", __DATE__);
-        printf("Copyright (c) 2013 Freescale Semiconductor\r\n");
+        printf("Copyright (c) 2013 http://www.beyondcore.net\r\n");
     }
     if (prompt)
     {

@@ -137,7 +137,7 @@ void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
     switch (config)
     {
         case kPIT_IT_Disable:
-            NVIC_DisableIRQ(PIT_IRQnTable[chl]);
+            //NVIC_DisableIRQ(PIT_IRQnTable[chl]);
             PIT->CHANNEL[chl].TCTRL &= ~PIT_TCTRL_TIE_MASK;
             break;
         case kPIT_IT_TOF:

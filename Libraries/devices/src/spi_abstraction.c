@@ -5,46 +5,40 @@
 
 static uint32_t gSPIInstance;
 
-int SPI_ABS_Init(int spiMode, int bitOrder, int baudrate)
+int SPI_ABS_Init(int frameFormat, int baudrate)
 {
-    uint32_t clock;
-    uint32_t div = 2;
-    uint32_t absError = 0xFFFFFFFF;
-    uint32_t bestError = 0xffffffffu;
-    uint32_t SPIxMAP = BOARD_SPI_MAP;
-    SPI_InitTypeDef SPI_InitStruct1;
-    QuickInit_Type * pSPIxMap = (QuickInit_Type*)&(SPIxMAP);
-    gSPIInstance = pSPIxMap->ip_instance;
-    // caluate baud
-    CLOCK_GetClockFrequency(kBusClock, &clock);
-    clock/=1000; //clock uint to KHz
-    while(1)
-    {
-        if(abs((clock/div) - baudrate) < absError)
-        {
-            absError = abs((clock/div) - baudrate);
-        }
-        div<<1;
-    }
-    SPI_InitStruct1.baudrateDivSelect = kSPI_BaudrateDiv_128;
-    SPI_InitStruct1.frameFormat = kSPI_CPOL0_CPHA1;
-    SPI_InitStruct1.dataSizeInBit = 8;
-    SPI_InitStruct1.instance = gSPIInstance;
-    SPI_InitStruct1.mode = kSPI_Master;
-    SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
-    SPI_Init(&SPI_InitStruct1);
+    gSPIInstance = SPI_QuickInit(BOARD_SPI_MAP, frameFormat, baudrate);
     return kSPI_ABS_StatusOK;
 }
 
-int SPI_ABS_ReadWriteByte(void)
+
+int SPI_ABS_xfer(uint8_t *dataSend, uint8_t *dataReceived, uint32_t cs, uint16_t csState, uint32_t len)
 {
-    
+    if(csState == kSPI_ABS_CS_KeepAsserted)
+    {
+        len--;
+        while(len--)
+        {
+            *dataReceived++ = SPI_ReadWriteByte(gSPIInstance, *dataSend++, cs, kSPI_ABS_CS_KeepAsserted);
+        }
+        *dataReceived++ = SPI_ReadWriteByte(gSPIInstance, *dataSend++, cs, kSPI_ABS_CS_ReturnInactive);
+    }
+    else if(csState == kSPI_ABS_CS_ReturnInactive)
+    {
+        while(len--)
+        {
+            *dataReceived++ = SPI_ReadWriteByte(gSPIInstance, *dataSend++, cs, kSPI_ABS_CS_ReturnInactive);
+        }
+    }
+    return kSPI_ABS_StatusOK;
 }
+
 
 int SPI_ABS_AbortTransfer(void)
 {
-    
+    return kSPI_ABS_StatusUnsupported;
 }
+
 /*
 void SPI_ABS_SetCSHigh(void)
 {

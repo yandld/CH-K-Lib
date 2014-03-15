@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
-  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
 
@@ -13,10 +13,12 @@
 
 #include "common.h"
   
+//!< SPI模块设备
 #define HW_SPI0     (0x00)
 #define HW_SPI1     (0x01)
 #define HW_SPI2     (0x02)
   
+//!< SPI帧格式选择
 typedef enum
 {
     kSPI_CPOL0_CPHA0,
@@ -31,21 +33,6 @@ typedef enum
     kSPI_Slave,
 } SPI_Mode_Type;
 
-//!< SPI 波特率选择
-typedef enum
-{
-    kSPI_BaudrateDiv_2,
-    kSPI_BaudrateDiv_4,
-    kSPI_BaudrateDiv_6,
-    kSPI_BaudrateDiv_8,
-    kSPI_BaudrateDiv_16,
-    kSPI_BaudrateDiv_32,
-    kSPI_BaudrateDiv_64,
-    kSPI_BaudrateDiv_128,
-    kSPI_BaudrateDiv_256,
-    kSPI_BaudrateDiv_512,
-    kSPI_BaudrateDiv_1024,
-}SPI_BaudrateDiv_Type;
 
 //!< interrupt and DMA select
 typedef enum
@@ -66,10 +53,10 @@ typedef struct
 {
     uint32_t                instance;               //!< 模块号
 	SPI_Mode_Type           mode;                   //!< 主从模式
-    SPI_BaudrateDiv_Type    baudrateDivSelect;      //!< 波特率分频选择   
     uint8_t                 dataSizeInBit;          //!< 每帧数据有多少位 通常为8或16
     uint8_t                 bitOrder;               //!< 先发高位还是先发地位
     SPI_FrameFormat_Type    frameFormat;            //!< 四种帧格式选择
+    uint32_t                baudrate;               //!< 速率
 }SPI_InitTypeDef;
 
 //!< 快速初始化结构
@@ -89,7 +76,7 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct);
 uint16_t SPI_ReadWriteByte(uint32_t instance, uint16_t data, uint16_t CSn, uint16_t csState);
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config);
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
-uint32_t SPI_QuickInit(uint32_t SPIxMAP, uint32_t frameFormat);
+uint32_t SPI_QuickInit(uint32_t SPIxMAP, uint32_t frameFormat, uint32_t baudrate);
 
 
 #endif

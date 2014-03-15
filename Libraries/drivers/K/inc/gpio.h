@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
-  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
 #ifndef __GPIO_H__

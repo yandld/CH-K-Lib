@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
-  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
 
@@ -30,16 +30,19 @@ typedef enum
     kSPI_ABS_StatusUnsupported,
 }SPI_ABS_Status;
 
-//!< spi bit order
 typedef enum
 {
-    kSPI_MsbFirst,
-    kSPI_LSBFirst,
-}SPI_ABS_BitOrder_Type;
-
+    kSPI_ABS_CS_ReturnInactive,     //!< 传输完成后CS信号保持片选中状态
+    kSPI_ABS_CS_KeepAsserted,       //!< 传输完成后CS信号保持未选中状态
+}SPI_ABS_CSStatus_Type;
+  
 
 //!< API functions
-int SPI_ABS_Init(int spiMode, int bitOrder, int baudrate);
+int SPI_ABS_Init(int frameFormat, int baudrate);
+int SPI_ABS_xfer(uint8_t *dataSend, uint8_t *dataReceived, uint32_t cs, uint16_t csState, uint32_t len);
+
+
+
 
 
 #endif

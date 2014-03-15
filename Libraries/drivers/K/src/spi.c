@@ -4,7 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
-  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
 #include "spi.h"
@@ -51,6 +51,89 @@ static const IRQn_Type SPI_IRQnTable[] =
 };
 #endif
 
+
+/* Defines constant value arrays for the baud rate pre-scalar and scalar divider values.*/
+static const uint32_t s_baudratePrescaler[] = { 2, 3, 5, 7 };
+static const uint32_t s_baudrateScaler[] = { 2, 4, 6, 8, 16, 32, 64, 128, 256, 512, 1024, 2048,
+                                           4096, 8192, 16384, 32768 };
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : dspi_hal_set_baud
+ * Description   : Set the DSPI baud rate in bits per second.
+ * This function will take in the desired bitsPerSec (baud rate) and will calculate the nearest
+ * possible baud rate without exceeding the desired baud rate, and will return the calculated
+ * baud rate in bits-per-second. It requires that the caller also provide the frequency of the
+ * module source clock (in Hz).
+ *
+ *END**************************************************************************/
+static uint32_t dspi_hal_set_baud(uint32_t instance, uint8_t whichCtar, uint32_t bitsPerSec, uint32_t sourceClockInHz)                    
+{
+    uint32_t prescaler, bestPrescaler;
+    uint32_t scaler, bestScaler;
+    uint32_t dbr, bestDbr;
+    uint32_t realBaudrate, bestBaudrate;
+    uint32_t diff, min_diff;
+    uint32_t baudrate = bitsPerSec;
+    /* for master mode configuration, if slave mode detected, return 0*/
+    if(!(SPI_InstanceTable[instance]->MCR & SPI_MCR_MSTR_MASK))
+    {
+        return 0;
+    }
+    /* find combination of prescaler and scaler resulting in baudrate closest to the */
+    /* requested value */
+    min_diff = 0xFFFFFFFFU;
+    bestPrescaler = 0;
+    bestScaler = 0;
+    bestDbr = 1;
+    bestBaudrate = 0; /* required to avoid compilation warning */
+
+    /* In all for loops, if min_diff = 0, the exit for loop*/
+    for (prescaler = 0; (prescaler < 4) && min_diff; prescaler++)
+    {
+        for (scaler = 0; (scaler < 16) && min_diff; scaler++)
+        {
+            for (dbr = 1; (dbr < 3) && min_diff; dbr++)
+            {
+                realBaudrate = ((sourceClockInHz * dbr) /
+                                (s_baudratePrescaler[prescaler] * (s_baudrateScaler[scaler])));
+
+                /* calculate the baud rate difference based on the conditional statement*/
+                /* that states that the calculated baud rate must not exceed the desired baud rate*/
+                if (baudrate >= realBaudrate)
+                {
+                    diff = baudrate-realBaudrate;
+                    if (min_diff > diff)
+                    {
+                        /* a better match found */
+                        min_diff = diff;
+                        bestPrescaler = prescaler;
+                        bestScaler = scaler;
+                        bestBaudrate = realBaudrate;
+                        bestDbr = dbr;
+                    }
+                }
+            }
+        }
+    }
+
+    uint32_t temp;
+    /* write the best dbr, prescalar, and baud rate scalar to the CTAR*/
+    temp = SPI_InstanceTable[instance]->CTAR[whichCtar];
+    temp &= ~(SPI_CTAR_DBR_MASK| SPI_CTAR_PBR_MASK | SPI_CTAR_BR_MASK);
+    if((bestDbr-1))
+    {
+        temp |= SPI_CTAR_DBR_MASK|SPI_CTAR_PBR(bestPrescaler)|SPI_CTAR_BR(bestScaler);
+    }
+    else
+    {
+        temp |= SPI_CTAR_PBR(bestPrescaler)|SPI_CTAR_BR(bestScaler);
+    }
+    SPI_InstanceTable[instance]->CTAR[whichCtar] = temp;
+    /* return the actual calculated baud rate*/
+    return bestBaudrate;
+}
+
+
 /**
  * @brief  SPI ³õÊ¼»¯
  *
@@ -59,6 +142,7 @@ static const IRQn_Type SPI_IRQnTable[] =
  */
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
 {
+    uint32_t clock;
     // enable clock gate
     uint32_t * SIM_SCGx = (void*) SIM_SPIClockGateTable[SPI_InitStruct->instance].register_addr;
     *SIM_SCGx |= SIM_SPIClockGateTable[SPI_InitStruct->instance].mask;
@@ -87,8 +171,10 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
         SPI_MCR_DIS_TXF_MASK|
         SPI_MCR_DIS_RXF_MASK;
     // Set SPI clock, SPI use Busclock
-    SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] = (SPI_CTAR_DBR_MASK|SPI_CTAR_PBR(0)|SPI_CTAR_BR(SPI_InitStruct->baudrateDivSelect));
+    CLOCK_GetClockFrequency(kBusClock, &clock);
+    dspi_hal_set_baud(SPI_InitStruct->instance, 1, SPI_InitStruct->baudrate, clock);
     // data size
+    SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] &= ~SPI_CTAR_FMSZ_MASK;
     SPI_InstanceTable[SPI_InitStruct->instance]->CTAR[1] |= SPI_CTAR_FMSZ(SPI_InitStruct->dataSizeInBit-1);
     // bit order
     switch(SPI_InitStruct->bitOrder)
@@ -135,12 +221,12 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
     SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_HALT_MASK;
 }
  
-uint32_t SPI_QuickInit(uint32_t SPIxMAP, uint32_t frameFormat)
+uint32_t SPI_QuickInit(uint32_t SPIxMAP, uint32_t frameFormat, uint32_t baudrate)
 {
     uint32_t i;
     QuickInit_Type * pSPIxMap = (QuickInit_Type*)&(SPIxMAP);
     SPI_InitTypeDef SPI_InitStruct1;
-    SPI_InitStruct1.baudrateDivSelect = kSPI_BaudrateDiv_128;
+    SPI_InitStruct1.baudrate = baudrate;
     SPI_InitStruct1.frameFormat = frameFormat;
     SPI_InitStruct1.dataSizeInBit = 8;
     SPI_InitStruct1.instance = pSPIxMap->ip_instance;

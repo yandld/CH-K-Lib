@@ -104,7 +104,7 @@ int main(void)
     DelayInit();
     UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
     printf("HelloWorld\r\n");
-    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
     shell_register_function(&CommandFun_GPIO); //GPIO√¸¡Ó ≤‚ ‘GPIO

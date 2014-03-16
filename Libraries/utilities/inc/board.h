@@ -13,18 +13,18 @@
 #define BOARD_LED_PIN_BASES             {6, 7, 11, 12}
 #define BOARD_UART_DEBUG_MAP            UART0_RX_PD06_TX_PD07
 #define BOARD_I2C_MAP                   I2C0_SCL_PB02_SDA_PB03
-
-
 #define BOARD_KEY_GPIO_BASES            {HW_GPIOE, HW_GPIOE, HW_GPIOE}
 #define BOARD_KEY_PIN_BASES             {26, 27, 28}
-//!< ADC
+
+
 #define BOARD_ADC_MAP                   ADC0_SE19_DM0
-//!< PWM
 #define BOARD_PWM_MAP
-//!< SPI 
+
 #define BOARD_SPI_MAP                   SPI2_SCK_PD12_SOUT_PD13_SIN_PD14
 #define BOARD_SPI_INSTANCE              HW_SPI2
 #define BOARD_SPI_PCS                   (1)
+#define BOARD_TXP2046_SPI_MAP           SPI2_SCK_PD12_SOUT_PD13_SIN_PD14
+#define BOARD_TXP2046_SPI_PCS           (0)
 //!< CCD
 #define BOARD_OV7620_PCLK_PORT      HW_GPIOA
 #define BOARD_OV7620_PCLK_PIN       (7)

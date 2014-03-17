@@ -189,7 +189,7 @@ void ili9320_Init(void)
     //¿ªÆôÏÔÊ¾   
     LCD_WriteRegister(0x07,0x0173);
    
-    LCD_Clear(RED);
+    LCD_Clear(BLUE);
 }
 
 

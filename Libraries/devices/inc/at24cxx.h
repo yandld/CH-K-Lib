@@ -11,8 +11,7 @@
 #define __24CXX_H__
 
 #include <stdint.h>
-
-
+#include "i2c_abstraction.h"
 
 typedef enum
 {
@@ -21,14 +20,26 @@ typedef enum
     kAT24C04,
     kAT24C08,
     kAT24C16,
-}AT24CXX_Device_Type;
+}at24cxx_part_number_t;
+
+typedef struct at24cxx_device
+{
+    // params
+    i2c_bus * bus;
+    at24cxx_part_number_t type;
+    // ops
+    i2c_status (*init) (struct at24cxx_device * device);
+    i2c_status (*probe)(struct at24cxx_device * device, at24cxx_part_number_t type);
+    i2c_status (*read)(struct at24cxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len);
+    i2c_status (*write)(struct at24cxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len);
+    i2c_status (*self_test)(struct at24cxx_device * device);
+    i2c_status (*get_size)(struct at24cxx_device * device, uint32_t * size);
+    //internal vars
+    i2c_device i2c_device;
+}at24cxx_device;
 
 //API funtctions
-int AT24CXX_Init(int type);
-int AT24CXX_ReadByte(uint32_t address, uint8_t *buffer, uint32_t len);
-int AT24CXX_WriteByte(uint32_t address, uint8_t *buffer, uint32_t len);
-int AT24CXX_GetTotalSize(void);
-int AT24CXX_SelfTest(void);
+i2c_status at24cxx_init(struct at24cxx_device * device);
 
 
 #endif

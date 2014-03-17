@@ -10,7 +10,7 @@
 
 #include "i2c_abstraction.h"
 #include "at24cxx.h"
-#include <string.h>
+#include "string.h"
 /**
   ******************************************************************************
   * @supported chip    AT24C01
@@ -22,113 +22,173 @@
   */
 static const uint32_t AT24CXX_TotalSizeTable[] = {128, 256, 512, 1024, 2048};
 static const uint32_t AT24CXX_PageSizeTable[] =  {8, 8, 16, 16, 16};
-static int AT24CXX_Type;
 
 #define AT24CXX_CHIP_ADDRESS   (0x50)
 
-int AT24CXX_Init(int type)
+static i2c_status at24cxx_probe(struct at24cxx_device * device, at24cxx_part_number_t type)
 {
-    AT24CXX_Type = (int)type;
-    return I2C_ABS_Init(kI2C_ABS_SpeedFast);
-}
-
-int AT24CXX_GetTotalSize(void)
-{
-    return AT24CXX_TotalSizeTable[AT24CXX_Type];
-}
-
-int AT24CXX_ReadByte(uint32_t address, uint8_t *buffer, uint32_t len)
-{   
-    if(len > AT24CXX_TotalSizeTable[AT24CXX_Type])
+    if(!device->bus)
     {
-        return kI2C_ABS_StatusError;
+        return ki2c_status_error;
     }
-    return I2C_ABS_ReadByte(AT24CXX_CHIP_ADDRESS+((address/256)), address%256, 1, buffer, len); 
-}
-
-static int AT24CXX_WritePage(uint32_t address, uint8_t *buffer, uint32_t len)
-{
-    if(len > AT24CXX_TotalSizeTable[AT24CXX_Type])
+    if(!device->bus->init)
     {
-        return kI2C_ABS_StatusError;
+        return ki2c_status_error;
     }
-    return I2C_ABS_WriteByte(AT24CXX_CHIP_ADDRESS+((address/256)), address%256, 1, buffer, len); 
+    if(!device->bus->probe)
+    {
+        return ki2c_status_error; 
+    }
+    if(device->bus->probe(device->bus, AT24CXX_CHIP_ADDRESS))
+    {
+        return ki2c_status_error;
+    }
+    device->type = type;
+    return ki2c_status_ok;
 }
 
+static i2c_status at24cxx_read(struct at24cxx_device * device,uint32_t addr, uint8_t *buf, uint32_t len)
+{
+    int ret;
+    if(!device->bus)
+    {
+        return ki2c_status_error;
+    }
+    if(!device->bus->read)
+    {
+        return ki2c_status_error;
+    }
+    device->i2c_device.chip_addr = (addr/256) + AT24CXX_CHIP_ADDRESS;
+    device->i2c_device.subaddr = addr%256;
+    device->i2c_device.subaddr_len = 1;
+    ret = device->bus->read(device->bus, &device->i2c_device, buf, len);
+    return (i2c_status)ret;
+}
 
-int AT24CXX_WriteByte(uint32_t address, uint8_t *buffer, uint32_t len)
+static i2c_status at24cxx_write_page(struct at24cxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)
+{
+    int ret;
+    if(!device->bus)
+    {
+        return ki2c_status_error;
+    }
+    if(!device->bus->write)
+    {
+        return ki2c_status_error;
+    }
+    device->i2c_device.chip_addr = (addr/256) + AT24CXX_CHIP_ADDRESS;
+    device->i2c_device.subaddr = addr%256;
+    device->i2c_device.subaddr_len = 1;
+    ret = device->bus->write(device->bus, &device->i2c_device, buf, len);
+    return (i2c_status)ret;
+}
+
+static i2c_status at24cxx_write(struct at24cxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)
 {
     int ret;
 	uint32_t secpos;
 	uint32_t secoff;
 	uint16_t Byteremian;
 	uint32_t pageremain;
-	secpos = address/AT24CXX_PageSizeTable[AT24CXX_Type];
-	secoff = address%AT24CXX_PageSizeTable[AT24CXX_Type];
-	pageremain = AT24CXX_PageSizeTable[AT24CXX_Type]-secoff;
-	ret = AT24CXX_WritePage(address, buffer, pageremain);
+	secpos = addr/AT24CXX_PageSizeTable[device->type];
+	secoff = addr%AT24CXX_PageSizeTable[device->type];
+	pageremain = AT24CXX_PageSizeTable[device->type]-secoff;
+    // check vailidiation
+    if((addr + len ) > AT24CXX_TotalSizeTable[device->type])
+    {
+        return ki2c_status_unsupported;
+    }
+    ret = at24cxx_write_page(device, addr, buf, len);
     if(ret)
     {
-        return ret;
+        return (i2c_status)ret;
     }
-    while(I2C_ABS_Probe(AT24CXX_CHIP_ADDRESS) != kI2C_ABS_StatusOK);
-	buffer += pageremain;
+    while(device->bus->probe(device->bus, AT24CXX_CHIP_ADDRESS) != ki2c_status_ok);
+	addr += pageremain;
 	secpos++;
 	Byteremian = len - pageremain;
 	while(Byteremian != 0)
 	{
-		if(Byteremian <= AT24CXX_PageSizeTable[AT24CXX_Type])
+		if(Byteremian <= AT24CXX_PageSizeTable[device->type])
 		{
 			 pageremain = Byteremian;
 		}
 		else
 		{
-			pageremain = AT24CXX_PageSizeTable[AT24CXX_Type];
+			pageremain = AT24CXX_PageSizeTable[device->type];
 		}
-        
-        ret = AT24CXX_WritePage(secpos*AT24CXX_PageSizeTable[AT24CXX_Type], buffer, pageremain);
+        ret = at24cxx_write_page(device, secpos*AT24CXX_PageSizeTable[device->type], buf, pageremain);
         if(ret)
         {
-            return ret;
+            return (i2c_status)ret;
         }
-        while(I2C_ABS_Probe(AT24CXX_CHIP_ADDRESS) != kI2C_ABS_StatusOK);
+        while(device->bus->probe(device->bus, AT24CXX_CHIP_ADDRESS) != ki2c_status_ok);
         secpos++;
-        buffer += pageremain;
+        buf += pageremain;
         Byteremian -= pageremain;
 	}
-    return kI2C_ABS_StatusOK;
+    return ki2c_status_ok;
 }
 
-int AT24CXX_SelfTest(void)
+i2c_status self_test(struct at24cxx_device * device)
 {
     int ret;
     uint8_t buf[8],buf1[8],buf2[8];
-    ret = AT24CXX_ReadByte(0, buf, sizeof(buf));
+    ret = device->read(device, 0, buf, sizeof(buf));
     if(ret)
     {
-        return ret;
+        return (i2c_status)ret;
     }
     memset(buf1,'T',sizeof(buf1));
-    ret = AT24CXX_WriteByte(0, buf1, sizeof(buf1));
+    ret = device->write(device, 0, buf1, sizeof(buf1));
     if(ret)
     {
-        return ret;
+        return (i2c_status)ret;
     }
-    ret = AT24CXX_ReadByte(0, buf2, sizeof(buf2));
+    ret = device->read(device, 0, buf2, sizeof(buf2));
     if(ret)
     {
-        return ret;
+        return (i2c_status)ret;
     }
-    ret = AT24CXX_WriteByte(0, buf, sizeof(buf));
+    ret = device->write(device, 0, buf, sizeof(buf));
     if(ret)
     {
-        return ret;
+        return (i2c_status)ret;
     }
     if(memcmp(buf1, buf2, sizeof(buf1)))
     {
-        return kI2C_ABS_StatusError;
+        return ki2c_status_error;
     }
-    return kI2C_ABS_StatusOK;
+    return ki2c_status_ok;
+}
+
+i2c_status at24cxx_get_size(struct at24cxx_device * device, uint32_t * size)
+{
+    *size = AT24CXX_TotalSizeTable[device->type];
+    return ki2c_status_ok;
+}
+
+i2c_status at24cxx_init(struct at24cxx_device * device)
+{
+    if(!device->bus)
+    {
+        return ki2c_status_error;
+    }
+    if(!device->bus->init)
+    {
+        return ki2c_status_error;
+    }
+    if(device->bus->init(device->bus, device->bus->instance, device->bus->baudrate))
+    {
+        return ki2c_status_error;
+    }
+    device->init = at24cxx_init;
+    device->probe = at24cxx_probe;
+    device->read = at24cxx_read;
+    device->write = at24cxx_write;
+    device->self_test = self_test;
+    device->get_size = at24cxx_get_size;
+    return ki2c_status_ok;
 }
 
 

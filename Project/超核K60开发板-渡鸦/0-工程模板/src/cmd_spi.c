@@ -37,12 +37,17 @@ int CMD_SPI(int argc, char * const * argv)
     if((argc == 2) && (!strcmp(argv[1], "TP")))
     {
         uint16_t num;
+        while(1)
+        {
         SPI_ABS_ReadWriteByte(0xD0, BOARD_TXP2046_SPI_PCS, kSPI_ABS_CS_KeepAsserted);
         num = SPI_ABS_ReadWriteByte(0xFF, BOARD_TXP2046_SPI_PCS, kSPI_ABS_CS_KeepAsserted);
         num<<=8;
         num += SPI_ABS_ReadWriteByte(0xFF, BOARD_TXP2046_SPI_PCS, kSPI_ABS_CS_ReturnInactive);  
         num>>=4;
-        printf("%d\r\n", num);
+        printf("%d\r", num);
+        }
+        
+
         return 0;
     }
     //≥ı ºªØSPI

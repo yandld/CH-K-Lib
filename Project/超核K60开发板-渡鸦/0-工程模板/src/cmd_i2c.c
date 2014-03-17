@@ -5,23 +5,23 @@
 #include "i2c_abstraction.h"
 
 
-static const uint32_t I2C_TestSpeedTable[] = {47000, 76000, 96000, 376000};
 static uint32_t gI2C_Instance;
 
-static int _do_i2c_scan(int argc, char *const argv[])
+static void _do_i2c_scan(int argc, char *const argv[])
 {
     uint8_t i,j;
-    
-    for(j = 0; j < ARRAY_SIZE(I2C_TestSpeedTable); j++)
+    i2c_bus bus;
+    if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 10*1000))
     {
-        I2C_ABS_Init(kI2C_ABS_SpeedStandard);
-        shell_printf("Scanning I2C%d bus at:%dHz\r\n",gI2C_Instance,  I2C_TestSpeedTable[j]);
-        for(i=0;i<127;i++)
+        printf("i2c init failed\r\n");
+        return;
+    }
+    shell_printf("i2c scanning bus at speed:%d\r\n", bus.baudrate);
+    for(i = 0;i < 127; i++)
+    {
+        if(bus.probe(&bus, i) == ki2c_status_ok)
         {
-            if(I2C_ABS_Probe(i) == kI2C_ABS_StatusOK)
-            {
-                shell_printf("address:0x%X(0x%X) found!\r\n", i, i<<1);
-            }
+            shell_printf("address:0x%X(0x%X) found!\r\n", i, i<<1);
         }
     }
 }
@@ -47,28 +47,42 @@ static int _do_i2c_it(int argc, char *const argv[])
     I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_Disable);
 }
 
-
-
 static int _do_i2c_at24cxx(int argc, char *const argv[])
 {
     uint32_t ret;
-    uint8_t buffer[256];
-    uint32_t i = 0;
-    AT24CXX_Init(kAT24C02);
-    ret = AT24CXX_SelfTest();
-    if(ret)
+    uint32_t i;
+    uint8_t buffer[10];
+    uint32_t size;
+    i2c_bus bus = {0};
+    at24cxx_device at24cxx = {0};
+    if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 40*1000))
     {
-        shell_printf("AT24CXX FAILED:%d\r\n", ret);
+        shell_printf("i2c bus init failed\r\n");
     }
-    else
+    at24cxx.bus = &bus;
+    if(at24cxx_init(&at24cxx))
     {
-        shell_printf("AT24CXX OK\r\n", ret);   
+        shell_printf("init at24cxx failed\r\n");
+        return 1;
     }
+    if(at24cxx.probe(&at24cxx, kAT24C02))
+    {
+        shell_printf("no device found\r\n");
+        return 1;
+    }
+    at24cxx.get_size(&at24cxx, &size);
+    shell_printf("at24cxx size:%d btye\r\n", size);
+    if(at24cxx.self_test(&at24cxx))
+    {
+        shell_printf("at24cxx self test failed\r\n");
+        return 1;  
+    }
+    shell_printf("at24cxx  test ok\r\n");
+    return 0;
 }
 
 int DoI2C(int argc, char *const argv[])
 {
-    uint8_t i;
     static uint8_t init = 0;
     if(argc == 1)
     {
@@ -93,7 +107,6 @@ int DoI2C(int argc, char *const argv[])
     {
         return CMD_RET_USAGE;
     }
-    return 0;
 }
 
 

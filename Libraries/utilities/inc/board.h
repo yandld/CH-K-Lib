@@ -13,6 +13,7 @@
 #define BOARD_LED_PIN_BASES             {6, 7, 11, 12}
 #define BOARD_UART_DEBUG_MAP            UART0_RX_PD06_TX_PD07
 #define BOARD_I2C_MAP                   I2C0_SCL_PB02_SDA_PB03
+#define BOARD_I2C_INSTANCE              (0)
 #define BOARD_KEY_GPIO_BASES            {HW_GPIOE, HW_GPIOE, HW_GPIOE}
 #define BOARD_KEY_PIN_BASES             {26, 27, 28}
 

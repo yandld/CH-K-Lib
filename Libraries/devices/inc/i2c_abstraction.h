@@ -32,14 +32,15 @@ typedef struct
 
 typedef struct i2c_bus
 {
-    const char* name;
+    // params
+    uint32_t instance;
+    uint32_t baudrate;
+    // ops
     i2c_status (*init)(struct i2c_bus * bus, uint32_t instance, uint32_t baudrate);
     i2c_status (*deinit)(struct i2c_bus * bus);
     i2c_status (*read)(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len);
     i2c_status (*write)(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len);
     i2c_status (*probe)(struct i2c_bus * bus, uint8_t chip_addr);
-    uint32_t instance;
-    uint32_t baudrate;
 }i2c_bus;
 
 
@@ -48,7 +49,6 @@ i2c_status i2c_bus_init(struct i2c_bus * bus, uint32_t instance, uint32_t baudra
 i2c_status i2c_bus_probe(struct i2c_bus * bus, uint8_t chip_addr);
 i2c_status i2c_bus_write(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len);
 i2c_status i2c_bus_read(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len);
-
 
 #endif
 

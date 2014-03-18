@@ -373,8 +373,8 @@ void UART_CallbackRxInstall(uint8_t instance, UART_CallBackRxType AppCBFun)
  *         @arg HW_UART0
  *         @arg HW_UART1
  *         @arg ...
- * @param  baudrate: uart baudrate
- * @retval None
+ * @param  baudrate: ²¨ÌØÂÊ 9600 115200...
+ * @retval UARTÄ£¿éºÅ
  */
 uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate)
 {

@@ -89,7 +89,6 @@ typedef struct
 }UART_InitTypeDef;
 
 //!< UART CallBack Type
-typedef void (*UART_CallBackType)(uint8_t byteReceived, uint8_t * pbyteToSend, uint8_t flag);
 typedef void (*UART_CallBackTxType)(uint8_t * pbyteToSend);
 typedef void (*UART_CallBackRxType)(uint8_t byteReceived);
 

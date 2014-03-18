@@ -14,13 +14,13 @@ int DoGPIO(int argc, char *const argv[])
     {
         GPIO_QuickInit(LED_GPIOInstanceTable[i], LED_PinTable[i], kGPIO_Mode_OPP);  
     }
-    for(i = 0; i < 20; i++)
+    for(i = 0; i < 10; i++)
     {
         for(j = 0; j < led_num; j++)
         {
             GPIO_ToggleBit(LED_GPIOInstanceTable[j], LED_PinTable[j]);
         }
-        DelayMs(40);
+        DelayMs(200);
     }
     return 0;
 }

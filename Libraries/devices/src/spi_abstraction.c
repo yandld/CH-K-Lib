@@ -24,7 +24,7 @@ spi_status spi_bus_init(struct spi_bus * bus, uint32_t instance, uint32_t baudra
     bus->instance = instance;
     if(!bus_open_flag)
     {
-        g_instance = SPI_QuickInit(BOARD_SPI_MAP, (SPI_FrameFormat_Type)kspi_cpol0_cpha1, bus->baudrate);
+        g_instance = SPI_QuickInit(BOARD_SPI_MAP, (SPI_FrameFormat_Type)kspi_cpol0_cpha0, bus->baudrate);
         bus_open_flag = 1;
     }
     // link ops

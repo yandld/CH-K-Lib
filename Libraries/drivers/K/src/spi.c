@@ -172,7 +172,7 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
         SPI_MCR_DIS_RXF_MASK;
     // set SPI clock, SPI use Busclock
     CLOCK_GetClockFrequency(kBusClock, &clock);
-    dspi_hal_set_baud(SPI_InitStruct->instance, 1, SPI_InitStruct->baudrate, clock);
+    dspi_hal_set_baud(SPI_InitStruct->instance, SPI_InitStruct->ctar, SPI_InitStruct->baudrate, clock);
     // config frame format
     SPI_FrameConfig(SPI_InitStruct->instance, SPI_InitStruct->ctar, SPI_InitStruct->frameFormat, SPI_InitStruct->dataSize, SPI_InitStruct->bitOrder);
     // clear all flags

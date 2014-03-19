@@ -32,7 +32,7 @@ int CMD_SPI(int argc, char * const * argv)
     shell_printf("SPI TEST CMD\r\n");
     spi_bus bus;
     spi_device device1;
-    spi_bus_init(&bus, BOARD_SPI_INSTANCE, 10*1000);
+    spi_bus_init(&bus, BOARD_SPI_INSTANCE, 40*1000);
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
     PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
     uint8_t buf[6];
@@ -45,10 +45,13 @@ int CMD_SPI(int argc, char * const * argv)
             device1.csn = BOARD_TXP2046_SPI_PCS;
             device1.cs_state = kspi_cs_keep_asserted;
             device1.format = kspi_cpol0_cpha1;
-            bus.write(&bus, &device1, &code, 1, false);
-            bus.read(&bus, &device1, buf, 2, true);
-            num = ((buf[1]<<8) + buf[0])>>4;
-            printf("%d\r", num);
+           // bus.write(&bus, &device1, &code, 1, false);
+           // bus.read(&bus, &device1, buf, 2, true);
+            buf[0] = SPI_ReadWriteByte(BOARD_SPI_INSTANCE, HW_CTAR0, 0xD0, 0, kSPI_PCS_KeepAsserted);
+            buf[0] = SPI_ReadWriteByte(BOARD_SPI_INSTANCE, HW_CTAR0, 0xFF, 0, kSPI_PCS_KeepAsserted);
+            buf[1] = SPI_ReadWriteByte(BOARD_SPI_INSTANCE, HW_CTAR0, 0xFF, 0, kSPI_PCS_ReturnInactive);
+          //  num = ((buf[1]<<8) + buf[0])>>4;
+            printf("%03d  %03d \r", buf[0], buf[1]);
         }
         
 

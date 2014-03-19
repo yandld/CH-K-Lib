@@ -23,9 +23,9 @@
 
 #define BOARD_SPI_MAP                   SPI2_SCK_PD12_SOUT_PD13_SIN_PD14
 #define BOARD_SPI_INSTANCE              HW_SPI2
-#define BOARD_SPI_PCS                   (1)
 #define BOARD_TXP2046_SPI_MAP           SPI2_SCK_PD12_SOUT_PD13_SIN_PD14
 #define BOARD_TXP2046_SPI_PCS           (0)
+#define BOARD_W24QXX_SPI_PCS            (1)
 //!< CCD
 #define BOARD_OV7620_PCLK_PORT      HW_GPIOA
 #define BOARD_OV7620_PCLK_PIN       (7)

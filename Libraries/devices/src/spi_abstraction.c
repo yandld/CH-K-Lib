@@ -1,83 +1,97 @@
 #include "spi_abstraction.h"
 #include "board.h"
 #include "spi.h"
-#include "clock.h"
 
-static uint32_t gSPIInstance;
 
- /**
- * @brief  SPI 通用抽象层接口 SPI 初始化
- * 
- * @param  frameFormat: 帧格式
- *         @arg kSPI_ABS_CPOL0_CPHA0:
- *         @arg kSPI_ABS_CPOL0_CPHA1:
- *         @arg kSPI_ABS_CPOL1_CPHA0:
- *         @arg kSPI_ABS_CPOL1_CPHA1:
- * @retval None
- */
-int SPI_ABS_Init(int frameFormat, int baudrate)
+static uint32_t g_instance;
+
+
+
+spi_status spi_bus_deinit(struct spi_bus * bus)
 {
-    gSPIInstance = SPI_QuickInit(BOARD_SPI_MAP, frameFormat, baudrate);
-    return kSPI_ABS_StatusOK;
-}
- /**
- * @brief  SPI 传送一个字节
- * 
- * @param  data: 发送的数据
- * @param  cs:   PCS 使能信号选择
- * @param  csState: 发送数据后CS线的状态
- *         @arg kSPI_ABS_CS_ReturnInactive: 回到未选中状态
- *         @arg kSPI_ABS_CS_KeepAsserted:   继续保持选中状态
- * @retval 接收到的数据
- */
-int SPI_ABS_ReadWriteByte(uint8_t data, uint32_t cs, uint16_t csState)
-{
-    return SPI_ReadWriteByte(gSPIInstance, data, cs, csState);
+    return kspi_status_unsupported;
 }
 
-int SPI_ABS_xfer(uint8_t *dataSend, uint8_t *dataReceived, uint32_t cs, uint16_t csState, uint32_t len)
+
+spi_status spi_bus_init(struct spi_bus * bus, uint32_t instance, uint32_t baudrate)
 {
-    if(csState == kSPI_ABS_CS_KeepAsserted)
+    static uint8_t bus_open_flag = 0;
+    if(!bus)
+    {
+        return kspi_status_error;
+    }
+    bus->baudrate = baudrate;
+    bus->instance = instance;
+    if(!bus_open_flag)
+    {
+        g_instance = SPI_QuickInit(BOARD_SPI_MAP, (SPI_FrameFormat_Type)kspi_cpol0_cpha1, bus->baudrate);
+        bus_open_flag = 1;
+    }
+    // link ops
+    bus->init = spi_bus_init;
+    bus->deinit = spi_bus_deinit;
+    bus->read = spi_bus_read;
+    bus->write = spi_bus_write;
+    return kspi_status_ok;
+
+}
+
+
+spi_status spi_bus_read(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool is_return_inactive)
+{
+    uint16_t dummy = 0xFFFF;
+  //  SPI_FrameConfig(g_instance, HW_CTAR0, (SPI_FrameFormat_Type)device->format, kSPI_MSBFirst, 8);
+    if(kspi_cs_keep_asserted == device->cs_state)
     {
         len--;
         while(len--)
         {
-            *dataReceived++ = SPI_ReadWriteByte(gSPIInstance, *dataSend++, cs, kSPI_ABS_CS_KeepAsserted);
+            *buf++ = SPI_ReadWriteByte(g_instance, HW_CTAR0, dummy, device->csn, kspi_cs_keep_asserted);
         }
-        *dataReceived++ = SPI_ReadWriteByte(gSPIInstance, *dataSend++, cs, kSPI_ABS_CS_ReturnInactive);
+        if(!is_return_inactive)
+        {
+            *buf++ = SPI_ReadWriteByte(g_instance, HW_CTAR0, dummy, device->csn, kspi_cs_keep_asserted);
+        }
+        else
+        {
+            *buf++ = SPI_ReadWriteByte(g_instance, HW_CTAR0, dummy, device->csn, kspi_cs_return_inactive);
+        }
     }
-    else if(csState == kSPI_ABS_CS_ReturnInactive)
+    else
     {
         while(len--)
         {
-            *dataReceived++ = SPI_ReadWriteByte(gSPIInstance, *dataSend++, cs, kSPI_ABS_CS_ReturnInactive);
+            *buf++ = SPI_ReadWriteByte(g_instance, HW_CTAR0, dummy, device->csn, kspi_cs_return_inactive);
         }
     }
-    return kSPI_ABS_StatusOK;
 }
 
-
-
-int SPI_ABS_AbortTransfer(void)
+spi_status spi_bus_write(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive)
 {
-    return kSPI_ABS_StatusUnsupported;
+   // SPI_FrameConfig(g_instance, HW_CTAR0, (SPI_FrameFormat_Type)device->format, kSPI_MSBFirst, 8);
+    if(kspi_cs_keep_asserted == device->cs_state)
+    {
+        len--;
+        while(len--)
+        {
+            SPI_ReadWriteByte(g_instance, HW_CTAR0, *buf++, device->csn, kspi_cs_keep_asserted);
+        }
+        if(!cs_return_inactive)
+        {
+            SPI_ReadWriteByte(g_instance, HW_CTAR0, *buf++, device->csn, kspi_cs_keep_asserted);
+        }
+        else
+        {
+            SPI_ReadWriteByte(g_instance, HW_CTAR0, *buf++, device->csn, kspi_cs_return_inactive);
+        }
+    }
+    else
+    {
+        while(len--)
+        {
+            SPI_ReadWriteByte(g_instance, HW_CTAR0, *buf++, device->csn, kspi_cs_return_inactive);
+        }
+    }
 }
-
-/*
-void SPI_ABS_SetCSHigh(void)
-{
-    
-}
-
-void SPI_ABS_SetCSLow(void)
-{
-    
-}
-*/
-
-
-
-
-
 
 

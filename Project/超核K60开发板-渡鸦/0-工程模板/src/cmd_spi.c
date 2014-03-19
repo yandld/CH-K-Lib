@@ -22,7 +22,7 @@ void SPI_ISR(void)
     {
         temp <<= 8;
     }
-    temp |= SPI_ReadWriteByte(BOARD_SPI_INSTANCE, W25QXX_READ_ID_TABLE[i], 1, kSPI_PCS_KeepAsserted);
+    temp |= SPI_ReadWriteByte(BOARD_SPI_INSTANCE,HW_CTAR0, W25QXX_READ_ID_TABLE[i], 1, kSPI_PCS_KeepAsserted);
     i++;
 }
 
@@ -30,21 +30,25 @@ int CMD_SPI(int argc, char * const * argv)
 {
     uint32_t i;
     shell_printf("SPI TEST CMD\r\n");
-    SPI_ABS_Init(kSPI_ABS_CPOL0_CPHA1, 20*1000);
+    spi_bus bus;
+    spi_device device1;
+    spi_bus_init(&bus, BOARD_SPI_INSTANCE, 10*1000);
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
     PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
     uint8_t buf[6];
     if((argc == 2) && (!strcmp(argv[1], "TP")))
     {
         uint16_t num;
+        uint8_t code = 0xD0;
         while(1)
         {
-        SPI_ABS_ReadWriteByte(0xD0, BOARD_TXP2046_SPI_PCS, kSPI_ABS_CS_KeepAsserted);
-        num = SPI_ABS_ReadWriteByte(0xFF, BOARD_TXP2046_SPI_PCS, kSPI_ABS_CS_KeepAsserted);
-        num<<=8;
-        num += SPI_ABS_ReadWriteByte(0xFF, BOARD_TXP2046_SPI_PCS, kSPI_ABS_CS_ReturnInactive);  
-        num>>=4;
-        printf("%d\r", num);
+            device1.csn = BOARD_TXP2046_SPI_PCS;
+            device1.cs_state = kspi_cs_keep_asserted;
+            device1.format = kspi_cpol0_cpha1;
+            bus.write(&bus, &device1, &code, 1, false);
+            bus.read(&bus, &device1, buf, 2, true);
+            num = ((buf[1]<<8) + buf[0])>>4;
+            printf("%d\r", num);
         }
         
 
@@ -56,12 +60,14 @@ int CMD_SPI(int argc, char * const * argv)
     SPI_CallbackInstall(BOARD_SPI_INSTANCE, SPI_ISR);
     //¿ªÆôSPIÖÐ¶Ï 
    // SPI_ITDMAConfig(BOARD_SPI_INSTANCE, kSPI_IT_TCF);
+    device1.csn = BOARD_W24QXX_SPI_PCS;
+    device1.cs_state = kspi_cs_keep_asserted;
+    device1.format = kspi_cpol0_cpha1;
+    bus.write(&bus, &device1, W25QXX_READ_ID_TABLE, 4, false);
+    bus.read(&bus, &device1, buf, 2, true);
 
-    // start transfer
-    //SPI_ReadWriteByte(BOARD_SPI_INSTANCE, W25QXX_READ_ID_TABLE[0], 1, kSPI_PCS_KeepAsserted); 
-    SPI_ABS_xfer(W25QXX_READ_ID_TABLE, buf, 1, kSPI_ABS_CS_KeepAsserted, sizeof(W25QXX_READ_ID_TABLE));
-    printf("buf[4]:%x\r\n", buf[4]);
-    printf("buf[5]:%x\r\n", buf[5]);
+    printf("buf[0]:%x\r\n", buf[0]);
+    printf("buf[1]:%x\r\n", buf[1]);
     return 0;
 }
 

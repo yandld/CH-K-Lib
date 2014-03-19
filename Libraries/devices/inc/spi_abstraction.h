@@ -12,35 +12,68 @@
 #define __SPI_ABSTRACTION_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
-//!< SPI frame format
-typedef enum 
-{
-    kSPI_ABS_CPOL0_CPHA0,
-    kSPI_ABS_CPOL0_CPHA1,
-    kSPI_ABS_CPOL1_CPHA0,
-    kSPI_ABS_CPOL1_CPHA1
-}SPI_ABS_FrameFormat_Type;
 
-//!< SPI return status
-typedef enum
-{
-    kSPI_ABS_StatusOK,
-    kSPI_ABS_StatusError,
-    kSPI_ABS_StatusUnsupported,
-}SPI_ABS_Status;
+
+
+
+
+
+
+
 
 typedef enum
 {
-    kSPI_ABS_CS_ReturnInactive,     //!< 传输完成后CS信号保持片选中状态
-    kSPI_ABS_CS_KeepAsserted,       //!< 传输完成后CS信号保持未选中状态
-}SPI_ABS_CSStatus_Type;
-  
+    kspi_status_ok = 0,
+    kspi_status_error,
+    kspi_status_unsupported,
+    kspi_status_busy,
+}spi_status;
 
-//!< API functions
-int SPI_ABS_Init(int frameFormat, int baudrate);
-int SPI_ABS_ReadWriteByte(uint8_t data, uint32_t cs, uint16_t csState);
-int SPI_ABS_xfer(uint8_t *dataSend, uint8_t *dataReceived, uint32_t cs, uint16_t csState, uint32_t len);
+typedef enum
+{
+    kspi_cpol0_cpha0,
+    kspi_cpol0_cpha1,
+    kspi_cpol1_cpha0,
+    kspi_cpol1_cpha1,
+}spi_frame_type;
+
+typedef enum
+{
+    kspi_cs_return_inactive,     
+    kspi_cs_keep_asserted,       
+}spi_cs_control_type;
+
+typedef struct
+{
+    spi_frame_type              format;
+    uint32_t                    csn;
+    spi_cs_control_type         cs_state;      //没传送完一帧数据后是否拉起CS
+}spi_device;
+
+
+
+
+typedef struct spi_bus
+{
+    // params
+    uint32_t instance;
+    uint32_t baudrate;
+    // ops
+    spi_status (*init)(struct spi_bus * bus, uint32_t instance, uint32_t baudrate);
+    spi_status (*deinit)(struct spi_bus * bus);
+    spi_status (*read)(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
+    spi_status (*write)(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
+}spi_bus;
+
+
+
+//!< API functinos
+spi_status spi_bus_init(struct spi_bus * bus, uint32_t instance, uint32_t baudrate);
+spi_status spi_bus_read(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
+spi_status spi_bus_write(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
+
 
 
 

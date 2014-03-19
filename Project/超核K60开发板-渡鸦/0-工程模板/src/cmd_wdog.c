@@ -9,8 +9,6 @@ void WDOG_ISR(void)
     
 }
 
-
-
 int CMD_WDOG(int argc, char * argv[])
 {
     printf("WDOG TEST\r\n");

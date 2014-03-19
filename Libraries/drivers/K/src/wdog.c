@@ -53,8 +53,8 @@ void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
     time_out = ((clock/8)/1000)*(WDOG_InitStruct->windowInMs);
     WDOG->WINH = (time_out & 0xFFFF0000)>>16;
     WDOG->WINL = (time_out & 0x0000FFFF)>>0;
-    
     WDOG->PRESC = WDOG_PRESC_PRESCVAL(7); // perscale = 8
+    // enable wdog
     wdag_value |= WDOG_STCTRLH_WDOGEN_MASK;
     WDOG->STCTRLH = wdag_value;
 }

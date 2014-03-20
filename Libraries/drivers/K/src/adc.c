@@ -10,7 +10,7 @@
   
 #include "adc.h"
 #include "gpio.h"
-  
+
 //!< Leagacy Support for Kineis Z Version(Inital Version)
 #if (!defined(ADC_BASES))
 

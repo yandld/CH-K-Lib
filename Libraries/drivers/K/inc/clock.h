@@ -1,6 +1,7 @@
 #ifndef __CLOCK_H__
 #define __CLOCK_H__
-#include "common.h"
+
+#include <stdint.h>
 
 typedef enum
 {

@@ -10,7 +10,7 @@
 #ifndef __LPTMR_H__
 #define __LPTMR_H__
 
-#include "common.h"
+#include <stdint.h>
 
 #define HW_LPTMR0   (0x00)
 

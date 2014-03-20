@@ -10,7 +10,7 @@
 #ifndef __DMA_H__
 #define __DMA_H__
   
-#include "common.h"
+#include <stdint.h>
 
 //!< DMA ´¥·¢Ô´Ñ¡Ôñ
 #define UART0_REV_DMAREQ  2

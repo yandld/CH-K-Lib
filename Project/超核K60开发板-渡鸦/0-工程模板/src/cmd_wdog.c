@@ -9,7 +9,7 @@ void WDOG_ISR(void)
     
 }
 
-int CMD_WDOG(int argc, char * argv[])
+int CMD_WDOG(int argc, char * const argv[])
 {
     printf("WDOG TEST\r\n");
     printf("WDOG RESET COUNTER:%d\r\n", WDOG_ReadResetCounter());

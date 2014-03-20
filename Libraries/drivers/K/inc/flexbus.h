@@ -10,8 +10,7 @@
 #ifndef __FLEXBUS_H__
 #define __FLEXBUS_H__
 
-
-#include "common.h"
+#include <stdint.h>
 
 //!< Flexbus 数据对其方式选择
 #define kFLEXBUS_DataLeftAligned   (0x00)

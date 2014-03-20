@@ -9,6 +9,7 @@
   */
 
 #include "dma.h"
+#include "common.h"
 
 static DMA_CallBackType DMA_CallBackTable[16] = {NULL};
 #if     (defined(MK60DZ10) || defined(MK60D10))

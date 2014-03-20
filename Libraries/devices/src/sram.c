@@ -1,7 +1,7 @@
 
 
 #include "sram.h"
-
+#include "common.h"
 
 void SRAM_Init(void)
 {
@@ -69,7 +69,7 @@ void SRAM_Init(void)
 uint32_t SRAM_SelfTest(void)
 {
     uint32_t i;
-    uint32_t test;
+    uint8_t test;
     uint32_t err_cnt = 0;
     char * SRAM_START_ADDR = SRAM_START_ADDRESS;
     for(i = 0; i < SRAM_SIZE; i++)

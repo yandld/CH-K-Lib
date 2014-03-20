@@ -1,3 +1,12 @@
+/**
+  ******************************************************************************
+  * @file    common.h
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2013.12.25
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
@@ -113,15 +122,17 @@ typedef struct
 #define NVIC_PriorityGroup_3         ((uint32_t)0x4) /*!< 3 bits for pre-emption priority   1 bits for subpriority */                                                   
 #define NVIC_PriorityGroup_4         ((uint32_t)0x3) /*!< 4 bits for pre-emption priority   0 bits for subpriority */
 
-//! @brief DELAY Function Selection
-#define DelayInit              SYSTICK_DelayInit
-#define DelayMs(x)             SYSTICK_DelayMs(x)
-#define DelayUs(x)             SYSTICK_DelayUs(x)
+//!< API functions
 #define EnableInterrupts   __enable_irq
 #define DisableInterrupts  __disable_irq
 #define SystemSoftReset    NVIC_SystemReset
 #define OSEnterInt(x)
 #define OSExitInt(x)
+uint32_t QuickInitEncode(QuickInit_Type type);
+void QuickInitDecode(uint32_t map, QuickInit_Type* type);
+void DelayMs(uint32_t ms);
+void DelayUs(uint32_t ms);
+void DelayInit(void);
 
 #endif
 

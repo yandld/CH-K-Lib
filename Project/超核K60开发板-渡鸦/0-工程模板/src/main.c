@@ -33,7 +33,7 @@ extern const cmd_tbl_t CommandFun_SPI;
 extern const cmd_tbl_t CommandFun_DMA;
 extern const cmd_tbl_t CommandFun_OV7620;
 extern const cmd_tbl_t CommandFun_WDOG;
-
+extern const cmd_tbl_t CommandFun_RTC;
 
 static const QuickInit_Type SPI_QuickInitTable[] =
 {
@@ -128,7 +128,8 @@ int main(void)
     shell_register_function(&CommandFun_DMA);
     shell_register_function(&CommandFun_OV7620);
     shell_register_function(&CommandFun_WDOG);
-    
+    shell_register_function(&CommandFun_OV7620);
+    shell_register_function(&CommandFun_RTC);
     
     CalConst(SPI_QuickInitTable, ARRAY_SIZE(SPI_QuickInitTable));
     while(1)

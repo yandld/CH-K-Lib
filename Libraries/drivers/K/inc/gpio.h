@@ -15,6 +15,7 @@
 #endif
 	 
 #include "common.h"
+#include <stdint.h>
 
 #define HW_GPIOA  (0x00U)
 #define HW_GPIOB  (0x01U)

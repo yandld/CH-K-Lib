@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "clock.h"
+#include "common.h"
 #include "lptmr.h"
 
 

@@ -1,7 +1,7 @@
 #ifndef __CPUIDY_H__
 #define __CPUIDY_H__
 
-#include "common.h"
+#include <stdint.h>
 
 typedef enum
 {

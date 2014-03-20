@@ -14,9 +14,8 @@
  extern "C" {
 #endif
 
-#include "common.h"
+#include <stdint.h>
 	 
-
 #ifdef UART_USE_STDIO
 #define UART_printf(fmt,args...)    printf (fmt ,##args)
 #endif

@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "i2c.h"
 #include "board.h"
+#include "common.h"
 #include "at24cxx.h"
 #include "i2c_abstraction.h"
 

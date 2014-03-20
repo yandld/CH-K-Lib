@@ -14,7 +14,7 @@
  extern "C" {
 #endif
 
-#include "common.h"
+#include <stdint.h>
 
 //!< ADCÄ£¿éºÅ
 #define HW_ADC0  (0) 

@@ -14,7 +14,7 @@
 	extern "C" {
 #endif
 
-#include "common.h"
+#include <stdint.h>
 
 #define HW_FTM0    (0x00)
 #define HW_FTM1    (0x01) 

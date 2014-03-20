@@ -68,7 +68,6 @@ void OV7620_Init(void)
 {
     DMA_InitTypeDef DMA_InitStruct1;
     uint32_t i;
-    uint32_t err_cnt;
     //把开辟的内存池付给指针
     for(i=0;i< OV7620_H;i++)
     {

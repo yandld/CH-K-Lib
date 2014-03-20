@@ -7,8 +7,8 @@
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
-#include "gpio.h"
 
+#include "gpio.h"
 
 //!< Leagacy Support for Kineis Z Version(Inital Version)
 #if (!defined(GPIO_BASES))

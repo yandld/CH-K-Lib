@@ -5,15 +5,12 @@
 
 static uint32_t g_instance;
 
-
-
 spi_status spi_bus_deinit(struct spi_bus * bus)
 {
     return kspi_status_unsupported;
 }
 
-
-spi_status spi_bus_init(struct spi_bus * bus, uint32_t instance, uint32_t baudrate)
+spi_status spi_bus_init(struct spi_bus * bus, spi_frame_type frame_type, uint32_t instance, uint32_t baudrate)
 {
     static uint8_t bus_open_flag = 0;
     if(!bus)
@@ -22,9 +19,10 @@ spi_status spi_bus_init(struct spi_bus * bus, uint32_t instance, uint32_t baudra
     }
     bus->baudrate = baudrate;
     bus->instance = instance;
+    
     if(!bus_open_flag)
     {
-        g_instance = SPI_QuickInit(BOARD_SPI_MAP, (SPI_FrameFormat_Type)kspi_cpol0_cpha0, bus->baudrate);
+        g_instance = SPI_QuickInit(BOARD_SPI_MAP, (SPI_FrameFormat_Type)bus->frame_type, bus->baudrate);
         bus_open_flag = 1;
     }
     // link ops
@@ -36,11 +34,9 @@ spi_status spi_bus_init(struct spi_bus * bus, uint32_t instance, uint32_t baudra
 
 }
 
-
 spi_status spi_bus_read(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool is_return_inactive)
 {
     uint16_t dummy = 0xFFFF;
-  //  SPI_FrameConfig(g_instance, HW_CTAR0, (SPI_FrameFormat_Type)device->format, kSPI_MSBFirst, 8);
     if(kspi_cs_keep_asserted == device->cs_state)
     {
         len--;
@@ -64,11 +60,11 @@ spi_status spi_bus_read(struct spi_bus * bus, spi_device * device, uint8_t *buf,
             *buf++ = SPI_ReadWriteByte(g_instance, HW_CTAR0, dummy, device->csn, kspi_cs_return_inactive);
         }
     }
+    return kspi_status_ok;
 }
 
 spi_status spi_bus_write(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive)
 {
-   // SPI_FrameConfig(g_instance, HW_CTAR0, (SPI_FrameFormat_Type)device->format, kSPI_MSBFirst, 8);
     if(kspi_cs_keep_asserted == device->cs_state)
     {
         len--;
@@ -92,6 +88,7 @@ spi_status spi_bus_write(struct spi_bus * bus, spi_device * device, uint8_t *buf
             SPI_ReadWriteByte(g_instance, HW_CTAR0, *buf++, device->csn, kspi_cs_return_inactive);
         }
     }
+    return kspi_status_ok;
 }
 
 

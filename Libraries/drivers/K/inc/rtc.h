@@ -22,59 +22,46 @@ typedef struct
    uint16_t hour;    /*!< Range from 0 to 23.*/
    uint16_t minute;  /*!< Range from 0 to 59.*/
    uint8_t second;   /*!< Range from 0 to 59.*/
+}RTC_DateTime_Type;
 
-}RTC_DataTime_Type;
 
-//!< mcu select type
 typedef enum
 {
-    kPinAlt0,
-    kPinAlt1,
-    kPinAlt2,
-    kPinAlt3,
+    kRTC_OScLoad_0PF,
+    kRTC_OScLoad_2PF,
+    kRTC_OScLoad_4PF,
+    kRTC_OScLoad_8PF,
+    kRTC_OScLoad_16PF,
 }RTC_OscLoad_Type;
+
 
 typedef struct
 {
-    RTC_OscLoad_Type oscLoad;
-    
+    RTC_OscLoad_Type        oscLoad;            // OSC 电容负载
+    RTC_DateTime_Type *     initialDateTime;    // 初始DateTime设定
+    bool                    isUpdate;           // 是否强制更新时间戳
 }RTC_InitTypeDef;
 
 
-typedef struct 
+//!< interrupt and DMA select
+typedef enum
 {
-	uint8_t Hour;
-	uint8_t Minute;
-	uint8_t Second;			
-	uint8_t Month;
-	uint8_t Date;
-	uint8_t Week;	
-	uint16_t Year;
-	uint32_t TSRValue;
-}RTC_CalanderTypeDef;		
+    kRTC_IT_TimeOverflow_Disable,
+    kRTC_IT_TimeAlarm_Disable,
+    kRTC_IT_TimeAlarm,
+    kRTC_IT_TimeOverflow,              
+}RTC_ITDMAConfig_Type;
 
-//RTC 中断源
-#define RTC_IT_TAF    (uint16_t)(0)
-#define RTC_IT_TOF    (uint16_t)(1)
-#define RTC_IT_TIF    (uint16_t)(2)
-#define IS_RTC_IT(IT)  (((IT) == RTC_IT_TAF) || \
-                        ((IT) == RTC_IT_TOF) || \
-                        ((IT) == RTC_IT_TIF))
-
-
-/*
-   *    value 0   => to be configured: 0pF \n
-   *    value 2   => to be configured: 2pF \n
-   *    value 4   => to be configured: 4pF \n
-   *    value 8   => to be configured: 8pF \n
-   *    value 16  => to be configured: 16pF \n
-*/
+//!< CallbackType
+typedef void (*RTC_CallBackType)(void);
 
 //API functions
-void RTC_Init(void);
-void RTC_SecondIntProcess(void);
-void RTC_GetCalander(RTC_CalanderTypeDef * RTC_CalanderStruct);
-uint8_t RTC_SetCalander(RTC_CalanderTypeDef * RTC_CalanderStruct);
-void RTC_ITConfig(uint16_t RTC_IT, FunctionalState NewState);
+void RTC_QuickInit(RTC_DateTime_Type* timedate);
+void RTC_Init(RTC_InitTypeDef * RTC_InitStruct);
+int RTC_GetWeekFromYMD(int year, int month, int days);
+void RTC_GetDateTime(RTC_DateTime_Type * datetime);
+void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config);
+void RTC_CallbackInstall(RTC_CallBackType AppCBFun);
+
 
 #endif

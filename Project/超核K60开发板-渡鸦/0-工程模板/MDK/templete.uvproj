@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60DZ10 CHK60EVB2</Define>
+              <Define>MK60DZ10 CHK60EVB2 DEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src</IncludePath>
             </VariousControls>
@@ -520,6 +520,11 @@
               <FilePath>..\src\cmd_wdog.c</FilePath>
             </File>
             <File>
+              <FileName>cmd_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_rtc.c</FilePath>
+            </File>
+            <File>
               <FileName>shell_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
@@ -598,6 +603,16 @@
               <FileName>wdog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\wdog.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\rtc.c</FilePath>
             </File>
           </Files>
         </Group>

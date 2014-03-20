@@ -12,6 +12,10 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#ifdef DEBUG
+#include <stdio.h>
+#endif
+
 #ifdef MK10D5
 #include "MK10D5.h"
 #elif MK10D10

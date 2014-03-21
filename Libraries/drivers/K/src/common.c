@@ -42,20 +42,33 @@ void QuickInitDecode(uint32_t map, QuickInit_Type* type)
     memcpy(type, pMap, sizeof(QuickInit_Type));  
 }
 
+#if (defined(__CC_ARM))
+__weak void DelayMs(uint32_t ms)
+#elif (defined(__ICCARM__))
 #pragma weak DelayMs
 void DelayMs(uint32_t ms)
+#endif
 {
     SYSTICK_DelayMs(ms);
 }
 
+#if (defined(__CC_ARM))
+__weak void DelayUs(uint32_t us)
+#elif (defined(__ICCARM__))
 #pragma weak DelayUs
-void DelayUs(uint32_t ms)
+void DelayUs(uint32_t us)
+#endif
 {
-    SYSTICK_DelayUs(ms);
+    SYSTICK_DelayUs(us);
 }
 
+
+#if (defined(__CC_ARM))
+__weak void DelayInit(void)
+#elif (defined(__ICCARM__))
 #pragma weak DelayInit
 void DelayInit(void)
+#endif
 {
     SYSTICK_DelayInit();
 }

@@ -77,7 +77,6 @@ static int DO_SPI_FLASH(int argc, char const *argv[])
 
 static int DO_SPI_TP(int argc, char const *argv[])
 {
-    uint32_t i;
     uint16_t x,y;
     spi_bus bus; 
     spi_bus_init(&bus, BOARD_SPI_INSTANCE);
@@ -96,7 +95,6 @@ static int DO_SPI_TP(int argc, char const *argv[])
 
 int CMD_SPI(int argc, char const * argv[])
 {
-    uint32_t i;
     shell_printf("SPI TEST CMD\r\n");
     //设置 CTAR0 1 通道  0给TP 1给SPIFLASH
     if((argc == 2) && (!strcmp(argv[1], "FLASH")))

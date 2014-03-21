@@ -139,23 +139,3 @@ void DelayUs(uint32_t ms);
 void DelayInit(void);
 
 #endif
-
-
-
-/*
-void CalConst(const QuickInit_Type * table, uint32_t size)
-{
-	uint8_t i =0;
-	uint32_t value = 0;
-	for(i = 0; i < size; i++)
-	{
-		value = table[i].ip_instance<<0;
-		value|= table[i].io_instance<<3;
-		value|= table[i].mux<<6;
-		value|= table[i].io_base<<9;
-		value|= table[i].io_offset<<14;
-		value|= table[i].channel<<19;
-		UART_printf("(0x%xU)\r\n",value);
-	}
-}
-*/

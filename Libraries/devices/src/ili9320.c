@@ -197,5 +197,3 @@ void ili9320_Init(void)
 
 
 
-
-

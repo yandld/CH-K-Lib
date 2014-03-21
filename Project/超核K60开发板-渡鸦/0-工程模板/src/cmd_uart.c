@@ -17,14 +17,13 @@ static void DMA_ISR(void)
 // 发送完成中断
 static void UART_TxISR(uint8_t * pbyteToSend)
 {
-    static uint8_t ch;
     *pbyteToSend = gReceicedChar;
     //发送完成后关闭发送完成中断 否则总是会进入发送完成中断
     UART_ITDMAConfig(instance, kUART_IT_Tx_Disable);
 }
 
 // 接收完成中断
-static uint8_t UART_RxISR(uint8_t pbyteReceived)
+static void UART_RxISR(uint8_t pbyteReceived)
 {
     gReceicedChar = pbyteReceived;
     //开启发送中断

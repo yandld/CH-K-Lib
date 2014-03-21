@@ -6,8 +6,6 @@
 
 int CMD_FLEXBUS(int argc, char * const * argv)
 {
-    uint8_t instance;
-    uint32_t err_cnt;
     shell_printf("FLEXBUS Test CMD\r\n");
 #if (defined(MK10D5))
     shell_printf("NOT SUPPORTED FEATURE\r\n");

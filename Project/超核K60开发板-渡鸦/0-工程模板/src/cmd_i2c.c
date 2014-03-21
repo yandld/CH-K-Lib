@@ -3,19 +3,20 @@
 #include "board.h"
 #include "common.h"
 #include "at24cxx.h"
+#include "adxl345.h"
 #include "i2c_abstraction.h"
 
 
 static uint32_t gI2C_Instance;
 
-static void _do_i2c_scan(int argc, char *const argv[])
+static int DO_I2C_SCAN(int argc, char *const argv[])
 {
-    uint8_t i,j;
+    uint8_t i;
     i2c_bus bus;
     if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 10*1000))
     {
         printf("i2c init failed\r\n");
-        return;
+        return 1;
     }
     shell_printf("i2c scanning bus at speed:%d\r\n", bus.baudrate);
     for(i = 0;i < 127; i++)
@@ -25,6 +26,7 @@ static void _do_i2c_scan(int argc, char *const argv[])
             shell_printf("address:0x%X(0x%X) found!\r\n", i, i<<1);
         }
     }
+    return 0;
 }
 
 void I2C_ISR(void)
@@ -32,11 +34,11 @@ void I2C_ISR(void)
     shell_printf("enter i2c it\r\n");
 }
 
-static int _do_i2c_it(int argc, char *const argv[])
+static int DO_I2C_IT(int argc, char *const argv[])
 {
     gI2C_Instance = I2C_QuickInit(BOARD_I2C_MAP, 47000);
     shell_printf("Scanning I2C%d bus at:%dHz\r\n",gI2C_Instance, 47000);
-    uint8_t i2c_7bit_address = strtoul(argv[2], 0, 0);
+    uint8_t i2c_7bit_address = 0x44;
     shell_printf("i2c it test Address:0x%x(%d)\r\n", i2c_7bit_address, i2c_7bit_address);
     I2C_CallbackInstall(gI2C_Instance, I2C_ISR);
     I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_BTC);
@@ -46,13 +48,11 @@ static int _do_i2c_it(int argc, char *const argv[])
     DelayMs(200);
     I2C_GenerateSTOP(gI2C_Instance);
     I2C_ITDMAConfig(gI2C_Instance, kI2C_IT_Disable);
+    return 0;
 }
 
-static int _do_i2c_at24cxx(int argc, char *const argv[])
+static int DO_I2C_AT24CXX(int argc, char *const argv[])
 {
-    uint32_t ret;
-    uint32_t i;
-    uint8_t buffer[10];
     uint32_t size;
     i2c_bus bus = {0};
     at24cxx_device at24cxx = {0};
@@ -82,33 +82,60 @@ static int _do_i2c_at24cxx(int argc, char *const argv[])
     return 0;
 }
 
-int DoI2C(int argc, char *const argv[])
+static int DO_I2C_ADXL345(int argc, char *const argv[])
 {
-    static uint8_t init = 0;
-    if(argc == 1)
+    short x,y,z;
+    short ax, ay, az;
+    i2c_bus bus = {0};
+    adxl345_device adxl345 = {0};
+    if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 40*1000))
     {
-        return CMD_RET_USAGE;
+        shell_printf("i2c bus init failed\r\n");
     }
-    if(!strcmp("SCAN", argv[1]))
+    adxl345.bus = &bus;
+    if(adxl345_init(&adxl345, 0x53))
     {
-        _do_i2c_scan(argc, argv);
-        return 0;
+        shell_printf("init at24cxx failed\r\n");
+        return 1;
     }
-    if(!strcmp("IT", argv[1]) && (argc == 3))
+    if(adxl345.probe(&adxl345))
     {
-        _do_i2c_it(argc, argv);
-        return 0;
+        shell_printf("no device found\r\n");
+        return 1;
     }
-    if(!strcmp("AT24CXX", argv[1]))
+    adxl345.calibration(&adxl345);
+    while(1)
     {
-        _do_i2c_at24cxx(argc, argv);
-        return 0;
-    }
-    else
-    {
-        return CMD_RET_USAGE;
+        if(!adxl345.readXYZ(&adxl345, &x, &y, &z))
+        {
+            adxl345.convert_angle(x, y, z, &ax, &ay, &az);
+            printf("X:%4d Y:%4d Z:%4d AX:%4d AY:%4d AZ:%4d  \r", x, y, z, ax, ay ,az); 
+        }
     }
 }
+
+
+int CMD_I2C(int argc, char *const argv[])
+{
+    if((argc == 2) && (!strcmp(argv[1], "SCAN")))
+    {
+        return DO_I2C_SCAN(0, NULL);
+    }
+    if((argc == 2) && (!strcmp(argv[1], "IT")))
+    {
+        return DO_I2C_IT(0, NULL);
+    }
+    if((argc == 2) && (!strcmp(argv[1], "AT24CXX")))
+    {
+        return DO_I2C_AT24CXX(0, NULL);
+    }
+    if((argc == 2) && (!strcmp(argv[1], "ADXL345")))
+    {
+        return DO_I2C_ADXL345(0, NULL);
+    }
+    return CMD_RET_USAGE;
+}
+
 
 
 const cmd_tbl_t CommandFun_I2C = 
@@ -116,12 +143,10 @@ const cmd_tbl_t CommandFun_I2C =
     .name = "I2C",
     .maxargs = 5,
     .repeatable = 1,
-    .cmd = DoI2C,
-    .usage = "I2C <CMD>",
+    .cmd = CMD_I2C,
+    .usage = "I2C <CMD> (CMD = SCAN,IT,AT24CXX)",
     .complete = NULL,
-    .help = "\r\n"
-    "I2C <CMD>\r\n"
-    "eg: I2C SCAN\r\n"
-    "eg: I2C IT 55\r\n"
+    .help = "I2C <CMD> (CMD = SCAN,IT,AT24CXX)",
+
 };
 

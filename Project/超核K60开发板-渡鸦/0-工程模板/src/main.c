@@ -73,6 +73,8 @@ static shell_io_install_t Shell_IOInstallStruct1 =
  UART2_RX_PF13_TX_PF14   
  UART5_RX_PD08_TX_PD09   
 */
+
+
 int main(void)
 {
     uint32_t i;

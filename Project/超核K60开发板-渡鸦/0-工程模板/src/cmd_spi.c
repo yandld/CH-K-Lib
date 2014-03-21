@@ -6,6 +6,7 @@
 #include "spi_abstraction.h"
 #include "w25qxx.h"
 #include "sram.h"
+#include "ads7843.h"
 
 static uint8_t W25QXX_READ_ID_TABLE[] = {0x90, 0x00, 0x00, 0x00, 0xFF, 0xFF};
 static uint8_t test_buffer[8];
@@ -76,24 +77,20 @@ static int DO_SPI_FLASH(int argc, char const *argv[])
 
 static int DO_SPI_TP(int argc, char const *argv[])
 {
-    uint8_t buf[6];
-    spi_bus bus;
-    spi_device device1;  
+    uint32_t i;
+    uint16_t x,y;
+    spi_bus bus; 
     spi_bus_init(&bus, BOARD_SPI_INSTANCE);
-    bus.bus_config(&bus, HW_CTAR0, kspi_cpol0_cpha0, 30*1000);
     PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
-    uint16_t num;
-    uint8_t code = 0x90;
+    ads7843_device ads7843;
+    ads7843.bus = &bus;
+    ads7843_init(&ads7843, BOARD_TP_SPI_PCSN, HW_CTAR0, 20*1000);
+    ads7843.probe(&ads7843);
     while(1)
     {
-        device1.csn = BOARD_TP_SPI_PCSN;
-        device1.bus_chl = HW_CTAR0;
-        device1.cs_state = kspi_cs_keep_asserted;
-        bus.write(&bus, &device1, &code, 1, false);
-        DelayUs(6);
-        bus.read(&bus, &device1, buf, 2, true);
-        num = ((buf[0]<<8) + buf[1])>>4;
-        printf("%d\r", num);
+        ads7843.readX(&ads7843, &x);
+        ads7843.readY(&ads7843, &y);
+        printf("X:%04d Y:%04d\r", x, y);
     }
 }
 

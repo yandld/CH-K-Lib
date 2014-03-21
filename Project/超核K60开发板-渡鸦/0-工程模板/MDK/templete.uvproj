@@ -665,6 +665,11 @@
               <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
             </File>
             <File>
+              <FileName>ads7843.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
+            </File>
+            <File>
               <FileName>w25qxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\w25qxx.c</FilePath>

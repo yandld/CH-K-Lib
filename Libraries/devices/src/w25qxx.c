@@ -239,10 +239,6 @@ spi_status w25qxx_write(struct w25qxx_device * device, uint32_t addr, uint8_t *b
 }
 
 
-
-
-
-
 spi_status w25qxx_init(struct w25qxx_device * device, uint32_t csn, uint32_t bus_chl, uint32_t baudrate)
 {
     if(!device)

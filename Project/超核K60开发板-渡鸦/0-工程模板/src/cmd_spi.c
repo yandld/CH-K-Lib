@@ -30,42 +30,12 @@ void SPI_ISR(void)
 #define SPI_FLASH_TEST_LEN  (1024*512)
 uint8_t* buf_test = SRAM_START_ADDRESS;
 
-int CMD_SPI(int argc, char * const * argv)
+static int DO_SPI_FLASH(int argc, char const *argv[])
 {
     uint32_t i;
-    shell_printf("SPI TEST CMD\r\n");
-    spi_bus bus;
-    spi_device device1;
+    spi_bus bus; 
     spi_bus_init(&bus, BOARD_SPI_INSTANCE);
-    //设置 CTAR0 1 通道  0给TP 1给SPIFLASH
-    bus.bus_config(&bus, HW_CTAR0, kspi_cpol0_cpha0, 30*1000);
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
-    PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
-    
-    uint8_t buf[6];
-    if((argc == 2) && (!strcmp(argv[1], "TP")))
-    {
-        uint16_t num;
-        uint8_t code = 0x90;
-        while(1)
-        {
-            device1.csn = BOARD_TP_SPI_PCSN;
-            device1.bus_chl = HW_CTAR0;
-            device1.cs_state = kspi_cs_keep_asserted;
-            bus.write(&bus, &device1, &code, 1, false);
-            DelayUs(6);
-            bus.read(&bus, &device1, buf, 2, true);
-            num = ((buf[0]<<8) + buf[1])>>4;
-            printf("%d\r", num);
-        }
-        return 0;
-    }
-    //初始化SPI
-   // SPI_QuickInit(BOARD_SPI_MAP, kSPI_CPOL0_CPHA1, 1*1000);
-    //安装回调函数
-   // SPI_CallbackInstall(BOARD_SPI_INSTANCE, SPI_ISR);
-    //开启SPI中断 
-   // SPI_ITDMAConfig(BOARD_SPI_INSTANCE, kSPI_IT_TCF);
     w25qxx_device w25qxx1;
     w25qxx1.bus = &bus;
     if(w25qxx_init(&w25qxx1, BOARD_FLASH_SPI_PCSN, HW_CTAR1, 2*1000*1000))
@@ -101,8 +71,54 @@ int CMD_SPI(int argc, char * const * argv)
            printf("error:[%d]:%d\r\n", i, buf_test[i]);
         }
     }
+}
+
+
+static int DO_SPI_TP(int argc, char const *argv[])
+{
+    uint8_t buf[6];
+    spi_bus bus;
+    spi_device device1;  
+    spi_bus_init(&bus, BOARD_SPI_INSTANCE);
+    bus.bus_config(&bus, HW_CTAR0, kspi_cpol0_cpha0, 30*1000);
+    PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
+    uint16_t num;
+    uint8_t code = 0x90;
+    while(1)
+    {
+        device1.csn = BOARD_TP_SPI_PCSN;
+        device1.bus_chl = HW_CTAR0;
+        device1.cs_state = kspi_cs_keep_asserted;
+        bus.write(&bus, &device1, &code, 1, false);
+        DelayUs(6);
+        bus.read(&bus, &device1, buf, 2, true);
+        num = ((buf[0]<<8) + buf[1])>>4;
+        printf("%d\r", num);
+    }
+}
+
+int CMD_SPI(int argc, char const * argv[])
+{
+    uint32_t i;
+    shell_printf("SPI TEST CMD\r\n");
+    //设置 CTAR0 1 通道  0给TP 1给SPIFLASH
+    if((argc == 2) && (!strcmp(argv[1], "FLASH")))
+    {
+        return DO_SPI_FLASH(argc, argv);
+    }
+    if((argc == 2) && (!strcmp(argv[1], "TP")))
+    {
+        return DO_SPI_TP(argc, argv);
+    }
+    //初始化SPI
+   // SPI_QuickInit(BOARD_SPI_MAP, kSPI_CPOL0_CPHA1, 1*1000);
+    //安装回调函数
+   // SPI_CallbackInstall(BOARD_SPI_INSTANCE, SPI_ISR);
+    //开启SPI中断 
+   // SPI_ITDMAConfig(BOARD_SPI_INSTANCE, kSPI_IT_TCF);
+
     
-    return 0;
+    return CMD_RET_USAGE;
 }
 
 const cmd_tbl_t CommandFun_SPI = 
@@ -111,7 +127,7 @@ const cmd_tbl_t CommandFun_SPI =
     .maxargs = 2,
     .repeatable = 1,
     .cmd = CMD_SPI,
-    .usage = "SPI TEST",
+    .usage = "SPI <CMD> (CMD = TP,FLASH)",
     .complete = NULL,
-    .help = "\r\n"
+    .help = "SPI <CMD> (CMD = TP,FLASH)"
 };

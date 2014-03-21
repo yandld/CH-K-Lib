@@ -130,7 +130,7 @@ static i2c_status at24cxx_write(struct at24cxx_device * device, uint32_t addr, u
     return ki2c_status_ok;
 }
 
-i2c_status self_test(struct at24cxx_device * device)
+static i2c_status self_test(struct at24cxx_device * device)
 {
     int ret;
     uint8_t buf[8],buf1[8],buf2[8];
@@ -162,7 +162,7 @@ i2c_status self_test(struct at24cxx_device * device)
     return ki2c_status_ok;
 }
 
-i2c_status at24cxx_get_size(struct at24cxx_device * device, uint32_t * size)
+static i2c_status at24cxx_get_size(struct at24cxx_device * device, uint32_t * size)
 {
     *size = AT24CXX_TotalSizeTable[device->type];
     return ki2c_status_ok;

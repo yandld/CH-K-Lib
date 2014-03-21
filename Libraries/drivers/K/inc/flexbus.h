@@ -11,6 +11,7 @@
 #define __FLEXBUS_H__
 
 #include <stdint.h>
+#include "common.h"
 
 //!< Flexbus 数据对其方式选择
 #define kFLEXBUS_DataLeftAligned   (0x00)
@@ -75,7 +76,7 @@ typedef struct
 
 //!< API functions
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct);
-
+FunctionalState FLEXBUS_IsModuleEnable(void);
 
 
 #endif

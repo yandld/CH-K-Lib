@@ -5,6 +5,8 @@
 
 void SRAM_Init(void)
 {
+    if(FLEXBUS_IsModuleEnable() == DISABLE)
+    {
     // set SRAM pinMux
     SIM->SCGC5 |= (SIM_SCGC5_PORTA_MASK | SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTE_MASK);
     // flexbus clock output(optional, use for debug)
@@ -62,6 +64,7 @@ void SRAM_Init(void)
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedReadWrite;
     FLEXBUS_InitStruct.CSPortMultiplexingCotrol = FB_CSPMCR_GROUP3(kFLEXBUS_CSPMCR_GROUP3_BE_23_16) | FB_CSPMCR_GROUP2(kFLEXBUS_CSPMCR_GROUP2_BE_31_24) | (FB_CSPMCR_GROUP1(kFLEXBUS_CSPMCR_GROUP1_CS1));
     FLEXBUS_Init(&FLEXBUS_InitStruct);
+}
 }
 
 

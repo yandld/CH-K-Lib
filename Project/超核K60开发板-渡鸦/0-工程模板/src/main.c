@@ -105,6 +105,7 @@ int main(void)
     shell_register_function(&CommandFun_OV7620);
     shell_register_function(&CommandFun_RTC);
     
+    CMD_FLEXBUS(0, NULL);
     while(1)
     {
         shell_main_loop("SHELL>>");

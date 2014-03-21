@@ -141,7 +141,7 @@ static uint32_t dspi_hal_set_baud(uint32_t instance, uint8_t whichCtar, uint32_t
  */
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
 {
-    uint32_t clock;
+
     // enable clock gate
     uint32_t * SIM_SCGx = (void*) SIM_SPIClockGateTable[SPI_InitStruct->instance].register_addr;
     *SIM_SCGx |= SIM_SPIClockGateTable[SPI_InitStruct->instance].mask;
@@ -170,11 +170,8 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
         SPI_MCR_CLR_RXF_MASK|
         SPI_MCR_DIS_TXF_MASK|
         SPI_MCR_DIS_RXF_MASK;
-    // set SPI clock, SPI use Busclock
-    CLOCK_GetClockFrequency(kBusClock, &clock);
-    dspi_hal_set_baud(SPI_InitStruct->instance, SPI_InitStruct->ctar, SPI_InitStruct->baudrate, clock);
     // config frame format
-    SPI_FrameConfig(SPI_InitStruct->instance, SPI_InitStruct->ctar, SPI_InitStruct->frameFormat, SPI_InitStruct->dataSize, SPI_InitStruct->bitOrder);
+    SPI_FrameConfig(SPI_InitStruct->instance, SPI_InitStruct->ctar, SPI_InitStruct->frameFormat, SPI_InitStruct->dataSize, SPI_InitStruct->bitOrder, SPI_InitStruct->baudrate);
     // clear all flags
     SPI_InstanceTable[SPI_InitStruct->instance]->SR = SPI_SR_EOQF_MASK   
             | SPI_SR_TFUF_MASK    
@@ -186,8 +183,9 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
     SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_HALT_MASK;
 }
  
-void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder)
+void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate)
 {
+    uint32_t clock;
     // data size
     SPI_InstanceTable[instance]->CTAR[ctar] &= ~SPI_CTAR_FMSZ_MASK;
     SPI_InstanceTable[instance]->CTAR[ctar] |= SPI_CTAR_FMSZ(dataSize-1);
@@ -225,6 +223,9 @@ void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type fram
         default:
             break;
     }
+    // set SPI clock, SPI use Busclock
+    CLOCK_GetClockFrequency(kBusClock, &clock);
+    dspi_hal_set_baud(instance, ctar, baudrate, clock);
 }
 
 

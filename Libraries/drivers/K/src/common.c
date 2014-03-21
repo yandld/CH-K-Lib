@@ -11,7 +11,12 @@
 #include <string.h>
 #include "systick.h"
 
-
+ /**
+ * @brief  编码快速初始化结构 用户一般不需调用
+ *
+ * @param  type: I2C快速初始化结构
+ * @retval 32位快速初始化编码
+ */
 uint32_t QuickInitEncode(QuickInit_Type type)
 {
     uint32_t value = 0;
@@ -24,22 +29,32 @@ uint32_t QuickInitEncode(QuickInit_Type type)
     return value;
 }
 
+ /**
+ * @brief  解码快速初始化结构 用户一般不需调用
+ *
+ * @param  map: 32位快速初始化编码
+ * @param  type: I2C快速初始化结构指针
+ * @retval None
+ */
 void QuickInitDecode(uint32_t map, QuickInit_Type* type)
 {
     QuickInit_Type * pMap = (QuickInit_Type*)&(map);
     memcpy(type, pMap, sizeof(QuickInit_Type));  
 }
 
+#pragma weak DelayMs
 void DelayMs(uint32_t ms)
 {
     SYSTICK_DelayMs(ms);
 }
 
+#pragma weak DelayUs
 void DelayUs(uint32_t ms)
 {
     SYSTICK_DelayUs(ms);
 }
 
+#pragma weak DelayInit
 void DelayInit(void)
 {
     SYSTICK_DelayInit();

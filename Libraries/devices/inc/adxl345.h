@@ -7,6 +7,7 @@
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
+  
 #ifndef __24CXX_H__
 #define __24CXX_H__
 

@@ -49,7 +49,6 @@ int RTC_GetWeekFromYMD(int year, int month, int days)
     return (y+y/4-y/100+y/400+days)%7;  
 }
 
-
 static void RTC_DateTimeToSecond(const RTC_DateTime_Type * datetime, uint32_t * seconds)
 {
     /* Compute number of days from 1970 till given year*/
@@ -70,8 +69,6 @@ static void RTC_DateTimeToSecond(const RTC_DateTime_Type * datetime, uint32_t * 
                (datetime->minute * SECONDS_IN_A_MIN) + datetime->second;
     (*seconds)++;
 }
-
-
 
 static void RTC_SecondToDateTime(const uint32_t * seconds, RTC_DateTime_Type * datetime)
 {
@@ -144,7 +141,6 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
     RTC_SecondToDateTime(&i, datetime);
 }
 
-
 void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
 {
     uint32_t i;
@@ -185,7 +181,6 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
     // enable RTC
     RTC->SR |= RTC_SR_TCE_MASK;
 }
-
 
 void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config)
 {

@@ -35,32 +35,6 @@ extern const cmd_tbl_t CommandFun_OV7620;
 extern const cmd_tbl_t CommandFun_WDOG;
 extern const cmd_tbl_t CommandFun_RTC;
 
-static const QuickInit_Type SPI_QuickInitTable[] =
-{
-    { 0, 2, 2, 5, 3, 0}, //SPI0_SCK_PC05_SOUT_PC06_SIN_PC07 2
-    { 0, 3, 2, 1, 3, 0}, //SPI0_SCK_PD01_SOUT_PD02_SIN_PD03 2
-    { 1, 4, 2, 1, 3, 0}, //SPI1_SCK_PE02_SOUT_PE01_SIN_PE03 2
-    { 0, 0, 2,15, 3, 0}, //SPI0_SCK_PA15_SOUT_PA16_SIN_PA17 2
-    { 2, 1, 2,21, 3, 0}, //SPI2_SCK_PB21_SOUT_PB22_SIN_PB23 2
-    { 2, 3, 2,12, 3, 0}, //SPI2_SCK_PD12_SOUT_PD13_SIN_PD14 2
-};
-
-void CalConst(const QuickInit_Type * table, uint32_t size)
-{
-	uint8_t i =0;
-	uint32_t value = 0;
-	for(i = 0; i < size; i++)
-	{
-		value = table[i].ip_instance<<0;
-		value|= table[i].io_instance<<3;
-		value|= table[i].mux<<6;
-		value|= table[i].io_base<<9;
-		value|= table[i].io_offset<<14;
-		value|= table[i].channel<<19;
-		UART_printf("(0x%xU)\r\n",value);
-	}
-}
-
 
 static void Putc(uint8_t data)
 {
@@ -131,7 +105,6 @@ int main(void)
     shell_register_function(&CommandFun_OV7620);
     shell_register_function(&CommandFun_RTC);
     
-    CalConst(SPI_QuickInitTable, ARRAY_SIZE(SPI_QuickInitTable));
     while(1)
     {
         shell_main_loop("SHELL>>");

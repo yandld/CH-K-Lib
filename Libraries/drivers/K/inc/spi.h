@@ -19,7 +19,7 @@
 #define HW_SPI2     (0x02)
   
 #define HW_CTAR0    (0x00)  
-#define HW_CTAR1    (0x00)  
+#define HW_CTAR1    (0x01)  
 
 //!< SPIÖ¡¸ñÊ½Ñ¡Ôñ
 typedef enum
@@ -81,7 +81,7 @@ uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint1
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config);
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
 uint32_t SPI_QuickInit(uint32_t SPIxMAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate);
-void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder);
+void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate);
 
 
 #endif

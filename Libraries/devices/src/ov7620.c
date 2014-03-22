@@ -22,7 +22,7 @@ static const void* PORT_DataAddressTable[] =
 static uint8_t status = TRANSFER_IN_PROCESS;  
 
 //uint8_t CCDBufferPool[OV7620_W*OV7620_H];   //使用内部RAM
-uint8_t * CCDBufferPool = SRAM_START_ADDRESS; //使用外部SRAM
+volatile uint8_t * CCDBufferPool = SRAM_START_ADDRESS; //使用外部SRAM
 uint8_t * CCDBuffer[OV7620_H];
 static OV7620_CallBackType OV7620_CallBackTable[1] = {NULL};
 //包括场中断和 行中断
@@ -71,7 +71,7 @@ void OV7620_Init(void)
     //把开辟的内存池付给指针
     for(i=0;i< OV7620_H;i++)
     {
-        CCDBuffer[i] = &CCDBufferPool[i*OV7620_W];
+        CCDBuffer[i] = (uint8_t *) &CCDBufferPool[i*OV7620_W];
     }
     //初始化
     GPIO_QuickInit(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_Mode_IPD);

@@ -29,11 +29,11 @@ void SPI_ISR(void)
 }
 
 #define SPI_FLASH_TEST_LEN  (1024*512)
-uint8_t* buf_test = SRAM_START_ADDRESS;
+volatile uint8_t* buf_test = SRAM_START_ADDRESS;
 //uint8_t buf_test[SPI_FLASH_TEST_LEN];
 
 
-static int DO_SPI_FLASH(int argc, char const *argv[])
+static int DO_SPI_FLASH(int argc, char * const argv[])
 {
     uint32_t i;
     spi_bus bus; 
@@ -59,13 +59,13 @@ static int DO_SPI_FLASH(int argc, char const *argv[])
   //  printf("erasing chip ...\r\n");
   //  w25qxx1.erase_chip(&w25qxx1);
   //  printf("erasing complete\r\n");
-    if(w25qxx1.write(&w25qxx1, 0, buf_test, SPI_FLASH_TEST_LEN))
+    if(w25qxx1.write(&w25qxx1, 0, (uint8_t*)buf_test, SPI_FLASH_TEST_LEN))
     {
         printf("w25qxx write failed\r\n");
         return 1;
     }
-    memset(buf_test,0, SPI_FLASH_TEST_LEN);
-    if(w25qxx1.read(&w25qxx1, 0, buf_test, SPI_FLASH_TEST_LEN))
+    memset((uint8_t*)buf_test,0, SPI_FLASH_TEST_LEN);
+    if(w25qxx1.read(&w25qxx1, 0, (uint8_t*)buf_test, SPI_FLASH_TEST_LEN))
     {
         printf("w25qxx read failed\r\n");
         return 1;
@@ -80,7 +80,7 @@ static int DO_SPI_FLASH(int argc, char const *argv[])
 }
 
 
-static int DO_SPI_TP(int argc, char const *argv[])
+static int DO_SPI_TP(int argc, char * const argv[])
 {
     uint16_t x,y;
     spi_bus bus; 
@@ -98,7 +98,7 @@ static int DO_SPI_TP(int argc, char const *argv[])
     }
 }
 
-int CMD_SPI(int argc, char const * argv[])
+int CMD_SPI(int argc, char *const argv[])
 {
     shell_printf("SPI TEST CMD\r\n");
     //设置 CTAR0 1 通道  0给TP 1给SPIFLASH

@@ -19,7 +19,7 @@ uint16_t RGB2COLOR(uint8_t RR,uint8_t GG,uint8_t BB)
 }
 
 
-static void OV7620_ISR(char ** image)
+static void OV7620_ISR(void)
 {
     uint32_t i,j;
     static uint32_t cnt;

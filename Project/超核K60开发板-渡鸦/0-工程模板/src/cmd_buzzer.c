@@ -7,7 +7,6 @@
 #include "ftm.h"
 #include "shell.h"
 #include "gpio.h"
-#include "board.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -23,10 +22,11 @@ int CMD_BUZZER(int argc, char * const * argv)
     {
         return CMD_RET_USAGE;
     }
-    
+    QuickInit_Type QuickInitStruct1;
     req = strtoul(argv[1], 0, 0);
     instance = FTM_PWM_QuickInit(BOARD_BUZZER_FTM_MAP ,req);
-    FTM_PWM_ChangeDuty(instance, FTM_PWM_GetChlFormMAP(BOARD_BUZZER_FTM_MAP), 5000); 
+    QuickInitDecode(BOARD_BUZZER_FTM_MAP, &QuickInitStruct1);
+    FTM_PWM_ChangeDuty(instance, QuickInitStruct1.channel, 5000); 
     return 0;
 }
 

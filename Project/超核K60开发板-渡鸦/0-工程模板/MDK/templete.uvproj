@@ -485,11 +485,6 @@
               <FilePath>..\src\cmd_i2c.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_key.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_buzzer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_buzzer.c</FilePath>

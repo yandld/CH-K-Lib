@@ -74,7 +74,7 @@ uint32_t SRAM_SelfTest(void)
     uint32_t i;
     uint8_t test;
     uint32_t err_cnt = 0;
-    char * SRAM_START_ADDR = SRAM_START_ADDRESS;
+    volatile uint8_t * SRAM_START_ADDR = SRAM_START_ADDRESS;
     for(i = 0; i < SRAM_SIZE; i++)
     {
         SRAM_START_ADDR[i] = i%0xFF;

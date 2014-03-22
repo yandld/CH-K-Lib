@@ -45,6 +45,19 @@ static int CMD_GPIO_KEY(int argc, char *const argv[])
     return 0;
 }
 
+static int CMD_GPIO_BUZZER(int argc, char *const argv[])
+{
+    uint32_t i;
+
+    GPIO_QuickInit(BOARD_BUZZER_GPIO_PORT, BOARD_BUZZER_GPIO_PIN, kGPIO_Mode_OPP);  
+    while(1)
+    {
+        GPIO_ToggleBit(BOARD_BUZZER_GPIO_PORT, BOARD_BUZZER_GPIO_PIN);
+        DelayMs(20);
+    }
+    return 0;
+}
+
 int CMD_GPIO(int argc, char *const argv[])
 {
     if((argc == 2) && (!strcmp(argv[1], "LED")))
@@ -55,6 +68,10 @@ int CMD_GPIO(int argc, char *const argv[])
     {
         return CMD_GPIO_KEY(0, NULL);
     }
+    if((argc == 2) && (!strcmp(argv[1], "BUZZER")))
+    {
+        return CMD_GPIO_BUZZER(0, NULL);
+    }
     return CMD_RET_USAGE;
 }
 
@@ -64,8 +81,8 @@ const cmd_tbl_t CommandFun_GPIO =
     .maxargs = 5,
     .repeatable = 1,
     .cmd = CMD_GPIO,
-    .usage = "GPIO <CMD> (CMD = LED, KEY)",
+    .usage = "GPIO <CMD> (CMD = LED, KEY, BUZZER)",
     .complete = NULL,
-    .help = "GPIO <CMD> (CMD = LED, KEY)",
+    .help = "GPIO <CMD> (CMD = LED, KEY, BUZZER)",
 };
 

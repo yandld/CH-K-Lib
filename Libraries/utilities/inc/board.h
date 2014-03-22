@@ -8,6 +8,8 @@
 //!< LED ¶Ë¿Ú ¼° Òý½Å
 #define BOARD_UART_DEBUG_MAP            UART0_RX_PD06_TX_PD07
 #define BOARD_BUZZER_FTM_MAP            FTM0_CH3_PA06
+#define BOARD_BUZZER_GPIO_PORT          (HW_GPIOA)
+#define BOARD_BUZZER_GPIO_PIN           (6)
 #define BOARD_LED_GPIO_BASES            {HW_GPIOE, HW_GPIOE, HW_GPIOE, HW_GPIOE}
 #define BOARD_LED_PIN_BASES             {6, 7, 11, 12}
 #define BOARD_I2C_MAP                   I2C0_SCL_PB02_SDA_PB03

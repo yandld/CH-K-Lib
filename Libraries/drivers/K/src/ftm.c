@@ -124,6 +124,9 @@ void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
 //!< 正交解码初始化
 void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
 {
+    // enable clock gate
+    uint32_t * SIM_SCGx = (void*) SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].register_addr;
+    *SIM_SCGx |= SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].mask;
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->MOD = FTM_MOD_MOD_MASK; //设置为最大
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->CNTIN = FTM_CNTIN_INIT_MASK/2; //最大值的一半
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK; //禁止写保护
@@ -386,11 +389,7 @@ uint8_t FTM_PWM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
 }
 
 
-uint8_t FTM_PWM_GetChlFormMAP(uint32_t FTMxMAP)
-{
-    QuickInit_Type * pFTMxMap = (QuickInit_Type*)&(FTMxMAP);
-    return pFTMxMap->channel;
-}
+
 
 
 void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)

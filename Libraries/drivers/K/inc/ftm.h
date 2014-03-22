@@ -116,7 +116,6 @@ typedef struct
 void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty);
 uint8_t FTM_PWM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ);
 void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct);
-uint8_t FTM_PWM_GetChlFormMAP(uint32_t FTMxMAP);
 void FTM_PWM_InvertPolarity(uint8_t instance, uint8_t chl, uint32_t config);
 uint32_t FTM_QD_QuickInit(uint32_t FTMxMAP);
 void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct);

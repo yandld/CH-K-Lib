@@ -73,9 +73,33 @@ static uint8_t w25qxx_read_sr(struct w25qxx_device * device)
     buf[0] = W25X_ReadStatusReg;
     device->bus->write(device->bus, &device->spi_device, buf, 1, false); //false = 保持片选,继续发送
     device->bus->read(device->bus, &device->spi_device, buf, 1, true);
+#if DEBUG
+    if(buf[0] & 0x01)
+    {
+       // printf("W25QXX BUSY\r\n", buf[0]);
+    }
+#endif
     return buf[0];
 }
 
+
+static spi_status w25qxx_write_enable(struct w25qxx_device * device)
+{
+    uint8_t buf[1];
+    buf[0] = W25X_WriteEnable;
+    device->bus->write(device->bus, &device->spi_device, buf, sizeof(buf), true);
+    return kspi_status_ok;
+}
+
+static spi_status w25qxx_write_sr(struct w25qxx_device * device, uint8_t value)
+{
+    uint8_t buf[2];
+    buf[0] = W25X_WriteStatusReg;
+    buf[1] = value;
+    w25qxx_write_enable(device);
+    device->bus->write(device->bus, &device->spi_device, buf, 2, true); 
+    return kspi_status_ok;
+}
 
 static spi_status w25qxx_probe(struct w25qxx_device * device)
 {
@@ -90,6 +114,9 @@ static spi_status w25qxx_probe(struct w25qxx_device * device)
     device->bus->write(device->bus, &device->spi_device, buf, 4, false);
     device->bus->read(device->bus, &device->spi_device, buf, 2, true);
     id = ((buf[0]<<8) + buf[1]);
+#if DEBUG
+    printf("ID:%d\r\n", id);
+#endif
     //see if we find a match
     for(i = 0; i< ARRAY_SIZE(w25qxx_attr_table);i++)
     {
@@ -100,6 +127,12 @@ static spi_status w25qxx_probe(struct w25qxx_device * device)
             device->id = w25qxx_attr_table[i].id;
             device->size = w25qxx_attr_table[i].size;
             w25qxx_power_up(device);
+            buf[0] = w25qxx_read_sr(device);
+            #if DEBUG
+            printf("SR:0x%X\r\n", buf[0]);
+            #endif
+            // enable full access to all memory regin, something like unlock chip.
+            w25qxx_write_sr(device, 0x00);
             return kspi_status_ok; 
         }
     }
@@ -121,13 +154,7 @@ static spi_status w25qxx_read(struct w25qxx_device * device, uint32_t addr, uint
     return kspi_status_ok;
 }
 
-static spi_status w25qxx_write_enable(struct w25qxx_device * device)
-{
-    uint8_t buf[1];
-    buf[0] = W25X_WriteEnable;
-    device->bus->write(device->bus, &device->spi_device, buf, sizeof(buf), true);
-    return kspi_status_ok;
-}
+
 
 static spi_status w25qxx_write_page(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)
 {
@@ -190,6 +217,18 @@ static spi_status w25qxx_erase_sector(struct w25qxx_device * device, uint32_t ad
     return kspi_status_ok;
 }
 
+static spi_status w25qxx_erase_chip(struct w25qxx_device * device)
+{
+    uint8_t buf_send[1]; 
+    w25qxx_write_enable(device);
+    while((w25qxx_read_sr(device) & 0x01) == 0x01);
+    buf_send[0] = W25X_ChipErase;
+    device->bus->write(device->bus, &device->spi_device, buf_send, sizeof(buf_send), true);
+    while((w25qxx_read_sr(device) & 0x01) == 0x01);
+    return kspi_status_ok;
+}
+
+
 spi_status w25qxx_write(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)  
 { 
 	uint32_t secpos;
@@ -220,6 +259,9 @@ spi_status w25qxx_write(struct w25qxx_device * device, uint32_t addr, uint8_t *b
             w25qxx_write_no_check(device, secpos*4096, mem_pool,4096); //写入整个扇区 
 		}else 
         {
+            #if DEBUG
+            printf("no need to erase -addr:%d\r\n", addr);
+            #endif
             w25qxx_write_no_check(device, addr, buf, secremain);//写已经擦除了的,直接写入扇区剩余区间. 
         }			   
 		if(len == secremain)break;//写入结束了
@@ -276,6 +318,8 @@ spi_status w25qxx_init(struct w25qxx_device * device, uint32_t csn, uint32_t bus
     device->read = w25qxx_read;
     device->write = w25qxx_write;
     device->erase_sector = w25qxx_erase_sector;
+    device->erase_chip = w25qxx_erase_chip;
+    
     return kspi_status_ok;
 }
 

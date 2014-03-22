@@ -37,7 +37,7 @@ typedef struct w25qxx_device
     spi_status (*read)(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len);
     spi_status (*write)(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len);
     spi_status (*erase_sector)(struct w25qxx_device * device, uint32_t addr);
-    spi_status (*self_test)(struct w25qxx_device * device);
+    spi_status (*erase_chip)(struct w25qxx_device * device);
     //internal vars
     spi_device spi_device;
 }w25qxx_device;

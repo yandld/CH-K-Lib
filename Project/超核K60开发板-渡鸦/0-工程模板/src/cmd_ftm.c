@@ -5,21 +5,34 @@
 #include <stdio.h>
 
 
-int CMD_FTM(int argc, char * const * argv)
+static int CMD_FTM_EA(int argc, char *const argv[])
 {
     uint8_t instance = 0;
     uint32_t req;
+    req = strtoul(argv[2], 0, 0);
+    instance = FTM_PWM_QuickInit(FTM2_CH1_PB19 , 3140);
+    //FTM_PWM_InvertPolarity(instance, HW_FTM_CH1, kFTM_PWM_LowTrue);
+    FTM_PWM_ChangeDuty(instance, 1, 3000); 
+    DelayMs(100);
+    FTM_PWM_ChangeDuty(instance, 1, 5000); 
+}
 
+
+int CMD_FTM(int argc, char *const argv[])
+{
+    uint8_t instance = 0;
+    uint32_t req;
+    uint32_t value;
+    uint8_t dir;
     printf("FTM TEST\r\n");
     //quick init
-    if(!strcmp(argv[1], "-q"))
+    if((argc == 2) && (!strcmp(argv[1], "EA")))
     {
-        req = strtoul(argv[2], 0, 0);
-        instance = FTM_PWM_QuickInit(FTM2_CH1_PB19 ,req);
-        //FTM_PWM_InvertPolarity(instance, HW_FTM_CH1, kFTM_PWM_LowTrue);
-        FTM_PWM_ChangeDuty(instance, 1, 3000); 
-        DelayMs(100);
-        FTM_PWM_ChangeDuty(instance, 1, 5000); 
+        return CMD_FTM_EA(0, NULL);
+    }
+    if((argc == 2) && (!strcmp(argv[1], "COMBINE")))
+    {
+        return CMD_FTM_EA(0, NULL);
     }
     //combie
     if(!strcmp(argv[1], "-c"))
@@ -50,10 +63,17 @@ int CMD_FTM(int argc, char * const * argv)
     //combie
     if(!strcmp(argv[1], "-qd"))
     {
-        PORT_PinPullConfig(HW_GPIOB, 0, kPullUp);
-        PORT_PinPullConfig(HW_GPIOB, 1, kPullUp);
-        PORT_PinOpenDrainConfig(HW_GPIOB, 1,ENABLE);
-        PORT_PinOpenDrainConfig(HW_GPIOB, 0,ENABLE);
+        FTM_QD_QuickInit(FTM1_QD_PHA_PA08_PHB_PA09);
+       // PORT_PinPullConfig(HW_GPIOB, 0, kPullUp);
+      //  PORT_PinPullConfig(HW_GPIOB, 1, kPullUp);
+      //  PORT_PinOpenDrainConfig(HW_GPIOB, 1,ENABLE);
+       // PORT_PinOpenDrainConfig(HW_GPIOB, 0,ENABLE);
+        while(1)
+        {
+            FTM_QD_GetData(HW_FTM1, &value, &dir);
+            printf("value:%d dir:%d\r\n", value, dir);
+            DelayMs(20);            
+        }
     }
     return 0;
 }
@@ -66,7 +86,7 @@ const cmd_tbl_t CommandFun_FTM =
     .maxargs = 4,
     .repeatable = 1,
     .cmd = CMD_FTM,
-    .usage = "FTM <requerency>",
+    .usage = "FTM <CMD> (CMD = EA,COMBINE)",
     .complete = NULL,
-    .help = "FTM <requerency>"
+    .help = "FTM <CMD> (CMD = EA,COMBINE)",
 };

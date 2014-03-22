@@ -73,14 +73,13 @@ static shell_io_install_t Shell_IOInstallStruct1 =
  UART5_RX_PD08_TX_PD09   
 */
 
-
 int main(void)
 {
     uint32_t i;
     DelayInit();
     UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
     printf("HelloWorld\r\n");
-    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(1);
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
     shell_register_function(&CommandFun_GPIO); //GPIO√¸¡Ó ≤‚ ‘GPIO

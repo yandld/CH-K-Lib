@@ -14,19 +14,12 @@
  /**
  * @brief  编码快速初始化结构 用户一般不需调用
  *
- * @param  type: I2C快速初始化结构
+ * @param  type: 快速初始化结构体指针
  * @retval 32位快速初始化编码
  */
-uint32_t QuickInitEncode(QuickInit_Type type)
+uint32_t QuickInitEncode(QuickInit_Type * type)
 {
-    uint32_t value = 0;
-    value = type.ip_instance<<0;
-    value|= type.io_instance<<3;
-    value|= type.mux<<6;
-    value|= type.io_base<<9;
-    value|= type.io_offset<<14;
-    value|= type.channel<<19;
-    return value;
+    return *(uint32_t*)type;
 }
 
  /**
@@ -36,7 +29,7 @@ uint32_t QuickInitEncode(QuickInit_Type type)
  * @param  type: I2C快速初始化结构指针
  * @retval None
  */
-void QuickInitDecode(uint32_t map, QuickInit_Type* type)
+void QuickInitDecode(uint32_t map, QuickInit_Type * type)
 {
     QuickInit_Type * pMap = (QuickInit_Type*)&(map);
     memcpy(type, pMap, sizeof(QuickInit_Type));  

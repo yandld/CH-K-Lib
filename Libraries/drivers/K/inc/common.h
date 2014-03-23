@@ -132,7 +132,7 @@ typedef struct
 #define SystemSoftReset    NVIC_SystemReset
 #define OSEnterInt(x)
 #define OSExitInt(x)
-uint32_t QuickInitEncode(QuickInit_Type type);
+uint32_t QuickInitEncode(QuickInit_Type * type);
 void QuickInitDecode(uint32_t map, QuickInit_Type* type);
 void DelayMs(uint32_t ms);
 void DelayUs(uint32_t ms);

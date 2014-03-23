@@ -232,7 +232,7 @@ uint8_t ADC_QuickInit(uint32_t ADCxMAP, uint32_t resolutionMode)
 }
   
 /**
- * @brief  ADC开始一次转换 立即返回
+ * @brief  ADC开始一次转换 立即返回 非阻塞式
  *
  * @param  instance: ADC模块号
  * @param  chl: ADC通道号

@@ -485,11 +485,6 @@
               <FilePath>..\src\cmd_i2c.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_buzzer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_buzzer.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_lptmr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_lptmr.c</FilePath>
@@ -518,6 +513,11 @@
               <FileName>cmd_rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_mp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_mp.c</FilePath>
             </File>
             <File>
               <FileName>shell_config.h</FileName>
@@ -633,6 +633,11 @@
               <FileName>shell_cmdhist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
+            </File>
+            <File>
+              <FileName>mempool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\mempool\mempool.c</FilePath>
             </File>
           </Files>
         </Group>

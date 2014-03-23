@@ -23,21 +23,23 @@
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 #endif
 
+typedef struct w25qxx_device *w25qxx_device_t;
+
 typedef struct w25qxx_device
 {
     // params
-    spi_bus * bus;
+    spi_bus_t bus;
     // attr
     const char * name;
     uint16_t id;
     uint32_t size;
     // ops
     spi_status (*init) (struct w25qxx_device * device, uint32_t csn, uint32_t bus_chl, uint32_t baudrate);
-    spi_status (*probe)(struct w25qxx_device * device);
-    spi_status (*read)(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len);
-    spi_status (*write)(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len);
-    spi_status (*erase_sector)(struct w25qxx_device * device, uint32_t addr);
-    spi_status (*erase_chip)(struct w25qxx_device * device);
+    spi_status (*probe)(w25qxx_device_t device);
+    spi_status (*read)(w25qxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len);
+    spi_status (*write)(w25qxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len);
+    spi_status (*erase_sector)(w25qxx_device_t device, uint32_t addr);
+    spi_status (*erase_chip)(w25qxx_device_t device);
     //internal vars
     spi_device spi_device;
 }w25qxx_device;

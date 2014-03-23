@@ -390,8 +390,6 @@ uint8_t FTM_PWM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
 
 
 
-
-
 void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
 {
     uint32_t cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty) / 10000;

@@ -37,14 +37,16 @@ typedef enum
     kspi_cs_keep_asserted,       
 }spi_cs_control_type;
 
-typedef struct
+typedef struct spi_device *spi_device_t;
+
+typedef struct spi_device
 {
     uint32_t                    csn;           //使用SPI的哪根片选信号
     uint32_t                    bus_chl;       //使用哪个传输属性在总线上传输 HW_CTAR0 或者 HW_CTAR1
     spi_cs_control_type         cs_state;      //没传送完一帧数据后是否拉起CS
 }spi_device;
 
-
+typedef struct spi_bus *spi_bus_t;
 
 typedef struct spi_bus
 {
@@ -54,19 +56,19 @@ typedef struct spi_bus
     spi_frame_type frame_type;
     // ops
     spi_status (*init)(struct spi_bus * bus, uint32_t instance);
-    spi_status (*bus_config)(struct spi_bus * bus, uint32_t bus_chl, spi_frame_type frame_type, uint32_t baudrate);
-    spi_status (*deinit)(struct spi_bus * bus);
-    spi_status (*read)(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
-    spi_status (*write)(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
+    spi_status (*bus_config)(spi_bus_t bus, uint32_t bus_chl, spi_frame_type frame_type, uint32_t baudrate);
+    spi_status (*deinit)(spi_bus_t bus);
+    spi_status (*read)(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
+    spi_status (*write)(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
 }spi_bus;
 
 
 
 //!< API functinos
 spi_status spi_bus_init(struct spi_bus * bus, uint32_t instance);
-spi_status spi_bus_read(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
-spi_status spi_bus_write(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
-spi_status bus_config(struct spi_bus * bus, uint32_t bus_chl, spi_frame_type frame_type, uint32_t baudrate);
+spi_status spi_bus_read(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
+spi_status spi_bus_write(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
+spi_status bus_config(spi_bus_t bus, uint32_t bus_chl, spi_frame_type frame_type, uint32_t baudrate);
 
 
 #endif

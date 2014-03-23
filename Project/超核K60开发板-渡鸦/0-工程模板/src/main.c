@@ -76,6 +76,8 @@ static shell_io_install_t Shell_IOInstallStruct1 =
 int main(void)
 {
     uint32_t i;
+    uint32_t t = 0x20000000 - 64;
+    uint8_t *p;
     DelayInit();
     UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
     printf("HelloWorld\r\n");
@@ -105,6 +107,11 @@ int main(void)
     shell_register_function(&CommandFun_RTC);
     
     CMD_FLEXBUS(0, NULL);
+    
+    *(uint8_t *)t = 5;
+    p = (uint8_t *)t;
+    printf("p:0x%X\r\n", *p);
+    
     while(1)
     {
         shell_main_loop("SHELL>>");

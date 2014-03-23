@@ -56,7 +56,7 @@ static const w25qxx_attr_t w25qxx_attr_table[] =
     {"W25Q128", 16384*1024, 0xEF17}, 
 };
 
-static spi_status w25qxx_power_up(struct w25qxx_device * device)
+static spi_status w25qxx_power_up(w25qxx_device_t device)
 {
     volatile uint32_t i;
     uint8_t buf[1];
@@ -67,7 +67,7 @@ static spi_status w25qxx_power_up(struct w25qxx_device * device)
     return kspi_status_ok;
 }
 
-static uint8_t w25qxx_read_sr(struct w25qxx_device * device)
+static uint8_t w25qxx_read_sr(w25qxx_device_t device)
 {
     uint8_t buf[1];
     buf[0] = W25X_ReadStatusReg;
@@ -83,7 +83,7 @@ static uint8_t w25qxx_read_sr(struct w25qxx_device * device)
 }
 
 
-static spi_status w25qxx_write_enable(struct w25qxx_device * device)
+static spi_status w25qxx_write_enable(w25qxx_device_t device)
 {
     uint8_t buf[1];
     buf[0] = W25X_WriteEnable;
@@ -91,7 +91,7 @@ static spi_status w25qxx_write_enable(struct w25qxx_device * device)
     return kspi_status_ok;
 }
 
-static spi_status w25qxx_write_sr(struct w25qxx_device * device, uint8_t value)
+static spi_status w25qxx_write_sr(w25qxx_device_t device, uint8_t value)
 {
     uint8_t buf[2];
     buf[0] = W25X_WriteStatusReg;
@@ -101,7 +101,7 @@ static spi_status w25qxx_write_sr(struct w25qxx_device * device, uint8_t value)
     return kspi_status_ok;
 }
 
-static spi_status w25qxx_probe(struct w25qxx_device * device)
+static spi_status w25qxx_probe(w25qxx_device_t device)
 {
     uint32_t i;
     uint16_t id;
@@ -139,7 +139,7 @@ static spi_status w25qxx_probe(struct w25qxx_device * device)
     return kspi_status_error;
 }
 
-static spi_status w25qxx_read(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)
+static spi_status w25qxx_read(w25qxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len)
 {
     uint8_t buf_send[4];
     buf_send[0] = W25X_ReadData;
@@ -156,7 +156,7 @@ static spi_status w25qxx_read(struct w25qxx_device * device, uint32_t addr, uint
 
 
 
-static spi_status w25qxx_write_page(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)
+static spi_status w25qxx_write_page(w25qxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len)
 {
     uint8_t buf_send[4];
     w25qxx_write_enable(device);
@@ -174,7 +174,7 @@ static spi_status w25qxx_write_page(struct w25qxx_device * device, uint32_t addr
     return kspi_status_ok;
 }
 
-spi_status w25qxx_write_no_check(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)  
+spi_status w25qxx_write_no_check(w25qxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len)  
 { 			 		 
 	uint16_t pageremain;	   
     #if DEBUG
@@ -201,7 +201,7 @@ spi_status w25qxx_write_no_check(struct w25qxx_device * device, uint32_t addr, u
     return kspi_status_ok;
 } 
 
-static spi_status w25qxx_erase_sector(struct w25qxx_device * device, uint32_t addr)
+static spi_status w25qxx_erase_sector(w25qxx_device_t device, uint32_t addr)
 {
     uint8_t buf_send[4];
     addr /= W25X_SECTOR_SIZE;
@@ -217,7 +217,7 @@ static spi_status w25qxx_erase_sector(struct w25qxx_device * device, uint32_t ad
     return kspi_status_ok;
 }
 
-static spi_status w25qxx_erase_chip(struct w25qxx_device * device)
+static spi_status w25qxx_erase_chip(w25qxx_device_t device)
 {
     uint8_t buf_send[1]; 
     w25qxx_write_enable(device);
@@ -229,7 +229,7 @@ static spi_status w25qxx_erase_chip(struct w25qxx_device * device)
 }
 
 
-spi_status w25qxx_write(struct w25qxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)  
+spi_status w25qxx_write(w25qxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len)  
 { 
 	uint32_t secpos;
 	uint16_t secoff;

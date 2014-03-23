@@ -5,7 +5,7 @@
 
 static uint32_t g_instance;
 
-spi_status spi_bus_deinit(struct spi_bus * bus)
+spi_status spi_bus_deinit(spi_bus_t bus)
 {
     return kspi_status_unsupported;
 }
@@ -34,7 +34,7 @@ spi_status spi_bus_init(struct spi_bus * bus, uint32_t instance)
     return kspi_status_ok;
 }
 
-spi_status bus_config(struct spi_bus * bus, uint32_t bus_chl, spi_frame_type frame_type, uint32_t baudrate)
+spi_status bus_config(spi_bus_t bus, uint32_t bus_chl, spi_frame_type frame_type, uint32_t baudrate)
 {
     if(!bus)
     {
@@ -45,7 +45,7 @@ spi_status bus_config(struct spi_bus * bus, uint32_t bus_chl, spi_frame_type fra
     return kspi_status_ok;
 }
 
-spi_status spi_bus_read(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool is_return_inactive)
+spi_status spi_bus_read(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint32_t len, bool is_return_inactive)
 {
     uint16_t dummy = 0xFFFF;
     if(kspi_cs_keep_asserted == device->cs_state)
@@ -74,7 +74,7 @@ spi_status spi_bus_read(struct spi_bus * bus, spi_device * device, uint8_t *buf,
     return kspi_status_ok;
 }
 
-spi_status spi_bus_write(struct spi_bus * bus, spi_device * device, uint8_t *buf, uint32_t len, bool cs_return_inactive)
+spi_status spi_bus_write(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint32_t len, bool cs_return_inactive)
 {
     if(kspi_cs_keep_asserted == device->cs_state)
     {

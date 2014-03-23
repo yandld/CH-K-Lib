@@ -23,7 +23,7 @@ static int DO_I2C_SCAN(int argc, char *const argv[])
     {
         if(bus.probe(&bus, i) == ki2c_status_ok)
         {
-            shell_printf("address:0x%X(0x%X) found!\r\n", i, i<<1);
+            shell_printf("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
         }
     }
     return 0;
@@ -119,19 +119,19 @@ int CMD_I2C(int argc, char *const argv[])
 {
     if((argc == 2) && (!strcmp(argv[1], "SCAN")))
     {
-        return DO_I2C_SCAN(0, NULL);
+        return DO_I2C_SCAN(argc, argv);
     }
     if((argc == 2) && (!strcmp(argv[1], "IT")))
     {
-        return DO_I2C_IT(0, NULL);
+        return DO_I2C_IT(argc, argv);
     }
     if((argc == 2) && (!strcmp(argv[1], "AT24CXX")))
     {
-        return DO_I2C_AT24CXX(0, NULL);
+        return DO_I2C_AT24CXX(argc, argv);
     }
     if((argc == 2) && (!strcmp(argv[1], "ADXL345")))
     {
-        return DO_I2C_ADXL345(0, NULL);
+        return DO_I2C_ADXL345(argc, argv);
     }
     return CMD_RET_USAGE;
 }

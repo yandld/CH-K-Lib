@@ -33,6 +33,7 @@ extern const cmd_tbl_t CommandFun_DMA;
 extern const cmd_tbl_t CommandFun_OV7620;
 extern const cmd_tbl_t CommandFun_WDOG;
 extern const cmd_tbl_t CommandFun_RTC;
+extern const cmd_tbl_t CommandFun_ENET;
 
 
 static void Putc(uint8_t data)
@@ -105,6 +106,7 @@ int main(void)
     shell_register_function(&CommandFun_WDOG);
     shell_register_function(&CommandFun_OV7620);
     shell_register_function(&CommandFun_RTC);
+    shell_register_function(&CommandFun_ENET);
     
     CMD_FLEXBUS(0, NULL);
     
@@ -122,6 +124,13 @@ int main(void)
 void NMI_Handler(void)
 {
     printf("NMI Enter\r\n");
+}
+
+
+void HardFault_Handler(void)
+{
+    printf("HardFault_Handler\r\n");
+    while(1);
 }
 
 #ifdef USE_FULL_ASSERT

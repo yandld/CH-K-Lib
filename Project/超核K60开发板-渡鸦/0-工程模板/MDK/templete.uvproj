@@ -524,6 +524,11 @@
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
             </File>
+            <File>
+              <FileName>cmd_enet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_enet.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -608,6 +613,11 @@
               <FileName>rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>enet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\enet.c</FilePath>
             </File>
           </Files>
         </Group>

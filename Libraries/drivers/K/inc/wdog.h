@@ -7,7 +7,10 @@
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
-  
+
+#ifndef __WDOG_H__
+#define __WDOG_H__
+
 #include "common.h"
 
 typedef enum
@@ -36,4 +39,6 @@ uint32_t WDOG_ReadResetCounter(void);
 void WDOG_ClearResetCounter(void);
 void WDOG_Refresh(void);
 
+
+#endif
 

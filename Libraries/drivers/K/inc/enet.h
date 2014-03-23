@@ -172,7 +172,7 @@
 
 /* 以太帧相关定义 */
 #define CFG_NUM_ENET_TX_BUFFERS     1     //发送缓冲区个数
-#define CFG_NUM_ENET_RX_BUFFERS     8     //接收缓冲区个数
+#define CFG_NUM_ENET_RX_BUFFERS     1     //接收缓冲区个数  驱动程序设定必须为1了 改了就会出错
 #define CFG_ENET_BUFFER_SIZE        1520    //以太发送帧缓冲区长度
 #define CFG_ENET_MAX_PACKET_SIZE    1520    //以太发最大数据包长度
 

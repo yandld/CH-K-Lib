@@ -10,22 +10,16 @@ uint8_t  gCfgDest_MAC[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 uint8_t gTxBuffer[1500];
 uint8_t  gCfgEnet_Type[] = ENET_TYPE_ARP;
 
+extern uint8_t gEnetFlag;
+
 int CMD_ENET(int argc, char * const * argv)
 {
-    uint32_t i,j;
+    static uint32_t cnt = 0;
+    uint32_t i = 0;
+    uint8_t j;
+    uint32_t len;
     uint32_t ret;
     uint16_t value;
-    QuickInit_Type qt1;
-    qt1.channel = 3;
-    qt1.io_base = 1;
-    qt1.ip_instance = 2;
-    i = QuickInitEncode(&qt1);
-    printf("0x%X\r\n", i);
-    memset(&qt1,0,sizeof(qt1));
-    QuickInitDecode(i, &qt1);
-    printf("%d\r\n", qt1.io_base);
-    printf("%d\r\n", qt1.ip_instance);
-	//¿ªPORTÊ±ÖÓ
     ENET_InitTypeDef ENET_InitStruct1;
     ENET_InitStruct1.pMacAddress = gCfgLoca_MAC;
     ENET_Init(&ENET_InitStruct1);
@@ -54,9 +48,26 @@ int CMD_ENET(int argc, char * const * argv)
   }
     while(1)
     {
-        ENET_MacSendData(gTxBuffer, sizeof(gTxBuffer));
-        DelayMs(500);
-        printf("Sended\r\n");
+        
+        //ENET_MacSendData(gTxBuffer, sizeof(gTxBuffer));
+        len = ENET_MacRecData(gTxBuffer);
+        if(len)
+        {
+            gEnetFlag = 0;
+            j = 14;
+            //printf("gTxBuffer[%d]:%d\r\n", 15, gTxBuffer[15]);
+            for(i=14; i<sizeof(gTxBuffer); i++)
+            {
+                if(gTxBuffer[i] != (j++))  
+                {
+                    printf("ERROR[%d]:%d %d\r\n", i, gTxBuffer[i], j);
+                    while(1);
+                }
+            }
+            printf("Enet frame received, len:%d %d\r\n", len, cnt++);
+        }
+        //DelayMs(5);
+       // printf("Sended\r\n");
     }
 
     return 0;

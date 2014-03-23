@@ -23,7 +23,6 @@ static NBUF *pxENETRxDescriptors;
 
 //以太网接收缓冲区
 static uint8_t ucENETRxBuffers[ ( CFG_NUM_ENET_RX_BUFFERS * CFG_ENET_BUFFER_SIZE ) + 16 ];
-static uint32_t uxNextRxBuffer = 0;
 
 /***********************************************************************************************
  功能：以太网缓冲区初始化
@@ -35,25 +34,29 @@ static void ENET_BDInit(void)
 {
     unsigned long ux;
     unsigned char *pcBufPointer;
-	//寻找16字节对齐空间
+	// 为Tx 描述符寻找16字节对齐空间
 	pcBufPointer = &( xENETTxDescriptors_unaligned[ 0 ] );
 	while( ( ( uint32_t ) pcBufPointer & 0x0fUL ) != 0 )
 	{
 		pcBufPointer++;
 	}
 	pxENETTxDescriptor = ( NBUF * ) pcBufPointer;	
-	//寻找16字节对齐空间
+	//为Rx 描述符寻找16字节对齐空间
 	pcBufPointer = &( pxENETRxDescriptors_unaligned[ 0 ] );
 	while( ( ( uint32_t ) pcBufPointer & 0x0fUL ) != 0 )
 	{
 		pcBufPointer++;
 	}
 	pxENETRxDescriptors = ( NBUF * ) pcBufPointer;
+    // Tx描述符初始化
+	for( ux = 0; ux < CFG_NUM_ENET_TX_BUFFERS; ux++ )
+	{
+        pxENETTxDescriptor[ux].length = 0;
+        pxENETTxDescriptor[ux].status = 0;
+        pxENETTxDescriptor[ux].ebd_status = TX_BD_IINS | TX_BD_PINS;   
+    }
 
-	pxENETTxDescriptor->length = 0;
-	pxENETTxDescriptor->status = 0;
-	pxENETTxDescriptor->ebd_status = TX_BD_IINS | TX_BD_PINS;
-	//寻找16字节对齐空间
+	//为Rx接受区寻找16字节对齐空间
 	pcBufPointer = &( ucENETRxBuffers[ 0 ] );
 	while((( uint32_t ) pcBufPointer & 0x0fUL ) != 0 )
 	{
@@ -64,15 +67,14 @@ static void ENET_BDInit(void)
 	{
 	    pxENETRxDescriptors[ ux ].status = RX_BD_E;
 	    pxENETRxDescriptors[ ux ].length = 0;
-      pxENETRxDescriptors[ ux ].data = (uint8_t *)__REV((uint32_t)pcBufPointer);
+        pxENETRxDescriptors[ ux ].data = (uint8_t *)__REV((uint32_t)pcBufPointer);
 	    pcBufPointer += CFG_ENET_BUFFER_SIZE;
 	    pxENETRxDescriptors[ ux ].bdu = 0x00000000;
 	    pxENETRxDescriptors[ ux ].ebd_status = RX_BD_INT;
 	}
 	//最后一个描述符设置为Warp
-	pxENETRxDescriptors[ CFG_NUM_ENET_RX_BUFFERS - 1 ].status |= RX_BD_W;
-	//从0描述符开始
-	uxNextRxBuffer = 0;
+    pxENETTxDescriptor[CFG_NUM_ENET_TX_BUFFERS - 1].status |= TX_BD_W;
+	pxENETRxDescriptors[CFG_NUM_ENET_RX_BUFFERS - 1].status |= RX_BD_W;
 }
 
 /***********************************************************************************************
@@ -276,8 +278,8 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 	ENET->EIR = ( uint32_t ) 0xFFFFFFFF;
 
 	//使能中断
-	ENET->EIMR = ENET_EIR_TXF_MASK | ENET_EIMR_RXF_MASK | ENET_EIMR_RXB_MASK | ENET_EIMR_UN_MASK | ENET_EIMR_RL_MASK | ENET_EIMR_LC_MASK | ENET_EIMR_BABT_MASK | ENET_EIMR_BABR_MASK | ENET_EIMR_EBERR_MASK;
-
+//	ENET->EIMR = ENET_EIR_TXF_MASK | ENET_EIMR_RXF_MASK ;
+//    ENET->EIMR |= ENET_EIMR_RXF_MASK;
 	//使能MAC模块
 	ENET->ECR |= ENET_ECR_ETHEREN_MASK;
     //表明接收缓冲区为空
@@ -286,11 +288,8 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 
 void ENET_MacSendData(uint8_t *ch, uint16_t len)
 {
-  //检查当前发送缓冲区描述符是否可用
-	while( pxENETTxDescriptor->status & TX_BD_R )
-	{
-		
-	}
+    //检查当前发送缓冲区描述符是否可用
+    while( pxENETTxDescriptor->status & TX_BD_R ) {};
     //设置发送缓冲区描述符
     pxENETTxDescriptor->data = (uint8_t *)__REV((uint32_t)ch);		
     pxENETTxDescriptor->length = __REVSH(len);
@@ -299,6 +298,23 @@ void ENET_MacSendData(uint8_t *ch, uint16_t len)
 	pxENETTxDescriptor->status = ( TX_BD_R | TX_BD_L | TX_BD_TC | TX_BD_W );
     //使能发送
     ENET->TDAR = ENET_TDAR_TDAR_MASK;
+}
+
+uint16_t ENET_MacRecData(uint8_t *ch)
+{
+    uint16_t len = 0;
+    //寻找非空的缓冲区描述符
+    if((pxENETRxDescriptors[0].status & RX_BD_E ) == 0)
+    {
+		//读取数据
+		len =  __REVSH(pxENETRxDescriptors[0].length);
+		memcpy(ch,(uint8_t *)__REV((uint32_t)pxENETRxDescriptors[0].data), len);
+		//表示已经读取改缓冲区数据
+		pxENETRxDescriptors[0].status |= RX_BD_E;
+		ENET->RDAR = ENET_RDAR_RDAR_MASK;
+        return len;
+	}
+	return 0;
 }
 
 /**
@@ -410,10 +426,11 @@ void ENET_Transmit_IRQHandler(void)
 }
 
 
-
+uint8_t gEnetFlag = 0;
 void ENET_Receive_IRQHandler(void)
 {
 	ENET->EIR |= ENET_EIMR_RXF_MASK; 
+    gEnetFlag = 1;
 }
 
 

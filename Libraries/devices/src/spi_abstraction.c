@@ -3,7 +3,6 @@
 #include "spi.h"
 
 
-static uint32_t g_instance;
 
 spi_status spi_bus_deinit(spi_bus_t bus)
 {
@@ -19,10 +18,9 @@ spi_status spi_bus_init(struct spi_bus * bus, uint32_t instance)
     }
     bus->baudrate = 10*1000; //inital baudrate
     bus->instance = instance;
-    
     if(!bus_open_flag)
     {
-        g_instance = SPI_QuickInit(BOARD_SPI_MAP, (SPI_FrameFormat_Type)bus->frame_type, bus->baudrate);
+        bus->instance = SPI_QuickInit(BOARD_SPI_MAP, (SPI_FrameFormat_Type)bus->frame_type, bus->baudrate);
         bus_open_flag = 1;
     }
     // link ops
@@ -53,22 +51,22 @@ spi_status spi_bus_read(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint32
         len--;
         while(len--)
         {
-            *buf++ = SPI_ReadWriteByte(g_instance, device->bus_chl, dummy, device->csn, kspi_cs_keep_asserted);
+            *buf++ = SPI_ReadWriteByte(bus->instance, device->bus_chl, dummy, device->csn, kspi_cs_keep_asserted);
         }
         if(!is_return_inactive)
         {
-            *buf++ = SPI_ReadWriteByte(g_instance, device->bus_chl, dummy, device->csn, kspi_cs_keep_asserted);
+            *buf++ = SPI_ReadWriteByte(bus->instance, device->bus_chl, dummy, device->csn, kspi_cs_keep_asserted);
         }
         else
         {
-            *buf++ = SPI_ReadWriteByte(g_instance, device->bus_chl, dummy, device->csn, kspi_cs_return_inactive);
+            *buf++ = SPI_ReadWriteByte(bus->instance, device->bus_chl, dummy, device->csn, kspi_cs_return_inactive);
         }
     }
     else
     {
         while(len--)
         {
-            *buf++ = SPI_ReadWriteByte(g_instance, device->bus_chl, dummy, device->csn, kspi_cs_return_inactive);
+            *buf++ = SPI_ReadWriteByte(bus->instance, device->bus_chl, dummy, device->csn, kspi_cs_return_inactive);
         }
     }
     return kspi_status_ok;
@@ -81,22 +79,22 @@ spi_status spi_bus_write(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint3
         len--;
         while(len--)
         {
-            SPI_ReadWriteByte(g_instance, device->bus_chl, *buf++, device->csn, kspi_cs_keep_asserted);
+            SPI_ReadWriteByte(bus->instance, device->bus_chl, *buf++, device->csn, kspi_cs_keep_asserted);
         }
         if(!cs_return_inactive)
         {
-            SPI_ReadWriteByte(g_instance, device->bus_chl, *buf++, device->csn, kspi_cs_keep_asserted);
+            SPI_ReadWriteByte(bus->instance, device->bus_chl, *buf++, device->csn, kspi_cs_keep_asserted);
         }
         else
         {
-            SPI_ReadWriteByte(g_instance, device->bus_chl, *buf++, device->csn, kspi_cs_return_inactive);
+            SPI_ReadWriteByte(bus->instance, device->bus_chl, *buf++, device->csn, kspi_cs_return_inactive);
         }
     }
     else
     {
         while(len--)
         {
-            SPI_ReadWriteByte(g_instance, device->bus_chl, *buf++, device->csn, kspi_cs_return_inactive);
+            SPI_ReadWriteByte(bus->instance, device->bus_chl, *buf++, device->csn, kspi_cs_return_inactive);
         }
     }
     return kspi_status_ok;

@@ -20,7 +20,7 @@ typedef struct ads7843_device * ads7843_device_t;
 struct ads7843_device
 {
     // params
-    struct spi_bus * bus;
+    spi_bus_t bus;
     // ops
     spi_status (*init) (struct ads7843_device * device, uint32_t csn, uint32_t bus_chl, uint32_t baudrate);
     spi_status (*probe)(ads7843_device_t device);

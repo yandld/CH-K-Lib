@@ -26,7 +26,7 @@ typedef struct at24cxx_device *ad24cxx_device_t;
 struct at24cxx_device
 {
     // params
-    struct i2c_bus * bus;
+    i2c_bus_t bus;
     at24cxx_part_number_t type;
     // ops
     i2c_status (*init) (struct at24cxx_device * device);

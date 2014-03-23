@@ -66,7 +66,7 @@ i2c_status i2c_bus_init(struct i2c_bus * bus, uint32_t instance, uint32_t baudra
     bus->instance = instance;
     if(!bus_open_flag)
     {
-        instance = I2C_QuickInit(BOARD_I2C_MAP, 100*1000);
+        bus->instance = I2C_QuickInit(BOARD_I2C_MAP, 100*1000);
         bus_open_flag = 1;
     }
     bus->init = i2c_bus_init;

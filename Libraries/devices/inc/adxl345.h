@@ -18,7 +18,7 @@ typedef struct adxl345_device *adxl345_device_t;
 struct adxl345_device
 {
     // params
-    struct i2c_bus * bus;
+    i2c_bus_t bus;
     // ops
     i2c_status (*init) (struct adxl345_device * device, uint8_t chip_addr);
     i2c_status (*probe)(adxl345_device_t device);

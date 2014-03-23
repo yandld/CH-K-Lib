@@ -23,32 +23,35 @@ typedef enum
     ki2c_status_no_slave,
 }i2c_status;
 
-typedef struct
+typedef struct i2c_device *i2c_device_t;
+struct i2c_device
 {
     uint8_t     chip_addr;        /*!< The slave's 7-bit address.*/
     uint32_t    subaddr;
     uint32_t    subaddr_len;
-}i2c_device;
+};
 
-typedef struct i2c_bus
+
+typedef struct i2c_bus* i2c_bus_t;
+struct i2c_bus
 {
     // params
     uint32_t instance;
     uint32_t baudrate;
     // ops
     i2c_status (*init)(struct i2c_bus * bus, uint32_t instance, uint32_t baudrate);
-    i2c_status (*deinit)(struct i2c_bus * bus);
-    i2c_status (*read)(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len);
-    i2c_status (*write)(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len);
-    i2c_status (*probe)(struct i2c_bus * bus, uint8_t chip_addr);
-}i2c_bus;
+    i2c_status (*deinit)(i2c_bus_t bus);
+    i2c_status (*read)(i2c_bus_t bus, i2c_device_t device, uint8_t *buf, uint32_t len);
+    i2c_status (*write)(i2c_bus_t bus, i2c_device_t device, uint8_t *buf, uint32_t len);
+    i2c_status (*probe)(i2c_bus_t bus, uint8_t chip_addr);
+};
 
 
 //!< API funtctions
 i2c_status i2c_bus_init(struct i2c_bus * bus, uint32_t instance, uint32_t baudrate);
-i2c_status i2c_bus_probe(struct i2c_bus * bus, uint8_t chip_addr);
-i2c_status i2c_bus_write(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len);
-i2c_status i2c_bus_read(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len);
+i2c_status i2c_bus_probe(i2c_bus_t bus, uint8_t chip_addr);
+i2c_status i2c_bus_write(i2c_bus_t bus, i2c_device_t device, uint8_t *buf, uint32_t len);
+i2c_status i2c_bus_read(i2c_bus_t bus, i2c_device_t device, uint8_t *buf, uint32_t len);
 
 #endif
 

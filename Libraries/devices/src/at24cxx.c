@@ -25,7 +25,7 @@ static const uint32_t AT24CXX_PageSizeTable[] =  {8, 8, 16, 16, 16};
 
 #define AT24CXX_CHIP_ADDRESS   (0x50)
 
-static i2c_status at24cxx_probe(struct at24cxx_device * device, at24cxx_part_number_t type)
+static i2c_status at24cxx_probe(ad24cxx_device_t device, at24cxx_part_number_t type)
 {
     if(!device->bus)
     {
@@ -47,7 +47,7 @@ static i2c_status at24cxx_probe(struct at24cxx_device * device, at24cxx_part_num
     return ki2c_status_ok;
 }
 
-static i2c_status at24cxx_read(struct at24cxx_device * device,uint32_t addr, uint8_t *buf, uint32_t len)
+static i2c_status at24cxx_read(ad24cxx_device_t device,uint32_t addr, uint8_t *buf, uint32_t len)
 {
     int ret;
     if(!device->bus)
@@ -65,7 +65,7 @@ static i2c_status at24cxx_read(struct at24cxx_device * device,uint32_t addr, uin
     return (i2c_status)ret;
 }
 
-static i2c_status at24cxx_write_page(struct at24cxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)
+static i2c_status at24cxx_write_page(ad24cxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len)
 {
     int ret;
     if(!device->bus)
@@ -83,7 +83,7 @@ static i2c_status at24cxx_write_page(struct at24cxx_device * device, uint32_t ad
     return (i2c_status)ret;
 }
 
-static i2c_status at24cxx_write(struct at24cxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len)
+static i2c_status at24cxx_write(ad24cxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len)
 {
     int ret;
 	uint32_t secpos;
@@ -130,7 +130,7 @@ static i2c_status at24cxx_write(struct at24cxx_device * device, uint32_t addr, u
     return ki2c_status_ok;
 }
 
-static i2c_status self_test(struct at24cxx_device * device)
+static i2c_status self_test(ad24cxx_device_t device)
 {
     int ret;
     uint8_t buf[8],buf1[8],buf2[8];
@@ -162,7 +162,7 @@ static i2c_status self_test(struct at24cxx_device * device)
     return ki2c_status_ok;
 }
 
-static i2c_status at24cxx_get_size(struct at24cxx_device * device, uint32_t * size)
+static i2c_status at24cxx_get_size(ad24cxx_device_t device, uint32_t * size)
 {
     *size = AT24CXX_TotalSizeTable[device->type];
     return ki2c_status_ok;
@@ -182,6 +182,7 @@ i2c_status at24cxx_init(struct at24cxx_device * device)
     {
         return ki2c_status_error;
     }
+    // link ops
     device->init = at24cxx_init;
     device->probe = at24cxx_probe;
     device->read = at24cxx_read;

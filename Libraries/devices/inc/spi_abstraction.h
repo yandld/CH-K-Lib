@@ -38,17 +38,15 @@ typedef enum
 }spi_cs_control_type;
 
 typedef struct spi_device *spi_device_t;
-
-typedef struct spi_device
+struct spi_device
 {
     uint32_t                    csn;           //使用SPI的哪根片选信号
     uint32_t                    bus_chl;       //使用哪个传输属性在总线上传输 HW_CTAR0 或者 HW_CTAR1
     spi_cs_control_type         cs_state;      //没传送完一帧数据后是否拉起CS
-}spi_device;
+};
 
 typedef struct spi_bus *spi_bus_t;
-
-typedef struct spi_bus
+struct spi_bus
 {
     // params
     uint32_t instance;
@@ -60,8 +58,7 @@ typedef struct spi_bus
     spi_status (*deinit)(spi_bus_t bus);
     spi_status (*read)(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
     spi_status (*write)(spi_bus_t bus, spi_device_t device, uint8_t *buf, uint32_t len, bool cs_return_inactive);
-}spi_bus;
-
+};
 
 
 //!< API functinos

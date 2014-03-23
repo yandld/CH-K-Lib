@@ -12,12 +12,12 @@
 #include "i2c.h"
 #include "board.h"
 
-i2c_status i2c_bus_deinit(struct i2c_bus * bus)
+i2c_status i2c_bus_deinit(i2c_bus_t bus)
 {
     return ki2c_status_unsupported;
 }
 
-i2c_status i2c_bus_read(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len)
+i2c_status i2c_bus_read(i2c_bus_t bus, i2c_device_t device, uint8_t *buf, uint32_t len)
 {
     int ret = I2C_BurstRead(bus->instance, device->chip_addr, device->subaddr, device->subaddr_len, buf, len);
     if(ret)
@@ -27,7 +27,7 @@ i2c_status i2c_bus_read(struct i2c_bus * bus, i2c_device * device, uint8_t *buf,
     return ki2c_status_ok;
 }
 
-i2c_status i2c_bus_write(struct i2c_bus * bus, i2c_device * device, uint8_t *buf, uint32_t len)
+i2c_status i2c_bus_write(i2c_bus_t bus, i2c_device_t device, uint8_t *buf, uint32_t len)
 {
     int ret = I2C_BurstWrite(bus->instance, device->chip_addr, device->subaddr, device->subaddr_len, buf, len);
     if(ret)
@@ -37,7 +37,7 @@ i2c_status i2c_bus_write(struct i2c_bus * bus, i2c_device * device, uint8_t *buf
     return ki2c_status_ok; 
 }
 
-i2c_status i2c_bus_probe(struct i2c_bus * bus, uint8_t chip_addr)
+i2c_status i2c_bus_probe(i2c_bus_t bus, uint8_t chip_addr)
 {
     i2c_status ret;
     I2C_GenerateSTART(bus->instance);

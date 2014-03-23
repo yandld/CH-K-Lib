@@ -36,7 +36,7 @@ volatile uint8_t* buf_test = SRAM_START_ADDRESS;
 static int DO_SPI_FLASH(int argc, char * const argv[])
 {
     uint32_t i;
-    spi_bus bus; 
+    struct spi_bus bus; 
     spi_bus_init(&bus, BOARD_SPI_INSTANCE);
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
     w25qxx_device w25qxx1;
@@ -77,16 +77,17 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
            printf("error:[0x%X]:%d\r\n", i, buf_test[i]);
         }
     }
+    return 0;
 }
 
 
 static int DO_SPI_TP(int argc, char * const argv[])
 {
     uint16_t x,y;
-    spi_bus bus; 
+    struct spi_bus bus; 
     spi_bus_init(&bus, BOARD_SPI_INSTANCE);
     PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
-    ads7843_device ads7843;
+    struct ads7843_device ads7843;
     ads7843.bus = &bus;
     ads7843_init(&ads7843, BOARD_TP_SPI_PCSN, HW_CTAR0, 20*1000);
     ads7843.probe(&ads7843);
@@ -116,8 +117,6 @@ int CMD_SPI(int argc, char *const argv[])
    // SPI_CallbackInstall(BOARD_SPI_INSTANCE, SPI_ISR);
     //¿ªÆôSPIÖÐ¶Ï 
    // SPI_ITDMAConfig(BOARD_SPI_INSTANCE, kSPI_IT_TCF);
-
-    
     return CMD_RET_USAGE;
 }
 

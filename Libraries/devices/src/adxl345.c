@@ -45,7 +45,7 @@
 #define FIFO_CTL		0X38
 #define FIFO_STATUS		0X39
 
-static i2c_status adxl345_write_register(struct adxl345_device * device, uint8_t addr, uint8_t value)
+static i2c_status adxl345_write_register(adxl345_device_t device, uint8_t addr, uint8_t value)
 {
     uint8_t buf[1];
     device->i2c_device.subaddr = addr;
@@ -69,7 +69,7 @@ static uint8_t adxl345_read_register(struct adxl345_device * device, uint8_t add
 }
 */
 
-i2c_status adxl345_probe(struct adxl345_device * device)
+i2c_status adxl345_probe(adxl345_device_t device)
 {
     uint8_t buf[3];
     device->i2c_device.subaddr = DEVICE_ID;
@@ -98,7 +98,7 @@ i2c_status adxl345_probe(struct adxl345_device * device)
     return ki2c_status_error; 
 }
 
-i2c_status adxl345_readXYZ(struct adxl345_device * device, short *x, short *y, short *z)
+i2c_status adxl345_readXYZ(adxl345_device_t device, short *x, short *y, short *z)
 {
     uint8_t buf[6];
     //uint8_t fifo_cnt;
@@ -113,7 +113,7 @@ i2c_status adxl345_readXYZ(struct adxl345_device * device, short *x, short *y, s
     return ki2c_status_ok; 
 }
 
-i2c_status adxl345_calibration(struct adxl345_device * device)
+i2c_status adxl345_calibration(adxl345_device_t device)
 {
 	short tx,ty,tz;
 	uint8_t i;

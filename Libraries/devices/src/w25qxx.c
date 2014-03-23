@@ -37,14 +37,15 @@
 uint8_t SPI_FLASH_BUFFER[4096];	
 #endif
 
-typedef struct
+struct w25qxx_attr_t
 {
     const char* name;
     uint32_t size;
     uint16_t id;
-}w25qxx_attr_t;
+};
 
-static const w25qxx_attr_t w25qxx_attr_table[] = 
+
+static const struct w25qxx_attr_t w25qxx_attr_table[] = 
 {
     {"W25Q10",    128*1024, 0xEF10},
     {"W25Q20",    256*1024, 0xEF11},

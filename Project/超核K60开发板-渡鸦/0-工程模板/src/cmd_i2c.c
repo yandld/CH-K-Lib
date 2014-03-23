@@ -12,7 +12,7 @@ static uint32_t gI2C_Instance;
 static int DO_I2C_SCAN(int argc, char *const argv[])
 {
     uint8_t i;
-    i2c_bus bus;
+    struct i2c_bus bus;
     if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 10*1000))
     {
         printf("i2c init failed\r\n");
@@ -54,8 +54,8 @@ static int DO_I2C_IT(int argc, char *const argv[])
 static int DO_I2C_AT24CXX(int argc, char *const argv[])
 {
     uint32_t size;
-    i2c_bus bus = {0};
-    at24cxx_device at24cxx = {0};
+    struct i2c_bus bus = {0};
+    struct at24cxx_device at24cxx = {0};
     if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 40*1000))
     {
         shell_printf("i2c bus init failed\r\n");
@@ -86,8 +86,8 @@ static int DO_I2C_ADXL345(int argc, char *const argv[])
 {
     short x,y,z;
     short ax, ay, az;
-    i2c_bus bus = {0};
-    adxl345_device adxl345 = {0};
+    struct i2c_bus bus = {0};
+    struct adxl345_device adxl345 = {0};
     if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 40*1000))
     {
         shell_printf("i2c bus init failed\r\n");

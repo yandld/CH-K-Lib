@@ -26,7 +26,7 @@ extern const cmd_tbl_t CommandFun_SRAM;
 extern const cmd_tbl_t CommandFun_LCD;
 extern const cmd_tbl_t CommandFun_Hist;
 extern const cmd_tbl_t CommandFun_I2C;
-extern const cmd_tbl_t CommandFun_BUZZER;
+extern const cmd_tbl_t CommandFun_MP;
 extern const cmd_tbl_t CommandFun_LPTMR;
 extern const cmd_tbl_t CommandFun_SPI;
 extern const cmd_tbl_t CommandFun_DMA;
@@ -97,7 +97,7 @@ int main(void)
     shell_register_function(&CommandFun_LCD); 
     shell_register_function(&CommandFun_Hist);
     shell_register_function(&CommandFun_I2C);
-    shell_register_function(&CommandFun_BUZZER);
+    shell_register_function(&CommandFun_MP);
     shell_register_function(&CommandFun_LPTMR);
     shell_register_function(&CommandFun_SPI);
     shell_register_function(&CommandFun_DMA);

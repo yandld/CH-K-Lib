@@ -15,13 +15,13 @@
 #define ADS7843_CMD_READ_X   (0xD0)
 #define ADS7843_CMD_READ_Y   (0X90)
 
-static spi_status ads7843_probe(struct ads7843_device * device)
+static spi_status ads7843_probe(ads7843_device_t device)
 {
 
     return kspi_status_unsupported;
 }
 
-static spi_status ads7843_readX(struct ads7843_device * device, uint16_t * value)
+static spi_status ads7843_readX(ads7843_device_t device, uint16_t * value)
 {
     uint8_t buf[2];
     buf[0] = ADS7843_CMD_READ_X; 
@@ -31,7 +31,7 @@ static spi_status ads7843_readX(struct ads7843_device * device, uint16_t * value
     return kspi_status_ok;
 }
 
-static spi_status ads7843_readY(struct ads7843_device * device, uint16_t * value)
+static spi_status ads7843_readY(ads7843_device_t device, uint16_t * value)
 {
     uint8_t buf[2];
     buf[0] = ADS7843_CMD_READ_Y; 

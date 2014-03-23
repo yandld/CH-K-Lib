@@ -22,21 +22,22 @@ typedef enum
     kAT24C16,
 }at24cxx_part_number_t;
 
-typedef struct at24cxx_device
+typedef struct at24cxx_device *ad24cxx_device_t;
+struct at24cxx_device
 {
     // params
-    i2c_bus * bus;
+    struct i2c_bus * bus;
     at24cxx_part_number_t type;
     // ops
     i2c_status (*init) (struct at24cxx_device * device);
-    i2c_status (*probe)(struct at24cxx_device * device, at24cxx_part_number_t type);
-    i2c_status (*read)(struct at24cxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len);
-    i2c_status (*write)(struct at24cxx_device * device, uint32_t addr, uint8_t *buf, uint32_t len);
-    i2c_status (*self_test)(struct at24cxx_device * device);
-    i2c_status (*get_size)(struct at24cxx_device * device, uint32_t * size);
+    i2c_status (*probe)(ad24cxx_device_t device, at24cxx_part_number_t type);
+    i2c_status (*read)(ad24cxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len);
+    i2c_status (*write)(ad24cxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len);
+    i2c_status (*self_test)(ad24cxx_device_t device);
+    i2c_status (*get_size)(ad24cxx_device_t device, uint32_t * size);
     //internal vars
-    i2c_device i2c_device;
-}at24cxx_device;
+    struct i2c_device i2c_device;
+};
 
 //API funtctions
 i2c_status at24cxx_init(struct at24cxx_device * device);

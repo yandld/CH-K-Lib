@@ -14,19 +14,20 @@
 #include <stdint.h>
 #include "i2c_abstraction.h"
 
-typedef struct adxl345_device
+typedef struct adxl345_device *adxl345_device_t;
+struct adxl345_device
 {
     // params
-    i2c_bus * bus;
+    struct i2c_bus * bus;
     // ops
     i2c_status (*init) (struct adxl345_device * device, uint8_t chip_addr);
-    i2c_status (*probe)(struct adxl345_device * device);
-    i2c_status (*readXYZ)(struct adxl345_device * device, short *x, short *y, short *z);
-    i2c_status (*calibration)(struct adxl345_device * device);
+    i2c_status (*probe)(adxl345_device_t device);
+    i2c_status (*readXYZ)(adxl345_device_t device, short *x, short *y, short *z);
+    i2c_status (*calibration)(adxl345_device_t device);
     short (*convert_angle)(short x, short y, short z, short *ax, short *ay, short *az);
     //internal vars
-    i2c_device i2c_device;
-}adxl345_device;
+    struct i2c_device i2c_device;
+};
 
 
 //!< API functions

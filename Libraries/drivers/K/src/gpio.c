@@ -3,8 +3,9 @@
   * @file    gpio.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+	* @note    此文件为芯片GPIO模块的底层功能函数
   ******************************************************************************
   */
 
@@ -54,23 +55,24 @@ static const IRQn_Type GPIO_IRQnTable[] =
 
  /**
  * @brief 设置引脚复用功能 这个函数会被很多其他外设模块驱动程序调用
- * 
- * @note 复用功能可参考 Reference Manual 的 Signal Multiplexing and Signal Descriptions 章节 
+ * @note  复用功能可参考 Reference Manual 的 Signal Multiplexing and Signal Descriptions 章节 
  * @code
- *      // 将一个IO口复用功能设置为Mux1
+ *      // 将一PORTA端口的3引脚复用成1模式即普通的PTA3模式
  *      PORT_PinMuxConfig(HW_GPIOA, 3, kPinAlt1);
  * @endcode
- * @param  instance: GPIO模块号 可选如下
- *         @arg HW_GPIOA
- *         @arg HW_GPIOB
- *         @arg HW_GPIOC
- *         @arg HW_GPIOD
- *         @arg HW_GPIOE
- * @param  pinIndex: 引脚号0-31
- * @param  pinMux:   复用功能选项 不同的复用值代表不同的功能 比如 kPinAlt1 一般代表用做GPIO
- *         @arg kPinAlt0
- *         @arg ...
- *         @arg kPinAlt7
+ * @param  instance: GPIO模块号 
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pinMux    :复用功能选项，不同的复用值代表不同的功能
+ *         @arg kPinAlt0 :引脚复用成0模式
+ *         @arg        . : .
+ *         @arg        . : .
+ *         @arg        . : .
+ *         @arg kPinAlt7 :引脚复用成7模式
  * @retval None
  */
 void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
@@ -84,8 +86,7 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
     PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
 }
  /**
- * @brief  设置一个引脚的属性 例如上拉下拉 复用选择 等 用户一般不必调用
- *
+ * @brief  设置一个引脚的上下拉电阻属性 例如上拉下拉 复用选择 等 用户一般不必调用
  * @code
  *      // 将一个引脚设置为 配有上啦电阻 开漏输出开启
  *      PORT_PinMuxConfig(HW_GPIOA, 3, kPullUp);

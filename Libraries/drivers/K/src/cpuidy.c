@@ -1,3 +1,13 @@
+/**
+  ******************************************************************************
+  * @file    clock.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2014.3.24
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+	* @note    此文件为内部文件，用于获取芯片的出厂信息，少部分用户使用
+  ******************************************************************************
+  */
 #include "cpuidy.h"
 #include "common.h"
 
@@ -43,14 +53,13 @@ static const char *CPUIDY_FamIDTable[8] =
 //! @{
 
 /**
- * @brief  获得 芯片的系列ID
- *
+ * @brief  获得芯片的系列ID
  * @code
  *      // 打印芯片型号
  *      printf("Family Type:%s\r\n", CPUIDY_GetFamID());
  * @endcode
  * @param  None
- * @retval ID 字符串指针
+ * @retval ID字符串指针
  */
 char *CPUIDY_GetFamID(void)
 {
@@ -58,15 +67,15 @@ char *CPUIDY_GetFamID(void)
 }
 
 /**
- * @brief  获得 芯片的引脚数
- *
+ * @brief  获得芯片的引脚数
  * @code
- *      // 打印芯片引脚数
+ *      // 获取芯片的引脚数
  *      uint32_t PinCnt;
  *      CPUIDY_GetPinCount(&PinCnt);
+ *      //将芯片的引脚数显示出来
  *      printf("Pin Cnt:%d\r\n", PinCnt);
  * @endcode
- * @param  None
+ * @param  pinCount  :获得芯片引脚数据的指针
  * @retval None
  */
 void CPUIDY_GetPinCount(uint32_t *pinCount)
@@ -77,20 +86,19 @@ void CPUIDY_GetPinCount(uint32_t *pinCount)
 
 /**
  * @brief  获得芯片ROM/RAM 大小
- *
  * @code
- *      // 打印芯片Pflash 数量
+ *      // 获取芯片Pflash的大小并显示出来
  *      uint32_t PFlashSize;
  *      CPUIDY_GetMemSize(kPFlashSizeInKB, &PFlashSize);
  *      printf("PFlash Size:%dKB\r\n", PFlashSize);
  * @endcode
  * @param  memSizeName: 存储器类型
- *         @arg kPFlashSizeInKB
- *         @arg kDFlashSizeInKB  
- *         @arg kFlexNVMSizeInKB
- *         @arg kEEPORMSizeInByte
- *         @arg kRAMSizeInKB
- * @param  memSizeInKB: 存储器大小 单位KB
+ *         @arg kPFlashSizeInKB  :编程Flash的尺寸
+ *         @arg kDFlashSizeInKB  :数据Flash的尺寸
+ *         @arg kFlexNVMSizeInKB :FlexNVM的尺寸
+ *         @arg kEEPORMSizeInByte:EEPOROM的尺寸
+ *         @arg kRAMSizeInKB     :芯片RAM的尺寸
+ * @param  memSizeInKB   :获得存储器大小数据的指针 单位KB
  * @retval None
  */
 void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB)
@@ -120,9 +128,8 @@ void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB)
 
 /**
  * @brief  获得芯片UID信息(全球唯一识别码)
- *
  * @code
- *      // 打印芯片UID
+ *      // 获取芯片的UID并显示出来
  *      uint32_t UID[4];
  *      CPUIDY_GetUID(UID);
  *      for(i = 0; i < 4; i++)
@@ -130,13 +137,7 @@ void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB)
  *          printf("UID[i]:0x%d", UID[i]);
  *      }
  * @endcode
- * @param  memSizeName: 存储器类型
- *         @arg kPFlashSizeInKB
- *         @arg kDFlashSizeInKB  
- *         @arg kFlexNVMSizeInKB
- *         @arg kEEPORMSizeInByte
- *         @arg kRAMSizeInKB
- * @param  memSizeInKB: 存储器大小 单位KB
+ * @param  UIDArray: UID数据的首地址
  * @retval None
  */
 void CPUIDY_GetUID(uint32_t * UIDArray)

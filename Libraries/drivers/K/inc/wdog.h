@@ -3,8 +3,9 @@
   * @file    wdog.h
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+	* @note    此文件为芯片看门狗模块的底层功能函数
   ******************************************************************************
   */
 

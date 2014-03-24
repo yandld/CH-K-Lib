@@ -3,8 +3,9 @@
   * @file    pit.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+	* @note    此文件为芯片PIT模块的底层功能函数
   ******************************************************************************
   */
 #include "pit.h"
@@ -46,16 +47,16 @@ static const IRQn_Type PIT_IRQnTable[] =
 //! @{
 
  /**
- * @brief  初始化PIT模块 推荐使用 PIT_QuickInit来进行快速初始化
- * 
+ * @brief  详细初始化PIT模块 推荐使用PIT_QuickInit函数
  * @code
- *      // 初始化PIT模块
- *      PIT_InitTypeDef PIT_InitStruct1;
- *      PIT_InitStruct1.instance = 0;
- *      PIT_InitStruct1.chl = 0;
- *      PIT_InitStruct1.timeInUs = 1000 //1ms
+ *      // 配置PIT0模块的0通道，时间周期为1ms
+ *      PIT_InitTypeDef PIT_InitStruct1; //申请一个结构变量
+ *      PIT_InitStruct1.instance = 0;    //这里必须是0
+ *      PIT_InitStruct1.chl = 0;         //选择0通道
+ *      PIT_InitStruct1.timeInUs = 1000  //1ms
  *      PIT_Init(&PIT_InitStruct1);
  * @endcode
+ * @param  PIT_InitStruct: pit模块工作配置数据
  * @retval None
  */
 void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
@@ -69,17 +70,15 @@ void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
     PIT_InstanceTable[PIT_InitStruct->instance]->CHANNEL[PIT_InitStruct->chl].LDVAL = fac_us * PIT_InitStruct->timeInUs;
     PIT_StartCounting(PIT_InitStruct->chl);
     PIT_Cmd(ENABLE);
-
 }
 
  /**
- * @brief  初始化PIT模块 填入最重要的参数
- * 
+ * @brief  PIT模块快速初始化配置
  * @code
  *      // 初始化PIT模块 0 通道 产生100MS中断 并开启中断 注册回调函数 在回调函数中打印调试信息
  *      //声明中断回调函数
  *      static void PIT0_CallBack(void);
- *      //初始化PIT
+ *      //初始化PIT模块的0通道，产生100ms中断
  *      PIT_QuickInit(HW_PIT_CH0, 100000);
  *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //注册回调函数
  *      PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);            //开启中断
@@ -117,18 +116,18 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
  *      //初始化PIT
  *      PIT_QuickInit(HW_PIT_CH0, 100000);
  *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //注册回调函数
- *      PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);            //开启中断
- *      //中断回调函数
+ *      PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);            //开启0通道中断
+ *      //中断回调函数编写
  *      static void PIT0_CallBack(void)
  *      {
  *          printf("Enter PIT0 INt\r\n");    
  *      }
  * @endcode
- * @param  chl 通道号
- *         @arg HW_PIT0_CH0 
- *         @arg HW_PIT0_CH1
- *         @arg HW_PIT0_CH2 
- *         @arg HW_PIT0_CH3 
+ * @param  chl  :通道号
+ *         @arg HW_PIT0_CH0   :0通道
+ *         @arg HW_PIT0_CH1   :1通道
+ *         @arg HW_PIT0_CH2   :2通道
+ *         @arg HW_PIT0_CH3   :3通道
  * @param  NewState ENABLE 或DISABLE
  * @retval None
  */
@@ -150,13 +149,16 @@ void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
 }
 
  /**
- * @brief  PIT 定时器开始计数
- * 
- * @param  chl 通道号
- *         @arg HW_PIT0_CH0 
- *         @arg HW_PIT0_CH1
- *         @arg HW_PIT0_CH2 
- *         @arg HW_PIT0_CH3 
+ * @brief  PIT通道定时器开始计数
+ * @code
+ *      // 开始PIT模块 0 通道的计数
+ *      PIT_StartCounting(HW_PIT0_CH0);
+ * @endcode
+ * @param  chl  :通道号
+ *         @arg HW_PIT0_CH0   :0通道
+ *         @arg HW_PIT0_CH1   :1通道
+ *         @arg HW_PIT0_CH2   :2通道
+ *         @arg HW_PIT0_CH3   :3通道
  * @retval None
  */
 void PIT_StartCounting(uint8_t chl)
@@ -165,13 +167,16 @@ void PIT_StartCounting(uint8_t chl)
 }
 
  /**
- * @brief  PIT 定时器停止计数
- * 
- * @param  chl 通道号
- *         @arg HW_PIT0_CH0 
- *         @arg HW_PIT0_CH1
- *         @arg HW_PIT0_CH2 
- *         @arg HW_PIT0_CH3 
+ * @brief  PIT通道定时器停止计数
+ * @code
+ *      //停止PIT模块 0 通道的计数
+ *      PIT_StopCounting(HW_PIT0_CH0);
+ * @endcode
+ * @param  chl  :通道号
+ *         @arg HW_PIT0_CH0   :0通道
+ *         @arg HW_PIT0_CH1   :1通道
+ *         @arg HW_PIT0_CH2   :2通道
+ *         @arg HW_PIT0_CH3   :3通道
  * @retval None
  */
 void PIT_StopCounting(uint8_t chl)
@@ -180,11 +185,14 @@ void PIT_StopCounting(uint8_t chl)
 }
 
  /**
- * @brief  开启 或 关闭PIT模块 在初始化后默认开启
- * 
+ * @brief  开启或关闭PIT模块 在初始化后默认开启
+ * @code
+ *      //关闭PIT模块
+ *      PIT_Cmd(DISABLE);
+ * @endcode
  * @param  NewState
- *         @arg ENABLE: 开启
- *         @arg ENABLE: 关闭
+ *         @arg ENABLE  : 开启
+ *         @arg DISABLE : 关闭
  * @retval None
  */
 void PIT_Cmd(FunctionalState NewState)
@@ -195,7 +203,17 @@ void PIT_Cmd(FunctionalState NewState)
 //! @}
 
 //! @}
-
+/**
+ * @brief  注册中断回调函数
+ * @param  chl  :通道号
+ *         @arg HW_PIT0_CH0   :0通道入口
+ *         @arg HW_PIT0_CH1   :1通道入口
+ *         @arg HW_PIT0_CH2   :2通道入口
+ *         @arg HW_PIT0_CH3   :3通道入口
+ * @param AppCBFun: 回调函数指针入口
+ * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
+ */
 void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
@@ -204,6 +222,14 @@ void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun)
     }
 }
 
+/**
+ * @brief  中断处理函数入口
+ * @param  PIT0_IRQHandler :芯片的PIT 0通道中断函数入口
+ *         PIT1_IRQHandler :芯片的PIT 1通道中断函数入口
+ *         PIT2_IRQHandler :芯片的PIT 2通道中断函数入口
+ *         PIT3_IRQHandler :芯片的PIT 3通道中断函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void PIT0_IRQHandler(void)
 {
     PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;

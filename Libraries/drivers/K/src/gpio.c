@@ -378,7 +378,7 @@ uint32_t GPIO_ReadPort(uint8_t instance)
 }
 /**
  * @brief  向一个端口写入32位数据
-* @code
+ * @code
  *      //向PORTB端口写入0xFFFFFFFF
  *      GPIO_WriteByte(HW_GPIOB, 0xFFFFFFFF); 
  * @endcode
@@ -400,13 +400,18 @@ void GPIO_WritePort(uint8_t instance, uint32_t data)
 }
 
 /**
- * @brief  设置GPIO引脚中断 或者 引脚DMA功能
+ * @brief  设置GPIO引脚中断类型或者DMA功能
+ * @code
+ *      //设置PORTB端口的10引脚为下降沿触发中断
+ *      GPIO_ITDMAConfig(HW_GPIOB, 10, kGPIO_IT_FallingEdge); 
+ * @endcode
  * @param  instance: GPIO模块号
- *         @arg HW_GPIOA
- *         @arg HW_GPIOB
- *         @arg HW_GPIOC
- *         @arg HW_GPIOD
- *         @arg HW_GPIOE
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
  * @param config: 配置模式
  *         @arg kGPIO_IT_Disable 禁止中断功能
  *         @arg kGPIO_DMA_Disable 禁止DMA功能
@@ -470,14 +475,15 @@ void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type 
 }
 /**
  * @brief  注册中断回调函数
- * @param  instance: GPIO模块号
- *         @arg HW_GPIOA
- *         @arg HW_GPIOB
- *         @arg HW_GPIOC
- *         @arg HW_GPIOD
- *         @arg HW_GPIOE
- * @param AppCBFun: 回调函数指针
+ * @param  instance: GPIO模块中断入口号
+ *         @arg HW_GPIOA :芯片的PORTA端口中断入口
+ *         @arg HW_GPIOB :芯片的PORTB端口中断入口
+ *         @arg HW_GPIOC :芯片的PORTC端口中断入口
+ *         @arg HW_GPIOD :芯片的PORTD端口中断入口
+ *         @arg HW_GPIOE :芯片的PORTE端口中断入口
+ * @param AppCBFun: 回调函数指针入口
  * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
  */
 void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
 {
@@ -493,7 +499,15 @@ void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
 //! @}
 
 
-
+/**
+ * @brief  中断处理函数入口
+ * @param  PORTA_IRQHandler :芯片的PORTA端口中断函数入口
+ *         PORTB_IRQHandler :芯片的PORTB端口中断函数入口
+ *         PORTC_IRQHandler :芯片的PORTC端口中断函数入口
+ *         PORTD_IRQHandler :芯片的PORTD端口中断函数入口
+ *         PORTE_IRQHandler :芯片的PORTE端口中断函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void PORTA_IRQHandler(void)
 {
     uint32_t ISFR;

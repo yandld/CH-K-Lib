@@ -67,6 +67,36 @@ void DelayInit(void)
 }
 
 
+#if (defined(USE_FULL_ASSERT) || (defined(DEBUG)))
+
+void assert_failed(char * file, uint32_t line)
+{
+	//∂œ—‘ ß∞‹ºÏ≤‚
+	while(1);
+}
+#endif
+
+#if DEBUG
+
+void NMI_Handler(void)
+{
+    printf("NMI INTERRUPT\r\n");
+}
+
+void HardFault_Handler(void)
+{
+    printf("HardFault_Handler\r\n");
+    while(1);
+}
+
+void BusFault_Handler(void)
+{
+    printf("BusFault_Handler\r\n");
+    while(1);
+}
+
+#endif
+
 
 
 

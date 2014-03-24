@@ -120,23 +120,4 @@ int main(void)
     }
 }
 
-//!< None Maskable Interrupt
-void NMI_Handler(void)
-{
-    printf("NMI Enter\r\n");
-}
 
-
-void HardFault_Handler(void)
-{
-    printf("HardFault_Handler\r\n");
-    while(1);
-}
-
-#ifdef USE_FULL_ASSERT
-void assert_failed(char * file, uint32_t line)
-{
-	//¶ÏÑÔÊ§°Ü¼ì²â
-	while(1);
-}
-#endif

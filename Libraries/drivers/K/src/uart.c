@@ -315,7 +315,6 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config)
     }
 }
 
-
 void UART_CallbackTxInstall(uint8_t instance, UART_CallBackTxType AppCBFun)
 {
 	//param check

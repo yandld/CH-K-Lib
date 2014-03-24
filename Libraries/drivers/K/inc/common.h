@@ -60,7 +60,7 @@
 
 
 //²ÎÊý¼ì²âÆ÷
-#ifdef USE_FULL_ASSERT
+#if (defined(USE_FULL_ASSERT) || (defined(DEBUG)))
 
 /**
   * @brief  The assert_param macro is used for function's parameters check.
@@ -74,7 +74,7 @@
   void assert_failed(char * file, uint32_t line);
 #else
   #define assert_param(expr) ((void)0)
-#endif /* USE_FULL_ASSERT */
+#endif
 
 
 typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;

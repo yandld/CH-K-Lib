@@ -53,9 +53,9 @@ static const IRQn_Type GPIO_IRQnTable[] =
 //! @{
 
  /**
- * @brief  设置引脚复用功能 这个函数会被很多其他外设模块驱动程序调用
+ * @brief 设置引脚复用功能 这个函数会被很多其他外设模块驱动程序调用
  * 
- * 复用功能可参考 Reference Manual 的 Signal Multiplexing and Signal Descriptions 章节 
+ * @note 复用功能可参考 Reference Manual 的 Signal Multiplexing and Signal Descriptions 章节 
  * @code
  *      // 将一个IO口复用功能设置为Mux1
  *      PORT_PinMuxConfig(HW_GPIOA, 3, kPinAlt1);

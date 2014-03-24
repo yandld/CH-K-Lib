@@ -98,7 +98,6 @@
 #define PHY_PHYSTS_SPEEDSTATUS      (0x0002)
 #define PHY_PHYSTS_LINKSTATUS       (0x0001)
 
-
 /* PHY硬件特性 */
 #define PHY_STATUS                  ( 0x1F )
 #define PHY_DUPLEX_STATUS           ( 4<<2 )
@@ -106,9 +105,7 @@
 /* PHY收发器硬件地址 */
 #define CFG_PHY_ADDRESS             (0x01)
      
-     
-     
-     //Freescale处理器相关定义
+//Freescale处理器相关定义
 
 /* TX缓冲区描述符位定义 */
 #define TX_BD_R			0x0080
@@ -169,7 +166,6 @@
 /* MII接口超时 */
 #define MII_TIMEOUT		0x1FFFF
 
-
 /* 以太帧相关定义 */
 #define CFG_NUM_ENET_TX_BUFFERS     1     //发送缓冲区个数
 #define CFG_NUM_ENET_RX_BUFFERS     1     //接收缓冲区个数  驱动程序设定必须为1了 改了就会出错
@@ -191,20 +187,31 @@ typedef struct
   	uint32_t reserverd_word2;
 } NBUF;
 
-
+//!< 以太网初始化结构
 typedef struct
 {
     uint8_t* pMacAddress;
 }ENET_InitTypeDef;
      
-     
+typedef enum
+{
+    kENET_IT_TXF_Disable,   //!< 禁止发送一帧后产生中断     
+    kENET_IT_RXF_Disable,   //!< 禁止接收一帧后产生中断    
+    kENET_IT_TXF,           //!< 开启ENET发送一帧中断    
+    kENET_IT_RXF,           //!< 开启ENET接收一帧中断
+}ENET_ITDMAConfig_Type;
+
+//!< ENET CallBack Type
+typedef void (*ENET_CallBackTxType)(void);
+typedef void (*ENET_CallBackRxType)(void);
 
 //!< API functions
 void ENET_Init(ENET_InitTypeDef* ENET_InitStrut);
-void ENET_MII_Init(void);
-uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data);
-uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data);
-void ENET_MacSendData(uint8_t *ch, uint16_t len);
+void ENET_MacSendData(uint8_t *data, uint16_t len);
+uint16_t ENET_MacReceiveData(uint8_t *data);
+void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config);
+void ENET_CallbackTxInstall(ENET_CallBackTxType AppCBFun);
+void ENET_CallbackRxInstall(ENET_CallBackRxType AppCBFun);
 
 
 #ifdef __cplusplus

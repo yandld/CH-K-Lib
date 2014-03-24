@@ -34,7 +34,7 @@ extern const cmd_tbl_t CommandFun_OV7620;
 extern const cmd_tbl_t CommandFun_WDOG;
 extern const cmd_tbl_t CommandFun_RTC;
 extern const cmd_tbl_t CommandFun_ENET;
-
+extern const cmd_tbl_t CommandFun_TSI;
 
 static void Putc(uint8_t data)
 {
@@ -107,6 +107,8 @@ int main(void)
     shell_register_function(&CommandFun_OV7620);
     shell_register_function(&CommandFun_RTC);
     shell_register_function(&CommandFun_ENET);
+    shell_register_function(&CommandFun_TSI);
+    
     
     CMD_FLEXBUS(0, NULL);
     

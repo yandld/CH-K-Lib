@@ -23,7 +23,7 @@ int CMD_ADC(int argc, char * const * argv)
     ADC_InitStruct1.instance = HW_ADC0;
     ADC_InitStruct1.resolutionMode = kADC_SingleDiff8or9; //单端模式下8位精度 查分模式下9位精度
     ADC_InitStruct1.singleOrDifferential = kADC_Single;
-    ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;
+    ADC_InitStruct1.triggerMode = kADC_TriggerSoftware;
     //初始化ADC模块
   //  ADC_Init(&ADC_InitStruct1);
     

@@ -74,7 +74,7 @@
 #define kADC_SingleDIff16        (0x03)
 
 //!< ADC 触发方式定义
-#define kADC_TriggleSoftware     (0x00)
+#define kADC_TriggerSoftware     (0x00)
 #define kADC_TriggerHardware     (0x01)
 
 //!< 是否连续转换

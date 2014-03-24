@@ -529,6 +529,11 @@
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
             </File>
+            <File>
+              <FileName>cmd_tsi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_tsi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -618,6 +623,11 @@
               <FileName>enet.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\enet.c</FilePath>
+            </File>
+            <File>
+              <FileName>tsi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\tsi.c</FilePath>
             </File>
           </Files>
         </Group>

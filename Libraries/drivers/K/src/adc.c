@@ -215,7 +215,7 @@ uint8_t ADC_QuickInit(uint32_t ADCxMAP, uint32_t resolutionMode)
     AD_InitStruct1.chl = pADCxMap->channel;
     AD_InitStruct1.clockDiv = kADC_ClockDiv8;
     AD_InitStruct1.resolutionMode = resolutionMode;
-    AD_InitStruct1.triggerMode = kADC_TriggleSoftware;
+    AD_InitStruct1.triggerMode = kADC_TriggerSoftware;
     AD_InitStruct1.singleOrDifferential = kADC_Single;
     AD_InitStruct1.continueConversionMode = kADC_ContinueConversionEnable;
     AD_InitStruct1.hardwareAverageSelect = kADC_HardwareAverageDisable;

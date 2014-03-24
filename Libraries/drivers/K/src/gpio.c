@@ -88,7 +88,7 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
  *
  * @code
  *      // 将一个引脚设置为 配有上啦电阻 开漏输出开启
- *      PORT_PinMuxConfig(HW_GPIOA, 3, kPullUp, ENABLE);
+ *      PORT_PinMuxConfig(HW_GPIOA, 3, kPullUp);
  * @endcode
  * @param  instance: GPIO模块号
  *         @arg HW_GPIOA
@@ -101,7 +101,6 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
  *         @arg kPullDisabled:禁止上下拉
  *         @arg kPullUp: 上拉
  *         @arg kPullDown:下拉
- * @param  newState: 是否开启开漏输出模式 这个选项只在Kinetis K系列上有效果.
  * @retval None
  */
 void PORT_PinPullConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
@@ -163,7 +162,7 @@ void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode
  * @brief  通过填入初始化结构体 初始化GPIO
  *
  * @code
- *       //初始化引脚作为GPIO功能(PTB10) 推挽输出 并翻转该引脚的电平
+ *  //初始化引脚作为GPIO功能(PTB10) 推挽输出 并翻转该引脚的电平
  *  GPIO_InitTypeDef GPIO_InitStruct1;
  *  GPIO_InitStruct1.instance = HW_GPIOB;
  *  GPIO_InitStruct1.mode = kGPIO_Mode_OPP; //推挽输出

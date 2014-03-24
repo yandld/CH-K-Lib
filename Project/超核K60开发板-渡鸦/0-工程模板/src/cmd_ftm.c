@@ -4,7 +4,7 @@
 #include "board.h"
 #include <stdlib.h>
 #include <stdio.h>
-
+#include "systick.h"
 
 static int CMD_FTM_EA(int argc, char *const argv[])
 {

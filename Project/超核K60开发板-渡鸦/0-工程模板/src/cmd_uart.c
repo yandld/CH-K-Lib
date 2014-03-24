@@ -1,6 +1,7 @@
 #include "shell.h"
 #include "uart.h"
 #include "common.h"
+#include "systick.h"
 #include "board.h"
 #include "dma.h"
 

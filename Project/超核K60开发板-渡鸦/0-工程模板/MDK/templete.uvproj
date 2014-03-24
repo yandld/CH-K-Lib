@@ -520,14 +520,14 @@
               <FilePath>..\src\cmd_mp.c</FilePath>
             </File>
             <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_enet.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_enet.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>

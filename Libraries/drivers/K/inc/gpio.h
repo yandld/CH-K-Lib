@@ -153,7 +153,7 @@ void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data);
 uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex);
 void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex);
 uint32_t GPIO_ReadPort(uint8_t instance);
-void GPIO_WriteByte(uint8_t instance, uint8_t pinIndex, uint32_t data);
+void GPIO_WritePort(uint8_t instance, uint32_t data);
 void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config);
 void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun);
 void PORT_PinOpenDrainConfig(uint8_t instance, uint8_t pinIndex, FunctionalState newState);

@@ -5,6 +5,7 @@
   * @version V2.5
   * @date    2013.12.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+	* @note    此文件为内部文件，用户无需调用和修改  
   ******************************************************************************
   */
 #include "common.h"
@@ -12,10 +13,10 @@
 #include "systick.h"
 
  /**
- * @brief  编码快速初始化结构 用户一般不需调用
+ * @brief  编码快速初始化结构 用户不需调用
  *
  * @param  type: 快速初始化结构体指针
- * @retval 32位快速初始化编码
+ * @retval       32位快速初始化编码
  */
 uint32_t QuickInitEncode(QuickInit_Type * type)
 {
@@ -23,10 +24,10 @@ uint32_t QuickInitEncode(QuickInit_Type * type)
 }
 
  /**
- * @brief  解码快速初始化结构 用户一般不需调用
+ * @brief  解码快速初始化结构 用户不需调用
  *
  * @param  map: 32位快速初始化编码
- * @param  type: I2C快速初始化结构指针
+ * @param  type: 快速初始化结构指针
  * @retval None
  */
 void QuickInitDecode(uint32_t map, QuickInit_Type * type)
@@ -35,6 +36,36 @@ void QuickInitDecode(uint32_t map, QuickInit_Type * type)
     memcpy(type, pMap, sizeof(QuickInit_Type));  
 }
 
+/**
+ * @brief  延时初始化函数
+ * @code
+ *      // 完成延时初始化配置，
+ *      //使用内核的SYStic模块实现延时功能
+ *        DelayInit();
+ * @endcode
+ * @param  None
+ * @retval None
+ */
+ #if (defined(__CC_ARM))
+__weak void DelayInit(void)
+#elif (defined(__ICCARM__))
+#pragma weak DelayInit
+void DelayInit(void)
+#endif
+{
+    SYSTICK_DelayInit();
+}
+
+/**
+ * @brief 毫秒级的延时设置函数
+ * @code
+ *      // 实现500ms的延时功能
+ *        DelayMs(500);
+ * @endcode
+ * @param  ms :需要延时的时间，单位毫秒
+ * @retval None
+ * @note  首先需要完成延时初始化配置
+ */
 #if (defined(__CC_ARM))
 __weak void DelayMs(uint32_t ms)
 #elif (defined(__ICCARM__))
@@ -45,6 +76,16 @@ void DelayMs(uint32_t ms)
     SYSTICK_DelayMs(ms);
 }
 
+/**
+ * @brief 微秒级的延时设置函数
+ * @code
+ *      // 实现500us的延时功能
+ *        DelayUs(500);
+ * @endcode
+ * @param  us :需要延时的时间，单位微秒
+ * @retval None
+ * @note  首先需要完成延时初始化配置
+ */
 #if (defined(__CC_ARM))
 __weak void DelayUs(uint32_t us)
 #elif (defined(__ICCARM__))
@@ -55,16 +96,6 @@ void DelayUs(uint32_t us)
     SYSTICK_DelayUs(us);
 }
 
-
-#if (defined(__CC_ARM))
-__weak void DelayInit(void)
-#elif (defined(__ICCARM__))
-#pragma weak DelayInit
-void DelayInit(void)
-#endif
-{
-    SYSTICK_DelayInit();
-}
 
 
 #if (defined(USE_FULL_ASSERT) || (defined(DEBUG)))

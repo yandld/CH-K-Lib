@@ -1,6 +1,15 @@
+/**
+  ******************************************************************************
+  * @file    clock.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2013.12.25
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+	* @note    此文件为内部文件，用于设置和获取芯片时钟频率，用户无需调用和修改  
+  ******************************************************************************
+  */
 #include "clock.h"
 #include "common.h"
-
 
 #define MCGOUT_TO_CORE_DIVIDER           (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
 #define MCGOUT_TO_SYSTEM_DIVIDER         (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
@@ -16,19 +25,25 @@
 //#define MCGOUT_TO_FLEXBUS_DIV_SET(x)     SIM_CLKDIV1_OUTDIV3(x)
 #define MCGOUT_TO_FLASH_DIV_SET(x)       SIM_CLKDIV1_OUTDIV4(x)
 
-//! @defgroup CHKinetis
-//! @{
-
-
-//! @defgroup CLOCK
-//! @brief 时钟分频模块
-//! @{
 
  /**
  * @brief  设置各个时钟的分频系数
- *
+ * @code
+ *      // 设置内核时钟的输出频率为1/3分频
+ *      CLOCK_SetClockDivider(kMcgOut2CoreDivider, kClockSimDiv3);
+ * @endcode
  * @param  clockDivName: 时钟名称
+ *         @arg kMcgOut2CoreDivider   :内核时钟分频
+ *         @arg kMcgOut2SystemDivider :系统时钟分频
+ *         @arg kMcgOut2BusDivider    :总线时钟分频
+ *         @arg kMcgOut2FlashDivider  :flash时钟分频
  * @param  dividerValue: 分频系数
+ *         @arg kClockSimDiv2  :2分频
+ *         @arg kClockSimDiv3  :3分频
+ *         @arg             .  : .      
+ *         @arg             .  : .  
+ *         @arg             .  : .   
+ *         @arg kClockSimDiv16 :16分频
  * @retval None
  */
 void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideValue_Type dividerValue)
@@ -54,21 +69,21 @@ void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideVa
 
  /**
  * @brief  获得系统各个总线时钟的频率
- *
  * @code
- *         //获得总线频率
- *         uint32_t SysClock;
- *         CLOCK_GetClockFrequency(kCoreClock, &SysClock);
- *         printf("CoreClock:%dHz\r\n", SysClock);
+ *         //获得总线时钟频率
+ *         uint32_t BusClock;
+ *         CLOCK_GetClockFrequency(kBusClock, &BusClock);
+ *         //将总线时钟频率显示出来
+ *         printf("BusClock:%dHz\r\n", BusClock);
  * @endcode
  * @param  clockName:时钟名称
- *         @arg kCoreClock: 内核时钟
- *         @arg kSystemClock:系统时钟
- *         @arg kBusClock: 总线时钟
- *         @arg kFlexBusClock: Flexbus总线
- *         @arg kFlashClock: Flash总线
+ *         @arg kCoreClock    :内核时钟
+ *         @arg kSystemClock  :系统时钟
+ *         @arg kBusClock     :总线时钟
+ *         @arg kFlexBusClock :Flexbus总线时钟
+ *         @arg kFlashClock   :Flash总线时钟
  * @param  FrequenctInHz: 获得频率数据的指针 单位Hz
- * @retval 0 成功 非0 错误
+ * @retval 0: 成功 非0: 错误
  */
 int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz)
 {
@@ -95,8 +110,5 @@ int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* Frequenct
     return 0;
 }
 
-//! @
-
-//! @
 
 

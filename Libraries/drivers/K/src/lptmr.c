@@ -121,10 +121,10 @@ uint32_t LPTMR_PC_ReadCounter(void)
 uint32_t LPTMR_PC_QuickInit(uint32_t LPTMRxMAP)
 {
     uint32_t i;
-    QuickInit_Type * pLPTMRxMap = (QuickInit_Type*)&(LPTMRxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(LPTMRxMAP);
     LPTMR_PC_InitTypeDef LPTMR_PC_InitStruct1;
     LPTMR_PC_InitStruct1.counterOverflowValue = 0xFFFF;
-    switch(pLPTMRxMap->channel)
+    switch(pq->channel)
     {
         case 1:
             LPTMR_PC_InitStruct1.inputSource = kLPTMR_PC_InputSource_ALT1;
@@ -136,12 +136,14 @@ uint32_t LPTMR_PC_QuickInit(uint32_t LPTMRxMAP)
             break;
     }
     LPTMR_PC_InitStruct1.pinPolarity = kLPTMR_PC_PinPolarity_RigsingEdge;
-    LPTMR_PC_Init(&LPTMR_PC_InitStruct1);
-    // init pinmux
-    for(i = 0; i < pLPTMRxMap->io_offset; i++)
+    /* init pinmux */
+    for(i = 0; i < pq->io_offset; i++)
     {
-        PORT_PinMuxConfig(pLPTMRxMap->io_instance, pLPTMRxMap->io_base + i, (PORT_PinMux_Type) pLPTMRxMap->mux); 
+        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
     }
+    /* init moudle */
+    LPTMR_PC_Init(&LPTMR_PC_InitStruct1);
+    return pq->ip_instance;
 }
 
 void LPTMR_ClearCount(void)

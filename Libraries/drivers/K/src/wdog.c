@@ -71,16 +71,16 @@ void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
             break;
     }
     WDOG_Unlock();
-    // Set Timeout Value
+    /* set timeout value */
     time_out = ((clock/8)/1000)*(WDOG_InitStruct->timeOutInMs);
     WDOG->TOVALH = (time_out & 0xFFFF0000)>>16;
     WDOG->TOVALL = (time_out & 0x0000FFFF)>>0;
-    // set window time value :timeout must greater then window time
+    /* set window time value :timeout must greater then window time */
     time_out = ((clock/8)/1000)*(WDOG_InitStruct->windowInMs);
     WDOG->WINH = (time_out & 0xFFFF0000)>>16;
     WDOG->WINL = (time_out & 0x0000FFFF)>>0;
     WDOG->PRESC = WDOG_PRESC_PRESCVAL(7); // perscale = 8
-    // enable wdog
+    /* enable wdog */
     wdag_value |= WDOG_STCTRLH_WDOGEN_MASK;
     WDOG->STCTRLH = wdag_value;
 }
@@ -149,7 +149,7 @@ void WDOG_Refresh(void)
     uint32_t i;
 	WDOG->REFRESH = 0xA602u;
 	WDOG->REFRESH = 0xB480u;
-    // a gap of more then 20 bus cycle between 2 refresh sequence
+    /* a gap of more then 20 bus cycle between 2 refresh sequence */
     for(i = 0; i < 20; i++)
     {
         __NOP();

@@ -27,7 +27,7 @@ SPI_Type * const SPI_InstanceTable[] = SPI_BASES;
 static SPI_CallBackType SPI_CallBackTable[ARRAY_SIZE(SPI_InstanceTable)] = {NULL};
     
 #if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15))
-static const RegisterManipulation_Type SIM_SPIClockGateTable[] =
+static const struct reg_ops SIM_SPIClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_DSPI0_MASK},
     {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI1_MASK},
@@ -232,22 +232,23 @@ void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type fram
 uint32_t SPI_QuickInit(uint32_t SPIxMAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate)
 {
     uint32_t i;
-    QuickInit_Type * pSPIxMap = (QuickInit_Type*)&(SPIxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(SPIxMAP);
     SPI_InitTypeDef SPI_InitStruct1;
     SPI_InitStruct1.baudrate = baudrate;
     SPI_InitStruct1.frameFormat = (SPI_FrameFormat_Type)frameFormat;
     SPI_InitStruct1.dataSize = 8;
-    SPI_InitStruct1.instance = pSPIxMap->ip_instance;
+    SPI_InitStruct1.instance = pq->ip_instance;
     SPI_InitStruct1.mode = kSPI_Master;
     SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
     SPI_InitStruct1.ctar = HW_CTAR0;
-    SPI_Init(&SPI_InitStruct1);
-    // init pinmux
-    for(i = 0; i < pSPIxMap->io_offset; i++)
+    /* init pinmux */
+    for(i = 0; i < pq->io_offset; i++)
     {
-        PORT_PinMuxConfig(pSPIxMap->io_instance, pSPIxMap->io_base + i, (PORT_PinMux_Type) pSPIxMap->mux); 
+        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
     }
-    return pSPIxMap->ip_instance;
+    /* init moudle */
+    SPI_Init(&SPI_InitStruct1);
+    return pq->ip_instance;
 }
 
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config)

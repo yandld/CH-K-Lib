@@ -38,6 +38,9 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
     struct spi_bus bus; 
     spi_bus_init(&bus, BOARD_SPI_INSTANCE);
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
+    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
     w25qxx_device w25qxx1;
     w25qxx1.bus = &bus;
     if(w25qxx_init(&w25qxx1, BOARD_FLASH_SPI_PCSN, HW_CTAR1, 64*1000*1000))
@@ -86,6 +89,9 @@ static int DO_SPI_TP(int argc, char * const argv[])
     struct spi_bus bus; 
     spi_bus_init(&bus, BOARD_SPI_INSTANCE);
     PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
+    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
     struct ads7843_device ads7843;
     ads7843.bus = &bus;
     ads7843_init(&ads7843, BOARD_TP_SPI_PCSN, HW_CTAR0, 20*1000);

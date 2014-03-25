@@ -10,7 +10,6 @@
 
 #include "i2c_abstraction.h"
 #include "i2c.h"
-#include "board.h"
 
 i2c_status i2c_bus_deinit(i2c_bus_t bus)
 {
@@ -44,7 +43,7 @@ i2c_status i2c_bus_probe(i2c_bus_t bus, uint8_t chip_addr)
     I2C_Send7bitAddress(bus->instance, chip_addr, kI2C_Write);
     if(I2C_WaitAck(bus->instance))
     {
-      ret = ki2c_status_no_slave;
+        ret = ki2c_status_no_slave;
     }
     else
     {
@@ -66,7 +65,10 @@ i2c_status i2c_bus_init(struct i2c_bus * bus, uint32_t instance, uint32_t baudra
     bus->instance = instance;
     if(!bus_open_flag)
     {
-        bus->instance = I2C_QuickInit(BOARD_I2C_MAP, 100*1000);
+        I2C_InitTypeDef I2C_InitStruct1;
+        I2C_InitStruct1.baudrate = bus->baudrate;
+        I2C_InitStruct1.instance = bus->instance;
+        I2C_Init(&I2C_InitStruct1);
         bus_open_flag = 1;
     }
     bus->init = i2c_bus_init;

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "at24cxx.h"
 #include "adxl345.h"
+#include "gpio.h"
 #include "i2c_abstraction.h"
 #include "systick.h"
 
@@ -13,13 +14,13 @@ static int DO_I2C_SCAN(int argc, char *const argv[])
 {
     uint8_t i;
     struct i2c_bus bus;
-    if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 10*1000))
+    if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 100*1000))
     {
         printf("i2c init failed\r\n");
         return 1;
     }
     shell_printf("i2c scanning bus at speed:%d\r\n", bus.baudrate);
-    for(i = 0;i < 127; i++)
+    for(i = 1;i < 127; i++)
     {
         if(bus.probe(&bus, i) == ki2c_status_ok)
         {
@@ -117,6 +118,13 @@ static int DO_I2C_ADXL345(int argc, char *const argv[])
 
 int CMD_I2C(int argc, char *const argv[])
 {
+    PORT_PinMuxConfig(HW_GPIOB, 2, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOB, 3, kPinAlt2);
+    PORT_PinOpenDrainConfig(HW_GPIOB, 2, ENABLE); 
+    PORT_PinOpenDrainConfig(HW_GPIOB, 3, ENABLE);
+    PORT_PinPullConfig(HW_GPIOB, 3, kPullUp);
+    PORT_PinPullConfig(HW_GPIOB, 2, kPullUp);
+    
     if((argc == 2) && (!strcmp(argv[1], "SCAN")))
     {
         return DO_I2C_SCAN(argc, argv);
@@ -144,9 +152,9 @@ const cmd_tbl_t CommandFun_I2C =
     .maxargs = 5,
     .repeatable = 1,
     .cmd = CMD_I2C,
-    .usage = "I2C <CMD> (CMD = SCAN,IT,AT24CXX)",
+    .usage = "I2C <CMD> (CMD = SCAN,IT,AT24CXX,ADXL345)",
     .complete = NULL,
-    .help = "I2C <CMD> (CMD = SCAN,IT,AT24CXX)",
+    .help = "I2C <CMD> (CMD = SCAN,IT,AT24CXX,ADXL345)",
 
 };
 

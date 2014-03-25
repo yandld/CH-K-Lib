@@ -78,7 +78,7 @@ void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideVa
  * @endcode
  * @param  clockName:时钟名称
  *         @arg kCoreClock    :内核时钟
- *         @arg kSystemClock  :系统时钟
+ *         @arg kSystemClock  :系统时钟 = 内核时钟
  *         @arg kBusClock     :总线时钟
  *         @arg kFlexBusClock :Flexbus总线时钟
  *         @arg kFlashClock   :Flash总线时钟
@@ -88,15 +88,15 @@ void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideVa
 int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz)
 {
     uint32_t MCGOutClock = 0;
-    //calualte MCGOutClock
+    /* calualte MCGOutClock system_MKxxx.c must not modified*/
     MCGOutClock = SystemCoreClock * MCGOUT_TO_CORE_DIVIDER;
-    
     switch (clockName)
     {
         case kCoreClock:
             *FrequenctInHz = MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
             break;
         case kSystemClock:
+            *FrequenctInHz = MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
             break;	
         case kBusClock:
             *FrequenctInHz = MCGOutClock / MCGOUT_TO_BUS_DIVIDER;

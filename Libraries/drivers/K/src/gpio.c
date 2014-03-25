@@ -5,13 +5,13 @@
   * @version V2.5
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-	* @note    此文件为芯片GPIO模块的底层功能函数
+  * @note    此文件为芯片GPIO模块的底层功能函数
   ******************************************************************************
   */
 
 #include "gpio.h"
 
-//!< Leagacy Support for Kineis Z Version(Inital Version)
+/* leagacy support for Kineis Z version(inital version) */
 #if (!defined(GPIO_BASES))
 
     #if (defined(MK60DZ10))
@@ -24,7 +24,7 @@
     #endif
 #endif
 
-//!< Gloabl Const Table Defination
+/* gloabl vars */
 static GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
 static PORT_Type * const PORT_InstanceTable[] = PORT_BASES;
 static GPIO_CallBackType GPIO_CallBackTable[ARRAY_SIZE(PORT_InstanceTable)] = {NULL};
@@ -57,7 +57,7 @@ static const IRQn_Type GPIO_IRQnTable[] =
  * @brief 设置引脚复用功能 这个函数会被很多其他外设模块驱动程序调用
  * @note  复用功能可参考 Reference Manual 的 Signal Multiplexing and Signal Descriptions 章节 
  * @code
- *      // 将一PORTA端口的3引脚复用成1模式即普通的PTA3模式
+ *      // 将一PORTA端口的3引脚复用成1模式.
  *      PORT_PinMuxConfig(HW_GPIOA, 3, kPinAlt1);
  * @endcode
  * @param  instance: GPIO模块号 
@@ -88,7 +88,7 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
  /**
  * @brief  设置一个引脚的上下拉电阻功能 用户一般不必调用
  * @code
- *      // 将PORTA端口的3引脚设置为上拉电阻
+ *      // 将PORTA端口的3引脚设置为上拉电阻(在输入的情况下)
  *      PORT_PinMuxConfig(HW_GPIOA, 3, kPullUp);
  * @endcode
  * @param  instance: GPIO模块号
@@ -100,13 +100,13 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
  * @param  pinIndex  :端口上的引脚号 0~31
  * @param  pull      :引脚电阻模式选择
  *         @arg kPullDisabled :关闭电阻上下拉
- *         @arg kPullUp       :上拉电阻设置
- *         @arg kPullDown     :下拉电阻设置
+ *         @arg kPullUp       :上拉电阻
+ *         @arg kPullDown     :下拉电阻
  * @retval None
  */
 void PORT_PinPullConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
@@ -173,7 +173,7 @@ void PORT_PinOpenDrainConfig(uint8_t instance, uint8_t pinIndex, FunctionalState
  */
 void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
@@ -198,11 +198,11 @@ void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode
  */
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(GPIO_InitStruct->instance));
     assert_param(IS_PORT_ALL_INSTANCE(GPIO_InitStruct->instance));
     assert_param(IS_GPIO_ALL_PIN(GPIO_InitStruct->pinx));
-    //config state
+    /* config state */
     switch(GPIO_InitStruct->mode)
     {
         case kGPIO_Mode_IFT:
@@ -233,7 +233,7 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
         default:
             break;					
     }
-    //config pinMux
+    /* config pinMux */
     PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
 }
 
@@ -289,7 +289,7 @@ uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode)
  */
 void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
@@ -315,11 +315,11 @@ void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data)
  */
 uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
-    //!< input or output
+    /* input or output */
     if(((GPIO_InstanceTable[instance]->PDDR) >> pinIndex) & 0x01)
     {
         return ((GPIO_InstanceTable[instance]->PDOR >> pinIndex) & 0x01);
@@ -347,7 +347,7 @@ uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex)
  */
 void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
@@ -371,7 +371,7 @@ void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex)
  */
 uint32_t GPIO_ReadPort(uint8_t instance)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     return (GPIO_InstanceTable[instance]->PDIR);
@@ -393,7 +393,7 @@ uint32_t GPIO_ReadPort(uint8_t instance)
  */
 void GPIO_WritePort(uint8_t instance, uint32_t data)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     GPIO_InstanceTable[instance]->PDOR = data;
@@ -427,7 +427,7 @@ void GPIO_WritePort(uint8_t instance, uint32_t data)
  */
 void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
@@ -487,7 +487,7 @@ void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type 
  */
 void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     if(AppCBFun != NULL)
@@ -511,9 +511,9 @@ void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
 void PORTA_IRQHandler(void)
 {
     uint32_t ISFR;
-    //safe copy
+    /* safe copy */
     ISFR = PORT_InstanceTable[HW_GPIOA]->ISFR;
-    //clear IT pending bit
+    /* clear IT pending bit */
     PORT_InstanceTable[HW_GPIOA]->ISFR = 0xFFFFFFFF;
     if(GPIO_CallBackTable[HW_GPIOA])
     {
@@ -524,9 +524,9 @@ void PORTA_IRQHandler(void)
 void PORTB_IRQHandler(void)
 {
     uint32_t ISFR;
-    //safe copy
+    /* safe copy */
     ISFR = PORT_InstanceTable[HW_GPIOB]->ISFR;
-    //clear IT pending bit
+    /* clear IT pending bit */
     PORT_InstanceTable[HW_GPIOB]->ISFR = 0xFFFFFFFF;
     if(GPIO_CallBackTable[HW_GPIOB])
     {
@@ -537,9 +537,9 @@ void PORTB_IRQHandler(void)
 void PORTC_IRQHandler(void)
 {
     uint32_t ISFR;
-    //safe copy
+    /* safe copy */
     ISFR = PORT_InstanceTable[HW_GPIOC]->ISFR;
-    //clear IT pending bit
+    /* clear IT pending bit */
     PORT_InstanceTable[HW_GPIOC]->ISFR = PORT_ISFR_ISF_MASK;
     if(GPIO_CallBackTable[HW_GPIOC])
     {
@@ -550,9 +550,9 @@ void PORTC_IRQHandler(void)
 void PORTD_IRQHandler(void)
 {
     uint32_t ISFR;
-    //safe copy
+    /* safe copy */
     ISFR = PORT_InstanceTable[HW_GPIOD]->ISFR;
-    //clear IT pending bit
+    /* clear IT pending bit */
     PORT_InstanceTable[HW_GPIOD]->ISFR = PORT_ISFR_ISF_MASK;
     if(GPIO_CallBackTable[HW_GPIOD])
     {
@@ -563,9 +563,9 @@ void PORTD_IRQHandler(void)
 void PORTE_IRQHandler(void)
 {
     uint32_t ISFR;
-    //safe copy
+    /* safe copy */
     ISFR = PORT_InstanceTable[HW_GPIOE]->ISFR;
-    //clear IT pending bit
+    /* clear IT pending bit */
     PORT_InstanceTable[HW_GPIOE]->ISFR = PORT_ISFR_ISF_MASK;
     if(GPIO_CallBackTable[HW_GPIOE])
     {
@@ -577,9 +577,9 @@ void PORTE_IRQHandler(void)
 void PORTF_IRQHandler(void)
 {
     uint32_t ISFR;
-    //safe copy
+    /* safe copy */
     ISFR = PORT_InstanceTable[HW_GPIOF]->ISFR;
-    //clear IT pending bit
+    /* clear IT pending bit */
     PORT_InstanceTable[HW_GPIOF]->ISFR = PORT_ISFR_ISF_MASK;
     if(GPIO_CallBackTable[HW_GPIOF])
     {

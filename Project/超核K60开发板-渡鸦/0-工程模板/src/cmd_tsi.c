@@ -34,7 +34,6 @@ void TSI_ISR(uint32_t outOfRangeArray)
 
 int CMD_TSI(int argc, char * const argv[])
 {
-    uint32_t i;
     printf("TSI TEST\r\n");
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     GPIO_QuickInit(HW_GPIOE, 7, kGPIO_Mode_OPP);

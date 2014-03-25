@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2013.12.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-	* @note    此文件为内部文件，用于设置和获取芯片时钟频率，用户无需调用和修改  
+  * @note    此文件为内部文件，用于设置和获取芯片时钟频率，用户无需调用和修改  
   ******************************************************************************
   */
 #ifndef __CLOCK_H__
@@ -13,6 +13,7 @@
 
 #include <stdint.h>
 
+/* 时钟源定义 */
 typedef enum
 {
     kCoreClock,

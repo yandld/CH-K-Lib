@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-	* @note    此文件为芯片GPIO模块的底层功能函数
+  * @note    此文件为芯片GPIO模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __GPIO_H__
@@ -18,6 +18,7 @@
 #include "common.h"
 #include <stdint.h>
 
+/* GPIO端口定义 */
 #define HW_GPIOA  (0x00U)
 #define HW_GPIOB  (0x01U)
 #define HW_GPIOC  (0x02U)
@@ -26,7 +27,7 @@
 #define HW_GPIOF  (0x05U)
 
 
-//!< mcu select type
+/* 端口复用选择 根据手册 Signal Multiplexing and Signal Descriptions 章节选择复用*/
 typedef enum
 {
     kPinAlt0,
@@ -40,7 +41,7 @@ typedef enum
     kPinAltNameCount,
 }PORT_PinMux_Type;
 
-//!< port pull type
+/* 端口上下拉配置 */
 typedef enum
 {
     kPullDisabled,
@@ -49,18 +50,18 @@ typedef enum
     kPullNameCount,
 }PORT_Pull_Type;
 
-//!< pin mode type
+/* GPIO端口模式配置 */
 typedef enum
 {
-    kGPIO_Mode_IFT = 0x00,            //!< input floating mode
-    kGPIO_Mode_IPD = 0x01,            //!< input pull down mode
-    kGPIO_Mode_IPU = 0x02,            //!< input pull up mode
-    kGPIO_Mode_OOD = 0x03,            //!< output open drain mode
-    kGPIO_Mode_OPP = 0x04,            //!< output push mode
+    kGPIO_Mode_IFT = 0x00,            //!< 浮空输入
+    kGPIO_Mode_IPD = 0x01,            //!< 下拉输入
+    kGPIO_Mode_IPU = 0x02,            //!< 上拉输入
+    kGPIO_Mode_OOD = 0x03,            //!< 开漏输出
+    kGPIO_Mode_OPP = 0x04,            //!< 推挽输出
     kGPIO_ModeNameCount,
 }GPIO_Mode_Type;
 
-//!< ping config type
+/* 端口输入输出模式选择 */
 typedef enum
 {
     kInput,
@@ -68,7 +69,7 @@ typedef enum
     kPinConfigNameCount,
 }GPIO_PinConfig_Type;
 
-//!< ITDMAConfig type
+/* 端口中断及DMA配置选择 */
 typedef enum
 {
     kGPIO_IT_Disable,
@@ -84,18 +85,18 @@ typedef enum
     kGPIO_ITDMAConfigNameCount,
 }GPIO_ITDMAConfig_Type;
 
-//!< init struct
+/* 端口初始化结构体 */
 typedef struct
 {
-    uint8_t                instance;             //!< GPIO pin select
-    GPIO_Mode_Type         mode;                 //!< GPIO operation mode
-    uint32_t               pinx;                 //!< pin index
+    uint8_t                instance;             //!< 端口
+    GPIO_Mode_Type         mode;                 //!< 工作模式
+    uint32_t               pinx;                 //!< 引脚号
 }GPIO_InitTypeDef;
 
-//!< call back type
+/* 端口中断回调函数定义 */
 typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 
-//!< param check
+/* 参数检查宏 */
 #define IS_GPIO_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(GPIO_InstanceTable))
 #define IS_PORT_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(PORT_InstanceTable))
 #define IS_GPIO_ALL_PIN(PIN)  (PIN < 32)
@@ -120,7 +121,6 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 #define GPIOE_IDR_Addr    (PTE_BASE+0x10) //0x40011808 
 #define GPIOF_IDR_Addr    (PTF_BASE+0x10) //0x40011A08 
 #define GPIOG_IDR_Addr    (PTG_BASE+0x10) //0x40011E08 
-
 
 #define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  //! < output
 #define PAin(n)    BIT_ADDR(GPIOA_IDR_Addr,n)  //! < input

@@ -16,19 +16,6 @@
 static uint32_t fac_us; //!< usDelay Mut
 static uint32_t fac_ms; //!< msDelay Mut
 
-
-#if (!defined(PIT_BASES))
-
-#if     (defined(MK60DZ10))
-#define PIT_BASES {PIT}
-#elif   (defined(MK10D5))
-#define PIT_BASES {PIT}
-#endif
-
-#endif
-
-
-PIT_Type * const PIT_InstanceTable[] = PIT_BASES;
 static PIT_CallBackType PIT_CallBackTable[4] = {NULL};
 static const IRQn_Type PIT_IRQnTable[] = 
 {
@@ -51,7 +38,6 @@ static const IRQn_Type PIT_IRQnTable[] =
  * @code
  *      // 配置PIT0模块的0通道，时间周期为1ms
  *      PIT_InitTypeDef PIT_InitStruct1; //申请一个结构变量
- *      PIT_InitStruct1.instance = 0;    //这里必须是0
  *      PIT_InitStruct1.chl = 0;         //选择0通道
  *      PIT_InitStruct1.timeInUs = 1000  //1ms
  *      PIT_Init(&PIT_InitStruct1);
@@ -67,7 +53,7 @@ void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
     fac_us /= 1000000;
     fac_ms = (fac_us * 1000);
     fac_ms = fac_ms;
-    PIT_InstanceTable[PIT_InitStruct->instance]->CHANNEL[PIT_InitStruct->chl].LDVAL = fac_us * PIT_InitStruct->timeInUs;
+    PIT->CHANNEL[PIT_InitStruct->chl].LDVAL = fac_us * PIT_InitStruct->timeInUs;
     PIT_StartCounting(PIT_InitStruct->chl);
     PIT_Cmd(ENABLE);
 }
@@ -100,7 +86,6 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
 {
     PIT_InitTypeDef PIT_InitStruct1;
     PIT_InitStruct1.chl = chl;
-    PIT_InitStruct1.instance = 0;
     PIT_InitStruct1.timeInUs = timeInUs;
     PIT_Init(&PIT_InitStruct1);
     PIT_StartCounting(chl);
@@ -222,14 +207,7 @@ void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun)
     }
 }
 
-/**
- * @brief  中断处理函数入口
- * @param  PIT0_IRQHandler :芯片的PIT 0通道中断函数入口
- *         PIT1_IRQHandler :芯片的PIT 1通道中断函数入口
- *         PIT2_IRQHandler :芯片的PIT 2通道中断函数入口
- *         PIT3_IRQHandler :芯片的PIT 3通道中断函数入口
- * @note 函数内部用于中断事件处理
- */
+
 void PIT0_IRQHandler(void)
 {
     PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;

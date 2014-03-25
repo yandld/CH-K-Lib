@@ -43,14 +43,12 @@
 #endif
 
 
-//! @brief expanse the "assert_param" macro in the Lib drivers code 
-#define USE_FULL_ASSERT         
-//! @brief means you can use printf
+/* means you can use printf via UART */
 #define UART_USE_STDIO
 
 
 
-//!< CH_Kinetis version information
+/* version information */
 #define CHK_VERSION                   2L              //!< major version number
 #define CHK_SUBVERSION                5L              //!< minor version number
 #define CHK_REVISION                  0L              //!< revise version number
@@ -61,7 +59,7 @@
 
 
 //²ÎÊý¼ì²âÆ÷
-#if (defined(USE_FULL_ASSERT) || (defined(DEBUG)))
+#if defined(DEBUG)
 
 /**
   * @brief  The assert_param macro is used for function's parameters check.
@@ -83,17 +81,12 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 typedef enum {FALSE = 0, TRUE = !FALSE} ErrorState;
 
 
-#if !defined(MIN)
-    #define MIN(a, b)   ((a) < (b) ? (a) : (b))
-#endif
-
-#if !defined(MAX)
-    #define MAX(a, b)   ((a) > (b) ? (a) : (b))
-#endif
-
+#define MIN(a, b)       ((a) < (b) ? (a) : (b))
+#define MAX(a, b)       ((a) > (b) ? (a) : (b))
+#define  ABS(a)         (((a) < 0) ? (-(a)) : (a))
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 
-#define BSWAP_16(x)	(uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))
+#define BSWAP_16(x)     (uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))
 #define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
 
@@ -114,12 +107,12 @@ typedef struct
     uint32_t reserved:8;
 }QuickInit_Type;
 
-//!< 
-typedef struct
+
+struct reg_ops
 {
     void *      addr;
     uint32_t    mask;
-}RegisterManipulation_Type;
+};
 
 #define NVIC_PriorityGroup_0         ((uint32_t)0x7) /*!< 0 bits for pre-emption priority   4 bits for subpriority */                                               
 #define NVIC_PriorityGroup_1         ((uint32_t)0x6) /*!< 1 bits for pre-emption priority   3 bits for subpriority */                                                  

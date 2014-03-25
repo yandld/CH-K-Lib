@@ -100,19 +100,18 @@ uint32_t TSI_QuickInit(uint32_t UARTxMAP)
 {
     uint32_t i;
     TSI_InitTypeDef TSI_InitStruct;
-    QuickInit_Type * pTSIxMAP;
-    pTSIxMAP = (QuickInit_Type*)&UARTxMAP;
+    QuickInit_Type * pq = (QuickInit_Type*)&UARTxMAP;
     /* config pinmux */
-    for(i = 0; i < pTSIxMAP->io_offset; i++)
+    for(i = 0; i < pq->io_offset; i++)
     {
-        PORT_PinMuxConfig(pTSIxMAP->io_instance, pTSIxMAP->io_base + i, (PORT_PinMux_Type) pTSIxMAP->mux);
+        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux);
     }
     /* config TSI moudle */
-    TSI_InitStruct.chl = pTSIxMAP->channel;
+    TSI_InitStruct.chl = pq->channel;
     TSI_InitStruct.triggerMode = kTSI_TriggerPeriodicalScan;
     TSI_InitStruct.threshld = 200;
     TSI_Init(&TSI_InitStruct);
-    return pTSIxMAP->ip_instance;
+    return pq->ip_instance;
 }
 
 

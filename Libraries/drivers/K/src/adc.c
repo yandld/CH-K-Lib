@@ -12,7 +12,7 @@
 #include "adc.h"
 #include "gpio.h"
 
-//!< Leagacy Support for Kineis Z Version(Inital Version)
+/* leagacy support for Kineis Z Version(inital version) */
 #if (!defined(ADC_BASES))
 
     #if (defined(MK60DZ10))
@@ -22,12 +22,12 @@
         #define ADC_BASES {ADC0}
     #endif
 #endif
-  
+/* global vars */
 ADC_Type * const ADC_InstanceTable[] = ADC_BASES;
 static ADC_CallBackType ADC_CallBackTable[ARRAY_SIZE(ADC_InstanceTable)] = {NULL};
 
 #if (defined(MK60DZ10) || defined(MK60D10))
-static const RegisterManipulation_Type SIM_ADCClockGateTable[] =
+static const struct reg_ops SIM_ADCClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC0_MASK},
     {(void*)&(SIM->SCGC3), SIM_SCGC3_ADC1_MASK},
@@ -63,7 +63,6 @@ static const IRQn_Type ADC_IRQnTable[] =
 
 //! @defgroup CHKinetis
 //! @{
-
 
 //! @defgroup ADC(模数转换模块)
 //! @brief ADC API functions
@@ -168,22 +167,22 @@ static int32_t ADC_Calibration(uint32_t instance)
  */
 void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 {
-    // enable clock gate
+    /* enable clock gate */
     *(uint32_t*)SIM_ADCClockGateTable[ADC_InitStruct->instance].addr |= SIM_ADCClockGateTable[ADC_InitStruct->instance].mask;
-    // do calibration
+    /* do calibration */
     ADC_Calibration(ADC_InitStruct->instance);
-	// set clock configuration
+	/* set clock configuration */
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~ADC_CFG1_ADICLK_MASK;
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |=  ADC_CFG1_ADICLK(ADC_InitStruct->clockDiv); 
-    // resolutionMode
+    /* resolutionMode */
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~(ADC_CFG1_MODE_MASK); 
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |= ADC_CFG1_MODE(ADC_InitStruct->resolutionMode);
-    // trigger mode
+    /* trigger mode */
     (kADC_TriggerHardware == ADC_InitStruct->triggerMode)?(ADC_InstanceTable[ADC_InitStruct->instance]->SC2 |=  ADC_SC2_ADTRG_MASK):(ADC_InstanceTable[ADC_InitStruct->instance]->SC2 &=  ADC_SC2_ADTRG_MASK);
-    // continues conversion
-    (kADC_ContinueConversionEnable == ADC_InitStruct->continueConversionMode)?(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_ADCO_MASK):(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_ADCO_MASK);
-    // hardware average
-    switch(ADC_InitStruct->hardwareAverageSelect)
+    /* if continues conversion */
+    (kADC_ContinueConversionEnable == ADC_InitStruct->continueMode)?(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_ADCO_MASK):(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_ADCO_MASK);
+    /* if hardware average enabled */
+    switch(ADC_InitStruct->hardwareAveMode)
     {
         case kADC_HardwareAverageDisable:
             ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
@@ -225,30 +224,28 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
  * @param  resolutionMode: 分辨率
  * @retval ADC模块号
  */
-uint8_t ADC_QuickInit(uint32_t ADCxMAP, uint32_t resolutionMode)
+uint8_t ADC_QuickInit(uint32_t ADCxMAP, ADC_ResolutionMode_Type resolutionMode)
 {
     uint8_t i;
-    QuickInit_Type * pADCxMap = (QuickInit_Type*)&(ADCxMAP);
-    
+    QuickInit_Type * pq = (QuickInit_Type*)&(ADCxMAP);
     ADC_InitTypeDef AD_InitStruct1;
-    AD_InitStruct1.instance = pADCxMap->ip_instance;
-    AD_InitStruct1.chl = pADCxMap->channel;
+    AD_InitStruct1.instance = pq->ip_instance;
+    AD_InitStruct1.chl = pq->channel;
     AD_InitStruct1.clockDiv = kADC_ClockDiv8;
     AD_InitStruct1.resolutionMode = resolutionMode;
     AD_InitStruct1.triggerMode = kADC_TriggerSoftware;
-    AD_InitStruct1.singleOrDifferential = kADC_Single;
-    AD_InitStruct1.continueConversionMode = kADC_ContinueConversionEnable;
-    AD_InitStruct1.hardwareAverageSelect = kADC_HardwareAverageDisable;
-    
-    ADC_Init(&AD_InitStruct1);
-    // init pinmux
-    for(i = 0; i < pADCxMap->io_offset; i++)
+    AD_InitStruct1.singleOrDiffMode = kADC_Single;
+    AD_InitStruct1.continueMode = kADC_ContinueConversionEnable;
+    AD_InitStruct1.hardwareAveMode = kADC_HardwareAverageDisable;
+    /* init pinmux */
+    for(i = 0; i < pq->io_offset; i++)
     {
-        PORT_PinMuxConfig(pADCxMap->io_instance, pADCxMap->io_base + i, (PORT_PinMux_Type) pADCxMap->mux);
-        PORT_PinPullConfig(pADCxMap->io_instance, pADCxMap->io_base + i, kPullDisabled);
-        
+        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux);
+        PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullDisabled); 
     }
-    return pADCxMap->ip_instance;
+    /* init moudle */
+    ADC_Init(&AD_InitStruct1);
+    return pq->ip_instance;
 }
   
 /**
@@ -306,7 +303,7 @@ int32_t ADC_QuickReadValue(uint32_t ADCxMAP)
     uint32_t chl = pADCxMap->channel;
     uint32_t mux = pADCxMap->reserved;
     ADC_StartConversion(instance, chl, mux);
-    // waiting for ADC complete
+    /* waiting for ADC complete */
     while(ADC_IsConversionCompleted(instance, mux)) {};
     return ADC_ReadValue(instance, mux);
 }

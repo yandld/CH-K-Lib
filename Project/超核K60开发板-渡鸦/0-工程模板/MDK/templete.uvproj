@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60DZ10 CHK60EVB2 DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -530,6 +530,11 @@
               <FilePath>..\src\cmd_tsi.c</FilePath>
             </File>
             <File>
+              <FileName>cmd_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_sd.c</FilePath>
+            </File>
+            <File>
               <FileName>shell_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
@@ -628,6 +633,11 @@
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -728,6 +738,21 @@
               <FileName>at24cxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\at24cxx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>znfat</GroupName>
+          <Files>
+            <File>
+              <FileName>deviceio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\znfat\deviceio.c</FilePath>
+            </File>
+            <File>
+              <FileName>znFAT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\znfat\znFAT.c</FilePath>
             </File>
           </Files>
         </Group>

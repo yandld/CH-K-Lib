@@ -98,7 +98,7 @@ void DelayUs(uint32_t us)
 
 
 
-#if (defined(USE_FULL_ASSERT) || (defined(DEBUG)))
+#if defined(DEBUG)
 
 void assert_failed(char * file, uint32_t line)
 {

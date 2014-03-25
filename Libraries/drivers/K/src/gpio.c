@@ -77,7 +77,7 @@ static const IRQn_Type GPIO_IRQnTable[] =
  */
 void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
 {
-    //param check
+    /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));

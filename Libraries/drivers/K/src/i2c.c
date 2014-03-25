@@ -193,18 +193,19 @@ uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
 {
     uint8_t i;
     I2C_InitTypeDef I2C_InitStruct1;
-    QuickInit_Type * pI2CxMap = (QuickInit_Type*)&(I2CxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(I2CxMAP);
     I2C_InitStruct1.baudrate = baudrate;
-    I2C_InitStruct1.instance = pI2CxMap->ip_instance;
-    I2C_Init(&I2C_InitStruct1);
-    // init pinmux and  open drain and pull up
-    for(i = 0; i < pI2CxMap->io_offset; i++)
+    I2C_InitStruct1.instance = pq->ip_instance;
+    /* init pinmux and  open drain and pull up */
+    for(i = 0; i < pq->io_offset; i++)
     {
-        PORT_PinMuxConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, (PORT_PinMux_Type)pI2CxMap->mux);
-        PORT_PinPullConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, kPullUp); 
-        PORT_PinOpenDrainConfig(pI2CxMap->io_instance, pI2CxMap->io_base + i, ENABLE);
+        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type)pq->mux);
+        PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullUp); 
+        PORT_PinOpenDrainConfig(pq->io_instance, pq->io_base + i, ENABLE);
     }
-    return pI2CxMap->ip_instance;
+    /* init moudle */
+    I2C_Init(&I2C_InitStruct1);
+    return pq->ip_instance;
 }
 
 /**

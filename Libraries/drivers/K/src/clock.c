@@ -88,7 +88,7 @@ void CLOCK_SetClockDivider(CLOCK_DividerSource_Type clockDivName, CLOCK_DivideVa
 int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz)
 {
     uint32_t MCGOutClock = 0;
-    /* calualte MCGOutClock system_MKxxx.c must not modified*/
+    /* calualte MCGOutClock system_MKxxx.c must not modified */
     MCGOutClock = SystemCoreClock * MCGOUT_TO_CORE_DIVIDER;
     switch (clockName)
     {

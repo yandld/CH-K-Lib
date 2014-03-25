@@ -8,7 +8,6 @@
   ******************************************************************************
   */
 #include "ftm.h"
-#include "clock.h"
 #include "common.h"
 #include "gpio.h"
 #include <math.h>

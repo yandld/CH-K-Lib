@@ -1,5 +1,4 @@
 #include "shell.h"
-#include "clock.h"
 #include "common.h"
 #include "enet.h"
 #include "gpio.h"

@@ -8,7 +8,6 @@
   ******************************************************************************
   */
 #include "systick.h"
-#include "clock.h"
 
 static uint32_t fac_us = 0;     //!< usDelay Mut
 static uint32_t fac_ms = 0;

@@ -10,7 +10,6 @@
 #include "spi.h"
 #include "gpio.h"
 #include "common.h"
-#include "clock.h"
 
 
 #if (!defined(SPI_BASES))

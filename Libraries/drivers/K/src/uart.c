@@ -11,7 +11,6 @@
 #include "uart.h"
 #include "gpio.h"
 #include "common.h"
-#include "clock.h"
 
 #ifdef UART_USE_STDIO
 #if __ICCARM__

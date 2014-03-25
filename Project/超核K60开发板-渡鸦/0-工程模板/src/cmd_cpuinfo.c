@@ -1,5 +1,5 @@
 #include "shell.h"
-#include "clock.h"
+#include "common.h"
 #include "cpuidy.h"
 
 const char* ClockSourceNameTable[] = 

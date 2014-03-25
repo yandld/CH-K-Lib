@@ -107,6 +107,16 @@ typedef struct
     uint32_t reserved:8;
 }QuickInit_Type;
 
+/* 时钟源定义 */
+typedef enum
+{
+    kCoreClock,
+    kSystemClock,
+    kBusClock,
+    kFlexBusClock,
+    kFlashClock,
+    kClockNameCount,
+}CLOCK_Source_Type; 
 
 struct reg_ops
 {
@@ -131,5 +141,6 @@ void QuickInitDecode(uint32_t map, QuickInit_Type* type);
 void DelayMs(uint32_t ms);
 void DelayUs(uint32_t ms);
 void DelayInit(void);
+int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
 
 #endif

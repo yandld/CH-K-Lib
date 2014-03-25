@@ -10,7 +10,6 @@
   
   
 #include "sd.h"
-#include "clock.h"
 
 
 uint8_t SD_CardType = SD_CARD_TYPE_NONE;

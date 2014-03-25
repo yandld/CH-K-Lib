@@ -3,8 +3,9 @@
   * @file    ftm.h
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片FTM模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __FTM_H_
@@ -125,7 +126,6 @@ uint32_t FTM_QD_QuickInit(uint32_t FTMxMAP);
 void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct);
 void FTM_QD_GetData(uint32_t instance, uint32_t* value, uint8_t* direction);
 void FTM_QD_ClearCount(uint32_t instance);
-
 
 
 #ifdef __cplusplus

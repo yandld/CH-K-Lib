@@ -3,8 +3,9 @@
   * @file    ftm.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片FTM模块的底层功能函数
   ******************************************************************************
   */
 #include "ftm.h"
@@ -58,9 +59,22 @@ static void FTM_PWM_SetMode(uint8_t instance, uint8_t chl, FTM_PWM_Mode_Type mod
 void FTM_PWM_InvertPolarity(uint8_t instance, uint8_t chl, uint32_t config);
 
 /**
- * @brief  初始化FTM PWM 功能前 一定要调用此函数
- *
- * @param  FTM 初始化结构体
+ * @brief  初始化FTM模块实现PWM功能
+ * @note  需要配合PORT_PinMuxConfig使用
+ * @code
+ *      //设置FTM2模块的1通道产生1000Hz频率的边沿对其方波
+ *       FTM_PWM_InitTypeDef FTM_InitStruct1; //申请一个结构体
+ *       FTM_InitStruct1.instance = HW_FTM2;  //选择FTM2模块
+ *       FTM_InitStruct1.frequencyInHZ = 1000;//设置频率为1000
+ *       FTM_InitStruct1.chl = HW_FTM_CH1;    //选择1通道
+ *       FTM_InitStruct1.mode = kPWM_EdgeAligned;//设置为边沿对其
+ *       FTM_PWM_Init(&FTM_InitStruct1); 
+ * @endcode         
+ * @param  FTM_PWM_InitTypeDef  : FTM工作在PWM模式下的结构体
+ *         @arg instance        :FTM模块号
+ *         @arg chl             :PWM发生通道号
+ *         @arg frequencyInHZ   :PWM波频率
+ *         @arg mode            :PWM波形模式设置
  * @retval None
  */
 void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
@@ -121,6 +135,21 @@ void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
 }
 
 //!< 正交解码初始化
+/**
+ * @brief  初始化FTM模块实现正交解码功能
+ * @note   需要配合PORT_PinMuxConfig等函数使用
+ * @code
+ *      //设置FTM2模块为正交解码方式A相位正B相位负
+ *       FTM_PWM_InitTypeDef FTM_QD_InitStruct; //申请一个结构体,
+ *       FTM_QD_InitStruct.instance = HW_FTM2;  //选择FTM2模块
+ *       FTM_QD_InitStruct.PHA_Polarity = kFTM_QD_NormalPolarity;      //A相位正
+ *       FTM_QD_InitStruct.PHA_Polarity = kFTM_QD_InvertedPolarity;    //A相位负
+ *       FTM_QD_InitStruct.mode = kQD_PHABEncoding;   //设置AB相解码
+ *       FTM_PWM_Init(&FTM_QD_InitStruct); 
+ * @endcode         
+ * @param  FTM_QD_InitTypeDef  : FTM工作在正交解码模式下的结构体
+ * @retval None
+ */
 void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
 {
     /* enable clock gate */
@@ -167,6 +196,15 @@ void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->SC |= FTM_SC_CLKS(1)|FTM_SC_PS(3);
 }
 
+/**
+ * @brief  快速配置初始化FTM模块实现正交解码功能
+ * @code
+ *      //设置FTM1模块的PTA8/PTA9引脚在正交模式下
+ *      FTM_QD_QuickInit(FTM1_QD_PHA_PA08_PHB_PA09); 
+ * @endcode         
+ * @param  FTMxMAP  : FTM工作在正交解码模式下的编码，详见ftm.h文件
+ * @retval None
+ */
 uint32_t FTM_QD_QuickInit(uint32_t FTMxMAP)
 {
     uint8_t i;
@@ -188,6 +226,19 @@ uint32_t FTM_QD_QuickInit(uint32_t FTMxMAP)
     return pq->ip_instance;
 }
 
+/**
+ * @brief  获得正交解码的数据
+ * @code
+ *      //获得FTM1正交解码的数据
+ *       uint32_t value；  //存储脉冲计数的数据
+ *       uint8_t  dire；   //存储方向
+ *      FTM_QD_GetData(HW_FTM1, @value, @dire); 
+ * @endcode         
+ * @param  instance  :FTM模块号
+ * @param  value     :脉冲数据存储地址
+ * @param  direction :脉冲方向存储地址
+ * @retval None
+ */
 void FTM_QD_GetData(uint32_t instance, uint32_t* value, uint8_t* direction)
 {
     *direction = (FTM_InstanceTable[instance]->QDCTRL>>FTM_QDCTRL_QUADIR_SHIFT & 1);
@@ -202,6 +253,9 @@ void FTM_QD_ClearCount(uint32_t instance)
 
 /*combine channel control*/
 /*dual capture control*/
+/**
+ * @brief  内部函数，用户无需调用
+ */
 static uint32_t get_channel_pair_index(uint8_t channel)
 {
     if((channel == HW_FTM_CH0) || (channel == HW_FTM_CH1))
@@ -228,6 +282,9 @@ static uint32_t get_channel_pair_index(uint8_t channel)
  * @param instance The FTM peripheral instance number.
  * @param channel  The FTM peripheral channel number.
  * @param enable  true to enable channle pair to combine, false to disable.
+ */
+/**
+ * @brief  内部函数，用户无需调用
  */
 #define FTM_COMBINE_CHAN_CTRL_WIDTH  (8)
 static void FTM_DualChlConfig(uint8_t instance, uint8_t chl, FTM_DualChlConfig_Type mode, FunctionalState newState)
@@ -260,6 +317,9 @@ static void FTM_DualChlConfig(uint8_t instance, uint8_t chl, FTM_DualChlConfig_T
 }
 
 //!< 设置FTM 工作模式
+/**
+ * @brief  内部函数，用户无需调用
+ */
 static void FTM_PWM_SetMode(uint8_t instance, uint8_t chl, FTM_PWM_Mode_Type mode)
 {
     switch(mode)
@@ -351,6 +411,9 @@ static void FTM_PWM_SetMode(uint8_t instance, uint8_t chl, FTM_PWM_Mode_Type mod
 }
 
 //!< 翻转 FTM极性
+/**
+ * @brief  内部函数，用户无需调用
+ */
 void FTM_PWM_InvertPolarity(uint8_t instance, uint8_t chl, uint32_t config)
 {
     switch(config)
@@ -368,6 +431,16 @@ void FTM_PWM_InvertPolarity(uint8_t instance, uint8_t chl, uint32_t config)
     }
 }
 
+/**
+ * @brief  快速配置初始化FTM模块实现PWM功能
+ * @code
+ *      //设置FTM0模块的3通道在PTA6引脚中产生1000HZ的pwm波形
+ *      FTM_PWM_QuickInit(FTM0_CH3_PA06, 1000); 
+ * @endcode         
+ * @param  FTMxMAP        : FTM工作在PWM模式下的编码，详见ftm.h文件
+ * @param  frequencyInHZ  : FTM工作工作频率设置
+ * @retval None
+ */
 uint8_t FTM_PWM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
 {
     uint8_t i;
@@ -387,8 +460,17 @@ uint8_t FTM_PWM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
     return pq->ip_instance;
 }
 
-
-
+/**
+ * @brief  更改指定引脚的PWM波形占空比
+ * @code
+ *      //设置FTM0模块的3通道的PWM波形占空比为50%
+ *      FTM_PWM_ChangeDuty(HW_FTM0, 3, 5000); 
+ * @endcode         
+ * @param  instance       : FTM模块号0~2
+ * @param  chl            : FTM模块下的通道号
+ * @param  pwmDuty        : PWM波形占空比0~10000
+ * @retval None
+ */
 void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
 {
     uint32_t cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty) / 10000;
@@ -517,7 +599,7 @@ void FTM_ClearITPendingBit(FTM_Type *FTMx,uint16_t FTM_IT)
 static const QuickInit_Type FTM_QD_QuickInitTable[] = 
 {
     { 1, 0, 6,  8, 2, 0}, //FTM1_QD_PHA_PA08_PHB_PA09 6
-    { 1, 0, 7, 12, 2, 0}, //FTM1_QD_PHA_PA12_PHB_PA13  7
+    { 1, 0, 7, 12, 2, 0}, //FTM1_QD_PHA_PA12_PHB_PA13 7
     { 1, 1, 6,  0, 2, 0}, //FTM1_QD_PHA_PB00_PHB_PB01  6
     { 2, 0, 6, 10, 2, 0}, //FTM2_QD_PHA_PA10_PHB_PA11  6
     { 2, 1, 6, 18, 2, 0}, //FTM2_QD_PHA_PB18_PHB_PB19 6

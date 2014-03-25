@@ -71,8 +71,7 @@ void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
     uint32_t input_clk;
     uint32_t min_val = 0xFFFF;
     // enable clock gate
-    uint32_t * SIM_SCGx = (void*) SIM_FTMClockGateTable[FTM_InitStruct->instance].register_addr;
-    *SIM_SCGx |= SIM_FTMClockGateTable[FTM_InitStruct->instance].mask;
+    *(uint32_t*)SIM_FTMClockGateTable[FTM_InitStruct->instance].addr |= SIM_FTMClockGateTable[FTM_InitStruct->instance].mask;
     //disable FTM, we must set CLKS(0) before config FTM!
     FTM_InstanceTable[FTM_InitStruct->instance]->SC = 0;
     // enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function)
@@ -125,8 +124,7 @@ void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
 void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
 {
     // enable clock gate
-    uint32_t * SIM_SCGx = (void*) SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].register_addr;
-    *SIM_SCGx |= SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].mask;
+    *(uint32_t*)SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].addr |= SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].mask;
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->MOD = FTM_MOD_MOD_MASK; //设置为最大
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->CNTIN = FTM_CNTIN_INIT_MASK/2; //最大值的一半
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK; //禁止写保护

@@ -17,17 +17,21 @@ typedef enum
     kTSI_TriggerPeriodicalScan,
 } TSI_TriggerMode_Type;
   
+//!< TSI 中断DMA配置
+typedef enum
+{
+    kTSI_IT_Disable,        //!< Disable Interrupt
+    kTSI_IT_OutOfRange,
+    kTSI_IT_EndOfScan,
+}TSI_ITDMAConfig_Type;
 
 //TSI初始化结构
 typedef struct
 {
-    uint32_t                chl;
-    TSI_TriggerMode_Type    triggerMode;
-    uint32_t                frequencyInHZ;
-	uint8_t  TSI_ITMode;    //扫描模式
+    uint32_t                chl;            //!< 通道号
+    TSI_TriggerMode_Type    triggerMode;    //!< 触发模式选择
+    uint32_t                threshld;       //!< 发生超范围中断时的判断阀值
 }TSI_InitTypeDef;
-
-
 
 //!< TSI QuickInit macro
 #define TSI0_CH0_PB00   (0x00004008)
@@ -48,8 +52,18 @@ typedef struct
 #define TSI0_CH15_PC02  (0x00784410)
 
 
-uint32_t TSI_QuickInit(uint32_t UARTxMAP);
 
+
+
+//!< TSI CallBack Type
+typedef void (*TSI_CallBackType)(uint32_t outOfRangeArray);
+
+//!< API functions
+uint32_t TSI_QuickInit(uint32_t UARTxMAP);
+uint32_t TSI_GetCounter(uint32_t chl);
+void TSI_ITDMAConfig(TSI_ITDMAConfig_Type config);
+void TSI_Init(TSI_InitTypeDef* TSI_InitStruct);
+void TSI_CallbackInstall(TSI_CallBackType AppCBFun);
 
 
 

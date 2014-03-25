@@ -117,7 +117,7 @@ typedef struct
 //!< 
 typedef struct
 {
-    void * register_addr;
+    void *      addr;
     uint32_t    mask;
 }RegisterManipulation_Type;
 

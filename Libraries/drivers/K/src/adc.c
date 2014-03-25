@@ -148,8 +148,7 @@ static int32_t ADC_Calibration(uint32_t instance)
 void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 {
     // enable clock gate
-    uint32_t * SIM_SCGx = (void*) SIM_ADCClockGateTable[ADC_InitStruct->instance].register_addr;
-    *SIM_SCGx |= SIM_ADCClockGateTable[ADC_InitStruct->instance].mask;
+    *(uint32_t*)SIM_ADCClockGateTable[ADC_InitStruct->instance].addr |= SIM_ADCClockGateTable[ADC_InitStruct->instance].mask;
     // do calibration
     ADC_Calibration(ADC_InitStruct->instance);
 	// set clock configuration

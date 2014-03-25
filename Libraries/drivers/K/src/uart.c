@@ -192,8 +192,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
 	//param check
     assert_param(IS_UART_ALL_INSTANCE(UART_InitStruct->instance));
     // enable clock gate
-    uint32_t * SIM_SCGx = (void*) SIM_UARTClockGateTable[UART_InitStruct->instance].register_addr;
-    *SIM_SCGx |= SIM_UARTClockGateTable[UART_InitStruct->instance].mask;
+    *((uint32_t*) SIM_UARTClockGateTable[UART_InitStruct->instance].addr) |= SIM_UARTClockGateTable[UART_InitStruct->instance].mask;
     //disable Tx Rx first
     UART_InstanceTable[UART_InitStruct->instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     //get clock

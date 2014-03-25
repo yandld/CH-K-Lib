@@ -49,7 +49,7 @@
 #define UART5_RX_PD08_TX_PD09   (0x90DDU)
 
 
-
+#if 0
 //!< UART paritySelect
 typedef enum
 {
@@ -64,6 +64,7 @@ typedef enum
     kUartOneStopBit = 0,  //!< one stop bit
     kUartTwoStopBit = 1,  //!< two stop bits
 } UART_StopBit_Type;
+#endif
 
 //!< interrupt and DMA select
 typedef enum

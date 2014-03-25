@@ -143,8 +143,7 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
 {
 
     // enable clock gate
-    uint32_t * SIM_SCGx = (void*) SIM_SPIClockGateTable[SPI_InitStruct->instance].register_addr;
-    *SIM_SCGx |= SIM_SPIClockGateTable[SPI_InitStruct->instance].mask;
+    *(uint32_t*)SIM_SPIClockGateTable[SPI_InitStruct->instance].addr |= SIM_SPIClockGateTable[SPI_InitStruct->instance].mask;
     // let all PCS low when in inactive mode
     // stop SPI
     SPI_InstanceTable[SPI_InitStruct->instance]->MCR |= SPI_MCR_HALT_MASK;

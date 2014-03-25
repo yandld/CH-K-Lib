@@ -15,7 +15,6 @@ int CMD_LPTMR(int argc, char * const * argv)
     uint32_t i;
     shell_printf("LPTMR TEST CMD\r\n");
     LPTMR_TC_InitTypeDef LPTMR_TC_InitStruct1;
-    LPTMR_TC_InitStruct1.instance = HW_LPTMR0;
     LPTMR_TC_InitStruct1.timeInMs = 500;
     LPTMR_TC_Init(&LPTMR_TC_InitStruct1);
     LPTMR_ITDMAConfig(kLPTMR_IT_TOF);
@@ -30,8 +29,6 @@ int CMD_LPTMR(int argc, char * const * argv)
         shell_printf("ReadValue:%d\r\n", i);
         LPTMR_ClearCount();
         DelayMs(1000);
-        
-        
     }
     return 0;
 }

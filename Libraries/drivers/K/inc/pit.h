@@ -30,11 +30,9 @@ typedef void (*PIT_CallBackType)(void);
 //PIT 初始化结构
 typedef struct
 {
-    uint8_t   instance;       //!< PIT instance
     uint8_t   chl;            //!< channel
     uint32_t  timeInUs;       //!< Tick Period Us
 }PIT_InitTypeDef;
-
 
 //!< PIT 中断DMA配置
 typedef enum

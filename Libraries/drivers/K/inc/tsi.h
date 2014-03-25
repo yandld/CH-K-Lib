@@ -52,9 +52,6 @@ typedef struct
 #define TSI0_CH15_PC02  (0x00784410)
 
 
-
-
-
 //!< TSI CallBack Type
 typedef void (*TSI_CallBackType)(uint32_t outOfRangeArray);
 

@@ -3,8 +3,9 @@
   * @file    adc.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片ADC模块的底层功能函数
   ******************************************************************************
   */
   
@@ -69,24 +70,44 @@ static const IRQn_Type ADC_IRQnTable[] =
 //! @{
 
 /**
- * @brief  判断转换是否结束
- *         
+ * @brief  判断AD转换是否结束
+ * @code
+ *      //查看ADC0 模块的A通道的转换是否完成
+ *      ADC_IsConversionCompleted(HW_ADC0, kADC_MuxA); 
+ * @endcode         
  * @param  instance: ADC 模块号
- *         @arg HW_ADC0
- *         @arg HW_ADC1
- *         @arg ...
+ *         @arg HW_ADC0  :ADC0模块
+ *         @arg HW_ADC1  :ADC1模块
+ *         @arg HW_ADC2  :ADC2模块
  * @param  mux: ADC 转换器通道 复用 选择
- *         @arg kADC_MuxA
- *         @arg kADC_MuxB
+ *         @arg kADC_MuxA   :A通道模式
+ *         @arg kADC_MuxB   :B通道模式
  * @retval 
  *         @arg 0:转换完成
- *         @arg 1:转换失败
+ *         @arg 1:转换未完成
  */
-int32_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
+uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
 {
     return (((ADC_InstanceTable[instance]->SC1[mux]) & ADC_SC1_COCO_MASK) >> ADC_SC1_COCO_SHIFT);  
 }
 
+/**
+ * @brief  AD采集校准函数，内部函数
+ * @code
+ *      //查看ADC0 模块的A通道的转换是否完成
+ *      ADC_IsConversionCompleted(HW_ADC0, kADC_MuxA); 
+ * @endcode         
+ * @param  instance: ADC 模块号
+ *         @arg HW_ADC0  :ADC0模块
+ *         @arg HW_ADC1  :ADC1模块
+ *         @arg HW_ADC2  :ADC2模块
+ * @param  mux: ADC 转换器通道 复用 选择
+ *         @arg kADC_MuxA   :A通道模式
+ *         @arg kADC_MuxB   :B通道模式
+ * @retval 
+ *         @arg 0:转换完成
+ *         @arg 1:转换未完成
+ */
 static int32_t ADC_Calibration(uint32_t instance)
 {
     uint32_t PG, MG;

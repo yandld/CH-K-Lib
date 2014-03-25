@@ -3,8 +3,9 @@
   * @file    uart.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片UART模块的底层功能函数
   ******************************************************************************
   */
 #include "uart.h"
@@ -179,9 +180,24 @@ _loop:
 //! @{
 
 /**
- * @brief  初始化UART模块 同时会初始化Tx 和 Rx.在使用串口前一定要调用此函数
- *
- * @param  UART初始化结构体
+ * @brief  初始化UART模块 
+ * @note   用户需自己进行引脚的复用配置
+ * @code
+ *      //使用UART0模块 使用115200波特率进行通信
+ *    UART_InitTypeDef UART_InitStruct1;      //申请一个结构变量
+ *    UART_InitStruct1.instance = HW_UART0;   //选择UART0模块
+ *    UART_InitStruct1.baudrate = 115200;     //设置通信速度为115200
+ *    UART_Init(&UART_InitStruct1);
+ * @endcode
+ * @param  UART_InitTypeDef: 串口工作配置存储结构体
+ *         instance      :芯片串口端口
+ *         @arg HW_UART0 :芯片的UART0端口
+ *         @arg HW_UART1 :芯片的UART1端口
+ *         @arg HW_UART2 :芯片的UART2端口
+ *         @arg HW_UART3 :芯片的UART3端口
+ *         @arg HW_UART4 :芯片的UART4端口
+ *         @arg HW_UART5 :芯片的UART5端口
+ * @param  baudrate  :串口通讯速率设置
  * @retval None
  */
 void UART_Init(UART_InitTypeDef* UART_InitStruct)
@@ -218,12 +234,20 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
 }
 
 /**
- * @brief  UART发送一个字节(阻塞式发送 只要发送完才会返回)
- * @param  instance: UART 模块号
- *         @arg HW_UART0
- *         @arg HW_UART1
- *         @arg ...
- * @param  ch: 需要发送的字节
+ * @brief  串口发送一个字节
+ * @note   阻塞式发送 只有发送完后才会返回
+ * @code
+ *      //使用UART0模块 发送数据0x5A
+ *    UART_WriteByte(HW_UART0, 0x5A);
+ * @endcode
+ * @param  instance      :芯片串口端口
+ *         @arg HW_UART0 :芯片的UART0端口
+ *         @arg HW_UART1 :芯片的UART1端口
+ *         @arg HW_UART2 :芯片的UART2端口
+ *         @arg HW_UART3 :芯片的UART3端口
+ *         @arg HW_UART4 :芯片的UART4端口
+ *         @arg HW_UART5 :芯片的UART5端口
+ * @param  ch: 需要发送的一字节数据
  * @retval None
  */
 void UART_WriteByte(uint8_t instance, uint8_t ch)
@@ -235,13 +259,22 @@ void UART_WriteByte(uint8_t instance, uint8_t ch)
 }
 
 /**
- * @brief  UART接受一个字节(非阻塞式 立即返回)
- * @param  instance: 模块号
- *         @arg HW_UART0
- *         @arg HW_UART1
- *         @arg ...
+ * @brief  UART接受一个字节
+ * @note   非阻塞式接收 立即返回
+ * @code
+ *      //接收UART0模块的数据
+ *      uint8_t data; //申请变量，存储接收的数据
+ *      UART_ReadByte(HW_UART0, &data);
+ * @endcode
+ * @param  instance      :芯片串口端口
+ *         @arg HW_UART0 :芯片的UART0端口
+ *         @arg HW_UART1 :芯片的UART1端口
+ *         @arg HW_UART2 :芯片的UART2端口
+ *         @arg HW_UART3 :芯片的UART3端口
+ *         @arg HW_UART4 :芯片的UART4端口
+ *         @arg HW_UART5 :芯片的UART5端口
  * @param  ch: 接收到的数据指针
- * @retval 0:成功接受到数据  非0:没有接受到数据
+ * @retval 0:成功接收到数据  非0:没有接收到数据
  */
 uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
 {
@@ -256,23 +289,27 @@ uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
 }
 
 /**
- * @brief  配置UART模块的中断或者DMA属性
- * @param  instance: UART 模块号
- *         @arg HW_UART0
- *         @arg HW_UART1
- *         @arg ...
- * @param  config: 模式选择
- *         @arg kUART_IT_Tx_Disable: 
- *         @arg kUART_IT_Rx_Disable:
- *         @arg kUART_DMA_Tx_Disable:
- *         @arg kUART_DMA_Rx_Disable:
+ * @brief  配置UART模块的中断或DMA属性
+ * @code
+ *      //配置UART0模块开启接收中断功能
+ *      UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
+ * @endcode
+ * @param  instance      :芯片串口端口
+ *         @arg HW_UART0 :芯片的UART0端口
+ *         @arg HW_UART1 :芯片的UART1端口
+ *         @arg HW_UART2 :芯片的UART2端口
+ *         @arg HW_UART3 :芯片的UART3端口
+ *         @arg HW_UART4 :芯片的UART4端口
+ *         @arg HW_UART5 :芯片的UART5端口
+ * @param  config: 工作模式选择
+ *         @arg kUART_IT_Tx_Disable    :关闭发送中断
+ *         @arg kUART_IT_Rx_Disable    :关闭接收中断
+ *         @arg kUART_DMA_Tx_Disable   :关闭DMA发送中断
+ *         @arg kUART_DMA_Rx_Disable   :关闭DMA接收中断
  *         @arg kUART_IT_Tx:
  *         @arg kUART_DMA_Tx:
  *         @arg kUART_IT_Rx:
  *         @arg kUART_DMA_Rx:
- * @param  newState:开启或者关闭
- *         @arg ENABLE
- *         @arg DISABLE
  * @retval None
  */
 void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config)
@@ -314,6 +351,19 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config)
     }
 }
 
+/**
+ * @brief  注册发送中断回调函数
+ * @param  instance      :芯片串口端口
+ *         @arg HW_UART0 :芯片的UART0端口
+ *         @arg HW_UART1 :芯片的UART1端口
+ *         @arg HW_UART2 :芯片的UART2端口
+ *         @arg HW_UART3 :芯片的UART3端口
+ *         @arg HW_UART4 :芯片的UART4端口
+ *         @arg HW_UART5 :芯片的UART5端口
+ * @param AppCBFun: 回调函数指针入口
+ * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
+ */
 void UART_CallbackTxInstall(uint8_t instance, UART_CallBackTxType AppCBFun)
 {
 	//param check
@@ -325,31 +375,17 @@ void UART_CallbackTxInstall(uint8_t instance, UART_CallBackTxType AppCBFun)
 }
 
 /**
- * @brief  设置UART中断回调函数
- * @code
- *      //初始化UART串口 波特率115200 开启接收中断
- *      uint32_t UART_Instance;
- *      //声明中断回调函数
- *      static void UART_RxISR(uint8_t byteReceived);
- *      UART_Instance = UART_QuickInit(UART4_RX_PC14_TX_PC15,115200);
- *      //打开接收中断回调函数
- *      UART_CallbackRxInstall(instance, UART_RxISR);
- *      //开启中断开关
- *      UART_ITDMAConfig(instance, kUART_IT_Rx); 
- *      //中断回调函数
- *      static void UART_RxISR(uint8_t byteReceived)
- *      {
- *          static uint8_t ch;
- *          ch = byteReceived;
- *          printf("ch:%d\r\n", ch);
- *      }
- * @endcode
- * @param  instance: UART模块号
- *         @arg HW_UART0
- *         @arg HW_UART1
- *         @arg ...
- * @param  AppCBFun: 回调函数指针
+ * @brief  注册接收中断回调函数
+ * @param  instance      :芯片串口端口
+ *         @arg HW_UART0 :芯片的UART0端口
+ *         @arg HW_UART1 :芯片的UART1端口
+ *         @arg HW_UART2 :芯片的UART2端口
+ *         @arg HW_UART3 :芯片的UART3端口
+ *         @arg HW_UART4 :芯片的UART4端口
+ *         @arg HW_UART5 :芯片的UART5端口
+ * @param AppCBFun: 回调函数指针入口
  * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
  */
 void UART_CallbackRxInstall(uint8_t instance, UART_CallBackRxType AppCBFun)
 {
@@ -362,15 +398,13 @@ void UART_CallbackRxInstall(uint8_t instance, UART_CallBackRxType AppCBFun)
 }
 
  /**
- * @brief  quick init for user, do not need init struct. 
+ * @brief  串口快速化配置函数
  * @code
  *      // 初始化 UART4 属性: 115200-N-8-N-1, Tx:PC15 Rx:PC14
  *      GPIO_QuickInit(UART4_RX_PC14_TX_PC15, 115200);
  * @endcode
- * @param  instance: UART instance
- *         @arg HW_UART0
- *         @arg HW_UART1
- *         @arg ...
+ * @param  UARTxMAP  : 串口引脚配置缩略图
+ *         例如 UART1_RX_PE01_TX_PE00 ：使用串口1的PTE1/PTE0引脚
  * @param  baudrate: 波特率 9600 115200...
  * @retval UART模块号
  */
@@ -394,6 +428,16 @@ uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate)
 
 //! @}
 
+/**
+ * @brief  中断处理函数入口
+ * @param  UART0_RX_TX_IRQHandler :芯片的UART0端口中断函数入口
+ *         UART1_RX_TX_IRQHandler :芯片的UART1端口中断函数入口
+ *         UART2_RX_TX_IRQHandler :芯片的UART2端口中断函数入口
+ *         UART3_RX_TX_IRQHandler :芯片的UART3端口中断函数入口
+ *         UART4_RX_TX_IRQHandler :芯片的UART4端口中断函数入口
+ *         UART5_RX_TX_IRQHandler :芯片的UART5端口中断函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void UART0_RX_TX_IRQHandler(void)
 {
     uint8_t ch;
@@ -537,28 +581,4 @@ void UART5_RX_TX_IRQHandler(void)
 #endif // (!defined(MK10D5))
 
 
-
-/*
-static const QuickInit_Type UART_QuickInitTable[] =
-{
-    { 1, 4, 3, 0, 2, 0}, //UART1_RX_PE01_TX_PE00
-    { 0, 5, 4,18, 2, 0}, //UART0_RX_PF17_TX_PF18 4
-    { 3, 4, 3, 4, 2, 0}, //UART3_RX_PE05_TX_PE04 3
-    { 5, 5, 4,19, 2, 0}, //UART5_RX_PF19_TX_PF20 4
-    { 5, 4, 3, 8, 2, 0}, //UART5_RX_PE09_TX_PE08 3
-    { 2, 4, 3,16, 2, 0}, //UART2_RX_PE17_TX_PE16 3
-    { 4, 4, 3,24, 2, 0}, //UART4_RX_PE25_TX_PE24 3
-    { 0, 0, 2, 1, 2, 0}, //UART0_RX_PA01_TX_PA02 2
-    { 0, 0, 3,14, 2, 0}, //UART0_RX_PA15_TX_PA14 3
-    { 3, 1, 3,10, 2, 0}, //UART3_RX_PB10_TX_PB11 3
-    { 0, 1, 3,16, 2,  0}, //UART0_RX_PB16_TX_PB17 3
-    { 1, 2, 3, 3, 2, 0}, //UART1_RX_PC03_TX_PC04 3
-    { 4, 2, 3,14, 2, 0}, //UART4_RX_PC14_TX_PC15 3
-    { 3, 2, 3,16, 2, 0}, //UART3_RX_PC16_TX_PC17 3
-    { 2, 3, 3, 2, 2, 0}, //UART2_RX_PD02_TX_PD03 3
-    { 0, 3, 3, 6, 2, 0}, //UART0_RX_PD06_TX_PD07 3
-    { 2, 5, 4,13, 2, 0}, //UART2_RX_PF13_TX_PF14 4
-    { 5, 3, 3, 8, 2, 0}, //UART5_RX_PD08_TX_PD09 3
-};
-*/
 

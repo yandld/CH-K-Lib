@@ -132,7 +132,7 @@ void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config
 int32_t ADC_QuickReadValue(uint32_t ADCxMAP);
 int32_t ADC_ReadValue(uint32_t instance, uint32_t mux);
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux);
-int32_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux);
+uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux);
 
 
 

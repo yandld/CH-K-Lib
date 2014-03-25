@@ -150,19 +150,20 @@ static int32_t ADC_Calibration(uint32_t instance)
 }
 
 /**
- * @brief  通过初始化结构体 初始化ADC模块
- *
+ * @brief  ADC模块工作初始化配置
  * @code
- *   ADC_InitStruct1.chl = 1; //1通道
- *   ADC_InitStruct1.clockDiv = kADC_ClockDiv8; //ADC转换时钟为输入时钟(默认BusClock) 的8分频
- *   ADC_InitStruct1.instance = HW_ADC0;
+ *   //使用adc0模块的1通道 单端模式 8位精度 软件触发
+ *   ADC_InitTypeDef ADC_InitStruct1;  //申请一个结构体
+ *   ADC_InitStruct1.chl = 1;  //1通道
+ *   ADC_InitStruct1.clockDiv = kADC_ClockDiv8; //ADC转换时钟为输入时钟(默认BusClock) 的8分频，和转换速度相关
+ *   ADC_InitStruct1.instance = HW_ADC0;        //选择ADC0模块
  *   ADC_InitStruct1.resolutionMode = kADC_SingleDiff8or9; //单端模式下8位精度 查分模式下9位精度
- *   ADC_InitStruct1.SingleOrDifferential = kADC_Single;
- *   ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;
+ *   ADC_InitStruct1.SingleOrDifferential = kADC_Single;   //选择单端模式
+ *   ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;   //设置为软件触发
  *   //初始化ADC模块
  *   ADC_Init(&ADC_InitStruct1);
  * @endcode
- * @param  ADC_InitStruct: ADC初始化结构体
+ * @param  ADC_InitStruct: ADC初始化结构体，内容详见注释
  * @retval None
  */
 void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
@@ -209,19 +210,19 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 }
 
 /**
- * @brief  快速初始化一个ADC通道
- *
+ * @brief  快速完成AD初始化配置
  * @code
- *    uint32_t instance;
- *    uint32_t value;
  *    //初始化 ADC0 通道20 引脚DM1 单端 精度 12位
- *    instance = ADC_QuickInit(ADC0_SE20_DM1, kADC_SingleDiff12or13);
+ *    ADC_QuickInit(ADC0_SE20_DM1, kADC_SingleDiff12or13);
  *    //读取AD转换结果
  *    value = ADC_QuickReadValue(ADC0_SE20_DM1);
- *    printf("AD Value:%d\r\n", value);
  * @endcode
- * @param  ADCxMAP: 快速初始化宏
- * @param  resolutionMode: 分辨率
+ * @param  ADCxMAP: 快速初始化宏，详见ADC.H文件
+ * @param  resolutionMode: 转换分辨率设置
+ *         @arg kADC_SingleDiff8or9   :转换精度为8/9位
+ *         @arg kADC_SingleDiff10or11 :转换精度为10/11位
+ *         @arg kADC_SingleDiff12or13 :转换精度为12/13位
+ *         @arg kADC_SingleDIff16     :转换精度为16位
  * @retval ADC模块号
  */
 uint8_t ADC_QuickInit(uint32_t ADCxMAP, ADC_ResolutionMode_Type resolutionMode)
@@ -249,13 +250,20 @@ uint8_t ADC_QuickInit(uint32_t ADCxMAP, ADC_ResolutionMode_Type resolutionMode)
 }
   
 /**
- * @brief  ADC开始一次转换 立即返回 非阻塞式
- *
- * @param  instance: ADC模块号
- * @param  chl: ADC通道号
- * @param  mux: 通道内转换通道
- *         @arg kADC_MuxA
- *         @arg kADC_MuxB
+ * @brief  ADC开始一次转换 
+ * @note   立即返回 非阻塞式 不等待转换结果
+ * @code
+ *    //启动 ADC0 通道20 在A模式下数据转换
+ *    ADC_StartConversion(HW_ADC0, 20, kADC_MuxA);
+ * @endcode
+ * @param  instance: ADC 模块号
+ *         @arg HW_ADC0  :ADC0模块
+ *         @arg HW_ADC1  :ADC1模块
+ *         @arg HW_ADC2  :ADC2模块
+ * @param  chl: ADC 通道号
+ * @param  mux: ADC 转换器通道 复用 选择
+ *         @arg kADC_MuxA   :A通道模式
+ *         @arg kADC_MuxB   :B通道模式
  * @retval None
  */
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux)
@@ -274,15 +282,20 @@ void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux)
 }
 
 /**
- * @brief  读取ADC转换数据(non-block函数 立即返回读取结果)
- *         
+ * @brief  读取ADC转换数据
+ * @note   立即返回 非阻塞式 
+ * @code
+ *    //读取 ADC0模块下的在A模式下数据转换结果
+ *    uint32_t data;   //存储转换结果
+ *    data = ADC_ReadValue(HW_ADC0, kADC_MuxA);
+ * @endcode
  * @param  instance: ADC 模块号
- *         @arg HW_ADC0
- *         @arg HW_ADC1
- *         @arg ...
+ *         @arg HW_ADC0  :ADC0模块
+ *         @arg HW_ADC1  :ADC1模块
+ *         @arg HW_ADC2  :ADC2模块
  * @param  mux: ADC 转换器通道 复用 选择
- *         @arg kADC_MuxA
- *         @arg kADC_MuxB
+ *         @arg kADC_MuxA   :A通道模式
+ *         @arg kADC_MuxB   :B通道模式
  * @retval :读取结果 如果当前还未完成转换 则返回上一次结果
  */
 int32_t ADC_ReadValue(uint32_t instance, uint32_t mux)
@@ -291,9 +304,14 @@ int32_t ADC_ReadValue(uint32_t instance, uint32_t mux)
 }
 
 /**
- * @brief  读取ADC转换结果 只需填入ADC快速初始化宏即可
- *         
- * @param  ADCxMAP: ADC 快速初始化宏
+ * @brief  读取ADC转换结果(简化版) 只需填入ADC快速初始化宏即可
+ * @note   阻塞式 直到数据转换完成    
+ * @code
+ *    //读取AD0模块20通道DM1引脚的转换结果
+ *    uint32_t value;   //存储数据转换结果
+ *    value = ADC_QuickReadValue(ADC0_SE20_DM1);
+ * @endcode
+ * @param  ADCxMAP: 快速初始化宏，详见ADC.H文件
  * @retval 转换结果
  */
 int32_t ADC_QuickReadValue(uint32_t ADCxMAP)
@@ -309,11 +327,23 @@ int32_t ADC_QuickReadValue(uint32_t ADCxMAP)
 }
 
 /**
- * @brief  ADC 中断及DMA配置
- *         
- * @param  instance: ADC 模块号     
- * @param  mux:      ADC 通道复用选择
- * @param  config:   ADC 中断及DMA配置
+ * @brief  ADC中断及DMA功能开关函数
+ * @code
+ *    //配置AD0模块 转换完成中断
+ *    ADC_ITDMAConfig(HW_ADC0, kADC_MuxA, kADC_IT_EOF);
+ * @endcode         
+ * @param  instance: ADC 模块号
+ *         @arg HW_ADC0  :ADC0模块
+ *         @arg HW_ADC1  :ADC1模块
+ *         @arg HW_ADC2  :ADC2模块
+ * @param  mux: ADC 转换器通道 复用 选择
+ *         @arg kADC_MuxA   :A通道模式
+ *         @arg kADC_MuxB   :B通道模式
+ * @param  config:   ADC中断及DMA配置
+ *         @arg kADC_IT_Disable    :关闭中断
+ *         @arg kADC_DMA_Disable   :关闭DMA功能 
+ *         @arg kADC_IT_EOF        :转换完成中断
+ *         @arg kADC_DMA_EOF       :DMA完成中断
  * @retval None
  */
 void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config)
@@ -339,16 +369,15 @@ void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config
     }
 }
 
- 
 /**
- * @brief  安装ADC 中断回调函数
- *
- * @param  instance: ADC模块号
- *         @arg HW_ADC0
- *         @arg HW_ADC1
- *         @arg ...
- * @param  AppCBFun: 用户中断回调函数
+ * @brief  注册中断回调函数
+ * @param  instance: ADC 模块号
+ *         @arg HW_ADC0  :ADC0模块
+ *         @arg HW_ADC1  :ADC1模块
+ *         @arg HW_ADC2  :ADC2模块
+ * @param AppCBFun: 回调函数指针入口
  * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
  */
 void ADC_CallbackInstall(uint8_t instance, ADC_CallBackType AppCBFun)
 {
@@ -361,7 +390,12 @@ void ADC_CallbackInstall(uint8_t instance, ADC_CallBackType AppCBFun)
 //! @}
 
 //! @}
-
+/**
+ * @brief  中断处理函数入口
+ * @param  ADC0_IRQHandler :芯片的ADC0模块中断函数入口
+ *         ADC1_IRQHandler :芯片的ADC0模块中断函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void ADC0_IRQHandler(void)
 {
     uint32_t value;

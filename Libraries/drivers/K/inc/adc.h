@@ -3,8 +3,9 @@
   * @file    adc.h
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片ADC模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __ADC_H__

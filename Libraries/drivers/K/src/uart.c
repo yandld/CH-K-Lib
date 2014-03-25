@@ -585,9 +585,6 @@ void UART5_RX_TX_IRQHandler(void)
 #endif /* (!defined(MK10D5)) */
 
 
-<<<<<<< HEAD
-=======
-
 #if 0
 static const QuickInit_Type UART_QuickInitTable[] =
 {
@@ -613,4 +610,4 @@ static const QuickInit_Type UART_QuickInitTable[] =
 #endif
 
 
->>>>>>> e265c7c545cd3fdc2ab681a958a06ce9dc652007
+

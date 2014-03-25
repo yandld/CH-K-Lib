@@ -19,28 +19,28 @@ void GUI_BMP_DrawEx(uint16_t xPos, uint16_t yPos, GUI_GetDataCallbackType fpAppG
     uint8_t biCompression=0;		//记录压缩方式
     uint32_t rowlen;	  		 	//水平方向字节数  
     uint32_t offx=0;
-	  //Get Header File Info 
+    //Get Header File Info 
     while(offx < sizeof(BITMAPINFO))
     {
         br = fpAppGetData(sizeof(BITMAPINFO)-offx, offx, &databuf);
-			  memcpy(((&BitMapInfo1) + offx), databuf, br);
+        memcpy(((&BitMapInfo1) + offx), databuf, br);
         offx += br;
     }
-		offx = BitMapInfo1.bmfHeader.bfOffBits;        	//数据偏移,得到数据段的开始地址
-		color_byte = BitMapInfo1.bmiHeader.biBitCount/8;	//彩色位 16/24/32  
-		biCompression = BitMapInfo1.bmiHeader.biCompression;//压缩方式
+    offx = BitMapInfo1.bmfHeader.bfOffBits;        	//数据偏移,得到数据段的开始地址
+    color_byte = BitMapInfo1.bmiHeader.biBitCount/8;	//彩色位 16/24/32  
+    biCompression = BitMapInfo1.bmiHeader.biCompression;//压缩方式
     TotalDataSizeInBytes = BitMapInfo1.bmiHeader.biSizeImage ;
-		y = BitMapInfo1.bmiHeader.biHeight;	//得到图片高度
-		image_width_in_pixel = BitMapInfo1.bmiHeader.biWidth;
-		//水平像素必须是4的倍数!!
+    y = BitMapInfo1.bmiHeader.biHeight;	//得到图片高度
+    image_width_in_pixel = BitMapInfo1.bmiHeader.biWidth;
+    //水平像素必须是4的倍数!!
 
-		if((image_width_in_pixel * color_byte)%4)rowlen=((image_width_in_pixel*color_byte)/4+1)*4;
-		else rowlen = image_width_in_pixel * color_byte;
+    if((image_width_in_pixel * color_byte)%4)rowlen=((image_width_in_pixel*color_byte)/4+1)*4;
+    else rowlen = image_width_in_pixel * color_byte;
 
-		//开始解码BMP   
-		color = 0;//颜色清空	 													 
-		x = 0;
-		rgb = 0;      
+    //开始解码BMP   
+    color = 0;//颜色清空	 													 
+    x = 0;
+    rgb = 0;      
     while(1)
     {				
         br = fpAppGetData(TotalDataSizeInBytes + BitMapInfo1.bmfHeader.bfOffBits - offx, offx, &databuf);

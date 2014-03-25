@@ -21,28 +21,39 @@ void GUI_Init(CHGUI_InitTypeDef* CHGUI_InitStruct)
 {
     gpCHGUI = CHGUI_InitStruct;
     if(gpCHGUI->ops == NULL)
-		{
+    {
         return;
-		}
-		if(gpCHGUI->ops->ctrl_init != NULL)
-		{
+    }
+    if(gpCHGUI->ops->ctrl_init != NULL)
+    {
         gpCHGUI->ops->ctrl_init();
-		}
-		if(gpCHGUI->ops->ctrl_fill != NULL)
-		{
+    }
+    if(gpCHGUI->ops->ctrl_fill != NULL)
+    {
         gpCHGUI->ops->ctrl_fill(0, 0, gpCHGUI->x_max, gpCHGUI->y_max, gGUI_BackColor);
-		}
-		if(gpCHGUI->ops->ctrl_get_id != NULL)
-		{
+    }
+    if(gpCHGUI->ops->ctrl_get_id != NULL)
+    {
         gpCHGUI->device_id = gpCHGUI->ops->ctrl_get_id();
-		}
-		//Initalize Touch system
-		if(gpCHGUI->tops != NULL)
-		{
+    }
+    //Initalize Touch system
+    if(gpCHGUI->tops != NULL)
+    {
         gpCHGUI->tops->ctrl_init();
-		}
+    }
 }
 
+void GUI_Clear(uint16_t color)
+{
+    uint32_t i,j;
+    for(i = 0; i < gpCHGUI->x_max; i++)
+    {
+        for(j = 0; j < gpCHGUI->y_max; j++)
+        {
+            gpCHGUI->ops->ctrl_point(i, j, color);
+        }
+    }
+}
 
 void GUI_DrawPixel(uint16_t x, uint16_t y)
 {
@@ -51,10 +62,7 @@ void GUI_DrawPixel(uint16_t x, uint16_t y)
 
 void GUI_DrawPoint(uint16_t x, uint16_t y)
 {	    
-	GUI_DrawPixel(x,y);//中心点 
-	GUI_DrawPixel(x+1,y);
-	GUI_DrawPixel(x,y+1);
-	GUI_DrawPixel(x+1,y+1);	 	  	
+	GUI_DrawPixel(x,y);//中心点 	  	
 }				
 
 void GUI_HLine(uint16_t y0, uint16_t x0, uint16_t x1)

@@ -32,10 +32,10 @@ uint8_t GUI_GetNumOfFonts(void)
 char* GUI_GetFontNameFormIndex(uint8_t FontIndex)
 {
     if(FontIndex <= gGUI_NumOfFonts)
-		{
+    {
         return CHGUI_FontTable[FontIndex].Name;
-		}
-		return NULL;
+    }
+    return NULL;
 }
 
 char* GUI_GetCurrentFontName(void)
@@ -60,9 +60,9 @@ void GUI_SetFontFormName(const char *pch)
     for(i = 0; i < gGUI_NumOfFonts; i++)
     {
         if(!strcmp(pch, CHGUI_FontTable[i].Name))
-	    	{
+        {
             gGUI_FontIndex = i;
-	    	}
+        }
     }
 }
 
@@ -92,23 +92,23 @@ static void _GUI_DispChar(uint16_t x, uint16_t y, uint8_t c)
     uint8_t j,pos,t;
     uint8_t temp;
     uint8_t XNum;
-	  uint32_t base;
-	  XNum = (CHGUI_FontTable[gGUI_FontIndex].FontXSize / 8) + 1;
+    uint32_t base;
+    XNum = (CHGUI_FontTable[gGUI_FontIndex].FontXSize / 8) + 1;
     if(CHGUI_FontTable[gGUI_FontIndex].FontXSize % 8 == 0)
-		{
-			XNum--;
-		}
+    {
+        XNum--;
+    }
     c = c - ' ';
-		base = (c * XNum *  CHGUI_FontTable[gGUI_FontIndex].FontYSize);
+    base = (c * XNum *  CHGUI_FontTable[gGUI_FontIndex].FontYSize);
 
-		for(j=0;j<XNum;j++)
-		{
+    for(j=0;j<XNum;j++)
+    {
         for(pos = 0; pos < CHGUI_FontTable[gGUI_FontIndex].FontYSize; pos++)
         {
             temp = (uint8_t)CHGUI_FontTable[gGUI_FontIndex].pFontDataAdress[base + pos +  j * CHGUI_FontTable[gGUI_FontIndex].FontYSize];
             if(j < XNum)
-						{
-							  for(t = 0; t < 8; t++)
+            {
+                for(t = 0; t < 8; t++)
                 {
                     if((temp>>t)&0x01)
                     {
@@ -116,23 +116,22 @@ static void _GUI_DispChar(uint16_t x, uint16_t y, uint8_t c)
                     }
                     else
                     {
-										    switch(gGUI_TextMode)
-											 {
-												    case GUI_TEXTMODE_NORMAL:
-															gpCHGUI->ops->ctrl_point(x + t, y + pos, gGUI_BackColor);
-															break;
-														case GUI_TEXTMODE_TRANSPARENT:
-															
-															break;
-														default:break;
-											 }
-                        
+                        switch(gGUI_TextMode)
+                        {
+                            case GUI_TEXTMODE_NORMAL:
+                                gpCHGUI->ops->ctrl_point(x + t, y + pos, gGUI_BackColor);
+                                break;
+                            case GUI_TEXTMODE_TRANSPARENT:
+            
+                                break;
+                            default:break;
+                        }
                     }
                 }
-						}
-						else
-						{
-							  for(t = 0; t < CHGUI_FontTable[gGUI_FontIndex].FontXSize%8; t++)
+            }
+            else
+            {
+                for(t = 0; t < CHGUI_FontTable[gGUI_FontIndex].FontXSize%8; t++)
                 {
                     if((temp>>t)&0x01)
                     {
@@ -143,11 +142,11 @@ static void _GUI_DispChar(uint16_t x, uint16_t y, uint8_t c)
                         gpCHGUI->ops->ctrl_point(x + t, y + pos, gGUI_BackColor);
                     }
                 }
-								
-						}
+    
+            }
         }
-				x += 8;
-		}
+    x += 8;
+    }
 }
 
 void GUI_DispChar(uint8_t c)
@@ -155,31 +154,31 @@ void GUI_DispChar(uint8_t c)
     //Check Pos
     if((gGUI_CurrentFontPointPos.x + CHGUI_FontTable[gGUI_FontIndex].FontXSize) > gpCHGUI->x_max)
     {
-         gGUI_CurrentFontPointPos.x = 0;
-			   gGUI_CurrentFontPointPos.y += CHGUI_FontTable[gGUI_FontIndex].FontYSize;
+        gGUI_CurrentFontPointPos.x = 0;
+        gGUI_CurrentFontPointPos.y += CHGUI_FontTable[gGUI_FontIndex].FontYSize;
         if(gGUI_CurrentFontPointPos.y + CHGUI_FontTable[gGUI_FontIndex].FontYSize > gpCHGUI->y_max)
         {
-				    gGUI_CurrentFontPointPos.y = 0;
+            gGUI_CurrentFontPointPos.y = 0;
         }
     }
-		//special char handing
-		switch(c)
-		{
+    //special char handing
+    switch(c)
+    {
         case '\n':
-					  break;
-        case '\r':
-					  gGUI_CurrentFontPointPos.y += CHGUI_FontTable[gGUI_FontIndex].FontYSize;
-					  gGUI_CurrentFontPointPos.x = 0;
             break;
-				case 0x7F: //backspace
-				    break;
-				case '\0': //end
-					  break;
-				default: //normal char
+        case '\r':
+            gGUI_CurrentFontPointPos.y += CHGUI_FontTable[gGUI_FontIndex].FontYSize;
+            gGUI_CurrentFontPointPos.x = 0;
+            break;
+        case 0x7F: //backspace
+            break;
+        case '\0': //end
+            break;
+        default: //normal char
             _GUI_DispChar(gGUI_CurrentFontPointPos.x, gGUI_CurrentFontPointPos.y, c);
             gGUI_CurrentFontPointPos.x += CHGUI_FontTable[gGUI_FontIndex].FontXSize;
             break;
-		}
+    }
 }
 
 

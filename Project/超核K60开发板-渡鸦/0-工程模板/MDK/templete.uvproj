@@ -540,64 +540,14 @@
           <GroupName>drivers</GroupName>
           <Files>
             <File>
-              <FileName>adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>clock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\clock.c</FilePath>
-            </File>
-            <File>
-              <FileName>cpuidy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
-            </File>
-            <File>
-              <FileName>dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
-            </File>
-            <File>
-              <FileName>flexbus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
-            </File>
-            <File>
-              <FileName>ftm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
-            </File>
-            <File>
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\gpio.c</FilePath>
             </File>
             <File>
-              <FileName>i2c.c</FileName>
+              <FileName>clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>lptmr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\lptmr.c</FilePath>
-            </File>
-            <File>
-              <FileName>pit.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\pit.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\clock.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>
@@ -610,9 +560,54 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\wdog.c</FilePath>
             </File>
             <File>
-              <FileName>common.c</FileName>
+              <FileName>pit.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\pit.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpuidy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>lptmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\lptmr.c</FilePath>
+            </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>systick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
             </File>
             <File>
               <FileName>rtc.c</FileName>
@@ -628,6 +623,11 @@
               <FileName>tsi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\tsi.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -658,6 +658,26 @@
               <FileName>mempool.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\mempool\mempool.c</FilePath>
+            </File>
+            <File>
+              <FileName>chgui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui.c</FilePath>
+            </File>
+            <File>
+              <FileName>chgui_bmp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui_bmp.c</FilePath>
+            </File>
+            <File>
+              <FileName>chgui_char.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui_char.c</FilePath>
+            </File>
+            <File>
+              <FileName>chgui_touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui_touch.c</FilePath>
             </File>
           </Files>
         </Group>

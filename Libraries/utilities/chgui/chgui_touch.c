@@ -56,11 +56,11 @@ static void GUI_TOUCH_StoreState(int x, int y)
     int xDiff, yDiff;
     static CHGUI_PID_TypeDef _State;
     if((x < 0) && (y < 0))
-		{
-			_State.Pressed = 0;
-			gPID_State = _State;
-			return;
-		}
+    {
+        _State.Pressed = 0;
+        gPID_State = _State;
+        return;
+    }
 	
     xDiff = abs (x - _x);
     yDiff = abs (y - _y);
@@ -79,8 +79,8 @@ static void GUI_TOUCH_StoreState(int x, int y)
 
 int GUI_TOUCH_GetState(CHGUI_PID_TypeDef *pState) 
 {
-  *pState = gPID_State;
-  return (gPID_State.Pressed != 0) ? 1 : 0;
+    *pState = gPID_State;
+    return (gPID_State.Pressed != 0) ? 1 : 0;
 }
 
 void GUI_TOUCH_Exec(void)
@@ -107,11 +107,11 @@ void GUI_TOUCH_Exec(void)
         yMax = xyMinMax[1].Min;
         yMin = xyMinMax[1].Max;
     }
-		//参数合法性检测
-		if((gpCHGUI->tops->ctrl_get_touch_x == NULL) || (gpCHGUI->tops->ctrl_get_touch_y == NULL))
-		{
-			return;
-		}
+    //参数合法性检测
+    if((gpCHGUI->tops->ctrl_get_touch_x == NULL) || (gpCHGUI->tops->ctrl_get_touch_y == NULL))
+    {
+        return;
+    }
     xPhys = gpCHGUI->tops->ctrl_get_touch_x();
     yPhys = gpCHGUI->tops->ctrl_get_touch_y();
     // Convert values into logical values 
@@ -124,13 +124,13 @@ void GUI_TOUCH_Exec(void)
     #endif
     if ((x < xMin) || (x > xMax)  || (y < yMin) || (y > yMax)) 
     {
-			GUI_TOUCH_StoreState(-1, -1);
+        GUI_TOUCH_StoreState(-1, -1);
     }
     else 
     {
         x = _AD2X(x);
         y = _AD2Y(y);
-			GUI_TOUCH_StoreState(x, y);
+        GUI_TOUCH_StoreState(x, y);
     }
 }
 

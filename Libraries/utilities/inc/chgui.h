@@ -107,6 +107,7 @@ char* GUI_GetCurrentFontName(void);
 void GUI_DispDeivceID(void);
 void GUI_GotoXY(uint16_t x, uint16_t y);
 void GUI_DrawPoint(uint16_t x, uint16_t y);
+void GUI_Clear(uint16_t color);
 
 
 #endif 

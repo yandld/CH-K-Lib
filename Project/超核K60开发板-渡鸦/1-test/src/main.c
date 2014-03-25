@@ -40,7 +40,7 @@ int main(void)
     printf("HelloWorld\r\n");
     SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(1);
 
-    CMD_FLEXBUS(0, NULL);
+//    CMD_FLEXBUS(0, NULL);
     
     while(1)
     {

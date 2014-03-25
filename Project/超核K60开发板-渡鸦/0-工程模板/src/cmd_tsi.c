@@ -45,10 +45,7 @@ int CMD_TSI(int argc, char * const argv[])
     TSI_QuickInit(TSI0_CH4_PA03);
     TSI_CallbackInstall(TSI_ISR);
     TSI_ITDMAConfig(kTSI_IT_EndOfScan);
-    while(1)
-    {
 
-    }
 }
 
 

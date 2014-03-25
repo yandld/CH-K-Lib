@@ -11,7 +11,6 @@
   
 #include "enet.h"
 #include "common.h"
-#include "clock.h"
 #include <string.h>
 
 //!< ENET DMA Tx&Rx Descriptors memory regin(must be 16 bit agiged)

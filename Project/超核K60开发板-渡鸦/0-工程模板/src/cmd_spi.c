@@ -1,5 +1,4 @@
 #include "shell.h"
-#include "clock.h"
 #include "spi.h"
 #include "gpio.h"
 #include "board.h"

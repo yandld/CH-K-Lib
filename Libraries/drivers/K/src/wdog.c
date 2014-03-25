@@ -10,7 +10,6 @@
   */
 #include "wdog.h"
 #include "common.h"
-#include "clock.h"
 
 static WDOG_CallBackType WDOG_CallBackTable[1] = {NULL};
 /**

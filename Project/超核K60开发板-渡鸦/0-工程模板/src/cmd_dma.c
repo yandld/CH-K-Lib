@@ -1,5 +1,4 @@
 #include "shell.h"
-#include "clock.h"
 #include "dma.h"
 #include "systick.h"
 

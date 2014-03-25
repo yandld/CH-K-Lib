@@ -530,11 +530,6 @@
               <FilePath>..\src\cmd_tsi.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_sd.c</FilePath>
-            </File>
-            <File>
               <FileName>shell_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
@@ -755,6 +750,12 @@
               <FilePath>..\..\..\..\Libraries\znfat\znFAT.c</FilePath>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>rtt-kernel</GroupName>
+        </Group>
+        <Group>
+          <GroupName>rtt-cortex-m4</GroupName>
         </Group>
       </Groups>
     </Target>

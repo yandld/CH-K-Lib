@@ -10,7 +10,6 @@
   */
 #include "pit.h"
 #include "common.h"
-#include "clock.h"
 
 //!< Internal vars
 static uint32_t fac_us; //!< usDelay Mut

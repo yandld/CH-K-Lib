@@ -9,7 +9,6 @@
   */
 #include "i2c.h"
 #include "gpio.h"
-#include "clock.h"
 
 //!< Leagacy Support for Kineis Z Version(Inital Version)
 #if (!defined(I2C_BASES))

@@ -54,23 +54,27 @@ typedef struct
     FTM_PWM_Mode_Type   mode;
 }FTM_PWM_InitTypeDef;
 
-#define kFTM_QD_NormalPolarity      (0x00)
-#define kFTM_QD_InvertedPolarity    (0x01)
+typedef enum
+{
+    kFTM_QD_NormalPolarity,
+    kFTM_QD_InvertedPolarity,
+}FTM_QD_PolarityMode_Type;
 
-//QD  模式选择
+
+/* QD  模式选择 */
 typedef enum
 {
 	kQD_PHABEncoding,
 	kQD_CountDirectionEncoding,
 }FTM_QD_Mode_Type;
 
-//!< QD初始化
+/* QD初始化 */
 typedef struct
 {
-    uint32_t        instance;
-    uint8_t         PHA_Polarity:1;
-    uint8_t         PHB_Polarity:1; 
-    FTM_QD_Mode_Type   mode;
+    uint32_t                            instance;
+    FTM_QD_PolarityMode_Type            PHA_Polarity;
+    FTM_QD_PolarityMode_Type            PHB_Polarity; 
+    FTM_QD_Mode_Type                    mode;
 }FTM_QD_InitTypeDef;
 
 //!< FTM PWM 快速初始化

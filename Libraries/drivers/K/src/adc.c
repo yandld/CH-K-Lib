@@ -11,7 +11,7 @@
 #include "adc.h"
 #include "gpio.h"
 
-/* Leagacy Support for Kineis Z Version(Inital Version) */
+/* leagacy support for Kineis Z Version(inital version) */
 #if (!defined(ADC_BASES))
 
     #if (defined(MK60DZ10))
@@ -282,7 +282,7 @@ int32_t ADC_QuickReadValue(uint32_t ADCxMAP)
     uint32_t chl = pADCxMap->channel;
     uint32_t mux = pADCxMap->reserved;
     ADC_StartConversion(instance, chl, mux);
-    // waiting for ADC complete
+    /* waiting for ADC complete */
     while(ADC_IsConversionCompleted(instance, mux)) {};
     return ADC_ReadValue(instance, mux);
 }

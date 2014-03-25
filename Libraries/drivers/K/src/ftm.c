@@ -13,7 +13,7 @@
 #include "gpio.h"
 #include <math.h>
 
-//!< Leagacy Support for Kineis Z Version(Inital Version)
+/* leagacy support for Kineis Z Version(inital version) */
 #if (!defined(FTM_BASES))
 
     #if (defined(MK60DZ10))
@@ -23,7 +23,8 @@
         #define FTM_BASES {FTM0, FTM1}
     #endif
 #endif
-
+        
+/* global vars */
 FTM_Type * const FTM_InstanceTable[] = FTM_BASES;
 
 #if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15))
@@ -42,7 +43,7 @@ static const RegisterManipulation_Type SIM_FTMClockGateTable[] =
 
 #endif
 
-//FTM  模式选择
+/* FTM  模式选择 */
 typedef enum
 {
 	kFTM_Combine,
@@ -53,7 +54,7 @@ typedef enum
     kFTM_FaultControl,
 }FTM_DualChlConfig_Type;
 
-//!< static functions declareation
+/* static functions declareation */
 static void FTM_PWM_SetMode(uint8_t instance, uint8_t chl, FTM_PWM_Mode_Type mode);
 void FTM_PWM_InvertPolarity(uint8_t instance, uint8_t chl, uint32_t config);
 
@@ -70,13 +71,13 @@ void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
     int32_t i;
     uint32_t clock;
     uint32_t min_val = 0xFFFF;
-    // enable clock gate
+    /* enable clock gate */
     *(uint32_t*)SIM_FTMClockGateTable[FTM_InitStruct->instance].addr |= SIM_FTMClockGateTable[FTM_InitStruct->instance].mask;
-    //disable FTM, we must set CLKS(0) before config FTM!
+    /* disable FTM, we must set CLKS(0) before config FTM! */
     FTM_InstanceTable[FTM_InitStruct->instance]->SC = 0;
-    // enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function)
+    /* enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function) */
     FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK;
-    // cal ps
+    /* cal ps */
     CLOCK_GetClockFrequency(kBusClock, &clock);
     pres = (clock/FTM_InitStruct->frequencyInHZ)/FTM_MOD_MOD_MASK;
     if((clock/FTM_InitStruct->frequencyInHZ)/pres > FTM_MOD_MOD_MASK)
@@ -98,32 +99,32 @@ void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
     printf("input_clk:%d\r\n", clock);
     printf("pres:%d\r\n", pres);
 #endif
-    //set CNT and CNTIN
+    /* set CNT and CNTIN */
     FTM_InstanceTable[FTM_InitStruct->instance]->CNT = 0;
     FTM_InstanceTable[FTM_InitStruct->instance]->CNTIN = 0;
-    // set modulo
+    /* set modulo */
     FTM_InstanceTable[FTM_InitStruct->instance]->MOD = (clock/(1<<ps))/FTM_InitStruct->frequencyInHZ;
-    // set LOCK bit to load MOD value
+    /* set LOCK bit to load MOD value */
     FTM_InstanceTable[FTM_InitStruct->instance]->PWMLOAD = 0xFFFFFFFF;
 #ifdef DEBUG
     printf("MOD Should be:%d\r\n",  (clock/(1<<ps))/FTM_InitStruct->frequencyInHZ);
     printf("MOD acutall is:%d\r\n", FTM_InstanceTable[FTM_InitStruct->instance]->MOD);
     printf("ps:%d\r\n", ps);
 #endif
-    // set FTM clock to system clock
+    /* set FTM clock to system clock */
     FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
     FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(1);
-    // set ps, this must be done after set modulo
+    /* set ps, this must be done after set modulo */
     FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_PS_MASK;
     FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_PS(ps); 
-    // set FTM mode
+    /* set FTM mode */
     FTM_PWM_SetMode(FTM_InitStruct->instance, FTM_InitStruct->chl, FTM_InitStruct->mode);
 }
 
 //!< 正交解码初始化
 void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
 {
-    // enable clock gate
+    /* enable clock gate */
     *(uint32_t*)SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].addr |= SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].mask;
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->MOD = FTM_MOD_MOD_MASK; //设置为最大
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->CNTIN = FTM_CNTIN_INIT_MASK/2; //最大值的一半
@@ -154,7 +155,7 @@ void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
     switch(FTM_QD_InitStruct->mode)
     {
         case kQD_PHABEncoding:
-            FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL &= ~FTM_QDCTRL_QUADMODE_MASK; //选定编码模式为A相与B相编码模式 
+            FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL &= ~FTM_QDCTRL_QUADMODE_MASK;
             break;
         case kQD_CountDirectionEncoding:
             FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL |= FTM_QDCTRL_QUADMODE_MASK;
@@ -162,8 +163,8 @@ void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
         default:
             break;
     }
-    FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL |= FTM_QDCTRL_QUADEN_MASK; //使能正交解码模式
-    //设置时钟 及分频
+    FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL |= FTM_QDCTRL_QUADEN_MASK;
+    /* set clock source and prescaler */
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->SC |= FTM_SC_CLKS(1)|FTM_SC_PS(3);
 }
 
@@ -392,7 +393,7 @@ uint8_t FTM_PWM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
 void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
 {
     uint32_t cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty) / 10000;
-    // combine mode
+    /* combine mode */
     if(FTM_InstanceTable[instance]->COMBINE & (FTM_COMBINE_COMBINE0_MASK|FTM_COMBINE_COMBINE1_MASK|FTM_COMBINE_COMBINE2_MASK|FTM_COMBINE_COMBINE3_MASK))
     { 
         if(chl%2)
@@ -409,7 +410,7 @@ void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
     }
     else
     {
-    //single chl
+    /* single chl */
     FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv; 
     }
 }

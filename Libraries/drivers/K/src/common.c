@@ -149,7 +149,7 @@ void DelayUs(uint32_t us)
 
 
 
-#if defined(DEBUG)
+#if (defined(DEBUG))
 
 void assert_failed(char * file, uint32_t line)
 {
@@ -158,7 +158,7 @@ void assert_failed(char * file, uint32_t line)
 }
 #endif
 
-#if DEBUG
+#if (defined(DEBUG) && defined(DEBUG_FAULT_HANDLER))
 
 void NMI_Handler(void)
 {

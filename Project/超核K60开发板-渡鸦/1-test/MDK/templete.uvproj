@@ -74,9 +74,9 @@
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
+            <UserProg1Name>fromelf --bin !L --output templete.bin</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60DZ10 CHK60EVB2 DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\RT-Thread_1.2.0\include;..\..\..\..\RT-Thread_1.2.0\components\finsh</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -394,7 +394,7 @@
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
+            <Misc>--keep __fsym_* --keep __vsym_*</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -423,116 +423,6 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_cpuinfo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_cpuinfo.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_pit.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_pit.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_flexbus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_flexbus.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_ftm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_ftm.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_nvic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_nvic.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_sram.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_lptmr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_lptmr.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_dma.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_ov7620.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_ov7620.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_wdog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_wdog.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_mp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_mp.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_enet.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_enet.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_tsi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_tsi.c</FilePath>
-            </File>
-            <File>
-              <FileName>shell_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\shell_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -632,67 +522,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>utilities</GroupName>
-          <Files>
-            <File>
-              <FileName>shell.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell.c</FilePath>
-            </File>
-            <File>
-              <FileName>shell_autocomplete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_autocomplete.c</FilePath>
-            </File>
-            <File>
-              <FileName>shell_cmdhelp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhelp.c</FilePath>
-            </File>
-            <File>
-              <FileName>shell_cmdhist.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
-            </File>
-            <File>
-              <FileName>chgui.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui.c</FilePath>
-            </File>
-            <File>
-              <FileName>chgui_bmp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui_bmp.c</FilePath>
-            </File>
-            <File>
-              <FileName>chgui_char.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui_char.c</FilePath>
-            </File>
-            <File>
-              <FileName>chgui_touch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui_touch.c</FilePath>
-            </File>
-            <File>
-              <FileName>mempool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\mempool\mempool.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>devices</GroupName>
           <Files>
             <File>
               <FileName>ili9320.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
-            </File>
-            <File>
-              <FileName>ov7620.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ov7620.c</FilePath>
             </File>
             <File>
               <FileName>sram.c</FileName>
@@ -732,19 +567,197 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>znfat</GroupName>
+          <GroupName>rtt-kernel</GroupName>
           <Files>
             <File>
-              <FileName>deviceio.c</FileName>
+              <FileName>clock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\znfat\deviceio.c</FilePath>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\clock.c</FilePath>
             </File>
             <File>
-              <FileName>znFAT.c</FileName>
+              <FileName>device.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\znfat\znFAT.c</FilePath>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\device.c</FilePath>
+            </File>
+            <File>
+              <FileName>idle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\idle.c</FilePath>
+            </File>
+            <File>
+              <FileName>ipc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\ipc.c</FilePath>
+            </File>
+            <File>
+              <FileName>irq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\irq.c</FilePath>
+            </File>
+            <File>
+              <FileName>kservice.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\kservice.c</FilePath>
+            </File>
+            <File>
+              <FileName>mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>memheap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\memheap.c</FilePath>
+            </File>
+            <File>
+              <FileName>mempool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\mempool.c</FilePath>
+            </File>
+            <File>
+              <FileName>module.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\module.c</FilePath>
+            </File>
+            <File>
+              <FileName>object.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\object.c</FilePath>
+            </File>
+            <File>
+              <FileName>scheduler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\scheduler.c</FilePath>
+            </File>
+            <File>
+              <FileName>slab.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\slab.c</FilePath>
+            </File>
+            <File>
+              <FileName>thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\src\timer.c</FilePath>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>rtt-cortex-m4</GroupName>
+          <Files>
+            <File>
+              <FileName>backtrace.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\libcpu\arm\common\backtrace.c</FilePath>
+            </File>
+            <File>
+              <FileName>div0.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\libcpu\arm\common\div0.c</FilePath>
+            </File>
+            <File>
+              <FileName>showmem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\libcpu\arm\common\showmem.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpuport.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\libcpu\arm\cortex-m4\cpuport.c</FilePath>
+            </File>
+            <File>
+              <FileName>context_rvds.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\libcpu\arm\cortex-m4\context_rvds.S</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>rtt-finsh</GroupName>
+          <Files>
+            <File>
+              <FileName>cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\cmd.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_compiler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_compiler.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_error.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_error.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_init.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_node.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_node.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_ops.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_ops.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_parser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_parser.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_token.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_token.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_var.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_var.c</FilePath>
+            </File>
+            <File>
+              <FileName>finsh_vm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\finsh_vm.c</FilePath>
+            </File>
+            <File>
+              <FileName>msh.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\msh.c</FilePath>
+            </File>
+            <File>
+              <FileName>msh_cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\shell.c</FilePath>
+            </File>
+            <File>
+              <FileName>symbol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\finsh\symbol.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>rtt-driver</GroupName>
         </Group>
       </Groups>
     </Target>

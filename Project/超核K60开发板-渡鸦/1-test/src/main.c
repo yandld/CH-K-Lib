@@ -6,7 +6,7 @@
 #include "stdio.h" 
 #include "common.h"
 
-#include "board.h"
+//#include "board.h"
 
 static uint8_t UART_Instance;
 
@@ -36,7 +36,7 @@ int main(void)
 {
     uint32_t i;
     DelayInit();
-    UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
+//    UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
     printf("HelloWorld\r\n");
     SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(1);
 

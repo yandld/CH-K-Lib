@@ -3,8 +3,9 @@
   * @file    spi.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片SPI模块的底层功能函数
   ******************************************************************************
   */
 #include "spi.h"

@@ -129,9 +129,6 @@ const _I2C_Divider_Type I2C_DiverTable[] =
  * @param  baudrate        :IIC模块通信速度
  * @retval None
  */
-=======
-/* set i2c baudrate */
->>>>>>> 351ae1996ef99b049c92819330ea80836555fa03
 void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
 {
     /* check if the requested frequency is greater than the max supported baud. */

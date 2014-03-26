@@ -3,8 +3,9 @@
   * @file    dma.h
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片DMA模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __DMA_H__
@@ -81,8 +82,8 @@
 //!< 触发模式选择
 typedef enum
 {
-    kDMA_TriggerSource_Normal,   
-    kDMA_TriggerSource_Periodic, 
+    kDMA_TriggerSource_Normal,    //正常模式
+    kDMA_TriggerSource_Periodic,  //周期触发模式
 }DMA_TriggerSource_Type;
 
 //!< DMA搬运数据端口位宽设置
@@ -96,21 +97,21 @@ typedef enum
 //!< 初始化结构体
 typedef struct 
 {
-    uint8_t         chl;                                //通道号         
-    uint8_t         chlTriggerSource;                   //触发源选择
+    uint8_t         chl;                                //DMA通道号0~15         
+    uint8_t         chlTriggerSource;                   //DMA触发源选择
     uint16_t        minorByteTransferCount;             //MINOR LOOP 中一次传输的字节数
     uint16_t        majorTransferCount;                 //MAJOR LOOP 循环次数
     DMA_TriggerSource_Type triggerSourceMode;           //触发模式选择
-    /* source config */
-    uint32_t        sourceAddressMinorAdj;              //源地址在MINOR LOOP 每次传输时的偏移量 可正可负
-    uint32_t        sourceAddress;                      //源地址
-    DMA_DataWidthBit_Type        sourceDataWidth;       //源地址宽度 8 16 32
-    uint32_t        sourceAddressMajorAdj;              //所有MAJOR LOOP循环完成后 地址偏移量
-    /* dest config */
-    int32_t         destAddressMinorAdj;                //同source..
-    uint32_t        destAddress;
-    DMA_DataWidthBit_Type        destDataWidth;     
-    int32_t         destAddressMajorAdj;
+    /* 数据源配置 */
+    uint32_t        sourceAddressMinorAdj;              //数据源地址在MINOR LOOP 每次传输时的偏移量，可正可负
+    uint32_t        sourceAddress;                      //数据源地址
+    DMA_DataWidthBit_Type        sourceDataWidth;       //数据源地址数据宽度 8 16 32
+    uint32_t        sourceAddressMajorAdj;              //所有MAJOR LOOP循环完成后 源地址偏移量
+    /* 目标属性配置 */
+    int32_t         destAddressMinorAdj;                //目标地址在MINOR LOOP 每次传输时的偏移量，可正可负
+    uint32_t        destAddress;                        //目标地址
+    DMA_DataWidthBit_Type        destDataWidth;         //目标地址数据宽度 8 16 32
+    int32_t         destAddressMajorAdj;                //所有MAJOR LOOP循环完成后 目标地址偏移量
 }DMA_InitTypeDef;
   
 

@@ -74,7 +74,7 @@
 #define FINSH_USING_MSH
 #define FINSH_USING_MSH_ONLY
 /* SECTION: device filesystem */
-//#define RT_USING_DFS 
+#define RT_USING_DFS 
 #define RT_USING_DFS_ELMFAT
 #define RT_DFS_ELM_WORD_ACCESS
 #define DFS_USING_WORKDIR
@@ -82,7 +82,7 @@
 #define RT_DFS_ELM_REENTRANT
 /* Number of volumes (logical drives) to be used. */
 #define RT_DFS_ELM_DRIVES			2
-/* #define RT_DFS_ELM_USE_LFN			1 */
+#define RT_DFS_ELM_USE_LFN			3 
 #define RT_DFS_ELM_MAX_LFN			255
 /* Maximum sector size to be handled. */
 #define RT_DFS_ELM_MAX_SECTOR_SIZE  512

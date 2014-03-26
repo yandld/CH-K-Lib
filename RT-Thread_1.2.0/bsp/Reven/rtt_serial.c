@@ -31,85 +31,132 @@
 #include <rtthread.h>
 #include "uart.h"
 
-struct rt_device uart_device;
-static uint8_t gch;
-static uint8_t gflag;
+#include "rtt_serial.h"
+
+static struct rt_device uart_device;
+static struct kinetis_uart_device serial;
+void rt_uart_rx_isr (rt_device_t dev, uint8_t ch)
+{
+    uart_device_t uart_device = (uart_device_t)(dev->user_data);
+    /* save character */
+    uart_device->rx_buffer[uart_device->rx_rec_index++] = ch;
+    if(uart_device->rx_rec_index >= UART_RX_BUFFER_SIZE)
+        uart_device->rx_rec_index = 0;
+    
+    /* if the next position is read index, discard this 'read char' */
+    if (uart_device->rx_rec_index == uart_device->rx_read_index)
+    {
+        uart_device->rx_read_index++;
+        if(uart_device->rx_read_index >= UART_RX_BUFFER_SIZE)
+            uart_device->rx_read_index = 0;
+    }
+    dev->rx_indicate(dev, 1);
+}
+
 void UART_RX_ISR(uint8_t ch)
 {
-    /* enter interrupt */
     rt_interrupt_enter();
-    uart_device.rx_indicate(&uart_device, 1);
-    gflag = 1;
-    gch = ch;
-    /* leave interrupt */
+    rt_uart_rx_isr(&uart_device, ch);
     rt_interrupt_leave();
 }
 
 static rt_err_t rt_serial_init (rt_device_t dev)
 { 
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    UART_CallbackRxInstall(HW_UART0, UART_RX_ISR);
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
-    
-    // UART_ITConfig(UART4, UART_IT_RDRF, ENABLE);
-    //  NVIC_EnableIRQ(UART4_RX_TX_IRQn);
+    if(!(dev->flag & RT_DEVICE_FLAG_ACTIVATED))
+    {
+        uart_device_t uart_device = (uart_device_t)(dev->user_data);
+        uart_device->instance = UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+        rt_memset(uart_device->rx_buffer, 0, sizeof(uart_device->rx_buffer));
+        uart_device->rx_rec_index = 0;
+        uart_device->rx_read_index = 0;
+    }
+    dev->flag |= RT_DEVICE_FLAG_ACTIVATED;
     return RT_EOK;
 }
 
 static rt_err_t rt_serial_open(rt_device_t dev, rt_uint16_t oflag)
 {
+    uart_device_t uart_device = (uart_device_t)(dev->user_data);
+    if(dev->flag & RT_DEVICE_FLAG_INT_RX)
+    {
+        UART_CallbackRxInstall(uart_device->instance, UART_RX_ISR);
+        UART_ITDMAConfig(uart_device->instance, kUART_IT_Rx); 
+    }
 	return RT_EOK;
 }
 
 static rt_err_t rt_serial_close(rt_device_t dev)
 {
+    uart_device_t uart_device = (uart_device_t)(dev->user_data);
+    if(dev->flag & RT_DEVICE_FLAG_INT_RX)
+    {
+        UART_ITDMAConfig(uart_device->instance, kUART_IT_Rx_Disable); 
+    }
 	return RT_EOK;
 }
 
 static rt_size_t rt_serial_read (rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
-    if(gflag)
+    uint8_t *ptr = buffer;
+    uart_device_t uart_device = (uart_device_t)(dev->user_data);
+    while(size)
     {
-        memcpy(buffer, &gch, 1);
-        gflag = 0; 
-        return 1;
+        if (uart_device->rx_read_index != uart_device->rx_rec_index)
+        {
+            /* read a character */
+            *ptr++ = uart_device->rx_buffer[uart_device->rx_read_index];
+            size--;
+
+            /* move to next position */
+            uart_device->rx_read_index ++;
+            if (uart_device->rx_read_index >= UART_RX_BUFFER_SIZE)
+                uart_device->rx_read_index = 0;
+        }
+        else
+        {
+            break;
+        }
     }
-    return 0;
+    return (rt_uint32_t)ptr - (rt_uint32_t)buffer;
 }
 
 
 static rt_size_t rt_serial_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
+    uart_device_t uart_device = (uart_device_t)(dev->user_data);
     rt_uint8_t* ptr = (rt_uint8_t*)buffer;
     while(size--)
     {
         if(*ptr == '\n')
         {
-            UART_WriteByte(HW_UART0, '\r');
+            UART_WriteByte(uart_device->instance, '\r');
         }
-        UART_WriteByte(HW_UART0, *ptr);
+        UART_WriteByte(uart_device->instance, *ptr);
         ptr++;
     }
     return size;
 }
 
-void rt_hw_usart_init(void)
+rt_err_t rt_hw_serial_register(rt_device_t device, const char* name, rt_uint32_t flag, struct kinetis_uart_device *serial)
 {
-
-	uart_device.type 		= RT_Device_Class_Char;
-	uart_device.rx_indicate = RT_NULL;
-	uart_device.tx_complete = RT_NULL;
-	uart_device.init 		= rt_serial_init;
-	uart_device.open		= rt_serial_open;
-	uart_device.close		= rt_serial_close;
-	uart_device.read 		= rt_serial_read;
-	uart_device.write 		= rt_serial_write;
+	device->type 		= RT_Device_Class_Char;
+	device->rx_indicate = RT_NULL;
+	device->tx_complete = RT_NULL;
+	device->init 		= rt_serial_init;
+	device->open		= rt_serial_open;
+	device->close		= rt_serial_close;
+	device->read 		= rt_serial_read;
+	device->write 		= rt_serial_write;
 //	uart_device->control 	= rt_serial_control;
-	uart_device.user_data	= RT_NULL;
-	
-    rt_device_register(&uart_device, "uart", RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STREAM);
+	device->user_data	= serial; 
+    rt_device_register(device, name, RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STREAM|RT_DEVICE_FLAG_INT_RX);
 }
 
+
+void rt_hw_usart_init(void)
+{
+    rt_hw_serial_register(&uart_device, "uart", 0, &serial); 
+}
 
 
 

@@ -12,17 +12,6 @@
 
 #if (!defined(MK10D5))
 
-FunctionalState FLEXBUS_IsModuleEnable(void)
-{
-    if(SIM->SCGC7 & SIM_SCGC7_FLEXBUS_MASK)
-    {
-        return ENABLE;
-    }
-    else
-    {
-        return DISABLE;
-    }
-}
 
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
 {

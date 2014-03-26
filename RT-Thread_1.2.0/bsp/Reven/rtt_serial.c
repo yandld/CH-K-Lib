@@ -32,12 +32,28 @@
 #include "uart.h"
 
 struct rt_device uart_device;
-static rt_err_t rt_serial_init (rt_device_t dev)
+static uint8_t gch;
+static uint8_t gflag;
+void UART_RX_ISR(uint8_t ch)
 {
-    UART_DebugPortInit(UART4_RX_C14_TX_C15, 115200);
-    UART_ITConfig(UART4, UART_IT_RDRF, ENABLE);
-	  NVIC_EnableIRQ(UART4_RX_TX_IRQn);
-	return RT_EOK;
+    /* enter interrupt */
+    rt_interrupt_enter();
+    uart_device.rx_indicate(&uart_device, 1);
+    gflag = 1;
+    gch = ch;
+    /* leave interrupt */
+    rt_interrupt_leave();
+}
+
+static rt_err_t rt_serial_init (rt_device_t dev)
+{ 
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_CallbackRxInstall(HW_UART0, UART_RX_ISR);
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
+    
+    // UART_ITConfig(UART4, UART_IT_RDRF, ENABLE);
+    //  NVIC_EnableIRQ(UART4_RX_TX_IRQn);
+    return RT_EOK;
 }
 
 static rt_err_t rt_serial_open(rt_device_t dev, rt_uint16_t oflag)
@@ -50,53 +66,34 @@ static rt_err_t rt_serial_close(rt_device_t dev)
 	return RT_EOK;
 }
 
- uint8_t gch;
- uint8_t is_read;
 static rt_size_t rt_serial_read (rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
-		rt_uint8_t* ptr = buffer;
-    if(is_read)
-		{
-			*ptr = gch;
-			is_read = 0;
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	/*
-    rt_uint8_t ch;
-		rt_uint8_t* ptr = buffer;
-    if(UART_ReceiveData(UART4, &ch) == TRUE)
-		{
-        *ptr = ch;
-			   size = 1;
-		}
-		else
-		{
-			size = 0;
-		}
-	  return size;
-	*/
+    if(gflag)
+    {
+        memcpy(buffer, &gch, 1);
+        gflag = 0; 
+        return 1;
+    }
+    return 0;
 }
 
 
 static rt_size_t rt_serial_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
-		rt_uint8_t* ptr = (rt_uint8_t*)buffer;
+    rt_uint8_t* ptr = (rt_uint8_t*)buffer;
     while(size--)
-		{
-			if(*ptr == '\n')
-			{
-				UART_SendData(UART4, '\r');
-			}
-			UART_SendData(UART4, *ptr);
-			ptr++;
-		}
-	
+    {
+        if(*ptr == '\n')
+        {
+            UART_WriteByte(HW_UART0, '\r');
+        }
+        UART_WriteByte(HW_UART0, *ptr);
+        ptr++;
+    }
+    return size;
 }
-void	rt_hw_usart_init(void)
+
+void rt_hw_usart_init(void)
 {
 
 	uart_device.type 		= RT_Device_Class_Char;
@@ -110,7 +107,7 @@ void	rt_hw_usart_init(void)
 //	uart_device->control 	= rt_serial_control;
 	uart_device.user_data	= RT_NULL;
 	
-	 rt_device_register(&uart_device, "uart", RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STREAM);
+    rt_device_register(&uart_device, "uart", RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STREAM);
 }
 
 

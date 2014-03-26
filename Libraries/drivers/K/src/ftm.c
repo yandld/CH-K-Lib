@@ -434,7 +434,12 @@ void FTM_PWM_InvertPolarity(uint8_t instance, uint8_t chl, uint32_t config)
 /**
  * @brief  快速配置初始化FTM模块实现PWM功能
  * @code
- *      //设置FTM0模块的3通道在PTA6引脚中产生1000HZ的pwm波形
+ *      
+
+
+
+
+//设置FTM0模块的3通道在PTA6引脚中产生1000HZ的pwm波形
  *      FTM_PWM_QuickInit(FTM0_CH3_PA06, 1000); 
  * @endcode         
  * @param  FTMxMAP        : FTM工作在PWM模式下的编码，详见ftm.h文件

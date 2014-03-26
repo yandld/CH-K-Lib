@@ -339,14 +339,19 @@ uint8_t I2C_ReadData(uint8_t instance)
 	return (I2C_InstanceTable[instance]->D);
 }
 /**
- * @brief  i2c send 7 bit address
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @param  address: address of slave device should be 0-127
- * @param  direction:
- *         @arg kI2C_Read  : Master read
- *         @arg kI2C_Write : Master write
+ * @brief  i2c发送一个地址并设置数据方向
+ * @code
+ *     //使用i2c的1模块向地址为0x55的从机读取数据
+ *    I2C_Send7bitAddress(HW_I2C1, 0x55, kI2C_Read);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @param  address: 发送从机地址：0~127
+ * @param  direction:  数据传输方向控制
+ *         @arg kI2C_Read  : 主机读取
+ *         @arg kI2C_Write : 主机发送
  * @retval None
  */
 void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type direction)
@@ -359,11 +364,13 @@ void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type d
 }
 
 /**
- * @brief  等待应答信号 此函数一般在使用SendData函数后调用 用于等待应答信号
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @retval 0:received ack 1:no ack  2:timeout
+ * @brief  等待应答信号 
+ * @note   此函数一般在使用SendData函数后调用 用于等待应答信号
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @retval 0:接收到应答 1:没有应答 2:超时
  */
 uint8_t I2C_WaitAck(uint8_t instance)
 {
@@ -401,13 +408,18 @@ uint8_t I2C_WaitAck(uint8_t instance)
     }
 }
 /**
- * @brief  I2C set read or write data when in Master mode
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @param  direction:
- *         @arg kI2C_Read  : Master read
- *         @arg kI2C_Write : Master write
+ * @brief  设置i2c在主模式下的数据读写操作
+ * @code
+ *     //使用i2c的1模块读取数据
+ *    I2C_SetMasterMode(HW_I2C1, kI2C_Read);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @param  direction:  数据传输方向控制
+ *         @arg kI2C_Read  : 主机读取
+ *         @arg kI2C_Write : 主机发送
  * @retval None
  */
 void I2C_SetMasterMode(uint8_t instance, I2C_Direction_Type direction)
@@ -417,10 +429,11 @@ void I2C_SetMasterMode(uint8_t instance, I2C_Direction_Type direction)
 	(direction == kI2C_Write)?(I2C_InstanceTable[instance]->C1 |= I2C_C1_TX_MASK):(I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TX_MASK);
 }
 /**
- * @brief  Generate NACK signal
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
+ * @brief  产生 NACK 信号
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
 void I2C_GenerateNAck(uint8_t instance)
@@ -430,10 +443,11 @@ void I2C_GenerateNAck(uint8_t instance)
 	I2C_InstanceTable[instance]->C1 |= I2C_C1_TXAK_MASK;
 }
 /**
- * @brief  Generate ACK signal
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
+ * @brief  产生 ACK 信号
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
 void I2C_GenerateAck(uint8_t instance)
@@ -443,14 +457,16 @@ void I2C_GenerateAck(uint8_t instance)
 	I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TXAK_MASK;
 }
 /**
- * @brief  config I2C dma or Intrrupt settings
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @param  config:
- *         @arg kI2C_ITDMA_Disable: disable DMA and interrupt
- *         @arg kI2C_IT_BTC  : trigger interrupt when byte transfer complete
- *         @arg kI2C_DMA_BTC : trigger dma when byte transfer complete
+ * @brief  I2C模块中断或DMA功能设置
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @param  config  :中断或DMA类型
+ *         @arg kI2C_IT_Disable  :关闭中断 
+ *         @arg kI2C_DMA_Disable :关闭DMA
+ *         @arg kI2C_IT_BTC,     :开启发送完成中断
+ *         @arg kI2C_DMA_BTC     :开启发送完成DMA功能
  * @retval None
  */
 void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config)
@@ -479,12 +495,14 @@ void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config)
 }
 
 /**
- * @brief  install ISR callback
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @param  AppCBFun: user callback function
+ * @brief  注册中断回调函数
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @param AppCBFun: 回调函数指针入口
  * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
  */
 void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
 {
@@ -495,13 +513,13 @@ void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
 }
 
 /**
- * @brief  return 0 if line is busy
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @retval 0:busy 1:idle
+ * @brief  检测I2C状态
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @retval 0 :I2C忙  1 :I2C空闲
  */
-
 uint8_t I2C_IsBusy(uint8_t instance)
 {
 	if(I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK)
@@ -514,7 +532,23 @@ uint8_t I2C_IsBusy(uint8_t instance)
 	}
 }
 
-
+/**
+ * @brief  设置i2c在主模式下的连续数据读操作
+ * @code
+ *     //使用i2c的1模块读取数据地址为0x55的从机中起始地址为0x01的数据10字节,存储在data的首地址
+ *    I2C_BurstRead(HW_I2C1, 0x55, 0x01, 1, &data, 10);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @param  deviceAddress :从机设备地址0~127
+ * @param  subAddress    :读取的起始地址
+ * @param  subAddressLen :地址的长度
+ * @param  pData         :保存数据的首地址
+ * @param  dataLen       :读取数据的长度
+ * @retval 数据的读取状态 0 ;成功 其它 :失败
+ */
 int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* pData, uint32_t dataLen)
 {
     uint32_t time_out = 0;
@@ -584,6 +618,23 @@ int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddre
     return 0;
 }
 
+/**
+ * @brief  设置i2c在主模式下的连续数据写操作
+ * @code
+ *     //使用i2c的1模块将data中的10字节数据写入地址为0x55的从机中起始地址为0x01的设备宏
+ *    I2C_BurstWrite(HW_I2C1, 0x55, 0x01, 1, &data, 10);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @param  deviceAddress :从机设备地址0~127
+ * @param  subAddress    :写入的起始地址
+ * @param  subAddressLen :地址的长度
+ * @param  pData         :保存数据的首地址
+ * @param  dataLen       :写入数据的长度
+ * @retval 数据的读取状态 0 ;成功 其它 :失败
+ */
 uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *pData, uint32_t dataLen)
 {
     uint32_t time_out = 0;
@@ -639,7 +690,6 @@ uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddr
     return 0;
 }
 
-
 /**
  * @brief  写一个从机寄存器(寄存器地址在从机中必须为8位地址 如MMA845x等传感器设备)
  *
@@ -675,7 +725,12 @@ uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t 
 //! @}
 
 //! @}
-
+/**
+ * @brief  中断处理函数入口
+ * @param  I2C0_IRQHandler :芯片的I2C0模块中断函数入口
+ *         I2C1_IRQHandler :芯片的I2C1模块中断函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void I2C0_IRQHandler(void)
 {
     // clear pending bit

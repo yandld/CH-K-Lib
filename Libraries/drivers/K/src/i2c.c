@@ -692,14 +692,18 @@ uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddr
 
 /**
  * @brief  写一个从机寄存器(寄存器地址在从机中必须为8位地址 如MMA845x等传感器设备)
- *
- * @param  instance: 模块号
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @param  deviceAddress: 7bit地址0-127
+ * @code
+ *     //使用i2c的1模块将data中的1字节数据写入地址为0x55的从机中地址为0x01的设备
+ *    I2C_WriteSingleRegister(HW_I2C1, 0x55, 0x01, data);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @param  deviceAddress :从机设备地址0~127
  * @param  registerAddress: 寄存器在从机中的地址
  * @param  Data: 需要写入的数据
- * @retval 0:succ  1:address send fail 2:data send fail
+ * @retval 0:成功  1:地址发送失败 2:数据发送失败
  */
 uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data)
 {
@@ -708,14 +712,18 @@ uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t
 
 /**
  * @brief  读取一个从机寄存器(寄存器地址在从机中必须为8位地址 如MMA845x等传感器设备)
- *         
- * @param  instance: 模块号
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @param  deviceAddress: 7bit地址0-127
+ * @code
+ *     //使用i2c的1模块读取地址为0x55的从机中地址为0x01的数据，存储到data中
+ *    I2C_WriteSingleRegister(HW_I2C1, 0x55, 0x01, &data);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @param  deviceAddress :从机设备地址0~127
  * @param  registerAddress: 寄存器在从机中的地址
  * @param  pData: 数据指针
- * @retval 0:succ  1:address send fail 2:data send fail
+ * @retval 0:成功  1:地址发送失败 2:数据发送失败
  */
 uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData)
 {

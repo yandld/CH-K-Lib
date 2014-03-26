@@ -3,8 +3,9 @@
   * @file    tsi.h
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片TSI模块的底层功能函数
   ******************************************************************************
   */
   
@@ -13,8 +14,8 @@
 //!< TSI 触发模式选择
 typedef enum
 {
-    kTSI_TriggerSoftware,
-    kTSI_TriggerPeriodicalScan,
+    kTSI_TriggerSoftware,     //软件触发
+    kTSI_TriggerPeriodicalScan,//硬件周期性扫描
 } TSI_TriggerMode_Type;
   
 //!< TSI 中断DMA配置
@@ -28,7 +29,7 @@ typedef enum
 //TSI初始化结构
 typedef struct
 {
-    uint32_t                chl;            //!< 通道号
+    uint32_t                chl;            //!< 通道号1~15
     TSI_TriggerMode_Type    triggerMode;    //!< 触发模式选择
     uint32_t                threshld;       //!< 发生超范围中断时的判断阀值
 }TSI_InitTypeDef;

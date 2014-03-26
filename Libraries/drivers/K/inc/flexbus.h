@@ -3,8 +3,9 @@
   * @file    flexbus.h
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片FlexBus模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __FLEXBUS_H__
@@ -64,14 +65,14 @@
 //!< FLEXBUS初始化结构体
 typedef struct
 {
-    uint32_t dataWidth;
-    uint32_t baseAddress;
-    uint32_t ADSpaceMask;
-    uint32_t dataAlignMode;
-    uint32_t autoAckMode;
-    uint32_t ByteEnableMode;
-    uint32_t CSn;
-    uint32_t CSPortMultiplexingCotrol;
+    uint32_t dataWidth;      //总线宽度 8/16/32
+    uint32_t baseAddress;    //32位基地址
+    uint32_t ADSpaceMask;    //片选数据空间设置
+    uint32_t dataAlignMode;  //数据对其方式
+    uint32_t autoAckMode;    //自动应答模式
+    uint32_t ByteEnableMode; //位使能模式选择
+    uint32_t CSn;            //片选信号设置
+    uint32_t CSPortMultiplexingCotrol; //多功能引脚配置
 }FLEXBUS_InitTypeDef;
 
 //!< API functions

@@ -3,8 +3,9 @@
   * @file    flexbus.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片FlexBus模块的底层功能函数
   ******************************************************************************
   */
 #include "flexbus.h"
@@ -12,7 +13,12 @@
 
 #if (!defined(MK10D5))
 
-
+/**
+ * @brief  初始化FlexBus模块
+ * @note   具体的配置应用详见关于FlexBus的使用例程  
+ * @param  FLEXBUS_InitStruct :FlexBus初始化配置结构体，详见FlexBus.h
+ * @retval None
+ */
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
 {
     // enable clock gate enable seruriy mode

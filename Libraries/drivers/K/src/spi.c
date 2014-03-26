@@ -132,11 +132,10 @@ static uint32_t dspi_hal_set_baud(uint32_t instance, uint8_t whichCtar, uint32_t
     return bestBaudrate;
 }
 
-
 /**
- * @brief  SPI 初始化
- *
- * @param  SPI  初始化结构体
+ * @brief  初始化SPI模块
+ * @note 需要其它函数配合使用
+ * @param  SPI_InitStruct :SPI初始化配置结构体
  * @retval None
  */
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
@@ -182,6 +181,11 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
     SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_HALT_MASK;
 }
  
+/**
+ * @brief  SPI数据帧配置
+ * @note   内部函数，用户无需调用
+ * @retval None
+ */
 void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate)
 {
     uint32_t clock;
@@ -227,8 +231,21 @@ void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type fram
     dspi_hal_set_baud(instance, ctar, baudrate, clock);
 }
 
-
-
+/**
+ * @brief  快速初始化SPI模块
+ * @code
+ *     //使用SPI的1模块SCK-PE02 SOUT-PE01 SIN-PE03 通信速度为48000hz 极性和相位都是0 
+ *     SPI_QuickInit(SPI1_SCK_PE02_SOUT_PE01_SIN_PE03, kSPI_CPOL0_CPHA0, 48000);
+ * @endcode
+ * @param  SPIxMAP :SPI通信快速配置引脚预定义，详见spi.h文件
+ * @param  frameFormat: SPI通信时的相位和极性的关系
+ *         @arg kSPI_CPOL0_CPHA0
+ *         @arg kSPI_CPOL1_CPHA0
+ *         @arg kSPI_CPOL0_CPHA1
+ *         @arg kSPI_CPOL1_CPHA1
+ * @param  baudrate :SPI通信速度设置
+ * @retval None
+ */
 uint32_t SPI_QuickInit(uint32_t SPIxMAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate)
 {
     uint32_t i;
@@ -251,6 +268,19 @@ uint32_t SPI_QuickInit(uint32_t SPIxMAP, SPI_FrameFormat_Type frameFormat, uint3
     return pq->ip_instance;
 }
 
+/**
+ * @brief  SPI模块 中断和DMA功能配置
+ * @code
+ *     //使用SPI的1模块发送完成中断
+ *     SPI_ITDMAConfig(HW_SPI1, kSPI_IT_TCF);
+ * @endcode
+ * @param  instance :SPI通信模块号 HW_SPI0~2
+ * @param  SPI_ITDMAConfig_Type: SPI中断类型
+ *         @arg kSPI_IT_TCF_Disable  :关闭中断
+ *         @arg kSPI_IT_TCF          :开启发送完成中断
+ * @param  baudrate :SPI通信速度设置
+ * @retval None
+ */
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config)
 {
     switch(config)
@@ -268,6 +298,13 @@ void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config)
     }
 }
 
+/**
+ * @brief  注册中断回调函数
+ * @param  instance :SPI通信模块号 HW_SPI0~2
+ * @param  AppCBFun: 回调函数指针入口
+ * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
+ */
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
@@ -276,7 +313,23 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
     }
 }
 
-
+/**
+ * @brief  SPI读写一字节数据
+ * @code
+ *     //使用SPI的1模块的1片选信号写一字节的数据0x55，片选信号最后为选中状态
+ *    SPI_ReadWriteByte(HW_SPI1, HW_CTAR0, 0x55, 1, kSPI_PCS_ReturnInactive);
+ * @endcode
+ * @param  instance :SPI通信模块号 HW_SPI0~2
+ * @param  ctar :SPI通信通道选择
+ *          @arg HW_CTAR0  :0通道
+ *          @arg HW_CTAR1  :1通道
+ * @param  data    : 要发送的一字节数据
+ * @param  CSn     : 片选信号端口选择
+ * @param  csState : 片选信号最后的状态
+ *          @arg kSPI_PCS_ReturnInactive  :最后处于选中状态
+ *          @arg kSPI_PCS_KeepAsserted    :最后保持未选中状态
+ * @retval 读取到的数据
+ */
 uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, uint16_t csState)
 {
     uint16_t read_data;
@@ -295,6 +348,13 @@ uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint1
     return read_data;
 }
 
+/**
+ * @brief  中断处理函数入口
+ * @param  SPI0_IRQHandler :芯片的SPI0模块中断函数入口
+ *         SPI1_IRQHandler :芯片的SPI1模块中断函数入口
+ *         SPI2_IRQHandler :芯片的SPI2模块中断函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void SPI0_IRQHandler(void)
 {
     SPI_InstanceTable[HW_SPI0]->SR |= SPI_SR_TCF_MASK ;

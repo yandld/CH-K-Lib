@@ -11,7 +11,7 @@
 #include "i2c.h"
 #include "gpio.h"
 
-//!< Leagacy Support for Kineis Z Version(Inital Version)
+/* leagacy support for Kineis Z Version(Inital Version) */
 #if (!defined(I2C_BASES))
 
     #if (defined(MK60DZ10))
@@ -22,7 +22,7 @@
     #endif 
 #endif
 
-//!< Gloabl Const Table Defination
+/* gloabl const table defination */
 static I2C_Type * const I2C_InstanceTable[] = I2C_BASES;
 static I2C_CallBackType I2C_CallBackTable[ARRAY_SIZE(I2C_InstanceTable)] = {NULL};
 #if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10))
@@ -68,7 +68,7 @@ typedef struct
 //!< @brief I2C divider values.
 const _I2C_Divider_Type I2C_DiverTable[] =
 {
-    // ICR  Divider
+    /* ICR  Divider */
     { 0x00, 20 },
     { 0x01, 22 },
     { 0x02, 24 },
@@ -129,9 +129,12 @@ const _I2C_Divider_Type I2C_DiverTable[] =
  * @param  baudrate        :IIC模块通信速度
  * @retval None
  */
+=======
+/* set i2c baudrate */
+>>>>>>> 351ae1996ef99b049c92819330ea80836555fa03
 void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
 {
-    // Check if the requested frequency is greater than the max supported baud.
+    /* check if the requested frequency is greater than the max supported baud. */
     if (baudrate > (sourceClockInHz / (1U * 20U)))
     {
         return;
@@ -141,13 +144,13 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
     uint32_t bestError = 0xffffffffu;
     uint32_t bestMult = 0u;
     uint32_t bestIcr = 0u;
-    // Search for the settings with the lowest error.
-    // mult is the MULT field of the I2C_F register, and ranges from 0-2. It selects the
-    // multiplier factor for the divider.
+    /* Search for the settings with the lowest error.
+     mult is the MULT field of the I2C_F register, and ranges from 0-2. It selects the
+     multiplier factor for the divider. */
     for (mult = 0u; (mult <= 2u) && (bestError != 0); ++mult)
     {
         uint32_t multiplier = 1u << mult;
-        // Scan table to find best match.
+        /* scan table to find best match. */
         uint32_t i;
         for (i = 0u; i < ARRAY_SIZE(I2C_DiverTable); ++i)
         {
@@ -158,8 +161,8 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
                 bestMult = mult;
                 bestIcr = I2C_DiverTable[i].icr;
                 bestError = absError;
-                // If the error is 0, then we can stop searching because we won't find a
-                // better match.
+                /* If the error is 0, then we can stop searching because we won't find a
+                 better match.*/
                 if (absError == 0)
                 {
                     break;
@@ -227,16 +230,16 @@ uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
  */
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(I2C_InitStruct->instance));
     uint32_t freq;
     SIM->SCGC4 |= SIM_I2CClockGateTable[I2C_InitStruct->instance];
-    // disable first
+    /* disable first */
     I2C_InstanceTable[I2C_InitStruct->instance]->C1 &= ~I2C_C1_IICEN_MASK;
-    // set baudrate
+    /* set baudrate */
     CLOCK_GetClockFrequency(kBusClock, &freq);
     I2C_SetBaudrate(I2C_InitStruct->instance, freq, I2C_InitStruct->baudrate);
-    // enable i2c
+    /* enable i2c */
     I2C_InstanceTable[I2C_InitStruct->instance]->C1 |= I2C_C1_IICEN_MASK;
 }
 
@@ -254,7 +257,7 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
  */
 void I2C_GenerateSTART(uint8_t instance)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
     I2C_InstanceTable[instance]->C1 |= I2C_C1_TX_MASK;
     I2C_InstanceTable[instance]->C1 |= I2C_C1_MST_MASK;
@@ -274,7 +277,7 @@ void I2C_GenerateSTART(uint8_t instance)
  */
 void I2C_GenerateRESTART(uint8_t instance)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
     I2C_InstanceTable[instance]->C1 |= I2C_C1_RSTA_MASK;
 }
@@ -293,7 +296,7 @@ void I2C_GenerateRESTART(uint8_t instance)
  */
 void I2C_GenerateSTOP(uint8_t instance)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
 	I2C_InstanceTable[instance]->C1 &= ~I2C_C1_MST_MASK;
     I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TX_MASK;
@@ -314,7 +317,7 @@ void I2C_GenerateSTOP(uint8_t instance)
  */
 void I2C_SendData(uint8_t instance, uint8_t data)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
 	I2C_InstanceTable[instance]->D = data;
 }
@@ -334,7 +337,7 @@ void I2C_SendData(uint8_t instance, uint8_t data)
  */
 uint8_t I2C_ReadData(uint8_t instance)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
 	return (I2C_InstanceTable[instance]->D);
 }
@@ -351,7 +354,7 @@ uint8_t I2C_ReadData(uint8_t instance)
  */
 void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type direction)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
     address <<= 1;
 	(kI2C_Write == direction)?((address &= 0xFE)):(address |= 0x01);
@@ -368,29 +371,29 @@ void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type d
 uint8_t I2C_WaitAck(uint8_t instance)
 {
     uint32_t timeout = 0;
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
-    //wait for transfer complete
+    /* wait for transfer complete */
     timeout = 0;
     while (((I2C_InstanceTable[instance]->S & I2C_S_TCF_MASK) == 0) && (timeout < 5000))
     {
         timeout++;
         __NOP();
     }
-    //both TCF and IICIF indicate one byte trasnfer complete
+    /* both TCF and IICIF indicate one byte trasnfer complete */
     timeout = 0;
     while (((I2C_InstanceTable[instance]->S & I2C_S_IICIF_MASK) == 0) && (timeout < 5000))
     {
         timeout++;
         __NOP();
     }
-    //IICIF is a W1C Reg, so clear it!
+    /* IICIF is a W1C Reg, so clear it! */
     I2C_InstanceTable[instance]->S |= I2C_S_IICIF_MASK;
     if(timeout > 4990)
     {
         return 2;
     }
-    //see if we receive the ACK signal
+    /* see if we receive the ACK signal */
     if (I2C_InstanceTable[instance]->S & I2C_S_RXAK_MASK)
     {
         return 1;
@@ -412,7 +415,7 @@ uint8_t I2C_WaitAck(uint8_t instance)
  */
 void I2C_SetMasterMode(uint8_t instance, I2C_Direction_Type direction)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
 	(direction == kI2C_Write)?(I2C_InstanceTable[instance]->C1 |= I2C_C1_TX_MASK):(I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TX_MASK);
 }
@@ -425,7 +428,7 @@ void I2C_SetMasterMode(uint8_t instance, I2C_Direction_Type direction)
  */
 void I2C_GenerateNAck(uint8_t instance)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
 	I2C_InstanceTable[instance]->C1 |= I2C_C1_TXAK_MASK;
 }
@@ -438,7 +441,7 @@ void I2C_GenerateNAck(uint8_t instance)
  */
 void I2C_GenerateAck(uint8_t instance)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
 	I2C_InstanceTable[instance]->C1 &= ~I2C_C1_TXAK_MASK;
 }
@@ -455,7 +458,7 @@ void I2C_GenerateAck(uint8_t instance)
  */
 void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config)
 {
-	//param check
+	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
     switch(config)
     {
@@ -520,9 +523,9 @@ int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddre
     uint32_t time_out = 0;
     uint8_t i;
     uint8_t * p = (uint8_t*)&subAddress;
-    //Generate START signal
+    /* generate START signal */
     I2C_GenerateSTART(instance);
-    //Send 7bit Data with WRITE operation
+    /* Send 7bit Data with WRITE operation */
     I2C_Send7bitAddress(instance, deviceAddress, kI2C_Write);
     if(I2C_WaitAck(instance))
     {
@@ -534,10 +537,10 @@ int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddre
         }
         return 1;
     }
-    //send sub address
+    /* send sub address */
     for(i = 0; i < subAddressLen; i++)
     {
-        //Send Reg Address
+        /* send reg address */
         I2C_SendData(instance, *p++);
         if(I2C_WaitAck(instance))
         {
@@ -550,9 +553,9 @@ int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddre
             return 2;
         }
     }
-    //Generate RESTART Signal
+    /* generate RESTART signal */
     I2C_GenerateRESTART(instance);
-    //Resend 7bit Address, This time we use READ Command
+    /* resend 7bit Address, This time we use READ Command */
     I2C_Send7bitAddress(instance, deviceAddress, kI2C_Read);
     if(I2C_WaitAck(instance))
     {
@@ -561,22 +564,22 @@ int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddre
         while(!I2C_IsBusy(instance));
         return 3;
     }
-    //Set Master in slave mode
+    /* set master in slave mode */
     I2C_SetMasterMode(instance,kI2C_Read);
-    //dummy read
+    /* dummy read */
     I2C_ReadData(instance); //dummy read
 	I2C_GenerateAck(instance);
 	I2C_WaitAck(instance);
-    //actually read
+    /* actually read */
 	for(i = 0; i < dataLen - 1; i++)
 	{
 		*(pData++) = I2C_ReadData(instance);
 		I2C_GenerateAck(instance);
         I2C_WaitAck(instance);
 	}
-    // read last
+    /* read last */
 	*pData = I2C_ReadData(instance);
-    //stop and finish
+    /* stop and finish */
     I2C_GenerateNAck(instance);
     I2C_WaitAck(instance);
     I2C_GenerateSTOP(instance);
@@ -588,9 +591,9 @@ uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddr
 {
     uint32_t time_out = 0;
     uint8_t * p = (uint8_t*)&subAddress;
-    //Generate START signal
+    /* generate START signal */
     I2C_GenerateSTART(instance);
-    //Send 7bit Data with WRITE operation
+    /* send 7bit Data with WRITE operation */
     I2C_Send7bitAddress(instance, deviceAddress, kI2C_Write);
     if(I2C_WaitAck(instance))
     {
@@ -602,7 +605,7 @@ uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddr
         }
         return 1;
     }
-    // send all address
+    /* send all address */
     while(subAddressLen--)
     {
         I2C_SendData(instance, *(p++));
@@ -617,7 +620,7 @@ uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddr
             return 2;
         }
     }
-    // send all data
+    /* send all data */
     while(dataLen--)
     {
         I2C_SendData(instance, *(pData++));
@@ -632,7 +635,7 @@ uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddr
             return 3;
         }
     }
-    //Generate stop and wait for line idle
+    /* generate stop and wait for line idle */
     I2C_GenerateSTOP(instance);
     time_out = 0;
     while(!I2C_IsBusy(instance));
@@ -690,7 +693,7 @@ void I2C0_IRQHandler(void)
 #if (!defined(MK10D5))
 void I2C1_IRQHandler(void)
 {
-    // clear pending bit
+    /* clear pending bit */
     I2C_InstanceTable[HW_I2C1]->S |= I2C_S_IICIF_MASK;
     if(I2C_CallBackTable[HW_I2C1])
     {

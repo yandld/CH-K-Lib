@@ -424,6 +424,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
+            <File>
+              <FileName>rtconfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\rtconfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>startup.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\startup.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -758,6 +768,13 @@
         </Group>
         <Group>
           <GroupName>rtt-driver</GroupName>
+          <Files>
+            <File>
+              <FileName>rtt_serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

@@ -71,6 +71,8 @@
 /* Using symbol table */
 #define FINSH_USING_SYMTAB
 #define FINSH_USING_DESCRIPTION
+#define FINSH_USING_MSH
+#define FINSH_USING_MSH_ONLY
 /* SECTION: device filesystem */
 //#define RT_USING_DFS 
 #define RT_USING_DFS_ELMFAT

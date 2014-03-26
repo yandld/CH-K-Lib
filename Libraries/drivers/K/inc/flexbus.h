@@ -76,7 +76,6 @@ typedef struct
 
 //!< API functions
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct);
-FunctionalState FLEXBUS_IsModuleEnable(void);
 
 
 #endif

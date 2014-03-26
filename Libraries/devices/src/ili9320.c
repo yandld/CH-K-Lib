@@ -50,8 +50,6 @@ void LCD_Clear(uint16_t color)
 void ili9320_Init(void)
 {
     uint32_t gpio_instance;
-    if(FLEXBUS_IsModuleEnable() == DISABLE)
-    {  
     //Flexbus Init
     SIM->SCGC5 |= (SIM_SCGC5_PORTA_MASK | SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTE_MASK);
     //control signals
@@ -106,7 +104,6 @@ void ili9320_Init(void)
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
     FLEXBUS_InitStruct.CSPortMultiplexingCotrol = FB_CSPMCR_GROUP3(kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
     FLEXBUS_Init(&FLEXBUS_InitStruct);
-    }
 
 
     // Back light

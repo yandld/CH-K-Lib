@@ -3,8 +3,9 @@
   * @file    i2c.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片IIC模块的底层功能函数
   ******************************************************************************
   */
 #include "i2c.h"
@@ -64,8 +65,6 @@ typedef struct
     uint16_t sclDivider;    //!< SCL clock divider.
 }_I2C_Divider_Type;
 
-
-
 //!< @brief I2C divider values.
 const _I2C_Divider_Type I2C_DiverTable[] =
 {
@@ -123,6 +122,13 @@ const _I2C_Divider_Type I2C_DiverTable[] =
 };
 
 //!< set i2c baudrate
+/**
+ * @brief  IIC通信速度设置 内部函数 用户无需使用
+ * @param  instance: IIC模块号 HW_I2C0~2
+ * @param  sourceClockInHz :IIC模块时钟源频率
+ * @param  baudrate        :IIC模块通信速度
+ * @retval None
+ */
 void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
 {
     // Check if the requested frequency is greater than the max supported baud.
@@ -175,18 +181,17 @@ void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudra
 
 
  /**
- * @brief  快速初始化I2C模块 无需调用I2C_Init
+ * @brief  快速初始化IIC模块
  * @code
- *      // 初始化I2C模块: SCL:PC10 SDA:PC11 baudrate:47000Hz
+ *      // 初始化I2C模块: 使用I2C1模块的SCL:PC10 SDA:PC11，通信速度:47000Hz
  *      I2C_QuickInit(I2C1_SCL_PC10_SDA_PC11, 47000);
  * @endcode
- * @param  I2CxMAP: I2C快速初始化选择项
+ * @param  I2CxMAP: I2C快速初始化选择项，详见i2c.h文件
  *         @arg I2C1_SCL_PE01_SDA_PE00
- *         @arg I2C0_SCL_PB00_SDA_PB01
- *         @arg I2C0_SCL_PB02_SDA_PB03
+ *         @arg         ...
  *         @arg I2C1_SCL_PC10_SDA_PC11
- * @param  baudrate: 建议为: 48000Hz 76000Hz 96000Hz 376000Hz
- * @retval 模块号
+ * @param  baudrate :通信速度 建议为: 48000Hz 76000Hz 96000Hz 376000Hz
+ * @retval i2c模块号
  */
 uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
 {
@@ -209,7 +214,15 @@ uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
 
 /**
  * @brief  初始化I2C模块
- * @param  I2C_InitStruct: init struct of I2C
+ * @note 需要其它函数配合使用
+ * @code
+ *     //使用i2c的1模块 通信速度为48000hz
+ *     I2C_InitTypeDef I2C_InitStruct1; //申请一个结构体
+ *     I2C_InitStruct1.baudrate = HW_I2C1; //选择i2c的1模块
+ *     I2C_InitStruct1.instance = 48000;   //设置通信速度48000
+ *     I2C_Init(&I2C_InitStruct1);
+ * @endcode
+ * @param  I2C_InitStruct :i2c初始化配置结构体
  * @retval None
  */
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
@@ -228,10 +241,15 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 }
 
 /**
- * @brief  generate start signal
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
+ * @brief  控制i2c产生一个开始信号
+ * @code
+ *     //使用i2c的1模块产生开始信号
+ *     I2C_GenerateSTART(HW_I2C1);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
 void I2C_GenerateSTART(uint8_t instance)
@@ -243,10 +261,15 @@ void I2C_GenerateSTART(uint8_t instance)
 }
 
 /**
- * @brief  产生RESTART信号
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
+ * @brief  产生一个再开始信号
+ * @code
+ *     //使用i2c的1模块产生开始信号
+ *     I2C_GenerateRESTART(HW_I2C1);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
 void I2C_GenerateRESTART(uint8_t instance)
@@ -257,10 +280,15 @@ void I2C_GenerateRESTART(uint8_t instance)
 }
 
 /**
- * @brief  产生STOP信号
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
+ * @brief  产生停止信号
+ * @code
+ *     //使用i2c的1模块产生停止信号
+ *     I2C_GenerateSTOP(HW_I2C1);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
 void I2C_GenerateSTOP(uint8_t instance)
@@ -272,10 +300,16 @@ void I2C_GenerateSTOP(uint8_t instance)
 }
 
 /**
- * @brief  i2c send a byte
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
+ * @brief  I2C发送一字节数据
+ * @code
+ *     //使用i2c的1模块发送数据0x5A
+ *     I2C_SendData(HW_I2C1, 0x5A);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @param  data     :需要发送的数据
  * @retval None
  */
 void I2C_SendData(uint8_t instance, uint8_t data)
@@ -286,11 +320,17 @@ void I2C_SendData(uint8_t instance, uint8_t data)
 }
 
 /**
- * @brief  i2c read a byte
- * @param  instance:
- *         @arg HW_I2C0
- *         @arg HW_I2C1
- * @retval None
+ * @brief  I2C读取一字节数据
+ * @code
+ *     //使用i2c的1模块读取数据
+ *      uint8_t data; //存储接收到的数据
+ *     data = I2C_ReadData(HW_I2C1);
+ * @endcode
+ * @param  instance :I2C模块号 
+ *         @arg HW_I2C0  :I2C0模块
+ *         @arg HW_I2C1  :I2C1模块
+ *         @arg HW_I2C2  :I2C2模块
+ * @retval  data    :接收的数据
  */
 uint8_t I2C_ReadData(uint8_t instance)
 {

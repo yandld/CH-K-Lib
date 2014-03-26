@@ -3,8 +3,9 @@
   * @file    rtc.h
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片RTC模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __RTC_H__
@@ -16,12 +17,12 @@
 
 typedef struct 
 {
-   uint16_t year;    /*!< Range from 200 to 2099.*/
-   uint16_t month;   /*!< Range from 1 to 12.*/
-   uint16_t day;     /*!< Range from 1 to 31 (depending on month).*/
-   uint16_t hour;    /*!< Range from 0 to 23.*/
-   uint16_t minute;  /*!< Range from 0 to 59.*/
-   uint8_t second;   /*!< Range from 0 to 59.*/
+   uint16_t year;    /*!< 年Range from 200 to 2099.*/
+   uint16_t month;   /*!< 月Range from 1 to 12.*/
+   uint16_t day;     /*!< 日Range from 1 to 31 (depending on month).*/
+   uint16_t hour;    /*!< 时Range from 0 to 23.*/
+   uint16_t minute;  /*!< 分Range from 0 to 59.*/
+   uint8_t second;   /*!< 秒Range from 0 to 59.*/
 }RTC_DateTime_Type;
 
 
@@ -58,7 +59,7 @@ typedef void (*RTC_CallBackType)(void);
 //API functions
 void RTC_QuickInit(RTC_DateTime_Type* timedate);
 void RTC_Init(RTC_InitTypeDef * RTC_InitStruct);
-int RTC_GetWeekFromYMD(int year, int month, int days);
+int  RTC_GetWeekFromYMD(int year, int month, int days);
 void RTC_GetDateTime(RTC_DateTime_Type * datetime);
 void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config);
 void RTC_CallbackInstall(RTC_CallBackType AppCBFun);

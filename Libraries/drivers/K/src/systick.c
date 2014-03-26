@@ -3,8 +3,9 @@
   * @file    systick.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片ARM内核中的SysTick模块的底层功能函数
   ******************************************************************************
   */
 #include "systick.h"
@@ -23,9 +24,8 @@ static uint32_t fac_ms = 0;
 
  /**
  * @brief  初始化SysTick时钟
- * 
  * @code
- *      // 初始化SysTick时钟 设定中断周期为10000us(10ms)
+ *     // 初始化SysTick时钟 设定中断周期为10000us(10ms)
  *      SYSTICK_Init(10000);
  * @endcode
  * @param  timeInUs: 中断周期 单位us
@@ -43,10 +43,9 @@ void SYSTICK_Init(uint32_t timeInUs)
 }
 
  /**
- * @brief  初始化SysTick为延时应用 初始化后 就可以调用 DelayMs DelayUs
- * 
+ * @brief  初始化SysTick为延时应用 初始化后就可以调用 DelayMs DelayUs
  * @code
- *      //将SysTick用作延时的初始化 初始化后 系统延时20ms
+ *      //将SysTick用作延时的初始化 初始化后系统延时20ms
  *      SYSTICK_DelayInit();
  *      SYSTICK_DelayMs(20);
  * @endcode
@@ -61,16 +60,14 @@ void SYSTICK_DelayInit(void)
 }
 
  /**
- * @brief  开启或者终止SysTick时钟
- * 
+ * @brief  开启或者停止SysTick时钟
  * @code
- *      //初始化并开启时钟
- *      SYSTICK_Init(10000);
+ *      //开启时钟
  *      SYSTICK_Cmd(ENABLE);
  * @endcode
  * @param  NewState:使能或者关闭
- *         @arg ENABLE:使能
- *         @arg DISABLE:禁止
+ *         @arg ENABLE :使能
+ *         @arg DISABLE:停止
  * @retval None
  */
 void SYSTICK_Cmd(FunctionalState NewState)
@@ -80,15 +77,12 @@ void SYSTICK_Cmd(FunctionalState NewState)
 
  /**
  * @brief  开启SysTick中断
- * 
  * @code
- *      //初始化并开启时钟
- *      SYSTICK_Init(10000);
- *      SYSTICK_Cmd(ENABLE);
+ *      //开启中断功能
  *      SYSTICK_ITConfig(ENABLE);
  * @endcode
  * @param  NewState:使能或者关闭
- *         @arg ENABLE:使能
+ *         @arg ENABLE :使能
  *         @arg DISABLE:禁止
  * @retval None
  */
@@ -98,13 +92,12 @@ void SYSTICK_ITConfig(FunctionalState NewState)
 }
 
  /**
- * @brief  SYSTICK延时
- * 
+ * @brief 微秒级延时函数
  * @code
  *      //延时100us
  *      SYSTICK_DelayUs(100);
  * @endcode
- * @param  us:延时
+ * @param  us:延时时间 单位us
  * @retval None
  */
 void SYSTICK_DelayUs(uint32_t us)
@@ -121,7 +114,7 @@ void SYSTICK_DelayUs(uint32_t us)
 }
 
  /**
- * @brief  SYSTICK延时
+ * @brief  毫秒级延时函数
  * 
  * @code
  *      //延时100ms

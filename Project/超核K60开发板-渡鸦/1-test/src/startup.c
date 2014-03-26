@@ -28,7 +28,7 @@ extern int __bss_end;
 
 void rt_hw_board_init(void)
 {
-    SYSTICK_Init(10);
+    SYSTICK_Init(1000/RT_TICK_PER_SECOND);
     SYSTICK_ITConfig(ENABLE);
     SYSTICK_Cmd(ENABLE);
 	rt_hw_usart_init();
@@ -50,11 +50,10 @@ void rtthread_startup(void)
 //    CMD_FLEXBUS(0, NULL);
     rt_hw_board_init();
 	rt_show_version(); /* print logo */
-	rt_system_tick_init();  /* init tick system */
-	rt_system_object_init();
-	rt_system_timer_init();
-    rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END); /* register system IRAM */
-    rt_system_heap_init((void*)SRAM_START_ADDRESS, (void*)(SRAM_SIZE + SRAM_START_ADDRESS)); /* register ERAM */
+	rt_system_timer_init(); /* init timer */
+    /* register IARM and extern RAM */
+    rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
+    rt_system_heap_init((void*)SRAM_START_ADDRESS, (void*)(SRAM_SIZE + SRAM_START_ADDRESS));
 	rt_system_scheduler_init();
 #ifdef RT_USING_FINSH
 	finsh_system_init(); /* init finsh */
@@ -62,6 +61,5 @@ void rtthread_startup(void)
 	rt_device_init_all(); /* register all devices */
     rt_system_timer_thread_init(); /* enable software timer system */
 	rt_thread_idle_init(); /* init idle thread */
-	rt_system_scheduler_start(); /* brunning the system */
-    
+	rt_system_scheduler_start(); /* running the system */
 }

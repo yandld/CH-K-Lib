@@ -701,7 +701,7 @@ void I2C1_IRQHandler(void)
 
 
 
-/*
+#if 0
 static const QuickInit_Type I2C_QuickInitTable[] =
 {
     { 1, 4, 6, 0, 2, 0}, //I2C1_SCL_PE01_SDA_PE00 6
@@ -712,4 +712,4 @@ static const QuickInit_Type I2C_QuickInitTable[] =
     { 1, 2, 2,10, 2, 0}, //I2C1_SCL_PC10_SDA_PC11 2
     { 0, 3, 2, 8, 2, 0}, //I2C0_SCL_PD08_SDA_PD09 2
 };
-*/
+#endif

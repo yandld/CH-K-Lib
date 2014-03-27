@@ -5,14 +5,8 @@
 #include <dfs_fs.h>
 #include <dfs_elm.h>
 
-#include <rtgui/rtgui.h>
-#include <rtgui/rtgui_system.h>
-#include <rtgui/rtgui_app.h>
-#include <rtgui_server.h>
-#include <driver.h>
 
-#include <rtgui/widgets/window.h>
-#include <rtgui/widgets/label.h>
+
 
 void led1_thread_entry(void* parameter)
 {
@@ -37,15 +31,6 @@ void led1_thread_entry(void* parameter)
         return ;
     }
 
-    /* re-set graphic device */
-    rtgui_graphic_set_device(device);
-    rtgui_system_server_init();
-    
-    
-    {
-        extern void application_init();
-        application_init();
-    }
     
 	while(1)
 	{

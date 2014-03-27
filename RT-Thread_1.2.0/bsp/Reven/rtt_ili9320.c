@@ -85,7 +85,6 @@ static rt_err_t lcd_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     {
     case RTGRAPHIC_CTRL_GET_INFO:
     {
-        rt_kprintf("RTGRAPHIC_CTRL_GET_INFO\r\n");
         struct rt_device_graphic_info *info;
 
         info = (struct rt_device_graphic_info*) args;

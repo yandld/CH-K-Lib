@@ -76,8 +76,8 @@ void rtthread_startup(void)
 	rt_show_version(); /* print logo */
 	rt_system_timer_init(); /* init timer */
     /* register IARM and extern RAM */
-    rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
-   // rt_system_heap_init((void*)SRAM_START_ADDRESS, (void*)(SRAM_SIZE + SRAM_START_ADDRESS));
+  //  rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
+    rt_system_heap_init((void*)SRAM_START_ADDRESS, (void*)(SRAM_SIZE + SRAM_START_ADDRESS));
 	rt_system_scheduler_init();
     rt_application_init(); /* init application */
 #ifdef RT_USING_FINSH

@@ -71,12 +71,11 @@ typedef struct
     uint32_t autoAckMode;
     uint32_t ByteEnableMode;
     uint32_t CSn;
-    uint32_t CSPortMultiplexingCotrol;
 }FLEXBUS_InitTypeDef;
 
 //!< API functions
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct);
-
+void FLEXBUS_PortMuxConfig(uint32_t config);
 
 #endif
 

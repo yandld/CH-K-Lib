@@ -22,26 +22,26 @@ extern int __bss_end;
 #define KINETIS_SRAM_BEGIN    (&__bss_end)
 #endif
 
-#define KINETIS_SRAM_SIZE_IN_KB         (32)
+#define KINETIS_SRAM_SIZE_IN_KB         (64)
 #define KINETIS_SRAM_END                (0x20000000 + KINETIS_SRAM_SIZE_IN_KB * 1024)
 
 
 void rt_hw_board_init(void)
 {
-    SYSTICK_Init(1000*1000/RT_TICK_PER_SECOND);
-    SYSTICK_ITConfig(ENABLE);
-    SYSTICK_Cmd(ENABLE);
-	rt_hw_usart_init();
-    rt_hw_sd_init();
+    DelayInit();
+    rt_hw_usart_init();
 #ifdef RT_USING_CONSOLE
 	rt_console_set_device("uart");
 #endif 
     SRAM_Init();
-    if(SRAM_SelfTest())
-    {
-        printf("SRAM SELF TEST FAILED\r\n");
-        while(1);
-    }
+    ili9320_Init();
+    
+    rt_hw_sd_init();
+    rt_hw_lcd_init();
+    
+    SYSTICK_Init(1000*1000/RT_TICK_PER_SECOND);
+    SYSTICK_ITConfig(ENABLE);
+    SYSTICK_Cmd(ENABLE);
 }
 
 
@@ -52,7 +52,7 @@ void rt_application_init(void)
     
     init_thread = rt_thread_create("led1",
                                    led1_thread_entry, RT_NULL,
-                                   2048, 8, 20);
+                                   2048, 0x20, 20);
     if (init_thread != RT_NULL)
     {
         rt_thread_startup(init_thread);		
@@ -77,7 +77,7 @@ void rtthread_startup(void)
 	rt_system_timer_init(); /* init timer */
     /* register IARM and extern RAM */
     rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
-    rt_system_heap_init((void*)SRAM_START_ADDRESS, (void*)(SRAM_SIZE + SRAM_START_ADDRESS));
+   // rt_system_heap_init((void*)SRAM_START_ADDRESS, (void*)(SRAM_SIZE + SRAM_START_ADDRESS));
 	rt_system_scheduler_init();
     rt_application_init(); /* init application */
 #ifdef RT_USING_FINSH

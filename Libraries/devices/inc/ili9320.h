@@ -1,7 +1,7 @@
 #include "common.h"
 
 //FlexBus总线定义
-#define FLEXBUS_BASE_ADDRESS        (0x70000000)
+#define LCD_BASE                    (0x70000000)
 #define LCD_COMMAND_ADDRESS         *(unsigned short *)0x70000000
 #define LCD_DATA_ADDRESS            *(unsigned short *)0x78000000
 
@@ -40,17 +40,23 @@
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
 
 
-static inline void LCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint16_t Color)
+static inline void LCD_DrawPoint(uint16_t x, uint16_t y, uint16_t c)
 {
     WMLCDCOM(0x20);
-    WMLCDDATA(XPos);
+    WMLCDDATA(x);
     WMLCDCOM(0x21);
-    WMLCDDATA(YPos);
+    WMLCDDATA(y);
     WMLCDCOM(0x22);
-    WMLCDDATA(Color);
+    WMLCDDATA(c);
 }
+
+
 
 //!< API functions
 void ili9320_Init(void);
 uint32_t ILI9320_GetDeivceID(void);
-void LCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint16_t Color);
+uint16_t LCD_ReadPoint(uint16_t x, uint16_t y);
+void LCD_DrawHLine(int x1, int x2, int y, uint16_t c);
+void LCD_DrawVLine(int x, int y1, int y2, uint16_t c);
+
+

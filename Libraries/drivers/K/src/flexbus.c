@@ -56,8 +56,14 @@ void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
     {
         FB->CS[FLEXBUS_InitStruct->CSn].CSCR |= FB_CSCR_BEM_MASK;
     }
+
+}
+
+
+void FLEXBUS_PortMuxConfig(uint32_t config)
+{
     // CS Port Multiplexing Cotrol
-    FB->CSPMCR = FLEXBUS_InitStruct->CSPortMultiplexingCotrol;
+    FB->CSPMCR = config;
 }
 
 

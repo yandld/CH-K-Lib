@@ -3,7 +3,7 @@
 #include <rtthread.h>
 #include <rthw.h>
 #include <finsh.h>
-
+#include <stdint.h>
 
 void SysTick_Handler(void)
 {
@@ -11,7 +11,6 @@ void SysTick_Handler(void)
 	rt_tick_increase();
 	rt_interrupt_leave();
 }
-
 
 int main(void)
 {

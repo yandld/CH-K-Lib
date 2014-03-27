@@ -3,16 +3,16 @@
 #include "flexbus.h"
 #include "systick.h"
 
- void LCD_WriteRegister(uint16_t RegisterIndex, uint16_t Data)
+ static void LCD_WriteRegister(uint16_t RegisterIndex, uint16_t Data)
 {
     WMLCDCOM(RegisterIndex);
     WMLCDDATA(Data);
 }
 
- uint16_t LCD_ReadRegister(uint16_t RegisterIndex)
+static uint16_t LCD_ReadRegister(uint16_t RegisterIndex)
 {
     WMLCDCOM(RegisterIndex);
-    return (*(uint32_t*)(&LCD_DATA_ADDRESS));
+    return LCD_DATA_ADDRESS;
 }
 
 uint32_t ILI9320_GetDeivceID(void)
@@ -33,6 +33,29 @@ void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos)
 #endif
 }
 
+static uint16_t LCD_BGR2RGB(uint16_t c)
+{
+	uint16_t  r,g,b,rgb;   
+	b=(c>>0)&0x1f;
+	g=(c>>5)&0x3f;
+	r=(c>>11)&0x1f;	 
+	rgb=(b<<11)+(g<<5)+(r<<0);		 
+	return(rgb);
+} 
+
+uint16_t LCD_ReadPoint(uint16_t x, uint16_t y)
+{
+    uint16_t value;
+    WMLCDCOM(0x20);
+    WMLCDDATA(x);
+    WMLCDCOM(0x21);
+    WMLCDDATA(y);
+    WMLCDCOM(0x22);
+    value = LCD_DATA_ADDRESS;
+    WMLCDCOM(0x22);
+    value = LCD_DATA_ADDRESS;
+    return LCD_BGR2RGB(value);
+}
 
 void LCD_Clear(uint16_t color)
 {
@@ -46,6 +69,26 @@ void LCD_Clear(uint16_t color)
 	}
 }  
 
+void LCD_DrawHLine(int x1, int x2, int y, uint16_t c)
+{
+    LCD_SetCursor(x1, y);
+    WMLCDCOM(0x22);
+    while (x1 < x2)
+    {
+        WMLCDDATA(c);
+        x1++;
+    }
+}
+
+
+void LCD_DrawVLine(int x, int y1, int y2, uint16_t c)
+{
+    while (y1 < y2)
+    {
+        LCD_DrawPoint(x, y1, c);
+        y1++;
+    }
+}
 
 void ili9320_Init(void)
 {
@@ -57,7 +100,7 @@ void ili9320_Init(void)
     PORTD->PCR[1]  = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;          // CS0
     PORTA->PCR[26] = PORT_PCR_MUX(6)|PORT_PCR_DSE_MASK;          // A27
     PORTC->PCR[16] = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;          // FB_BE_23_16
-    
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);
     /*
     PORTB->PCR[18] = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;           //  FB_AD15
     PORTC->PCR[0]  = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;           //  FB_AD14
@@ -100,11 +143,11 @@ void ili9320_Init(void)
     FLEXBUS_InitStruct.CSn = kFLEXBUS_CS0;
     FLEXBUS_InitStruct.dataAlignMode = kFLEXBUS_DataLeftAligned;
     FLEXBUS_InitStruct.dataWidth = kFLEXBUS_PortSize_16Bit;
-    FLEXBUS_InitStruct.baseAddress = FLEXBUS_BASE_ADDRESS;
+    FLEXBUS_InitStruct.baseAddress = LCD_BASE;
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
-    FLEXBUS_InitStruct.CSPortMultiplexingCotrol = FB_CSPMCR_GROUP3(kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
+    //FLEXBUS_InitStruct.CSPortMultiplexingCotrol &= ~FB_CSPMCR_GROUP3_MASK;
+   // FLEXBUS_InitStruct.CSPortMultiplexingCotrol |= FB_CSPMCR_GROUP3(kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
     FLEXBUS_Init(&FLEXBUS_InitStruct);
-
 
     // Back light
     gpio_instance = GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);
@@ -115,6 +158,7 @@ void ili9320_Init(void)
     DelayMs(10);
     GPIO_WriteBit(gpio_instance, 19, 1);
     DelayMs(10); 
+    
    //initializing funciton 1    
     //LCD_WR_REG(0xe5,0x8000);  // Set the internal vcore voltage    
     LCD_WriteRegister(0x00,0x0001);  // start OSC    
@@ -122,7 +166,7 @@ void ili9320_Init(void)
     LCD_WriteRegister(0x01,0x0100);  //s720  to  s1 ; G1 to G320    
     LCD_WriteRegister(0x02,0x0700);  //set the line inversion    
     //LCD_WR_REG(0x03,0x1018);  //65536 colors     
-    LCD_WriteRegister(0x03,0x1030);    
+    LCD_WriteRegister(0x03,0x1030);   
     //∫·∆¡
     #ifdef LCD_USE_HORIZONTAL
     LCD_WriteRegister(0x03,(0<<5)|(0<<4)|(1<<3)|(1<<12));
@@ -188,7 +232,6 @@ void ili9320_Init(void)
 
     //ø™∆Ùœ‘ æ   
     LCD_WriteRegister(0x07,0x0173);
-   
     LCD_Clear(BLUE);
 }
 

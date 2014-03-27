@@ -154,6 +154,17 @@ int CMD_LCD(int argc, char * const * argv)
     GUI_printf("HelloWorld\r\n");
     GUI_printf("CHGUI_Version:%0.2f\r\n", (float)(GUI_VERSION/100));
     GUI_printf("ID:%X\r\n", GUI_GetDeivceID());
+    
+    LCD_DrawPoint(100, 100, RED);
+    i = LCD_ReadPoint(100, 100);
+    if (RED != i)
+    {
+        printf("read ponit failed 0x%X\r\n", i);
+        while(1);
+    }
+    LCD_DrawHLine(0, 100, 30, RED);
+    LCD_DrawVLine(30, 0, 100, RED);
+    DelayMs(500);
     while(1)
     {
         /*

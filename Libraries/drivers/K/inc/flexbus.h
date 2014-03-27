@@ -65,7 +65,6 @@
 //!< FLEXBUS初始化结构体
 typedef struct
 {
-<<<<<<< HEAD
     uint32_t dataWidth;
     uint32_t baseAddress;
     uint32_t ADSpaceMask;
@@ -73,16 +72,6 @@ typedef struct
     uint32_t autoAckMode;
     uint32_t ByteEnableMode;
     uint32_t CSn;
-=======
-    uint32_t dataWidth;      //总线宽度 8/16/32
-    uint32_t baseAddress;    //32位基地址
-    uint32_t ADSpaceMask;    //片选数据空间设置
-    uint32_t dataAlignMode;  //数据对其方式
-    uint32_t autoAckMode;    //自动应答模式
-    uint32_t ByteEnableMode; //位使能模式选择
-    uint32_t CSn;            //片选信号设置
-    uint32_t CSPortMultiplexingCotrol; //多功能引脚配置
->>>>>>> 197e869ef6bbe5e856dd256cadd412ba702bb6d1
 }FLEXBUS_InitTypeDef;
 
 //!< API functions

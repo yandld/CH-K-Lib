@@ -67,7 +67,7 @@ rtgui_container_t *demo_view_progressbar(void)
 
     /* get demo container rect */
     demo_view_get_rect(container, &rect);
-    label = rtgui_label_create("水平进度条:");
+    label = rtgui_label_create("H srocll bar:");
     rtgui_container_add_child(container, RTGUI_WIDGET(label));
     rect.x1 += 5;
     rect.x2 -= 5;
@@ -81,7 +81,7 @@ rtgui_container_t *demo_view_progressbar(void)
 
     /* get demo container rect */
     demo_view_get_rect(container, &rect);
-    label = rtgui_label_create("垂直进度条:");
+    label = rtgui_label_create("V srocrll bar:");
     rtgui_container_add_child(container, RTGUI_WIDGET(label));
     rect.x1 += 5;
     rect.x2 -= 5;

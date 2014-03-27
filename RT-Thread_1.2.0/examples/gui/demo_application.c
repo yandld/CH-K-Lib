@@ -76,8 +76,11 @@ static void application_entry(void *parameter)
     //demo_view_buffer_animation();
    // demo_view_instrument_panel();
 #endif
-    demo_view_combobox();
+    
+    demo_view_scrollbar();
     /*
+    demo_view_combobox();
+    
     demo_view_window();
     demo_view_label();
     demo_view_button();

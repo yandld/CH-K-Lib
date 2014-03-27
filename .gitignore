@@ -29,6 +29,7 @@
 *.ini
 *.lst
 output
+Doc
 settings
 Debug
 Release

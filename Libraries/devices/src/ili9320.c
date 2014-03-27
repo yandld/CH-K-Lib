@@ -69,7 +69,7 @@ void LCD_Clear(uint16_t color)
 	}
 }  
 
-void LCD_DrawHLine(int x1, int x2, int y, uint16_t c)
+void LCD_DrawHLine2(int x1, int x2, int y, uint16_t c)
 {
     LCD_SetCursor(x1, y);
     WMLCDCOM(0x22);
@@ -81,7 +81,7 @@ void LCD_DrawHLine(int x1, int x2, int y, uint16_t c)
 }
 
 
-void LCD_DrawVLine(int x, int y1, int y2, uint16_t c)
+void LCD_DrawVLine2(int x, int y1, int y2, uint16_t c)
 {
     while (y1 < y2)
     {

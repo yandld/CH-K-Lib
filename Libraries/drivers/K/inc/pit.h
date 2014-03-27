@@ -19,10 +19,10 @@
 
 
 //!< hardware instances
-#define HW_PIT0_CH0   (0x00U)
-#define HW_PIT0_CH1   (0x01U)
-#define HW_PIT0_CH2   (0x02U)
-#define HW_PIT0_CH3   (0x03U)
+#define HW_PIT_CH0   (0x00U)
+#define HW_PIT_CH1   (0x01U)
+#define HW_PIT_CH2   (0x02U)
+#define HW_PIT_CH3   (0x03U)
 
 //!< PIT CallBack Type
 typedef void (*PIT_CallBackType)(void);

@@ -4,15 +4,15 @@
 #include "ads7843.h"
 #include "gpio.h"
 #include "spi.h"
-#include "board.h"
-#include "chgui.h"         
-#include "chgui_char.h"    
-#include "chgui_bmp.h"     
-#include "chgui_touch.h"
+#include "board.h"       
 #include "sd.h"
+
 
 //fat32
 #include "znfat.h"
+
+
+#if 0
 //底层操作连接结构 目前的版本只需实现LCD_DrawPoint和 LCD_Init就可以工作，其他填NULL就可以
 CHGUI_CtrlOperation_TypeDef lcd_ops = 
 {
@@ -65,6 +65,8 @@ static uint32_t tp_get_y(void)
     sum/=7;
     return sum;
 }
+
+
     
 //触摸屏操作连接器
 CHGUI_TouchCtrlOperation_TypeDef tp_ops = 
@@ -83,6 +85,8 @@ CHGUI_InitTypeDef CHGUI_InitStruct1 =
     &lcd_ops,
     &tp_ops,
 };
+
+#endif
 
 struct znFAT_Init_Args initArgSD; //初始化参数集合
 struct znFAT_Init_Args initArgFlash; //初始化参数集合
@@ -110,6 +114,7 @@ static uint32_t AppGetData(uint32_t ReqestedByte, uint32_t Offset, uint8_t **ppD
 
 int CMD_LCD(int argc, char * const * argv)
 {
+    #if 0
     uint8_t res;
     uint32_t i;
     uint32_t bmp_pic_cnt;
@@ -199,7 +204,7 @@ int CMD_LCD(int argc, char * const * argv)
         }
         }
         return 0;
-
+#endif
 }
 
 const cmd_tbl_t CommandFun_LCD = 

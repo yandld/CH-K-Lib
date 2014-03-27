@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60DZ10 CHK60EVB2 DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -653,26 +653,6 @@
               <FileName>shell_cmdhist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
-            </File>
-            <File>
-              <FileName>chgui.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui.c</FilePath>
-            </File>
-            <File>
-              <FileName>chgui_bmp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui_bmp.c</FilePath>
-            </File>
-            <File>
-              <FileName>chgui_char.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui_char.c</FilePath>
-            </File>
-            <File>
-              <FileName>chgui_touch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\chgui\chgui_touch.c</FilePath>
             </File>
             <File>
               <FileName>mempool.c</FileName>

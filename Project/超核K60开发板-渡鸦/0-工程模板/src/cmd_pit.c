@@ -42,21 +42,21 @@ int CMD_PIT(int argc, char * const * argv)
     {
         shell_printf("PIT%d TIME:%dMS\r\n", i, CMD_PIT_IntervalTable[i]/1000);
     }
-    PIT_QuickInit(HW_PIT0_CH0, CMD_PIT0_TIME_US);
-    PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack);
-    PIT_ITDMAConfig(HW_PIT0_CH0, kPIT_IT_TOF);
+    PIT_QuickInit(HW_PIT_CH0, CMD_PIT0_TIME_US);
+    PIT_CallbackInstall(HW_PIT_CH0, PIT0_CallBack);
+    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
     
-    PIT_QuickInit(HW_PIT0_CH1, CMD_PIT1_TIME_US);
-    PIT_CallbackInstall(HW_PIT0_CH1, PIT1_CallBack);
-    PIT_ITDMAConfig(HW_PIT0_CH1, kPIT_IT_TOF);
+    PIT_QuickInit(HW_PIT_CH1, CMD_PIT1_TIME_US);
+    PIT_CallbackInstall(HW_PIT_CH1, PIT1_CallBack);
+    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
     
-    PIT_QuickInit(HW_PIT0_CH2, CMD_PIT2_TIME_US);
-    PIT_CallbackInstall(HW_PIT0_CH2, PIT2_CallBack);
-    PIT_ITDMAConfig(HW_PIT0_CH2, kPIT_IT_TOF);
+    PIT_QuickInit(HW_PIT_CH2, CMD_PIT2_TIME_US);
+    PIT_CallbackInstall(HW_PIT_CH2, PIT2_CallBack);
+    PIT_ITDMAConfig(HW_PIT_CH2, kPIT_IT_TOF);
     
-    PIT_QuickInit(HW_PIT0_CH3, CMD_PIT3_TIME_US);
-    PIT_CallbackInstall(HW_PIT0_CH3, PIT3_CallBack);
-    PIT_ITDMAConfig(HW_PIT0_CH3, kPIT_IT_TOF);
+    PIT_QuickInit(HW_PIT_CH3, CMD_PIT3_TIME_US);
+    PIT_CallbackInstall(HW_PIT_CH3, PIT3_CallBack);
+    PIT_ITDMAConfig(HW_PIT_CH3, kPIT_IT_TOF);
     return 0;
 }
 

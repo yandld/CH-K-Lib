@@ -71,8 +71,8 @@
 /* Using symbol table */
 #define FINSH_USING_SYMTAB
 #define FINSH_USING_DESCRIPTION
-//#define FINSH_USING_MSH
-//#define FINSH_USING_MSH_ONLY
+#define FINSH_USING_MSH
+#define FINSH_USING_MSH_ONLY
 /* SECTION: device filesystem */
 #define RT_USING_DFS 
 #define RT_USING_DFS_ELMFAT
@@ -82,12 +82,12 @@
 #define RT_DFS_ELM_REENTRANT
 /* Number of volumes (logical drives) to be used. */
 #define RT_DFS_ELM_DRIVES			2
-#define RT_DFS_ELM_USE_LFN			3 
+//#define RT_DFS_ELM_USE_LFN			3 
 #define RT_DFS_ELM_MAX_LFN			255
 /* Maximum sector size to be handled. */
 #define RT_DFS_ELM_MAX_SECTOR_SIZE  512
 
-#define RT_USING_DFS_ROMFS
+//#define RT_USING_DFS_ROMFS
 
 /* the max number of mounted filesystem */
 #define DFS_FILESYSTEMS_MAX			2
@@ -97,7 +97,7 @@
 
 
 // <section name="RT_USING_RTGUI" description="RTGUI, a graphic user interface" default="true" >
-#define RT_USING_RTGUI
+//#define RT_USING_RTGUI
 // <integer name="RTGUI_NAME_MAX" description="Maximal size of RTGUI object name length" default="16" />
 #define RTGUI_NAME_MAX	16
 // <integer name="RTGUI_DEFAULT_FONT_SIZE" description="The default point size of font in GUI" default="16" />

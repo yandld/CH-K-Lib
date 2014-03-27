@@ -43,14 +43,14 @@ void rt_hw_lcd_draw_hline(const char* c, int x1, int x2, int y)
 {
     rt_uint16_t p;
     p = *(uint16_t *)c;
-    LCD_DrawHLine(x1, x2, y, p);
+    LCD_DrawHLine2(x1, x2, y, p);
 }
 
 void rt_hw_lcd_draw_vline(const char* c, int x, int y1, int y2)
 {
     rt_uint16_t p;
     p = *(uint16_t *)c;
-    LCD_DrawVLine(x, y1, y2, p);
+    LCD_DrawVLine2(x, y1, y2, p);
 }
 
 struct rt_device_graphic_ops lcd_ili_ops =

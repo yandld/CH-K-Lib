@@ -3,8 +3,9 @@
   * @file    dma.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片DMA模块的底层功能函数
   ******************************************************************************
   */
 
@@ -43,8 +44,11 @@ static const IRQn_Type DMA_IRQnTable[] =
 };
 #endif
 
-
-
+/**
+ * @brief  初始化DMA模块
+ * @param  DMA_InitStruct :DMA初始化配置结构体，详见dma.h
+ * @retval None
+ */
 void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 {
 	// enable DMA and DMAMUX clock
@@ -91,6 +95,10 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 
 /**
  * @brief  开始一次DMA传输
+ * @code
+ *     //开启DMA 的0通道进行数据传输
+ *     DMA_StartTransfer(HW_DMA_CH0);
+ * @endcode
  * @param  chl: DMA通道号
  *         @arg HW_DMA_CH0
  *         @arg HW_DMA_CH1
@@ -105,6 +113,9 @@ void DMA_StartTransfer(uint8_t chl)
 
 /**
  * @brief  设置DMA传输完成中断
+ * @code
+ *     //开启DMA 的0通道的传输完成中断功能
+ *     DMA_StartTransfer(HW_DMA_CH0);
  * @param  chl: DMA通道号
  *         @arg HW_DMA_CH0
  *         @arg HW_DMA_CH1
@@ -158,6 +169,18 @@ void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun)
     }
 }
 
+/**
+ * @brief  检测DMA传输是否完成
+ * @code
+ *     //检测DMA的0通道是否完成数据传输
+ *     status = DMA_IsTransferComplete(HW_DMA_CH0);
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @retval 0:数据传输完成 1:数据传输未完成
+ */
 uint8_t DMA_IsTransferComplete(uint8_t chl)
 {
     if(DMA0->TCD[chl].CSR & (1<<chl))
@@ -177,23 +200,57 @@ uint8_t DMA_IsTransferComplete(uint8_t chl)
     return 0;
 }
 
+/**
+ * @brief  设置DMA模块指定通道的目标地址
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @param address: 32位的目标数据地址
+ * @retval None
+ */
 void DMA_SetDestAddress(uint8_t chl, uint32_t address)
 {
     DMA0->TCD[chl].DADDR = address;
 }
 
+/**
+ * @brief  设置DMA模块指定通道的源地址
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @param address: 32位的源数据地址
+ * @retval None
+ */
 void DMA_SetSourceAddress(uint8_t chl, uint32_t address)
 {
     DMA0->TCD[chl].SADDR = address;
 }
 
+/**
+ * @brief  取消DMA模块指定通道的数据传输
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @retval None
+ */
 void DMA_CancelTransfer(uint8_t chl)
 {
     DMA0->CR |= DMA_CR_CX_MASK;
 }
 
-
-
+/**
+ * @brief  中断处理函数入口
+ * @param  DMA0_IRQHandler :芯片的DMA0通道中断函数入口
+ *               ...       :         ....
+ *         DMA15_IRQHandler:芯片的DMA15通道中断函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void DMA0_IRQHandler(void)
 {
     DMA0->INT |= (1<<0);

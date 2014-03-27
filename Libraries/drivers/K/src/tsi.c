@@ -3,8 +3,9 @@
   * @file    tsi.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片TSI模块的底层功能函数
   ******************************************************************************
   */
   
@@ -34,6 +35,11 @@ static const void* TSI_ChlCNTRTalbe[] =
     (void*)&TSI0->CNTR15, 
 };
 
+/**
+ * @brief  获得指定通道的数值
+ * @param  chl :tsi模块的通道1~15
+ * @retval 该通道的数据值
+ */
 uint32_t TSI_GetCounter(uint32_t chl)
 {
     uint32_t i;
@@ -48,6 +54,12 @@ uint32_t TSI_GetCounter(uint32_t chl)
     return i;
 }
 
+/**
+ * @brief  TSI通道校验函数
+ * @param  chl      :tsi模块的通道1~15
+ * @param  threshld :修正校验值
+ * @retval 该通道的数据值
+ */
 static void TSI_Calibration(uint32_t chl, uint32_t threshld)
 {
     uint32_t cnt;
@@ -64,6 +76,19 @@ static void TSI_Calibration(uint32_t chl, uint32_t threshld)
     TSI0->GENCS &= ~TSI_GENCS_TSIEN_MASK;
 }
 
+/**
+ * @brief  TSI初始化配置
+ * @code
+ *    //初始化配置TSI模块的1通道为周期触发方式，判断阀值为200
+ *    TSI_InitTypeDef  TSI_InitStruct1;      //申请一个结构变量
+ *    TSI_InitStruct1.chl = 1;   //选择通道
+ *    TSI_InitStruct1.triggerMode = kTSI_TriggerPeriodicalScan; //硬件周期扫描
+ *    TSI_InitStruct1.threshld = 200;   //设置阀值为200
+ *    TSI_Init(&TSI_InitStruct1);
+ * @endcode
+ * @param  TSI_InitStruct: TSI初始化结构体,存储通道的工作状态
+ * @retval None
+ */
 void TSI_Init(TSI_InitTypeDef* TSI_InitStruct)
 {
 	SIM->SCGC5 |= (SIM_SCGC5_TSI_MASK); 
@@ -96,6 +121,15 @@ void TSI_Init(TSI_InitTypeDef* TSI_InitStruct)
 	TSI0->GENCS |= TSI_GENCS_TSIEN_MASK;
 }
 
+/**
+ * @brief  TSI快速初始化配置
+ * @code
+ *    //快速初始化配置TSI模块的1通道的PTA0引脚做默认触控引脚
+ *    TSI_QuickInit(TSI0_CH1_PA00);
+ * @endcode
+ * @param  UARTxMAP: TSI初始化预定义，详见tsi.h文件
+ * @retval 通道号
+ */
 uint32_t TSI_QuickInit(uint32_t UARTxMAP)
 {
     uint32_t i;
@@ -114,7 +148,18 @@ uint32_t TSI_QuickInit(uint32_t UARTxMAP)
     return pq->ip_instance;
 }
 
-
+/**
+ * @brief  TSI模块中断类型或者DMA功能设置
+ * @code
+ *      //开启扫描结束触发中断模式
+ *      TSI_ITDMAConfig(kTSI_IT_EndOfScan); 
+ * @endcode
+ * @param config: 中断配置模式
+ *         @arg kTSI_IT_Disable 关闭中断功能
+ *         @arg kTSI_IT_OutOfRange 超出阀值触发中断
+ *         @arg kTSI_IT_EndOfScan 扫描结束触发中断
+ * @retval None
+ */
 void TSI_ITDMAConfig(TSI_ITDMAConfig_Type config)
 {
     switch(config)
@@ -137,6 +182,12 @@ void TSI_ITDMAConfig(TSI_ITDMAConfig_Type config)
     }
 }
 
+/**
+ * @brief  注册中断回调函数
+ * @param AppCBFun: 回调函数指针入口
+ * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
+ */
 void TSI_CallbackInstall(TSI_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
@@ -144,7 +195,11 @@ void TSI_CallbackInstall(TSI_CallBackType AppCBFun)
         TSI_CallBackTable[0] = AppCBFun;
     }
 }
-
+/**
+ * @brief  中断处理函数入口
+ * @param  TSI0_IRQHandler  :芯片的TSI模块中断函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void TSI0_IRQHandler(void)
 {
     uint32_t chl_array;

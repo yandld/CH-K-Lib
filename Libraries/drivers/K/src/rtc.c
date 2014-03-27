@@ -3,8 +3,9 @@
   * @file    rtc.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片RTC模块的底层功能函数
   ******************************************************************************
   */
   
@@ -26,8 +27,12 @@ static const uint8_t  LY[] = {0U, 31U, 29U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 3
 // Number of days from begin of the non Leap-year
 static const uint16_t MONTH_DAYS[] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 212U, 243U, 273U, 304U, 334U};
 
-
-// 如果RTC时钟有效 则忽略timedate参数 否则写入timedate
+/**
+ * @brief  RTC模块快速初始化配置
+ * @note  如果RTC时钟有效 则忽略timedate参数 否则写入timedate
+ * @param  RTC_DateTime_Type :RTC时钟数据结构体，详见rtc.h
+ * @retval None
+ */
 void RTC_QuickInit(RTC_DateTime_Type* timedate)
 {
     RTC_InitTypeDef RTC_InitStruct1;
@@ -37,6 +42,13 @@ void RTC_QuickInit(RTC_DateTime_Type* timedate)
     RTC_Init(&RTC_InitStruct1);
 }
 
+/**
+ * @brief  由年月日计算出周数
+ * @param  year  :年
+ * @param  month :月
+ * @param  days  :日
+ * @retval 返回计算出来的周期数
+ */
 int RTC_GetWeekFromYMD(int year, int month, int days)
 {  
     static int mdays[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 };  
@@ -48,7 +60,13 @@ int RTC_GetWeekFromYMD(int year, int month, int days)
     }  
     return (y+y/4-y/100+y/400+days)%7;  
 }
-
+ 
+/**
+ * @brief  由日期计算出秒
+ * @param  RTC_DateTime_Type :RTC时钟数据结构体，详见rtc.h
+ * @param  seconds           :就算出来的秒数据存储地址
+ * @retval None
+ */
 static void RTC_DateTimeToSecond(const RTC_DateTime_Type * datetime, uint32_t * seconds)
 {
     /* Compute number of days from 1970 till given year*/
@@ -70,6 +88,12 @@ static void RTC_DateTimeToSecond(const RTC_DateTime_Type * datetime, uint32_t * 
     (*seconds)++;
 }
 
+/**
+ * @brief  由秒计算出日期
+ * @param  seconds           :输入的秒
+ * @param  datetime  :计算出来的年月日等信息结构体
+ * @retval None
+ */
 static void RTC_SecondToDateTime(const uint32_t * seconds, RTC_DateTime_Type * datetime)
 {
     uint32_t x;
@@ -131,6 +155,16 @@ static void RTC_SecondToDateTime(const uint32_t * seconds, RTC_DateTime_Type * d
     datetime->day = Days;
 }
 
+/**
+ * @brief  获得RTC的时间
+ * @code
+ *      //获得RTC的时间
+ *      RTC_DateTime_Type ts;    //申请一个结构体
+ *      RTC_GetDateTime(&ts);    //将日期存储到ts中
+ * @endcode
+ * @param  datetime  :返回出来的年月日等信息结构体
+ * @retval None
+ */
 void RTC_GetDateTime(RTC_DateTime_Type * datetime)
 {
     if(!datetime)
@@ -141,6 +175,11 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
     RTC_SecondToDateTime(&i, datetime);
 }
 
+/**
+ * @brief  RTC模块初始化配置
+ * @param  RTC_DateTime_Type :RTC工作模式配置，详见rtc.h
+ * @retval None
+ */
 void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
 {
     uint32_t i;
@@ -182,6 +221,19 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
     RTC->SR |= RTC_SR_TCE_MASK;
 }
 
+/**
+ * @brief  设置RTC中断功能
+ * @code
+ *      //设置RTC开启闹钟中断
+ *      RTC_ITDMAConfig(kRTC_IT_TimeAlarm); 
+ * @endcode
+ * @param config: 配置中断类型
+ *         @arg kRTC_IT_TimeOverflow_Disable :关闭时间溢出中断
+ *         @arg kRTC_IT_TimeAlarm_Disable    :关闭闹钟中断
+ *         @arg kRTC_IT_TimeAlarm            :开启闹钟中断
+ *         @arg kRTC_IT_TimeOverflow         :开启时间溢出中断
+ * @retval None
+ */
 void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config)
 {
     switch(config)
@@ -205,6 +257,12 @@ void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config)
     }
 }
 
+/**
+ * @brief  注册中断回调函数
+ * @param AppCBFun: 回调函数指针入口
+ * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
+ */
 void RTC_CallbackInstall(RTC_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
@@ -212,7 +270,11 @@ void RTC_CallbackInstall(RTC_CallBackType AppCBFun)
         RTC_CallBackTable[0] = AppCBFun;
     }
 }
-
+/**
+ * @brief  中断处理函数入口
+ * @param  RTC_IRQHandler :芯片的RTC中断函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void RTC_IRQHandler(void)
 {
     if(RTC_CallBackTable[0])

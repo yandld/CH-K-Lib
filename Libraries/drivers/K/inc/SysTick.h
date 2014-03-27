@@ -1,3 +1,13 @@
+/**
+  ******************************************************************************
+  * @file    systick.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2014.3.26
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片ARM内核中的SysTick模块的底层功能函数
+  ******************************************************************************
+  */
 #ifndef __SYSTICK_H__
 #define __SYSTICK_H__
 

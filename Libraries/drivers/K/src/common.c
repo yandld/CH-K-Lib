@@ -108,7 +108,7 @@ void DelayInit(void)
 }
 
 /**
- * @brief 毫秒级的延时设置函数
+ * @brief 抽象毫秒级的延时设置函数
  * @code
  *      // 实现500ms的延时功能
  *        DelayMs(500);
@@ -128,7 +128,7 @@ void DelayMs(uint32_t ms)
 }
 
 /**
- * @brief 微秒级的延时设置函数
+ * @brief 抽象微秒级的延时设置函数
  * @code
  *      // 实现500us的延时功能
  *        DelayUs(500);

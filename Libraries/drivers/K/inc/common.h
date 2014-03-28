@@ -134,8 +134,6 @@ struct reg_ops
 #define EnableInterrupts   __enable_irq
 #define DisableInterrupts  __disable_irq
 #define SystemSoftReset    NVIC_SystemReset
-#define OSEnterInt(x)
-#define OSExitInt(x)
 uint32_t QuickInitEncode(QuickInit_Type * type);
 void QuickInitDecode(uint32_t map, QuickInit_Type* type);
 void DelayMs(uint32_t ms);

@@ -14,7 +14,7 @@
 
 static DMA_CallBackType DMA_CallBackTable[16] = {NULL};
 #if     (defined(MK60DZ10) || defined(MK60D10))
-//!< DMA IRQn Table
+/* DMA中断向量入口 */
 static const IRQn_Type DMA_IRQnTable[] = 
 {
     DMA0_IRQn,
@@ -51,14 +51,14 @@ static const IRQn_Type DMA_IRQnTable[] =
  */
 void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 {
-	// enable DMA and DMAMUX clock
+	/* enable DMA and DMAMUX clock */
 	SIM->SCGC6 |= SIM_SCGC6_DMAMUX_MASK;    
 	SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;
-    //disable chl first
+    /* disable chl first */
     DMA0->ERQ &= ~(1<<(DMA_InitStruct->chl));
-    // dma chl source config
+    /* dma chl source config */
     DMAMUX->CHCFG[DMA_InitStruct->chl] = DMAMUX_CHCFG_SOURCE(DMA_InitStruct->chlTriggerSource);
-    // trigger mode
+    /* trigger mode */
     switch(DMA_InitStruct->triggerSourceMode)
     {
         case kDMA_TriggerSource_Normal:
@@ -72,24 +72,24 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
     }
     //
     DMA0->TCD[DMA_InitStruct->chl].ATTR  = 0;
-    // minor loop cnt
+    /* minor loop cnt */
     DMA0->TCD[DMA_InitStruct->chl].NBYTES_MLNO = DMA_NBYTES_MLNO_NBYTES(DMA_InitStruct->minorByteTransferCount);
-    // major loop cnt
+    /* major loop cnt */
 	DMA0->TCD[DMA_InitStruct->chl].CITER_ELINKNO = DMA_CITER_ELINKNO_CITER(DMA_InitStruct->majorTransferCount);
 	DMA0->TCD[DMA_InitStruct->chl].BITER_ELINKNO = DMA_BITER_ELINKNO_BITER(DMA_InitStruct->majorTransferCount);
-    // source config
+    /* source config */
     DMA0->TCD[DMA_InitStruct->chl].SADDR = DMA_InitStruct->sourceAddress;
     DMA0->TCD[DMA_InitStruct->chl].SOFF = DMA_InitStruct->sourceAddressMinorAdj;
     DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_SSIZE(DMA_InitStruct->sourceDataWidth);
     DMA0->TCD[DMA_InitStruct->chl].SLAST = DMA_SLAST_SLAST(DMA_InitStruct->sourceAddressMajorAdj);
-    // destation config
+    /* destation config */
     DMA0->TCD[DMA_InitStruct->chl].DADDR = DMA_InitStruct->destAddress;
     DMA0->TCD[DMA_InitStruct->chl].DOFF = DMA_InitStruct->destAddressMinorAdj;
     DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_DSIZE(DMA_InitStruct->destDataWidth);
     DMA0->TCD[DMA_InitStruct->chl].DLAST_SGA = DMA_DLAST_SGA_DLASTSGA(DMA_InitStruct->destAddressMajorAdj);
-    // auto close enable
+    /* auto close enable */
     DMA0->TCD[DMA_InitStruct->chl].CSR |= DMA_CSR_DREQ_MASK; 
-	// enable DMAMUX
+	/* enable DMAMUX */
 	DMAMUX->CHCFG[DMA_InitStruct->chl] |= DMAMUX_CHCFG_ENBL_MASK;
 }
 
@@ -187,7 +187,7 @@ uint8_t DMA_IsTransferComplete(uint8_t chl)
     {
         if(DMA0->TCD[chl].CSR & DMA_CSR_DONE_MASK)
         {
-            // clear this bit
+            /* clear this bit */
             DMA0->TCD[chl].CSR &= ~DMA_CSR_DONE_MASK;
             return 0;
         }
@@ -196,7 +196,7 @@ uint8_t DMA_IsTransferComplete(uint8_t chl)
             return 1;
         } 
     }
-    // this chl is idle, so return 0;
+    /* this chl is idle, so return 0; */
     return 0;
 }
 

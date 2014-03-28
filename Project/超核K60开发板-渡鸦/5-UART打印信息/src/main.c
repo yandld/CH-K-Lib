@@ -4,7 +4,7 @@
 #include "cpuidy.h"
 
 /* CH Kinetis固件库 V2.50 版本 */
-/* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.s 中的 CLOCK_SETUP 宏 */
+/* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
 /* UART 快速初始化结构所支持的引脚* 使用时还是推荐标准初始化 */
 /*

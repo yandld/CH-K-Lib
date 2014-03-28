@@ -4,7 +4,7 @@
 #include "cpuidy.h"
 
 /* CH Kinetis固件库 V2.50 版本 */
-/* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.s 中的 CLOCK_SETUP 宏 */
+/* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
  
 int main(void)
@@ -24,7 +24,7 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     
     /* 打印芯片信息 */
-    printf(" type any character will echo...\r\n");
+    printf(" type any character whitch will echo...\r\n");
     
     while(1)
     {

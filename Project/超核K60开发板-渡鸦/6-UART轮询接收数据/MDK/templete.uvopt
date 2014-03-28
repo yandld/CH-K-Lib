@@ -262,7 +262,7 @@
 
   <Group>
     <GroupName>startup</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -312,10 +312,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>22</ColumnNumber>
+      <ColumnNumber>49</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>13</TopLine>
-      <CurrentLine>26</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>7</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -354,7 +354,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>271</TopLine>
+      <TopLine>272</TopLine>
       <CurrentLine>280</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\uart.c</PathWithFileName>

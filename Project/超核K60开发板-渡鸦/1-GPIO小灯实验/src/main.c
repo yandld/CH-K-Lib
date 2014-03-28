@@ -1,7 +1,7 @@
 #include "gpio.h"
 #include "common.h"
 /* CH Kinetis固件库 V2.50 版本 */
-/* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.s 中的 CLOCK_SETUP 宏 */
+/* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
 /* GPIO 工作模式 */
 /*

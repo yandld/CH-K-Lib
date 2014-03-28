@@ -38,7 +38,7 @@ int main(void)
     
 //    /* 另外一种初始化方式 标准初始化 稍微繁琐 但是推荐 */
 //    UART_InitTypeDef UART_InitStruct1 = {0};
-//    UART_InitStruct1.baudrate = HW_UART0;
+//    UART_InitStruct1.instance = HW_UART0;
 //    UART_InitStruct1.baudrate = 115200;
 //    UART_Init(&UART_InitStruct1);
 //    

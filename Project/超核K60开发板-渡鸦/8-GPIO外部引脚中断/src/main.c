@@ -22,7 +22,7 @@ int main(void)
     
     /* 初始化一个模块的一般模式: 初始化模块本身->根据芯片手册 初始化对应的复用引脚->使用模块 */
     UART_InitTypeDef UART_InitStruct1 = {0};
-    UART_InitStruct1.baudrate = HW_UART0;
+    UART_InitStruct1.instance = HW_UART0;
     UART_InitStruct1.baudrate = 115200;
     UART_Init(&UART_InitStruct1);
     

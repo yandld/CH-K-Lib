@@ -143,7 +143,7 @@ uint32_t TSI_QuickInit(uint32_t UARTxMAP)
     /* config TSI moudle */
     TSI_InitStruct.chl = pq->channel;
     TSI_InitStruct.triggerMode = kTSI_TriggerPeriodicalScan;
-    TSI_InitStruct.threshld = 200;
+    TSI_InitStruct.threshld = 700;
     TSI_Init(&TSI_InitStruct);
     return pq->ip_instance;
 }

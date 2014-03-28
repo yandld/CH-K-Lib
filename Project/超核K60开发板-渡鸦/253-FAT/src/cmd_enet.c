@@ -21,14 +21,14 @@ void ENET_ISR(void)
     if(len)
     {
         j = 14;
-        for(i=14; i<sizeof(gTxBuffer); i++)
-        {
-            if(gTxBuffer[i] != (j++))  
-            {
-                printf("len:%d ERROR[%d]:%d %d\r\n", len, i, gTxBuffer[i], j);
-                while(1);
-            }
-        }
+//        for(i=14; i<sizeof(gTxBuffer); i++)
+//        {
+//            if(gTxBuffer[i] != (j++))  
+//            {
+//                printf("len:%d ERROR[%d]:%d %d\r\n", len, i, gTxBuffer[i], j);
+//                while(1);
+//            }
+//        }
         printf("Enet frame received, len:%d %d\r\n", len, cnt++);
     }
 }

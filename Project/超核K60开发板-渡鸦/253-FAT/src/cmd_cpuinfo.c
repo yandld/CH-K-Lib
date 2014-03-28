@@ -24,7 +24,7 @@ int DoCPUInfo(int argc, char *const argv[])
 {
     uint8_t i;
     uint32_t val;
-    CPUIDY_GetPinCount(&val);
+    val = CPUIDY_GetPinCount();
     uint32_t UID[4];
     if(argc == 1)
     {
@@ -36,7 +36,7 @@ int DoCPUInfo(int argc, char *const argv[])
         }
         for(i=0;i< kMemNameCount; i++)
         {
-            CPUIDY_GetMemSize((CLOCK_Source_Type)i,&val);
+            val = CPUIDY_GetMemSize((CLOCK_Source_Type)i);
             shell_printf("%-*s- %dKB\r\n", 16, MemNameTable[i],val);
         }
         CPUIDY_GetUID(UID);

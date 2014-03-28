@@ -939,6 +939,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Start.c</FilePath>
             </File>
+            <File>
+              <FileName>GUIDEMO_Bitmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Bitmap.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

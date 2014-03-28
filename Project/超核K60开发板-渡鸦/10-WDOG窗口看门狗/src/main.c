@@ -8,7 +8,6 @@ int main(void)
     DelayInit();
     
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP); /* LED */
-    GPIO_QuickInit(HW_GPIOE, 26, kGPIO_Mode_IPU); /* KEY */
     
     /* 初始化一个模块的一般模式: 初始化模块本身->根据芯片手册 初始化对应的复用引脚->使用模块 */
     UART_InitTypeDef UART_InitStruct1 = {0};
@@ -22,24 +21,27 @@ int main(void)
     
     /* 初始化看门狗 */
     WDOG_InitTypeDef WDOG_InitStruct1 = {0};
-    WDOG_InitStruct1.mode = kWDOG_Mode_Normal;
-    WDOG_InitStruct1.timeOutInMs = 1000; /* 时限 2000MS : 2000MS 内没有喂狗则复位 */
+    WDOG_InitStruct1.mode = kWDOG_Mode_Window;
+    WDOG_InitStruct1.windowInMs = 600;   /* 开窗时间 设置为窗体模式后 喂狗必须在 看门狗开始计时后 600-1000MS内完成 多了少了都复位 比普通看门狗严格*/
+    WDOG_InitStruct1.timeOutInMs = 1000; /* 时限 1000MS : 1000MS 内没有喂狗则复位 */
     WDOG_Init(&WDOG_InitStruct1);
     
-    printf("WDOG test start! press KEY1 to feed dog\r\n");
+    printf("system reset! WDOG test start! \r\n");
+    printf("press any character to disable dog feed\r\n");
     
-    /* 点亮LED 然后熄灭  指示系统运行从新上电运行 */
-    GPIO_WriteBit(HW_GPIOE, 6, 0);
-    DelayMs(200);
-    GPIO_WriteBit(HW_GPIOE, 6, 1);
+    static uint32_t i;
+    uint8_t ch;
     while(1)
     {
-        if(GPIO_ReadBit(HW_GPIOE, 26) == 0) /* 按键被按下 */
+        if(UART_ReadByte(HW_UART0, &ch) == 0)
         {
-            /* 喂狗 防止复位 */
-            WDOG_Refresh();
+            printf("stop feed wdog, will cause reset!\r\n");
+            while(1);
         }
-        DelayMs(10);
+        printf("cnt:i:%d\r\n", i++);
+        DelayMs(700); /* 喂狗时间必须在 600-1000MS内 */
+        GPIO_ToggleBit(HW_GPIOE, 6);
+        WDOG_Refresh();
     }
 }
 

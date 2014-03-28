@@ -163,16 +163,12 @@ void NMI_Handler(void)
 {
     /* clear NMI pending bit */
     MCM->ISR |= MCM_ISR_NMI_MASK;
-    printf("NMI ENTER\r\n");
+    //printf("NMI ENTER\r\n");
 }
 
 
 #if (defined(DEBUG) && defined(DEBUG_FAULT_HANDLER))
 
-void NMI_Handler(void)
-{
-    printf("NMI INTERRUPT\r\n");
-}
 
 void HardFault_Handler(void)
 {

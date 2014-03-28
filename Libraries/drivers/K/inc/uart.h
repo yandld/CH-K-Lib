@@ -85,8 +85,10 @@ typedef struct
 {
     uint8_t   instance;       //!< UART instance
     uint32_t  baudrate;       //!< UART baudrate
+    #if 0
     uint8_t   parityMode;     //!< UART parity mode
     uint8_t   stopBitCount;   //!< UART stopbit
+    #endif
 }UART_InitTypeDef;
 
 //!< UART CallBack Type

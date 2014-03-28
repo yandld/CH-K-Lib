@@ -132,9 +132,9 @@ int main(void)
     }
 
   //  GUI_Init();//≥ı ºªØGUI 
-    SYSTICK_Init(1000);
-    SYSTICK_ITConfig(ENABLE);
-    SYSTICK_Cmd(ENABLE);
+ //   SYSTICK_Init(1000);
+ //   SYSTICK_ITConfig(ENABLE);
+  //  SYSTICK_Cmd(ENABLE);
 	//GUI_DispString("Hello emWin!");//œ‘ æ≤‚ ‘  
   //  GUIDEMO_Main();
     while(1)

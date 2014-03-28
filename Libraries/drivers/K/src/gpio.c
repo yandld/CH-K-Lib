@@ -132,7 +132,7 @@ void PORT_PinPullConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
  * @brief  端口引脚的开漏状态配置 用户一般不必调用
  * @code
  *      // 将PORTA端口的3引脚设置为开漏状态 
- *      PORT_PinOpenDrainConfig(HW_GPIOA, 3, kPullUp);
+ *      PORT_PinOpenDrainConfig(HW_GPIOA, 3, ENABLE);
  * @endcode
  * @param  instance: GPIO模块号
  *         @arg HW_GPIOA :芯片的PORTA端口
@@ -150,6 +150,30 @@ void PORT_PinOpenDrainConfig(uint8_t instance, uint8_t pinIndex, FunctionalState
 {
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
+}
+
+/**
+ * @brief  端口引脚的开启无源滤波器 作为输入时有效
+ * @code
+ *      // 将PORTA端口的3引脚设置为开漏状态 
+ *      PORT_PinPassiveFilterConfig(HW_GPIOA, 3, ENABLE);
+ * @endcode
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  newState  :功能开关控制
+ *         @arg ENABLE   :开启功能
+ *         @arg DISABLE  :关闭功能
+ * @retval None
+ */
+void PORT_PinPassiveFilterConfig(uint8_t instance, uint8_t pinIndex, FunctionalState newState)
+{
+    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
+    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_PFE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_PFE_MASK);
 }
 
  /**

@@ -41,6 +41,7 @@ static int CMD_GPIO_KEY(int argc, char *const argv[])
         GPIO_QuickInit(KEY_GPIOInstanceTable[i], KEY_PinTable[i], kGPIO_Mode_IPU);  
         GPIO_CallbackInstall(KEY_GPIOInstanceTable[i], GPIO_ISR);
         GPIO_ITDMAConfig(KEY_GPIOInstanceTable[i], KEY_PinTable[i], kGPIO_IT_RisingEdge);
+        PORT_PinPassiveFilterConfig(KEY_GPIOInstanceTable[i], KEY_PinTable[i], ENABLE);
     }
     return 0;
 }

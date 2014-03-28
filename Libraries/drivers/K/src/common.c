@@ -158,6 +158,15 @@ void assert_failed(char * file, uint32_t line)
 }
 #endif
 
+/* ·Ç¿ÉÆÁ±ÎÖÐ¶Ï non maskable interrupt*/
+void NMI_Handler(void)
+{
+    /* clear NMI pending bit */
+    MCM->ISR |= MCM_ISR_NMI_MASK;
+    printf("NMI ENTER\r\n");
+}
+
+
 #if (defined(DEBUG) && defined(DEBUG_FAULT_HANDLER))
 
 void NMI_Handler(void)

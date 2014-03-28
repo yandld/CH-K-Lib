@@ -29,28 +29,7 @@ void led1_thread_entry(void* parameter)
 
     GUI_Init();//³õÊ¼»¯GUI 
 	GUI_DispString("Hello emWin!");//ÏÔÊ¾²âÊÔ  
-    
-    fd = open("/PIC/25.BMP", O_RDONLY , 0);
-    if(fd >= 0)
-    {
-        
-        stat("/PIC/25.BMP", &f_stat);
-        rt_kprintf("file size:%d\r\n", f_stat.st_size);
-        ptr = rt_malloc(f_stat.st_size);
-        if(ptr == NULL)
-        {
-            rt_kprintf("no memory\r\n");
-        }
-        else
-        {
-            i = read(fd, ptr, f_stat.st_size);
-            
-            rt_kprintf("i = %d\r\n", i);
-            rt_kprintf("Xsize:%d\r\n", GUI_BMP_GetXSize(ptr));
-            rt_kprintf("Ysize:%d\r\n", GUI_BMP_GetYSize(ptr));
-            GUI_BMP_Draw(ptr , 20, 20);
-        }
-    }
+    MainTask();
 	while(1)
 	{
         

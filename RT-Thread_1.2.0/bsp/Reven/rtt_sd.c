@@ -4,13 +4,23 @@
 
 
 struct rt_device sd_device;
-
+static  SD_InitTypeDef SD_InitStruct1;
 static rt_err_t rt_sd_init (rt_device_t dev)
 {
-    SD_InitTypeDef SD_InitStruct1;
+    rt_uint8_t i;
+
     SD_InitStruct1.SD_BaudRate = 2000000;
-    while(SD_Init(&SD_InitStruct1) != ESDHC_OK);
-    rt_kprintf("I need init\r\n");
+    for(i = 0; i< 10; i++)
+    {
+        if(SD_Init(&SD_InitStruct1) == ESDHC_OK)
+        {
+            break;
+        }
+    }
+    if(i == 10)
+    {
+        return RT_ERROR;
+    }
     rt_kprintf("Size:%dMB\r\n", SD_InitStruct1.SD_Size);
     return RT_EOK;
 }
@@ -29,8 +39,7 @@ static rt_err_t rt_sd_close(rt_device_t dev)
 
 rt_err_t rt_sd_indicate(rt_device_t dev, rt_size_t size)
 {
-    	rt_kprintf("I need indicate\r\n");
-     
+    rt_kprintf("I need indicate\r\n"); 
 }
 
 
@@ -65,7 +74,7 @@ static rt_err_t rt_sd_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 	case RT_DEVICE_CTRL_BLK_GETGEOME:
 		geometry.block_size = 512;
 		geometry.bytes_per_sector = 512;
-		geometry.sector_count = 40960;
+		geometry.sector_count = SD_InitStruct1.SD_Size*1024*2;
 		rt_memcpy(args, &geometry, sizeof(struct rt_device_blk_geometry));
 		break;
 	default:

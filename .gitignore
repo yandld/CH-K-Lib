@@ -32,6 +32,7 @@ output
 Doc
 settings
 Debug
+SI
 Release
 lib_html
 

@@ -455,11 +455,6 @@
               <FilePath>..\src\device_test.c</FilePath>
             </File>
             <File>
-              <FileName>25.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\25.c</FilePath>
-            </File>
-            <File>
               <FileName>msh_cmd_bmp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\msh_cmd_bmp.c</FilePath>
@@ -878,6 +873,111 @@
               <FileName>LCDConf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\emWin\LCDConf.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>emwin-demo</GroupName>
+          <Files>
+            <File>
+              <FileName>GUIDEMO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_AntialiasedText.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_AntialiasedText.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Automotive.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Automotive.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_BarGraph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_BarGraph.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Bitmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Bitmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_ColorBar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_ColorBar.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Conf.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Cursor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Cursor.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Fading.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Fading.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Graph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Graph.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_ImageFlow.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_ImageFlow.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Intro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Intro.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Listview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Listview.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_RadialMenu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_RadialMenu.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Resource.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Resource.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Skinning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Skinning.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Speed.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Speed.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Speedometer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Speedometer.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_Start.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Start.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_VScreen.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_VScreen.c</FilePath>
             </File>
           </Files>
         </Group>

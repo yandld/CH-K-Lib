@@ -89,14 +89,21 @@ void SysTick_Handler(void)
 
 GUI_TIMER_TIME  GUI_X_GetTime (void) 
 {
-    return OS_TimeMS;
+    return rt_tick_get();
+   // rt_uint32_t tick_start,tick_end;
 }
 
 
 void  GUI_X_Delay (int ms) 
 {
-  int tEnd = OS_TimeMS + ms;
-  while ((tEnd - OS_TimeMS) > 0);
+    if(ms >= (1000/RT_TICK_PER_SECOND))
+    {
+        rt_thread_delay(ms);
+    }
+    else
+    {
+        rt_thread_delay(1);
+    }
 }
 
 
@@ -107,7 +114,7 @@ void  GUI_X_Delay (int ms)
 */
 void GUI_X_ExecIdle (void) 
 {
-    GUI_X_Delay(1);
+    GUI_X_Delay(10);
 }
 
 

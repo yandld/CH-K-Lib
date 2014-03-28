@@ -5,7 +5,7 @@
 /* CH Kinetis固件库 V2.50 版本 */
 /* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.s 中的 CLOCK_SETUP 宏 */
 
-/* UART 快速初始化结构所支持的 引脚* 使用时还是推荐普通初始化 */
+/* UART 快速初始化结构所支持的引脚* 使用时还是推荐标准初始化 */
 /*
  UART1_RX_PE01_TX_PE00   
  UART0_RX_PF17_TX_PF18   
@@ -27,20 +27,25 @@
  UART5_RX_PD08_TX_PD09   
 */
  
- 
 int main(void)
 {
     uint32_t instance; /*存放 UART 的模块号 */
     DelayInit();
-    GPIO_QuickInit(HW_GPIOE,  6, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
+    
     /* 初始化UART 使用快速初始化方式 波特率 115200 其他配置默认 返回初始化后 UART的模块号 */
     instance = UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    /* 另外一种初始化方式 标准初始化 推荐 */
-//    UART_InitTypeDef UART_InitStruct1;
+    
+//    /* 另外一种初始化方式 标准初始化 稍微繁琐 但是推荐 */
+//    UART_InitTypeDef UART_InitStruct1 = {0};
 //    UART_InitStruct1.baudrate = HW_UART0;
 //    UART_InitStruct1.baudrate = 115200;
 //    UART_Init(&UART_InitStruct1);
-    
+//    
+//    /* 初始化串口所占用的引脚 其中kPinAlt3为引脚复用3选项 可以在芯片 Reference Manuel 上的 Signal Multiplexing and Signal Descriptions 一章中查到*/
+//    /* 当使用快速初始化时 则无需在初始化引脚 因为快速初始化已经初始化过了 */
+//    PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
+//    PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     /* 当使用串口初始化后 printf 被默认连接到 串口*/
     printf("UART%d OK! Hello Kinetis\r\n", instance);
     

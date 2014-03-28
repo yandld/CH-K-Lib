@@ -71,17 +71,15 @@ char *CPUIDY_GetFamID(void)
  * @code
  *      // 获取芯片的引脚数
  *      uint32_t PinCnt;
- *      CPUIDY_GetPinCount(&PinCnt);
+ *      PinCnt = CPUIDY_GetPinCount();
  *      //将芯片的引脚数显示出来
  *      printf("Pin Cnt:%d\r\n", PinCnt);
  * @endcode
- * @param  pinCount  :获得芯片引脚数据的指针
- * @retval None
+ * @retval 引脚数量
  */
-void CPUIDY_GetPinCount(uint32_t *pinCount)
+uint32_t CPUIDY_GetPinCount(void)
 {
-    *pinCount = 0;
-    *pinCount = CPUIDY_PinCountTable[PINCOUNT_FIELD];
+    return CPUIDY_PinCountTable[PINCOUNT_FIELD];
 }
 
 /**
@@ -89,7 +87,7 @@ void CPUIDY_GetPinCount(uint32_t *pinCount)
  * @code
  *      // 获取芯片Pflash的大小并显示出来
  *      uint32_t PFlashSize;
- *      CPUIDY_GetMemSize(kPFlashSizeInKB, &PFlashSize);
+ *      PFlashSize = CPUIDY_GetMemSize(kPFlashSizeInKB);
  *      printf("PFlash Size:%dKB\r\n", PFlashSize);
  * @endcode
  * @param  memSizeName: 存储器类型
@@ -101,29 +99,31 @@ void CPUIDY_GetPinCount(uint32_t *pinCount)
  * @param  memSizeInKB   :获得存储器大小数据的指针 单位KB
  * @retval None
  */
-void CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName, uint32_t *memSizeInKB)
+uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName)
 {
-    *memSizeInKB = 0;
+    uint32_t ret_value;
     switch (memSizeName)
 		{
         case kPFlashSizeInKB:
-            *memSizeInKB = CPUIDY_PFlashSizeTable[PFLASH_SIZE_FIELD];
+            ret_value = CPUIDY_PFlashSizeTable[PFLASH_SIZE_FIELD];
             break;
         case kDFlashSizeInKB:
-            *memSizeInKB = 0;
+            ret_value = 0;
             break;
         case kFlexNVMSizeInKB:
-            *memSizeInKB = CPUIDY_NVMSizeTable[FLEXNVM_SIZE_FIELD];
+            ret_value = CPUIDY_NVMSizeTable[FLEXNVM_SIZE_FIELD];
             break;
         case kEEPORMSizeInByte:
-            *memSizeInKB = CPUIDY_EEPORMSizeTable[EEPORM_SIZE_FIELD];
+            ret_value = CPUIDY_EEPORMSizeTable[EEPORM_SIZE_FIELD];
             break;
         case kRAMSizeInKB:
-            *memSizeInKB = CPUIDY_RAMSizeTable[RAM_SIZE_FIELD];
+            ret_value = CPUIDY_RAMSizeTable[RAM_SIZE_FIELD];
             break;
         default:
+            ret_value = 0;
             break;
 		}
+    return ret_value;
 }
 
 /**

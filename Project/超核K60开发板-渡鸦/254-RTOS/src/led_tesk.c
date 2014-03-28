@@ -29,7 +29,7 @@ void led1_thread_entry(void* parameter)
 
     GUI_Init();//≥ı ºªØGUI 
 	GUI_DispString("Hello emWin!");//œ‘ æ≤‚ ‘  
-    MainTask();
+   // MainTask();
 	while(1)
 	{
         

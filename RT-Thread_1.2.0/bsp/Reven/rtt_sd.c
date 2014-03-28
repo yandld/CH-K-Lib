@@ -27,13 +27,13 @@ static rt_err_t rt_sd_init (rt_device_t dev)
 
 static rt_err_t rt_sd_open(rt_device_t dev, rt_uint16_t oflag)
 {
-	rt_kprintf("I need open\r\n");
+	rt_kprintf("sd driver - I need open\r\n");
 	return RT_EOK;
 }
 
 static rt_err_t rt_sd_close(rt_device_t dev)
 {
-	rt_kprintf("I need close\r\n");
+	rt_kprintf("sd driver - I need close\r\n");
 	return RT_EOK;
 }
 
@@ -47,21 +47,35 @@ static rt_size_t rt_sd_read (rt_device_t dev, rt_off_t pos, void* buffer, rt_siz
 {
     uint16_t i;
 //	DisableInterrupts();
-	SD_ReadSingleBlock(pos, buffer);
+    uint16_t rec_size = size;
+    uint8_t * ptr = buffer;
+    while(rec_size--)
+    {
+        SD_ReadSingleBlock(pos++, ptr);
+        ptr +=512;
+    }
 //	EnableInterrupts();
 	//for(i=0;i<512;i++)
 //	{
 	//	rt_kprintf("%x ", p[i]);
 //	}
-	return 1;
+    
+	return size;
 }
 
 
 static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
-	  rt_kprintf("pos:%d size:%d\r\n", pos, size);
-    SD_WriteSingleBlock(pos, buffer);
-		return 1;
+    uint16_t i;
+//	DisableInterrupts();
+    uint16_t rec_size = size;
+    uint8_t * ptr = buffer;
+    while(rec_size--)
+    {
+        SD_WriteSingleBlock(pos++, ptr);
+        ptr +=512;
+    }
+    return size;
 }
 
 static rt_err_t rt_sd_control(rt_device_t dev, rt_uint8_t cmd, void *args)

@@ -87,23 +87,23 @@ void SysTick_Handler(void)
 }
 */
 
-GUI_TIMER_TIME  GUI_X_GetTime (void) 
+GUI_TIMER_TIME GUI_X_GetTime (void) 
 {
-    return rt_tick_get();
-   // rt_uint32_t tick_start,tick_end;
+    return (rt_tick_get()*(1000/RT_TICK_PER_SECOND));
 }
 
 
 void  GUI_X_Delay (int ms) 
 {
-    if(ms >= (1000/RT_TICK_PER_SECOND))
+    rt_uint32_t delay;
+    rt_uint32_t factor;
+    factor = 1000/RT_TICK_PER_SECOND;
+    delay = ms / factor;
+    if(ms % factor)
     {
-        rt_thread_delay(ms);
+        delay++;
     }
-    else
-    {
-        rt_thread_delay(1);
-    }
+    rt_thread_delay(delay);
 }
 
 
@@ -114,7 +114,7 @@ void  GUI_X_Delay (int ms)
 */
 void GUI_X_ExecIdle (void) 
 {
-    GUI_X_Delay(10);
+    GUI_X_Delay(1);
 }
 
 
@@ -128,25 +128,45 @@ void GUI_X_ExecIdle (void)
 *********************************************************************************************************
 */
 
+static struct rt_semaphore static_sem;
 void  GUI_X_InitOS (void)
 { 
-  //  DispSem   = OSSemCreate(1);
-  //  EventMbox = OSMboxCreate((void *)0);
-
+    rt_err_t result;
+    //  DispSem   = OSSemCreate(1);
+    //  EventMbox = OSMboxCreate((void *)0);
+    rt_kprintf("GUI_X_InitOS.\n");
+    /* 初始化静态信号量，初始值是0 */
+    result = rt_sem_init(&static_sem, "ssem", 10, RT_IPC_FLAG_FIFO);
+    if (result != RT_EOK)
+    {
+        rt_kprintf("init static semaphore failed.\n");
+        return ;
+    }
 }
 
 
 void  GUI_X_Lock (void)
 { 
+    rt_err_t result;
+   // rt_sem_release(&static_sem);
  //   INT8U  err;
     
-    
+  //  rt_kprintf("lock\r\n");
   //  OSSemPend(DispSem, 0, &err);
 }
 
 
 void  GUI_X_Unlock (void)
 { 
+    rt_err_t result;
+ //   result = rt_sem_take(&static_sem, RT_WAITING_FOREVER);
+    if (result != RT_EOK)
+    {
+        /* 不成功则测试失败 */
+   //     rt_kprintf("take a static semaphore, failed.\n");
+        return ;
+    }
+    
  //   OSSemPost(DispSem);
 }
 

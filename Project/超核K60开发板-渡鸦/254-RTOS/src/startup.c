@@ -70,14 +70,23 @@ void rt_application_init(void)
 
 void rtthread_startup(void)
 {
-    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(1);
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
 //    CMD_FLEXBUS(0, NULL);
     rt_hw_board_init();
 	rt_show_version(); /* print logo */
 	rt_system_timer_init(); /* init timer */
     /* register IARM and extern RAM */
   //  rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
-    rt_system_heap_init((void*)SRAM_START_ADDRESS, (void*)(SRAM_SIZE + SRAM_START_ADDRESS));
+    SRAM_Init();
+    if(SRAM_SelfTest())
+    {
+        printf("ex sram test failed\r\n");
+    }
+    else
+    {
+        rt_system_heap_init((void*)SRAM_START_ADDRESS, (void*)(SRAM_SIZE + SRAM_START_ADDRESS));
+    }
+    
 	rt_system_scheduler_init();
     rt_application_init(); /* init application */
 #ifdef RT_USING_FINSH

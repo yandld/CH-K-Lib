@@ -93,76 +93,14 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 *
 **********************************************************************
 */
-#if 0 // Show all demos
 #ifndef   SHOW_GUIDEMO_AATEXT
   #define SHOW_GUIDEMO_AATEXT            (1)
 #endif
 #ifndef   SHOW_GUIDEMO_AUTOMOTIVE
-  #define SHOW_GUIDEMO_AUTOMOTIVE        (0)
+  #define SHOW_GUIDEMO_AUTOMOTIVE        (1)
 #endif
 #ifndef   SHOW_GUIDEMO_BARGRAPH
   #define SHOW_GUIDEMO_BARGRAPH          (1)
-#endif
-#ifndef   SHOW_GUIDEMO_BITMAP
-  #define SHOW_GUIDEMO_BITMAP            (1)
-#endif
-#ifndef   SHOW_GUIDEMO_COLORBAR
-  #define SHOW_GUIDEMO_COLORBAR          (1)
-#endif
-#ifndef   SHOW_GUIDEMO_CURSOR
-  #define SHOW_GUIDEMO_CURSOR            (1)
-#endif
-#ifndef   SHOW_GUIDEMO_FADING
-  #define SHOW_GUIDEMO_FADING            (1)
-#endif
-#ifndef   SHOW_GUIDEMO_GRAPH
-  #define SHOW_GUIDEMO_GRAPH             (1)
-#endif
-#ifndef   SHOW_GUIDEMO_ICONVIEW
-  #define SHOW_GUIDEMO_ICONVIEW          (1)
-#endif
-#ifndef   SHOW_GUIDEMO_IMAGEFLOW
-  #define SHOW_GUIDEMO_IMAGEFLOW         (1)
-#endif
-#ifndef   SHOW_GUIDEMO_LISTVIEW
-  #define SHOW_GUIDEMO_LISTVIEW          (1)
-#endif
-#ifndef   SHOW_GUIDEMO_RADIALMENU
-  #define SHOW_GUIDEMO_RADIALMENU        (1)
-#endif
-#ifndef   SHOW_GUIDEMO_SKINNING
-  #define SHOW_GUIDEMO_SKINNING          (1)
-#endif
-#ifndef   SHOW_GUIDEMO_SPEED
-  #define SHOW_GUIDEMO_SPEED             (1)
-#endif
-#ifndef   SHOW_GUIDEMO_SPEEDOMETER
-  #define SHOW_GUIDEMO_SPEEDOMETER       (1)
-#endif
-#ifndef   SHOW_GUIDEMO_TRANSPARENTDIALOG
-  #define SHOW_GUIDEMO_TRANSPARENTDIALOG (1)
-#endif
-#ifndef   SHOW_GUIDEMO_TREEVIEW
-  #define SHOW_GUIDEMO_TREEVIEW          (1)
-#endif
-#ifndef   SHOW_GUIDEMO_VSCREEN
-  #define SHOW_GUIDEMO_VSCREEN           (1)
-#endif
-#ifndef   SHOW_GUIDEMO_WASHINGMACHINE
-  #define SHOW_GUIDEMO_WASHINGMACHINE    (1)
-#endif
-#ifndef   SHOW_GUIDEMO_ZOOMANDROTATE
-  #define SHOW_GUIDEMO_ZOOMANDROTATE     (1)
-#endif
-#else // Choose a demo
-#ifndef   SHOW_GUIDEMO_AATEXT
-  #define SHOW_GUIDEMO_AATEXT            (0)
-#endif
-#ifndef   SHOW_GUIDEMO_AUTOMOTIVE
-  #define SHOW_GUIDEMO_AUTOMOTIVE        (0)
-#endif
-#ifndef   SHOW_GUIDEMO_BARGRAPH
-  #define SHOW_GUIDEMO_BARGRAPH          (0)
 #endif
 #ifndef   SHOW_GUIDEMO_BITMAP
   #define SHOW_GUIDEMO_BITMAP            (0)
@@ -215,7 +153,7 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #ifndef   SHOW_GUIDEMO_ZOOMANDROTATE
   #define SHOW_GUIDEMO_ZOOMANDROTATE     (0)
 #endif
-#endif
+
 
 /*********************************************************************
 *

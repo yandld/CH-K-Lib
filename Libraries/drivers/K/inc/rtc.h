@@ -8,8 +8,8 @@
   * @note    此文件为芯片RTC模块的底层功能函数
   ******************************************************************************
   */
-#ifndef __RTC_H__
-#define __RTC_H__
+#ifndef __CH_LIB_RTC_H__
+#define __CH_LIB_RTC_H__
 
 #include <stdint.h>
 #include "common.h"

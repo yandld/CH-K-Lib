@@ -8,8 +8,8 @@
   * @note    此文件为芯片PIT模块的底层功能函数
   ******************************************************************************
   */
-#ifndef __PIT_H__
-#define __PIT_H__
+#ifndef __CH_LIB_PIT_H__
+#define __CH_LIB_PIT_H__
 
 #include "common.h"
 

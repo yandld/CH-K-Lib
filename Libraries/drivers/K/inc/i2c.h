@@ -8,8 +8,8 @@
   * @note    此文件为芯片IIC模块的底层功能函数
   ******************************************************************************
   */
-#ifndef __I2C_H__
-#define __I2C_H__
+#ifndef __CH_LIB_I2C_H__
+#define __CH_LIB_I2C_H__
 
 #ifdef __cplusplus
  extern "C" {

@@ -8,8 +8,8 @@
 	* @note    此文件为内部文件，用户无需调用和修改  
   ******************************************************************************
   */
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#ifndef __CH_LIB_COMMON_H__
+#define __CH_LIB_COMMON_H__
 
 #include <stdint.h>
 #include <stdbool.h>

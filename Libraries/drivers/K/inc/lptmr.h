@@ -8,8 +8,8 @@
   * @note    此文件为芯片LPTM模块的底层功能函数
   ******************************************************************************
   */
-#ifndef __LPTMR_H__
-#define __LPTMR_H__
+#ifndef __CH_LIB_LPTMR_H__
+#define __CH_LIB_LPTMR_H__
 
 #include <stdint.h>
 

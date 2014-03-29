@@ -8,8 +8,8 @@
   * @note    此文件为芯片FlexBus模块的底层功能函数
   ******************************************************************************
   */
-#ifndef __FLEXBUS_H__
-#define __FLEXBUS_H__
+#ifndef __CH_LIB_FLEXBUS_H__
+#define __CH_LIB_FLEXBUS_H__
 
 #include <stdint.h>
 #include "common.h"

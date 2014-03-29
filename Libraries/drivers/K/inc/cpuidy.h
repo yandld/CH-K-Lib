@@ -8,8 +8,8 @@
 	* @note    此文件为内部文件，用于获取芯片的出厂信息，少部分用户使用
   ******************************************************************************
   */
-#ifndef __CPUIDY_H__
-#define __CPUIDY_H__
+#ifndef __CH_LIB_CPUIDY_H__
+#define __CH_LIB_CPUIDY_H__
 
 #include <stdint.h>
 

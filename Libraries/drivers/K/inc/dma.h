@@ -8,8 +8,8 @@
   * @note    此文件为芯片DMA模块的底层功能函数
   ******************************************************************************
   */
-#ifndef __DMA_H__
-#define __DMA_H__
+#ifndef __CH_LIB_DMA_H__
+#define __CH_LIB_DMA_H__
   
 #include <stdint.h>
 

@@ -9,8 +9,8 @@
   ******************************************************************************
   */
 
-#ifndef __WDOG_H__
-#define __WDOG_H__
+#ifndef __CH_LIB_WDOG_H__
+#define __CH_LIB_WDOG_H__
 
 #include "common.h"
 

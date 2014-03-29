@@ -9,8 +9,8 @@
   ******************************************************************************
   */
   
-#ifndef __ENET_H__
-#define __ENET_H__
+#ifndef __CH_LIB_ENET_H__
+#define __CH_LIB_ENET_H__
 
 
 #ifdef __cplusplus

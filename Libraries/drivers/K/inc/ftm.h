@@ -8,8 +8,8 @@
   * @note    此文件为芯片FTM模块的底层功能函数
   ******************************************************************************
   */
-#ifndef __FTM_H_
-#define	__FTM_H_
+#ifndef __CH_LIB_FTM_H_
+#define	__CH_LIB_FTM_H_
 
 #ifdef __cplusplus
 	extern "C" {

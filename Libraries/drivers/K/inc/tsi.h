@@ -8,7 +8,9 @@
   * @note    此文件为芯片TSI模块的底层功能函数
   ******************************************************************************
   */
-  
+#ifndef __CH_LIB_TSI_H__
+#define __CH_LIB_TSI_H__
+
 #include <stdint.h>
   
 //!< TSI 触发模式选择
@@ -64,4 +66,5 @@ void TSI_Init(TSI_InitTypeDef* TSI_InitStruct);
 void TSI_CallbackInstall(TSI_CallBackType AppCBFun);
 
 
+#endif
 

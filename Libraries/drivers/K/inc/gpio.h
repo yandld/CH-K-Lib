@@ -8,8 +8,8 @@
   * @note    此文件为芯片GPIO模块的底层功能函数
   ******************************************************************************
   */
-#ifndef __GPIO_H__
-#define __GPIO_H__
+#ifndef __CH_LIB_GPIO_H__
+#define __CH_LIB_GPIO_H__
 
 #ifdef __cplusplus
  extern "C" {

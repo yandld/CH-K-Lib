@@ -9,8 +9,8 @@
   ******************************************************************************
   */
   
-#ifndef __SD_H__
-#define __SD_H__
+#ifndef __CH_LIB_SD_H__
+#define __CH_LIB_SD_H__
 
 
  #include <stdint.h>

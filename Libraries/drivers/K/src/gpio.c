@@ -455,7 +455,8 @@ void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type 
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
-    
+    /* init moudle */
+    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
     switch(config)
     {
@@ -514,6 +515,8 @@ void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
+    /* init moudle */
+    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     if(AppCBFun != NULL)
     {
         GPIO_CallBackTable[instance] = AppCBFun;

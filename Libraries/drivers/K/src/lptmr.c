@@ -68,22 +68,22 @@ void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct)
  */
 void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
 {
-	// open clock gate
+	/* open clock gate */
 	SIM->SCGC5 |= SIM_SCGC5_LPTIMER_MASK; 
     LPTMR0->CSR = 0x00; 
     LPTMR0->PSR = 0x00;
     LPTMR0->CMR = 0x00;
-    // disable module first
+    /* disable module first */
     LPTMR0->CSR &= ~LPTMR_CSR_TEN_MASK;
-    // free counter will reset whenever compare register is writtened.
+    /* free counter will reset whenever compare register is writtened. */
     LPTMR0->CSR &= ~LPTMR_CSR_TFC_MASK;     
-    // timer counter mode
+    /* timer counter mode */
     LPTMR0->CSR |= LPTMR_CSR_TMS_MASK; 
-	// bypass the glitch filter, which mean we use 1KHZ LPO directly
+	/* bypass the glitch filter, which mean we use 1KHZ LPO directly */
     LPTMR0->PSR = LPTMR_PSR_PCS(1)| LPTMR_PSR_PBYP_MASK; 
-    // set CMR(compare register)
+    /* set CMR(compare register) */
     LPTMR0->CMR = LPTMR_CMR_COMPARE(LPTMR_PC_InitStruct->counterOverflowValue);
-    // input source
+    /* input source */
     switch(LPTMR_PC_InitStruct->inputSource)
     {
         case kLPTMR_PC_InputSource_CMP0:
@@ -98,7 +98,7 @@ void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
         default:
             break;
     }
-    // pin polarity
+    /* pin polarity */
     switch(LPTMR_PC_InitStruct->pinPolarity)
     {
         case kLPTMR_PC_PinPolarity_RigsingEdge:
@@ -110,7 +110,7 @@ void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
         default:
             break;
     }
-    // enable moudle
+    /* enable moudle */
     LPTMR0->CSR |= LPTMR_CSR_TEN_MASK; 
 }
 
@@ -127,6 +127,7 @@ void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
  */
 void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config)
 {
+    SIM->SCGC5 |= SIM_SCGC5_LPTIMER_MASK; 
     switch (config)
     {
         case kLPTMR_IT_Disable:
@@ -150,6 +151,7 @@ void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config)
  */
 void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun)
 {
+    SIM->SCGC5 |= SIM_SCGC5_LPTIMER_MASK; 
     if(AppCBFun != NULL)
     {
         LPTMR_CallBackTable[0] = AppCBFun;

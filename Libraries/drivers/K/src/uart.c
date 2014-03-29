@@ -315,6 +315,8 @@ uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
  */
 void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config)
 {
+    /* enable clock gate */
+    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
     switch(config)
     {
         case kUART_IT_Tx_Disable:
@@ -369,6 +371,8 @@ void UART_CallbackTxInstall(uint8_t instance, UART_CallBackTxType AppCBFun)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
+    /* enable clock gate */
+    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
     if(AppCBFun != NULL)
     {
         UART_CallBackTxTable[instance] = AppCBFun;
@@ -392,6 +396,8 @@ void UART_CallbackRxInstall(uint8_t instance, UART_CallBackRxType AppCBFun)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
+    /* enable clock gate */
+    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
     if(AppCBFun != NULL)
     {
         UART_CallBackRxTable[instance] = AppCBFun;

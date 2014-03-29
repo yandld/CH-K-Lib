@@ -117,6 +117,7 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
  */
 void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
 {
+    SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
     switch (config)
     {
         case kPIT_IT_Disable:
@@ -200,6 +201,7 @@ void PIT_Cmd(FunctionalState NewState)
  */
 void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun)
 {
+    SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
     if(AppCBFun != NULL)
     {
         PIT_CallBackTable[chl] = AppCBFun;

@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60DZ10 CHK60EVB2 DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\RT-Thread_1.2.0\include;..\..\..\..\RT-Thread_1.2.0\components\finsh;..\..\..\..\RT-Thread_1.2.0\components\dfs\include;..\..\..\..\RT-Thread_1.2.0\components\rtgui\include\rtgui;..\..\..\..\RT-Thread_1.2.0\components\rtgui\include;..\..\..\..\Libraries\emWin\Include</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\RT-Thread_1.2.0\include;..\..\..\..\RT-Thread_1.2.0\components\finsh;..\..\..\..\RT-Thread_1.2.0\components\dfs\include;..\..\..\..\RT-Thread_1.2.0\components\rtgui\include\rtgui;..\..\..\..\RT-Thread_1.2.0\components\rtgui\include;..\..\..\..\Libraries\emWin\Include;..\..\..\..\RT-Thread_1.2.0\components\drivers\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -402,7 +402,7 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>startup</GroupName>
+          <GroupName>lib-startup</GroupName>
           <Files>
             <File>
               <FileName>system_MK60DZ10.c</FileName>
@@ -462,7 +462,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>drivers</GroupName>
+          <GroupName>lib-drivers</GroupName>
           <Files>
             <File>
               <FileName>gpio.c</FileName>
@@ -557,7 +557,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>devices</GroupName>
+          <GroupName>lib-devices</GroupName>
           <Files>
             <File>
               <FileName>ili9320.c</FileName>
@@ -808,6 +808,36 @@
               <FileName>rtt_ili9320.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\RT-Thread_1.2.0\bsp\Reven\rtt_ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtt_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\bsp\Reven\rtt_spi.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>rtt-devicer-struct</GroupName>
+          <Files>
+            <File>
+              <FileName>serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\drivers\serial\serial.c</FilePath>
+            </File>
+            <File>
+              <FileName>dataqueue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\drivers\src\dataqueue.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\drivers\spi\spi_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\RT-Thread_1.2.0\components\drivers\spi\spi_dev.c</FilePath>
             </File>
           </Files>
         </Group>

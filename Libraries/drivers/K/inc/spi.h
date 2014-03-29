@@ -9,8 +9,8 @@
   ******************************************************************************
   */
 
-#ifndef __SPI_H__
-#define __SPI_H__
+#ifndef __CH_LIB_SPI_H__
+#define __CH_LIB_SPI_H__
 
 #include <stdint.h>
   

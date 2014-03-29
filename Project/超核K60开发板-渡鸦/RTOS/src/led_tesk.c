@@ -15,7 +15,7 @@ void led1_thread_entry(void* parameter)
 	rt_int32_t i;
     rt_uint8_t * ptr;
     struct stat f_stat;
-    
+
     dfs_init();
     elm_init();
     if (dfs_mount("sd0", "/", "elm", 0, 0) == 0)
@@ -29,7 +29,7 @@ void led1_thread_entry(void* parameter)
 
     GUI_Init();//≥ı ºªØGUI 
 	GUI_DispString("Hello emWin!");//œ‘ æ≤‚ ‘  
-    MainTask();
+ //   MainTask();
 	while(1)
 	{
         

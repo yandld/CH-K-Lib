@@ -61,6 +61,8 @@
 /* Using Device System */
 #define RT_USING_DEVICE
 
+#define RT_USING_SERIAL
+#define RT_USING_SPI
 /* SECTION: Console options */
 #define RT_USING_CONSOLE
 /* the buffer size of console*/

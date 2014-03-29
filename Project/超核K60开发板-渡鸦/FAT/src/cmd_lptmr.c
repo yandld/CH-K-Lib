@@ -26,7 +26,7 @@ int CMD_LPTMR(int argc, char * const * argv)
     {
         i = LPTMR_PC_ReadCounter();
         shell_printf("ReadValue:%d\r\n", i);
-        LPTMR_ClearCount();
+        LPTMR_ClearCounter();
         DelayMs(1000);
     }
     return 0;

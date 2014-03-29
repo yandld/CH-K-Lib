@@ -38,7 +38,7 @@ void rt_hw_board_init(void)
     
     rt_hw_sd_init();
     rt_hw_lcd_init();
-    
+    rt_hw_spi_init();
     SYSTICK_Init(1000*1000/RT_TICK_PER_SECOND);
     SYSTICK_ITConfig(ENABLE);
     SYSTICK_Cmd(ENABLE);

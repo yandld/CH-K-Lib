@@ -3,7 +3,6 @@
 #include "uart.h"
 #include "pit.h"
 
-/* PIT中断服务函数 */
 static void PIT_ISR(void)
 {
     static uint32_t i;

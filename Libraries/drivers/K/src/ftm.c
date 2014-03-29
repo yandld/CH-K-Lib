@@ -107,7 +107,7 @@ void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
     }
     if(pres > (1<<ps)) ps++;
     if(ps > 7) ps = 7;
-#ifdef DEBUG
+#ifdef LIB_DEBUG
     printf("freq:%dHz\r\n", FTM_InitStruct->frequencyInHZ);
     printf("input_clk:%d\r\n", clock);
     printf("pres:%d\r\n", pres);
@@ -119,7 +119,7 @@ void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
     FTM_InstanceTable[FTM_InitStruct->instance]->MOD = (clock/(1<<ps))/FTM_InitStruct->frequencyInHZ;
     /* set LOCK bit to load MOD value */
     FTM_InstanceTable[FTM_InitStruct->instance]->PWMLOAD = 0xFFFFFFFF;
-#ifdef DEBUG
+#ifdef LIB_DEBUG
     printf("MOD Should be:%d\r\n",  (clock/(1<<ps))/FTM_InitStruct->frequencyInHZ);
     printf("MOD acutall is:%d\r\n", FTM_InstanceTable[FTM_InitStruct->instance]->MOD);
     printf("ps:%d\r\n", ps);

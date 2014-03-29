@@ -68,7 +68,7 @@ static void TSI_Calibration(uint32_t chl, uint32_t threshld)
 	TSI0->GENCS |= TSI_GENCS_SWTS_MASK;
 	while(!(TSI0->GENCS & TSI_GENCS_EOSF_MASK)){};
     cnt = TSI_GetCounter(chl);
-    #if DEBUG
+    #if LIB_DEBUG
         printf("TSI_Calibration cnt:%d\r\n", cnt);
         printf("TSI_Calibration threshld:%d\r\n", threshld);
     #endif

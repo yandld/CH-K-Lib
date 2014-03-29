@@ -149,7 +149,7 @@ void DelayUs(uint32_t us)
 
 
 
-#if (defined(DEBUG))
+#if (defined(LIB_DEBUG))
 
 void assert_failed(char * file, uint32_t line)
 {
@@ -167,7 +167,7 @@ void NMI_Handler(void)
 }
 
 
-#if (defined(DEBUG) && defined(DEBUG_FAULT_HANDLER))
+#if (defined(LIB_DEBUG) && defined(DEBUG_FAULT_HANDLER))
 
 
 void HardFault_Handler(void)

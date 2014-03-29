@@ -176,7 +176,7 @@ static uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t dat
     {
         if (ENET->EIR & ENET_EIR_MII_MASK)
         {
-            #if DEBUG
+            #if LIB_DEBUG
             //printf("MII - timeout:%d\r\n", timeout);
             #endif
             break;  
@@ -266,7 +266,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
         ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYIDR1, &usData );
     } while( usData == 0xffff );
 
-#ifdef DEBUG
+#ifdef LIB_DEBUG
     printf("PHY_PHYIDR1=0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYIDR2, &usData );
     printf("PHY_PHYIDR2=0x%X\r\n",usData); 
@@ -284,7 +284,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     //开始自动协商
     ENET_MII_Write(CFG_PHY_ADDRESS, PHY_BMCR, ( PHY_BMCR_AN_RESTART | PHY_BMCR_AN_ENABLE ) );
 
-#ifdef DEBUG
+#ifdef LIB_DEBUG
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_BMCR, &usData );
     printf("PHY_BMCR=0x%X\r\n",usData);
 #endif 
@@ -295,7 +295,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 		timeout++;
 		if(timeout > 30)
         {
-            #if DEBUG
+            #if LIB_DEBUG
             printf("enet phy reset failed\r\n");
             #endif
             return ;
@@ -321,7 +321,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     {
         ENET->RCR &= (unsigned long)~ENET_RCR_DRT_MASK;
         ENET->TCR |= ENET_TCR_FDEN_MASK;
-		#ifdef DEBUG
+		#ifdef LIB_DEBUG
         printf("full-duplex\r\n");
 		#endif 
     }
@@ -329,7 +329,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     {
         ENET->RCR |= ENET_RCR_DRT_MASK;
         ENET->TCR &= (unsigned long)~ENET_TCR_FDEN_MASK;
-		#ifdef DEBUG
+		#ifdef LIBDEBUG
 		printf("half-duplex\r\n");
 		#endif 
     }

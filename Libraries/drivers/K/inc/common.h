@@ -13,7 +13,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#ifdef DEBUG
+#ifdef LIB_DEBUG
 #include <stdio.h>
 #endif
 
@@ -59,7 +59,7 @@
 
 
 //²ÎÊý¼ì²âÆ÷
-#if defined(DEBUG)
+#if defined(LIB_DEBUG)
 
 /**
   * @brief  The assert_param macro is used for function's parameters check.

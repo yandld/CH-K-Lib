@@ -206,7 +206,7 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
     // see if we have to reconfig TSR
     if(((!RTC->TSR) || RTC_InitStruct->isUpdate) && (RTC_InitStruct->initialDateTime != NULL))
     {
-        #ifdef DEBUG
+        #ifdef LIB_DEBUG
         printf("RTC_Init() - Reconfig!\r\n");
         #endif
         RTC_DateTimeToSecond(RTC_InitStruct->initialDateTime, &i);

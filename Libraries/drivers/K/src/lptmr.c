@@ -203,12 +203,12 @@ uint32_t LPTMR_PC_QuickInit(uint32_t LPTMRxMAP)
  * @brief  清除脉冲计数器的脉冲数
  * @code
  *     //清除脉冲计数的个数
- *     LPTMR_ClearCount();
+ *     LPTMR_ClearCounter();
  * @endcode
  * @param  None
  * @retval None
  */
-void LPTMR_ClearCount(void)
+void LPTMR_ClearCounter(void)
 {
     //disable and reenable moudle to clear counter
     LPTMR0->CSR &= ~LPTMR_CSR_TEN_MASK;

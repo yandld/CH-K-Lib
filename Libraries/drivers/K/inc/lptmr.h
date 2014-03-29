@@ -64,7 +64,7 @@ void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config);
 void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun);
 uint32_t LPTMR_PC_ReadCounter(void);
 uint32_t LPTMR_PC_QuickInit(uint32_t LPTMRxMAP);
-void LPTMR_ClearCount(void);
+void LPTMR_ClearCounter(void);
 
 #endif
 

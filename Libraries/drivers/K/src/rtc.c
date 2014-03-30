@@ -38,7 +38,7 @@ void RTC_QuickInit(RTC_DateTime_Type* timedate)
     RTC_InitTypeDef RTC_InitStruct1;
     RTC_InitStruct1.initialDateTime = timedate;
     RTC_InitStruct1.isUpdate = false; /* will not force to update */
-    RTC_InitStruct1.oscLoad = kRTC_OScLoad_16PF;
+    RTC_InitStruct1.oscLoad = kRTC_OScLoad_8PF;
     RTC_Init(&RTC_InitStruct1);
 }
 

@@ -450,11 +450,6 @@
               <FilePath>..\src\device_test.c</FilePath>
             </File>
             <File>
-              <FileName>msh_cmd_bmp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\msh_cmd_bmp.c</FilePath>
-            </File>
-            <File>
               <FileName>init_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\init_thread.c</FilePath>
@@ -463,6 +458,21 @@
               <FileName>led_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\led_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_pic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_pic.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>WelcomeDLG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\WelcomeDLG.c</FilePath>
             </File>
           </Files>
         </Group>

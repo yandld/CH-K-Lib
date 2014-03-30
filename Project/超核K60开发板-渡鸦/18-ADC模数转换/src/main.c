@@ -3,7 +3,6 @@
 #include "uart.h"
 #include "adc.h"
 
-
 /* 可用的 ADC通道及引脚 - 144P*/
 /*
  ADC0_SE0_DP0        
@@ -68,13 +67,16 @@ int main(void)
     /* 初始化对应引脚 */
     /* DM0引脚为专门的模拟引脚 ADC时 无需设置复用  DM0也无法当做普通的数字引脚 */
     
+    /* 启动一次ADC转换 */
+    ADC_StartConversion(HW_ADC0, 19, kADC_MuxA);
+    
     while(1)
     {
         /* 如果ADC转换完成 */
         if(ADC_IsConversionCompleted(HW_ADC0, kADC_MuxA) == 0)
         {
             /* 读取ADC的值  kADC_MuxA是每个ADC通道的转换器 默认都是 kADC_MuxA  MuxB 一般不能用于软件触发 */
-            printf("ADC:%d\r", ADC_ReadValue(HW_ADC0, kADC_MuxA));
+            printf("ADC:%04d\r", ADC_ReadValue(HW_ADC0, kADC_MuxA));
         }
     }
 }

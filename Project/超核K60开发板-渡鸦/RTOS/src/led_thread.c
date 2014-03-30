@@ -1,14 +1,15 @@
 #include <rtthread.h>
 #include <rthw.h>
 
-
+#include "gpio.h"
 
 void led_thread_entry(void* parameter)
 {
-
+    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
 	while(1)
 	{
-        rt_thread_delay(100);
+        GPIO_ToggleBit(HW_GPIOE, 6);
+        rt_thread_delay(50);
 	}
 }
 

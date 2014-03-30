@@ -189,19 +189,19 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
             ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
             break;
         case kADC_HardwareAverage_4:
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS_MASK;
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
             ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(0);
             break;
         case kADC_HardwareAverage_8:
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS_MASK;
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
             ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(1);
             break;
         case kADC_HardwareAverage_16:
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS_MASK;
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
             ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(2);
             break;
         case kADC_HardwareAverage_32:
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS_MASK;
+            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
             ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(3);
             break;
         default:

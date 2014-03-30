@@ -11,7 +11,7 @@ extern char working_directory[];
 
 
 
-static int _pic(const char *path)
+int show_pic(const char *path)
 {
     char *fullpath;
     int fd;
@@ -90,7 +90,7 @@ int cmd_pic(int argc, char** argv)
     }
     else if (argc == 2)
     {
-        _pic(argv[1]);
+        show_pic(argv[1]);
     }
 
     return 0;

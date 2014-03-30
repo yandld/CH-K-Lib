@@ -40,7 +40,7 @@ void led1_thread_entry(void* parameter)
         send_buffer[1] = 11;
         rt_uint8_t rec_buffer[10];
        // spi->open(spi, RT_DEVICE_OFLAG_RDWR);
-        rt_spi_send(spi_device, send_buffer, 3);                      
+     //   rt_spi_send(spi_device, send_buffer, 3);                      
     }
 
     

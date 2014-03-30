@@ -26,9 +26,19 @@ int CMD_ADC(int argc, char * const * argv)
     
     instance = ADC_QuickInit(BOARD_ADC_MAP, kADC_SingleDiff10or11);
     ADC_CallbackInstall(instance, ADC_CallBack);
-    ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_EOF);
+   // ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_EOF);
     ADC_StartConversion(instance, 19, kADC_MuxA);
-
+    while(1)
+    {
+      //  shell_printf("%d\r", ADC_QuickReadValue(BOARD_ADC_MAP));
+        
+        
+        if(ADC_IsConversionCompleted(instance, kADC_MuxA) == 0)
+        {
+            shell_printf("%d\r", ADC_ReadValue(instance, kADC_MuxA));
+          //  ADC_StartConversion(instance, 19, kADC_MuxA);
+        }
+    }
     return 0;
 }
 

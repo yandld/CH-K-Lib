@@ -71,7 +71,9 @@ static rt_uint32_t xfer(struct rt_spi_device* device, struct rt_spi_message* mes
     rt_uint32_t size = message->length;
     const rt_uint16_t * send_ptr = message->send_buf;
     rt_uint16_t * recv_ptr = message->recv_buf;
-    rt_kprintf("xfer\r\n");
+    rt_kprintf("message->length%d\r\n", message->length);
+    rt_kprintf("message->cs_take%d\r\n", message->cs_take);
+    rt_kprintf("message->cs_release%d\r\n", message->cs_release);
     while(size--)
     {
         rt_uint16_t data = 0xFF;
@@ -79,11 +81,8 @@ static rt_uint32_t xfer(struct rt_spi_device* device, struct rt_spi_message* mes
         {
             data = *send_ptr++;
         }
-        if(message->cs_take)
-        {
-            data = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, data, 1, kSPI_PCS_KeepAsserted);
-        }
-        else if(message->cs_release)
+        /* 最后一个 并且是需要释放CS */
+        if((size == 0) && (message->cs_release))
         {
             data = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, data, 1, kSPI_PCS_ReturnInactive);
         }

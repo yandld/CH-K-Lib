@@ -87,7 +87,7 @@ static const IRQn_Type ADC_IRQnTable[] =
  */
 uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
 {
-    return (((ADC_InstanceTable[instance]->SC1[mux]) & ADC_SC1_COCO_MASK) >> ADC_SC1_COCO_SHIFT);  
+    return (!((ADC_InstanceTable[instance]->SC1[mux]) & ADC_SC1_COCO_MASK) >> ADC_SC1_COCO_SHIFT);  
 }
 
 /**
@@ -232,7 +232,7 @@ uint8_t ADC_QuickInit(uint32_t ADCxMAP, ADC_ResolutionMode_Type resolutionMode)
     ADC_InitTypeDef AD_InitStruct1;
     AD_InitStruct1.instance = pq->ip_instance;
     AD_InitStruct1.chl = pq->channel;
-    AD_InitStruct1.clockDiv = kADC_ClockDiv8;
+    AD_InitStruct1.clockDiv = kADC_ClockDiv2;
     AD_InitStruct1.resolutionMode = resolutionMode;
     AD_InitStruct1.triggerMode = kADC_TriggerSoftware;
     AD_InitStruct1.singleOrDiffMode = kADC_Single;

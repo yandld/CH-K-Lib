@@ -41,7 +41,7 @@ void rt_hw_board_init(void)
     
     rt_hw_sd_init();
     rt_hw_lcd_init();
-    rt_hw_spi_init();
+    rt_hw_spi_bus_init();
     /* attacted */
     rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", RT_NULL);
     
@@ -52,18 +52,23 @@ void rt_hw_board_init(void)
 
 
 extern void init_thread_entry(void* parameter);
+extern void led_thread_entry(void* parameter);
+
 void rt_application_init(void)
 {
     rt_thread_t init_thread;
-    
-    init_thread = rt_thread_create("init",
-                                   init_thread_entry, RT_NULL,
-                                   2048, 0x20, 20);
+    /* init thread */
+    init_thread = rt_thread_create("init", init_thread_entry, RT_NULL, 2048, 0x20, 20);                       
     if (init_thread != RT_NULL)
     {
         rt_thread_startup(init_thread);		
     }
-
+    /* led thread */
+    init_thread = rt_thread_create("led", led_thread_entry, RT_NULL, 2048, 0x21, 20);                                                      
+    if (init_thread != RT_NULL)
+    {
+        rt_thread_startup(init_thread);		
+    }
 }
 
 void rtthread_startup(void)
@@ -74,7 +79,7 @@ void rtthread_startup(void)
 	rt_show_version(); /* print logo */
 	rt_system_timer_init(); /* init timer */
     /* register IARM and extern RAM */
-  //  rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
+    rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
     SRAM_Init();
     if(SRAM_SelfTest())
     {
@@ -95,3 +100,5 @@ void rtthread_startup(void)
 	rt_thread_idle_init(); /* init idle thread */
 	rt_system_scheduler_start(); /* running the system */
 }
+
+

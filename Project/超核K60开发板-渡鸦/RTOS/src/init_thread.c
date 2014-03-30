@@ -9,7 +9,6 @@
 #include <drivers/spi.h>
 
 
-
 void init_thread_entry(void* parameter)
 {
     struct rt_spi_device *spi_device;
@@ -54,7 +53,7 @@ void init_thread_entry(void* parameter)
     
     
     GUI_Init();//≥ı ºªØGUI 
-	//GUI_DispString("Hello emWin!");//œ‘ æ≤‚ ‘  
+	GUI_DispString("GUI system OK");//œ‘ æ≤‚ ‘  
  //   MainTask();
 	while(1)
 	{

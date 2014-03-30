@@ -102,7 +102,7 @@ static struct rt_spi_ops kinetis_spi_ops =
     xfer
 };
 
-int rt_hw_spi_init(void)
+int rt_hw_spi_bus_init(void)
 {
     kinetis_spi.ops = &kinetis_spi_ops;
     return rt_spi_bus_register(&kinetis_spi, "spi2", &kinetis_spi_ops); 

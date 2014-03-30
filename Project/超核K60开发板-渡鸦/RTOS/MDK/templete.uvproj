@@ -459,6 +459,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\init_thread.c</FilePath>
             </File>
+            <File>
+              <FileName>led_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\led_thread.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -49,7 +49,7 @@ int main(void)
 {
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200); /* 为了代码简单 这里直接调用快速初始化了 */
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("ADC test\r\n");
     
@@ -66,7 +66,7 @@ int main(void)
     ADC_Init(&AD_InitStruct1);
     
     /* 初始化对应引脚 */
-    /* DM0引脚为专门的模拟引脚 ADC时 无需设置复用  也无法当做普通的数字引脚 */
+    /* DM0引脚为专门的模拟引脚 ADC时 无需设置复用  DM0也无法当做普通的数字引脚 */
     
     while(1)
     {

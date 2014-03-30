@@ -335,6 +335,8 @@ rt_err_t w25qxx_init(const char * flash_device_name, const char * spi_device_nam
         else
         {
             FLASH_TRACE("Memory Capacity error!\r\n");
+            FLASH_TRACE("ID:0x%02X", memory_type_capacity);
+            
             return -RT_ENOSYS;
         }
     }

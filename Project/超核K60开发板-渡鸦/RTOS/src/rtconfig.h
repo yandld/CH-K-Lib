@@ -74,12 +74,13 @@
 #define FINSH_USING_SYMTAB
 #define FINSH_USING_DESCRIPTION
 #define FINSH_USING_MSH
-#define FINSH_USING_MSH_ONLY
+//#define FINSH_USING_MSH_ONLY
 /* SECTION: device filesystem */
 #define RT_USING_DFS 
 #define RT_USING_DFS_ELMFAT
 #define RT_DFS_ELM_WORD_ACCESS
 #define DFS_USING_WORKDIR
+
 /* Reentrancy (thread safe) of the FatFs module.  */
 #define RT_DFS_ELM_REENTRANT
 /* Number of volumes (logical drives) to be used. */
@@ -87,7 +88,7 @@
 //#define RT_DFS_ELM_USE_LFN			3 
 #define RT_DFS_ELM_MAX_LFN			255
 /* Maximum sector size to be handled. */
-#define RT_DFS_ELM_MAX_SECTOR_SIZE  512
+#define RT_DFS_ELM_MAX_SECTOR_SIZE  4096
 
 //#define RT_USING_DFS_ROMFS
 

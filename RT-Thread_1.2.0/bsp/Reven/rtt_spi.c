@@ -27,7 +27,6 @@ static rt_err_t configure(struct rt_spi_device* device, struct rt_spi_configurat
         return RT_EIO;
     }
     /* baud */
-    rt_kprintf("spi - config baud:%d\r\n", configuration->max_hz);
     if(configuration->max_hz < 100)
     {
         SPI_InitStruct1.baudrate = 1000;
@@ -69,11 +68,8 @@ static rt_uint32_t xfer(struct rt_spi_device* device, struct rt_spi_message* mes
 {
     struct rt_spi_configuration * config = &device->config;
     rt_uint32_t size = message->length;
-    const rt_uint16_t * send_ptr = message->send_buf;
-    rt_uint16_t * recv_ptr = message->recv_buf;
-    rt_kprintf("message->length%d\r\n", message->length);
-    rt_kprintf("message->cs_take%d\r\n", message->cs_take);
-    rt_kprintf("message->cs_release%d\r\n", message->cs_release);
+    const rt_uint8_t * send_ptr = message->send_buf;
+    rt_uint8_t * recv_ptr = message->recv_buf;
     while(size--)
     {
         rt_uint16_t data = 0xFF;

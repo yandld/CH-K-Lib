@@ -80,7 +80,6 @@ static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, void* buffer, rt_si
 
 static rt_err_t rt_sd_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
-    rt_kprintf("I need control:0x%x\r\n", cmd);
     struct rt_device_blk_geometry geometry;
     rt_memset(&geometry, 0, sizeof(geometry));
 	switch (cmd)

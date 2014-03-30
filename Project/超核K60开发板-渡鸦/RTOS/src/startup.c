@@ -51,27 +51,19 @@ void rt_hw_board_init(void)
 }
 
 
-extern void led1_thread_entry(void* parameter);
+extern void init_thread_entry(void* parameter);
 void rt_application_init(void)
 {
     rt_thread_t init_thread;
     
-    init_thread = rt_thread_create("led1",
-                                   led1_thread_entry, RT_NULL,
+    init_thread = rt_thread_create("init",
+                                   init_thread_entry, RT_NULL,
                                    2048, 0x20, 20);
     if (init_thread != RT_NULL)
     {
         rt_thread_startup(init_thread);		
     }
-    /*
-    init_thread = rt_thread_create("sd0",
-                                   sd0_thread_entry, RT_NULL,
-                                   2048, 10, 20);							 
-    if (init_thread != RT_NULL)
-    {
-        rt_thread_startup(init_thread);		
-    }
-    */
+
 }
 
 void rtthread_startup(void)

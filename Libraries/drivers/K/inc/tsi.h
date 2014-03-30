@@ -20,6 +20,24 @@ typedef enum
     kTSI_TriggerPeriodicalScan,//硬件周期性扫描
 } TSI_TriggerMode_Type;
   
+#define HW_TSI_CH0      (0x00)
+#define HW_TSI_CH1      (0x01)
+#define HW_TSI_CH2      (0x02)
+#define HW_TSI_CH3      (0x03)
+#define HW_TSI_CH4      (0x04)
+#define HW_TSI_CH5      (0x05)
+#define HW_TSI_CH6      (0x06)
+#define HW_TSI_CH7      (0x07)
+#define HW_TSI_CH8      (0x08)
+#define HW_TSI_CH9      (0x09)
+#define HW_TSI_CH10     (0x0A)
+#define HW_TSI_CH11     (0x0B)
+#define HW_TSI_CH12     (0x0C)
+#define HW_TSI_CH13     (0x0D)
+#define HW_TSI_CH14     (0x0E)
+#define HW_TSI_CH15     (0x0F)
+
+
 //!< TSI 中断DMA配置
 typedef enum
 {

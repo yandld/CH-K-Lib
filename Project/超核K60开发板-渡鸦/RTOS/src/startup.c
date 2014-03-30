@@ -11,6 +11,8 @@
 #include "shell.h"
 #include "sram.h"
 
+#include <drivers/spi.h>
+
 #ifdef __CC_ARM
 extern int Image$$RW_IRAM1$$ZI$$Limit;
 #define KINETIS_SRAM_BEGIN    (&Image$$RW_IRAM1$$ZI$$Limit)
@@ -25,7 +27,8 @@ extern int __bss_end;
 #define KINETIS_SRAM_SIZE_IN_KB         (64)
 #define KINETIS_SRAM_END                (0x20000000 + KINETIS_SRAM_SIZE_IN_KB * 1024)
 
-
+static struct rt_spi_device spi_device;
+    
 void rt_hw_board_init(void)
 {
     DelayInit();
@@ -39,6 +42,9 @@ void rt_hw_board_init(void)
     rt_hw_sd_init();
     rt_hw_lcd_init();
     rt_hw_spi_init();
+    /* attacted */
+    rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", RT_NULL);
+    
     SYSTICK_Init(1000*1000/RT_TICK_PER_SECOND);
     SYSTICK_ITConfig(ENABLE);
     SYSTICK_Cmd(ENABLE);

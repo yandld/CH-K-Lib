@@ -43,7 +43,7 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
     PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
     w25qxx_device w25qxx1;
     w25qxx1.bus = &bus;
-    if(w25qxx_init(&w25qxx1, BOARD_FLASH_SPI_PCSN, HW_CTAR1, 64*1000*1000))
+    if(w25qxx_init(&w25qxx1, BOARD_FLASH_SPI_PCSN, HW_CTAR1, 10*1000*1000))
     {
         printf("w25qxx init failed\r\n");
         return 1;
@@ -58,9 +58,9 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
     {
         buf_test[i] = i;
     }
-  //  printf("erasing chip ...\r\n");
-  //  w25qxx1.erase_chip(&w25qxx1);
-  //  printf("erasing complete\r\n");
+   // printf("erasing chip ...\r\n");
+   // w25qxx1.erase_chip(&w25qxx1);
+   // printf("erasing complete\r\n");
     if(w25qxx1.write(&w25qxx1, 0, (uint8_t*)buf_test, SPI_FLASH_TEST_LEN))
     {
         printf("w25qxx write failed\r\n");

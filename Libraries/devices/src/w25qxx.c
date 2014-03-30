@@ -18,6 +18,7 @@
 #define W25X_WriteEnable		0x06 
 #define W25X_WriteDisable		0x04 
 #define W25X_ReadStatusReg		0x05 
+#define W25X_ReadStatusReg2		0x35 
 #define W25X_WriteStatusReg		0x01 
 #define W25X_ReadData			0x03 
 #define W25X_FastReadData		0x0B 
@@ -66,6 +67,15 @@ static spi_status w25qxx_power_up(w25qxx_device_t device)
     //delay 3us
     for(i=0;i<1000;i++);
     return kspi_status_ok;
+}
+
+static uint8_t w25qxx_read_sr2(w25qxx_device_t device)
+{
+    uint8_t buf[1];
+    buf[0] = W25X_ReadStatusReg2;
+    device->bus->write(device->bus, &device->spi_device, buf, 1, false); //false = 保持片选,继续发送
+    device->bus->read(device->bus, &device->spi_device, buf, 1, true);
+    return buf[0];
 }
 
 static uint8_t w25qxx_read_sr(w25qxx_device_t device)
@@ -131,6 +141,10 @@ static spi_status w25qxx_probe(w25qxx_device_t device)
             buf[0] = w25qxx_read_sr(device);
             #if DEBUG
             printf("SR:0x%X\r\n", buf[0]);
+            #endif
+            buf[0] = w25qxx_read_sr2(device);
+            #if DEBUG
+            printf("SR2:0x%X\r\n", buf[0]);
             #endif
             // enable full access to all memory regin, something like unlock chip.
             w25qxx_write_sr(device, 0x00);

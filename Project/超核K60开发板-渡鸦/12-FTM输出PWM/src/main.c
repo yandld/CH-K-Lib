@@ -57,21 +57,21 @@ int main(void)
     printf("ftm test, pwm will be generated on PC01\r\n");
     
     /* 使用快速初始化 帮助初学者完成必要配置 */
-    FTM_PWM_QuickInit(FTM0_CH0_PC01, 3000);
+    FTM_PWM_QuickInit(FTM0_CH3_PA06, 3000);
     
 //    /* 另外一种方法 普通模式 初始化FTM模块 推荐 */
 //    FTM_PWM_InitTypeDef FTM_PWM_InitStruct1 = {0};
-//    FTM_PWM_InitStruct1.chl = HW_FTM_CH0; /* 通道0 */
+//    FTM_PWM_InitStruct1.chl = HW_FTM_CH3; /* 通道0 */
 //    FTM_PWM_InitStruct1.frequencyInHZ = 3000; /* 3Khz */
 //    FTM_PWM_InitStruct1.instance = HW_FTM0;
 //    FTM_PWM_InitStruct1.mode = kPWM_EdgeAligned; /* 边沿对齐模式 产生普通 PWM波 */
 //    FTM_PWM_Init(&FTM_PWM_InitStruct1);
 //    
 //    /* 初始化对应的引脚 */
-//    PORT_PinMuxConfig(HW_GPIOC, 1, kPinAlt4);
+//    PORT_PinMuxConfig(HW_GPIOA, 6, kPinAlt3);
     
     /* 设置FTM 的占空比 */
-    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH0, 5000); // 50%占空比 0-10000 对应 0-100%
+    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH3, 5000); // 50%占空比 0-10000 对应 0-100%
     
     while(1)
     {

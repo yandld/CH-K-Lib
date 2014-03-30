@@ -1,5 +1,6 @@
 #include "bmp180.h"
 #include <string.h>
+#include "common.h"
 #include "i2c.h"
 
 static uint8_t bmp180_read_register(bmp180_device *device, uint8_t reg_addr, uint8_t *data)

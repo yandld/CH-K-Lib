@@ -40,7 +40,7 @@ static const IRQn_Type SPI_IRQnTable[] =
 };
 
 #elif (defined(MK10D5))
-static const RegisterManipulation_Type SIM_SPIClockGateTable[] =
+static const struct reg_ops SIM_SPIClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI0_MASK},
 };

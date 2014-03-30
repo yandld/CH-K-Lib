@@ -9,10 +9,9 @@
   */
   
 #include "24l01.h"
-#include "spi_abstraction.h"
 #include "board.h"
 #include "gpio.h"
-
+#include "spi.h"
 
 #define CE_HIGH()     GPIO_WriteBit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN, 1)
 #define CE_LOW()      GPIO_WriteBit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN, 0)
@@ -20,24 +19,22 @@
 static uint8_t NRF2401_WriteBuffer(uint8_t reg, uint8_t *pData, uint8_t len)
 {
     uint8_t status;
-    status = SPI_ABS_ReadWriteByte(reg, BOARD_SPI_NRF2401_CSn, kSPI_ABS_CS_KeepAsserted); // Select register to write to and read status byte
+    status = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, reg, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
     len--;
     while(len--)
     {
-        SPI_ABS_ReadWriteByte(*pData++, BOARD_SPI_NRF2401_CSn, kSPI_ABS_CS_KeepAsserted);
+        SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, *pData++, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
     }
-    SPI_ABS_ReadWriteByte(*pData++, BOARD_SPI_NRF2401_CSn, kSPI_ABS_CS_ReturnInactive);
-	return(status);          // return nRF24L01 status byte
+    SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, *pData++, BOARD_SPI_NRF2401_CSn, kSPI_PCS_ReturnInactive);
+    return(status);          // return nRF24L01 status byte
 }
 
 static uint8_t NRF2401_ReadWriteReg(uint8_t reg,uint8_t value)
 {
-    uint8_t send_buf[2];
-    uint8_t rec_buf[2];
-    send_buf[0] = reg;
-    send_buf[1] = value;
-    SPI_ABS_xfer(send_buf, rec_buf, BOARD_SPI_NRF2401_CSn, kSPI_ABS_CS_KeepAsserted, sizeof(send_buf));
-    return rec_buf[0];
+    uint8_t status;
+    status = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, reg, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
+    SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, value, BOARD_SPI_NRF2401_CSn, kSPI_PCS_ReturnInactive);
+    return status;
 }
 
 const uint8_t TX_ADDRESS[TX_ADR_WIDTH]={0x34,0x43,0x10,0x10,0x01}; //∑¢ÀÕµÿ÷∑
@@ -95,13 +92,14 @@ static uint8_t NRF2401_ConfigStatus(void)
 static uint8_t NRF2401_ReadBuffer(uint8_t reg, uint8_t *pData, uint32_t len)
 {
     uint8_t status;
-    status = SPI_ABS_ReadWriteByte(reg, BOARD_SPI_NRF2401_CSn, kSPI_ABS_CS_KeepAsserted); // Select register to write to and read status byte
+    /* Select register to write to and read status byte */
+    status = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, reg, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
     len--;
     while(len--)
-    {
-        *pData++ = SPI_ABS_ReadWriteByte(0x00, BOARD_SPI_NRF2401_CSn, kSPI_ABS_CS_KeepAsserted);
+    { 
+        *pData++ = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, 0x00, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
     }
-    *pData++ = SPI_ABS_ReadWriteByte(0x00, BOARD_SPI_NRF2401_CSn, kSPI_ABS_CS_ReturnInactive);
+    *pData++ = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, 0x00, BOARD_SPI_NRF2401_CSn, kSPI_PCS_ReturnInactive);
 	return(status);                    // return nRF24L01 status byte
 }
 
@@ -120,7 +118,8 @@ static uint8_t NRF2401_Check(void)
 
 uint8_t NRF2401_Init(void)
 {
-    SPI_ABS_Init(kSPI_ABS_CPOL0_CPHA0, 1000*1000);
+    
+    SPI_QuickInit(SPI0_SCK_PC05_SOUT_PC06_SIN_PC07, kSPI_CPOL0_CPHA0, 1000 * 1000);
 	GPIO_QuickInit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN , kGPIO_Mode_OPP);
     GPIO_QuickInit(BOARD_NRF2401_IRQ_PORT, BOARD_NRF2401_IRQ_PIN , kGPIO_Mode_IPU);
     PORT_PinMuxConfig(HW_GPIOC, BOARD_SPI_CS_PIN, kPinAlt2);

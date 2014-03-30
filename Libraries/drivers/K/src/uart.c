@@ -57,7 +57,7 @@ static const IRQn_Type UART_IRQnTable[] =
     UART5_RX_TX_IRQn,
 };
 #elif (defined(MK10D5))
-static const RegisterManipulation_Type SIM_UARTClockGateTable[] =
+static const struct reg_ops SIM_UARTClockGateTable[] =
 {
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},

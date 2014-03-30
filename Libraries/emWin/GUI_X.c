@@ -172,8 +172,8 @@ void  GUI_X_Unlock (void)
 
 
 U32  GUI_X_GetTaskId (void) 
-{ 
-  //  return ((U32)(OSTCBCur->OSTCBPrio));
+{
+
 }
 
 void GUI_TOUCH_X_ActivateX(void) 
@@ -186,32 +186,33 @@ void GUI_TOUCH_X_ActivateY(void)
 {
 
 }
-extern struct ads7843_device ads7843;
+
+
 int  GUI_TOUCH_X_MeasureX(void) 
 {
-    U16 i;
-    U16 x;
-    U16 sum = 0;
-    for(i=0;i<5;i++)
+    rt_uint8_t buf[2];
+    rt_uint16_t value;
+    rt_device_t touch_device = rt_device_find("ads7843");
+    if(touch_device != RT_NULL)
     {
-      //  ads7843.readX(&ads7843, &x); 
-        sum += x;
+        touch_device->read(touch_device, 0, buf, 2);
+        value = ((buf[0]<<8) + buf[1])>>4; //12bit mode
     }
-    return sum/5;
+    return value;
 }
 
 
 int  GUI_TOUCH_X_MeasureY(void) 
 {
-    U16 i;
-    U16 y;
-    U16 sum = 0;
-    for(i=0;i<5;i++)
+    rt_uint8_t buf[2];
+    rt_uint16_t value;
+    rt_device_t touch_device = rt_device_find("ads7843");
+    if(touch_device != RT_NULL)
     {
-     //   ads7843.readY(&ads7843, &y); 
-        sum += y;
+        touch_device->read(touch_device, 1, buf, 2);
+        value = ((buf[0]<<8) + buf[1])>>4; //12bit mode
     }
-    return sum/5;
+    return value;
 }
 /*
 *********************************************************************************************************

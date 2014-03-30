@@ -2,7 +2,6 @@
 #include "uart.h"
 #include "i2c.h"
 #include "systick.h"
-#include "cpuidy.h"
 #include "common.h"
 
 #include <rtthread.h>
@@ -12,6 +11,7 @@
 #include "sram.h"
 
 #include <drivers/spi.h>
+#include "rtt_spi.h"
 
 #ifdef __CC_ARM
 extern int Image$$RW_IRAM1$$ZI$$Limit;
@@ -27,8 +27,7 @@ extern int __bss_end;
 #define KINETIS_SRAM_SIZE_IN_KB         (64)
 #define KINETIS_SRAM_END                (0x20000000 + KINETIS_SRAM_SIZE_IN_KB * 1024)
 
-static struct rt_spi_device spi_device;
-    
+
 void rt_hw_board_init(void)
 {
     DelayInit();
@@ -42,9 +41,28 @@ void rt_hw_board_init(void)
     rt_hw_sd_init();
     rt_hw_lcd_init();
     rt_hw_spi_bus_init();
-    /* attacted */
-    rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", RT_NULL);
-    
+    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
+    /* attacted spi2 - 1*/
+    {
+        static struct rt_spi_device spi_device;
+        static struct kinetis_spi_cs spi_cs_0;
+        spi_cs_0.ch = 1;
+        /* pinMux */
+        PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
+        rt_spi_bus_attach_device(&spi_device, "spi21", "spi2", &spi_cs_0);
+    }
+    /* attacted spi2 - 0*/
+    {
+        static struct rt_spi_device spi_device;
+        static struct kinetis_spi_cs spi_cs_0;
+        spi_cs_0.ch = 0;
+        /* pinMux */
+        PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
+        rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", &spi_cs_0);
+    }
+
     SYSTICK_Init(1000*1000/RT_TICK_PER_SECOND);
     SYSTICK_ITConfig(ENABLE);
     SYSTICK_Cmd(ENABLE);
@@ -75,7 +93,7 @@ void rt_application_init(void)
 
 void rtthread_startup(void)
 {
-    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);
 //    CMD_FLEXBUS(0, NULL);
     rt_hw_board_init();
 	rt_show_version(); /* print logo */

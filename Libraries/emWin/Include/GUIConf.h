@@ -44,13 +44,13 @@ Purpose     : Configures emWins abilities, fonts etc.
 *
 *       Multi tasking support
 */
-#define GUI_OS                    (0)  // Compile with multitasking support
+#define GUI_OS                    (1)  // Compile with multitasking support
 
 /*********************************************************************
 *
 *       Configuration of touch support
 */
-#define GUI_SUPPORT_TOUCH         (0)  // Support a touch screen (req. win-manager)
+#define GUI_SUPPORT_TOUCH         (1)  // Support a touch screen (req. win-manager)
 
 /*********************************************************************
 *

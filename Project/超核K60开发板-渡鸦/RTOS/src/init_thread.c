@@ -19,15 +19,27 @@ void init_thread_entry(void* parameter)
     
     dfs_init();
     elm_init();
-    
+    /* check device */
+    spi_device = (struct rt_spi_device *)rt_device_find("spi21");
+    if(spi_device == RT_NULL)
+    {
+        rt_kprintf("no spi device(bus2 - device1) found\r\n");
+        rt_thread_suspend(thread);
+    }
     spi_device = (struct rt_spi_device *)rt_device_find("spi20");
     if(spi_device == RT_NULL)
     {
-        rt_kprintf("no spi device found\r\n");
+        rt_kprintf("no spi device(bus2 - device0) found\r\n");
         rt_thread_suspend(thread);
     }
-    
-    if(w25qxx_init("spi_flash", "spi20")!= RT_EOK)
+    /* attacted ads7843 to spi20 */
+    if(touch_ads7843_init("ads7843", "spi20") != RT_EOK)
+    {
+        rt_kprintf("init touch failed\r\n");
+        rt_thread_suspend(thread); 
+    }
+    /* attacted ads7843 to spi21 */
+    if(w25qxx_init("spi_flash", "spi21")!= RT_EOK)
     {
         rt_kprintf("init spi flash failed\r\n");
         rt_thread_suspend(thread); 

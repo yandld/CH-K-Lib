@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60DZ10 CHK60EVB2 DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src;..\RT-Thread_1.2.0\include;..\RT-Thread_1.2.0\components\finsh;..\RT-Thread_1.2.0\components\dfs\include;..\RT-Thread_1.2.0\components\rtgui\include\rtgui;..\RT-Thread_1.2.0\components\rtgui\include;..\..\..\..\Libraries\emWin\Include;..\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\devices\inc</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src;..\RT-Thread_1.2.0\include;..\RT-Thread_1.2.0\components\finsh;..\RT-Thread_1.2.0\components\dfs\include;..\RT-Thread_1.2.0\components\rtgui\include\rtgui;..\RT-Thread_1.2.0\components\rtgui\include;..\..\..\..\Libraries\emWin\Include;..\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\devices\inc;..\RT-Thread_1.2.0\bsp\Reven</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -819,6 +819,11 @@
               <FileType>1</FileType>
               <FilePath>..\RT-Thread_1.2.0\bsp\Reven\spi_flash_w25qxx.c</FilePath>
             </File>
+            <File>
+              <FileName>touch_ads7843.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\RT-Thread_1.2.0\bsp\Reven\touch_ads7843.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -920,14 +925,14 @@
               <FilePath>..\..\..\..\Libraries\emWin\GUIConf.c</FilePath>
             </File>
             <File>
-              <FileName>GUIConf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\Libraries\emWin\GUIConf.h</FilePath>
-            </File>
-            <File>
               <FileName>LCDConf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\emWin\LCDConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIConf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Include\GUIConf.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -998,6 +1003,11 @@
               <FileName>GUIDEMO_Bitmap.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Bitmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIDEMO_IconView.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_IconView.c</FilePath>
             </File>
           </Files>
         </Group>

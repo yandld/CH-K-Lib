@@ -1,17 +1,16 @@
 #include "common.h"
 
 //FlexBus总线定义
-#define LCD_BASE                    (0x70000000)
-#define LCD_COMMAND_ADDRESS         *(unsigned short *)0x70000000
-#define LCD_DATA_ADDRESS            *(unsigned short *)0x78000000
+#define ILI9320_BASE                    (0x70000000)
+#define ILI9320_COMMAND_ADDRESS         *(unsigned short *)0x70000000
+#define ILI9320_DATA_ADDRESS            *(unsigned short *)0x78000000
 
 //写数据，写命令
-#define WMLCDCOM(cmd)	   {LCD_COMMAND_ADDRESS = cmd;}
-#define WMLCDDATA(data)	   {LCD_DATA_ADDRESS = data;}
+#define WMLCDCOM(cmd)	   {ILI9320_COMMAND_ADDRESS = cmd;}
+#define WMLCDDATA(data)	   {ILI9320_DATA_ADDRESS = data;}
 
 #define LCD_X_MAX   (240)
 #define LCD_Y_MAX   (320)
-
 
 //画笔颜色
 #define WHITE         	 0xFFFF
@@ -53,10 +52,11 @@ static inline void LCD_DrawPoint(uint16_t x, uint16_t y, uint16_t c)
 
 
 //!< API functions
-void ili9320_Init(void);
+void ILI9320_Init(void);
 uint32_t ILI9320_GetDeivceID(void);
-uint16_t LCD_ReadPoint(uint16_t x, uint16_t y);
-void LCD_DrawHLine2(int x1, int x2, int y, uint16_t c);
-void LCD_DrawVLine2(int x, int y1, int y2, uint16_t c);
+void ILI9320_DeawVLine(int x, int y1, int y2, uint16_t c);
+void ILI9320_DeawHLine(int x1, int x2, int y, uint16_t c);
+uint16_t ILI9320_ReadPoint(uint16_t x, uint16_t y);
+void ILI9320_Clear(uint16_t c);
 
 

@@ -102,12 +102,12 @@ typedef struct
     uint16_t        minorByteTransferCount;             //MINOR LOOP 中一次传输的字节数
     uint16_t        majorTransferCount;                 //MAJOR LOOP 循环次数
     DMA_TriggerSource_Type triggerSourceMode;           //触发模式选择
-    /* 数据源配置 */
-    uint32_t        sourceAddressMinorAdj;              //数据源地址在MINOR LOOP 每次传输时的偏移量，可正可负
+    /* 源地址配置 */
+    int32_t        sourceAddressMinorAdj;              //数据源地址在MINOR LOOP 每次传输时的偏移量，可正可负
     uint32_t        sourceAddress;                      //数据源地址
     DMA_DataWidthBit_Type        sourceDataWidth;       //数据源地址数据宽度 8 16 32
-    uint32_t        sourceAddressMajorAdj;              //所有MAJOR LOOP循环完成后 源地址偏移量
-    /* 目标属性配置 */
+    int32_t        sourceAddressMajorAdj;              //所有MAJOR LOOP循环完成后 源地址偏移量
+    /* 目标地址属性配置 */
     int32_t         destAddressMinorAdj;                //目标地址在MINOR LOOP 每次传输时的偏移量，可正可负
     uint32_t        destAddress;                        //目标地址
     DMA_DataWidthBit_Type        destDataWidth;         //目标地址数据宽度 8 16 32

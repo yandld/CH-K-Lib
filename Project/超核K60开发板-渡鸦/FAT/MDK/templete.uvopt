@@ -505,7 +505,7 @@
       <Focus>0</Focus>
       <ColumnNumber>5</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>33</TopLine>
+      <TopLine>48</TopLine>
       <CurrentLine>50</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\cmd_spi.c</PathWithFileName>
@@ -569,8 +569,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>20</TopLine>
+      <CurrentLine>29</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\cmd_rtc.c</PathWithFileName>
       <FilenameWithoutPath>cmd_rtc.c</FilenameWithoutPath>

@@ -22,7 +22,7 @@
 #if (!defined(GPIO_BASES))
 
     #if     (defined(MK60DZ10))
-    #define UART_BASES {UART0, UART1, UART2, UART3, UART4}
+    #define UART_BASES {UART0, UART1, UART2, UART3, UART4, UART5}
     #elif   (defined(MK10D5))
     #define UART_BASES {UART0, UART1, UART2}
     #endif
@@ -45,6 +45,7 @@ static const struct reg_ops SIM_UARTClockGateTable[] =
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART3_MASK},
     {(void*)&(SIM->SCGC1), SIM_SCGC1_UART4_MASK},
+    {(void*)&(SIM->SCGC1), SIM_SCGC1_UART5_MASK},
 };
 /* interrupt handler table */
 static const IRQn_Type UART_IRQnTable[] = 
@@ -206,6 +207,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     uint16_t sbr;
     uint8_t brfa; 
     uint32_t clock;
+    static bool is_fitst_init = true;
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(UART_InitStruct->instance));
     /* enable clock gate */
@@ -231,7 +233,13 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     /* enable Tx Rx */
     UART_InstanceTable[UART_InitStruct->instance]->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     /* link debug instance */
-    UART_DebugInstance = UART_InitStruct->instance;
+    
+    /* 如果是第一次初始化 则自动连接到printf */
+    if(is_fitst_init)
+    {
+        UART_DebugInstance = UART_InitStruct->instance;
+    }
+    is_fitst_init = false;
 }
 
 /**

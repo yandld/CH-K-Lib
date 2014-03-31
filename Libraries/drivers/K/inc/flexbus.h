@@ -45,6 +45,16 @@
 #define kFLEXBUS_BE_AssertedWrite       (0x00)
 #define kFLEXBUS_BE_AssertedReadWrite   (0x01)
 
+
+typedef enum
+{
+    kFLEXBUS_CSPMCR_Group1,
+    kFLEXBUS_CSPMCR_Group2,  
+    kFLEXBUS_CSPMCR_Group3,
+    kFLEXBUS_CSPMCR_Group4,
+    kFLEXBUS_CSPMCR_Group5,    
+}FLEXBUS_PortMultiplexingSelect_Type;
+
 //!< Flexus 控制信号复用选择
 #define kFLEXBUS_CSPMCR_GROUP1_ALE      (0x00)
 #define kFLEXBUS_CSPMCR_GROUP1_CS1      (0x01)
@@ -76,7 +86,7 @@ typedef struct
 
 //!< API functions
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct);
-void FLEXBUS_PortMuxConfig(uint32_t config);
+void FLEXBUS_PortMuxConfig(FLEXBUS_PortMultiplexingSelect_Type group, uint32_t config);
 
 #endif
 

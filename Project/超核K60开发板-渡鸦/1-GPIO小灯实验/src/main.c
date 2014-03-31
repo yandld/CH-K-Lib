@@ -1,7 +1,7 @@
 #include "gpio.h"
 #include "common.h"
 /* CH Kinetis固件库 V2.50 版本 */
-/* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */
+/* 修改主频 请修改 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
 /* GPIO 工作模式 */
 /*
@@ -11,6 +11,15 @@
  *         @arg kGPIO_Mode_OOD :开漏输出 如果不清楚这2种输出的区别请 百度..
  *         @arg kGPIO_Mode_OPP :推挽输出
  */
+ 
+/*
+     实验名称：GPIO小灯实验
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：控制PTE端口的6引脚是输出模式
+      在低电平时小灯亮起，在高电平时小灯熄灭
+      小灯周期性闪烁，闪烁时间间隔500ms     
+*/
  
 int main(void)
 {

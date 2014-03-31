@@ -183,7 +183,7 @@ void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun)
  */
 uint8_t DMA_IsTransferComplete(uint8_t chl)
 {
-    if(DMA0->TCD[chl].CSR & (1<<chl))
+    if(DMA0->ERQ & (1 << chl))
     {
         if(DMA0->TCD[chl].CSR & DMA_CSR_DONE_MASK)
         {

@@ -33,7 +33,7 @@ int main(void)
     DMA_InitStruct1.majorTransferCount = 1; /* 最大可以被触发 1次 */
     
     DMA_InitStruct1.sourceAddress = (uint32_t)SourceBuffer; /*源地址 */
-    DMA_InitStruct1.sourceAddressMajorAdj = -5; /* 每次触发传输Minor Loop后源地址 偏移量 */
+    DMA_InitStruct1.sourceAddressMajorAdj = 0; /* 每次触发传输Minor Loop后源地址 偏移量 */
     DMA_InitStruct1.sourceAddressMinorAdj = 1;  /* 每次触发传输Major Loop后源地址 偏移量 */
     DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8; /* 8位数据位宽 */
     

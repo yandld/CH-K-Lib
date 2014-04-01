@@ -48,8 +48,14 @@ int main(void)
     while(DMA_IsTransferComplete(HW_DMA_CH0));
     for(i=0;i<ARRAY_SIZE(DestBuffer);i++)
     {
-        printf("Dest[%d]:%c\r\n", i, DestBuffer[i]);
+        /* 如果拷贝不成功 */
+        if(DestBuffer[i] != SourceBuffer[i])
+        {
+            printf("DMA test error:%d\r\n", i);
+            while(1);
+        }
     }
+    printf("DMA memcpy test OK!");
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

@@ -204,7 +204,6 @@ void TSI_CallbackInstall(TSI_CallBackType AppCBFun)
  */
 void TSI0_IRQHandler(void)
 {
-    uint32_t chl_array;
     /* clear all IT pending bit */
     TSI0->GENCS |= TSI_GENCS_OUTRGF_MASK;
 	TSI0->GENCS |= TSI_GENCS_EOSF_MASK;

@@ -37,7 +37,7 @@ int main(void)
     GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_RisingEdge);
     GPIO_ITDMAConfig(HW_GPIOA, 4,  kGPIO_IT_RisingEdge);
     
-    printf("NVIC test\r\n");
+    printf("NVIC test connect E26&A04\r\n");
     /* 将系统 中断优先级分组 可以配置 16个 抢占优先级 和16个 子优先级 */
     NVIC_SetPriorityGrouping(3);
     printf("NVIC_PriorityGrouping:%d\r\n", NVIC_GetPriorityGrouping());

@@ -17,10 +17,12 @@
 
 #include <stdint.h>
 
+/* FTM 硬件模块号 */
 #define HW_FTM0    (0x00)
 #define HW_FTM1    (0x01) 
 #define HW_FTM2    (0x02) 
 
+/* FTM可用的通道 */
 #define HW_FTM_CH0 (0x00)
 #define HW_FTM_CH1 (0x01)
 #define HW_FTM_CH2 (0x02)

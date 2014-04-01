@@ -54,7 +54,7 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
     PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     
-    printf("ftm test, pwm will be generated on PC01\r\n");
+    printf("ftm test, pwm will be generated on PA06\r\n");
     
     /* 使用快速初始化 帮助初学者完成必要配置 */
     FTM_PWM_QuickInit(FTM0_CH3_PA06, 3000);

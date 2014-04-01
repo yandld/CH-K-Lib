@@ -35,7 +35,7 @@ int main(void)
     ADC_StartConversion(HW_ADC0, 19, kADC_MuxA);
     
     /* 初始化 PIT模块 */
-    PIT_QuickInit(HW_PIT_CH0, 1000); /* 1ms 触发一次 */
+    PIT_QuickInit(HW_PIT_CH0, 1000*500); /* 500 ms 触发一次 */
     while(1)
     {
         /* 如果ADC转换完成 */
@@ -43,7 +43,7 @@ int main(void)
         {
             /* 读取ADC的值  kADC_MuxA是每个ADC通道的转换器 默认都是 kADC_MuxA  MuxB 一般不能用于软件触发 */
             printf("ADC:%04d\r", ADC_ReadValue(HW_ADC0, kADC_MuxA));
-            DelayMs(2);
+            DelayMs(5);
         }
     }
 }

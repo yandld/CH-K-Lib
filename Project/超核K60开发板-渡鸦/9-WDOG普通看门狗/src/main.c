@@ -23,10 +23,11 @@ int main(void)
     /* 初始化看门狗 */
     WDOG_InitTypeDef WDOG_InitStruct1 = {0};
     WDOG_InitStruct1.mode = kWDOG_Mode_Normal;
-    WDOG_InitStruct1.timeOutInMs = 1000; /* 时限 2000MS : 2000MS 内没有喂狗则复位 */
+    WDOG_InitStruct1.timeOutInMs = 2000; /* 时限 2000MS : 2000MS 内没有喂狗则复位 */
     WDOG_Init(&WDOG_InitStruct1);
     
-    printf("WDOG test start! press KEY1 to feed dog\r\n");
+    printf("WDOG test start!\r\n");
+    printf("press KEY1 to feed dog within 2S or system with reset!\r\n");
     
     /* 点亮LED 然后熄灭  指示系统运行从新上电运行 */
     GPIO_WriteBit(HW_GPIOE, 6, 0);

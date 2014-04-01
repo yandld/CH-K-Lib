@@ -78,6 +78,7 @@ int main(void)
             /* 读取ADC的值  kADC_MuxA是每个ADC通道的转换器 默认都是 kADC_MuxA  MuxB 一般不能用于软件触发 */
             printf("ADC:%04d\r", ADC_ReadValue(HW_ADC0, kADC_MuxA));
         }
+        DelayMs(5);
     }
 }
 

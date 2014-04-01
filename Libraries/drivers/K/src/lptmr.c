@@ -213,7 +213,7 @@ uint32_t LPTMR_PC_QuickInit(uint32_t LPTMRxMAP)
  */
 void LPTMR_ClearCounter(void)
 {
-    //disable and reenable moudle to clear counter
+    /* disable and reenable moudle to clear counter */
     LPTMR0->CSR &= ~LPTMR_CSR_TEN_MASK;
     LPTMR0->CSR |= LPTMR_CSR_TEN_MASK;
 }

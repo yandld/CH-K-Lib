@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>mk60dz10</TargetName>
+      <TargetName>mk60d10</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60DZ10 RAVEN DEBUG</Define>
+              <Define>MK60D10 RAVEN DEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X</IncludePath>
             </VariousControls>
@@ -405,14 +405,14 @@
           <GroupName>startup</GroupName>
           <Files>
             <File>
-              <FileName>system_MK60DZ10.c</FileName>
+              <FileName>system_MK60D10.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\system_MK60DZ10.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\system_MK60D10.c</FilePath>
             </File>
             <File>
-              <FileName>startup_MK60DZ10.s</FileName>
+              <FileName>startup_MK60D10.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60DZ10.s</FilePath>
+              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60D10.s</FilePath>
             </File>
           </Files>
         </Group>

@@ -39,8 +39,10 @@ int main(void)
     
     while(1)
     {
-        /* 翻转引脚电平 原来是低变成高 原来是高变成低 */
-        GPIO_ToggleBit(HW_GPIOE, 6);
+//        /* 翻转引脚电平 原来是低变成高 原来是高变成低 */
+//        GPIO_ToggleBit(HW_GPIOE, 6);
+        /* 另外一种方法 使用位带操作 */
+        PEout(6) = !PEout(6);
         DelayMs(500);
     }
 }

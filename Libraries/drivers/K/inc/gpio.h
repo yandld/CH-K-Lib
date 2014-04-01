@@ -101,8 +101,11 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 #define IS_PORT_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(PORT_InstanceTable))
 #define IS_GPIO_ALL_PIN(PIN)  (PIN < 32)
 
-//!< BitBand Operation
-#define BITBAND(addr,bitnum) ((addr & 0xF0000000)+0x2000000+((addr &0xFFFFF)<<5)+(bitnum<<2)) 
+/* 位带操作 内存偏移计算 详见 Cortex-M4 Generic User Guide 2.25 */
+/* CM4中有2块bitband区域 0x2000_0000-0x200F_FFFF 映射至 0x2200_0000-0x23FF_FFFF
+                         0x4000_0000-0x4000_FFFF 映射至 0x4200_0000-0x43FF_FFFF
+*/
+#define BITBAND(addr,bitnum) ((addr & 0xF0000000) + 0x2000000 + ((addr & 0xFFFFF) << 5) + (bitnum << 2)) 
 #define MEM_ADDR(addr)  *((volatile unsigned long  *)(addr)) 
 #define BIT_ADDR(addr, bitnum)   MEM_ADDR(BITBAND(addr, bitnum)) 
 //IO Mapping

@@ -28,6 +28,14 @@
  UART5_RX_PD08_TX_PD09   
 */
  
+ /*
+     实验名称：UART打印信息
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：使用串口UART将芯片的出厂信息在芯片上电后发送出去
+        发送完毕后，进入while中，执行小灯闪烁效果
+*/
+ 
 int main(void)
 {
     uint32_t clock;

@@ -6,6 +6,12 @@
 /* CH Kinetis固件库 V2.50 版本 */
 /* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
+/*
+     实验名称：UART采用轮询方式接收数据
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：给开发板发送什么数据，开发板将接收到的数据转发回去
+*/
  
 int main(void)
 {
@@ -23,7 +29,7 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
     PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     
-    /* 打印芯片信息 */
+    /* 打印信息 */
     printf(" type any character whitch will echo...\r\n");
     
     while(1)

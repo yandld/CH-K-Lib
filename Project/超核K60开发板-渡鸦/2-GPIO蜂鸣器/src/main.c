@@ -41,7 +41,7 @@ int main(void)
     {
         /* 翻转引脚电平 原来是低变成高 原来是高变成低 */
         GPIO_ToggleBit(HW_GPIOA, 6);
-        DelayMs(10); //延时 10ms
+        DelayMs(300); //延时 10ms
     }
 }
 

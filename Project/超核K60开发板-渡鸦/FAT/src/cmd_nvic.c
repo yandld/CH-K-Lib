@@ -6,7 +6,7 @@ int CMD_NVIC(int argc, char * const * argv)
 {
     printf("NVIC Test\r\n");
     uint32_t PreemptPriority, SubPriority;
-    NVIC_SetPriorityGrouping(NVIC_PriorityGroup_2);
+    NVIC_SetPriorityGrouping(3);
     printf("SystemPrioirityGroup:%d\r\n", NVIC_GetPriorityGrouping());
     
     NVIC_SetPriority(PORTA_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 2, 1));

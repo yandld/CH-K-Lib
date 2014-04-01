@@ -247,7 +247,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     //缓冲区描述符初始化
     ENET_BDInit();
 	//很重要。。
-	MCG->C2 &= ~MCG_C2_EREFS_MASK;
+	MCG->C2 &= ~MCG_C2_EREFS0_MASK;
 	//复位以太网
 	ENET->ECR = ENET_ECR_RESET_MASK;
 	for( usData = 0; usData < 100; usData++ )

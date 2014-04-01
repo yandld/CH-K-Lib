@@ -29,7 +29,7 @@ static SPI_CallBackType SPI_CallBackTable[ARRAY_SIZE(SPI_InstanceTable)] = {NULL
 #if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15))
 static const struct reg_ops SIM_SPIClockGateTable[] =
 {
-    {(void*)&(SIM->SCGC6), SIM_SCGC6_DSPI0_MASK},
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI0_MASK},
     {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI1_MASK},
     {(void*)&(SIM->SCGC3), SIM_SCGC3_SPI2_MASK},
 };

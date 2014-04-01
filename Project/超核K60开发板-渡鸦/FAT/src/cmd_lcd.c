@@ -114,6 +114,7 @@ static uint32_t AppGetData(uint32_t ReqestedByte, uint32_t Offset, uint8_t **ppD
 
 int CMD_LCD(int argc, char * const * argv)
 {
+    ILI9320_Init();
     #if 0
     uint8_t res;
     uint32_t i;

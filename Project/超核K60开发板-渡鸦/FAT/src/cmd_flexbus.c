@@ -77,10 +77,13 @@ int CMD_FLEXBUS(int argc, char * const * argv)
     FLEXBUS_InitStruct.CSn = kFLEXBUS_CS0;
     FLEXBUS_InitStruct.dataAlignMode = kFLEXBUS_DataLeftAligned;
     FLEXBUS_InitStruct.dataWidth = kFLEXBUS_PortSize_16Bit;
-    FLEXBUS_InitStruct.baseAddress = LCD_BASE;
+    FLEXBUS_InitStruct.baseAddress = ILI9320_BASE;
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
     FLEXBUS_Init(&FLEXBUS_InitStruct);
-    FLEXBUS_PortMuxConfig(FB_CSPMCR_GROUP3(kFLEXBUS_CSPMCR_GROUP3_BE_23_16) | FB_CSPMCR_GROUP2(kFLEXBUS_CSPMCR_GROUP2_BE_31_24) | (FB_CSPMCR_GROUP1(kFLEXBUS_CSPMCR_GROUP1_CS1)));
+    /* config Flexbus SRAM pinmux */
+    FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
+    FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group2, kFLEXBUS_CSPMCR_GROUP2_BE_31_24);
+    FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group1, kFLEXBUS_CSPMCR_GROUP1_CS1);
 #endif
 
     return 0;

@@ -5,31 +5,69 @@
 #include "gpio.h"
 
 
+#define TSI_THRESHOLD   (2000)
 
-void TSI_ISR(uint32_t outOfRangeArray)
+void TSI_ISR(void)
 {
+    uint32_t i;
+    static bool inital_it = true;
+    static int32_t inital_value[16];
+    int32_t tsi_value[16];
+    uint32_t out_of_rang_flag = 0;
+    TSI_ITDMAConfig(kTSI_IT_Disable);
+    if(inital_it)
+    {
+        /* 记录采集第一次的初始值 */
+        for(i = 1; i < 5; i++)
+        {
+            inital_value[i] = TSI_GetCounter(i);
+        }
+        inital_it = false;        
+    }
+    for(i = 1; i < 5; i++)
+    {
+        tsi_value[i] = TSI_GetCounter(i);
+    }
+    /* 判断是否超出范围 */
+    for(i = 1; i < 5; i++)
+    {
+        if(ABS(tsi_value[i] - inital_value[i]) > TSI_THRESHOLD)
+        {
+            out_of_rang_flag |= (1<<i);
+        }
+        else
+        {
+            out_of_rang_flag &= ~(1<<i);
+        }
+    }
+
+
     static uint32_t last_chl_array;
     uint32_t value;
-    TSI_ITDMAConfig(kTSI_IT_Disable);
-    value = outOfRangeArray^last_chl_array;
-    if(value & outOfRangeArray & (1<<1))
+    
+   // printf("0x%X\r", out_of_rang_flag);
+    
+    value = out_of_rang_flag ^ last_chl_array;
+    if(value & out_of_rang_flag & (1<<1))
     {
         GPIO_ToggleBit(HW_GPIOE, 6);
     }
-    if(value & outOfRangeArray & (1<<2))
+    if(value & out_of_rang_flag & (1<<2))
     {
         GPIO_ToggleBit(HW_GPIOE, 12);
     }
-    if(value & outOfRangeArray & (1<<3))
+    if(value & out_of_rang_flag & (1<<3))
     {
         GPIO_ToggleBit(HW_GPIOE, 11);
     }
-    if(value & outOfRangeArray & (1<<4))
+    if(value & out_of_rang_flag & (1<<4))
     {
         GPIO_ToggleBit(HW_GPIOE, 7);
     }
-    last_chl_array = outOfRangeArray;
+    last_chl_array = out_of_rang_flag;
+    
     TSI_ITDMAConfig(kTSI_IT_EndOfScan);
+
 }
 
 int CMD_TSI(int argc, char * const argv[])

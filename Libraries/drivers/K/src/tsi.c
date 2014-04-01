@@ -72,7 +72,7 @@ static void TSI_Calibration(uint32_t chl, uint32_t threshld)
         printf("TSI_Calibration cnt:%d\r\n", cnt);
         printf("TSI_Calibration threshld:%d\r\n", threshld);
     #endif
-	TSI0->THRESHLD[chl] = TSI_THRESHLD_HTHH(cnt + threshld) | TSI_THRESHLD_LTHH(cnt - threshld);
+	TSI0->THRESHOLD = TSI_THRESHOLD_HTHH(cnt + threshld) | TSI_THRESHOLD_LTHH(cnt - threshld);
     TSI0->GENCS &= ~TSI_GENCS_TSIEN_MASK;
 }
 
@@ -92,9 +92,11 @@ static void TSI_Calibration(uint32_t chl, uint32_t threshld)
 void TSI_Init(TSI_InitTypeDef* TSI_InitStruct)
 {
 	SIM->SCGC5 |= (SIM_SCGC5_TSI_MASK); 
+    /* disalbe moudle */
+	TSI0->GENCS &= ~TSI_GENCS_TSIEN_MASK;
     /* config general settings */
     TSI0->GENCS |= ((TSI_GENCS_NSCN(10))|(TSI_GENCS_PS(3)));
-    TSI0->SCANC |= ((TSI_SCANC_EXTCHRG(3))|(TSI_SCANC_REFCHRG(31))|(TSI_SCANC_DELVOL(7))|(TSI_SCANC_SMOD(0))|(TSI_SCANC_AMPSC(0)));
+    TSI0->SCANC |= ((TSI_SCANC_EXTCHRG(3))|(TSI_SCANC_REFCHRG(31))|(TSI_SCANC_SMOD(0))|(TSI_SCANC_AMPSC(0)));
     /* enable all pens */
     /* FIXME: seems if there is only one TSI pen, TSI cannot work in continues module(STM=1) */	
     TSI0->PEN |= (1<<TSI_InitStruct->chl|(1<<0));			
@@ -116,7 +118,7 @@ void TSI_Init(TSI_InitTypeDef* TSI_InitStruct)
 	TSI0->GENCS |= TSI_GENCS_EOSF_MASK;	 
 	TSI0->GENCS |= TSI_GENCS_EXTERF_MASK;
 	TSI0->GENCS |= TSI_GENCS_OVRF_MASK;
-	TSI0->STATUS = 0xFFFFFFFF;
+//	TSI0->STATUS = 0xFFFFFFFF;
     /* enable moudle */
 	TSI0->GENCS |= TSI_GENCS_TSIEN_MASK;
 }
@@ -206,11 +208,11 @@ void TSI0_IRQHandler(void)
     /* clear all IT pending bit */
     TSI0->GENCS |= TSI_GENCS_OUTRGF_MASK;
 	TSI0->GENCS |= TSI_GENCS_EOSF_MASK;
-    chl_array = TSI0->STATUS & 0xFFFF;
-    TSI0->STATUS = 0xFFFFFFFF;
+  //  chl_array = TSI0->STATUS & 0xFFFF;
+   // TSI0->STATUS = 0xFFFFFFFF;
     if(TSI_CallBackTable[0])
     {
-        TSI_CallBackTable[0](chl_array);
+        TSI_CallBackTable[0]();
     }  
 }
 

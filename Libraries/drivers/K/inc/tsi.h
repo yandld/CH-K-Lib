@@ -74,7 +74,7 @@ typedef struct
 
 
 //!< TSI CallBack Type
-typedef void (*TSI_CallBackType)(uint32_t outOfRangeArray);
+typedef void (*TSI_CallBackType)(void);
 
 //!< API functions
 uint32_t TSI_QuickInit(uint32_t UARTxMAP);

@@ -36,7 +36,7 @@ void rt_hw_board_init(void)
 	rt_console_set_device("uart");
 #endif 
     SRAM_Init();
-    ili9320_Init();
+    ILI9320_Init();
     
     rt_hw_sd_init();
     rt_hw_lcd_init();

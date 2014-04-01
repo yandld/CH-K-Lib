@@ -76,7 +76,6 @@ static long _cpuusage(void)
     rt_uint8_t major, minor;
     cpu_usage_init();
     cpu_usage_get(&major, &minor);
-    //rt_vsprintf()
     rt_kprintf("CPUUsage: %d.%d%\r\n", major, minor);
 
     return 0;
@@ -88,5 +87,4 @@ int cpuusage(int argc, char ** argv)
     return 0;
 }
 
-MSH_CMD_EXPORT(cpuusage, show cpuusage)
-
+FINSH_FUNCTION_EXPORT_ALIAS(cpuusage, __cmd_cpuusage, cpu.);

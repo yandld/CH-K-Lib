@@ -70,7 +70,7 @@ void ILI9320_Clear(uint16_t c)
 	}
 }
 
-void ILI9320_DeawHLine(int x1, int x2, int y, uint16_t c)
+void ILI9320_DrawHLine(int x1, int x2, int y, uint16_t c)
 {
     ILI9320_SetCursor(x1, y);
     WMLCDCOM(0x22);
@@ -81,7 +81,7 @@ void ILI9320_DeawHLine(int x1, int x2, int y, uint16_t c)
     }
 }
 
-void ILI9320_DeawVLine(int x, int y1, int y2, uint16_t c)
+void ILI9320_DrawVLine(int x, int y1, int y2, uint16_t c)
 {
     while (y1 < y2)
     {

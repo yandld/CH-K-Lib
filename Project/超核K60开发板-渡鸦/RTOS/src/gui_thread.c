@@ -4,15 +4,6 @@
   #include "WM.h"
 
   #include "CHECKBOX.h"
-  #include "FRAMEWIN.h"
-  #include "PROGBAR.h"
-  #include "TEXT.h"
-  #include "BUTTON.h"
-  #include "SLIDER.h"
-  #include "HEADER.h"
-  #include "GRAPH.h"
-  #include "ICONVIEW.h"
-  #include "LISTVIEW.h"
   #include "TREEVIEW.h"
 
 void gui_thread_entry(void* parameter)
@@ -24,6 +15,8 @@ void gui_thread_entry(void* parameter)
   //  GUI_Exec();
   //  show_pic("/SD/PIC/INDEX.BMP");
     GUI_CURSOR_Show();
+    
+    CreateRaven();
   //  MainTask();
 	while(1)
 	{

@@ -39,6 +39,7 @@ static rt_err_t configure(struct rt_spi_device* device, struct rt_spi_configurat
     {
         SPI_InitStruct1.baudrate = configuration->max_hz;
     }
+    rt_kprintf("spi bus baudrate:%d\r\n", SPI_InitStruct1.baudrate);
     /* frame foramt */
     SPI_InitStruct1.frameFormat = (SPI_FrameFormat_Type)(configuration->mode & 0x03);
     /* MSB or LSB */

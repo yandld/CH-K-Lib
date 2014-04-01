@@ -38,7 +38,7 @@ rt_err_t touch_ads7843_init(const char * flash_device_name, const char * spi_dev
         struct rt_spi_configuration cfg;
         cfg.data_width = 8;
         cfg.mode = RT_SPI_MODE_0 | RT_SPI_MSB; /* SPI Compatible: Mode 0 and Mode 3 */
-        cfg.max_hz = 1000 * 1000;
+        cfg.max_hz = 2 * 1000 * 1000;
         rt_spi_configure(rt_spi_device, &cfg);
     }
 

@@ -1009,6 +1009,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_IconView.c</FilePath>
             </File>
+            <File>
+              <FileName>GUIDEMO_Treeview.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_Treeview.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

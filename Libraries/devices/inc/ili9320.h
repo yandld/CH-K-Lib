@@ -54,8 +54,8 @@ static inline void LCD_DrawPoint(uint16_t x, uint16_t y, uint16_t c)
 //!< API functions
 void ILI9320_Init(void);
 uint32_t ILI9320_GetDeivceID(void);
-void ILI9320_DeawVLine(int x, int y1, int y2, uint16_t c);
-void ILI9320_DeawHLine(int x1, int x2, int y, uint16_t c);
+void ILI9320_DrawVLine(int x, int y1, int y2, uint16_t c);
+void ILI9320_DrawHLine(int x1, int x2, int y, uint16_t c);
 uint16_t ILI9320_ReadPoint(uint16_t x, uint16_t y);
 void ILI9320_Clear(uint16_t c);
 

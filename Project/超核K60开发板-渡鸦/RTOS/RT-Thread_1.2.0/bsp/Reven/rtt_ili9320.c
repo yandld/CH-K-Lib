@@ -18,7 +18,7 @@ void rt_hw_lcd_set_pixel(const char* c, int x, int y)
 /* 获取像素点颜色 */
 void rt_hw_lcd_get_pixel(char* c, int x, int y)
 {
-    *(uint16_t*)c = LCD_ReadPoint(x, y);
+    *(uint16_t*)c = ILI9320_ReadPoint(x, y);
 }
 
 
@@ -43,14 +43,14 @@ void rt_hw_lcd_draw_hline(const char* c, int x1, int x2, int y)
 {
     rt_uint16_t p;
     p = *(uint16_t *)c;
-    LCD_DrawHLine2(x1, x2, y, p);
+    ILI9320_DrawHLine(x1, x2, y, p);
 }
 
 void rt_hw_lcd_draw_vline(const char* c, int x, int y1, int y2)
 {
     rt_uint16_t p;
     p = *(uint16_t *)c;
-    LCD_DrawVLine2(x, y1, y2, p);
+    ILI9320_DrawVLine(x, y1, y2, p);
 }
 
 struct rt_device_graphic_ops lcd_ili_ops =

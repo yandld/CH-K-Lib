@@ -59,7 +59,8 @@ int show_pic(const char *path)
             if(!rt_strncmp(ex_name_pos, "BMP", 3))
             {
                 rt_kprintf(" W:%d", GUI_BMP_GetXSize(ptr));
-                rt_kprintf(" H:%d\r\n", GUI_BMP_GetYSize(ptr));  
+                rt_kprintf(" H:%d\r\n", GUI_BMP_GetYSize(ptr));
+                
                 GUI_BMP_Draw(ptr , 0, 0);
             }
             if(!rt_strncmp(ex_name_pos, "JPG", 3))

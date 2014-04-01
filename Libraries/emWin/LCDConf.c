@@ -160,9 +160,10 @@ void LCD_X_Config(void) {
     LCD_SetSizeEx    (0, XSIZE_PHYS,   YSIZE_PHYS);
     LCD_SetVSizeEx   (0, VXSIZE_PHYS,  VYSIZE_PHYS);
     /* Horzital display */
-    Config.Orientation   =  GUI_MIRROR_X|GUI_SWAP_XY;
+    Config.Orientation   =  0;
     GUIDRV_FlexColor_Config(pDevice, &Config);
-    unsigned Orientation = (GUI_MIRROR_X|GUI_SWAP_XY);
+    unsigned Orientation = 0;
+    
     GUI_TOUCH_SetOrientation(Orientation);
     GUI_TOUCH_Calibrate(GUI_COORD_X, 0, 239, TOUCH_AD_LEFT, TOUCH_AD_RIGHT);
     GUI_TOUCH_Calibrate(GUI_COORD_Y, 0, 319, TOUCH_AD_TOP, TOUCH_AD_BOTTOM);	

@@ -94,6 +94,36 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 }
 
 /**
+ * @brief  获得 DMA MajorLoopCount 计数值
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @retval 计数值
+ */
+uint32_t DMA_GetMajorLoopCount(uint8_t chl)
+{
+    return (DMA0->TCD[chl].CITER_ELINKNO & DMA_CITER_ELINKNO_CITER_MASK) >> DMA_CITER_ELINKNO_CITER_SHIFT;
+}
+
+/**
+ * @brief  设置 DMA MajorLoopCount 计数值
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @retval None
+ * @note   数值不能超过 DMA_CITER_ELINKNO_CITER_MASK
+ */
+void DMA_SetMajorLoopCount(uint8_t chl, uint32_t val)
+{
+    DMA0->TCD[chl].CITER_ELINKNO &= ~DMA_CITER_ELINKNO_CITER_MASK;
+    DMA0->TCD[chl].CITER_ELINKNO |= DMA_CITER_ELINKNO_CITER(val);
+}
+
+/**
  * @brief  开始一次DMA传输
  * @code
  *     //开启DMA 的0通道进行数据传输
@@ -232,14 +262,10 @@ void DMA_SetSourceAddress(uint8_t chl, uint32_t address)
 
 /**
  * @brief  取消DMA模块指定通道的数据传输
- * @param  chl: DMA通道号
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
+ * @param  None
  * @retval None
  */
-void DMA_CancelTransfer(uint8_t chl)
+void DMA_CancelTransfer(void)
 {
     DMA0->CR |= DMA_CR_CX_MASK;
 }

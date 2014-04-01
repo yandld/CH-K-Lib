@@ -133,9 +133,12 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct);
 uint8_t DMA_IsTransferComplete(uint8_t chl);
 void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config);
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun);
-void DMA_CancelTransfer(uint8_t chl);
+void DMA_CancelTransfer(void);
 void DMA_SetDestAddress(uint8_t chl, uint32_t address);
 void DMA_SetSourceAddress(uint8_t chl, uint32_t address);
+uint32_t DMA_GetMajorLoopCount(uint8_t chl);
+void DMA_SetMajorLoopCount(uint8_t chl, uint32_t val);
+
 
 
 #endif

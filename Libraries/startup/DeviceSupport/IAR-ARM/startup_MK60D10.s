@@ -1,12 +1,12 @@
 ;/*****************************************************************************
-; * @file:    startup_MK60DZ10.s
+; * @file:    startup_MK60D10.s
 ; * @purpose: CMSIS Cortex-M4 Core Device Startup File
-; *           MK10DZ10
+; *           MK10D10
 ; * @version: 1.0
-; * @date:    2013-8-12
+; * @date:    2014-4-2
 ; *----------------------------------------------------------------------------
 ; *
-; * Copyright: 1997 - 2013 Freescale Semiconductor, Inc. All Rights Reserved.
+; * www.beyondcore.net
 ; *
 ; ******************************************************************************/
 
@@ -31,13 +31,10 @@
 
         ;; Forward declaration of sections.
         SECTION CSTACK:DATA:NOROOT(3)
-
         SECTION .intvec:CODE:NOROOT(2)
-
         EXTERN  __iar_program_start
-        EXTERN  SystemInit
+        EXTERN  SystemInit        
         PUBLIC  __vector_table
-        PUBLIC  __vector_table_0x1c
         PUBLIC  __Vectors
         PUBLIC  __Vectors_End
         PUBLIC  __Vectors_Size
@@ -46,25 +43,23 @@
 
 __vector_table
         DCD     sfe(CSTACK)
-        DCD     Reset_Handler
+                DCD     Reset_Handler  ; Reset Handler
+                DCD     NMI_Handler  ; NMI Handler
+                DCD     HardFault_Handler  ; Hard Fault Handler
+                DCD     MemManage_Handler  ; MPU Fault Handler
+                DCD     BusFault_Handler  ; Bus Fault Handler
+                DCD     UsageFault_Handler  ; Usage Fault Handler
+                DCD     0  ; Reserved
+                DCD     0  ; Reserved
+                DCD     0  ; Reserved
+                DCD     0  ; Reserved
+                DCD     SVC_Handler  ; SVCall Handler
+                DCD     DebugMon_Handler  ; Debug Monitor Handler
+                DCD     0  ; Reserved
+                DCD     PendSV_Handler  ; PendSV Handler
+                DCD     SysTick_Handler  ; SysTick Handler
 
-        DCD     NMI_Handler
-        DCD     HardFault_Handler
-        DCD     MemManage_Handler
-        DCD     BusFault_Handler
-        DCD     UsageFault_Handler
-__vector_table_0x1c
-        DCD     0
-        DCD     0
-        DCD     0
-        DCD     0
-        DCD     SVC_Handler
-        DCD     DebugMon_Handler
-        DCD     0
-        DCD     PendSV_Handler
-        DCD     SysTick_Handler
-
-        ; External Interrupts
+                ; External Interrupts
                 DCD     DMA0_IRQHandler  ; DMA Channel 0 Transfer Complete
                 DCD     DMA1_IRQHandler  ; DMA Channel 1 Transfer Complete
                 DCD     DMA2_IRQHandler  ; DMA Channel 2 Transfer Complete
@@ -94,22 +89,22 @@ __vector_table_0x1c
                 DCD     SPI0_IRQHandler  ; SPI0 Interrupt
                 DCD     SPI1_IRQHandler  ; SPI1 Interrupt
                 DCD     SPI2_IRQHandler  ; SPI2 Interrupt
-                DCD     CAN0_ORed_Message_buffer_IRQHandler  ; CAN0 OR'd Message Buffers Interrupt
-                DCD     CAN0_Bus_Off_IRQHandler  ; CAN0 Bus Off Interrupt
-                DCD     CAN0_Error_IRQHandler  ; CAN0 Error Interrupt
-                DCD     CAN0_Tx_Warning_IRQHandler  ; CAN0 Tx Warning Interrupt
-                DCD     CAN0_Rx_Warning_IRQHandler  ; CAN0 Rx Warning Interrupt
-                DCD     CAN0_Wake_Up_IRQHandler  ; CAN0 Wake Up Interrupt
-                DCD     Reserved51_IRQHandler  ; Reserved interrupt 51
-                DCD     Reserved52_IRQHandler  ; Reserved interrupt 52
-                DCD     CAN1_ORed_Message_buffer_IRQHandler  ; CAN1 OR'd Message Buffers Interrupt
-                DCD     CAN1_Bus_Off_IRQHandler  ; CAN1 Bus Off Interrupt
-                DCD     CAN1_Error_IRQHandler  ; CAN1 Error Interrupt
-                DCD     CAN1_Tx_Warning_IRQHandler  ; CAN1 Tx Warning Interrupt
-                DCD     CAN1_Rx_Warning_IRQHandler  ; CAN1 Rx Warning Interrupt
-                DCD     CAN1_Wake_Up_IRQHandler  ; CAN1 Wake Up Interrupt
+                DCD     CAN0_ORed_Message_buffer_IRQHandler  ; CAN0 OR'd message buffers interrupt
+                DCD     CAN0_Bus_Off_IRQHandler  ; CAN0 bus off interrupt
+                DCD     CAN0_Error_IRQHandler  ; CAN0 error interrupt
+                DCD     CAN0_Tx_Warning_IRQHandler  ; CAN0 Tx warning interrupt
+                DCD     CAN0_Rx_Warning_IRQHandler  ; CAN0 Rx warning interrupt
+                DCD     CAN0_Wake_Up_IRQHandler  ; CAN0 wake up interrupt
+                DCD     I2S0_Tx_IRQHandler  ; I2S0 transmit interrupt
+                DCD     I2S0_Rx_IRQHandler  ; I2S0 receive interrupt
+                DCD     CAN1_ORed_Message_buffer_IRQHandler  ; CAN1 OR'd message buffers interrupt
+                DCD     CAN1_Bus_Off_IRQHandler  ; CAN1 bus off interrupt
+                DCD     CAN1_Error_IRQHandler  ; CAN1 error interrupt
+                DCD     CAN1_Tx_Warning_IRQHandler  ; CAN1 Tx warning interrupt
+                DCD     CAN1_Rx_Warning_IRQHandler  ; CAN1 Rx warning interrupt
+                DCD     CAN1_Wake_Up_IRQHandler  ; CAN1 wake up interrupt
                 DCD     Reserved59_IRQHandler  ; Reserved interrupt 59
-                DCD     Reserved60_IRQHandler  ; Reserved interrupt 60
+                DCD     UART0_LON_IRQHandler  ; UART0 LON interrupt
                 DCD     UART0_RX_TX_IRQHandler  ; UART0 Receive/Transmit interrupt
                 DCD     UART0_ERR_IRQHandler  ; UART0 Error interrupt
                 DCD     UART1_RX_TX_IRQHandler  ; UART1 Receive/Transmit interrupt
@@ -132,7 +127,7 @@ __vector_table_0x1c
                 DCD     FTM2_IRQHandler  ; FTM2 fault, overflow and channels interrupt
                 DCD     CMT_IRQHandler  ; CMT interrupt
                 DCD     RTC_IRQHandler  ; RTC interrupt
-                DCD     Reserved83_IRQHandler  ; Reserved interrupt 83
+                DCD     RTC_Seconds_IRQHandler  ; RTC seconds interrupt
                 DCD     PIT0_IRQHandler  ; PIT timer channel 0 interrupt
                 DCD     PIT1_IRQHandler  ; PIT timer channel 1 interrupt
                 DCD     PIT2_IRQHandler  ; PIT timer channel 2 interrupt
@@ -144,7 +139,7 @@ __vector_table_0x1c
                 DCD     ENET_Transmit_IRQHandler  ; Ethernet MAC Transmit Interrupt
                 DCD     ENET_Receive_IRQHandler  ; Ethernet MAC Receive Interrupt
                 DCD     ENET_Error_IRQHandler  ; Ethernet MAC Error and miscelaneous Interrupt
-                DCD     I2S0_IRQHandler  ; I2S0 Interrupt
+                DCD     Reserved95_IRQHandler  ; Reserved interrupt 95
                 DCD     SDHC_IRQHandler  ; SDHC Interrupt
                 DCD     DAC0_IRQHandler  ; DAC0 interrupt
                 DCD     DAC1_IRQHandler  ; DAC1 interrupt
@@ -159,7 +154,7 @@ __vector_table_0x1c
                 DCD     PORTE_IRQHandler  ; Port E interrupt
                 DCD     Reserved108_IRQHandler  ; Reserved interrupt 108
                 DCD     Reserved109_IRQHandler  ; Reserved interrupt 109
-                DCD     Reserved110_IRQHandler  ; Reserved interrupt 110
+                DCD     SWI_IRQHandler  ; Software interrupt
                 DCD     Reserved111_IRQHandler  ; Reserved interrupt 111
                 DCD     Reserved112_IRQHandler  ; Reserved interrupt 112
                 DCD     Reserved113_IRQHandler  ; Reserved interrupt 113
@@ -331,7 +326,8 @@ Reset_Handler
         LDR     R0, =__iar_program_start
         BX      R0
 
-        PUBWEAK NMI_Handler
+
+        PUBWEAK NMI_Handler  
         SECTION .text:CODE:REORDER(1)
 NMI_Handler
         B NMI_Handler
@@ -551,15 +547,15 @@ CAN0_Rx_Warning_IRQHandler
 CAN0_Wake_Up_IRQHandler
         B CAN0_Wake_Up_IRQHandler
 
-        PUBWEAK Reserved51_IRQHandler
+        PUBWEAK I2S0_Tx_IRQHandler
         SECTION .text:CODE:REORDER(1)     
-Reserved51_IRQHandler
-        B Reserved51_IRQHandler
+I2S0_Tx_IRQHandler
+        B I2S0_Tx_IRQHandler
 
-        PUBWEAK Reserved52_IRQHandler
+        PUBWEAK I2S0_Rx_IRQHandler
         SECTION .text:CODE:REORDER(1)     
-Reserved52_IRQHandler
-        B Reserved52_IRQHandler
+I2S0_Rx_IRQHandler
+        B I2S0_Rx_IRQHandler
 
         PUBWEAK CAN1_ORed_Message_buffer_IRQHandler
         SECTION .text:CODE:REORDER(1)     
@@ -596,10 +592,10 @@ CAN1_Wake_Up_IRQHandler
 Reserved59_IRQHandler
         B Reserved59_IRQHandler
 
-        PUBWEAK Reserved60_IRQHandler
+        PUBWEAK UART0_LON_IRQHandler
         SECTION .text:CODE:REORDER(1)     
-Reserved60_IRQHandler
-        B Reserved60_IRQHandler
+UART0_LON_IRQHandler
+        B UART0_LON_IRQHandler
 
         PUBWEAK UART0_RX_TX_IRQHandler
         SECTION .text:CODE:REORDER(1)     
@@ -711,10 +707,10 @@ CMT_IRQHandler
 RTC_IRQHandler
         B RTC_IRQHandler
 
-        PUBWEAK Reserved83_IRQHandler
+        PUBWEAK RTC_Seconds_IRQHandler
         SECTION .text:CODE:REORDER(1)  
-Reserved83_IRQHandler
-        B Reserved83_IRQHandler
+RTC_Seconds_IRQHandler
+        B RTC_Seconds_IRQHandler
 
         PUBWEAK PIT0_IRQHandler
         SECTION .text:CODE:REORDER(1)      
@@ -771,10 +767,10 @@ ENET_Receive_IRQHandler
 ENET_Error_IRQHandler
         B ENET_Error_IRQHandler
 
-        PUBWEAK I2S0_IRQHandler
+        PUBWEAK Reserved95_IRQHandler
         SECTION .text:CODE:REORDER(1)      
-I2S0_IRQHandler
-        B I2S0_IRQHandler
+Reserved95_IRQHandler
+        B Reserved95_IRQHandler
 
         PUBWEAK SDHC_IRQHandler
         SECTION .text:CODE:REORDER(1)         
@@ -846,10 +842,10 @@ Reserved108_IRQHandler
 Reserved109_IRQHandler
         B Reserved109_IRQHandler
 
-        PUBWEAK Reserved110_IRQHandler
+        PUBWEAK SWI_IRQHandler
         SECTION .text:CODE:REORDER(1)        
-Reserved110_IRQHandler
-        B Reserved110_IRQHandler
+SWI_IRQHandler
+        B SWI_IRQHandler
 
         PUBWEAK Reserved111_IRQHandler
         SECTION .text:CODE:REORDER(1)           

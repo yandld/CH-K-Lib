@@ -52,18 +52,22 @@ void init_thread_entry(void* parameter)
     else
     {
         rt_kprintf("spi_flash mount to / failed!\n");
-        rt_thread_suspend(thread); 
+        rt_kprintf("try to format disk...\r\n");
+        mkfs("elm", "spi_flash");
+        dfs_mount("spi_flash", "/", "elm", 0, 0);
+       // rt_thread_suspend(thread); 
+        /* mount SD */
+
     }
-    /* mount SD */
-    if (dfs_mount("sd0", "/SD", "elm", 0, 0) == 0)
-    {
-        rt_kprintf("sd0 mount to /SD \n");
-    }
-    else
-    {
-        rt_kprintf("sd0 mount to /SD failed!\n");
-    }
-    
+
+        if (dfs_mount("sd0", "/SD", "elm", 0, 0) == 0)
+        {
+            rt_kprintf("sd0 mount to /SD \n");
+        }
+        else
+        {
+            rt_kprintf("sd0 mount to /SD failed!\n");
+        }
 
  //   MainTask();
 

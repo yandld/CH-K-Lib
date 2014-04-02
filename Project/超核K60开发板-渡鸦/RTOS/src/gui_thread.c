@@ -14,9 +14,9 @@ void gui_thread_entry(void* parameter)
    // CreateWelcome();
   //  GUI_Exec();
   //  show_pic("/SD/PIC/INDEX.BMP");
-    GUI_CURSOR_Show();
+  //  GUI_CURSOR_Show();
     
-    CreateRaven();
+   // CreateRaven();
   //  MainTask();
 	while(1)
 	{

@@ -3,74 +3,137 @@
 #include "uart.h"
 #include "dma.h"
 #include "sram.h"
-#include "ftm.h"
+#include "ili9320.h"
 #include "dma.h"
-#include "pit.h"
 
-static const uint32_t DMA_PORT_TriggerSourceTable[] = 
-{
-    PORTA_DMAREQ,
-    PORTB_DMAREQ,
-    PORTC_DMAREQ,
-    PORTD_DMAREQ,
-    PORTE_DMAREQ,
-};
+#define OV7620_W    (320) // 每行有多少像素
+#define OV7620_H    (240) //高度 有多少行
 
-/**
- * @brief  DMA 用作脉冲计数初始化     
- * @param  dmaChl :DMA通道号
- * @param  instance :端口号 比如HW_GPIOA
- * @param  pinIndex :引脚号
- * @retval None
- */
-static void DMA_PulseCountInit(uint32_t dmaChl, uint32_t instance, uint32_t pinIndex)
+//uint8_t CCDBufferPool[OV7620_W*OV7620_H];   //使用内部RAM
+volatile uint8_t * CCDBufferPool = SRAM_START_ADDRESS; //使用外部SRAM
+
+/* CCD内存池 */
+uint8_t * CCDBuffer[OV7620_H];
+/* 引脚定义 */
+#define BOARD_OV7620_PCLK_PORT      HW_GPIOA
+#define BOARD_OV7620_PCLK_PIN       (7)
+#define BOARD_OV7620_VSYNC_PORT     HW_GPIOA
+#define BOARD_OV7620_VSYNC_PIN      (16)
+#define BOARD_OV7620_HREF_PORT      HW_GPIOA
+#define BOARD_OV7620_HREF_PIN       (17)
+#define BOARD_OV7620_DATA_OFFSET    (8) /* PA8-PA15 只能为 0 8 16 24 */
+
+/* 状态机定义 */
+typedef enum
 {
-    /* 开启2路引脚 配置为DMA触发 */
-    GPIO_QuickInit(instance, pinIndex, kGPIO_Mode_IPU);
-    /* 配置为DMA上升沿触发 */
-    GPIO_ITDMAConfig(instance, pinIndex, kGPIO_DMA_RisingEdge);
-    /* 配置DMA */
-    uint8_t dummy1, dummy2;
-    DMA_InitTypeDef DMA_InitStruct1;  
-    DMA_InitStruct1.chl = dmaChl;  
-    DMA_InitStruct1.chlTriggerSource = DMA_PORT_TriggerSourceTable[instance];
-    DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal; 
-    DMA_InitStruct1.minorByteTransferCount = 1;
-    DMA_InitStruct1.majorTransferCount = DMA_CITER_ELINKNO_CITER_MASK;
-    
-    DMA_InitStruct1.sourceAddress = (uint32_t)&dummy1;
-    DMA_InitStruct1.sourceAddressMajorAdj = 0; 
-    DMA_InitStruct1.sourceAddressMinorAdj = 0;
-    DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8;
-    
-    DMA_InitStruct1.destAddress = (uint32_t)&dummy2; 
-    DMA_InitStruct1.destAddressMajorAdj = 0;
-    DMA_InitStruct1.destAddressMinorAdj = 0; 
-    DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8;
-    DMA_Init(&DMA_InitStruct1);
-    /* 启动传输 */
-    DMA_StartTransfer(dmaChl);
+    TRANSFER_IN_PROCESS,
+    NEXT_FRAME,
+}OV7620_Status;
+
+static void UserApp(void);
+
+/* 摄像头场中断处理函数 */
+void OV7620_ISR(uint32_t pinArray)
+{
+
+    static uint8_t status = TRANSFER_IN_PROCESS;  
+    switch(status)
+    {
+        case TRANSFER_IN_PROCESS: /* 正在传输 */
+            /* 查看DMA是否完成传送 */
+            if(DMA_IsTransferComplete(HW_DMA_CH2) == 0)
+            {
+                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_Disable);
+                /* 开始处理用户 函数 */
+                UserApp();
+                /* 用户函数处理完毕 */
+                status = NEXT_FRAME;
+                /* 处理完用户函数后 继续开启场中断 准备下一场数据到达 */
+                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);  
+            }
+            else
+            {
+                status = TRANSFER_IN_PROCESS;
+            }
+            break;
+        case NEXT_FRAME:
+            /* 传输完成 复位buffer地址 开始下一场传输 */
+            DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[0]);
+            DMA_StartTransfer(HW_DMA_CH2); 
+            status =  TRANSFER_IN_PROCESS;
+            break;
+        default:
+            break;
+    }
+}
+
+static uint16_t RGB2COLOR(uint8_t RR,uint8_t GG,uint8_t BB)
+{
+  return (((RR/8)<<11)+((GG/8)<<6)+BB/8); 
+}
+
+/* 接收完成一场后 用户处理函数 */
+static void UserApp(void)
+{
+    uint32_t i,j;
+    static uint32_t cnt;
+    printf("SYNC cnt:%d\r\n", cnt++); 
+    for(i=0;i<OV7620_H;i++)
+    {
+        for(j=0;j<OV7620_W;j++)
+        {
+            LCD_DrawPoint(OV7620_H - i, OV7620_W- j, RGB2COLOR(CCDBuffer[i][j], CCDBuffer[i][j], CCDBuffer[i][j]));
+        }
+    } 
 }
 
 
-static void PIT_ISR(void)
+static void OV7620_Init(void)
 {
-    /* 由于DMA 是倒计数的 所需需要用最大值减一下 */
-    uint32_t ch_value[2];
-    /* CH0 */
-    ch_value[0] = DMA_CITER_ELINKNO_CITER_MASK - DMA_GetMajorLoopCount(HW_DMA_CH0);
-    /* CH1 */
-    ch_value[1] = DMA_CITER_ELINKNO_CITER_MASK - DMA_GetMajorLoopCount(HW_DMA_CH1);
-    /* 清零计数 */
-    DMA_CancelTransfer();
-    DMA_SetMajorLoopCount(HW_DMA_CH0, DMA_CITER_ELINKNO_CITER_MASK);
-    DMA_SetMajorLoopCount(HW_DMA_CH1, DMA_CITER_ELINKNO_CITER_MASK);
-    /* 开始下一次传输 */
-    DMA_StartTransfer(HW_DMA_CH0);
-    DMA_StartTransfer(HW_DMA_CH1);
-    printf("[CH%d]:%4dHz [CH%d]:%4dHz\r\n", 0, ch_value[0], 1, ch_value[1]); 
+    DMA_InitTypeDef DMA_InitStruct1;
+    uint32_t i;
+    //把开辟的内存池付给指针
+    for(i=0;i< OV7620_H;i++)
+    {
+        CCDBuffer[i] = (uint8_t *) &CCDBufferPool[i*OV7620_W];
+    }
+    /* 场中断  行中断 像素中断 */
+    GPIO_QuickInit(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_Mode_IPD);
+    GPIO_QuickInit(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_Mode_IPD);
+    GPIO_QuickInit(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_Mode_IPD);
+    /* 初始化数据端口 */
+    for(i=0;i<8;i++)
+    {
+        GPIO_QuickInit(HW_GPIOA, BOARD_OV7620_DATA_OFFSET+i, kGPIO_Mode_IFT);
+    }
+    /* 安装回调函数 */
+    GPIO_CallbackInstall(BOARD_OV7620_VSYNC_PORT, OV7620_ISR);
+    /* 行中断配置为DMA触发 */
+    GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_DMA_RisingEdge);
+    /* 场中断配置为中断触发 */
+    GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);
+    /* 像素中断 */
+  //  GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge); //实际并没有用到
+    /* 初始化DMA */
+    DMA_InitStruct1.chl = HW_DMA_CH2;
+    DMA_InitStruct1.chlTriggerSource = PORTA_DMAREQ;
+    DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
+    DMA_InitStruct1.minorByteTransferCount = OV7620_W;
+    DMA_InitStruct1.majorTransferCount = OV7620_H;
     
+    DMA_InitStruct1.sourceAddress = (uint32_t)&PTA->PDIR + BOARD_OV7620_DATA_OFFSET/8;
+    DMA_InitStruct1.sourceAddressMajorAdj = 0;
+    DMA_InitStruct1.sourceAddressMinorAdj = 0;
+    DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8;
     
+    DMA_InitStruct1.destAddress = (uint32_t)CCDBuffer[0];
+    DMA_InitStruct1.destAddressMajorAdj = 0;
+    DMA_InitStruct1.destAddressMinorAdj = 1;
+    DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8;
+
+    DMA_Init(&DMA_InitStruct1);
+    /* 开始传输 */
+    DMA_StartTransfer(HW_DMA_CH2); 
 }
 
 int main(void)
@@ -79,24 +142,15 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
-    printf("DMA pulse count test\r\n");
-    printf("connect A05&C01, B00&B23 \r\n");
+    printf("OV7620 test\r\n");
     
-    /* 开启2路PWM通道 产生不同频率的PWM波 */
-    FTM_PWM_QuickInit(FTM0_CH0_PC01, 10000);
-    FTM_PWM_QuickInit(FTM1_CH0_PB00, 20000);
+    ILI9320_Init();
+    SRAM_Init();
+    /* 摄像头速度非常快 把FLexbus 总线速度调到最高 */
+    SIM->CLKDIV1 &= ~SIM_CLKDIV1_OUTDIV3_MASK;
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(2);
+    OV7620_Init();
 
-    
-    /* 开启DMA捕捉引脚脉冲信号 使用DMA0通道 触发源选择A 端口 5引脚 (每个端口只能测量一路DMA 也就是说DMA脉冲最多只能测量5路(PTA,PTB,PTC,PTD,PTE))*/
-    DMA_PulseCountInit(HW_DMA_CH0, HW_GPIOA, 5);
-    DMA_PulseCountInit(HW_DMA_CH1, HW_GPIOB, 23);
-    
-    /* 开启一个PIT中断用于显示收到的计数 */
-    PIT_QuickInit(HW_PIT_CH0, 1000 * 1000);
-    PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
-
-   
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

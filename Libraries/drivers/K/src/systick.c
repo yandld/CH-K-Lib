@@ -33,12 +33,12 @@ static uint32_t fac_ms = 0;
  */
 void SYSTICK_Init(uint32_t timeInUs)
 {
-    // Set clock source = core clock
+    /* Set clock source = core clock */
     SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; 
     CLOCK_GetClockFrequency(kCoreClock, &fac_us);
     fac_us /= 1000000;
     fac_ms = fac_us * 1000;
-    //every 100ms in a int
+    /* every 100ms in a int */
     SysTick->LOAD = fac_us * timeInUs;
 }
 

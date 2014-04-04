@@ -173,6 +173,15 @@ void DAC_SetBufferValue(uint32_t instance, uint16_t* buf, uint8_t len)
 	}                       
 }
 
+/**
+ * @brief  注册中断回调函数
+ * @param  instance: DAC 模块号
+ *         @arg HW_DAC0  :DAC0模块
+ *         @arg HW_DAC1  :DAC1模块
+ * @param AppCBFun: 回调函数指针入口
+ * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
+ */
 void DAC_CallbackInstall(uint8_t instance, DAC_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)

@@ -94,7 +94,7 @@ void ILI9320_Init(void)
 {
     uint32_t gpio_instance;
     /* 减低flexbus总线速度 总线速度太高 不能正确执行读点操作 */
-    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);
+    //SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);
     /* Flexbus Init */
     SIM->SCGC5 |= (SIM_SCGC5_PORTA_MASK | SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTE_MASK);
     /*control signals */

@@ -9,7 +9,7 @@
 #include <drivers/spi.h>
 
 extern void gui_thread_entry(void* parameter);
-
+extern void led_thread_entry(void* parameter);
 
 void init_thread_entry(void* parameter)
 {
@@ -69,15 +69,18 @@ void init_thread_entry(void* parameter)
             rt_kprintf("sd0 mount to /SD failed!\n");
         }
 
- //   MainTask();
-
     /* gui thread */
     thread = rt_thread_create("gui", gui_thread_entry, RT_NULL, 4096, 0x23, 20);                                                      
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);		
     }
-    
+    /* led thread */
+    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 2048, 0x21, 20);                                                      
+    if (thread != RT_NULL)
+    {
+        rt_thread_startup(thread);		
+    }
     /* supend me */
     thread = rt_thread_self();
     rt_thread_suspend(thread); 

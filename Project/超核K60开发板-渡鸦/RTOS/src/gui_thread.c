@@ -6,6 +6,9 @@
   #include "CHECKBOX.h"
   #include "TREEVIEW.h"
 
+
+
+
 void gui_thread_entry(void* parameter)
 {
     rt_thread_t thread = rt_thread_self();
@@ -16,7 +19,7 @@ void gui_thread_entry(void* parameter)
   //  show_pic("/SD/PIC/INDEX.BMP");
   //  GUI_CURSOR_Show();
     
-   // CreateRaven();
+    CreateRaven();
   //  MainTask();
 	while(1)
 	{

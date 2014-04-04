@@ -70,8 +70,6 @@ void rt_hw_board_init(void)
 
 
 extern void init_thread_entry(void* parameter);
-extern void led_thread_entry(void* parameter);
-
 
 void rt_application_init(void)
 {
@@ -82,13 +80,6 @@ void rt_application_init(void)
     {
         rt_thread_startup(init_thread);		
     }
-    /* led thread */
-    init_thread = rt_thread_create("led", led_thread_entry, RT_NULL, 2048, 0x21, 20);                                                      
-    if (init_thread != RT_NULL)
-    {
-        rt_thread_startup(init_thread);		
-    }
-
 }
 
 void rtthread_startup(void)

@@ -171,6 +171,9 @@ void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun)
  */
 uint32_t LPTMR_PC_ReadCounter(void)
 {
+    /* must first read */
+    uint32_t *p = (uint32_t *)&LPTMR0->CNR;
+    *p = 0x1234;
 	return (uint32_t)((LPTMR0->CNR & LPTMR_CNR_COUNTER_MASK) >> LPTMR_CNR_COUNTER_SHIFT); 
 }
 

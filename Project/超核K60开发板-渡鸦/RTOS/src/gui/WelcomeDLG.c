@@ -206,6 +206,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
         // USER START (Optionally insert code for reacting on notification message)
+        GUI_EndDialog(pMsg->hWin, 0);
         // USER END
         break;
       case WM_NOTIFICATION_RELEASED:
@@ -241,7 +242,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 WM_HWIN CreateRaven(void);
 WM_HWIN CreateRaven(void) {
   WM_HWIN hWin;
-
+  BUTTON_SetDefaultSkin(BUTTON_SKIN_FLEX);
   hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
   return hWin;
 }

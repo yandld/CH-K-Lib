@@ -84,7 +84,7 @@ void rt_application_init(void)
 
 void rtthread_startup(void)
 {
-    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
 //    CMD_FLEXBUS(0, NULL);
     rt_hw_board_init();
 	rt_show_version(); /* print logo */

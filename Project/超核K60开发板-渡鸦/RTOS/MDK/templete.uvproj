@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10 CHK60EVB2 DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src;..\RT-Thread_1.2.0\include;..\RT-Thread_1.2.0\components\finsh;..\RT-Thread_1.2.0\components\dfs\include;..\RT-Thread_1.2.0\components\rtgui\include\rtgui;..\RT-Thread_1.2.0\components\rtgui\include;..\..\..\..\Libraries\emWin\Include;..\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\devices\inc;..\RT-Thread_1.2.0\bsp\Reven</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src\gui;..\src;..\RT-Thread_1.2.0\include;..\RT-Thread_1.2.0\components\finsh;..\RT-Thread_1.2.0\components\dfs\include;..\RT-Thread_1.2.0\components\rtgui\include\rtgui;..\RT-Thread_1.2.0\components\rtgui\include;..\..\..\..\Libraries\emWin\Include;..\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\devices\inc;..\RT-Thread_1.2.0\bsp\Reven</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -473,6 +473,16 @@
               <FileName>WelcomeDLG.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\gui\WelcomeDLG.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_desktop.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\gui_desktop.c</FilePath>
+            </File>
+            <File>
+              <FileName>my_gui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\my_gui.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1008,6 +1018,49 @@
               <FileName>GUIDEMO_IconView.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\emWin\Sample\GUIDemo\GUIDEMO_IconView.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>GUIDEMO_Treeview.c</FileName>

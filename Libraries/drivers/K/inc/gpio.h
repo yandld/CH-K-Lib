@@ -105,46 +105,26 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 /* CM4中有2块bitband区域 0x2000_0000-0x200F_FFFF 映射至 0x2200_0000-0x23FF_FFFF
                          0x4000_0000-0x4000_FFFF 映射至 0x4200_0000-0x43FF_FFFF
 */
-#define BITBAND(addr,bitnum) ((addr & 0xF0000000) + 0x2000000 + ((addr & 0xFFFFF) << 5) + (bitnum << 2)) 
-#define MEM_ADDR(addr)  *((volatile unsigned long  *)(addr)) 
-#define BIT_ADDR(addr, bitnum)   MEM_ADDR(BITBAND(addr, bitnum)) 
-//IO Mapping
-#define GPIOA_ODR_Addr    (PTA_BASE+0) //0x4001080C 
-#define GPIOB_ODR_Addr    (PTB_BASE+0) //0x40010C0C 
-#define GPIOC_ODR_Addr    (PTC_BASE+0) //0x4001100C 
-#define GPIOD_ODR_Addr    (PTD_BASE+0) //0x4001140C 
-#define GPIOE_ODR_Addr    (PTE_BASE+0) //0x4001180C 
-#define GPIOF_ODR_Addr    (PTF_BASE+0) //0x40011A0C    
-#define GPIOG_ODR_Addr    (PTG_BASE+0) //0x40011E0C    
-
-#define GPIOA_IDR_Addr    (PTA_BASE+0x10) //0x40010808 
-#define GPIOB_IDR_Addr    (PTB_BASE+0x10) //0x40010C08 
-#define GPIOC_IDR_Addr    (PTC_BASE+0x10) //0x40011008 
-#define GPIOD_IDR_Addr    (PTD_BASE+0x10) //0x40011408 
-#define GPIOE_IDR_Addr    (PTE_BASE+0x10) //0x40011808 
-#define GPIOF_IDR_Addr    (PTF_BASE+0x10) //0x40011A08 
-#define GPIOG_IDR_Addr    (PTG_BASE+0x10) //0x40011E08 
-
-#define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  //! < output
-#define PAin(n)    BIT_ADDR(GPIOA_IDR_Addr,n)  //! < input
+#define PAout(n)   BITBAND_REG(PTA->PDOR, n)
+#define PAin(n)    BITBAND_REG(PTA->PDIR, n)
   
-#define PBout(n)   BIT_ADDR(GPIOB_ODR_Addr,n)
-#define PBin(n)    BIT_ADDR(GPIOB_IDR_Addr,n)
+#define PBout(n)   BITBAND_REG(PTB->PDOR, n)
+#define PBin(n)    BITBAND_REG(PTB->PDIR, n)
 
-#define PCout(n)   BIT_ADDR(GPIOC_ODR_Addr,n)
-#define PCin(n)    BIT_ADDR(GPIOC_IDR_Addr,n)
+#define PCout(n)   BITBAND_REG(PTC->PDOR, n)
+#define PCin(n)    BITBAND_REG(PTC->PDIR, n)
 
-#define PDout(n)   BIT_ADDR(GPIOD_ODR_Addr,n)
-#define PDin(n)    BIT_ADDR(GPIOD_IDR_Addr,n)
+#define PDout(n)   BITBAND_REG(PTD->PDOR, n)
+#define PDin(n)    BITBAND_REG(PTD->PDIR, n)
 
-#define PEout(n)   BIT_ADDR(GPIOE_ODR_Addr,n)
-#define PEin(n)    BIT_ADDR(GPIOE_IDR_Addr,n)
+#define PEout(n)   BITBAND_REG(PTE->PDOR, n)
+#define PEin(n)    BITBAND_REG(PTE->PDIR, n)
 
-#define PFout(n)   BIT_ADDR(GPIOF_ODR_Addr,n)
-#define PFin(n)    BIT_ADDR(GPIOF_IDR_Addr,n)
+#define PFout(n)   BITBAND_REG(PTF->PDOR, n)
+#define PFin(n)    BITBAND_REG(PTF->PDIR, n)
 
-#define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)
-#define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)
+#define PGout(n)   BITBAND_REG(PTG->PDOR, n)
+#define PGin(n)    BITBAND_REG(PTG->PDIR, n)
 
 //!< API functions
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);

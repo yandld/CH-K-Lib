@@ -11,6 +11,7 @@
 /* 按键返回值 */
 static uint8_t gRetValue;
 
+/* 状态机表 */
 typedef enum
 {
     kKEY_Idle,          /* 空闲态 */

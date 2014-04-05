@@ -72,7 +72,7 @@
    2 ... Multipurpose Clock Generator (MCG) in Bypassed Low Power External (BLPE) mode
          Core clock/Bus clock derived directly from an external crystal 8MHz with no multiplication
          Core clock = 8MHz, BusClock = 8MHz
-   3 ... Multipurpose Clock Generator (MCG) in Bypassed Low Power External (BLPE) mode
+   3 ... Multipurpose Clock Generator (MCG) in Bypassed Low Power External (PEE) mode
          Core clock/Bus clock derived directly from an external clock 50MHz
          Core clock = 100MHz, BusClock = 50MHz    
 */

@@ -20,7 +20,22 @@ static const IRQn_Type DAC_IRQnTable[] =
     DAC1_IRQn,
 };
 
-
+/**
+ * @brief  初始化DAC模块
+ * @code
+ *  DAC_InitTypeDef DAC_InitStruct = {0};
+ *  DAC_InitStruct.bufferMode = kDAC_Buffer_Swing; 
+ *  DAC_InitStruct.instance = HW_DAC0;
+ *  DAC_InitStruct.referenceMode = kDAC_Reference_2; 
+ *  DAC_InitStruct.triggerMode = kDAC_TriggerSoftware; 
+ *  DAC_Init(&DAC_InitStruct);
+ * @endcode
+ * @param  DAC_InitTypeDef: 串口工作配置存储结构体
+ *         instance      :芯片串口端口
+ *         @arg HW_DAC0 :芯片的DAC0 模块
+ *         @arg HW_DAC1 :芯片的DAC1 模块
+ * @retval None
+ */
 void DAC_Init(DAC_InitTypeDef* DAC_InitStruct)
 {
     SIM->SCGC2 |= SIM_SCGC2_DAC0_MASK;
@@ -80,24 +95,67 @@ void DAC_Init(DAC_InitTypeDef* DAC_InitStruct)
     DAC_InstanceTable[DAC_InitStruct->instance]->C0 |= DAC_C0_DACEN_MASK;
 }
  
+/**
+ * @brief  获得DAC模块buffer的指针
+ *
+ * @param  instance      :模块号
+ *         @arg HW_DAC0 :芯片的DAC0 模块
+ *         @arg HW_DAC1 :芯片的DAC1 模块
+ * @note   返回DAC当前转换到的 buffer 指针 位置
+ * @retval None
+ */
 uint32_t DAC_GetBufferReadPointer(uint32_t instance)
 {
     return (DAC_InstanceTable[instance]->C2 & DAC_C2_DACBFRP_MASK) >> DAC_C2_DACBFRP_SHIFT;
 }
 
+/**
+ * @brief  设置DAC模块buffer的指针
+ *
+ * @param  instance     :模块号
+ *         @arg HW_DAC0 :芯片的DAC0 模块
+ *         @arg HW_DAC1 :芯片的DAC1 模块
+ * @param  value        :指针位置 0-15
+ * @retval None
+ */
 void DAC_SetBufferReadPointer(uint32_t instance, uint32_t value)
 {
     DAC_InstanceTable[instance]->C2 &= ~DAC_C2_DACBFRP_MASK;
     DAC_InstanceTable[instance]->C2 |= DAC_C2_DACBFRP(value);
 }
 
-/* max 15 */
+/**
+ * @brief  设置DAC模块读取buffer指针时的最高上限值
+ *
+ * @param  instance     :模块号
+ *         @arg HW_DAC0 :芯片的DAC0 模块
+ *         @arg HW_DAC1 :芯片的DAC1 模块
+ * @param  value        :指针位置上限 0-15
+ * @retval None
+ */
 void DAC_SetBufferUpperLimit(uint32_t instance, uint32_t value)
 {
     DAC_InstanceTable[instance]->C2 &= ~DAC_C2_DACBFUP_MASK;
     DAC_InstanceTable[instance]->C2 |= DAC_C2_DACBFUP(value);
 }
 
+/**
+ * @brief  设置DAC模块中断和DMA
+ *
+ * @param  instance     :模块号
+ *         @arg HW_DAC0 :芯片的DAC0 模块
+ *         @arg HW_DAC1 :芯片的DAC1 模块
+ * @param  config       :配置选项
+ *         @arg kDAC_DMA_Disable                : 禁止DAC DMA功能
+ *         @arg kDAC_IT_Disable                 : 禁止DAC 中断功能
+ *         @arg kDAC_IT_BufferPointer_WaterMark : 开启DAC 水位中断
+ *         @arg kDAC_IT_BufferPointer_TopFlag   : 开启DAC ReadPointer = 0中断
+ *         @arg kDAC_IT_BufferPointer_BottomFlag: 开始DAC ReadPointer = UpLimit 中断
+ *         @arg kDAC_DMA_BufferPointer_WaterMark: 
+ *         @arg kDAC_DMA_BufferPointer_TopFlag  :
+ *         @arg kDAC_DMA_BufferPointer_BottomFlag:
+ * @retval None
+ */
 void DAC_ITDMAConfig(uint32_t instance, DAC_ITDMAConfig_Type config)
 {
     switch(config)
@@ -137,12 +195,29 @@ void DAC_ITDMAConfig(uint32_t instance, DAC_ITDMAConfig_Type config)
     }
 }
 
-/* will only trigger once and will advence the read pointer by one step*/
+/**
+ * @brief  软件触发DAC开始工作
+ *
+ * @param  instance     :模块号
+ *         @arg HW_DAC0 :芯片的DAC0 模块
+ *         @arg HW_DAC1 :芯片的DAC1 模块
+ * @note   will only trigger once and will advence the read pointer by one step
+ * @retval None
+ */
 void DAC_StartConversion(uint32_t instance)
 {
     DAC_InstanceTable[instance]->C0 |= DAC_C0_DACSWTRG_MASK;
 }
 
+/**
+ * @brief  设置DAC Buffer的水位
+ *
+ * @param  instance     :模块号
+ *         @arg HW_DAC0 :芯片的DAC0 模块
+ *         @arg HW_DAC1 :芯片的DAC1 模块
+ * @param  value        :水位值 0-15
+ * @retval None
+ */
 void DAC_SetWaterMark(uint32_t instance, DAC_WaterMarkMode_Type value)
 {
 	switch(value)
@@ -163,6 +238,16 @@ void DAC_SetWaterMark(uint32_t instance, DAC_WaterMarkMode_Type value)
 	}
 }
 
+/**
+ * @brief  填充DAC 缓冲区数据
+ *
+ * @param  instance     :模块号
+ *         @arg HW_DAC0 :芯片的DAC0 模块
+ *         @arg HW_DAC1 :芯片的DAC1 模块
+ * @param  buf          :数据指针
+ * @param  len          :长度
+ * @retval None
+ */
 void DAC_SetBufferValue(uint32_t instance, uint16_t* buf, uint8_t len)
 {
 	uint8_t i;

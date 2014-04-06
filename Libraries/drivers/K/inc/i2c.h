@@ -75,8 +75,8 @@ uint8_t I2C_IsBusy(uint8_t instance);
 void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config);
 void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun);
 // higher level functions
-int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* pData, uint32_t dataLen);
-uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *pData, uint32_t dataLen);
+int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len);
+uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len);
 uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData);
 uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data);
 

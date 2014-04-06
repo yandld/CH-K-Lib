@@ -545,11 +545,11 @@ uint8_t I2C_IsBusy(uint8_t instance)
  * @param  deviceAddress :从机设备地址0~127
  * @param  subAddress    :读取的起始地址
  * @param  subAddressLen :地址的长度
- * @param  pData         :保存数据的首地址
- * @param  dataLen       :读取数据的长度
+ * @param  buf         :保存数据的首地址
+ * @param  len       :读取数据的长度
  * @retval 数据的读取状态 0 ;成功 其它 :失败
  */
-int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* pData, uint32_t dataLen)
+int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len)
 {
     uint32_t time_out = 0;
     uint8_t i;
@@ -602,14 +602,14 @@ int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddre
 	I2C_GenerateAck(instance);
 	I2C_WaitAck(instance);
     /* actually read */
-	for(i = 0; i < dataLen - 1; i++)
+	for(i = 0; i < len - 1; i++)
 	{
-		*(pData++) = I2C_ReadData(instance);
+		*(buf++) = I2C_ReadData(instance);
 		I2C_GenerateAck(instance);
         I2C_WaitAck(instance);
 	}
     /* read last */
-	*pData = I2C_ReadData(instance);
+	*buf = I2C_ReadData(instance);
     /* stop and finish */
     I2C_GenerateNAck(instance);
     I2C_WaitAck(instance);
@@ -631,11 +631,11 @@ int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddre
  * @param  deviceAddress :从机设备地址0~127
  * @param  subAddress    :写入的起始地址
  * @param  subAddressLen :地址的长度
- * @param  pData         :保存数据的首地址
- * @param  dataLen       :写入数据的长度
+ * @param  buf         :保存数据的首地址
+ * @param  len       :写入数据的长度
  * @retval 数据的读取状态 0 ;成功 其它 :失败
  */
-uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *pData, uint32_t dataLen)
+uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len)
 {
     uint32_t time_out = 0;
     uint8_t * p = (uint8_t*)&subAddress;
@@ -669,9 +669,9 @@ uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddr
         }
     }
     /* send all data */
-    while(dataLen--)
+    while(len--)
     {
-        I2C_SendData(instance, *(pData++));
+        I2C_SendData(instance, *(buf++));
         if(I2C_WaitAck(instance))
         {
             I2C_GenerateSTOP(instance);

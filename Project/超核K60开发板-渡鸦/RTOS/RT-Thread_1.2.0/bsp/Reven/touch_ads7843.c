@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include "touch_ads7843.h"
-
+#include <rtthread.h>
+#include <drivers/spi.h>
 
 static struct rt_device  ads7843_device;
 struct rt_spi_device * rt_spi_device;

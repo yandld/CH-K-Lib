@@ -42,10 +42,7 @@ We appreciate your understanding and fairness.
 */
 
 #include "GUI_Private.H"
-#include "stdio.h"
-#include "ads7843.h"
-#include "gpio.h"
-#include "spi.h"
+#include <stdio.h>
 #include <rtthread.h>
 
 /*

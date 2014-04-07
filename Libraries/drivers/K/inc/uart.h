@@ -57,39 +57,40 @@ typedef enum
     kUART_ParityOdd      = 0x3,  /*!< 1位 偶校验 */
 } UART_ParityMode_Type;
 
+/*!< 每帧数据位个数 */
 typedef enum 
 {
     kUART_8BitsPerChar  = 0,   /*!< 8-bit data characters */
     kUart_9BitsPerChar  = 1,   /*!< 9-bit data characters */
 } UART_BitPerChar_Type;
 
-//!< interrupt and DMA select
+/*!< 中断及DMA配置 */
 typedef enum
 {
-    kUART_IT_Tx_Disable,       //!< Disable Tx Interrupt
-    kUART_IT_Rx_Disable,       //!< Disable Rx Interrupt
-    kUART_DMA_Tx_Disable,      //!< Disable Tx DMA
-    kUART_DMA_Rx_Disable,      //!< Disable Rx DMA
-    kUART_IT_Tx,           //!< Byte Transfer Complete Interrupt for Tx
-    kUART_DMA_Tx,          //!< DMA Trigger On Byte Transfer Complete for Tx
-    kUART_IT_Rx,           //!< Byte Transfer Complete Interrupt for Rx
-    kUART_DMA_Rx,          //!< DMA Trigger On Byte Transfer Complete for Rx
+    kUART_IT_Tx_Disable,        /*!< Disable Tx Interrupt */
+    kUART_IT_Rx_Disable,        /*!< Disable Rx Interrupt */
+    kUART_DMA_Tx_Disable,       /*!< Disable Tx DMA */
+    kUART_DMA_Rx_Disable,       /*!< Disable Rx DMA */
+    kUART_IT_Tx,                /*!< Byte Transfer Complete Interrupt for Tx */
+    kUART_DMA_Tx,               /*!< DMA Trigger On Byte Transfer Complete for Tx */
+    kUART_IT_Rx,                /*!< Byte Transfer Complete Interrupt for Rx */
+    kUART_DMA_Rx,               /*!< DMA Trigger On Byte Transfer Complete for Rx */
 }UART_ITDMAConfig_Type;
 
-//!< UART Init type
+/*!< UART初始化结构 */
 typedef struct
 {
-    uint8_t                 instance;       //!< UART instance
-    uint32_t                baudrate;       //!< UART baudrate
-    UART_ParityMode_Type    parityMode;     //!< UART parity mode
-    UART_BitPerChar_Type    bitPerChar;     //!< UART bit per char
+    uint8_t                 instance;       /*!< UART instance */
+    uint32_t                baudrate;       /*!< UART baudrate */
+    UART_ParityMode_Type    parityMode;     /*!< UART parity mode */
+    UART_BitPerChar_Type    bitPerChar;     /*!< UART bit per char */
 }UART_InitTypeDef;
 
-//!< UART CallBack Type
+/*!< UART 回调函数声明 */
 typedef void (*UART_CallBackTxType)(uint8_t * pbyteToSend);
 typedef void (*UART_CallBackRxType)(uint8_t byteReceived);
 
-//!< API functions
+/*!< API 接口 */
 uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate);
 void UART_Init(UART_InitTypeDef * UART_InitStruct);
 int UART_printf(const char *format,...);

@@ -189,6 +189,8 @@ _loop:
  *    UART_InitTypeDef UART_InitStruct1;      //申请一个结构变量
  *    UART_InitStruct1.instance = HW_UART0;   //选择UART0模块
  *    UART_InitStruct1.baudrate = 115200;     //设置通信速度为115200
+ *    UART_InitStruct1.parityMode = kUART_ParityDisabled; //校验位禁止
+ *    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;   //每帧8bit
  *    UART_Init(&UART_InitStruct1);
  * @endcode
  * @param  UART_InitTypeDef: 串口工作配置存储结构体

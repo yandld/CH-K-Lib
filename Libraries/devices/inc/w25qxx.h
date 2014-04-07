@@ -23,30 +23,17 @@
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 #endif
 
-typedef struct w25qxx_device *w25qxx_device_t;
-
-typedef struct w25qxx_device
-{
-    // params
-    spi_bus_t bus;
-    // attr
-    const char * name;
-    uint16_t id;
-    uint32_t size;
-    // ops
-    spi_status (*init) (struct w25qxx_device * device, uint32_t csn, uint32_t bus_chl, uint32_t baudrate);
-    spi_status (*probe)(w25qxx_device_t device);
-    spi_status (*read)(w25qxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len);
-    spi_status (*write)(w25qxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len);
-    spi_status (*erase_sector)(w25qxx_device_t device, uint32_t addr);
-    spi_status (*erase_chip)(w25qxx_device_t device);
-    //internal vars
-    struct spi_device spi_device;
-}w25qxx_device;
 
 
 //!< API functions
-spi_status w25qxx_init(struct w25qxx_device * device, uint32_t csn, uint32_t bus_chl, uint32_t baudrate);
+int w25qxx_init(spi_bus_t bus, uint32_t cs);
+int w25qxx_probe(void);
+int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len);
+int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len);
+int w25qxx_erase_chip(void);
+uint32_t w25qxx_get_size(void);
+uint32_t w25qxx_get_id(void);
+const char * w25qxx_get_name(void);
 
 
 #endif 

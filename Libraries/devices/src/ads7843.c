@@ -15,71 +15,44 @@
 #define ADS7843_CMD_READ_X   (0xD0)
 #define ADS7843_CMD_READ_Y   (0X90)
 
-static spi_status ads7843_probe(ads7843_device_t device)
-{
+static struct spi_device device;
 
-    return kspi_status_unsupported;
-}
-
-static spi_status ads7843_readX(ads7843_device_t device, uint16_t * value)
+uint32_t ads7843_readX(uint16_t * value)
 {
     uint8_t buf[2];
-    buf[0] = ADS7843_CMD_READ_X; 
-    device->bus->write(device->bus, &device->spi_device, buf, 1, false);
-    device->bus->read(device->bus, &device->spi_device, buf, 2, true);
+    buf[0] = ADS7843_CMD_READ_X;
+    spi_write(&device, buf, 1, false);
+    spi_read(&device, buf, 2, true);
     *value = ((buf[0]<<8) + buf[1])>>4; //12bit mode
-    return kspi_status_ok;
+    return SPI_EOK;
 }
 
-static spi_status ads7843_readY(ads7843_device_t device, uint16_t * value)
+uint32_t ads7843_readY(uint16_t * value)
 {
     uint8_t buf[2];
-    buf[0] = ADS7843_CMD_READ_Y; 
-    device->bus->write(device->bus, &device->spi_device, buf, 1, false);
-    device->bus->read(device->bus, &device->spi_device, buf, 2, true);
-    *value = ((buf[0]<<8) + buf[1])>>4;//12bit mode
-    return kspi_status_ok;
+    buf[0] = ADS7843_CMD_READ_Y;
+    spi_write(&device, buf, 1, false);
+    spi_read(&device, buf, 2, true);
+    *value = ((buf[0]<<8) + buf[1])>>4; //12bit mode
+    return SPI_EOK;
 }
 
 
-spi_status ads7843_init(struct ads7843_device * device, uint32_t csn, uint32_t bus_chl, uint32_t baudrate)
+int ads7843_init(spi_bus_t bus, uint32_t cs)
 {
-    if(!device)
+    uint32_t ret;
+    device.csn = cs;
+    device.config.baudrate = 2*1000*1000;
+    device.config.data_width = 8;
+    device.config.mode = SPI_MODE_0 | SPI_MASTER | SPI_MSB;
+    ret = spi_bus_attach_device(bus, &device);
+    if(ret)
     {
-        return kspi_status_error;
+        return ret;
     }
-    device->spi_device.csn = csn;
-    device->spi_device.bus_chl = bus_chl;
-    device->spi_device.cs_state = kspi_cs_keep_asserted;
-    if(!device->bus)
+    else
     {
-        return kspi_status_error;
+        ret = spi_config(&device);
     }
-    if(!device->bus->init)
-    {
-        return kspi_status_error;
-    }
-    if(!device->bus->bus_config)
-    {
-        return kspi_status_error;
-    }
-    //init 
-    if(device->bus->init(device->bus, device->bus->instance))
-    {
-        return kspi_status_error;
-    }
-    // bus chl config
-    if(device->bus->bus_config(device->bus, device->spi_device.bus_chl, kspi_cpol0_cpha0, baudrate))
-    {
-        return kspi_status_error;
-    }
-    // link ops
-    device->init = ads7843_init;
-    device->probe = ads7843_probe;
-    device->readX = ads7843_readX;
-    device->readY = ads7843_readY;
-    return kspi_status_ok;
+    return ret;
 }
-
-
-

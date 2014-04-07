@@ -71,7 +71,6 @@ i2c_status i2c_bus_init(struct i2c_bus * bus, uint32_t instance, uint32_t baudra
         I2C_Init(&I2C_InitStruct1);
         bus_open_flag = 1;
     }
-    bus->init = i2c_bus_init;
     bus->deinit = i2c_bus_deinit;
     bus->read = i2c_bus_read;
     bus->write = i2c_bus_write;

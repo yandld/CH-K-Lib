@@ -27,47 +27,58 @@ void SPI_ISR(void)
     i++;
 }
 
-#define SPI_FLASH_TEST_LEN  (1024*512)
-volatile uint8_t* buf_test = SRAM_START_ADDRESS;
-//uint8_t buf_test[SPI_FLASH_TEST_LEN];
-
-
+extern int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
 static int DO_SPI_FLASH(int argc, char * const argv[])
 {
     uint32_t i;
-    struct spi_bus bus; 
-    spi_bus_init(&bus, BOARD_SPI_INSTANCE);
-    PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
-    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
-    w25qxx_device w25qxx1;
-    w25qxx1.bus = &bus;
-    if(w25qxx_init(&w25qxx1, BOARD_FLASH_SPI_PCSN, HW_CTAR1, 10*1000*1000))
+    uint16_t x,y;
+    #define SPI_FLASH_TEST_LEN  (1024*512)
+    volatile uint8_t* buf_test = SRAM_START_ADDRESS;
+    uint32_t ret;
+    static struct spi_bus bus;
+    ret = kinetis_spi_bus_init(&bus, HW_SPI2);
+    if(ret)
     {
-        printf("w25qxx init failed\r\n");
+        printf("spi bus init failed!\r\n");
+    }
+    
+    ret = ads7843_init(&bus, 0);
+    if(ret)
+    {
+        printf("ads7843 init failed!\r\n");
+    }
+    ret = w25qxx_init(&bus, 1);
+    if(ret)
+    {
+        printf("w25qxx init failed!\r\n");
+    }
+    
+    
+    for(i=0;i<100;i++)
+    {
+        ads7843_readX(&x);
+        ads7843_readY(&y);
+        printf("X:%04d Y:%04d\r", x, y);
+        DelayMs(10);
+    }
+    /* probe w25qxx */
+    if(w25qxx_probe())
+    {
+        printf("no w25qxx deived found\r\n");
         return 1;
     }
-    if(w25qxx1.probe(&w25qxx1))
-    {
-        printf("no w25qxx deive found\r\n");
-        return 1;
-    }
-    printf("%s,id:0x%X,size:%dKB\r\n",w25qxx1.name, w25qxx1.id, w25qxx1.size/1024);
+    printf("%s detected!\r\n", w25qxx_get_name());
     for(i=0;i<SPI_FLASH_TEST_LEN;i++)
     {
         buf_test[i] = i;
     }
-   // printf("erasing chip ...\r\n");
-   // w25qxx1.erase_chip(&w25qxx1);
-   // printf("erasing complete\r\n");
-    if(w25qxx1.write(&w25qxx1, 0, (uint8_t*)buf_test, SPI_FLASH_TEST_LEN))
+    if(w25qxx_write(0, (uint8_t*)buf_test, SPI_FLASH_TEST_LEN))
     {
         printf("w25qxx write failed\r\n");
         return 1;
     }
     memset((uint8_t*)buf_test,0, SPI_FLASH_TEST_LEN);
-    if(w25qxx1.read(&w25qxx1, 0, (uint8_t*)buf_test, SPI_FLASH_TEST_LEN))
+    if(w25qxx_read(0, (uint8_t*)buf_test, SPI_FLASH_TEST_LEN))
     {
         printf("w25qxx read failed\r\n");
         return 1;
@@ -79,30 +90,11 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
            printf("error:[0x%X]:%d\r\n", i, buf_test[i]);
         }
     }
+    printf("spi flash test finish!\r\n");
     return 0;
 }
 
 
-static int DO_SPI_TP(int argc, char * const argv[])
-{
-    uint16_t x,y;
-    struct spi_bus bus; 
-    spi_bus_init(&bus, BOARD_SPI_INSTANCE);
-    PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
-    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
-    struct ads7843_device ads7843;
-    ads7843.bus = &bus;
-    ads7843_init(&ads7843, BOARD_TP_SPI_PCSN, HW_CTAR0, 20*1000);
-    ads7843.probe(&ads7843);
-    while(1)
-    {
-        ads7843.readX(&ads7843, &x);
-        ads7843.readY(&ads7843, &y);
-        printf("X:%04d Y:%04d\r", x, y);
-    }
-}
 
 int CMD_SPI(int argc, char *const argv[])
 {
@@ -112,10 +104,7 @@ int CMD_SPI(int argc, char *const argv[])
     {
         return DO_SPI_FLASH(argc, argv);
     }
-    if((argc == 2) && (!strcmp(argv[1], "TP")))
-    {
-        return DO_SPI_TP(argc, argv);
-    }
+
     //初始化SPI
    // SPI_QuickInit(BOARD_SPI_MAP, kSPI_CPOL0_CPHA1, 1*1000);
     //安装回调函数

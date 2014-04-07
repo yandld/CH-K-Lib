@@ -77,7 +77,6 @@ static shell_io_install_t Shell_IOInstallStruct1 =
  UART5_RX_PD08_TX_PD09   
 */
 struct spi_bus bus; 
-struct ads7843_device ads7843;
 
 int main(void)
 {
@@ -114,16 +113,16 @@ int main(void)
     shell_register_function(&CommandFun_TSI);
     
 
-    spi_bus_init(&bus, BOARD_SPI_INSTANCE);
+//    spi_bus_init(&bus, BOARD_SPI_INSTANCE);
     PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
     
 
-    ads7843.bus = &bus;
-    ads7843_init(&ads7843, BOARD_TP_SPI_PCSN, HW_CTAR0, 20*1000);
-    ads7843.probe(&ads7843);
+  //  ads7843.bus = &bus;
+  //  ads7843_init(&ads7843, BOARD_TP_SPI_PCSN, HW_CTAR0, 20*1000);
+  //  ads7843.probe(&ads7843);
     CMD_FLEXBUS(0, NULL);
     if(SRAM_SelfTest())
     {

@@ -16,25 +16,11 @@
 #include "spi_abstraction.h"
 
 
-typedef struct ads7843_device * ads7843_device_t;
-struct ads7843_device
-{
-    // params
-    spi_bus_t bus;
-    // ops
-    spi_status (*init) (struct ads7843_device * device, uint32_t csn, uint32_t bus_chl, uint32_t baudrate);
-    spi_status (*probe)(ads7843_device_t device);
-    spi_status (*readX)(ads7843_device_t device, uint16_t * value);
-    spi_status (*readY)(ads7843_device_t device, uint16_t * value);
-    //internal vars
-    struct spi_device spi_device;
-};
-
 
 //!< API functions
-spi_status ads7843_init(struct ads7843_device * device, uint32_t csn, uint32_t bus_chl, uint32_t baudrate);
-
-
+int ads7843_init(spi_bus_t bus, uint32_t cs);
+uint32_t ads7843_readX(uint16_t * value);
+uint32_t ads7843_readY(uint16_t * value);
 
 
 

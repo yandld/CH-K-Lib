@@ -175,14 +175,6 @@ i2c_status adxl345_init(struct adxl345_device * device, uint8_t chip_addr)
     {
         return ki2c_status_error;
     }
-    if(!device->bus->init)
-    {
-        return ki2c_status_error;
-    }
-    if(device->bus->init(device->bus, device->bus->instance, device->bus->baudrate))
-    {
-        return ki2c_status_error;
-    }
     //link param
     device->i2c_device.chip_addr = chip_addr;
     device->i2c_device.subaddr_len = 1;

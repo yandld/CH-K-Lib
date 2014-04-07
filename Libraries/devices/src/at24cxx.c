@@ -31,10 +31,6 @@ static i2c_status at24cxx_probe(ad24cxx_device_t device, at24cxx_part_number_t t
     {
         return ki2c_status_error;
     }
-    if(!device->bus->init)
-    {
-        return ki2c_status_error;
-    }
     if(!device->bus->probe)
     {
         return ki2c_status_error; 
@@ -171,14 +167,6 @@ static i2c_status at24cxx_get_size(ad24cxx_device_t device, uint32_t * size)
 i2c_status at24cxx_init(struct at24cxx_device * device)
 {
     if(!device->bus)
-    {
-        return ki2c_status_error;
-    }
-    if(!device->bus->init)
-    {
-        return ki2c_status_error;
-    }
-    if(device->bus->init(device->bus, device->bus->instance, device->bus->baudrate))
     {
         return ki2c_status_error;
     }

@@ -39,7 +39,6 @@ struct i2c_bus
     uint32_t instance;
     uint32_t baudrate;
     // ops
-    i2c_status (*init)(struct i2c_bus * bus, uint32_t instance, uint32_t baudrate);
     i2c_status (*deinit)(i2c_bus_t bus);
     i2c_status (*read)(i2c_bus_t bus, i2c_device_t device, uint8_t *buf, uint32_t len);
     i2c_status (*write)(i2c_bus_t bus, i2c_device_t device, uint8_t *buf, uint32_t len);

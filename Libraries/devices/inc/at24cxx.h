@@ -13,35 +13,17 @@
 #include <stdint.h>
 #include "i2c_abstraction.h"
 
-typedef enum
-{
-    kAT24C01,
-    kAT24C02,
-    kAT24C04,
-    kAT24C08,
-    kAT24C16,
-}at24cxx_part_number_t;
 
-typedef struct at24cxx_device *ad24cxx_device_t;
-struct at24cxx_device
-{
-    // params
-    i2c_bus_t bus;
-    at24cxx_part_number_t type;
-    // ops
-    i2c_status (*init) (struct at24cxx_device * device);
-    i2c_status (*probe)(ad24cxx_device_t device, at24cxx_part_number_t type);
-    i2c_status (*read)(ad24cxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len);
-    i2c_status (*write)(ad24cxx_device_t device, uint32_t addr, uint8_t *buf, uint32_t len);
-    i2c_status (*self_test)(ad24cxx_device_t device);
-    i2c_status (*get_size)(ad24cxx_device_t device, uint32_t * size);
-    //internal vars
-    struct i2c_device i2c_device;
-};
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
+#endif
 
 //API funtctions
-i2c_status at24cxx_init(struct at24cxx_device * device);
-
+int at24cxx_init(struct i2c_bus* bus, const char * name);
+int at24cxx_read(uint32_t addr, uint8_t *buf, uint32_t len);
+int at24cxx_write(uint32_t addr, uint8_t *buf, uint32_t len);
+int at24cxx_self_test(void);
+int at24cxx_get_size(void);
 
 #endif
 

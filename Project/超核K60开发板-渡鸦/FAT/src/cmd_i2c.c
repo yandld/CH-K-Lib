@@ -14,20 +14,25 @@ static int DO_I2C_SCAN(int argc, char *const argv[])
 {
     uint8_t i;
     struct i2c_bus bus;
-    if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 100*1000))
+    struct i2c_device device;
+    if(kinetis_i2c_bus_init(&bus, 0))
     {
-        printf("i2c init failed\r\n");
-        return 1;
+        printf("i2c bus init failed\r\n");
     }
-    shell_printf("i2c scanning bus at speed:%d\r\n", bus.baudrate);
-    for(i = 1;i < 127; i++)
+    device.config.baudrate = 100*1000;
+    device.config.data_width = 8;
+    device.subaddr_len = 1;
+    device.subaddr = 0;
+    i2c_bus_attach_device(&bus, &device);
+    for(i=0;i<127;i++)
     {
-        if(bus.probe(&bus, i) == ki2c_status_ok)
+        device.chip_addr = i;
+        if(!i2c_probe(&device))
         {
-            shell_printf("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
+            printf("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
         }
     }
-    return 0;
+
 }
 
 void I2C_ISR(void)
@@ -54,37 +59,33 @@ static int DO_I2C_IT(int argc, char *const argv[])
 
 static int DO_I2C_AT24CXX(int argc, char *const argv[])
 {
-    uint32_t size;
-    struct i2c_bus bus = {0};
-    struct at24cxx_device at24cxx = {0};
-    if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 40*1000))
+    uint32_t ret;
+    static struct i2c_bus bus;
+    ret = kinetis_i2c_bus_init(&bus, HW_I2C0);
+    if(ret)
     {
-        shell_printf("i2c bus init failed\r\n");
+        printf("spi bus init failed!\r\n");
     }
-    at24cxx.bus = &bus;
-    if(at24cxx_init(&at24cxx))
+    
+    ret = at24cxx_init(&bus, "at24c02");
+    if(ret)
     {
-        shell_printf("init at24cxx failed\r\n");
-        return 1;
+        printf("at24cxx init failed!\r\n");
     }
-    if(at24cxx.probe(&at24cxx, kAT24C02))
-    {
-        shell_printf("no device found\r\n");
-        return 1;
-    }
-    at24cxx.get_size(&at24cxx, &size);
-    shell_printf("at24cxx size:%d btye\r\n", size);
-    if(at24cxx.self_test(&at24cxx))
+    
+    shell_printf("at24cxx size:%d btye\r\n", at24cxx_get_size());
+    if(at24cxx_self_test())
     {
         shell_printf("at24cxx self test failed\r\n");
         return 1;  
     }
-    shell_printf("at24cxx  test ok\r\n");
-    return 0;
+    printf("at24cxx test ok!\r\n");
+
 }
 
 static int DO_I2C_ADXL345(int argc, char *const argv[])
 {
+    #if 0
     short x,y,z;
     short ax, ay, az;
     struct i2c_bus bus = {0};
@@ -113,6 +114,7 @@ static int DO_I2C_ADXL345(int argc, char *const argv[])
             printf("X:%4d Y:%4d Z:%4d AX:%4d AY:%4d AZ:%4d  \r", x, y, z, ax, ay ,az); 
         }
     }
+    #endif
 }
 
 

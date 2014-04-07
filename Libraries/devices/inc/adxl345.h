@@ -14,26 +14,6 @@
 #include <stdint.h>
 #include "i2c_abstraction.h"
 
-typedef struct adxl345_device *adxl345_device_t;
-struct adxl345_device
-{
-    // params
-    i2c_bus_t bus;
-    // ops
-    i2c_status (*init) (struct adxl345_device * device, uint8_t chip_addr);
-    i2c_status (*probe)(adxl345_device_t device);
-    i2c_status (*readXYZ)(adxl345_device_t device, short *x, short *y, short *z);
-    i2c_status (*calibration)(adxl345_device_t device);
-    short (*convert_angle)(short x, short y, short z, short *ax, short *ay, short *az);
-    //internal vars
-    struct i2c_device i2c_device;
-};
-
-
-//!< API functions
-i2c_status adxl345_init(struct adxl345_device * device, uint8_t chip_addr);
-
-
 
 
 

@@ -143,11 +143,11 @@ int w25qxx_probe(void)
             w25qxx_type.size = w25qxx_attr_table[i].size;
             w25qxx_power_up();
             buf[0] = w25qxx_read_sr();
-            #if DEBUG
+            #if LIB_DEBUG
             printf("SR:0x%X\r\n", buf[0]);
             #endif
             buf[0] = w25qxx_read_sr2();
-            #if DEBUG
+            #if LIB_DEBUG
             printf("SR2:0x%X\r\n", buf[0]);
             #endif
             // enable full access to all memory regin, something like unlock chip.
@@ -214,7 +214,7 @@ static int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
 static int w25qxx_write_no_check(uint32_t addr, uint8_t *buf, uint32_t len)  
 { 			 		 
 	uint16_t pageremain;	   
-    #if DEBUG
+    #if LIB_DEBUG
     printf("w25qxx - write_no_check: addr:%d len:%d\r\n", addr, len);
     #endif
 	pageremain = W25X_PAGE_SIZE-(addr%W25X_PAGE_SIZE); //单页剩余的字节数		 	    
@@ -295,7 +295,7 @@ int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
             w25qxx_write_no_check(secpos*4096, mem_pool,4096); //写入整个扇区 
 		}else 
         {
-            #if DEBUG
+            #if LIB_DEBUG
             printf("no need to erase -addr:%d\r\n", addr);
             #endif
             w25qxx_write_no_check(addr, buf, secremain);//写已经擦除了的,直接写入扇区剩余区间. 

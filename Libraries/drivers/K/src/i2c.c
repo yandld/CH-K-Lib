@@ -568,6 +568,13 @@ int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddre
         }
         return 1;
     }
+    /* if len = 0 then return */
+    if(!len)
+    {
+        I2C_GenerateSTOP(instance);
+        while(!I2C_IsBusy(instance));
+        return 0;
+    }
     /* send sub address */
     for(i = 0; i < subAddressLen; i++)
     {

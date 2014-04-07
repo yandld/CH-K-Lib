@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60D10 RAVEN DEBUG</Define>
+              <Define>MK60D10 RAVEN LIB_DEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X</IncludePath>
             </VariousControls>
@@ -680,11 +680,6 @@
               <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
             </File>
             <File>
-              <FileName>spi_abstraction.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\spi_abstraction.c</FilePath>
-            </File>
-            <File>
               <FileName>ads7843.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
@@ -708,6 +703,11 @@
               <FileName>at24cxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\at24cxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_bus_ops.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\spi_bus_ops.c</FilePath>
             </File>
           </Files>
         </Group>

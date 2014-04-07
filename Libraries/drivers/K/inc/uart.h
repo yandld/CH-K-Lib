@@ -60,30 +60,30 @@ typedef enum
 /*!< 每帧数据位个数 */
 typedef enum 
 {
-    kUART_8BitsPerChar  = 0,   /*!< 8-bit data characters */
-    kUart_9BitsPerChar  = 1,   /*!< 9-bit data characters */
+    kUART_8BitsPerChar  = 0,   /*!< 8-bit 数据 不包括校验位 */
+    kUART_9BitsPerChar  = 1,   /*!< 9-bit 数据 不包括校验位 */
 } UART_BitPerChar_Type;
 
 /*!< 中断及DMA配置 */
 typedef enum
 {
-    kUART_IT_Tx_Disable,        /*!< Disable Tx Interrupt */
-    kUART_IT_Rx_Disable,        /*!< Disable Rx Interrupt */
-    kUART_DMA_Tx_Disable,       /*!< Disable Tx DMA */
-    kUART_DMA_Rx_Disable,       /*!< Disable Rx DMA */
-    kUART_IT_Tx,                /*!< Byte Transfer Complete Interrupt for Tx */
-    kUART_DMA_Tx,               /*!< DMA Trigger On Byte Transfer Complete for Tx */
-    kUART_IT_Rx,                /*!< Byte Transfer Complete Interrupt for Rx */
-    kUART_DMA_Rx,               /*!< DMA Trigger On Byte Transfer Complete for Rx */
+    kUART_IT_Tx_Disable,        /*!< 禁止发送中断 */
+    kUART_IT_Rx_Disable,        /*!< 禁止接收中断 */
+    kUART_DMA_Tx_Disable,       /*!< 禁止DMA发送 */
+    kUART_DMA_Rx_Disable,       /*!< 禁止DMA接收 */
+    kUART_IT_Tx,                /*!< 开启每发送一帧传输完成中断 */
+    kUART_DMA_Tx,               /*!< 开启每发送一帧传输完成触发DMA */
+    kUART_IT_Rx,                /*!< 开启每接收一帧传输完成中断 */
+    kUART_DMA_Rx,               /*!< 开启每接收一帧传输完成触发DMA */
 }UART_ITDMAConfig_Type;
 
 /*!< UART初始化结构 */
 typedef struct
 {
-    uint8_t                 instance;       /*!< UART instance */
-    uint32_t                baudrate;       /*!< UART baudrate */
-    UART_ParityMode_Type    parityMode;     /*!< UART parity mode */
-    UART_BitPerChar_Type    bitPerChar;     /*!< UART bit per char */
+    uint8_t                 instance;       /*!< UART 模块号 */
+    uint32_t                baudrate;       /*!< UART 波特率 */
+    UART_ParityMode_Type    parityMode;     /*!< UART 校验位 */
+    UART_BitPerChar_Type    bitPerChar;     /*!< UART 每一帧含多少位数据 */
 }UART_InitTypeDef;
 
 /*!< UART 回调函数声明 */

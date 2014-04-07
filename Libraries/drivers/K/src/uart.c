@@ -247,6 +247,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
             break;
     }
     /* bit per char */
+    /* note: Freescale's bit size config in register are including parity bit! */
     switch(UART_InitStruct->bitPerChar)
     {
         case kUART_8BitsPerChar:
@@ -262,7 +263,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
                 UART_InstanceTable[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;    
             }
             break;
-        case kUart_9BitsPerChar:
+        case kUART_9BitsPerChar:
             if(UART_InstanceTable[UART_InitStruct->instance]->C1 & UART_C1_PE_MASK)
             {
                 /* parity is enabled it's actually 10 bit*/

@@ -21,7 +21,7 @@
 #define UART_printf(fmt,args...)    printf (fmt ,##args)
 #endif
 
-//!< hardware instances
+/*!< UART 模块号 */
 #define HW_UART0  (0x00U)
 #define HW_UART1  (0x01U)
 #define HW_UART2  (0x02U)
@@ -29,7 +29,7 @@
 #define HW_UART4  (0x04U)
 #define HW_UART5  (0x05U)
 
-//!< UART QuickInit macro                            
+/*!< UART 快速初始化宏 */                      
 #define UART1_RX_PE01_TX_PE00   (0x80E1U)
 #define UART0_RX_PF17_TX_PF18   (0xA528U)
 #define UART3_RX_PE05_TX_PE04   (0x88E3U)
@@ -49,23 +49,19 @@
 #define UART2_RX_PF13_TX_PF14   (0x9B2AU)
 #define UART5_RX_PD08_TX_PD09   (0x90DDU)
 
-
-#if 0
-//!< UART paritySelect
+/*!< parity 选择 */
 typedef enum
 {
-    kUartParityDisabled = 0x0,  //!< parity disabled
-    kUartParityEven     = 0x2,  //!< parity enabled, type even, bit setting: PE|PT = 10
-    kUartParityOdd      = 0x3,  //!< parity enabled, type odd,  bit setting: PE|PT = 11
+    kUART_ParityDisabled = 0x0,  /*!< 校验位禁止 */
+    kUART_ParityEven     = 0x2,  /*!< 1位 奇校验 */
+    kUART_ParityOdd      = 0x3,  /*!< 1位 偶校验 */
 } UART_ParityMode_Type;
 
-//!< UART Stopbit select
-typedef enum
+typedef enum 
 {
-    kUartOneStopBit = 0,  //!< one stop bit
-    kUartTwoStopBit = 1,  //!< two stop bits
-} UART_StopBit_Type;
-#endif
+    kUART_8BitsPerChar  = 0,   /*!< 8-bit data characters */
+    kUart_9BitsPerChar  = 1,   /*!< 9-bit data characters */
+} UART_BitPerChar_Type;
 
 //!< interrupt and DMA select
 typedef enum
@@ -83,12 +79,10 @@ typedef enum
 //!< UART Init type
 typedef struct
 {
-    uint8_t   instance;       //!< UART instance
-    uint32_t  baudrate;       //!< UART baudrate
-    #if 0
-    uint8_t   parityMode;     //!< UART parity mode
-    uint8_t   stopBitCount;   //!< UART stopbit
-    #endif
+    uint8_t                 instance;       //!< UART instance
+    uint32_t                baudrate;       //!< UART baudrate
+    UART_ParityMode_Type    parityMode;     //!< UART parity mode
+    UART_BitPerChar_Type    bitPerChar;     //!< UART bit per char
 }UART_InitTypeDef;
 
 //!< UART CallBack Type

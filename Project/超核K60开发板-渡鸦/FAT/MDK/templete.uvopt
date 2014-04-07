@@ -159,7 +159,7 @@
           <Type>0</Type>
           <LineNumber>76</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>8778</Address>
+          <Address>8962</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -173,18 +173,18 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>149</LineNumber>
+          <LineNumber>560</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>33516</Address>
+          <Address>18722</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Yandld\Desktop\露脡脩禄驴陋路垄掳氓脳脢脕脧掳眉\3-鲁脤脨貌脭麓脗毛\CH-K-Lib-V2.5\Libraries\devices\src\spi_abstraction.c</Filename>
+          <Filename>C:\Users\Yandld\Desktop\露脡脩禄驴陋路垄掳氓脳脢脕脧掳眉\3-鲁脤脨貌脭麓脗毛\CH-K-Lib-V2.5\Libraries\drivers\K\src\i2c.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\templete\../../../../Libraries/drivers/K/src/i2c.c\560</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -290,7 +290,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>468</TopLine>
+      <TopLine>467</TopLine>
       <CurrentLine>473</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60D10.s</PathWithFileName>
@@ -506,8 +506,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>17</TopLine>
+      <CurrentLine>18</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\cmd_i2c.c</PathWithFileName>
       <FilenameWithoutPath>cmd_i2c.c</FilenameWithoutPath>
@@ -800,10 +800,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>12</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>560</TopLine>
+      <CurrentLine>574</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\i2c.c</PathWithFileName>
       <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
@@ -1122,7 +1122,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>27</TopLine>
+      <TopLine>24</TopLine>
       <CurrentLine>39</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\ads7843.c</PathWithFileName>
@@ -1152,13 +1152,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>12</ColumnNumber>
+      <ColumnNumber>24</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>45</TopLine>
+      <TopLine>126</TopLine>
       <CurrentLine>72</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\devices\src\i2c_abstraction.c</PathWithFileName>
-      <FilenameWithoutPath>i2c_abstraction.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\devices\src\adxl345.c</PathWithFileName>
+      <FilenameWithoutPath>adxl345.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1168,13 +1168,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>15</ColumnNumber>
+      <ColumnNumber>1</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>172</TopLine>
-      <CurrentLine>181</CurrentLine>
+      <TopLine>102</TopLine>
+      <CurrentLine>122</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\devices\src\adxl345.c</PathWithFileName>
-      <FilenameWithoutPath>adxl345.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\devices\src\at24cxx.c</PathWithFileName>
+      <FilenameWithoutPath>at24cxx.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1184,13 +1184,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>23</ColumnNumber>
+      <ColumnNumber>16</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>166</TopLine>
-      <CurrentLine>194</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>51</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\devices\src\at24cxx.c</PathWithFileName>
-      <FilenameWithoutPath>at24cxx.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\devices\src\spi_bus_ops.c</PathWithFileName>
+      <FilenameWithoutPath>spi_bus_ops.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1202,11 +1202,11 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>17</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\devices\src\spi_bus_ops.c</PathWithFileName>
-      <FilenameWithoutPath>spi_bus_ops.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\devices\src\i2c_bus_ops.c</PathWithFileName>
+      <FilenameWithoutPath>i2c_bus_ops.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1242,8 +1242,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>3964</TopLine>
+      <CurrentLine>3985</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\znfat\znFAT.c</PathWithFileName>
       <FilenameWithoutPath>znFAT.c</FilenameWithoutPath>

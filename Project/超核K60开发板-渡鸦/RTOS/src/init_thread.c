@@ -47,7 +47,7 @@ void init_thread_entry(void* parameter)
     /* mount spi_flash */
     if (dfs_mount("spi_flash", "/", "elm", 0, 0) == 0)
     {
-        rt_kprintf("spi_flash mount to / \n");
+        rt_kprintf("spi_flash mount to / OK \n");
     }
     else
     {

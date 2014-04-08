@@ -312,10 +312,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>26</ColumnNumber>
+      <ColumnNumber>22</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>63</TopLine>
-      <CurrentLine>69</CurrentLine>
+      <CurrentLine>76</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -338,7 +338,7 @@
       <Focus>0</Focus>
       <ColumnNumber>43</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>508</TopLine>
+      <TopLine>509</TopLine>
       <CurrentLine>513</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\gpio.c</PathWithFileName>
@@ -354,7 +354,7 @@
       <Focus>0</Focus>
       <ColumnNumber>47</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>331</TopLine>
+      <TopLine>334</TopLine>
       <CurrentLine>340</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\uart.c</PathWithFileName>
@@ -418,7 +418,7 @@
       <Focus>0</Focus>
       <ColumnNumber>42</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>377</TopLine>
+      <TopLine>378</TopLine>
       <CurrentLine>382</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\adc.c</PathWithFileName>
@@ -434,7 +434,7 @@
       <Focus>0</Focus>
       <ColumnNumber>41</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>472</TopLine>
+      <TopLine>473</TopLine>
       <CurrentLine>477</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\ftm.c</PathWithFileName>
@@ -450,7 +450,7 @@
       <Focus>0</Focus>
       <ColumnNumber>48</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>730</TopLine>
+      <TopLine>731</TopLine>
       <CurrentLine>735</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\i2c.c</PathWithFileName>

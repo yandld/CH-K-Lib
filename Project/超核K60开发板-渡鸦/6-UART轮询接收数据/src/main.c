@@ -15,7 +15,7 @@
  
 int main(void)
 {
-    uint8_t ch;
+    uint16_t ch;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     
@@ -23,6 +23,8 @@ int main(void)
     UART_InitTypeDef UART_InitStruct1 = {0};
     UART_InitStruct1.instance = HW_UART0;
     UART_InitStruct1.baudrate = 115200;
+    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
+    UART_InitStruct1.parityMode = kUART_ParityDisabled;
     UART_Init(&UART_InitStruct1);
     
     /* 初始化串口0对应的引脚 D6 D7*/

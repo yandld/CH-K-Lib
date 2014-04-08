@@ -1,7 +1,6 @@
 #include "gpio.h"
 #include "common.h"
 #include "uart.h"
-#include "cpuidy.h"
 
 /* CH Kinetis固件库 V2.50 版本 */
 /* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */

@@ -61,7 +61,7 @@
 
 #define DISABLE_WDOG    1
 
-#define CLOCK_SETUP     0
+#define CLOCK_SETUP     3
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
@@ -213,45 +213,27 @@ void SystemInit (void) {
   /* MCG->C2: ??=0,??=0,RANGE0=2,HGO=0,EREFS=1,LP=0,IRCS=0 */
   MCG->C2 = (uint8_t)0x24u;
 #elif (CLOCK_SETUP == 3)
-  /* SIM->CLKDIV1: OUTDIV1=0,OUTDIV2=0,OUTDIV3=1,OUTDIV4=1,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0 */
-  SIM->CLKDIV1 = (uint32_t)0x01330000u; /* Update system prescalers */
-  /* Switch to FBE Mode */
-  /* OSC->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=0,SC4P=0,SC8P=0,SC16P=0 */
-  OSC->CR = (uint8_t)0x80u;
-  /* SIM->SOPT2: MCGCLKSEL=0 */
-  SIM->SOPT2 &= (uint8_t)~(uint8_t)0x01u;
-  /* MCG->C2: ??=0,??=0,RANGE=2,HGO=0,EREFS=0,LP=0,IRCS=0 */
-  MCG->C2 = (uint8_t)0x20u;
-  /* MCG->C1: CLKS=2,FRDIV=5,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
-  MCG->C1 = (uint8_t)0xAAu;
-  /* MCG->C4: DMX32=0,DRST_DRS=0 */
-  MCG->C4 &= (uint8_t)~(uint8_t)0xE0u;
-  /* MCG->C5: ??=0,PLLCLKEN=0,PLLSTEN=0,PRDIV=0x0F */
-  MCG->C5 = (uint8_t)0x0Fu;
-  /* MCG->C6: LOLIE=0,PLLS=0,CME=0,VDIV=0 */
-  MCG->C6 = (uint8_t)0x00u;
-  while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u) { /* Check that the oscillator is running */
-  }
-  while((MCG->S & MCG_S_IREFST_MASK) != 0u) { /* Check that the source of the FLL reference clock is the external reference clock. */
-  }
-  while((MCG->S & 0x0Cu) != 0x08u) {    /* Wait until external reference clock is selected as MCG output */
-  }
-  /* Switch to PBE Mode */
-  /* MCG->C1: CLKS=2,FRDIV=5,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
-  MCG->C1 = (uint8_t)0xAAu;
-  /* MCG->C6: LOLIE=0,PLLS=1,CME=0,VDIV=8 */
-  MCG->C6 = (uint8_t)0x48u;
-  while((MCG->S & MCG_S_PLLST_MASK) == 0u) { /* Wait until the source of the PLLS clock has switched to the PLL */
-  }
-  while((MCG->S & MCG_S_LOCK0_MASK) == 0u) { /* Wait until locked */
-  }
-  /* Switch to PEE Mode */
-  /* MCG_C1: CLKS=0,FRDIV=5,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
-  MCG->C1 = (uint8_t)0x2Au;
-  while((MCG->S & 0x0Cu) != 0x0Cu) {    /* Wait until output of the PLL is selected */
-  }
-  while((MCG->S & MCG_S_LOCK0_MASK) == 0u) { /* Wait until locked */
-  }
+    SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu; /* 配置系统预分频器 先设置为都为最低分频 */
+    //转到 FBE 模式 
+    OSC->CR = (uint8_t)0x00u;
+    SIM->SOPT2 &= (uint8_t)~(uint8_t)0x01u;
+    MCG->C2 = (uint8_t)0x24u;
+    MCG->C1 = (uint8_t)0x9Au;
+    MCG->C4 &= (uint8_t)~(uint8_t)0xE0u;
+    MCG->C5 = (uint8_t)0x03u;
+    MCG->C6 = (uint8_t)0x00u;
+    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);/* 检查 FLL参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_IREFST_MASK) != 0u); /* 检查 FLL参考时钟是内部参考时钟 */
+    while((MCG->S & 0x0Cu) != 0x08u);          /* 等待 FBE 被选择 */
+    MCG->C5 = (uint8_t)MCG_C5_PRDIV0(24);        //50/25 = 2M
+    MCG->C6 = (uint8_t)(0x40u|MCG_C6_VDIV0(26));
+    SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(3));	
+    while((MCG->S & MCG_S_PLLST_MASK) == 0u);   /* 等待PLLS 时钟源转到 PLL */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);    /* 等待锁定 */
+    //转到PEE
+    MCG->C1 = (uint8_t)0x1Au;
+    while((MCG->S & 0x0Cu) != 0x0Cu);           /* 等待PLL输出 */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);      /* 等待PLL锁定 */
 #endif /* (CLOCK_SETUP == 3) */
   
 }

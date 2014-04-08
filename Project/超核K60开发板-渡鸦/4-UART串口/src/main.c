@@ -52,8 +52,8 @@ int main(void)
     UART_InitTypeDef UART_InitStruct1 = {0};
     UART_InitStruct1.instance = HW_UART0;
     UART_InitStruct1.baudrate = 115200;
-    UART_InitStruct1.parityMode = kUART_ParityOdd;
-    UART_InitStruct1.bitPerChar = kUART_9BitsPerChar;
+    UART_InitStruct1.parityMode = kUART_ParityDisabled;
+    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
     UART_Init(&UART_InitStruct1);
     
     /* 初始化串口所占用的引脚 其中kPinAlt3为引脚复用3选项 可以在芯片 Reference Manuel 上的 Signal Multiplexing and Signal Descriptions 一章中查到*/
@@ -62,11 +62,8 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     /* 当使用串口初始化后 printf 被默认连接到第一个被初始化的串口上*/
     printf("UART%d OK! Hello Kinetis\r\n", instance);
-    
     while(1)
     {
-        
-        #if 0
         /* 串口 按字节发送 数据 注意 instance必须是已经初始化过的模块 否则 将产生错误*/
         UART_WriteByte(instance, 'h');
         UART_WriteByte(instance, 'e');
@@ -78,7 +75,6 @@ int main(void)
         /* 闪烁小灯 */
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(500);
-        #endif
     }
 }
 

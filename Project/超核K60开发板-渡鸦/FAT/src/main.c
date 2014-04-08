@@ -46,7 +46,7 @@ static void Putc(uint8_t data)
 
 static uint8_t Getc(void)
 {
-    uint8_t ch;
+    uint16_t ch;
     while(UART_ReadByte(UART_Instance, &ch));
     return ch;
 }

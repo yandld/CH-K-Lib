@@ -91,9 +91,9 @@ int fputc(int ch,FILE *f)
 
 int fgetc(FILE *f)
 {
-    uint8_t ch;
+    uint16_t ch;
     while(UART_ReadByte(UART_DebugInstance, &ch));
-    return ch;
+    return (ch & 0xFF);
 }
 #elif __ICCARM__ /* IAR support */
 size_t __write(int handle, const unsigned char * buffer, size_t size)
@@ -284,7 +284,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     UART_InstanceTable[UART_InitStruct->instance]->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     /* link debug instance */
     
-    /* 如果是第一次初始化 则自动连接到printf */
+    /* if it's first initalized ,link getc and putc to it */
     if(is_fitst_init)
     {
         UART_DebugInstance = UART_InitStruct->instance;
@@ -309,12 +309,15 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
  * @param  ch: 需要发送的一字节数据
  * @retval None
  */
-void UART_WriteByte(uint32_t instance, uint8_t ch)
+void UART_WriteByte(uint32_t instance, uint16_t ch)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
+    /* config ninth bit */
+    uint8_t ninth_bit = (ch >> 8) & 0x01U;
+    (ninth_bit)?(UART_InstanceTable[instance]->C3 |= UART_C3_T8_MASK):(UART_InstanceTable[instance]->C3 &= ~UART_C3_T8_MASK);
     while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
-    UART_InstanceTable[instance]->D = (uint8_t)ch;
+    UART_InstanceTable[instance]->D = (uint8_t)(ch & 0xFF);
 }
 
 
@@ -336,13 +339,17 @@ void UART_WriteByte(uint32_t instance, uint8_t ch)
  * @param  ch: 接收到的数据指针
  * @retval 0:成功接收到数据  非0:没有接收到数据
  */
-uint8_t UART_ReadByte(uint32_t instance, uint8_t *ch)
+uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
+    uint8_t temp = 0;
     if((UART_InstanceTable[instance]->S1 & UART_S1_RDRF_MASK) != 0)
     {
-        *ch = (uint8_t)(UART_InstanceTable[instance]->D);	
+        /* get ninth bit */
+        temp = (UART_InstanceTable[instance]->C3 & UART_C3_R8_MASK) >> UART_C3_R8_SHIFT;
+        *ch = temp << 8;
+        *ch |= (uint8_t)(UART_InstanceTable[instance]->D);	
         return 0; 		  
     }
     return 1;

@@ -64,7 +64,7 @@ static int DO_I2C_AT24CXX(int argc, char *const argv[])
     ret = kinetis_i2c_bus_init(&bus, HW_I2C0);
     if(ret)
     {
-        printf("spi bus init failed!\r\n");
+        printf("i2c bus init failed!\r\n");
     }
     
     ret = at24cxx_init(&bus, "at24c02");
@@ -85,36 +85,39 @@ static int DO_I2C_AT24CXX(int argc, char *const argv[])
 
 static int DO_I2C_ADXL345(int argc, char *const argv[])
 {
-    #if 0
     short x,y,z;
     short ax, ay, az;
-    struct i2c_bus bus = {0};
-    struct adxl345_device adxl345 = {0};
-    if(i2c_bus_init(&bus, BOARD_I2C_INSTANCE, 40*1000))
+    uint32_t ret;
+    static struct i2c_bus bus;
+    ret = kinetis_i2c_bus_init(&bus, HW_I2C0);
+    if(ret)
     {
-        shell_printf("i2c bus init failed\r\n");
-    }
-    adxl345.bus = &bus;
-    if(adxl345_init(&adxl345, 0x53))
-    {
-        shell_printf("init at24cxx failed\r\n");
+        printf("i2c bus init failed!\r\n");
         return 1;
     }
-    if(adxl345.probe(&adxl345))
+    if(adxl345_init(&bus))
     {
-        shell_printf("no device found\r\n");
+        printf("adxl345 init failed\r\n");
         return 1;
     }
-    adxl345.calibration(&adxl345);
+    if(adxl345_probe())
+    {
+        printf("adxl345 init failed\r\n");
+        return 1;
+    }     
+    printf("device found:ID:0x%02X\r\n", adxl345_get_addr());
+    adxl345_calibration();
     while(1)
     {
-        if(!adxl345.readXYZ(&adxl345, &x, &y, &z))
+        if(!adxl345_readXYZ(&x, &y, &z))
         {
-            adxl345.convert_angle(x, y, z, &ax, &ay, &az);
+            adxl345_convert_angle(x, y, z, &ax, &ay, &az);
             printf("X:%4d Y:%4d Z:%4d AX:%4d AY:%4d AZ:%4d  \r", x, y, z, ax, ay ,az); 
         }
+        DelayMs(5);
     }
-    #endif
+    return 0;
+   
 }
 
 

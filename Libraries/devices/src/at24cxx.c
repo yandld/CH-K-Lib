@@ -21,13 +21,12 @@
   ******************************************************************************
   */
 
-
 struct at24cxx_attr
 {
     const char* name;
-    uint32_t total_size;
-    uint16_t page_size;
-    uint8_t  chip_addr; /* base addr */
+    uint32_t total_size; /* total size */
+    uint16_t page_size;  /* page size */
+    uint8_t  chip_addr;  /* base addr */
 };
 
 static const struct at24cxx_attr at24cxx_attr_table[] = 
@@ -41,8 +40,8 @@ static const struct at24cxx_attr at24cxx_attr_table[] =
 
 
 
-struct i2c_device device;
-struct at24cxx_attr at24cxx_addr;
+static struct i2c_device device;
+static struct at24cxx_attr at24cxx_addr;
 
 int at24cxx_get_size(void)
 {

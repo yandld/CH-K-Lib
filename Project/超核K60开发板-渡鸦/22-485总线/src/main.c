@@ -23,7 +23,7 @@ int main(void)
     
     /* 向485总线发送一串字符 */
     UART_SendString(HW_UART5, "485 device test\r\n");
-    uint8_t ch;
+    uint16_t ch;
     while(1)
     {
         /* 将485总线的数据发回去 */

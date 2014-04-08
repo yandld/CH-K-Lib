@@ -5,17 +5,14 @@
 
 static const char UART_String1[] = "HelloWorld\r\n";
 
-static void UART_TX_ISR(uint8_t * byteToSend)
+static void UART_TX_ISR(uint16_t * byteToSend)
 {
-    static uint32_t cnt = sizeof(UART_String1);
     static const char *p = UART_String1;
     *byteToSend = *p++;
-    cnt--;
-    if(!cnt)
+    if((p - UART_String1) == sizeof(UART_String1))
     {
         p = UART_String1;
-        cnt = sizeof(UART_String1);
-        UART_ITDMAConfig(HW_UART0, kUART_IT_Tx_Disable);
+        UART_ITDMAConfig(HW_UART0, kUART_IT_Tx_Disable);  
     }
 }
 

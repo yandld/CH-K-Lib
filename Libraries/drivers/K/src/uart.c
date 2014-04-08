@@ -516,7 +516,7 @@ uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate)
  */
 void UART0_RX_TX_IRQHandler(void)
 {
-    uint8_t ch;
+    uint16_t ch;
     /* Tx */
     if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_TIE_MASK))
     {
@@ -539,7 +539,7 @@ void UART0_RX_TX_IRQHandler(void)
 
 void UART1_RX_TX_IRQHandler(void)
 {
-    uint8_t ch;
+    uint16_t ch;
     /* Tx */
     if((UART_InstanceTable[HW_UART1]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART1]->C2 & UART_C2_TIE_MASK))
     {
@@ -563,7 +563,7 @@ void UART1_RX_TX_IRQHandler(void)
 #if (!defined(MK10D5))
 void UART2_RX_TX_IRQHandler(void)
 {
-    uint8_t ch;
+    uint16_t ch;
     /* Tx */
     if((UART_InstanceTable[HW_UART2]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART2]->C2 & UART_C2_TIE_MASK))
     {
@@ -586,7 +586,7 @@ void UART2_RX_TX_IRQHandler(void)
 
 void UART3_RX_TX_IRQHandler(void)
 {
-    uint8_t ch;
+    uint16_t ch;
     /* Tx */
     if((UART_InstanceTable[HW_UART3]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART3]->C2 & UART_C2_TIE_MASK))
     {
@@ -609,7 +609,7 @@ void UART3_RX_TX_IRQHandler(void)
 
 void UART4_RX_TX_IRQHandler(void)
 {
-    uint8_t ch;
+    uint16_t ch;
     /* Tx */
     if((UART_InstanceTable[HW_UART4]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART4]->C2 & UART_C2_TIE_MASK))
     {
@@ -633,7 +633,7 @@ void UART4_RX_TX_IRQHandler(void)
 #if (defined(MK70F12)|| defined(MK70F15))
 void UART5_RX_TX_IRQHandler(void)
 {
-    uint8_t ch;
+    uint16_t ch;
     /* Tx */
     if((UART_InstanceTable[HW_UART5]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART5]->C2 & UART_C2_TIE_MASK))
     {

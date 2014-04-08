@@ -13,7 +13,7 @@
 /* 串口接收中断回调函数 
    在函数中写中断想要做的事情
 */
-static void UART_RX_ISR(uint8_t byteReceived)
+static void UART_RX_ISR(uint16_t byteReceived)
 {
     /* 将接收到的数据发送回去 */
     UART_WriteByte(HW_UART0, byteReceived);

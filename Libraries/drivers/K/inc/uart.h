@@ -87,8 +87,8 @@ typedef struct
 }UART_InitTypeDef;
 
 /*!< UART 回调函数声明 */
-typedef void (*UART_CallBackTxType)(uint8_t * pbyteToSend);
-typedef void (*UART_CallBackRxType)(uint8_t byteReceived);
+typedef void (*UART_CallBackTxType)(uint16_t * pbyteToSend);
+typedef void (*UART_CallBackRxType)(uint16_t byteReceived);
 
 /*!< API functions */
 uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate);

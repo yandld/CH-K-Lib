@@ -5,7 +5,6 @@
 #include "gpio.h"
 #include "spi.h"
 #include "board.h"       
-#include "sd.h"
 
 
 //fat32

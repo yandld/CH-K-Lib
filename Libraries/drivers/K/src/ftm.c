@@ -35,7 +35,7 @@ static const struct reg_ops SIM_FTMClockGateTable[] =
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM2_MASK},
 };
 #elif (defined(MK10D5))
-static const RegisterManipulation_Type SIM_FTMClockGateTable[] =
+static const struct reg_ops SIM_FTMClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM0_MASK},
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM1_MASK},

@@ -85,7 +85,12 @@ int main(void)
     UART_Instance = UART_QuickInit(BOARD_UART_DEBUG_MAP,115200);
     printf("HelloWorld\r\n");
     /* 设置Flexbus 速度 速度太快ili9320LCD读点有问题 */
+    #ifndef MK10D5
     SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);
+    shell_register_function(&CommandFun_ENET);
+    shell_register_function(&CommandFun_LCD); 
+    #endif
+    
     shell_io_install(&Shell_IOInstallStruct1);
     shell_register_function(&CommandFun_Help);
     shell_register_function(&CommandFun_GPIO); //GPIO命令 测试GPIO
@@ -98,7 +103,7 @@ int main(void)
     shell_register_function(&CommandFun_RESET); 
     shell_register_function(&CommandFun_NVIC); 
     shell_register_function(&CommandFun_SRAM); 
-    shell_register_function(&CommandFun_LCD); 
+    
     shell_register_function(&CommandFun_Hist);
     shell_register_function(&CommandFun_I2C);
     shell_register_function(&CommandFun_MP);
@@ -109,33 +114,17 @@ int main(void)
     shell_register_function(&CommandFun_WDOG);
     shell_register_function(&CommandFun_OV7620);
     shell_register_function(&CommandFun_RTC);
-    shell_register_function(&CommandFun_ENET);
+    
     shell_register_function(&CommandFun_TSI);
     
 
-//    spi_bus_init(&bus, BOARD_SPI_INSTANCE);
-    PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
-    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
-    
+
 
   //  ads7843.bus = &bus;
   //  ads7843_init(&ads7843, BOARD_TP_SPI_PCSN, HW_CTAR0, 20*1000);
   //  ads7843.probe(&ads7843);
     CMD_FLEXBUS(0, NULL);
-    if(SRAM_SelfTest())
-    {
-        printf("SRAM failed\r\n");
-        while(1);
-    }
 
-  //  GUI_Init();//初始化GUI 
- //   SYSTICK_Init(1000);
- //   SYSTICK_ITConfig(ENABLE);
-  //  SYSTICK_Cmd(ENABLE);
-	//GUI_DispString("Hello emWin!");//显示测试  
-  //  GUIDEMO_Main();
     while(1)
     {
         shell_main_loop("SHELL>>");

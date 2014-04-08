@@ -129,7 +129,7 @@ const _I2C_Divider_Type I2C_DiverTable[] =
  * @param  baudrate        :IIC模块通信速度
  * @retval None
  */
-void I2C_SetBaudrate(uint8_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
+void I2C_SetBaudrate(uint32_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
 {
     /* check if the requested frequency is greater than the max supported baud. */
     if (baudrate > (sourceClockInHz / (1U * 20U)))
@@ -252,7 +252,7 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
  *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
-void I2C_GenerateSTART(uint8_t instance)
+void I2C_GenerateSTART(uint32_t instance)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -272,7 +272,7 @@ void I2C_GenerateSTART(uint8_t instance)
  *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
-void I2C_GenerateRESTART(uint8_t instance)
+void I2C_GenerateRESTART(uint32_t instance)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -291,7 +291,7 @@ void I2C_GenerateRESTART(uint8_t instance)
  *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
-void I2C_GenerateSTOP(uint8_t instance)
+void I2C_GenerateSTOP(uint32_t instance)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -312,7 +312,7 @@ void I2C_GenerateSTOP(uint8_t instance)
  * @param  data     :需要发送的数据
  * @retval None
  */
-void I2C_SendData(uint8_t instance, uint8_t data)
+void I2C_SendData(uint32_t instance, uint8_t data)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -332,7 +332,7 @@ void I2C_SendData(uint8_t instance, uint8_t data)
  *         @arg HW_I2C2  :I2C2模块
  * @retval  data    :接收的数据
  */
-uint8_t I2C_ReadData(uint8_t instance)
+uint8_t I2C_ReadData(uint32_t instance)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -354,7 +354,7 @@ uint8_t I2C_ReadData(uint8_t instance)
  *         @arg kI2C_Write : 主机发送
  * @retval None
  */
-void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type direction)
+void I2C_Send7bitAddress(uint32_t instance, uint8_t address, I2C_Direction_Type direction)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -372,7 +372,7 @@ void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type d
  *         @arg HW_I2C2  :I2C2模块
  * @retval 0:接收到应答 1:没有应答 2:超时
  */
-uint8_t I2C_WaitAck(uint8_t instance)
+uint8_t I2C_WaitAck(uint32_t instance)
 {
     uint32_t timeout = 0;
 	/* param check */
@@ -422,7 +422,7 @@ uint8_t I2C_WaitAck(uint8_t instance)
  *         @arg kI2C_Write : 主机发送
  * @retval None
  */
-void I2C_SetMasterMode(uint8_t instance, I2C_Direction_Type direction)
+void I2C_SetMasterMode(uint32_t instance, I2C_Direction_Type direction)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -436,7 +436,7 @@ void I2C_SetMasterMode(uint8_t instance, I2C_Direction_Type direction)
  *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
-void I2C_GenerateNAck(uint8_t instance)
+void I2C_GenerateNAck(uint32_t instance)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -450,7 +450,7 @@ void I2C_GenerateNAck(uint8_t instance)
  *         @arg HW_I2C2  :I2C2模块
  * @retval None
  */
-void I2C_GenerateAck(uint8_t instance)
+void I2C_GenerateAck(uint32_t instance)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -469,7 +469,7 @@ void I2C_GenerateAck(uint8_t instance)
  *         @arg kI2C_DMA_BTC     :开启发送完成DMA功能
  * @retval None
  */
-void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config)
+void I2C_ITDMAConfig(uint32_t instance, I2C_ITDMAConfig_Type config)
 {
 	/* param check */
     assert_param(IS_I2C_ALL_INSTANCE(instance));
@@ -504,7 +504,7 @@ void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config)
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
  */
-void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
+void I2C_CallbackInstall(uint32_t instance, I2C_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
     {
@@ -520,7 +520,7 @@ void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun)
  *         @arg HW_I2C2  :I2C2模块
  * @retval 0 :I2C忙  1 :I2C空闲
  */
-uint8_t I2C_IsBusy(uint8_t instance)
+uint8_t I2C_IsBusy(uint32_t instance)
 {
 	if(I2C_InstanceTable[instance]->S & I2C_S_BUSY_MASK)
 	{
@@ -549,7 +549,7 @@ uint8_t I2C_IsBusy(uint8_t instance)
  * @param  len       :读取数据的长度
  * @retval 数据的读取状态 0 ;成功 其它 :失败
  */
-int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len)
+int32_t I2C_BurstRead(uint32_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len)
 {
     uint32_t time_out = 0;
     uint8_t i;
@@ -642,7 +642,7 @@ int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddre
  * @param  len       :写入数据的长度
  * @retval 数据的读取状态 0 ;成功 其它 :失败
  */
-uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len)
+uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len)
 {
     uint32_t time_out = 0;
     uint8_t * p = (uint8_t*)&subAddress;
@@ -712,7 +712,7 @@ uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddr
  * @param  Data: 需要写入的数据
  * @retval 0:成功  1:地址发送失败 2:数据发送失败
  */
-uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data)
+uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data)
 {
     return I2C_BurstWrite(instance ,deviceAddress, registerAddress, 1, &data, 1);
 }
@@ -732,7 +732,7 @@ uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t
  * @param  pData: 数据指针
  * @retval 0:成功  1:地址发送失败 2:数据发送失败
  */
-uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData)
+uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData)
 {
     return I2C_BurstRead(instance, deviceAddress, registerAddress, 1, pData, 1);
 }

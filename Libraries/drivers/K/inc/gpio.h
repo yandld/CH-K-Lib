@@ -128,20 +128,20 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 
 //!< API functions
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
-uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode);
-void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data);
-uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex);
-void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex);
-void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config);
-void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun);
+uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode);
+void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data);
+uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex);
+void GPIO_ToggleBit(uint32_t instance, uint8_t pinIndex);
+void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config);
+void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun);
 //!< low level functions 一般不必调用
-void PORT_PinPullConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull);
-void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode);
-void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
-uint32_t GPIO_ReadPort(uint8_t instance);
-void GPIO_WritePort(uint8_t instance, uint32_t data);
-void PORT_PinOpenDrainConfig(uint8_t instance, uint8_t pinIndex, FunctionalState newState);
-void PORT_PinPassiveFilterConfig(uint8_t instance, uint8_t pinIndex, FunctionalState newState);
+void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull);
+void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode);
+void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
+uint32_t GPIO_ReadPort(uint32_t instance);
+void GPIO_WritePort(uint32_t instance, uint32_t data);
+void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pinIndex, FunctionalState newState);
+void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pinIndex, FunctionalState newState);
     
 #ifdef __cplusplus
 }

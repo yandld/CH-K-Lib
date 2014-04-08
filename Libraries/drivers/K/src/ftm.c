@@ -55,8 +55,8 @@ typedef enum
 }FTM_DualChlConfig_Type;
 
 /* static functions declareation */
-static void FTM_PWM_SetMode(uint8_t instance, uint8_t chl, FTM_PWM_Mode_Type mode);
-void FTM_PWM_InvertPolarity(uint8_t instance, uint8_t chl, uint32_t config);
+static void FTM_PWM_SetMode(uint32_t instance, uint8_t chl, FTM_PWM_Mode_Type mode);
+void FTM_PWM_InvertPolarity(uint32_t instance, uint8_t chl, uint32_t config);
 
 /**
  * @brief  初始化FTM模块实现PWM功能
@@ -287,7 +287,7 @@ static uint32_t get_channel_pair_index(uint8_t channel)
  * @brief  内部函数，用户无需调用
  */
 #define FTM_COMBINE_CHAN_CTRL_WIDTH  (8)
-static void FTM_DualChlConfig(uint8_t instance, uint8_t chl, FTM_DualChlConfig_Type mode, FunctionalState newState)
+static void FTM_DualChlConfig(uint32_t instance, uint8_t chl, FTM_DualChlConfig_Type mode, FunctionalState newState)
 {
     uint32_t mask;
     switch(mode)
@@ -320,7 +320,7 @@ static void FTM_DualChlConfig(uint8_t instance, uint8_t chl, FTM_DualChlConfig_T
 /**
  * @brief  内部函数，用户无需调用
  */
-static void FTM_PWM_SetMode(uint8_t instance, uint8_t chl, FTM_PWM_Mode_Type mode)
+static void FTM_PWM_SetMode(uint32_t instance, uint8_t chl, FTM_PWM_Mode_Type mode)
 {
     switch(mode)
     {
@@ -414,7 +414,7 @@ static void FTM_PWM_SetMode(uint8_t instance, uint8_t chl, FTM_PWM_Mode_Type mod
 /**
  * @brief  内部函数，用户无需调用
  */
-void FTM_PWM_InvertPolarity(uint8_t instance, uint8_t chl, uint32_t config)
+void FTM_PWM_InvertPolarity(uint32_t instance, uint8_t chl, uint32_t config)
 {
     switch(config)
     {
@@ -474,7 +474,7 @@ uint8_t FTM_PWM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
  * @param  pwmDuty        : PWM波形占空比0~10000
  * @retval None
  */
-void FTM_PWM_ChangeDuty(uint8_t instance, uint8_t chl, uint32_t pwmDuty)
+void FTM_PWM_ChangeDuty(uint32_t instance, uint8_t chl, uint32_t pwmDuty)
 {
     uint32_t cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty) / 10000;
     /* combine mode */

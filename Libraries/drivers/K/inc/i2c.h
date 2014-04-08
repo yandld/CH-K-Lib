@@ -19,7 +19,7 @@
 
 typedef struct
 {
-    uint8_t instance;    //!< I2C pin select
+    uint32_t instance;    //!< I2C pin select
     uint32_t baudrate;   //!< baudrate some common baudrate: 48000Hz 76000Hz 96000Hz 376000Hz
 }I2C_InitTypeDef;
 
@@ -65,20 +65,20 @@ typedef void (*I2C_CallBackType)(void);
 //!< API functions
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
 uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate);
-void I2C_GenerateSTART(uint8_t instance);
-void I2C_GenerateRESTART(uint8_t instance);
-void I2C_GenerateSTOP(uint8_t instance);
-void I2C_SendData(uint8_t instance, uint8_t data);
-void I2C_Send7bitAddress(uint8_t instance, uint8_t address, I2C_Direction_Type direction);
-uint8_t I2C_WaitAck(uint8_t instance);
-uint8_t I2C_IsBusy(uint8_t instance);
-void I2C_ITDMAConfig(uint8_t instance, I2C_ITDMAConfig_Type config);
-void I2C_CallbackInstall(uint8_t instance, I2C_CallBackType AppCBFun);
+void I2C_GenerateSTART(uint32_t instance);
+void I2C_GenerateRESTART(uint32_t instance);
+void I2C_GenerateSTOP(uint32_t instance);
+void I2C_SendData(uint32_t instance, uint8_t data);
+void I2C_Send7bitAddress(uint32_t instance, uint8_t address, I2C_Direction_Type direction);
+uint8_t I2C_WaitAck(uint32_t instance);
+uint8_t I2C_IsBusy(uint32_t instance);
+void I2C_ITDMAConfig(uint32_t instance, I2C_ITDMAConfig_Type config);
+void I2C_CallbackInstall(uint32_t instance, I2C_CallBackType AppCBFun);
 // higher level functions
-int32_t I2C_BurstRead(uint8_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len);
-uint8_t I2C_BurstWrite(uint8_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len);
-uint8_t I2C_ReadSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData);
-uint8_t I2C_WriteSingleRegister(uint8_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data);
+int32_t I2C_BurstRead(uint32_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len);
+uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len);
+uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData);
+uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data);
 
 #ifdef __cplusplus
 }

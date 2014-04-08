@@ -124,7 +124,7 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
 #endif /* comiler support */
 
 #else /* DO NOT USE STDIO */
-static void UART_putstr(uint8_t instance, const char *str)
+static void UART_putstr(uint32_t instance, const char *str)
 {
     while(*str != '\0')
     {
@@ -309,13 +309,14 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
  * @param  ch: 需要发送的一字节数据
  * @retval None
  */
-void UART_WriteByte(uint8_t instance, uint8_t ch)
+void UART_WriteByte(uint32_t instance, uint8_t ch)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
     while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
     UART_InstanceTable[instance]->D = (uint8_t)ch;
 }
+
 
 /**
  * @brief  UART接受一个字节
@@ -335,7 +336,7 @@ void UART_WriteByte(uint8_t instance, uint8_t ch)
  * @param  ch: 接收到的数据指针
  * @retval 0:成功接收到数据  非0:没有接收到数据
  */
-uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
+uint8_t UART_ReadByte(uint32_t instance, uint8_t *ch)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
@@ -371,7 +372,7 @@ uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch)
  *         @arg kUART_DMA_Rx:
  * @retval None
  */
-void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config)
+void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config)
 {
     /* enable clock gate */
     *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
@@ -425,7 +426,7 @@ void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config)
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
  */
-void UART_CallbackTxInstall(uint8_t instance, UART_CallBackTxType AppCBFun)
+void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
@@ -450,7 +451,7 @@ void UART_CallbackTxInstall(uint8_t instance, UART_CallBackTxType AppCBFun)
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
  */
-void UART_CallbackRxInstall(uint8_t instance, UART_CallBackRxType AppCBFun)
+void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));

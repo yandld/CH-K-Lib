@@ -75,7 +75,7 @@ static const IRQn_Type GPIO_IRQnTable[] =
  *         @arg kPinAlt7 :引脚复用成7模式
  * @retval None
  */
-void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
+void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -104,7 +104,7 @@ void PORT_PinMuxConfig(uint8_t instance, uint8_t pinIndex, PORT_PinMux_Type pinM
  *         @arg kPullDown     :下拉电阻
  * @retval None
  */
-void PORT_PinPullConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
+void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -146,7 +146,7 @@ void PORT_PinPullConfig(uint8_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
  *         @arg DISABLE  :关闭功能
  * @retval None
  */
-void PORT_PinOpenDrainConfig(uint8_t instance, uint8_t pinIndex, FunctionalState newState)
+void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pinIndex, FunctionalState newState)
 {
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
@@ -170,7 +170,7 @@ void PORT_PinOpenDrainConfig(uint8_t instance, uint8_t pinIndex, FunctionalState
  *         @arg DISABLE  :关闭功能
  * @retval None
  */
-void PORT_PinPassiveFilterConfig(uint8_t instance, uint8_t pinIndex, FunctionalState newState)
+void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pinIndex, FunctionalState newState)
 {
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_PFE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_PFE_MASK);
@@ -195,7 +195,7 @@ void PORT_PinPassiveFilterConfig(uint8_t instance, uint8_t pinIndex, FunctionalS
  *         @arg kOutput  :输出功能选择
  * @retval None
  */
-void GPIO_PinConfig(uint8_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode)
+void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -282,7 +282,7 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
  *         @arg kGPIO_Mode_OPP :推挽输出
  * @retval None
  */
-uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode)
+uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
 {
     GPIO_InitTypeDef GPIO_InitStruct1;
     GPIO_InitStruct1.instance = instance;
@@ -311,7 +311,7 @@ uint8_t GPIO_QuickInit(uint8_t instance, uint32_t pinx, GPIO_Mode_Type mode)
  *         @arg 1 : 高电平
  * @retval None
  */
-void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data)
+void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -337,7 +337,7 @@ void GPIO_WriteBit(uint8_t instance, uint8_t pinIndex, uint8_t data)
  *         @arg 0 : 低电平
  *         @arg 1 : 高电平
  */
-uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex)
+uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -369,7 +369,7 @@ uint8_t GPIO_ReadBit(uint8_t instance, uint8_t pinIndex)
  * @param  pinIndex  :端口上的引脚号 0~31
  * @retval None
  */
-void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex)
+void GPIO_ToggleBit(uint32_t instance, uint8_t pinIndex)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -393,7 +393,7 @@ void GPIO_ToggleBit(uint8_t instance, uint8_t pinIndex)
  *         @arg HW_GPIOE :芯片的PORTE端口
  * @retval 端口的32位数据
  */
-uint32_t GPIO_ReadPort(uint8_t instance)
+uint32_t GPIO_ReadPort(uint32_t instance)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -415,7 +415,7 @@ uint32_t GPIO_ReadPort(uint8_t instance)
  * @param  data  :32位数据
  * @retval None
  */
-void GPIO_WritePort(uint8_t instance, uint32_t data)
+void GPIO_WritePort(uint32_t instance, uint32_t data)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -449,7 +449,7 @@ void GPIO_WritePort(uint8_t instance, uint32_t data)
  *         @arg kGPIO_IT_High 高电平触发中断
  * @retval None
  */
-void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config)
+void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -510,7 +510,7 @@ void GPIO_ITDMAConfig(uint8_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type 
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
  */
-void GPIO_CallbackInstall(uint8_t instance, GPIO_CallBackType AppCBFun)
+void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));

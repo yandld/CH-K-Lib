@@ -65,6 +65,8 @@ int main(void)
     
     while(1)
     {
+        
+        #if 0
         /* 串口 按字节发送 数据 注意 instance必须是已经初始化过的模块 否则 将产生错误*/
         UART_WriteByte(instance, 'h');
         UART_WriteByte(instance, 'e');
@@ -76,6 +78,7 @@ int main(void)
         /* 闪烁小灯 */
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(500);
+        #endif
     }
 }
 

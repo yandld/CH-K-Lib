@@ -94,11 +94,12 @@ typedef void (*UART_CallBackRxType)(uint8_t byteReceived);
 uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate);
 void UART_Init(UART_InitTypeDef * UART_InitStruct);
 int UART_printf(const char *format,...);
-uint8_t UART_ReadByte(uint8_t instance, uint8_t *ch);
-void UART_WriteByte(uint8_t instance, uint8_t ch);
-void UART_CallbackTxInstall(uint8_t instance, UART_CallBackTxType AppCBFun);
-void UART_CallbackRxInstall(uint8_t instance, UART_CallBackRxType AppCBFun);
-void UART_ITDMAConfig(uint8_t instance, UART_ITDMAConfig_Type config);
+uint8_t UART_ReadByte(uint32_t instance, uint8_t *ch);
+void UART_WriteByte(uint32_t instance, uint8_t ch);
+void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun);
+void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun);
+void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config);
+
 #ifdef UART_USE_STDIO
 int printf(const char *fmt, ...);
 #endif

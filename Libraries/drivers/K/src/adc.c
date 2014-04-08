@@ -346,7 +346,7 @@ int32_t ADC_QuickReadValue(uint32_t ADCxMAP)
  *         @arg kADC_DMA_EOF       :DMA完成中断
  * @retval None
  */
-void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config)
+void ADC_ITDMAConfig(uint32_t instance, uint32_t mux, ADC_ITDMAConfig_Type config)
 {
     switch(config)
     {
@@ -379,7 +379,7 @@ void ADC_ITDMAConfig(uint8_t instance, uint32_t mux, ADC_ITDMAConfig_Type config
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
  */
-void ADC_CallbackInstall(uint8_t instance, ADC_CallBackType AppCBFun)
+void ADC_CallbackInstall(uint32_t instance, ADC_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
     {

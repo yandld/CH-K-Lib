@@ -90,12 +90,13 @@ typedef struct
 typedef void (*UART_CallBackTxType)(uint8_t * pbyteToSend);
 typedef void (*UART_CallBackRxType)(uint8_t byteReceived);
 
-/*!< API ½Ó¿Ú */
+/*!< API functions */
 uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate);
 void UART_Init(UART_InitTypeDef * UART_InitStruct);
 int UART_printf(const char *format,...);
 uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch);
 void UART_WriteByte(uint32_t instance, uint16_t ch);
+/* Interrupt and DMA functions */
 void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun);
 void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun);
 void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config);

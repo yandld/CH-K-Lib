@@ -52,7 +52,7 @@ int main(void)
     UART_InitTypeDef UART_InitStruct1 = {0};
     UART_InitStruct1.instance = HW_UART0;
     UART_InitStruct1.baudrate = 115200;
-    UART_InitStruct1.parityMode = kUART_ParityDisabled;
+    UART_InitStruct1.parityMode = kUART_ParityEven;
     UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
     UART_Init(&UART_InitStruct1);
     
@@ -62,6 +62,7 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     /* 当使用串口初始化后 printf 被默认连接到第一个被初始化的串口上*/
     printf("UART%d OK! Hello Kinetis\r\n", instance);
+    
     while(1)
     {
         /* 串口 按字节发送 数据 注意 instance必须是已经初始化过的模块 否则 将产生错误*/

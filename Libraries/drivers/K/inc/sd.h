@@ -131,8 +131,6 @@ typedef struct
 
 
 
-
-
 typedef enum
 {
 	SD_Flag_CLSL,                 //!< Command line single level

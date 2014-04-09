@@ -45,7 +45,8 @@
 #define FIFO_STATUS		0X39
 
 static struct i2c_device device;
-
+/* ADXL345 2 possible addr */
+static const uint8_t adxl345_addr[] = {0x53, 0x1D};
 
 int adxl345_init(struct i2c_bus* bus)
 {
@@ -67,7 +68,7 @@ int adxl345_init(struct i2c_bus* bus)
     return ret;
 }
 
-int adxl345_write_register(uint8_t addr, uint8_t value)
+static int adxl345_write_register(uint8_t addr, uint8_t value)
 {
     
     uint8_t buf[1];
@@ -79,9 +80,6 @@ int adxl345_write_register(uint8_t addr, uint8_t value)
     }
     return 0;
 }
-
-static const uint8_t adxl345_addr[] = {0x53, 0x1D};
-
 
 int adxl345_get_addr(void)
 {

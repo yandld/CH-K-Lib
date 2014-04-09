@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    i2c_abstraction.c
+  * @file    i2c_bus_ops.c
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
@@ -11,10 +11,9 @@
 #include "i2c_abstraction.h"
 #include "i2c.h"
 
-
 static int kinetis_i2c_configure(i2c_device_t device, struct i2c_config *configuration)
 {
-    printf("i2c config\r\n");
+    printf("i2c config needed!\r\n");
     return I2C_EOK;
 }
 
@@ -45,8 +44,6 @@ const static struct i2c_ops kinetis_i2c_ops =
     kinetis_i2c_write,
 };
 
-
-
 int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance)
 {
     uint32_t _instnace;
@@ -56,8 +53,6 @@ int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance)
     {
         return 1;
     }
-    //PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
-   // PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
     /* register bus */
     bus->instance = instance;
     return i2c_bus_register(bus, &kinetis_i2c_ops);

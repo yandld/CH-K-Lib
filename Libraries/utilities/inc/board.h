@@ -44,6 +44,8 @@
 #define BOARD_TXP2046_SPI_PCS       (0)
 #define BOARD_FLASH_SPI_PCS         (1)
 
+#elif ATOM
+
 
 #elif URANUS
 

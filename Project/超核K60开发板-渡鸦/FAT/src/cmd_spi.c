@@ -99,6 +99,8 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
 int CMD_SPI(int argc, char *const argv[])
 {
     shell_printf("SPI TEST CMD\r\n");
+    PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
+    PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
     //设置 CTAR0 1 通道  0给TP 1给SPIFLASH
     if((argc == 2) && (!strcmp(argv[1], "FLASH")))
     {

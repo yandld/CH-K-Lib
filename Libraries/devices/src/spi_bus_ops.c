@@ -1,6 +1,14 @@
+/**
+  ******************************************************************************
+  * @file    spi_bus_ops.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2013.12.25
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #include "spi_abstraction.h"
 #include "spi.h"
-#include "gpio.h"
 
 static int kinetis_spi_configure(spi_device_t device, struct spi_config *configuration)
 {
@@ -79,8 +87,6 @@ int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance)
     {
         return 1;
     }
-    PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
-    PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
     /* register bus */
     bus->instance = instance;
     return spi_bus_register(bus, &kinetis_spi_ops);

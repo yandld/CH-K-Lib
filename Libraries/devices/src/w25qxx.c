@@ -67,7 +67,7 @@ static int w25qxx_power_up(void)
     uint8_t buf[1];
     buf[0] = W25X_ReleasePowerDown;
     spi_write(&device, buf, sizeof(buf), true);
-    //delay 3us
+    /* delay 3us */
     for(i=0;i<1000;i++);
     return SPI_EOK;
 }
@@ -125,7 +125,7 @@ int w25qxx_probe(void)
     buf[1] = 0;
     buf[2] = 0;
     buf[3] = 0;
-    //read id
+    /* read id */
     spi_write(&device, buf, 4, false);
     spi_read(&device, buf, 2, true);
     id = ((buf[0]<<8) + buf[1]);
@@ -181,7 +181,6 @@ int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len)
     buf_send[1] = (uint8_t)((addr)>>16);
     buf_send[2] = (uint8_t)((addr)>>8);
     buf_send[3] = (uint8_t)addr;
-    
     
     if(spi_write(&device, buf_send, sizeof(buf_send), false))
     {
@@ -316,10 +315,6 @@ int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
     return SPI_EOK;
 }
 
-
-
-
-
 int w25qxx_init(spi_bus_t bus, uint32_t cs)
 {
     uint32_t ret;
@@ -338,13 +333,4 @@ int w25qxx_init(spi_bus_t bus, uint32_t cs)
     }
     return ret;
 }
-
-
-
-
-
-
-
-
-
 

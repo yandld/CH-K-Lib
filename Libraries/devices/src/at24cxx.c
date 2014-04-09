@@ -24,9 +24,9 @@
 struct at24cxx_attr
 {
     const char* name;
-    uint32_t total_size; /* total size */
-    uint16_t page_size;  /* page size */
-    uint8_t  chip_addr;  /* base addr */
+    uint32_t total_size;    /* total size */
+    uint16_t page_size;     /* page size */
+    uint8_t  chip_addr;     /* base addr */
 };
 
 static const struct at24cxx_attr at24cxx_attr_table[] = 
@@ -37,7 +37,6 @@ static const struct at24cxx_attr at24cxx_attr_table[] =
     {"at24c08",   1024, 16,0x50},
     {"at24c16",   2048, 16,0x50},
 };
-
 
 
 static struct i2c_device device;
@@ -58,7 +57,7 @@ int at24cxx_read(uint32_t addr, uint8_t *buf, uint32_t len)
     return ret;
 }
 
-int at24cxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
+static int at24cxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
 {
     int ret;
     device.chip_addr = (addr/256) + at24cxx_addr.chip_addr;

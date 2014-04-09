@@ -21,17 +21,13 @@
 #endif
 
 
-
 //!< API functions 
 int adxl345_init(struct i2c_bus* bus);
-int adxl345_write_register(uint8_t addr, uint8_t value);
 int adxl345_probe(void);
 int adxl345_get_addr(void);
 int adxl345_readXYZ(short *x, short *y, short *z);
 int adxl345_calibration(void);
 short adxl345_convert_angle(short x, short y, short z, short *ax, short *ay, short *az);
-
-
 
 
 #endif

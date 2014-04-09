@@ -17,11 +17,11 @@ int main(void)
     td.minute = 59;
     td.second = 50;
     td.year = 2014;
+    td.month = 11;
     printf("RTC test\r\n");
     
     /* 快速初始化 RTC模块 如果原来没有时间设定 则写入默认的时间设定 有则忽略这个参数 */
     RTC_QuickInit(&td);
-
     while(1)
     {
         /* 获得时间 */

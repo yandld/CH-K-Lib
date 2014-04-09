@@ -43,10 +43,9 @@ typedef enum
 
 //!< API functions
 void PIT_Init(PIT_InitTypeDef* PIT_InitStruct);
-void PIT_Cmd(FunctionalState NewState);
 void PIT_QuickInit(uint8_t chl, uint32_t timeInUs);
-void PIT_StartCounting(uint8_t chl);
-void PIT_StopCounting(uint8_t chl);
+void PIT_ResetCounter(uint8_t chl);
+uint32_t PIT_GetCounterValue(uint8_t chl);
 void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun);
 void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config);
 

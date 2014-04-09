@@ -185,7 +185,7 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
     uint32_t i;
     SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;
     // RTC->CR = 0;
-    // OSC load config
+    /* OSC load config */
     switch(RTC_InitStruct->oscLoad)
     {
         case kRTC_OScLoad_2PF:
@@ -203,21 +203,21 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
         default:
             break;
     }
-    // see if we have to reconfig TSR
+    /* see if we have to reconfig TSR */
     if(((!RTC->TSR) || RTC_InitStruct->isUpdate) && (RTC_InitStruct->initialDateTime != NULL))
     {
-        #ifdef LIB_DEBUG
-        printf("RTC_Init() - Reconfig!\r\n");
-        #endif
         RTC_DateTimeToSecond(RTC_InitStruct->initialDateTime, &i);
+        #ifdef LIB_DEBUG
+        printf("RTC_Init() - Reconfig:%d\r\n", i);
+        #endif
         RTC->SR &= ~RTC_SR_TCE_MASK;
         RTC->TSR = RTC_TSR_TSR(i);
         RTC->SR |= RTC_SR_TCE_MASK;
     }
-    // enable OSC
+    /* enable OSC */
     RTC->CR |= RTC_CR_OSCE_MASK;
 	for(i=0;i<0x600000;i++) {};
-    // enable RTC
+    /* enable RTC */
     RTC->SR |= RTC_SR_TCE_MASK;
 }
 

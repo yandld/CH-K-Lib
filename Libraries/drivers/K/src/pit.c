@@ -47,14 +47,15 @@ static const IRQn_Type PIT_IRQnTable[] =
 void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
 {
     SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
-    //get clock
+    /* get clock */
     CLOCK_GetClockFrequency(kBusClock, &fac_us);
     fac_us /= 1000000;
     fac_ms = (fac_us * 1000);
     fac_ms = fac_ms;
     PIT->CHANNEL[PIT_InitStruct->chl].LDVAL = fac_us * PIT_InitStruct->timeInUs;
-    PIT_StartCounting(PIT_InitStruct->chl);
-    PIT_Cmd(ENABLE);
+    PIT->CHANNEL[PIT_InitStruct->chl].TCTRL |= (PIT_TCTRL_TEN_MASK);
+    /* enable PIT module */
+    PIT->MCR &= ~PIT_MCR_MDIS_MASK;
 }
 
  /**
@@ -87,7 +88,6 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
     PIT_InitStruct1.chl = chl;
     PIT_InitStruct1.timeInUs = timeInUs;
     PIT_Init(&PIT_InitStruct1);
-    PIT_StartCounting(chl);
 }
 
  /**
@@ -126,6 +126,7 @@ void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
             break;
         case kPIT_IT_TOF:
             NVIC_EnableIRQ(PIT_IRQnTable[chl]);
+            PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
             PIT->CHANNEL[chl].TCTRL |= PIT_TCTRL_TIE_MASK;
             break;
         default:
@@ -134,11 +135,7 @@ void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
 }
 
  /**
- * @brief  PIT通道定时器开始计数
- * @code
- *      // 开始PIT模块 0 通道的计数
- *      PIT_StartCounting(HW_PIT0_CH0);
- * @endcode
+ * @brief  PIT定时器Counter清到LOAD值 (重新开始新一次CountDown计时)
  * @param  chl  :通道号
  *         @arg HW_PIT0_CH0   :0通道
  *         @arg HW_PIT0_CH1   :1通道
@@ -146,48 +143,26 @@ void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
  *         @arg HW_PIT0_CH3   :3通道
  * @retval None
  */
-void PIT_StartCounting(uint8_t chl)
-{
-    PIT->CHANNEL[chl].TCTRL |= (PIT_TCTRL_TEN_MASK);
-}
-
- /**
- * @brief  PIT通道定时器停止计数
- * @code
- *      //停止PIT模块 0 通道的计数
- *      PIT_StopCounting(HW_PIT0_CH0);
- * @endcode
- * @param  chl  :通道号
- *         @arg HW_PIT0_CH0   :0通道
- *         @arg HW_PIT0_CH1   :1通道
- *         @arg HW_PIT0_CH2   :2通道
- *         @arg HW_PIT0_CH3   :3通道
- * @retval None
- */
-void PIT_StopCounting(uint8_t chl)
+void PIT_ResetCounter(uint8_t chl)
 {
     PIT->CHANNEL[chl].TCTRL &= (~PIT_TCTRL_TEN_MASK);
+    PIT->CHANNEL[chl].TCTRL |= (PIT_TCTRL_TEN_MASK);
 }
-
  /**
- * @brief  开启或关闭PIT模块 在初始化后默认开启
- * @code
- *      //关闭PIT模块
- *      PIT_Cmd(DISABLE);
- * @endcode
- * @param  NewState
- *         @arg ENABLE  : 开启
- *         @arg DISABLE : 关闭
- * @retval None
+ * @brief  读取Counter值
+ * @param  chl  :通道号
+ *         @arg HW_PIT0_CH0   :0通道
+ *         @arg HW_PIT0_CH1   :1通道
+ *         @arg HW_PIT0_CH2   :2通道
+ *         @arg HW_PIT0_CH3   :3通道
+ * @retval Counter值
  */
-void PIT_Cmd(FunctionalState NewState)
+uint32_t PIT_GetCounterValue(uint8_t chl)
 {
-    (ENABLE == NewState)?(PIT->MCR &= ~PIT_MCR_MDIS_MASK):(PIT->MCR |= PIT_MCR_MDIS_MASK);
+    return PIT->CHANNEL[chl].CVAL;
 }
 
-//! @}
 
-//! @}
 /**
  * @brief  注册中断回调函数
  * @param  chl  :通道号
@@ -208,6 +183,9 @@ void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun)
     }
 }
 
+//! @}
+
+//! @}
 
 void PIT0_IRQHandler(void)
 {

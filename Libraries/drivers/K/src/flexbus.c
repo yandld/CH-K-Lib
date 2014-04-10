@@ -91,6 +91,8 @@ void FLEXBUS_PortMuxConfig(FLEXBUS_PortMultiplexingSelect_Type group, uint32_t c
             FB->CSPMCR &= ~FB_CSPMCR_GROUP5_MASK;
             FB->CSPMCR |= FB_CSPMCR_GROUP5(config);
             break;
+        default:
+            break;
     }
 }
 

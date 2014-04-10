@@ -19,6 +19,8 @@
 
 #define I2C_SPEED_URANUS   (400*1000)
 
+
+#if 0
 static mpu6050_device mpu6050_device1;
 static hmc5883_device hmc_device;
 static bmp180_device bmp180_device1;
@@ -27,6 +29,8 @@ static uint8_t NRF2401RXBuffer[32];//无线接收数据
 imu_float_euler_angle_t angle;
 imu_raw_data_t raw_data;
 //实现姿态解算的回调并连接回调
+
+
 static uint32_t imu_get_mag(int16_t * mx, int16_t * my, int16_t *mz)
 {
     hmc_device.read_data(&hmc_device, mx, my, mz);
@@ -97,6 +101,8 @@ static void PIT_CH1_ISR(void)
     GPIO_ToggleBit(HW_GPIOA, 1);
 }
 
+#endif 
+
 int main(void)
 {
     uint32_t i;
@@ -107,7 +113,7 @@ int main(void)
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
     printf("UART Init OK!\r\n");
-   
+   #if 0
     // 初始化LED
     ret = NRF2401_Init();
     if(ret)
@@ -167,13 +173,7 @@ int main(void)
             //目前这个版本不做任何处理
         }	
     }
+    #endif
 }
 
 
-#ifdef USE_FULL_ASSERT
-void assert_failed(char * file, uint32_t line)
-{
-	//断言失败检测
-	while(1);
-}
-#endif

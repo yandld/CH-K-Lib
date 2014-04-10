@@ -86,6 +86,11 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
 int CMD_SPI(int argc, char *const argv[])
 {
     shell_printf("SPI TEST CMD\r\n");
+    
+    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); //
+    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); //
+    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); //    
+
     PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
     if((argc == 2) && (!strcmp(argv[1], "FLASH")))

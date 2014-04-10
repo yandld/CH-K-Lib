@@ -12,7 +12,7 @@ void WDOG_ISR(void)
 int CMD_WDOG(int argc, char * const argv[])
 {
     printf("WDOG TEST\r\n");
-    printf("WDOG RESET COUNTER:%d\r\n", WDOG_ReadResetCounter());
+    printf("WDOG RESET COUNTER:%d\r\n", WDOG_GetResetCounter());
     WDOG_InitTypeDef WDOG_InitStruct1;
     WDOG_InitStruct1.mode = kWDOG_Mode_Window;
     WDOG_InitStruct1.timeOutInMs = 2000;

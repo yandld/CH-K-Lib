@@ -80,13 +80,16 @@ const static struct spi_ops kinetis_spi_ops =
 
 int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance)
 {
-    uint32_t _instnace;
     /* init hardware */
-    _instnace = SPI_QuickInit(SPI2_SCK_PD12_SOUT_PD13_SIN_PD14, kSPI_CPOL0_CPHA1, 1000*1000);
-    if(_instnace != instance)
-    {
-        return 1;
-    }
+    SPI_InitTypeDef SPI_InitStruct1;
+    SPI_InitStruct1.baudrate = 1000*1000;
+    SPI_InitStruct1.frameFormat = kSPI_CPOL0_CPHA1;
+    SPI_InitStruct1.dataSize = 8;
+    SPI_InitStruct1.instance = instance;
+    SPI_InitStruct1.mode = kSPI_Master;
+    SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
+    SPI_InitStruct1.ctar = HW_CTAR0;
+
     /* register bus */
     bus->instance = instance;
     return spi_bus_register(bus, &kinetis_spi_ops);

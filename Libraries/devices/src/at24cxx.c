@@ -29,6 +29,9 @@ struct at24cxx_attr
     uint8_t  chip_addr;     /* base addr */
 };
 
+static struct i2c_device device;
+static struct at24cxx_attr at24cxx_addr;
+
 static const struct at24cxx_attr at24cxx_attr_table[] = 
 {
     {"at24c01",    128, 8, 0x50},
@@ -37,10 +40,6 @@ static const struct at24cxx_attr at24cxx_attr_table[] =
     {"at24c08",   1024, 16,0x50},
     {"at24c16",   2048, 16,0x50},
 };
-
-
-static struct i2c_device device;
-static struct at24cxx_attr at24cxx_addr;
 
 int at24cxx_get_size(void)
 {
@@ -151,7 +150,7 @@ int at24cxx_self_test(void)
 int at24cxx_init(struct i2c_bus* bus, const char * name)
 {
     uint32_t i;
-    uint32_t ret;
+    uint32_t ret = 0;
     /* find match */
     for(i=0;i<ARRAY_SIZE(at24cxx_attr_table);i++)
     {
@@ -161,25 +160,19 @@ int at24cxx_init(struct i2c_bus* bus, const char * name)
             break;
         }
     }
+    /* devices not supported */
     if( i == ARRAY_SIZE(at24cxx_attr_table))
     {
         return 2;
     }
-    
-    device.config.baudrate = 100*1000;
+    /* i2c bus config */
+    device.config.baudrate = 450*1000;
     device.config.data_width = 8;
     device.config.mode = 0;
     device.subaddr_len = 1;
     device.chip_addr = at24cxx_addr.chip_addr;
+    /* attach device to bus */
     ret = i2c_bus_attach_device(bus, &device);
-    if(ret)
-    {
-        return ret;
-    }
-    else
-    {
-        ret = i2c_config(&device);
-    }
     return ret;
 }
 

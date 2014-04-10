@@ -19,6 +19,7 @@ static int DO_I2C_SCAN(int argc, char *const argv[])
     {
         printf("i2c bus init failed\r\n");
     }
+    
     device.config.baudrate = 100*1000;
     device.config.data_width = 8;
     device.subaddr_len = 1;
@@ -62,15 +63,13 @@ static int DO_I2C_AT24CXX(int argc, char *const argv[])
     uint32_t ret;
     static struct i2c_bus bus;
     ret = kinetis_i2c_bus_init(&bus, HW_I2C0);
-    if(ret)
-    {
-        printf("i2c bus init failed!\r\n");
-    }
-    
     ret = at24cxx_init(&bus, "at24c02");
-    if(ret)
+    ret = adxl345_init(&bus);
+    
+    if(adxl345_probe())
     {
-        printf("at24cxx init failed!\r\n");
+        printf("adxl345 init failed\r\n");
+        return 1;
     }
     
     shell_printf("at24cxx size:%d btye\r\n", at24cxx_get_size());
@@ -81,6 +80,7 @@ static int DO_I2C_AT24CXX(int argc, char *const argv[])
     }
     printf("at24cxx test ok!\r\n");
 
+    return 0;
 }
 
 static int DO_I2C_ADXL345(int argc, char *const argv[])

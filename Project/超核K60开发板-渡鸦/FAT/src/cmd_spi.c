@@ -37,24 +37,11 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
     uint32_t ret;
     static struct spi_bus bus;
     ret = kinetis_spi_bus_init(&bus, HW_SPI2);
-    if(ret)
-    {
-        printf("spi bus init failed!\r\n");
-    }
-    
     ret = ads7843_init(&bus, 0);
-    if(ret)
-    {
-        printf("ads7843 init failed!\r\n");
-    }
     ret = w25qxx_init(&bus, 1);
-    if(ret)
-    {
-        printf("w25qxx init failed!\r\n");
-    }
     
     
-    for(i=0;i<100;i++)
+    for(i=0;i<500;i++)
     {
         ads7843_readX(&x);
         ads7843_readY(&y);
@@ -101,7 +88,6 @@ int CMD_SPI(int argc, char *const argv[])
     shell_printf("SPI TEST CMD\r\n");
     PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
-    //设置 CTAR0 1 通道  0给TP 1给SPIFLASH
     if((argc == 2) && (!strcmp(argv[1], "FLASH")))
     {
         return DO_SPI_FLASH(argc, argv);

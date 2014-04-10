@@ -66,7 +66,7 @@ typedef struct
 }_I2C_Divider_Type;
 
 //!< @brief I2C divider values.
-const _I2C_Divider_Type I2C_DiverTable[] =
+static const _I2C_Divider_Type I2C_DiverTable[] =
 {
     /* ICR  Divider */
     { 0x00, 20 },
@@ -129,7 +129,7 @@ const _I2C_Divider_Type I2C_DiverTable[] =
  * @param  baudrate        :IIC模块通信速度
  * @retval None
  */
-void I2C_SetBaudrate(uint32_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
+static void I2C_SetBaudrate(uint32_t instance, uint32_t sourceClockInHz, uint32_t baudrate)
 {
     /* check if the requested frequency is greater than the max supported baud. */
     if (baudrate > (sourceClockInHz / (1U * 20U)))

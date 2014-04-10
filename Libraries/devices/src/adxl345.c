@@ -57,14 +57,6 @@ int adxl345_init(struct i2c_bus* bus)
     device.config.mode = 0;
     device.subaddr_len = 1;
     ret = i2c_bus_attach_device(bus, &device);
-    if(ret)
-    {
-        return ret;
-    }
-    else
-    {
-        ret = i2c_config(&device);
-    }
     return ret;
 }
 

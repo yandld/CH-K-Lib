@@ -47,7 +47,9 @@ int main(void)
         if(GPIO_ReadBit(HW_GPIOE, 26) == 0) /* 按键被按下 */
         {
             /* 喂狗 防止复位 */
+            printf("wdog feed! we have 2s\r\n");
             WDOG_Refresh();
+            DelayMs(100);
         }
         DelayMs(10);
     }

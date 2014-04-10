@@ -36,10 +36,13 @@ void WDOG_QuickInit(uint32_t timeInUs);
 void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct);
 void WDOG_ITDMAConfig(FunctionalState NewState);
 void WDOG_CallbackInstall(WDOG_CallBackType AppCBFun);
-uint32_t WDOG_ReadResetCounter(void);
+uint32_t WDOG_GetResetCounter(void);
 void WDOG_ClearResetCounter(void);
 void WDOG_Refresh(void);
+uint32_t WDOG_GetCurrentCounter(void);
 
 
 #endif
+
+
 

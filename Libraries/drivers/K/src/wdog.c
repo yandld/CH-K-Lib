@@ -83,6 +83,7 @@ void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
     wdag_value |= WDOG_STCTRLH_WDOGEN_MASK;
     WDOG->STCTRLH = wdag_value;
 }
+
 /**
  * @brief  看门狗中断配置
  * @code
@@ -98,6 +99,7 @@ void WDOG_ITDMAConfig(FunctionalState NewState)
     (ENABLE == NewState)?(WDOG->STCTRLH |= WDOG_STCTRLH_IRQRSTEN_MASK):(WDOG->STCTRLH &= ~(WDOG_STCTRLH_IRQRSTEN_MASK));
     (ENABLE == NewState)?(NVIC_EnableIRQ(Watchdog_IRQn)):(NVIC_DisableIRQ(Watchdog_IRQn));
 }
+
 /**
  * @brief  注册中断回调函数
  * @param AppCBFun: 回调函数指针入口
@@ -111,19 +113,21 @@ void WDOG_CallbackInstall(WDOG_CallBackType AppCBFun)
         WDOG_CallBackTable[0] = AppCBFun;
     }
 }
+
 /**
  * @brief  读取看门狗计数器的数值
  * @code
  *      //获取当前看门狗中计时器的数值 
  *      uint32_t counter;    //申请一个变量
- *      counter = WDOG_ReadResetCounter();  //获取计时器的数值，存储在counter中
+ *      counter = WDOG_GetResetCounter();  //获取计时器的数值，存储在counter中
  * @endcode
  * @retval 当前计数器的数值
  */
-uint32_t WDOG_ReadResetCounter(void)
+uint32_t WDOG_GetResetCounter(void)
 {
     return (WDOG->RSTCNT);
 }
+
 /**
  * @brief  清除看门狗计数器的数值
  * @code
@@ -136,6 +140,15 @@ void WDOG_ClearResetCounter(void)
 {
     WDOG->RSTCNT = WDOG_RSTCNT_RSTCNT_MASK;
 }
+
+uint32_t WDOG_GetCurrentCounter(void)
+{
+    uint32_t val;
+    val = (WDOG->TMROUTH << 16);
+    val |= WDOG->TMROUTL;
+    return val;
+}
+
 /**
  * @brief  喂狗
  * @code
@@ -146,8 +159,10 @@ void WDOG_ClearResetCounter(void)
 void WDOG_Refresh(void)
 {
     uint32_t i;
+    __disable_irq();
 	WDOG->REFRESH = 0xA602u;
 	WDOG->REFRESH = 0xB480u;
+    __enable_irq();
     /* a gap of more then 20 bus cycle between 2 refresh sequence */
     for(i = 0; i < 20; i++)
     {

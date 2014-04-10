@@ -3,13 +3,7 @@
 #include "uart.h"
 #include "wdog.h"
 
-/*
-     实验名称：WDOG窗口看门狗
-     实验平台：渡鸦开发板
-     板载芯片：MK60DN512ZVQ10
- 实验效果：在主循环中每隔700ms喂一次狗，并伴随这小灯闪烁。防止芯片复位，当使用串口助手
-        给开发板发送数据后，芯片将停止喂狗，时间超出，引起芯片复位
-*/
+
 
 int main(void)
 {
@@ -30,26 +24,26 @@ int main(void)
     /* 初始化看门狗 */
     WDOG_InitTypeDef WDOG_InitStruct1 = {0};
     WDOG_InitStruct1.mode = kWDOG_Mode_Window;
-    WDOG_InitStruct1.windowInMs = 600;   /* 开窗时间 设置为窗体模式后 喂狗必须在 看门狗开始计时后 600-1000MS内完成 多了少了都复位 比普通看门狗严格*/
-    WDOG_InitStruct1.timeOutInMs = 1000; /* 时限 1000MS : 1000MS 内没有喂狗则复位 */
+    WDOG_InitStruct1.windowInMs = 1000;   /* 开窗时间 设置为窗体模式后 喂狗必须在 看门狗开始计时后 1000 - 2000 MS内完成 多了少了都复位 比普通看门狗严格*/
+    WDOG_InitStruct1.timeOutInMs = 2000; /* 时限 2000MS : 2000MS 内没有喂狗则复位 */
     WDOG_Init(&WDOG_InitStruct1);
     
-    printf("system reset! WDOG test start! \r\n");
-    printf("press any character to disable dog feed\r\n");
+    printf("\r\nSYSTEM RESET!!!!!!!%d\r\n", WDOG_GetResetCounter());
+    printf("press any character to feed dog feed, must be in windows time\r\n");
     
     static uint32_t i;
-    uint8_t ch;
+    uint16_t ch;
     while(1)
     {
         if(UART_ReadByte(HW_UART0, &ch) == 0)
         {
-            printf("stop feed wdog, will cause reset!\r\n");
-            while(1);
+            printf("wdog feed succ!\r\n");
+            WDOG_Refresh();
+            i = 0;
         }
-        printf("cnt:i:%d\r\n", i++);
-        DelayMs(700); /* 喂狗时间必须在 600-1000MS内 */
+        printf("cnt:i:%d\r", i++);
+        DelayMs(100);
         GPIO_ToggleBit(HW_GPIOE, 6);
-        WDOG_Refresh();
     }
 }
 

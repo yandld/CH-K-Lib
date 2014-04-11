@@ -32,6 +32,8 @@ int main(void)
     UART_InitTypeDef UART_InitStruct1 = {0};
     UART_InitStruct1.instance = HW_UART0;
     UART_InitStruct1.baudrate = 115200;
+    UART_InitStruct1.parityMode = kUART_ParityDisabled;
+    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
     UART_Init(&UART_InitStruct1);
     
     /* 初始化串口0对应的引脚 D6 D7*/
@@ -43,7 +45,7 @@ int main(void)
     /* 打开GPIO引脚中断 上升沿触发 */
     GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_RisingEdge);
     
-    printf("press any key1 to let LED blinking\r\n");
+    printf("press any key1 to let LED toggle\r\n");
     
     while(1)
     {

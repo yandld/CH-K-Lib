@@ -84,6 +84,7 @@ static void PIT_CH1_ISR(void)
 }
 
 int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance);
+
 int init_sensor(void)
 {
     uint32_t ret;

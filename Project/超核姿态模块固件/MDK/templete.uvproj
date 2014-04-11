@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK10D5 URANUS</Define>
+              <Define>MK10D5 URANUS LIB_DEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\devices\inc;..\..\..\Libraries\utilities\inc</IncludePath>
             </VariousControls>
@@ -503,6 +503,21 @@
               <FileName>spi_bus_ops.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\devices\src\spi_bus_ops.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpu6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\devices\src\mpu6050.c</FilePath>
+            </File>
+            <File>
+              <FileName>hmc5883.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\devices\src\hmc5883.c</FilePath>
+            </File>
+            <File>
+              <FileName>bmp180.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\devices\src\bmp180.c</FilePath>
             </File>
           </Files>
         </Group>

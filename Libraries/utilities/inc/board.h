@@ -51,6 +51,7 @@
 
 #define BOARD_LED_GPIO_BASES        {HW_GPIOA}
 #define BOARD_LED_PIN_BASES         {1}
+#define BOARD_I2C_INSTANCE          HW_I2C0
 #define BOARD_I2C_MAP               I2C0_SCL_PE19_SDA_PE18
 #define BOARD_SPI_MAP               SPI0_SCK_PC05_SOUT_PC06_SIN_PC07
 #define BOARD_SPI_CS_PORT           HW_GPIOC

@@ -12,7 +12,7 @@
 #define __I2C_ABSTRACTION_H__
 
 #include <stdint.h>
-#include "i2c_abstraction.h"
+
 
 
 #define I2C_EOK         (0x00)

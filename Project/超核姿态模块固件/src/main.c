@@ -17,13 +17,10 @@
 #include "trans.h"
 #include "dma.h"
 
-#define I2C_SPEED_URANUS   (400*1000)
 
 
 #if 0
-static mpu6050_device mpu6050_device1;
-static hmc5883_device hmc_device;
-static bmp180_device bmp180_device1;
+
 static trans_user_data_t send_data;
 static uint8_t NRF2401RXBuffer[32];//无线接收数据
 imu_float_euler_angle_t angle;
@@ -57,24 +54,6 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 };
 
 
-uint8_t InitSensor(void)
-{
-    static int init = 0;
-    uint8_t ret = 0;
-    if(!init)
-    {
-        ret += mpu6050_init(&mpu6050_device1, BOARD_I2C_MAP, "mpu6050", I2C_SPEED_URANUS);
-        ret += hmc5883_init(&hmc_device, BOARD_I2C_MAP, "hmc5883", I2C_SPEED_URANUS);
-        ret += bmp180_init(&bmp180_device1, HW_I2C0, 0x77, I2C_SPEED_URANUS);
-        init = 1;
-    }
-    if(ret)
-    {
-        return ret;
-    }
-    return 0;
-}
-
 //中断服务
 static void PIT_CH0_ISR(void)
 {
@@ -94,25 +73,96 @@ static void PIT_CH0_ISR(void)
     send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
 }
 
-//中断服务
-static void PIT_CH1_ISR(void)
-{
-    trans_send_pactket(send_data, TRANS_WITH_NRF2401);
-    GPIO_ToggleBit(HW_GPIOA, 1);
-}
+
 
 #endif 
 
+static void PIT_CH1_ISR(void)
+{
+//    trans_send_pactket(send_data, TRANS_WITH_NRF2401);
+    GPIO_ToggleBit(HW_GPIOA, 1);
+}
+
+int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance);
+int init_sensor(void)
+{
+    uint32_t ret;
+    static struct i2c_bus bus;
+    ret = kinetis_i2c_bus_init(&bus, BOARD_I2C_INSTANCE);
+    /* enable pinmux */
+    PORT_PinMuxConfig(HW_GPIOE, 18, kPinAlt4);
+    PORT_PinMuxConfig(HW_GPIOE, 19, kPinAlt4);
+    ret = mpu6050_init(&bus);
+    ret = hmc5883_init(&bus);
+    ret = bmp180_init(&bus);
+    ret = mpu6050_probe();
+    if(ret)
+    {
+        printf("mpu6050 failed:%d\r\n", ret);
+    }
+    ret = hmc5883_probe();
+    if(ret)
+    {
+        printf("hmc5883 failed:%d\r\n", ret);
+    }
+    ret = bmp180_probe();
+    if(ret)
+    {
+        printf("bmp180 failed:%d\r\n", ret);
+    }
+    return ret;
+}
+
+
 int main(void)
 {
+    int16_t x,y,z;
     uint32_t i;
-    uint8_t ret;
-    //int32_t temperature;
-    //int32_t pressure;
+    uint32_t ret;
+    int32_t temperature;
+    int32_t pressure;
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
     printf("UART Init OK!\r\n");
+    //开PIT0
+    PIT_QuickInit(HW_PIT_CH0, 1000*4);
+    //PIT_CallbackInstall(HW_PIT_CH0, PIT_CH0_ISR);
+    //PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
+    //开PIT1
+    PIT_QuickInit(HW_PIT_CH1, 1000*20);
+    PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
+    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
+    
+    init_sensor();
+    
+    while(1)
+    {
+        //mpu6050_read_gyro(&x, &y, &z);
+        
+        bmp180_start_conversion(BMP180_T_MEASURE);
+        DelayMs(20);
+       // mpu6050_read_data(&x, &y, &z);
+       // printf("x:%04d, y:%04d, z:%04d  \r", x, y, z);
+        bmp180_read_temperature(&temperature);
+        bmp180_start_conversion(BMP180_P3_MEASURE);
+        DelayMs(20);
+        bmp180_read_pressure(&pressure);
+        printf("t:%d p:%d\r", temperature, pressure);
+        
+        DelayMs(10);
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
    #if 0
     // 初始化LED
     ret = NRF2401_Init();
@@ -136,14 +186,7 @@ int main(void)
     imu_io_install(&IMU_IOInstallStruct1);
     //初始化发送器
     trans_init();
-    //开PIT0
-    PIT_QuickInit(HW_PIT_CH0, 1000*4);
-    PIT_CallbackInstall(HW_PIT_CH0, PIT_CH0_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
-    //开PIT1
-    PIT_QuickInit(HW_PIT_CH1, 1000*20);
-    PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
+
     
     while(1)
     {

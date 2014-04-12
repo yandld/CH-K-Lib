@@ -1,4 +1,7 @@
-#include "common.h"
+#ifndef __ILI9320_H__
+#define __ILI9320_H__
+
+#include <stdint.h>
 
 //FlexBus总线定义
 #define ILI9320_BASE                    (0x70000000)
@@ -39,24 +42,17 @@
 #define LBBLUE           0X2B12 //浅棕蓝色(选择条目的反色)
 
 
-static inline void LCD_DrawPoint(uint16_t x, uint16_t y, uint16_t c)
-{
-    WMLCDCOM(0x20);
-    WMLCDDATA(x);
-    WMLCDCOM(0x21);
-    WMLCDDATA(y);
-    WMLCDCOM(0x22);
-    WMLCDDATA(c);
-}
-
-
-
 //!< API functions
-void ILI9320_Init(void);
-uint32_t ILI9320_GetDeivceID(void);
-void ILI9320_DrawVLine(int x, int y1, int y2, uint16_t c);
-void ILI9320_DrawHLine(int x1, int x2, int y, uint16_t c);
-uint16_t ILI9320_ReadPoint(uint16_t x, uint16_t y);
-void ILI9320_Clear(uint16_t c);
+void ili9320_init(void);
+uint16_t ili9320_get_id(void);
+int ili9320_read_pixel(int x, int y);
+void ili9320_clear(int c);
+void ili9320_write_gram(uint16_t *buf, int len);
+void ili9320_set_window(int x, int y, int xlen, int ylen);
+void ili9320_write_pixel(int x, int y, int c);
+void ili9320_hline(int xs, int xe, int y, int c);
+void ili9320_vline(int ys, int ye, int x, int c);
 
+
+#endif
 

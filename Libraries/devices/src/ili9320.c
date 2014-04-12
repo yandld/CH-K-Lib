@@ -1,37 +1,30 @@
 #include "ili9320.h"
 #include "gpio.h"
 #include "flexbus.h"
-#include "common.h"
 
 
-static void ILI9320_WriteRegister(uint16_t RegisterIndex, uint16_t Data)
+#define ILI9320_DEBUG		1
+#if ( ILI9320_DEBUG == 1 )
+#define ILI9320_TRACE	printf
+#else
+#define ILI9320_TRACE(...)
+#endif
+
+static void write_reg(uint16_t addr, uint16_t val)
 {
-    WMLCDCOM(RegisterIndex);
-    WMLCDDATA(Data);
+    WMLCDCOM(addr);
+    WMLCDDATA(val);
 }
 
-static uint16_t ILI9320_ReadRegister(uint16_t RegisterIndex)
+static uint16_t read_reg(uint16_t addr)
 {
-    WMLCDCOM(RegisterIndex);
+    WMLCDCOM(addr);
     return ILI9320_DATA_ADDRESS;
 }
 
-uint32_t ILI9320_GetDeivceID(void)
+uint16_t ili9320_get_id(void)
 {
-    return ILI9320_ReadRegister(0x00);
-}
-
-static void ILI9320_SetCursor(uint16_t Xpos, uint16_t Ypos)
-{
-#ifdef LCD_USE_HORIZONTAL
-	Xpos = LCD_X_MAX - 1 -Xpos;
-    ILI9320_WriteRegister(0x21, Xpos);
-    ILI9320_WriteRegister(0x20, Ypos);
-	
-#else
-    ILI9320_WriteRegister(0x20, Xpos);
-    ILI9320_WriteRegister(0x21, Ypos);
-#endif
+    return read_reg(0x00);
 }
 
 static uint16_t LCD_BGR2RGB(uint16_t c)
@@ -44,53 +37,83 @@ static uint16_t LCD_BGR2RGB(uint16_t c)
 	return(rgb);
 } 
 
-uint16_t ILI9320_ReadPoint(uint16_t x, uint16_t y)
+
+int ili9320_read_pixel(int x, int y)
 {
-    uint16_t value;
-    WMLCDCOM(0x20);
-    WMLCDDATA(x);
-    WMLCDCOM(0x21);
-    WMLCDDATA(y);
-    WMLCDCOM(0x22);
+    int value;
+    write_reg(0x0020, x);
+    write_reg(0x0021, y);
+    WMLCDCOM(0x0022);
     value = ILI9320_DATA_ADDRESS;
-    WMLCDCOM(0x22);
+    WMLCDCOM(0x0022);
     value = ILI9320_DATA_ADDRESS;
     return LCD_BGR2RGB(value);
 }
 
-void ILI9320_Clear(uint16_t c)
+void ili9320_clear(int c)
 {
-	uint32_t index=0;
-	uint32_t totalpoint = LCD_X_MAX*LCD_Y_MAX;
-	ILI9320_SetCursor(0,0);
+	int i;
+    ili9320_set_window(0, 0, LCD_X_MAX, LCD_Y_MAX);
 	WMLCDCOM(0x22);
-	for(index = 0; index < totalpoint; index++)
+	for(i = 0; i < (LCD_X_MAX * LCD_Y_MAX); i++)
 	{
 		WMLCDDATA(c);	   
 	}
 }
 
-void ILI9320_DrawHLine(int x1, int x2, int y, uint16_t c)
+void ili9320_write_gram(uint16_t *buf, int len)
 {
-    ILI9320_SetCursor(x1, y);
-    WMLCDCOM(0x22);
-    while (x1 < x2)
+    WMLCDCOM(0x0022);
+    while(len--)
+    {
+        WMLCDDATA(*buf++);
+    }
+}
+void ili9320_write_pixel(int x, int y, int c)
+{
+    write_reg(0x0020, x);
+    write_reg(0x0021, y);
+    WMLCDCOM(0x0022);
+    WMLCDDATA(c);
+}
+
+void ili9320_set_window(int x, int y, int xlen, int ylen)
+{
+    write_reg(0x0020, x);
+    write_reg(0x0021, y);
+    write_reg(0x0050, x);
+    write_reg(0x0052, y);
+    write_reg(0x0051, x + xlen - 1);
+    write_reg(0x0053, y + ylen - 1);                      
+}
+
+void ili9320_hline(int xs, int xe, int y, int c)
+{
+    write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
+    write_reg(0x0020, xs);
+    write_reg(0x0021, y);
+    WMLCDCOM(0x0022);
+    while(xs < xe)
     {
         WMLCDDATA(c);
-        x1++;
+        xs++;
     }
 }
 
-void ILI9320_DrawVLine(int x, int y1, int y2, uint16_t c)
+void ili9320_vline(int ys, int ye, int x, int c)
 {
-    while (y1 < y2)
+    write_reg(0x03,(0<<5)|(0<<4)|(1<<3)|(1<<12));
+    write_reg(0x0020, x);
+    write_reg(0x0021, ys);
+    WMLCDCOM(0x0022);
+    while(ys < ye)
     {
-        LCD_DrawPoint(x, y1, c);
-        y1++;
+        WMLCDDATA(c);
+        ys++;
     }
 }
 
-void ILI9320_Init(void)
+void ili9320_init(void)
 {
     uint32_t gpio_instance;
     /* 减低flexbus总线速度 总线速度太高 不能正确执行读点操作 */
@@ -149,8 +172,6 @@ void ILI9320_Init(void)
     FLEXBUS_Init(&FLEXBUS_InitStruct);
     /* 配置Flexbus 引脚复用 */
     FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
-
-
     /* Back light */
     gpio_instance = GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);
     GPIO_WriteBit(gpio_instance, 3, 1); 
@@ -162,79 +183,78 @@ void ILI9320_Init(void)
     DelayMs(5); 
     
     //LCD_WR_REG(0xe5,0x8000);  // Set the internal vcore voltage    
-    ILI9320_WriteRegister(0x00,0x0001);  // start OSC    
-    ILI9320_WriteRegister(0x2b,0x0010);  //Set the frame rate as 80 when the internal resistor is used for oscillator circuit    
-    ILI9320_WriteRegister(0x01,0x0100);  //s720  to  s1 ; G1 to G320    
-    ILI9320_WriteRegister(0x02,0x0700);  //set the line inversion    
+    write_reg(0x00,0x0001);  // start OSC    
+    write_reg(0x2b,0x0010);  //Set the frame rate as 80 when the internal resistor is used for oscillator circuit    
+    write_reg(0x01,0x0100);  //s720  to  s1 ; G1 to G320    
+    write_reg(0x02,0x0700);  //set the line inversion    
     //LCD_WR_REG(0x03,0x1018);  //65536 colors     
-    ILI9320_WriteRegister(0x03,0x1030);   
+    write_reg(0x03,0x1030);   
     //横屏
     #ifdef LCD_USE_HORIZONTAL
-    ILI9320_WriteRegister(0x03,(0<<5)|(0<<4)|(1<<3)|(1<<12));
+    write_reg(0x03,(0<<5)|(0<<4)|(1<<3)|(1<<12));
     #else
-    ILI9320_WriteRegister(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
+    write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
     #endif
 
-    ILI9320_WriteRegister(0x04,0x0000);   
-    ILI9320_WriteRegister(0x08,0x0202);  //specify the line number of front and back porch periods respectively    
-    ILI9320_WriteRegister(0x09,0x0000);   
-    ILI9320_WriteRegister(0x0a,0x0000);   
-    ILI9320_WriteRegister(0x0c,0x0000);  //select  internal system clock    
-    ILI9320_WriteRegister(0x0d,0x0000);   
-    ILI9320_WriteRegister(0x0f,0x0000);    
-    ILI9320_WriteRegister(0x50,0x0000);  //0x50 -->0x53 set windows adress    
-    ILI9320_WriteRegister(0x51,0x00ef);   
-    ILI9320_WriteRegister(0x52,0x0000);   
-    ILI9320_WriteRegister(0x53,0x013f);   
-    ILI9320_WriteRegister(0x60,0x2700);   
-    ILI9320_WriteRegister(0x61,0x0001);   
-    ILI9320_WriteRegister(0x6a,0x0000);   
-    ILI9320_WriteRegister(0x80,0x0000);   
-    ILI9320_WriteRegister(0x81,0x0000);   
-    ILI9320_WriteRegister(0x82,0x0000);   
-    ILI9320_WriteRegister(0x83,0x0000);   
-    ILI9320_WriteRegister(0x84,0x0000);   
-    ILI9320_WriteRegister(0x85,0x0000);   
-    ILI9320_WriteRegister(0x90,0x0010);   
-    ILI9320_WriteRegister(0x92,0x0000);   
-    ILI9320_WriteRegister(0x93,0x0003);   
-    ILI9320_WriteRegister(0x95,0x0110);   
-    ILI9320_WriteRegister(0x97,0x0000);   
-    ILI9320_WriteRegister(0x98,0x0000);    
+    write_reg(0x04,0x0000);   
+    write_reg(0x08,0x0202);  //specify the line number of front and back porch periods respectively    
+    write_reg(0x09,0x0000);   
+    write_reg(0x0a,0x0000);   
+    write_reg(0x0c,0x0000);  //select  internal system clock    
+    write_reg(0x0d,0x0000);   
+    write_reg(0x0f,0x0000);    
+    write_reg(0x50,0x0000);  //0x50 -->0x53 set windows adress    
+    write_reg(0x51,0x00ef);   
+    write_reg(0x52,0x0000);   
+    write_reg(0x53,0x013f);   
+    write_reg(0x60,0x2700);   
+    write_reg(0x61,0x0001);   
+    write_reg(0x6a,0x0000);   
+    write_reg(0x80,0x0000);   
+    write_reg(0x81,0x0000);   
+    write_reg(0x82,0x0000);   
+    write_reg(0x83,0x0000);   
+    write_reg(0x84,0x0000);   
+    write_reg(0x85,0x0000);   
+    write_reg(0x90,0x0010);   
+    write_reg(0x92,0x0000);   
+    write_reg(0x93,0x0003);   
+    write_reg(0x95,0x0110);   
+    write_reg(0x97,0x0000);   
+    write_reg(0x98,0x0000);    
  
     //power setting function    
-    ILI9320_WriteRegister(0x10,0x0000);   
-    ILI9320_WriteRegister(0x11,0x0000);   
-    ILI9320_WriteRegister(0x12,0x0000);   
-    ILI9320_WriteRegister(0x13,0x0000);   
+    write_reg(0x10,0x0000);   
+    write_reg(0x11,0x0000);   
+    write_reg(0x12,0x0000);   
+    write_reg(0x13,0x0000);   
     DelayMs(20);   
-    ILI9320_WriteRegister(0x10,0x17b0);   
-    ILI9320_WriteRegister(0x11,0x0004);   
+    write_reg(0x10,0x17b0);   
+    write_reg(0x11,0x0004);   
     DelayMs(5);   
-    ILI9320_WriteRegister(0x12,0x013e);   
+    write_reg(0x12,0x013e);   
     DelayMs(5);   
-    ILI9320_WriteRegister(0x13,0x1f00);   
-    ILI9320_WriteRegister(0x29,0x000f);   
+    write_reg(0x13,0x1f00);   
+    write_reg(0x29,0x000f);   
     DelayMs(5);   
-    ILI9320_WriteRegister(0x20,0x0000);   
-    ILI9320_WriteRegister(0x21,0x0000);   
+    write_reg(0x20,0x0000);   
+    write_reg(0x21,0x0000);   
  
     //initializing function 2    
-    ILI9320_WriteRegister(0x30,0x0204);   
-    ILI9320_WriteRegister(0x31,0x0001);   
-    ILI9320_WriteRegister(0x32,0x0000);   
-    ILI9320_WriteRegister(0x35,0x0206);   
-    ILI9320_WriteRegister(0x36,0x0600);   
-    ILI9320_WriteRegister(0x37,0x0500);   
-    ILI9320_WriteRegister(0x38,0x0505);   
-    ILI9320_WriteRegister(0x39,0x0407);   
-    ILI9320_WriteRegister(0x3c,0x0500);   
-    ILI9320_WriteRegister(0x3d,0x0503);   
-
-    //开启显示   
-    ILI9320_WriteRegister(0x07,0x0173);
-    ILI9320_Clear(BLACK);
+    write_reg(0x30,0x0204);   
+    write_reg(0x31,0x0001);   
+    write_reg(0x32,0x0000);   
+    write_reg(0x35,0x0206);   
+    write_reg(0x36,0x0600);   
+    write_reg(0x37,0x0500);   
+    write_reg(0x38,0x0505);   
+    write_reg(0x39,0x0407);   
+    write_reg(0x3c,0x0500);   
+    write_reg(0x3d,0x0503);   
+    
+    //开启显示 
+    ILI9320_TRACE("ID:0x%X\r\n", ili9320_get_id());
+    write_reg(0x07,0x0173);
+    ili9320_clear(BLACK);
 }
-
-
 

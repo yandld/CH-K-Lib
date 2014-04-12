@@ -28,7 +28,7 @@ static void OV7620_ISR(void)
     {
         for(j=0;j<OV7620_W;j++)
         {
-            LCD_DrawPoint(OV7620_H - i, OV7620_W- j, RGB2COLOR(CCDBuffer[i][j], CCDBuffer[i][j], CCDBuffer[i][j]));
+            ili9320_write_pixel(OV7620_H - i, OV7620_W- j, RGB2COLOR(CCDBuffer[i][j], CCDBuffer[i][j], CCDBuffer[i][j]));
         }
     }
 }

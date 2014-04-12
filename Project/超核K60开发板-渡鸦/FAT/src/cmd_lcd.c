@@ -111,9 +111,19 @@ static uint32_t AppGetData(uint32_t ReqestedByte, uint32_t Offset, uint8_t **ppD
     return ReqestedByte;
 }
 
+static uint16_t buf[100]; 
 int CMD_LCD(int argc, char * const * argv)
 {
-    ILI9320_Init();
+    uint32_t i;
+    ili9320_init();
+    memset(buf, BLUE, sizeof(buf));
+  //  ili9320_set_window(0,0,10,10);
+ //   ili9320_write_gram(buf, ARRAY_SIZE(buf));
+    ili9320_hline(0,60,50,RED);
+    ili9320_vline(100, 150, 90, GREEN);
+    
+    
+    
     #if 0
     uint8_t res;
     uint32_t i;

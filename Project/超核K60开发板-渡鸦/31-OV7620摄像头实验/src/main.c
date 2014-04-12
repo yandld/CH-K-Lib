@@ -82,7 +82,7 @@ static void UserApp(void)
     {
         for(j=0;j<OV7620_W;j++)
         {
-            LCD_DrawPoint(OV7620_H - i, OV7620_W- j, RGB2COLOR(CCDBuffer[i][j], CCDBuffer[i][j], CCDBuffer[i][j]));
+            ili9320_write_pixel(OV7620_H - i, OV7620_W- j, RGB2COLOR(CCDBuffer[i][j], CCDBuffer[i][j], CCDBuffer[i][j]));
         }
     } 
 }
@@ -144,7 +144,7 @@ int main(void)
     
     printf("OV7620 test\r\n");
     
-    ILI9320_Init();
+    ili9320_init();
     SRAM_Init();
     /* 摄像头速度非常快 把FLexbus 总线速度调到最高 */
     SIM->CLKDIV1 &= ~SIM_CLKDIV1_OUTDIV3_MASK;

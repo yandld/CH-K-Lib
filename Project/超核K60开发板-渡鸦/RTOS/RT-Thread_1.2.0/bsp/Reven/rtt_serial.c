@@ -37,7 +37,6 @@
 
 static struct rt_serial_device serial;
 static struct serial_ringbuffer uart_int_rx;
-static struct serial_ringbuffer uart_int_tx;
 static char grev_ch = 0;
 static bool grev_flag = false;
 static void UART_ISR(uint8_t byteReceived)
@@ -66,9 +65,8 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
             UART_InitStruct1.baudrate = 115200;
             break;
     }
+    
     UART_Init(&UART_InitStruct1);
-    PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
-    PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     
     UART_CallbackRxInstall(HW_UART0, UART_ISR);
     UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
@@ -135,15 +133,12 @@ int rt_hw_usart_init(void)
     
     serial.ops    = &kinetis_uart_ops;
     serial.int_rx = &uart_int_rx;
-    serial.int_tx = &uart_int_tx;
     serial.config = config;
     
     rt_hw_serial_register(&serial, "uart",
                           RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_STREAM,
                           RT_NULL);
 }
-
-
 
 
 

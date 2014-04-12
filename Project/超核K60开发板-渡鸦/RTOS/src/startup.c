@@ -32,6 +32,8 @@ void rt_hw_board_init(void)
 {
     DelayInit();
     rt_hw_usart_init();
+    PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
+    PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
 #ifdef RT_USING_CONSOLE
 	rt_console_set_device("uart");
 #endif 
@@ -39,7 +41,9 @@ void rt_hw_board_init(void)
     ILI9320_Init();
     
     rt_hw_sd_init();
+    
     rt_hw_lcd_init();
+    
     rt_hw_spi_bus_init();
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
@@ -86,11 +90,11 @@ void rtthread_startup(void)
 {
     SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
 //    CMD_FLEXBUS(0, NULL);
+    rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
     rt_hw_board_init();
 	rt_show_version(); /* print logo */
 	rt_system_timer_init(); /* init timer */
     /* register IARM and extern RAM */
-    rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
     SRAM_Init();
     if(SRAM_SelfTest())
     {

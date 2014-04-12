@@ -16,7 +16,7 @@ static uint32_t UART0_SendWithDMA(uint32_t dmaChl, uint8_t *buf, uint32_t size)
         return 1;
     }
     DMA_InitStruct1.chl = dmaChl;  /* 使用0通道 */
-    DMA_InitStruct1.chlTriggerSource = UART0_TRAN_DMAREQ; /*尽最大努力传输 */
+    DMA_InitStruct1.chlTriggerSource = UART0_TRAN_DMAREQ; /* 串口完成传输一帧后触发 */
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal; /* 普通模式 不是周期触发模式 */
     DMA_InitStruct1.minorByteTransferCount = 1;
     DMA_InitStruct1.majorTransferCount = size;

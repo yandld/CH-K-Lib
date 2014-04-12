@@ -38,6 +38,13 @@
 uint8_t SPI_FLASH_BUFFER[4096];	
 #endif
 
+#define W25QXX_DEBUG		1
+#if ( W25QXX_DEBUG == 1 )
+#define W25QXX_TRACE	printf
+#else
+#define W25QXX_TRACE(...)
+#endif
+
 struct w25qxx_attr_t
 {
     const char* name;
@@ -88,12 +95,7 @@ static uint8_t w25qxx_read_sr(void)
     buf[0] = W25X_ReadStatusReg;
     spi_write(&device, buf, 1, false); //false = 保持片选,继续发送
     spi_read(&device, buf, 1, true);
-#if DEBUG
-    if(buf[0] & 0x01)
-    {
-       // printf("W25QXX BUSY\r\n", buf[0]);
-    }
-#endif
+    W25QXX_TRACE("W25QXX BUSY\r\n", buf[0]);
     return buf[0];
 }
 
@@ -129,9 +131,7 @@ int w25qxx_probe(void)
     spi_write(&device, buf, 4, false);
     spi_read(&device, buf, 2, true);
     id = ((buf[0]<<8) + buf[1]);
-#if DEBUG
-    printf("ID:%d\r\n", id);
-#endif
+    W25QXX_TRACE("ID:%d\r\n", id);
     //see if we find a match
     for(i = 0; i< ARRAY_SIZE(w25qxx_attr_table);i++)
     {
@@ -143,13 +143,9 @@ int w25qxx_probe(void)
             w25qxx_type.size = w25qxx_attr_table[i].size;
             w25qxx_power_up();
             buf[0] = w25qxx_read_sr();
-            #if LIB_DEBUG
-            printf("SR:0x%X\r\n", buf[0]);
-            #endif
+            W25QXX_TRACE("SR:0x%X\r\n", buf[0]);
             buf[0] = w25qxx_read_sr2();
-            #if LIB_DEBUG
-            printf("SR2:0x%X\r\n", buf[0]);
-            #endif
+            W25QXX_TRACE("SR2:0x%X\r\n", buf[0]);
             // enable full access to all memory regin, something like unlock chip.
             w25qxx_write_sr(0x00);
             return SPI_EOK; 
@@ -213,9 +209,7 @@ static int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
 static int w25qxx_write_no_check(uint32_t addr, uint8_t *buf, uint32_t len)  
 { 			 		 
 	uint16_t pageremain;	   
-    #if LIB_DEBUG
-    printf("w25qxx - write_no_check: addr:%d len:%d\r\n", addr, len);
-    #endif
+    W25QXX_TRACE("w25qxx - write_no_check: addr:%d len:%d\r\n", addr, len);
 	pageremain = W25X_PAGE_SIZE-(addr%W25X_PAGE_SIZE); //单页剩余的字节数		 	    
 	if(len <= pageremain) pageremain = len;//不大于256个字节
 	while(1)
@@ -294,9 +288,7 @@ int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
             w25qxx_write_no_check(secpos*4096, mem_pool,4096); //写入整个扇区 
 		}else 
         {
-            #if LIB_DEBUG
-            printf("no need to erase -addr:%d\r\n", addr);
-            #endif
+            W25QXX_TRACE("no need to erase -addr:%d\r\n", addr);
             w25qxx_write_no_check(addr, buf, secremain);//写已经擦除了的,直接写入扇区剩余区间. 
         }			   
 		if(len == secremain)break;//写入结束了

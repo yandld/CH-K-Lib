@@ -48,6 +48,14 @@ static struct i2c_device device;
 /* ADXL345 2 possible addr */
 static const uint8_t adxl345_addr[] = {0x53, 0x1D};
 
+
+#define ADXL345_DEBUG		1
+#if ( ADXL345_DEBUG == 1 )
+#define ADXL345_TRACE	printf
+#else
+#define ADXL345_TRACE(...)
+#endif
+
 int adxl345_init(struct i2c_bus* bus)
 {
     uint32_t ret;
@@ -155,10 +163,7 @@ int adxl345_calibration(void)
 	offx = -offx/4;
 	offy = -offy/4;
 	offz = -(offz-256)/4;	
-#if LIB_DEBUG
-    printf("OFFX:%d OFFY:%d OFFZ:%d \r\n" ,offx, offy, offz);
-#endif
-    
+    ADXL345_TRACE("OFFX:%d OFFY:%d OFFZ:%d \r\n" ,offx, offy, offz);
  	adxl345_write_register(OFSX, offx);
 	adxl345_write_register(OFSY, offy);
 	adxl345_write_register(OFSZ, offz);

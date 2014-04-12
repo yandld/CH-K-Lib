@@ -89,7 +89,7 @@ int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance)
     SPI_InitStruct1.mode = kSPI_Master;
     SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
     SPI_InitStruct1.ctar = HW_CTAR0;
-
+    SPI_Init(&SPI_InitStruct1);
     /* register bus */
     bus->instance = instance;
     return spi_bus_register(bus, &kinetis_spi_ops);

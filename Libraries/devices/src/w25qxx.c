@@ -38,7 +38,7 @@
 uint8_t SPI_FLASH_BUFFER[4096];	
 #endif
 
-#define W25QXX_DEBUG		1
+#define W25QXX_DEBUG		0
 #if ( W25QXX_DEBUG == 1 )
 #define W25QXX_TRACE	printf
 #else

@@ -37,7 +37,9 @@ int CMD_BOV7620(int argc, char * const * argv)
 {
     printf("OV7620 TEST\r\n");
     printf("INIT FLEXBUS FIRST\r\n");
-   // ili9320_Init();
+    SIM->CLKDIV1 &= ~SIM_CLKDIV1_OUTDIV3_MASK;
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(2);
+    ili9320_init();
     OV7620_CallbackInstall(OV7620_ISR);
     OV7620_Init();
     return 0;

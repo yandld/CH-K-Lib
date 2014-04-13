@@ -57,7 +57,7 @@
 #define ADC1_SE9_PB1        (0x484209U)
 #define ADC1_SE14_PB10      (0x705409U)
 #define ADC1_SE15_PB11      (0x785609U)
-#define ADC1_SE17_PB117     (0x886201U)
+#define ADC1_SE17_PA17      (0x886201U)
 #define ADC1_SE19_DM0       (0x980001U)
 #define ADC1_SE20_DM1       (0xa00001U)
 #define ADC1_SE26_TEMP      (0xd00001U)

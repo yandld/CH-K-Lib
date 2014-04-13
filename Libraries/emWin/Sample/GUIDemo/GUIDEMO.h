@@ -97,25 +97,25 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
   #define SHOW_GUIDEMO_AATEXT            (1)
 #endif
 #ifndef   SHOW_GUIDEMO_AUTOMOTIVE
-  #define SHOW_GUIDEMO_AUTOMOTIVE        (0)
+  #define SHOW_GUIDEMO_AUTOMOTIVE        (1)
 #endif
 #ifndef   SHOW_GUIDEMO_BARGRAPH
-  #define SHOW_GUIDEMO_BARGRAPH          (0)
+  #define SHOW_GUIDEMO_BARGRAPH          (1)
 #endif
 #ifndef   SHOW_GUIDEMO_BITMAP
-  #define SHOW_GUIDEMO_BITMAP            (0)
+  #define SHOW_GUIDEMO_BITMAP            (1)
 #endif
 #ifndef   SHOW_GUIDEMO_COLORBAR
-  #define SHOW_GUIDEMO_COLORBAR          (0)
+  #define SHOW_GUIDEMO_COLORBAR          (1)
 #endif
 #ifndef   SHOW_GUIDEMO_CURSOR
-  #define SHOW_GUIDEMO_CURSOR            (0)
+  #define SHOW_GUIDEMO_CURSOR            (1)
 #endif
 #ifndef   SHOW_GUIDEMO_FADING
   #define SHOW_GUIDEMO_FADING            (0)
 #endif
 #ifndef   SHOW_GUIDEMO_GRAPH
-  #define SHOW_GUIDEMO_GRAPH             (0)
+  #define SHOW_GUIDEMO_GRAPH             (1)
 #endif
 #ifndef   SHOW_GUIDEMO_ICONVIEW
   #define SHOW_GUIDEMO_ICONVIEW          (0)

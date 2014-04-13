@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10 RAVEN LIB_DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\d4d\common_files;..\..\..\..\Libraries\d4d\graphic_objects;..\..\..\..\Libraries\d4d</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -624,6 +624,11 @@
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
             </File>
+            <File>
+              <FileName>fonts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\fonts.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -813,6 +818,136 @@
               <FileName>znFAT.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\znfat\znFAT.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>d4d_common_files</GroupName>
+          <Files>
+            <File>
+              <FileName>d4d_base.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_base.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_bmp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_bmp.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_extsrc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_extsrc.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_font.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_font.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_low.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_low.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_math.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_object.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_object.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_scheme.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_scheme.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_screen.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_screen.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>d4d_graphic_objects</GroupName>
+          <Files>
+            <File>
+              <FileName>d4d_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_button.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_check_box.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_check_box.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_console.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_console.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_gauge.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_gauge.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_graph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_graph.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_icon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_icon.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_label.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_label.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_menu.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_picture.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_picture.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_progress_bar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_progress_bar.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_scroll_bar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_scroll_bar.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_slider.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_slider.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_text_box.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_text_box.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>d4d_low_level_driver</GroupName>
+          <Files>
+            <File>
+              <FileName>d4dlcd_template.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\low_level_drivers\LCD\lcd_controllers_drivers\template\d4dlcd_template.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1522,6 +1657,11 @@
               <FileType>5</FileType>
               <FilePath>..\src\shell_config.h</FilePath>
             </File>
+            <File>
+              <FileName>fonts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\fonts.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1986,6 +2126,136 @@
               <FileName>znFAT.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\znfat\znFAT.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>d4d_common_files</GroupName>
+          <Files>
+            <File>
+              <FileName>d4d_base.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_base.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_bmp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_bmp.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_extsrc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_extsrc.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_font.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_font.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_low.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_low.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_math.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_object.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_object.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_scheme.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_scheme.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_screen.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\common_files\d4d_screen.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>d4d_graphic_objects</GroupName>
+          <Files>
+            <File>
+              <FileName>d4d_button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_button.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_check_box.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_check_box.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_console.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_console.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_gauge.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_gauge.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_graph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_graph.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_icon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_icon.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_label.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_label.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_menu.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_picture.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_picture.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_progress_bar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_progress_bar.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_scroll_bar.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_scroll_bar.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_slider.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_slider.c</FilePath>
+            </File>
+            <File>
+              <FileName>d4d_text_box.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\graphic_objects\d4d_text_box.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>d4d_low_level_driver</GroupName>
+          <Files>
+            <File>
+              <FileName>d4dlcd_template.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\d4d\low_level_drivers\LCD\lcd_controllers_drivers\template\d4dlcd_template.c</FilePath>
             </File>
           </Files>
         </Group>

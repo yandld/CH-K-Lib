@@ -85,7 +85,7 @@ void ili9320_set_window(int x, int y, int xlen, int ylen)
     write_reg(0x0052, y);
     write_reg(0x0051, x + xlen - 1);
     write_reg(0x0053, y + ylen - 1);                      
-}
+} 
 
 void ili9320_hline(int xs, int xe, int y, int c)
 {
@@ -99,6 +99,7 @@ void ili9320_hline(int xs, int xe, int y, int c)
         xs++;
     }
 }
+
 
 void ili9320_vline(int ys, int ye, int x, int c)
 {

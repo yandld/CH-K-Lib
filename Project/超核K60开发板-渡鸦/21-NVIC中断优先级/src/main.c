@@ -11,14 +11,16 @@
 
 static void PORTE_ISR(uint32_t array)
 {
-    printf("PORTE Interrupt!\r\n");
+    printf("PORTE IT enter!\r\n");
     DelayMs(1000);
+    printf("PORTE IT exit!\r\n");
 }
 
 static void PORTA_ISR(uint32_t array)
 {
-    printf("PORTA Interrupt!\r\n");
+    printf("PORTA IT enter!\r\n");
     DelayMs(1000);
+    printf("PORTA IT exit!\r\n");
 }
 
 /* 将E26和 A4 跳线连接 然后配置 他们的NVIC优先级 */
@@ -39,12 +41,9 @@ int main(void)
     
     printf("NVIC test connect E26&A04\r\n");
     /* 将系统 中断优先级分组 可以配置 16个 抢占优先级 和16个 子优先级 */
-    NVIC_SetPriorityGrouping(3);
-    printf("NVIC_PriorityGrouping:%d\r\n", NVIC_GetPriorityGrouping());
-    /* 将PORTE中断设置为 抢占优先级1 子优先级2  (优先级数字越小代表优先级越高)*/
-    NVIC_SetPriority(PORTE_IRQn, NVIC_EncodePriority(3, 1, 2));
-    /* 将PORTE中断设置为 抢占优先级2 子优先级2  */
-    NVIC_SetPriority(PORTA_IRQn, NVIC_EncodePriority(3, 2, 2)); 
+    NVIC_SetPriorityGrouping(NVIC_PriorityGroup_2);
+    NVIC_SetPriority(PORTE_IRQn, NVIC_EncodePriority(NVIC_PriorityGroup_2, 2, 2));
+    NVIC_SetPriority(PORTA_IRQn, NVIC_EncodePriority(NVIC_PriorityGroup_2, 2, 2));
     
     while(1)
     {

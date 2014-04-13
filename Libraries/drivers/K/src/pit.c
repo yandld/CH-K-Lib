@@ -75,10 +75,10 @@ void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
  *      }
  * @endcode
  * @param  chl 通道号
- *         @arg HW_PIT0_CH0 
- *         @arg HW_PIT0_CH1
- *         @arg HW_PIT0_CH2 
- *         @arg HW_PIT0_CH3 
+ *         @arg HW_PIT_CH0 
+ *         @arg HW_PIT_CH1
+ *         @arg HW_PIT_CH2 
+ *         @arg HW_PIT_CH3 
  * @param  timeInUs 产生中断的周期 \单位US
  * @retval None
  */

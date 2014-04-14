@@ -31,8 +31,6 @@ int CMD_ADC(int argc, char * const * argv)
     while(1)
     {
       //  shell_printf("%d\r", ADC_QuickReadValue(BOARD_ADC_MAP));
-        
-        
         if(ADC_IsConversionCompleted(instance, kADC_MuxA) == 0)
         {
             shell_printf("%d\r", ADC_ReadValue(instance, kADC_MuxA));

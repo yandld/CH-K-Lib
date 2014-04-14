@@ -41,7 +41,7 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
     ret = w25qxx_init(&bus, 1);
     
     
-    for(i=0;i<500;i++)
+    for(i=0;i<100;i++)
     {
         ads7843_readX(&x);
         ads7843_readY(&y);
@@ -55,6 +55,7 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
         return 1;
     }
     printf("%s detected!\r\n", w25qxx_get_name());
+    /*
     for(i=0;i<SPI_FLASH_TEST_LEN;i++)
     {
         buf_test[i] = i;
@@ -77,6 +78,7 @@ static int DO_SPI_FLASH(int argc, char * const argv[])
            printf("error:[0x%X]:%d\r\n", i, buf_test[i]);
         }
     }
+    */
     printf("spi flash test finish!\r\n");
     return 0;
 }

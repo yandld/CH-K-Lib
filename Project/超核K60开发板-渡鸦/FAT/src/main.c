@@ -106,7 +106,7 @@ int main(void)
     
     shell_register_function(&CommandFun_Hist);
     shell_register_function(&CommandFun_I2C);
-    shell_register_function(&CommandFun_MP);
+    shell_register_function(& CommandFun_MP);
     shell_register_function(&CommandFun_LPTMR);
     shell_register_function(&CommandFun_SPI);
     shell_register_function(&CommandFun_DMA);
@@ -117,8 +117,6 @@ int main(void)
     
     shell_register_function(&CommandFun_TSI);
     
-
-
 
   //  ads7843.bus = &bus;
   //  ads7843_init(&ads7843, BOARD_TP_SPI_PCSN, HW_CTAR0, 20*1000);

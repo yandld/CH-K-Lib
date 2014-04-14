@@ -38,6 +38,7 @@ Tool
 Release
 lib_html
 d4d
+RTOS
 
 # Libraries
 *.lib

@@ -1,8 +1,18 @@
 #include "gpio.h"
 #include "uart.h"
 #include "can.h"
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
+/*
+     实验名称：CAN通信测试
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：使用CAN1模块的3号邮箱采用中断的方式接收来自0x56的数据
+         使用2号邮箱向0x10地址的设备发生数据，时间间隔是500毫秒 
+*/
 
+/* CAN通信 中断回调函数 */
 void CAN_ISR(void)
 {
     static uint32_t cnt;
@@ -31,12 +41,14 @@ int main(void)
     
     /* 设置接收中断 安装回调函数 */
     CAN_CallbackInstall(HW_CAN1, CAN_ISR);
-    CAN_ITDMAConfig(HW_CAN1, 3, kCAN_IT_RX);
+    /* 开启CAN通信中断接收功能，3号邮箱 */
+    CAN_ITDMAConfig(HW_CAN1,3, kCAN_IT_RX);
     
     /* 设置 3号邮箱为CAN接收邮箱 */
     CAN_SetReceiveMB(HW_CAN1, 3, 0x56);
     while(1)
     {
+        /* 使用邮箱2 发送ID:0x10 发送 "CAN TEST" */
         CAN_WriteData(HW_CAN1, 2, 0x10, (uint8_t *)"CAN TEST", 8); /* 使用邮箱2 发送ID:0x10 发送 "CAN TEST" */
         DelayMs(500);
     }

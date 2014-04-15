@@ -519,6 +519,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
             </File>
+            <File>
+              <FileName>can.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\can.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

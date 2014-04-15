@@ -5,14 +5,13 @@
   * @version V2.5
   * @date    2014.4.10
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片CAN模块的底层功能函数，具体应用请查看实例程序
-             此底层驱动满足基本的can通信模式，不支持先入先出功能
   ******************************************************************************
   */
   
 #include "can.h"
 #include "gpio.h"
 
+#define CAN_MB_MAX      (16)
 #if (!defined(CAN_BASES))
 
     #if (defined(MK60DZ10))
@@ -26,8 +25,37 @@ static const struct reg_ops SIM_CANClockGateTable[] =
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FLEXCAN0_MASK},
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FLEXCAN1_MASK},
 }; 
-        
-        
+static const IRQn_Type CAN_IRQnTable[] = 
+{
+    CAN0_ORed_Message_buffer_IRQn,
+    CAN1_ORed_Message_buffer_IRQn,
+};
+/* callback function slot */
+static CAN_CallBackType CAN_CallBackTable[ARRAY_SIZE(CAN_InstanceTable)] = {NULL};
+
+#define CAN_GET_MB_CODE(cs)         (((cs) & CAN_CS_CODE_MASK)>>CAN_CS_CODE_SHIFT)
+#define CAN_GET_FRAME_LEN(cs)       (((cs) & CAN_CS_DLC_MASK)>>CAN_CS_DLC_SHIFT)
+
+typedef enum
+{
+    kFlexCanTX_Inactive  = 0x08, /*!< MB is not active.*/
+    kFlexCanTX_Abort     = 0x09, /*!< MB is aborted.*/
+    kFlexCanTX_Data      = 0x0C, /*!< MB is a TX Data Frame(MB RTR must be 0).*/
+    kFlexCanTX_Remote    = 0x1C, /*!< MB is a TX Remote Request Frame (MB RTR must be 1).*/
+    kFlexCanTX_Tanswer   = 0x0E, /*!< MB is a TX Response Request Frame from.*/
+                                 /*!  an incoming Remote Request Frame.*/
+    kFlexCanTX_NotUsed   = 0xF,  /*!< Not used*/
+    kFlexCanRX_Inactive  = 0x0, /*!< MB is not active.*/
+    kFlexCanRX_Full      = 0x2, /*!< MB is full.*/
+    kFlexCanRX_Empty     = 0x4, /*!< MB is active and empty.*/
+    kFlexCanRX_Overrun   = 0x6, /*!< MB is overwritten into a full buffer.*/
+    //kFlexCanRX_Busy      = 0x8, /*!< FlexCAN is updating the contents of the MB.*/
+                                /*!  The CPU must not access the MB.*/
+    kFlexCanRX_Ranswer   = 0xA, /*!< A frame was configured to recognize a Remote Request Frame*/
+                                /*!  and transmit a Response Frame in return.*/
+    kFlexCanRX_NotUsed   = 0xF, /*!< Not used*/
+}CAN_MBCode_Type;
+
 
 /**
  * @brief  设置CAN通讯速率
@@ -136,56 +164,46 @@ static uint32_t CAN_SetBaudrate(CAN_Type *can, CAN_Baudrate_Type baudrate)
 	}
 	return 0;
 }
-/***********************************************************************************************
- 功能：接收邮箱中断设置
- 形参：can : CAN0  CAN1
- 返回：0
- 详解：内部参数
-************************************************************************************************/
-void CAN_Set_Rev_Mask(CAN_Type *can, uint32_t rxid)
+
+void CAN_SetReceiveMask(uint32_t instance, uint32_t mb, uint32_t mask)
 {
-    can->MCR |= (CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
-    	// 等待模块进入冻结模式
-	while(!(CAN_MCR_FRZACK_MASK & (can->MCR))); 
-    if(rxid>0x7FF)
-    {	  //识别为扩展id
-        can->RXMGMASK = CAN_ID_EXT(rxid); 
+    CAN_InstanceTable[instance]->MCR |= (CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
+	while(!(CAN_MCR_FRZACK_MASK & (CAN_InstanceTable[instance]->MCR))) {}; 
+    if(mask > 0x7FF)
+    {	 
+        CAN_InstanceTable[instance]->RXIMR[mb] = CAN_ID_EXT(mask); 
     }
     else
-    {	//识别为标准11位id
-        can->RXMGMASK = CAN_ID_STD(rxid); 
+    {
+        CAN_InstanceTable[instance]->RXIMR[mb] = CAN_ID_STD(mask); 
     } 
-    can->MCR &= ~(CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK); //取消暂停 
-	while((CAN_MCR_FRZACK_MASK & (can->MCR)));   // 等待模块推出冻结模式
+    /* enable module */
+    CAN_InstanceTable[instance]->MCR &= ~(CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
+	while((CAN_MCR_FRZACK_MASK & (CAN_InstanceTable[instance]->MCR)));
 }
-/***********************************************************************************************
- 功能：启动CAN接收邮箱
- 形参：can : CAN0 或者  CAN1
-       boxindex：0~15
-       rxid：准备接收数据源的地址
- 返回：0
- 详解：采用中断方式接收
-************************************************************************************************/
-void CAN_EnableRev(CAN_Type *can, uint8_t boxindex, uint32_t rxid)
+
+
+void CAN_SetReceiveMB(uint32_t instance, uint32_t mb, uint32_t id)
 {
-	CAN_Set_Rev_Mask(can,rxid);
-    can->IMASK1 |= CAN_IMASK1_BUFLM(1<<boxindex);  //开启接收中断
-    // 写入 ID
-    if(rxid>0x7FF)
-    {	  //识别为扩展id   
-        can->MB[boxindex].CS |= CAN_CS_IDE_MASK;
-        can->MB[boxindex].CS &= ~CAN_CS_SRR_MASK;
-        can->MB[boxindex].ID &= ~(CAN_ID_STD_MASK | CAN_ID_EXT_MASK);
-        can->MB[boxindex].ID |= (rxid & (CAN_ID_STD_MASK | CAN_ID_EXT_MASK));
+    CAN_SetReceiveMask(instance , mb, id);
+    if(id > 0x7FF)
+    {	 
+        CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_IDE_MASK;
+        CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_SRR_MASK;
+        /* id settings */
+        CAN_InstanceTable[instance]->MB[mb].ID &= ~(CAN_ID_STD_MASK | CAN_ID_EXT_MASK);
+        CAN_InstanceTable[instance]->MB[mb].ID |= (id & (CAN_ID_STD_MASK | CAN_ID_EXT_MASK));
     }
     else
-    {	//识别为标准11位id
-        can->MB[boxindex].CS &= ~(CAN_CS_IDE_MASK | CAN_CS_SRR_MASK);
-        can->MB[boxindex].ID &= ~CAN_ID_STD_MASK;
-        can->MB[boxindex].ID |= CAN_ID_STD(rxid);       
-    } 
-    can->MB[boxindex].CS &= ~CAN_CS_CODE_MASK; // 
-	can->MB[boxindex].CS |= CAN_CS_CODE(4); // 激活这个 MB 作为接受数据
+    {
+        CAN_InstanceTable[instance]->MB[mb].CS &= ~(CAN_CS_IDE_MASK | CAN_CS_SRR_MASK);
+         /* id settings */
+        CAN_InstanceTable[instance]->MB[mb].ID &= ~CAN_ID_STD_MASK;
+        CAN_InstanceTable[instance]->MB[mb].ID |= CAN_ID_STD(id);       
+    }
+    /* set code */
+    CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_CODE_MASK; 
+	CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_CODE(kFlexCanRX_Empty);
 }
 
 void CAN_Init(CAN_InitTypeDef* CAN_InitStruct)
@@ -193,35 +211,49 @@ void CAN_Init(CAN_InitTypeDef* CAN_InitStruct)
     uint32_t i;
     /* enable clock gate */
     *((uint32_t*) SIM_CANClockGateTable[CAN_InitStruct->instance].addr) |= SIM_CANClockGateTable[CAN_InitStruct->instance].mask; 
+  
     /* set clock source is bus clock */
     CAN_InstanceTable[CAN_InitStruct->instance]->CTRL1 |= CAN_CTRL1_CLKSRC_MASK;
+
     /* enable module */
     CAN_InstanceTable[CAN_InitStruct->instance]->MCR &= ~CAN_MCR_MDIS_MASK;
+    
     /* software reset */
 	CAN_InstanceTable[CAN_InitStruct->instance]->MCR |= CAN_MCR_SOFTRST_MASK;	
-	while(CAN_MCR_SOFTRST_MASK & (CAN_InstanceTable[CAN_InitStruct->instance]->MCR)); 
+	while(CAN_MCR_SOFTRST_MASK & (CAN_InstanceTable[CAN_InitStruct->instance]->MCR)) {}; 
+        
+    /* halt mode */
+    CAN_InstanceTable[CAN_InitStruct->instance]->MCR |= (CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
+	while(!(CAN_MCR_FRZACK_MASK & (CAN_InstanceTable[CAN_InitStruct->instance]->MCR))) {}; 
+        
     /* init all mb */
-    for(i = 0; i < 16; i++)
+    for(i = 0; i < CAN_MB_MAX; i++)
 	{
 		CAN_InstanceTable[CAN_InitStruct->instance]->MB[i].CS = 0x00000000;
 		CAN_InstanceTable[CAN_InitStruct->instance]->MB[i].ID = 0x00000000;
 		CAN_InstanceTable[CAN_InitStruct->instance]->MB[i].WORD0 = 0x00000000;
 		CAN_InstanceTable[CAN_InitStruct->instance]->MB[i].WORD1 = 0x00000000;
+        /* indviual mask*/
+        CAN_InstanceTable[CAN_InitStruct->instance]->RXIMR[i] = CAN_ID_EXT(CAN_RXIMR_MI_MASK);
 	}
-	//接收邮箱屏蔽
-	CAN_InstanceTable[CAN_InitStruct->instance]->RXMGMASK = CAN_ID_EXT(CAN_RXMGMASK_MG_MASK); 
-    CAN_InstanceTable[CAN_InitStruct->instance]->RX14MASK = CAN_ID_EXT(CAN_RX14MASK_RX14M_MASK); 
-    CAN_InstanceTable[CAN_InitStruct->instance]->RX15MASK = CAN_ID_EXT(CAN_RX15MASK_RX15M_MASK); 
+	/* set all masks */
+	//CAN_InstanceTable[CAN_InitStruct->instance]->RXMGMASK = CAN_ID_EXT(CAN_RXMGMASK_MG_MASK); 
+   // CAN_InstanceTable[CAN_InitStruct->instance]->RX14MASK = CAN_ID_EXT(CAN_RX14MASK_RX14M_MASK); 
+   // CAN_InstanceTable[CAN_InitStruct->instance]->RX15MASK = CAN_ID_EXT(CAN_RX15MASK_RX15M_MASK);
+    /* use indviual mask, do not use RXMGMASK, RX14MASK and RX15MASK */
+    CAN_InstanceTable[CAN_InitStruct->instance]->MCR |= CAN_MCR_IRMQ_MASK;
     
-   //设置传输速率
+    /* setting baudrate */
 	CAN_SetBaudrate(CAN_InstanceTable[CAN_InitStruct->instance], CAN_InitStruct->baudrate);
-	CAN_InstanceTable[CAN_InitStruct->instance]->MCR &= ~(CAN_MCR_FRZ_MASK| CAN_MCR_HALT_MASK); //取消暂停 
-	while((CAN_MCR_FRZACK_MASK & (CAN_InstanceTable[CAN_InitStruct->instance]->MCR)));   // 等待模块推出冻结模式
-	while(((CAN_InstanceTable[CAN_InitStruct->instance]->MCR)&CAN_MCR_NOTRDY_MASK));    // 等待同步，见参考手册k10 1046页 
-
+	CAN_InstanceTable[CAN_InitStruct->instance]->MCR &= ~(CAN_MCR_FRZ_MASK| CAN_MCR_HALT_MASK);
+    
+    /* enable module */
+    CAN_InstanceTable[CAN_InitStruct->instance]->MCR &= ~(CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
+	while((CAN_MCR_FRZACK_MASK & (CAN_InstanceTable[CAN_InitStruct->instance]->MCR)));
+	while(((CAN_InstanceTable[CAN_InitStruct->instance]->MCR)&CAN_MCR_NOTRDY_MASK));
 }
 
-void CAN_QuickInit(uint32_t CANxMAP, CAN_Baudrate_Type baudrate)
+uint32_t CAN_QuickInit(uint32_t CANxMAP, CAN_Baudrate_Type baudrate)
 {
 	uint32_t i;
     QuickInit_Type * pq = (QuickInit_Type*)&(CANxMAP); 
@@ -234,242 +266,162 @@ void CAN_QuickInit(uint32_t CANxMAP, CAN_Baudrate_Type baudrate)
     {
         PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
     }
+    return pq->ip_instance;
 }
 
-uint32_t CAN_SendData2(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf, uint8_t len)
+uint32_t CAN_IsMessageBoxBusy(uint32_t instance, uint32_t mb)
 {
-	if(mb >= 16 || len >8)
-	{
-		return 1; //输入数据错误
-	} 
-}
-
-/*
-void CAN_Init2(uint32_t CANxMAP, CAN_Baudrate_Type baudrate)
-{
-	uint8_t i;
-    CAN_Type *can;
-	//记录CANdev的数据
-	//开启CAN时钟 配置对应引脚
-     QuickInit_Type * pq = (QuickInit_Type*)&(CANxMAP);
-    
-    for(i = 0; i < pq->io_offset; i++)
+    uint32_t code;
+    code = CAN_GET_MB_CODE(CAN_InstanceTable[instance]->MB[mb].CS);
+    if((code == kFlexCanTX_Inactive) || (code == kFlexCanRX_Inactive))
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        return 0;
     }
-	if((pq->ip_instance) == HW_CAN0)
-	{
-		can = CAN0;
-        SIM->SCGC6 |= SIM_SCGC6_FLEXCAN0_MASK;	 //开启CAN0的时钟
-		NVIC_EnableIRQ(CAN0_ORed_Message_buffer_IRQn);//开启中断
-	}
-	if((pq->ip_instance) == HW_CAN1)
-	{
-		can = CAN1;
-        SIM->SCGC3 |= SIM_SCGC3_FLEXCAN1_MASK;	//开启can1的的时钟
-		NVIC_EnableIRQ(CAN1_ORed_Message_buffer_IRQn);//开启中断
-	}
-	//选择为BusClock 时钟
-	can->CTRL1 |=  CAN_CTRL1_CLKSRC_MASK;	
-	//开启CAN通信模块 
-	can->MCR &= ~CAN_MCR_MDIS_MASK;	
-	//等待通信模块复位启动
-	while((CAN_MCR_LPMACK_MASK & (can->MCR)));	 
-	//软件复位模块 //等待软件复位完成
-	can->MCR |= CAN_MCR_SOFTRST_MASK;	
-	while(CAN_MCR_SOFTRST_MASK & (can->MCR));  
-    //使能冻结模式
-	can->MCR |= (CAN_MCR_FRZ_MASK| CAN_MCR_HALT_MASK);  
-	// 等待模块进入冻结模式
-	while(!(CAN_MCR_FRZACK_MASK & (can->MCR))); 
-    //初始化所有邮箱
-	for(i=0;i<16;i++)
-	{
-		can->MB[i].CS = 0x00000000;
-		can->MB[i].ID = 0x00000000;
-		can->MB[i].WORD0 = 0x00000000;
-		can->MB[i].WORD1 = 0x00000000;
-	}
-	//接收邮箱屏蔽
-	can->RXMGMASK = CAN_ID_EXT(CAN_RXMGMASK_MG_MASK); 
-    can->RX14MASK = CAN_ID_EXT(CAN_RX14MASK_RX14M_MASK); 
-    can->RX15MASK = CAN_ID_EXT(CAN_RX15MASK_RX15M_MASK); 
-   //设置传输速率
-	CAN_SetBaudrate(can,baudrate);
-	can->MCR &= ~(CAN_MCR_FRZ_MASK| CAN_MCR_HALT_MASK); //取消暂停 
-	while((CAN_MCR_FRZACK_MASK & (can->MCR)));   // 等待模块推出冻结模式
-	while(((can->MCR)&CAN_MCR_NOTRDY_MASK));    // 等待同步，见参考手册k10 1046页 
+    return 1;
 }
-*/
-/***********************************************************************************************
- 功能：CAN 设备发送数据
- 形参：can : CAN0 或者  CAN1
-       Data: 数据指针 
- 返回：0
- 详解: 发送数据最大不超过 8字节
-************************************************************************************************/
-uint8_t CAN_SendData(CAN_Type *can,uint8_t boxindex, uint32_t txid, uint8_t *Data, uint8_t len)
+
+uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf, uint8_t len)
 {
-	uint8_t  i;
+    uint32_t i;
 	uint32_t word[2] = {0};
-    can->IMASK1 |= CAN_IMASK1_BUFLM(1<<boxindex);  //开启接收中断
-	if(boxindex >= 16 || len >8)
+	if(mb >= CAN_MB_MAX || len > 8)
 	{
-		return 1; //输入数据错误
+		return 1;
 	}
-	// 转换数据格式
-	for(i=0;i<len;i++)
+    if(CAN_IsMessageBoxBusy(instance, mb))
+    {
+        return 2;
+    }
+    /* clear IT pending bit */
+    CAN_InstanceTable[instance]->IFLAG1 |= (1 << mb);
+    /* setting data */
+	for(i = 0; i < len; i++)
 	{
-		if(i<4)
-		word[0] |= (*(Data+i)<<((3-i)*8));
-	   else
-		word[1] |= (*(Data+i)<<((7-i)*8));
-	} 
-    can->MB[boxindex].WORD0 = word[0];
-	can->MB[boxindex].WORD1 = word[1]; 
-	//输入id处理
-	if(txid>0x7FF)
-    {	  //识别为扩展id
-        can->MB[boxindex].ID &= ~(CAN_ID_STD_MASK | CAN_ID_EXT_MASK);  
-        can->MB[boxindex].ID |= (txid & (CAN_ID_STD_MASK | CAN_ID_EXT_MASK));
-        can->MB[boxindex].CS |= CAN_CS_IDE_MASK;
-        can->MB[boxindex].CS &= ~CAN_CS_SRR_MASK;
-        can->MB[boxindex].CS &= ~CAN_CS_DLC_MASK;
-        can->MB[boxindex].CS |= CAN_CS_DLC(len);
-        can->MB[boxindex].CS &= ~CAN_CS_CODE_MASK;
-        can->MB[boxindex].CS |= CAN_CS_CODE(12);	 // 激活这个 MB 发送数据
+        if(i<4)
+        {
+            word[0] |= (*(buf+i)<<((3-i)*8));
+        }
+        else
+        {
+            word[1] |= (*(buf+i)<<((7-i)*8));  
+        }
+	}
+    CAN_InstanceTable[instance]->MB[mb].WORD0 = word[0];
+    CAN_InstanceTable[instance]->MB[mb].WORD1 = word[1];
+    /* DLC field */
+    CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_DLC_MASK;
+    CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_DLC(len);
+    /* clear RTR */
+    CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_RTR_MASK;
+    /* ID and IDE */
+    if(id > 0x7FF)
+    {
+        /* SRR must set to 1 */
+        CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_SRR_MASK;
+        CAN_InstanceTable[instance]->MB[mb].ID |= (id & (CAN_ID_STD_MASK | CAN_ID_EXT_MASK));
+        CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_IDE_MASK;
     }
     else
-    {	//识别为标准11位id
-        can->MB[boxindex].ID &= ~CAN_ID_STD_MASK ;  
-        can->MB[boxindex].ID |= CAN_ID_STD(txid);
-        can->MB[boxindex].CS &= ~(CAN_CS_IDE_MASK | CAN_CS_SRR_MASK);
-        can->MB[boxindex].CS &= ~CAN_CS_DLC_MASK;
-        can->MB[boxindex].CS |= CAN_CS_DLC(len);
-        can->MB[boxindex].CS &= ~CAN_CS_CODE_MASK;
-        can->MB[boxindex].CS |= CAN_CS_CODE(12);	 // 激活这个 MB 发送数据  
-    } 
+    {
+        CAN_InstanceTable[instance]->MB[mb].ID |= CAN_ID_STD(id);
+        CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_IDE_MASK;
+    }
+    /* start transfer */
+    CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_CODE_MASK;
+    CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_CODE(kFlexCanTX_Data);
     return 0;
-}  
-/***********************************************************************************************
- 功能：CAN接收数据
- 形参：can : CAN0 或者  CAN1
-       boxindex:邮箱编号0~15
-       *data : 接收数据缓冲区
- 返回：接收到的数据长度
- 详解：
-************************************************************************************************/
-uint8_t CAN_ReadData(CAN_Type *can,uint8_t boxindex, uint8_t *Data)
-{
-	uint8_t len = 0;
-	uint8_t code,i;
-	uint32_t word[2] = {0};
-    // 锁 MB
-    code = CAN_get_code(can->MB[boxindex].CS);
-    if(code != 0x02) //验证是否接收成功
-    {
-        len = 0;
-        return len;
-    }
-    len = CAN_get_length(can->MB[boxindex].CS);  //获得接收的数据长度
-    if(len <1)
-    {
-        return len; //接收失败
-    }
-	word[0] = can->MB[boxindex].WORD0;   //读取接收的数据
-	word[1] = can->MB[boxindex].WORD1;   //读取接收的数据
-	code = can->TIMER;    // 全局解锁 MB 操作
-	//清报文缓冲区中断标志
-	can->IFLAG1 = (1<<boxindex);	 //必须清除
-	for(i=0;i<len;i++)
-    {  
-	   if(i<4)
-	   (*(Data+i))=(word[0]>>((3-i)*8));
-	   else									 //数据存储转换
-	   (*(Data+i))=(word[1]>>((7-i)*8));
-    }
-    return len;
-}
-/***********************************************************************************************
- 功能：CAN使能接收中断
- 形参：can : CAN0 或者  CAN1
- 返回：0
- 详解：0
-************************************************************************************************/
-void CAN_AbleInterrupts(CAN_Type * can)
-{
-	switch((uint32_t)can)
-	{
-		case CAN0_BASE:
-			NVIC_EnableIRQ(CAN0_ORed_Message_buffer_IRQn);
-			break;
-		case CAN1_BASE:
-			NVIC_EnableIRQ(CAN1_ORed_Message_buffer_IRQn);
-			break;
-		default:break;
-	}
-}
-/***********************************************************************************************
- 功能：CAN禁止接收中断
- 形参：can : CAN0 或者  CAN1
- 返回：0
- 详解：0
-************************************************************************************************/
-void CAN_DisableInterrupts(CAN_Type * can)
-{
-	switch((uint32_t)can)
-	{
-		case CAN0_BASE:
-			NVIC_DisableIRQ(CAN0_ORed_Message_buffer_IRQn);
-			break;
-		case CAN1_BASE:
-			NVIC_DisableIRQ(CAN1_ORed_Message_buffer_IRQn);
-			break;
-		default:break;
-	}
-}
-/***********************************************************************************************
- 功能：CAN清楚中断标志位
- 形参：can : CAN0 或者  CAN1
- 返回：0
- 详解：0
-************************************************************************************************/
-void CAN_ClearRecFlag(CAN_Type * can, uint8_t boxindex)
-{
-	can->IFLAG1 |= (1<<boxindex);	 //必须清除
 }
 
-//extern uint8_t CANRXBuffer[8];
-//extern uint32_t CAN_Data_Len;
-/***********************************************************************************************
- 功能：CAN0 接收中断
- 形参：0
- 返回：0
- 详解：0
-************************************************************************************************/
-void CAN0_ORed_Message_buffer_IRQHandler(void)
-{  
-    CAN_ClearRecFlag(CAN0,1); //清除接收标志位
+void CAN_CallbackInstall(uint32_t instance, CAN_CallBackType AppCBFun)
+{
+    if(AppCBFun != NULL)
+    {
+        CAN_CallBackTable[instance] = AppCBFun;
+    }
 }
-/***********************************************************************************************
- 功能：CAN1 接收中断
- 形参：0
- 返回：0
- 详解：0
-************************************************************************************************/
+
+void CAN_ITDMAConfig(uint32_t instance, uint32_t mb, CAN_ITDMAConfig_Type config)
+{
+    switch(config)
+    {
+        case kCAN_IT_Tx_Disable:
+            CAN_InstanceTable[instance]->IMASK1 &= ~CAN_IMASK1_BUFLM(1 << mb);
+            break;
+        case kCAN_IT_Tx:
+            CAN_InstanceTable[instance]->IMASK1 |= CAN_IMASK1_BUFLM(1 << mb);
+            NVIC_EnableIRQ(CAN_IRQnTable[instance]);
+            break;
+        case kCAN_IT_Rx_Disable:
+            CAN_InstanceTable[instance]->IMASK1 &= ~CAN_IMASK1_BUFLM(1 << mb);
+            break;
+        case kCAN_IT_RX:
+            CAN_InstanceTable[instance]->IMASK1 |= CAN_IMASK1_BUFLM(1 << mb);
+            NVIC_EnableIRQ(CAN_IRQnTable[instance]);
+            break;
+        default:
+            break;
+    }
+}
+
+
+uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint8_t *buf, uint8_t *len)
+{
+	uint32_t code,i;
+    uint8_t len1;
+	uint32_t word[2] = {0};
+    code = CAN_GET_MB_CODE(CAN_InstanceTable[instance]->MB[mb].CS);
+    if((code & 0x01))
+    { 
+        /* MB is busy and controlled by hardware */
+        return 2;
+    }
+    /* if reviced data */
+    if(CAN_InstanceTable[instance]->IFLAG1 & (1<<mb))
+    {
+        /* clear IT pending bit */
+        CAN_InstanceTable[instance]->IFLAG1 |= (1 << mb);
+        /* read content */
+        len1 = CAN_GET_FRAME_LEN(CAN_InstanceTable[instance]->MB[mb].CS);
+        word[0] = CAN_InstanceTable[instance]->MB[mb].WORD0;
+        word[1] = CAN_InstanceTable[instance]->MB[mb].WORD1;
+        for(i = 0; i < len1; i++)
+        {  
+           if(i<4)
+           (*(buf+i))=(word[0]>>((3-i)*8));
+           else							
+           (*(buf+i))=(word[1]>>((7-i)*8));
+        }
+        *len = len1;
+        i = CAN_InstanceTable[instance]->TIMER; /* unlock MB */
+        return 0;
+    }
+    i = CAN_InstanceTable[instance]->TIMER; /* unlock MB */
+    return 1;
+}
+
+
+void CAN0_ORed_Message_buffer_IRQHandler(void)
+{
+    uint32_t temp;
+    if(CAN_CallBackTable[HW_CAN0])
+    {
+        CAN_CallBackTable[HW_CAN0]();
+    }
+    /* make sure clear IT pending bit according to IT enable reg */
+    temp = CAN_InstanceTable[HW_CAN0]->IMASK1;
+    CAN_InstanceTable[HW_CAN0]->IFLAG1 |= temp;
+}
+
 void CAN1_ORed_Message_buffer_IRQHandler(void)
 {  
-    
-   if((CAN1->IFLAG1)&(1<<CAN_DEFAULT_RXMSGBOXINDEX))
-   {
-//     CAN_Data_Len = CAN_ReadData(CAN1,CAN_DEFAULT_RXMSGBOXINDEX,CANRXBuffer); //接收数据
-     CAN_ClearRecFlag(CAN1,CAN_DEFAULT_RXMSGBOXINDEX); //清除接收标志位
-   }
-   if((CAN1->IFLAG1)&(0x01<<8))
-   {
-    CAN_ClearRecFlag(CAN1,8); //清除接收标志位
-   }
-    
+    uint32_t temp;
+    if(CAN_CallBackTable[HW_CAN1])
+    {
+        CAN_CallBackTable[HW_CAN1]();
+    } 
+    /* make sure clear IT pending bit according to IT enable reg */
+    temp = CAN_InstanceTable[HW_CAN1]->IMASK1;
+    CAN_InstanceTable[HW_CAN1]->IFLAG1 |= temp;
 }
 
 

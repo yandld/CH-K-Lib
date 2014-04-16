@@ -105,7 +105,7 @@ Purpose     : Sample configuration file
   #define LCD_WRITE_REGLH(Adr, d0, d1) LCD_WRITE_REG(Adr, ((d1)<<8) | (d0))
 #endif  
 
-#define LCD_INIT_CONTROLLER()   ili9320_init()
+#define LCD_INIT_CONTROLLER()   0
  
 #endif /* LCDCONF_H */
 

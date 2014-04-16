@@ -18,9 +18,9 @@
 
 
 //!< API functions
-int ads7843_init(spi_bus_t bus, uint32_t cs);
-uint32_t ads7843_readX(uint16_t * value);
-uint32_t ads7843_readY(uint16_t * value);
+int ads7843_init(spi_bus_t bus, int cs);
+uint32_t ads7843_readX(int * value);
+uint32_t ads7843_readY(int * value);
 
 
 

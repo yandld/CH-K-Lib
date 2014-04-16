@@ -117,12 +117,9 @@ void DelayInit(void)
  * @retval None
  * @note  首先需要完成延时初始化配置
  */
-#if (defined(__CC_ARM))
-__weak void DelayMs(uint32_t ms)
-#elif (defined(__ICCARM__))
+
 #pragma weak DelayMs
 void DelayMs(uint32_t ms)
-#endif
 {
     SYSTICK_DelayMs(ms);
 }
@@ -137,12 +134,8 @@ void DelayMs(uint32_t ms)
  * @retval None
  * @note  首先需要完成延时初始化配置
  */
-#if (defined(__CC_ARM))
-__weak void DelayUs(uint32_t us)
-#elif (defined(__ICCARM__))
 #pragma weak DelayUs
 void DelayUs(uint32_t us)
-#endif
 {
     SYSTICK_DelayUs(us);
 }

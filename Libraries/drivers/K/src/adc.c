@@ -399,7 +399,11 @@ void ADC_CallbackInstall(uint32_t instance, ADC_CallBackType AppCBFun)
 void ADC0_IRQHandler(void)
 {
     uint32_t value;
-    /* clear COCO bit and read value*/
+    if(ADC_CallBackTable[HW_ADC0] != NULL)
+    {
+        ADC_CallBackTable[HW_ADC0](value);
+    }
+    /*make sure clear COCO bit and read value*/
     if(!(ADC_InstanceTable[HW_ADC0]->CFG2 & ADC_CFG2_MUXSEL_MASK))
     {
         value = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxA];
@@ -408,16 +412,16 @@ void ADC0_IRQHandler(void)
     {
         value = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxB];
     }
-    if(ADC_CallBackTable[HW_ADC0] != NULL)
-    {
-        ADC_CallBackTable[HW_ADC0](value);
-    }
 }
 
 void ADC1_IRQHandler(void)
 {
     uint32_t value;
-    /* clear COCO bit and read value*/
+    if(ADC_CallBackTable[HW_ADC1] != NULL)
+    {
+        ADC_CallBackTable[HW_ADC1](value);
+    }
+    /*make sure clear COCO bit and read value*/
     if(!(ADC_InstanceTable[HW_ADC1]->CFG2 & ADC_CFG2_MUXSEL_MASK))
     {
         value = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxA];
@@ -425,9 +429,5 @@ void ADC1_IRQHandler(void)
     else
     {
         value = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxB];
-    }
-    if(ADC_CallBackTable[HW_ADC1] != NULL)
-    {
-        ADC_CallBackTable[HW_ADC1](value);
     }
 }

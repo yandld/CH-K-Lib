@@ -24,6 +24,9 @@ void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
     /* enable clock gate enable seruriy mode */
     SIM->SOPT2 |= SIM_SOPT2_FBSL(3);
     SIM->SCGC7 |= SIM_SCGC7_FLEXBUS_MASK;
+    /* div */
+    SIM->CLKDIV1 &= ~SIM_CLKDIV1_OUTDIV3_MASK;
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(FLEXBUS_InitStruct->div);
     /* we must set V_MASK in CS0, because CS0.CSMR.V_MASK act as a global CS */
     FB->CS[0].CSMR |= FB_CSMR_V_MASK; 
     /* clear registers */
@@ -62,7 +65,6 @@ void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
     {
         FB->CS[FLEXBUS_InitStruct->CSn].CSCR |= FB_CSCR_BEM_MASK;
     }
-
 }
 
 

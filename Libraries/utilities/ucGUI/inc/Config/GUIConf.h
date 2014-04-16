@@ -22,7 +22,7 @@ Purpose     : Configures abilities, fonts etc.
 #define GUICONF_H
 
 #define GUI_OS                    (0)  /* Compile with multitasking support */
-#define GUI_SUPPORT_TOUCH         (0)  /* Support a touch screen (req. win-manager) */
+#define GUI_SUPPORT_TOUCH         (1)  /* Support a touch screen (req. win-manager) */
 #define GUI_SUPPORT_MOUSE         (0)  /* Support a mouse */
 #define GUI_SUPPORT_UNICODE       (0)  /* Support mixed ASCII/UNICODE strings */
 

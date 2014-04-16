@@ -74,6 +74,7 @@ typedef enum
 //!< FLEXBUS初始化结构体
 typedef struct
 {
+    uint32_t div;
     uint32_t dataWidth;
     uint32_t baseAddress;
     uint32_t ADSpaceMask;

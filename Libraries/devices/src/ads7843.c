@@ -17,7 +17,7 @@
 
 static struct spi_device device;
 
-uint32_t ads7843_readX(uint16_t * value)
+uint32_t ads7843_readX(int * value)
 {
     uint8_t buf[2];
     buf[0] = ADS7843_CMD_READ_X;
@@ -27,7 +27,7 @@ uint32_t ads7843_readX(uint16_t * value)
     return SPI_EOK;
 }
 
-uint32_t ads7843_readY(uint16_t * value)
+uint32_t ads7843_readY(int * value)
 {
     uint8_t buf[2];
     buf[0] = ADS7843_CMD_READ_Y;
@@ -38,7 +38,7 @@ uint32_t ads7843_readY(uint16_t * value)
 }
 
 
-int ads7843_init(spi_bus_t bus, uint32_t cs)
+int ads7843_init(spi_bus_t bus, int cs)
 {
     uint32_t ret;
     device.csn = cs;
@@ -56,3 +56,4 @@ int ads7843_init(spi_bus_t bus, uint32_t cs)
     }
     return ret;
 }
+

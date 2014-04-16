@@ -22,6 +22,11 @@
 #define HW_CTAR0    (0x00)  
 #define HW_CTAR1    (0x01)  
 
+#define HW_SPI_CS0  (0x00)
+#define HW_SPI_CS1  (0x01)
+#define HW_SPI_CS2  (0x02)
+#define HW_SPI_CS3  (0x03)
+
 //!< SPIÖ¡¸ñÊ½Ñ¡Ôñ
 typedef enum
 {

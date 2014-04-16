@@ -3,7 +3,7 @@
 #include "flexbus.h"
 
 
-#define ILI9320_DEBUG		1
+#define ILI9320_DEBUG		0
 #if ( ILI9320_DEBUG == 1 )
 #define ILI9320_TRACE	printf
 #else
@@ -112,6 +112,7 @@ void ili9320_vline(int ys, int ye, int x, int c)
         WMLCDDATA(c);
         ys++;
     }
+    write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
 }
 
 void ili9320_init(void)

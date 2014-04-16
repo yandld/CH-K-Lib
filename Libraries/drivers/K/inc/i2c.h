@@ -66,6 +66,8 @@ typedef void (*I2C_CallBackType)(void);
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
 uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate);
 void I2C_GenerateSTART(uint32_t instance);
+void I2C_GenerateAck(uint32_t instance)
+void I2C_SetMasterMode(uint32_t instance, I2C_Direction_Type direction);
 void I2C_GenerateRESTART(uint32_t instance);
 void I2C_GenerateSTOP(uint32_t instance);
 void I2C_SendData(uint32_t instance, uint8_t data);

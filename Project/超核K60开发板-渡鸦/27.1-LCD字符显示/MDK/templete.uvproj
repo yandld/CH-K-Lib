@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10 RAVEN DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\ucGUI\inc;..\..\..\..\Libraries\ucGUI\inc\Config</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\utilities\ucGUI\inc;..\..\..\..\Libraries\utilities\ucGUI\inc\Config</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -542,7 +542,7 @@
             <File>
               <FileName>GUILib.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\ucGUI\build\MDK\obj\GUILib.lib</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\ucGUI\build\MDK\obj\GUILib.lib</FilePath>
             </File>
           </Files>
         </Group>

@@ -9,7 +9,6 @@
 #include "shell.h"
 #include "board.h"
 
-#include "GUI.h"
 #include "ads7843.h"
 #include "spi.h"
 

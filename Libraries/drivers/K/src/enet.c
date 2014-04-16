@@ -26,12 +26,9 @@ static ENET_CallBackRxType ENET_CallBackRxTable[1] = {0};
 static uint8_t ucENETRxBuffers[ ( CFG_NUM_ENET_RX_BUFFERS * CFG_ENET_BUFFER_SIZE ) + 16 ];
 
 /**
- * @brief   初始化以太网描述符缓冲区
- *
- * @note    以太网模块为提升速度 通过nent 内部DMA搬运用户自定义内存区 每个内存区还要分配描述符
- * @param   None
- * @retval  None
- *
+ * @brief 初始化以太网描述符缓冲区
+ * @note  以太网模块为提升速度 通过nent内部DMA搬运用户自定义内存区 每个内存区还要分配描述符
+ * @retval None
  */
 static void ENET_BDInit(void)
 {
@@ -80,11 +77,9 @@ static void ENET_BDInit(void)
 }
 
 /**
- * @brief   计算哈希校验值
- *
- * @param   MAC地址
- * @retval  Hash
- *
+ * @brief 计算哈希校验值
+ * @note  辅助函数
+ * @retval Hash值
  */
 static uint8_t ENET_HashAddress(const uint8_t* addr)
 {
@@ -112,10 +107,8 @@ static uint8_t ENET_HashAddress(const uint8_t* addr)
 
 /**
  * @brief   设置ENET模块的接收MAC地址
- *
  * @param   MAC地址
  * @retval  None
- *
  */
 static void ENET_SetAddress(const uint8_t *pa)
 {
@@ -132,8 +125,7 @@ static void ENET_SetAddress(const uint8_t *pa)
 }
 
 /**
- * @brief  初始化以太网 MII配置层 接口
- *
+ * @brief  初始化以太网 MII配置层接口
  * @param  None
  * @retval None
  */
@@ -151,12 +143,11 @@ static void ENET_MII_Init(void)
 }
 
 /**
- * @brief  写入以太网 MII 配置层数据
- *
- * @param   phy_addr    PHY芯片地址
- * @param   reg_addr    寄存器在PHY内部的偏移地址
- * @param   data        需要写入的数据
- * @retval  None
+ * @brief  写入以太网MII配置层数据
+ * @param   phy_addr  :PHY芯片地址
+ * @param   reg_addr  :寄存器在PHY内部的偏移地址
+ * @param   data      :需要写入的数据
+ * @retval  0 :成功 其它 :失败
  */
 static uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
 {
@@ -192,12 +183,11 @@ static uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t dat
 }
 
 /**
- * @brief  读以太网 MII 配置层数据
- *
- * @param   phy_addr    PHY芯片地址
- * @param   reg_addr    寄存器在PHY内部的偏移地址
- * @param   data        需要读入的数据
- * @retval  None
+ * @brief  读以太网MII配置层数据
+ * @param   phy_addr    :PHY芯片地址
+ * @param   reg_addr    :寄存器在PHY内部的偏移地址
+ * @param   data        :需要读入的数据地址
+ * @retval  0 :成功 其它 :失败
  */
 static uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
 {
@@ -231,9 +221,9 @@ static uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *dat
 }
 
 /**
- * @brief  初始化以太网模块
- *
- * @param   ENET_InitStrut    以太网初始化结构指针
+ * @brief   初始化以太网模块
+ * @note    用户调用函数
+ * @param   ENET_InitStrut   :以太网初始化结构指针，详见应用例程
  * @retval  None
  */
 void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
@@ -354,9 +344,9 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 
 /**
  * @brief  发送一帧以太帧数据
- *
- * @param   data    数据指针
- * @param   len     长度 (< 1500)
+ * @note    用户调用函数
+ * @param   data    :发送数据指针
+ * @param   len     :数据长度 (< 1500字节)
  * @retval  None
  */
 void ENET_MacSendData(uint8_t *data, uint16_t len)
@@ -375,9 +365,9 @@ void ENET_MacSendData(uint8_t *data, uint16_t len)
 
 /**
  * @brief  接收一帧以太帧数据
- *
- * @param   data    数据指针
- * @retval  len 接收到的长度
+ * @note    用户调用函数
+ * @param   data    :数据指针
+ * @retval  接收到的数据长度
  */
 uint16_t ENET_MacReceiveData(uint8_t *data)
 {
@@ -398,11 +388,11 @@ uint16_t ENET_MacReceiveData(uint8_t *data)
 
 /**
  * @brief  配置ENET模块的中断或者DMA属性
- * @param  config: 模式选择
- *         @arg kENET_IT_TXF_Disable: 禁止发送一帧以太网数据帧中断
- *         @arg kENET_IT_RXF_Disable: 禁止接收一帧以太网数据帧中断
- *         @arg kENET_IT_TXF: 开启发送一帧以太网数据中断
- *         @arg kENET_IT_RXF: 开始接收一帧以太网数据中断
+ * @param  config     :模式选择
+ *         @arg kENET_IT_TXF_Disable:禁止发送一帧以太网数据帧中断
+ *         @arg kENET_IT_RXF_Disable:禁止接收一帧以太网数据帧中断
+ *         @arg kENET_IT_TXF        :发送一帧以太网数据中断
+ *         @arg kENET_IT_RXF        :接收一帧以太网数据中断
  * @retval None
  */
 void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config)
@@ -429,7 +419,7 @@ void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config)
 }
 
 /**
- * @brief  设置ENET中断回调函数
+ * @brief  设置ENET发送中断回调函数
  * @param  AppCBFun: 回调函数指针
  * @retval None
  */
@@ -442,7 +432,7 @@ void ENET_CallbackTxInstall(ENET_CallBackTxType AppCBFun)
 }
 
 /**
- * @brief  设置ENET中断回调函数
+ * @brief  设置ENET接收中断回调函数
  * @param  AppCBFun: 回调函数指针
  * @retval None
  */
@@ -454,7 +444,6 @@ void ENET_CallbackRxInstall(ENET_CallBackRxType AppCBFun)
     }
 }
 
-
 void ENET_Transmit_IRQHandler(void)
 {
 	ENET->EIR |= ENET_EIMR_TXF_MASK;
@@ -464,7 +453,11 @@ void ENET_Transmit_IRQHandler(void)
     }  
 }
 
-
+/**
+ * @brief  中断处理函数入口
+ * @param  ENET_Receive_IRQHandler :以太网中断接收函数入口
+ * @note 函数内部用于中断事件处理
+ */
 void ENET_Receive_IRQHandler(void)
 {
 	ENET->EIR |= ENET_EIMR_RXF_MASK; 

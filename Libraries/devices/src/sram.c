@@ -9,7 +9,7 @@
   */
 #include "sram.h"
 #include "flexbus.h"
-
+#include "common.h"
 
 void SRAM_Init(void)
 {

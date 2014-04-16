@@ -174,7 +174,7 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *pbuffer, uint16_t count);
 uint8_t SD_WriteMultiBlock(uint32_t sector,const uint8_t *pbuffer, uint16_t count);
 uint32_t SD_SendCommand(SD_CommandTypeDef* Command);
 void SD_ITConfig(SDHC_Type* SDx, SD_IT_TypeDef SD_IT, FunctionalState NewState);
-ITStatus SD_GetITStates(SDHC_Type* SDx, SD_IT_TypeDef SD_IT);
+uint32_t SD_GetITStates(SDHC_Type* SDx, SD_IT_TypeDef SD_IT);
 void SD_ClearITPendingBit(SDHC_Type* SDx, SD_IT_TypeDef SD_IT);
 void SD_ClearAllITPendingFlag(void);
 

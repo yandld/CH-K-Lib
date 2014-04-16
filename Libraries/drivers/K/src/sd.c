@@ -137,7 +137,7 @@ uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct)
 	}
 	if (result == 0) //SDHC 卡
 	{
-		hc = TRUE;  					
+		hc = true;  					
 	}
 	//反复发送55+ACDM41 直到卡准备好
 	do 

@@ -12,7 +12,6 @@
 #define __CH_LIB_FLEXBUS_H__
 
 #include <stdint.h>
-#include "common.h"
 
 //!< Flexbus 数据对其方式选择
 #define kFLEXBUS_DataLeftAligned   (0x00)

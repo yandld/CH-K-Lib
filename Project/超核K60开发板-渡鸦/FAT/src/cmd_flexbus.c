@@ -3,6 +3,7 @@
 #include "shell.h"
 #include "ili9320.h"
 #include "sram.h"
+#include "common.h"
 
 int CMD_FLEXBUS(int argc, char * const * argv)
 {

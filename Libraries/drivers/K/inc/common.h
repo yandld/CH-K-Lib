@@ -37,17 +37,15 @@
 
 #else
 #define MK60DZ10
-#include "MK60DZ10.h"
+#include "MK60D10.h"
 #warning "No CPU defined!"
-#warning "Default: MK60DZ10"
+#warning "Default: MK60D10"
 
 #endif
 
 
 /* means you can use printf via UART */
 #define UART_USE_STDIO
-
-
 
 /* version information */
 #define CHK_VERSION                   2L              //!< major version number
@@ -57,7 +55,6 @@
 /* CH_Kinetis version */
 #define FW_VERSION                ((CHK_VERSION * 10000) + \
                                   (CHK_SUBVERSION * 100) + CHK_REVISION)
-
 
 //²ÎÊý¼ì²âÆ÷
 #if defined(LIB_DEBUG)
@@ -76,10 +73,7 @@
   #define assert_param(expr) ((void)0)
 #endif
 
-
-typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
 typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
-typedef enum {FALSE = 0, TRUE = !FALSE} ErrorState;
 
 #define NVIC_PriorityGroup_0         ((uint32_t)0x7) /*!< 0 bits for pre-emption priority   4 bits for subpriority */                                               
 #define NVIC_PriorityGroup_1         ((uint32_t)0x6) /*!< 1 bits for pre-emption priority   3 bits for subpriority */                                                  
@@ -97,11 +91,7 @@ typedef enum {FALSE = 0, TRUE = !FALSE} ErrorState;
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
 
 
-#if !defined(NULL)
-	#define NULL 0
-#endif
-
-//!< 
+/* QuickInitType */
 typedef struct
 {
     uint32_t ip_instance:3;

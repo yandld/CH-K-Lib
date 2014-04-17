@@ -13,13 +13,14 @@
 
 #include <stdint.h>
 
+/*芯片信息结构体定义*/
 typedef enum
 {
-    kPFlashSizeInKB,                 
-    kDFlashSizeInKB,
-    kFlexNVMSizeInKB,
-    kEEPORMSizeInByte,
-    kRAMSizeInKB,
+    kPFlashSizeInKB,   //芯片内部的PFlash大小                
+    kDFlashSizeInKB,   //芯片内部的DFlash大小 
+    kFlexNVMSizeInKB,  //芯片内部的FlexNVMFlash大小 
+    kEEPROMSizeInByte, //芯片内部的EEPROM大小 
+    kRAMSizeInKB,      //芯片内部的RAM大小 
     kMemNameCount,
 }CPUIDY_MemSize_Type;
 

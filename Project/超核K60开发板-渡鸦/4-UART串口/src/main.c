@@ -50,10 +50,10 @@ int main(void)
     
     /* 另外一种初始化方式 标准初始化 稍微繁琐 但是推荐 */
     UART_InitTypeDef UART_InitStruct1 = {0};
-    UART_InitStruct1.instance = HW_UART0;
-    UART_InitStruct1.baudrate = 115200;
-    UART_InitStruct1.parityMode = kUART_ParityEven;
-    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
+    UART_InitStruct1.instance = HW_UART0;     //设置使用UART0端口
+    UART_InitStruct1.baudrate = 115200;       //设置通信速度为115200
+    UART_InitStruct1.parityMode = kUART_ParityEven; //设置校验模式
+    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar; //设置数据传输位数
     UART_Init(&UART_InitStruct1);
     
     /* 初始化串口所占用的引脚 其中kPinAlt3为引脚复用3选项 可以在芯片 Reference Manuel 上的 Signal Multiplexing and Signal Descriptions 一章中查到*/
@@ -65,14 +65,14 @@ int main(void)
     
     while(1)
     {
-        /* 串口 按字节发送 数据 注意 instance必须是已经初始化过的模块 否则 将产生错误*/
-        UART_WriteByte(instance, 'h');
-        UART_WriteByte(instance, 'e');
-        UART_WriteByte(instance, 'l');
-        UART_WriteByte(instance, 'l');
-        UART_WriteByte(instance, 'o');
-        UART_WriteByte(instance, '\r');
-        UART_WriteByte(instance, '\n');
+        /* 串口 按字节发送 数据 注意 HW_UART0必须是已经初始化过的模块 否则 将产生错误*/
+        UART_WriteByte(HW_UART0, 'h');
+        UART_WriteByte(HW_UART0, 'e');
+        UART_WriteByte(HW_UART0, 'l');
+        UART_WriteByte(HW_UART0, 'l');
+        UART_WriteByte(HW_UART0, 'o');
+        UART_WriteByte(HW_UART0, '\r');
+        UART_WriteByte(HW_UART0, '\n');
         /* 闪烁小灯 */
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(500);

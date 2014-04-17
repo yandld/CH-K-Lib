@@ -534,6 +534,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
             </File>
+            <File>
+              <FileName>ads7843.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -543,6 +548,11 @@
               <FileName>GUILib.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\ucGUI\build\MDK\obj\GUILib.lib</FilePath>
+            </File>
+            <File>
+              <FileName>ucGuiFunc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ucGuiFunc.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -564,6 +564,11 @@
               <FileType>4</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\ucGUI\build\MDK\obj\GUILib.lib</FilePath>
             </File>
+            <File>
+              <FileName>ucGuiFunc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ucGuiFunc.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

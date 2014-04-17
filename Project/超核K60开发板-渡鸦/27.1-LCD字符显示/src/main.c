@@ -5,22 +5,6 @@
 
 #include "gui.h"
 
-int LCD_L0_Init(void)
-{
-    ili9320_init();
-    return 0;
-}
-
-void LCD_L0_SetPixelIndex(int x, int y, int PixelIndex)
-{
-    ili9320_write_pixel(x, y, PixelIndex);
-}
-
-unsigned int LCD_L0_GetPixelIndex(int x, int y)
-{
-    return ili9320_read_pixel(x, y); 
-}
-
 int main(void)
 {
     uint32_t i;

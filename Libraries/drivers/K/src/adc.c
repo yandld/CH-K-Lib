@@ -160,6 +160,7 @@ static int32_t ADC_Calibration(uint32_t instance)
  *   ADC_InitStruct1.resolutionMode = kADC_SingleDiff8or9; //单端模式下8位精度 查分模式下9位精度
  *   ADC_InitStruct1.SingleOrDifferential = kADC_Single;   //选择单端模式
  *   ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;   //设置为软件触发
+ *   ADC_InitStruct1.vref = kADC_VoltageVREF;              //使用外部VERFH VREFL 作为模拟电压参考
  *   //初始化ADC模块
  *   ADC_Init(&ADC_InitStruct1);
  * @endcode
@@ -175,6 +176,9 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 	/* set clock configuration */
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~ADC_CFG1_ADICLK_MASK;
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |=  ADC_CFG1_ADICLK(ADC_InitStruct->clockDiv); 
+    /* voltage reference */
+    ADC_InstanceTable[ADC_InitStruct->instance]->SC2 &= ~ADC_SC2_REFSEL_MASK;
+    ADC_InstanceTable[ADC_InitStruct->instance]->SC2 |= ADC_SC2_REFSEL(ADC_InitStruct->vref);
     /* resolutionMode */
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~(ADC_CFG1_MODE_MASK); 
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |= ADC_CFG1_MODE(ADC_InitStruct->resolutionMode);
@@ -231,13 +235,13 @@ uint8_t ADC_QuickInit(uint32_t ADCxMAP, ADC_ResolutionMode_Type resolutionMode)
     QuickInit_Type * pq = (QuickInit_Type*)&(ADCxMAP);
     ADC_InitTypeDef AD_InitStruct1;
     AD_InitStruct1.instance = pq->ip_instance;
-    AD_InitStruct1.chl = pq->channel;
     AD_InitStruct1.clockDiv = kADC_ClockDiv2;
     AD_InitStruct1.resolutionMode = resolutionMode;
     AD_InitStruct1.triggerMode = kADC_TriggerSoftware;
     AD_InitStruct1.singleOrDiffMode = kADC_Single;
     AD_InitStruct1.continueMode = kADC_ContinueConversionEnable;
     AD_InitStruct1.hardwareAveMode = kADC_HardwareAverageDisable;
+    AD_InitStruct1.vref = kADC_VoltageVREF;     
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
     {
@@ -262,23 +266,26 @@ uint8_t ADC_QuickInit(uint32_t ADCxMAP, ADC_ResolutionMode_Type resolutionMode)
  *         @arg HW_ADC2  :ADC2模块
  * @param  chl: ADC 通道号
  * @param  mux: ADC 转换器通道 复用 选择
- *         @arg kADC_MuxA   :A通道模式
- *         @arg kADC_MuxB   :B通道模式
+ *         @arg kADC_MuxA   :A转换器触发
+ *         @arg kADC_MuxB   :B转换器触发
  * @retval None
  */
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux)
 {
-    if(kADC_MuxA ==  mux)
+    ADC_InstanceTable[instance]->SC1[mux] &= ~(ADC_SC1_ADCH_MASK);
+    ADC_InstanceTable[instance]->SC1[mux] |= ADC_SC1_ADCH(chl);
+}
+
+void ADC_ChlMuxConfig(uint32_t instance, uint32_t mux)
+{
+    if(kADC_ChlMuxA ==  mux)
     {
         ADC_InstanceTable[instance]->CFG2 &= ~ADC_CFG2_MUXSEL_MASK;
     }
-    if(kADC_MuxB ==  mux)
+    if(kADC_ChlMuxB ==  mux)
     {
         ADC_InstanceTable[instance]->CFG2 |= ADC_CFG2_MUXSEL_MASK; 
     }
-    ADC_InstanceTable[instance]->SC1[mux] &= ~(ADC_SC1_ADCH_MASK);
-    ADC_InstanceTable[instance]->SC1[mux] |= ADC_SC1_ADCH(chl);
-
 }
 
 /**
@@ -399,10 +406,6 @@ void ADC_CallbackInstall(uint32_t instance, ADC_CallBackType AppCBFun)
 void ADC0_IRQHandler(void)
 {
     uint32_t value;
-    if(ADC_CallBackTable[HW_ADC0] != NULL)
-    {
-        ADC_CallBackTable[HW_ADC0](value);
-    }
     /*make sure clear COCO bit and read value*/
     if(!(ADC_InstanceTable[HW_ADC0]->CFG2 & ADC_CFG2_MUXSEL_MASK))
     {
@@ -412,15 +415,15 @@ void ADC0_IRQHandler(void)
     {
         value = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxB];
     }
+    if(ADC_CallBackTable[HW_ADC0] != NULL)
+    {
+        ADC_CallBackTable[HW_ADC0](value);
+    }
 }
 
 void ADC1_IRQHandler(void)
 {
     uint32_t value;
-    if(ADC_CallBackTable[HW_ADC1] != NULL)
-    {
-        ADC_CallBackTable[HW_ADC1](value);
-    }
     /*make sure clear COCO bit and read value*/
     if(!(ADC_InstanceTable[HW_ADC1]->CFG2 & ADC_CFG2_MUXSEL_MASK))
     {
@@ -430,4 +433,9 @@ void ADC1_IRQHandler(void)
     {
         value = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxB];
     }
+    if(ADC_CallBackTable[HW_ADC1] != NULL)
+    {
+        ADC_CallBackTable[HW_ADC1](value);
+    }
+
 }

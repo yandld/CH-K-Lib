@@ -15,13 +15,12 @@ int main(void)
     /* 初始化ADC模块 通道26 芯片内连接内部温度传感器 */
     ADC_InitTypeDef AD_InitStruct1;
     AD_InitStruct1.instance = HW_ADC0;
-    AD_InitStruct1.chl = 26;
-    AD_InitStruct1.clockDiv = kADC_ClockDiv2; /* ADC采样时钟2分频 */
+    AD_InitStruct1.clockDiv = kADC_ClockDiv8;
     AD_InitStruct1.resolutionMode = kADC_SingleDiff12or13;
     AD_InitStruct1.triggerMode = kADC_TriggerSoftware; /* 软件触发转换 */
-    AD_InitStruct1.singleOrDiffMode = kADC_Single; /*单端模式 */
+    AD_InitStruct1.singleOrDiffMode = kADC_Differential; /*单端模式 */
     AD_InitStruct1.continueMode = kADC_ContinueConversionDisable; 
-    AD_InitStruct1.hardwareAveMode = kADC_HardwareAverageDisable; /*禁止 硬件平均 功能 */
+    AD_InitStruct1.hardwareAveMode = kADC_HardwareAverage_32;
     ADC_Init(&AD_InitStruct1);
     
     /* 初始化对应引脚 */
@@ -35,18 +34,18 @@ int main(void)
     {
         ADC_StartConversion(HW_ADC0, 26, kADC_MuxA);
         while(ADC_IsConversionCompleted(HW_ADC0, kADC_MuxA));
-        vtemp=((float)ADC_ReadValue(HW_ADC0, kADC_MuxA)/4096)*3.3;
-        if(vtemp>=.7012)
+        vtemp = ((float)ADC_ReadValue(HW_ADC0, kADC_MuxA)/4096)*3.3;
+        if(vtemp >= 0.7012)
         {
-            temp=(vtemp-.7012)/.001646;
+            temp = (vtemp-0.7012)/.001646;
         }
         else
         {
-            temp=(vtemp-.7012)/.001769;
+            temp = (vtemp-0.7012)/.001769;
         }
-        temp=25-temp;
-        printf("tempature:%0.2f C\r", temp);   
-        DelayMs(5);
+        temp=25 - temp;
+        printf("tempature:%2.3fC  \r", temp);   
+        DelayMs(100);
         GPIO_ToggleBit(HW_GPIOE, 6);
     }
 }

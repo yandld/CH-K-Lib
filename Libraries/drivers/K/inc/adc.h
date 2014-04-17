@@ -79,18 +79,21 @@ typedef enum
     kADC_SingleDiff10or11 = 2,
     kADC_SingleDIff16 = 3
 }ADC_ResolutionMode_Type;
+
 //!< ADC 触发方式定义
 typedef enum
 {
     kADC_TriggerSoftware,
     kADC_TriggerHardware,
 }ADC_TriggerSelect_Type;
+
 //!< 是否连续转换
 typedef enum
 {
     kADC_ContinueConversionEnable,
     kADC_ContinueConversionDisable,
 }ADC_ContinueMode_Type;
+
 //!< 单端ADC还是查分ADC
 typedef enum
 {
@@ -98,9 +101,19 @@ typedef enum
     kADC_Differential,
 }ADC_SingleOrDiffMode_Type;
 
-//!< ADC通道复用选择(每个ADC通道有2个ADC转换器 为MuxA 和 MuxB)
+//!< ADC 通道复用选择(每个ADC通道有2个ADC转换触发器 为MuxA 和 MuxB MuxB 只能硬件触发)
 #define kADC_MuxA                (0x00)
 #define kADC_MuxB                (0x01)
+//!< ADC 通道复用选择(SEA 还是SEB)
+#define kADC_ChlMuxA             (0x00)
+#define kADC_ChlMuxB             (0x01)
+
+//!< 模拟电压参考源
+typedef enum
+{
+    kADC_VoltageVREF,
+    kADC_VoltageVALT,
+}ADC_VoltageRef_Type;
 
 //!< 硬件平均
 typedef enum
@@ -122,19 +135,19 @@ typedef enum
 }ADC_ITDMAConfig_Type;
 
 //!< ADC 回调函数定义
-typedef void (*ADC_CallBackType)(uint32_t conversionValue);
+typedef void (*ADC_CallBackType)(int32_t conversionValue);
 
 //!< ADC 初始化结构
 typedef struct
 {
     uint32_t                    instance;                   //!< 模块号
-    uint32_t                    chl;                        //!< ADC通道号
     ADC_TriggerSelect_Type      triggerMode;                //!< 触发模式 软件触发 或 硬件触发
     ADC_ClockDiv_Type           clockDiv;                   //!< ADC时钟分频
     ADC_ResolutionMode_Type     resolutionMode;             //!< 分频率选择 8 10 12 16位精度等
     ADC_SingleOrDiffMode_Type   singleOrDiffMode;           //!< 单端 还是 差分输入
     ADC_ContinueMode_Type       continueMode;               //!< 是否启动连续转换
     ADC_HardwareAveMode_Type    hardwareAveMode;            //!< 硬件平均功能选择
+    ADC_VoltageRef_Type         vref;                       //!< 模拟电压参考源
 }ADC_InitTypeDef;
 
 
@@ -147,7 +160,7 @@ int32_t ADC_QuickReadValue(uint32_t ADCxMAP);
 int32_t ADC_ReadValue(uint32_t instance, uint32_t mux);
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux);
 uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux);
-
+void ADC_ChlMuxConfig(uint32_t instance, uint32_t mux);
 
 
 #ifdef __cplusplus

@@ -11,6 +11,10 @@
 #ifndef __CH_LIB_TSI_H__
 #define __CH_LIB_TSI_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+     
 #include <stdint.h>
   
 //!< TSI 触发模式选择
@@ -83,6 +87,9 @@ void TSI_ITDMAConfig(TSI_ITDMAConfig_Type config);
 void TSI_Init(TSI_InitTypeDef* TSI_InitStruct);
 void TSI_CallbackInstall(TSI_CallBackType AppCBFun);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

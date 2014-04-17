@@ -3,36 +3,53 @@
 #include "common.h"
 
 /* 重定义 GUI接口函数 */
+
+#define SAMP_CNT 4
+#define SAMP_CNT_DIV2 2
+static int buf[2];
+
+int ads_GetXY(int* buf)
+{
+    int i, j, k, min;
+    int temp;
+    int tempXY[2][SAMP_CNT];
+
+    for(i=0; i<SAMP_CNT; i++)
+    {
+        ads7843_readX(&buf[0]);
+        ads7843_readY(&buf[1]);
+        tempXY[0][i] = buf[0];
+        tempXY[1][i] = buf[1];
+    }
+    for(k=0; k<2; k++)
+    {
+        for(i=0; i<SAMP_CNT-1; i++)
+        {
+            min=i;
+            for (j=i+1; j<SAMP_CNT; j++)
+            {
+                if (tempXY[k][min] > tempXY[k][j]) min=j;
+            }
+            temp = tempXY[k][i];
+            tempXY[k][i] = tempXY[k][min];
+            tempXY[k][min] = temp;
+        }
+        if((tempXY[k][SAMP_CNT_DIV2]-tempXY[k][SAMP_CNT_DIV2-1]) > 5)
+        return 1;
+        buf[k] = (tempXY[k][SAMP_CNT_DIV2]+tempXY[k][SAMP_CNT_DIV2-1]) / 2;
+    }
+    return 0;
+}
+
 int GUI_TOUCH_X_MeasureX(void)
 {
-    int ret;
-    int x;
-    static int x_last;
-    ads7843_readX(&x);
-    ret = x;
-    if(ABS(x - x_last) > 5)
-    {
-        /* discard this result */
-        ret = x_last;
-    }
-    x_last = x;
-    return ret;
+    ads_GetXY(buf);
+    return buf[0];
 }
 
 int GUI_TOUCH_X_MeasureY(void)
 {
-    int ret;
-    int x;
-    static int x_last;
-    ads7843_readY(&x);
-    ret = x;
-    if(ABS(x - x_last) > 5)
-    {
-        /* discard this result */
-        ret = x_last;
-    }
-    x_last = x;
-    return ret;
+    return buf[1];
 }
 
 int LCD_L0_Init(void)

@@ -268,10 +268,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>26</ColumnNumber>
+      <ColumnNumber>31</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>46</TopLine>
-      <CurrentLine>46</CurrentLine>
+      <TopLine>31</TopLine>
+      <CurrentLine>48</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -654,7 +654,7 @@
       <Focus>0</Focus>
       <ColumnNumber>5</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>63</TopLine>
+      <TopLine>64</TopLine>
       <CurrentLine>66</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\spi_bus_ops.c</PathWithFileName>
@@ -668,10 +668,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>10</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>21</TopLine>
-      <CurrentLine>24</CurrentLine>
+      <TopLine>14</TopLine>
+      <CurrentLine>20</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\ads7843.c</PathWithFileName>
       <FilenameWithoutPath>ads7843.c</FilenameWithoutPath>
@@ -710,8 +710,8 @@
       <Focus>0</Focus>
       <ColumnNumber>10</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>35</TopLine>
-      <CurrentLine>11</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>10</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\ucGuiFunc.c</PathWithFileName>
       <FilenameWithoutPath>ucGuiFunc.c</FilenameWithoutPath>

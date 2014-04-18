@@ -7,7 +7,7 @@
 #define SAMP_CNT 4
 #define SAMP_CNT_DIV2 2
 static int buf[2];
-
+/* ÂË²¨ */
 int ads_GetXY(int* buf)
 {
     int i, j, k, min;

@@ -16,16 +16,16 @@
 
 typedef enum
 {
-    kWDOG_Mode_Normal,            //!< 普通模式看门狗
-    kWDOG_Mode_Window,            //!< WDOG 窗体模式
+    kWDOG_Mode_Normal,            //普通模式看门狗
+    kWDOG_Mode_Window,            // WDOG 窗体模式
 }WDOG_Mode_Type;
 
 
 typedef struct
 {
-    WDOG_Mode_Type      mode;                   //!< WDOG 工作模式选择
-    uint32_t            timeOutInMs;            //!< WDOG 最大喂狗时限
-    uint32_t            windowInMs;             //!< WDOG 开窗起始时间
+    WDOG_Mode_Type      mode;                   //WDOG 工作模式选择
+    uint32_t            timeOutInMs;            //WDOG 最大喂狗时限
+    uint32_t            windowInMs;             //WDOG 开窗起始时间
 }WDOG_InitTypeDef;
 
 //!< Callback Type

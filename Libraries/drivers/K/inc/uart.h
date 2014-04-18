@@ -22,16 +22,16 @@
 #endif
 
 /*!< UART 模块号 */
-#define HW_UART0  (0x00U)
-#define HW_UART1  (0x01U)
-#define HW_UART2  (0x02U)
-#define HW_UART3  (0x03U)
-#define HW_UART4  (0x04U)
-#define HW_UART5  (0x05U)
+#define HW_UART0  (0x00U)  //芯片的UART0端口
+#define HW_UART1  (0x01U)  //芯片的UART1端口
+#define HW_UART2  (0x02U)  //芯片的UART2端口
+#define HW_UART3  (0x03U)  //芯片的UART3端口
+#define HW_UART4  (0x04U)  //芯片的UART4端口
+#define HW_UART5  (0x05U)  //芯片的UART5端口
 
 /*!< UART 快速初始化宏 */                      
-#define UART1_RX_PE01_TX_PE00   (0x80E1U)
-#define UART0_RX_PF17_TX_PF18   (0xA528U)
+#define UART1_RX_PE01_TX_PE00   (0x80E1U) //芯片的UART1端口，使用PTE1引脚为接收引脚，使用PTE0引脚为发送引脚
+#define UART0_RX_PF17_TX_PF18   (0xA528U) //芯片的UART0端口，使用PTE17引脚为接收引脚，使用PTE18引脚为发送引脚
 #define UART3_RX_PE05_TX_PE04   (0x88E3U)
 #define UART5_RX_PF19_TX_PF20   (0xA72DU)
 #define UART5_RX_PE09_TX_PE08   (0x90E5U)
@@ -46,44 +46,44 @@
 #define UART3_RX_PC16_TX_PC17   (0xA0D3U)
 #define UART2_RX_PD02_TX_PD03   (0x84DAU)
 #define UART0_RX_PD06_TX_PD07   (0x8CD8U)
-#define UART2_RX_PF13_TX_PF14   (0x9B2AU)
-#define UART5_RX_PD08_TX_PD09   (0x90DDU)
+#define UART2_RX_PF13_TX_PF14   (0x9B2AU) 
+#define UART5_RX_PD08_TX_PD09   (0x90DDU) //芯片的UART5端口，使用PTD8引脚为接收引脚，使用PTD9引脚为发送引脚
 
 /*!< parity 选择 */
 typedef enum
 {
-    kUART_ParityDisabled = 0x0,  /*!< 校验位禁止 */
-    kUART_ParityEven     = 0x2,  /*!< 1位 奇校验 */
-    kUART_ParityOdd      = 0x3,  /*!< 1位 偶校验 */
+    kUART_ParityDisabled = 0x0,  // 校验位禁止
+    kUART_ParityEven     = 0x2,  // 1位 奇校验 
+    kUART_ParityOdd      = 0x3,  // 1位 偶校验 
 } UART_ParityMode_Type;
 
 /*!< 每帧数据位个数 */
 typedef enum 
 {
-    kUART_8BitsPerChar  = 0,   /*!< 8-bit 数据 不包括校验位 */
-    kUART_9BitsPerChar  = 1,   /*!< 9-bit 数据 不包括校验位 */
+    kUART_8BitsPerChar  = 0,   // 8-bit 数据 不包括校验位 
+    kUART_9BitsPerChar  = 1,   // 9-bit 数据 不包括校验位 
 } UART_BitPerChar_Type;
 
 /*!< 中断及DMA配置 */
 typedef enum
 {
-    kUART_IT_Tx_Disable,        /*!< 禁止发送中断 */
-    kUART_IT_Rx_Disable,        /*!< 禁止接收中断 */
-    kUART_DMA_Tx_Disable,       /*!< 禁止DMA发送 */
-    kUART_DMA_Rx_Disable,       /*!< 禁止DMA接收 */
-    kUART_IT_Tx,                /*!< 开启每发送一帧传输完成中断 */
-    kUART_DMA_Tx,               /*!< 开启每发送一帧传输完成触发DMA */
-    kUART_IT_Rx,                /*!< 开启每接收一帧传输完成中断 */
-    kUART_DMA_Rx,               /*!< 开启每接收一帧传输完成触发DMA */
+    kUART_IT_Tx_Disable,        // 禁止发送中断 
+    kUART_IT_Rx_Disable,        // 禁止接收中断 
+    kUART_DMA_Tx_Disable,       // 禁止DMA发送
+    kUART_DMA_Rx_Disable,       // 禁止DMA接收 
+    kUART_IT_Tx,                // 开启每发送一帧传输完成中断 
+    kUART_DMA_Tx,               // 开启每发送一帧传输完成触发DMA 
+    kUART_IT_Rx,                // 开启每接收一帧传输完成中断 
+    kUART_DMA_Rx,               // 开启每接收一帧传输完成触发DMA 
 }UART_ITDMAConfig_Type;
 
 /*!< UART初始化结构 */
 typedef struct
 {
-    uint8_t                 instance;       /*!< UART 模块号 */
-    uint32_t                baudrate;       /*!< UART 波特率 */
-    UART_ParityMode_Type    parityMode;     /*!< UART 校验位 */
-    UART_BitPerChar_Type    bitPerChar;     /*!< UART 每一帧含多少位数据 */
+    uint8_t                 instance;       // UART 模块号 HW_UART0~HW_UART5
+    uint32_t                baudrate;       // UART 波特率 
+    UART_ParityMode_Type    parityMode;     // UART 校验位 
+    UART_BitPerChar_Type    bitPerChar;     // UART 每一帧含多少位数据 
 }UART_InitTypeDef;
 
 /*!< UART 回调函数声明 */

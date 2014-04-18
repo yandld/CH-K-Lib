@@ -19,78 +19,78 @@
 #include <stdint.h>
 
 /* GPIO端口定义 */
-#define HW_GPIOA  (0x00U)
-#define HW_GPIOB  (0x01U)
-#define HW_GPIOC  (0x02U)
-#define HW_GPIOD  (0x03U)
-#define HW_GPIOE  (0x04U)
-#define HW_GPIOF  (0x05U)
+#define HW_GPIOA  (0x00U)   //PTA引脚端口定义
+#define HW_GPIOB  (0x01U)   //PTB引脚端口定义
+#define HW_GPIOC  (0x02U)   //PTC引脚端口定义
+#define HW_GPIOD  (0x03U)   //PTD引脚端口定义
+#define HW_GPIOE  (0x04U)   //PTE引脚端口定义
+#define HW_GPIOF  (0x05U)   //PTF引脚端口定义
 
 
 /* 端口复用选择 根据手册 Signal Multiplexing and Signal Descriptions 章节选择复用*/
 typedef enum
 {
-    kPinAlt0,
-    kPinAlt1,
-    kPinAlt2,
-    kPinAlt3,
-    kPinAlt4,
-    kPinAlt5,
-    kPinAlt6,
-    kPinAlt7,
+    kPinAlt0,  //0功能复用
+    kPinAlt1,  //1功能复用
+    kPinAlt2,  //2功能复用
+    kPinAlt3,  //3功能复用
+    kPinAlt4,  //4功能复用
+    kPinAlt5,  //5功能复用
+    kPinAlt6,  //6功能复用
+    kPinAlt7,  //7功能复用
     kPinAltNameCount,
 }PORT_PinMux_Type;
 
-/* 端口上下拉配置 */
+/* 端口上下拉配置 ，电阻阻值约为20K*/
 typedef enum
 {
-    kPullDisabled,
-    kPullUp,
-    kPullDown,
-    kPullNameCount,
+    kPullDisabled,  //关闭上下拉电阻功能
+    kPullUp,        //开启上拉电阻功能
+    kPullDown,      //开启下拉电阻功能
+    kPullNameCount, //规则检测使用，无意义
 }PORT_Pull_Type;
 
 /* GPIO端口模式配置 */
 typedef enum
 {
-    kGPIO_Mode_IFT = 0x00,            //!< 浮空输入
-    kGPIO_Mode_IPD = 0x01,            //!< 下拉输入
-    kGPIO_Mode_IPU = 0x02,            //!< 上拉输入
-    kGPIO_Mode_OOD = 0x03,            //!< 开漏输出
-    kGPIO_Mode_OPP = 0x04,            //!< 推挽输出
-    kGPIO_ModeNameCount,
+    kGPIO_Mode_IFT = 0x00,       //浮空输入
+    kGPIO_Mode_IPD = 0x01,       //下拉输入
+    kGPIO_Mode_IPU = 0x02,       //上拉输入
+    kGPIO_Mode_OOD = 0x03,       //开漏输出
+    kGPIO_Mode_OPP = 0x04,       //推挽输出
+    kGPIO_ModeNameCount,         //规则检测使用，无意义
 }GPIO_Mode_Type;
 
 /* 端口输入输出模式选择 */
 typedef enum
 {
-    kInput,
-    kOutput,
-    kPinConfigNameCount,
+    kInput,                  //引脚输入模式
+    kOutput,                 //引脚输出模式
+    kPinConfigNameCount,     //规则检测使用，无意义
 }GPIO_PinConfig_Type;
 
 /* 端口中断及DMA配置选择 */
 typedef enum
 {
-    kGPIO_IT_Disable,
-    kGPIO_DMA_Disable,
-    kGPIO_DMA_RisingEdge,	
-    kGPIO_DMA_FallingEdge,
-    kGPIO_DMA_RisingFallingEdge,
-    kGPIO_IT_Low,
-    kGPIO_IT_RisingEdge,
-    kGPIO_IT_FallingEdge,
-    kGPIO_IT_RisingFallingEdge,
-    kGPIO_IT_High,
-    kGPIO_ITDMAConfigNameCount,
+    kGPIO_IT_Disable,             //关闭引脚中断
+    kGPIO_DMA_Disable,            //关闭DMA功能
+    kGPIO_DMA_RisingEdge,	      //上升沿触发DMA
+    kGPIO_DMA_FallingEdge,        //下降沿触发DMA
+    kGPIO_DMA_RisingFallingEdge,  //上升沿和下降沿触发DMA
+    kGPIO_IT_Low,                 //低电平出发中断
+    kGPIO_IT_RisingEdge,          //上升沿触发中断
+    kGPIO_IT_FallingEdge,         //下降沿触发中断
+    kGPIO_IT_RisingFallingEdge,   //上升沿和下降沿触发中断
+    kGPIO_IT_High,                //高电平触发中断
+    kGPIO_ITDMAConfigNameCount,   //规则检测使用，无意义
 }GPIO_ITDMAConfig_Type;
 
 /* 端口初始化结构体 */
 typedef struct
 {
-    uint8_t                instance;             //!< 端口
-    GPIO_Mode_Type         mode;                 //!< 工作模式
-    uint32_t               pinx;                 //!< 引脚号
+    uint8_t                instance;    //引脚端口HW_GPIOA~HW_GPIOF
+    GPIO_Mode_Type         mode;        //工作模式
+    uint32_t               pinx;        //引脚号0~31
 }GPIO_InitTypeDef;
 
 /* 端口中断回调函数定义 */

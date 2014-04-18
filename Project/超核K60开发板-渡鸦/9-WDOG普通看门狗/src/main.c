@@ -3,6 +3,9 @@
 #include "uart.h"
 #include "wdog.h"
 
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请使用 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */
+
 /*
      实验名称：WDOG普通看门狗
      实验平台：渡鸦开发板
@@ -31,7 +34,7 @@ int main(void)
     
     /* 初始化看门狗 */
     WDOG_InitTypeDef WDOG_InitStruct1 = {0};
-    WDOG_InitStruct1.mode = kWDOG_Mode_Normal;
+    WDOG_InitStruct1.mode = kWDOG_Mode_Normal;  //设置看门狗处于正常工作模式
     WDOG_InitStruct1.timeOutInMs = 2000; /* 时限 2000MS : 2000MS 内没有喂狗则复位 */
     WDOG_Init(&WDOG_InitStruct1);
     
@@ -48,7 +51,7 @@ int main(void)
         {
             /* 喂狗 防止复位 */
             printf("wdog feed! we have 2s\r\n");
-            WDOG_Refresh();
+            WDOG_Refresh(); //喂狗
             DelayMs(100);
         }
         DelayMs(10);

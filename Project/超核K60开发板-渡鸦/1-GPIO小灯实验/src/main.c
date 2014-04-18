@@ -25,7 +25,7 @@ int main(void)
 {
     /* 初始化Delay */
     DelayInit();
-    /* 使用简易初始化初始化一个GPIO 设置为推挽输出模式 */
+    /* 使用简易初始化初始化PTE端口的6引脚作为IO使用 设置为推挽输出模式 */
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     /* 另外一种初始化方式: 结构体模式的初始化 有点类似STM32固件库*/
 //    GPIO_InitTypeDef GPIO_InitStruct1;
@@ -34,7 +34,7 @@ int main(void)
 //    GPIO_InitStruct1.pinx = 6;
 //    GPIO_Init(&GPIO_InitStruct1);
     
-    /* 输出低电平 */
+    /* 控制PTE端口的6引脚输出低电平 */
     GPIO_WriteBit(HW_GPIOE, 6, 0);
     
     while(1)

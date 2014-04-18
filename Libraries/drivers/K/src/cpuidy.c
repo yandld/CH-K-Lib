@@ -15,13 +15,13 @@
 #define PFLASH_SIZE_FIELD           ((SIM->FCFG1 & SIM_FCFG1_PFSIZE_MASK)>>SIM_FCFG1_PFSIZE_SHIFT)
 #define DFLASH_SIZE_FIELD           ((SIM->FCFG1 & SIM_FCFG1_PFSIZE_MASK)>>SIM_FCFG1_PFSIZE_SHIFT)
 #define FLEXNVM_SIZE_FIELD          ((SIM->FCFG1 & SIM_FCFG1_NVMSIZE_MASK)>>SIM_FCFG1_NVMSIZE_SHIFT)
-#define EEPORM_SIZE_FIELD           ((SIM->FCFG1 & SIM_FCFG1_EESIZE_MASK)>>SIM_FCFG1_EESIZE_SHIFT)  
+#define EEPROM_SIZE_FIELD           ((SIM->FCFG1 & SIM_FCFG1_EESIZE_MASK)>>SIM_FCFG1_EESIZE_SHIFT)  
 #define RAM_SIZE_FIELD              ((SIM->SOPT1 & SIM_SOPT1_RAMSIZE_MASK)>>SIM_SOPT1_RAMSIZE_SHIFT)
 
 /* memory size table */
 static const uint32_t CPUIDY_PFlashSizeTable[16] = {8, 16, 24, 32, 48, 64, 96 ,128, 192, 256, 0, 512, 0, 0, 0, 0};
 static const uint32_t CPUIDY_RAMSizeTable[16] = {4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 0, 0, 0, 0, 0, 0};
-static const uint32_t CPUIDY_EEPORMSizeTable[16] = {16*1024, 8*1024, 4*1024, 2*1024, 1*1024, 512, 256, 128, 64, 32, 0, 0, 0, 0, 0};
+static const uint32_t CPUIDY_EEPROMSizeTable[16] = {16*1024, 8*1024, 4*1024, 2*1024, 1*1024, 512, 256, 128, 64, 32, 0, 0, 0, 0, 0};
 static const uint32_t CPUIDY_NVMSizeTable[16] = {8, 16, 24, 32, 48, 64, 96, 128, 192, 256 ,0, 512, 0, 0, 0, 0};
 
 /* pin count field */
@@ -113,8 +113,8 @@ uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName)
         case kFlexNVMSizeInKB:
             ret_value = CPUIDY_NVMSizeTable[FLEXNVM_SIZE_FIELD];
             break;
-        case kEEPORMSizeInByte:
-            ret_value = CPUIDY_EEPORMSizeTable[EEPORM_SIZE_FIELD];
+        case kEEPROMSizeInByte:
+            ret_value = CPUIDY_EEPROMSizeTable[EEPROM_SIZE_FIELD];
             break;
         case kRAMSizeInKB:
             ret_value = CPUIDY_RAMSizeTable[RAM_SIZE_FIELD];

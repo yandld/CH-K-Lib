@@ -19,10 +19,10 @@
 
 
 //!< hardware instances
-#define HW_PIT_CH0   (0x00U)
-#define HW_PIT_CH1   (0x01U)
-#define HW_PIT_CH2   (0x02U)
-#define HW_PIT_CH3   (0x03U)
+#define HW_PIT_CH0   (0x00U) //定义PIT模块的0通道
+#define HW_PIT_CH1   (0x01U) //定义PIT模块的1通道
+#define HW_PIT_CH2   (0x02U) //定义PIT模块的2通道
+#define HW_PIT_CH3   (0x03U) //定义PIT模块的3通道
 
 //!< PIT CallBack Type
 typedef void (*PIT_CallBackType)(void);
@@ -30,15 +30,15 @@ typedef void (*PIT_CallBackType)(void);
 //PIT 初始化结构
 typedef struct
 {
-    uint8_t   chl;            //!< channel
-    uint32_t  timeInUs;       //!< Tick Period Us
+    uint8_t   chl;            //PIT模块通道选择
+    uint32_t  timeInUs;       //定时时间单位为us
 }PIT_InitTypeDef;
 
 //!< PIT 中断DMA配置
 typedef enum
 {
-    kPIT_IT_Disable,        //!< Disable Interrupt
-    kPIT_IT_TOF,            //!< Enable time overflow flag
+    kPIT_IT_Disable,        //关闭中断
+    kPIT_IT_TOF,            //开启中断
 }PIT_ITDMAConfig_Type;
 
 //!< API functions

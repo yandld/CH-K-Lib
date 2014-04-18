@@ -42,8 +42,8 @@ int main(void)
         val[2] = GPIO_ReadBit(HW_GPIOA, 4);
         /* 将返回的电平设置到另外一个引脚上 */
         GPIO_WriteBit(HW_GPIOE, 11, val[0]);
-        GPIO_WriteBit(HW_GPIOE, 7, val[1]);
-        GPIO_WriteBit(HW_GPIOE, 6, val[2]);
+        GPIO_WriteBit(HW_GPIOE,  7, val[1]);
+        GPIO_WriteBit(HW_GPIOE,  6, val[2]);
     }
 }
 

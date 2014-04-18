@@ -8,7 +8,7 @@
 #define SAMP_CNT_DIV2 2
 static int buf[2];
 /* ÂË²¨ */
-int ads_GetXY(int* buf)
+static int ads_filter(int* buf)
 {
     int i, j, k, min;
     int temp;
@@ -43,7 +43,7 @@ int ads_GetXY(int* buf)
 
 int GUI_TOUCH_X_MeasureX(void)
 {
-    ads_GetXY(buf);
+    ads_filter(buf);
     return buf[0];
 }
 

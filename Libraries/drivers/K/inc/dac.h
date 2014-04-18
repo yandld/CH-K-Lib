@@ -84,7 +84,7 @@ void DAC_SetBufferUpperLimit(uint32_t instance, uint32_t value);
 void DAC_ITDMAConfig(uint32_t instance, DAC_ITDMAConfig_Type config);
 void DAC_SetBufferValue(uint32_t instance, uint16_t* buf, uint8_t len);
 void DAC_SetWaterMark(uint32_t instance, DAC_WaterMarkMode_Type value);
-void DAC_StartConversion(uint32_t instance);
+void DAC_SoftwareStartConversion(uint32_t instance);
 
 #endif
 

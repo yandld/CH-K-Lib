@@ -204,7 +204,7 @@ void DAC_ITDMAConfig(uint32_t instance, DAC_ITDMAConfig_Type config)
  * @note   will only trigger once and will advence the read pointer by one step
  * @retval None
  */
-void DAC_StartConversion(uint32_t instance)
+void DAC_SoftwareStartConversion(uint32_t instance)
 {
     DAC_InstanceTable[instance]->C0 |= DAC_C0_DACSWTRG_MASK;
 }

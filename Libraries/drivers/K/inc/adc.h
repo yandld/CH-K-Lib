@@ -61,6 +61,11 @@
 #define ADC1_SE19_DM0       (0x980001U)
 #define ADC1_SE20_DM1       (0xa00001U)
 #define ADC1_SE26_TEMP      (0xd00001U)
+#define ADC0_SE21           (0x00B00000) /* analog pin */
+#define ADC0_SE22           (0x00B00000)
+#define ADC1_SE16           (0x00800001)
+#define ADC1_SE18           (0x00900001)
+
 
 //!< ADC 转换时钟分频因子
 typedef enum

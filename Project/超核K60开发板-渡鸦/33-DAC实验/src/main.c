@@ -2,6 +2,13 @@
 #include "common.h"
 #include "uart.h"
 #include "dac.h"
+#include "pit.h"
+
+void PIT_ISR(void)
+{
+    /* 不停的触发 DAC 来产生波形 */
+    DAC_SoftwareStartConversion(HW_DAC0); 
+}
 
 int main(void)
 {
@@ -24,10 +31,15 @@ int main(void)
         value[i] = i*4096/16;
     }
     DAC_SetBufferValue(HW_DAC0, value, 16); /*写入DAC buffer 最多写入16个 uint16_t 的转换值 */
+    
+    /* 开启PIT中断 */
+    PIT_QuickInit(HW_PIT_CH0, 1000);
+    PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
+    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
+    
     while(1)
     {
-        /* 不停的触发 DAC 来产生波形 */
-        DAC_StartConversion(HW_DAC0);
+
     }
 }
 

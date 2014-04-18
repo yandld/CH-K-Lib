@@ -51,38 +51,39 @@ typedef enum
 //单端PWM占空比输出 初始化结构
 typedef struct
 {
-    uint32_t            instance;
-    uint32_t            chl;
-    uint32_t            frequencyInHZ;
-    FTM_PWM_Mode_Type   mode;
+    uint32_t            instance; //FTM模块号：HW_FTM0~HW_FTM2
+    uint32_t            chl;     //FTM通道号：HW_FTM_CH0~HW_FTM_CH7
+    uint32_t            frequencyInHZ; //PWM波形占空比
+    FTM_PWM_Mode_Type   mode;    //PWM模式选择
 }FTM_PWM_InitTypeDef;
 
+//正交解码AB相极性选择
 typedef enum
 {
-    kFTM_QD_NormalPolarity,
-    kFTM_QD_InvertedPolarity,
+    kFTM_QD_NormalPolarity,  //正常极性
+    kFTM_QD_InvertedPolarity,//反正极性
 }FTM_QD_PolarityMode_Type;
+ 
 
-
-/* QD  模式选择 */
+/* QD 正交解码模式选择 */
 typedef enum
 {
-	kQD_PHABEncoding,
-	kQD_CountDirectionEncoding,
+	kQD_PHABEncoding,    //AB相解码
+	kQD_CountDirectionEncoding, //方向解码
 }FTM_QD_Mode_Type;
 
 /* QD初始化 */
 typedef struct
 {
-    uint32_t                            instance;
-    FTM_QD_PolarityMode_Type            PHA_Polarity;
-    FTM_QD_PolarityMode_Type            PHB_Polarity; 
-    FTM_QD_Mode_Type                    mode;
+    uint32_t                            instance;    //FTM模块号：HW_FTM0~HW_FTM2
+    FTM_QD_PolarityMode_Type            PHA_Polarity; //A相极性
+    FTM_QD_PolarityMode_Type            PHB_Polarity; //B相极性
+    FTM_QD_Mode_Type                    mode;   //正交解码模式
 }FTM_QD_InitTypeDef;
 
 //!< FTM PWM 快速初始化
-#define FTM0_CH4_PB12   (0x205908U)
-#define FTM0_CH5_PB13   (0x285b08U)
+#define FTM0_CH4_PB12   (0x205908U)  //FTM0模块的4通道 PTB12引脚
+#define FTM0_CH5_PB13   (0x285b08U)  //FTM0模块的5通道 PTB13引脚
 #define FTM0_CH5_PA00   (0x2840c0U)
 #define FTM0_CH6_PA01   (0x3042c0U)
 #define FTM0_CH7_PA02   (0x3844c0U)
@@ -112,7 +113,7 @@ typedef struct
 #define FTM2_CH0_PB18   (0x64caU)
 #define FTM2_CH1_PB19   (0x866caU)
 //!< FTM 正交解码快速初始化
-#define FTM1_QD_PHA_PA08_PHB_PA09       (0x9181U)
+#define FTM1_QD_PHA_PA08_PHB_PA09       (0x9181U) //FTM1模块的PTA8、PTA9为正交解码
 #define FTM1_QD_PHA_PA12_PHB_PA13       (0x99c1U)
 #define FTM1_QD_PHA_PB00_PHB_PB01       (0x8189U)
 #define FTM2_QD_PHA_PA10_PHB_PA11       (0x9582U)

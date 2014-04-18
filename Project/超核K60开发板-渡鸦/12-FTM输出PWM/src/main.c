@@ -3,6 +3,9 @@
 #include "uart.h"
 #include "ftm.h"
 
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
+
 
 /* 可用的FTM通道有: */
 /*
@@ -38,6 +41,13 @@
  FTM2_CH1_PB19   
 */
 
+/*
+     实验名称：FTM输出PWM
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：控制PTA端口的6引脚是PWM模式
+      输出占空比为50%，频率为3KHz的方波  
+*/
 int main(void)
 {
     DelayInit();
@@ -57,25 +67,25 @@ int main(void)
     printf("ftm test, pwm will be generated on PA06\r\n");
     
     /* 使用快速初始化 帮助初学者完成必要配置 */
-    FTM_PWM_QuickInit(FTM0_CH3_PA06, 3000);
+    FTM_PWM_QuickInit(FTM0_CH3_PA06, 3000); //使用FTM0模块的3通道，在PTA6引脚产生3KHz频率的占空比，此时的占空比为0
     
 //    /* 另外一种方法 普通模式 初始化FTM模块 推荐 */
 //    FTM_PWM_InitTypeDef FTM_PWM_InitStruct1 = {0};
 //    FTM_PWM_InitStruct1.chl = HW_FTM_CH3; /* 通道0 */
 //    FTM_PWM_InitStruct1.frequencyInHZ = 3000; /* 3Khz */
-//    FTM_PWM_InitStruct1.instance = HW_FTM0;
+//    FTM_PWM_InitStruct1.instance = HW_FTM0; //FTM0模块
 //    FTM_PWM_InitStruct1.mode = kPWM_EdgeAligned; /* 边沿对齐模式 产生普通 PWM波 */
 //    FTM_PWM_Init(&FTM_PWM_InitStruct1);
 //    
-//    /* 初始化对应的引脚 */
+//    /* 初始化对应的PWM引脚 */
 //    PORT_PinMuxConfig(HW_GPIOA, 6, kPinAlt3);
     
-    /* 设置FTM 的占空比 */
-    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH3, 5000); // 50%占空比 0-10000 对应 0-100%
+    /* 设置FTM0模块3通道的占空比 */
+    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH3, 5000); // 50%占空比 ：0-10000 对应 0-100%
     
     while(1)
     {
-        GPIO_ToggleBit(HW_GPIOE, 6);
+        GPIO_ToggleBit(HW_GPIOE, 6); //控制小灯闪烁
         DelayMs(500);
     }
 }

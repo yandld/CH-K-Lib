@@ -2,7 +2,8 @@
 #include "common.h"
 #include "uart.h"
 #include "ftm.h"
-
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
 /* 可用的FTM 正交解码 通道有: */
 /*
@@ -11,6 +12,15 @@
  FTM1_QD_PHA_PB00_PHB_PB01       
  FTM2_QD_PHA_PA10_PHB_PA11       
  FTM2_QD_PHA_PB18_PHB_PB19       
+*/
+
+/*
+     实验名称：FTM正交解码
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：使用FTM1模块的PTA8、PTA9引脚进行正交解码
+      通过串口将正交解码的数据发送出去
+      小灯周期性闪烁，闪烁时间间隔500ms     
 */
 
 int main(void)
@@ -25,7 +35,7 @@ int main(void)
      
     /* 初始化正交解码通道 */
     FTM_QD_InitTypeDef FTM_QD_InitStruct1 = {0};
-    FTM_QD_InitStruct1.instance = HW_FTM1;
+    FTM_QD_InitStruct1.instance = HW_FTM1;  //使用FTM1模块
     FTM_QD_InitStruct1.mode = kQD_PHABEncoding; /* 编码器类型 普通2线 AB相编码器 */
     FTM_QD_InitStruct1.PHA_Polarity = kFTM_QD_NormalPolarity; /* 正常极性 */
     FTM_QD_InitStruct1.PHB_Polarity = kFTM_QD_NormalPolarity;
@@ -38,7 +48,7 @@ int main(void)
     uint8_t dir; /* 记录编码器旋转方向1 */
     while(1)
     {
-        /* 获取 FTM 数据 */
+        /* 获取正交解码数据 */
         FTM_QD_GetData(HW_FTM1, &value, &dir);
         printf("value:%d dir:%d\r\n", value, dir);
         GPIO_ToggleBit(HW_GPIOE, 6);

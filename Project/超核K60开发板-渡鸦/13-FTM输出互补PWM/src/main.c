@@ -3,6 +3,8 @@
 #include "uart.h"
 #include "ftm.h"
 
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
 /* 可用的FTM通道有: */
 /*
@@ -38,6 +40,13 @@
  FTM2_CH1_PB19   
 */
 
+/*
+     实验名称：FTM输出互补PWM
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：使用PTC1和PTC2引脚输出互补型的PWM波形 
+*/
+
 int main(void)
 {
     DelayInit();
@@ -60,7 +69,7 @@ int main(void)
     FTM_PWM_InitTypeDef FTM_PWM_InitStruct1 = {0};
     FTM_PWM_InitStruct1.chl = HW_FTM_CH0; /* 通道0 */
     FTM_PWM_InitStruct1.frequencyInHZ = 3000; /* 3Khz */
-    FTM_PWM_InitStruct1.instance = HW_FTM0;
+    FTM_PWM_InitStruct1.instance = HW_FTM0; //使用FTM0模块
     FTM_PWM_InitStruct1.mode = kPWM_Complementary; /* 互补模式 */
     FTM_PWM_Init(&FTM_PWM_InitStruct1);
     /* 初始化另外一个互补通道 其他设置不变*/

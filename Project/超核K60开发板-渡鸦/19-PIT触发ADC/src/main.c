@@ -3,7 +3,16 @@
 #include "uart.h"
 #include "adc.h"
 #include "pit.h"
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
+/*
+     实验名称：PIT触发ADC
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：使用PIT模块周期性的触发ADC模块进行数据采集
+    通过调节开发板上的电位器，可以更改ad采集结果
+*/
 int main(void)
 {
     DelayInit();
@@ -15,9 +24,9 @@ int main(void)
     /* 配置ADC0 硬件触发源 */
     SIM->SOPT7 |= SIM_SOPT7_ADC0TRGSEL(4); /* 使用PIT0 触发 */
     SIM->SOPT7 &= ~SIM_SOPT7_ADC0PRETRGSEL_MASK; /* 使用trigger A */
-    SIM->SOPT7 |= SIM_SOPT7_ADC0ALTTRGEN_MASK; /*使用除PDB之外的硬件触发源 此触发源可能引芯片而异*/
+    SIM->SOPT7 |= SIM_SOPT7_ADC0ALTTRGEN_MASK; /*使用除PDB之外的硬件触发源 此触发源可能因芯片而异*/
 
-    /* 初始化ADC模块 ADC0_SE19_BM0 */
+    /* 初始化ADC模块 ADC0_SE19_DM0 */
     ADC_InitTypeDef AD_InitStruct1;
     AD_InitStruct1.instance = HW_ADC0;
     AD_InitStruct1.clockDiv = kADC_ClockDiv2; /* ADC采样时钟2分频 */
@@ -37,7 +46,7 @@ int main(void)
     PIT_QuickInit(HW_PIT_CH0, 1000*200); /* 200 ms 触发一次 */
     while(1)
     {
-        /* 如果ADC转换完成 */
+        /* 如果ADC转换完成 读取转换结果*/
         if(ADC_IsConversionCompleted(HW_ADC0, kADC_MuxA) == 0)
         {
             printf("ADC:%04d\r", ADC_ReadValue(HW_ADC0, kADC_MuxA));

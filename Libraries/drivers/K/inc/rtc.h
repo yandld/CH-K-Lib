@@ -28,7 +28,7 @@ typedef struct
 
 typedef enum
 {
-    kRTC_OScLoad_0PF,
+    kRTC_OScLoad_0PF, //芯片内部晶振电容配置
     kRTC_OScLoad_2PF,
     kRTC_OScLoad_4PF,
     kRTC_OScLoad_8PF,
@@ -39,7 +39,7 @@ typedef enum
 typedef struct
 {
     RTC_OscLoad_Type        oscLoad;            // OSC 电容负载
-    RTC_DateTime_Type *     initialDateTime;    // 初始DateTime设定
+    RTC_DateTime_Type *     initialDateTime;    // 初始日期设置
     bool                    isUpdate;           // 是否强制更新时间戳
 }RTC_InitTypeDef;
 
@@ -47,10 +47,10 @@ typedef struct
 //!< interrupt and DMA select
 typedef enum
 {
-    kRTC_IT_TimeOverflow_Disable,
-    kRTC_IT_TimeAlarm_Disable,
-    kRTC_IT_TimeAlarm,
-    kRTC_IT_TimeOverflow,              
+    kRTC_IT_TimeOverflow_Disable,  //关闭时间中断
+    kRTC_IT_TimeAlarm_Disable,     //关闭闹钟中断
+    kRTC_IT_TimeAlarm,             //开启闹钟中断 
+    kRTC_IT_TimeOverflow,          //开启时间溢出中断     
 }RTC_ITDMAConfig_Type;
 
 //!< CallbackType

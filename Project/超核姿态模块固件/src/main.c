@@ -139,11 +139,20 @@ int main(void)
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
     
     init_sensor();
+    PORT_PinMuxConfig(HW_GPIOC, 5, kPinAlt2); //
+    PORT_PinMuxConfig(HW_GPIOC, 6, kPinAlt2); //
+    PORT_PinMuxConfig(HW_GPIOC, 7, kPinAlt2); //    
+
+    PORT_PinMuxConfig(HW_GPIOC, BOARD_SPI_CS_PIN, kPinAlt2);
     static struct spi_bus bus;
     ret = kinetis_spi_bus_init(&bus, HW_SPI0);
     nrf24l01_init(&bus, 2);
-    ret = NRF2401_Init();
-
+    NRF2401_Init();
+    if(nrf24l01_probe())
+    {
+        printf("NRF2401 ERROR\r\n");
+        while(1);
+    }
     if(ret)
     {
         printf("NRF2401 ERROR\r\n");
@@ -163,7 +172,7 @@ int main(void)
    //     DelayMs(20);
     //    bmp180_read_pressure(&pressure);
         //printf("t:%d p:%d\r", temperature, pressure);
-        len = NRF2401_RecPacket(NRF2401RXBuffer);
+        nrf24l01_read_packet(NRF2401RXBuffer, &len);
         while(len--)
         {
             printf("buf[%d]:%c \r\n", len , NRF2401RXBuffer[len]);

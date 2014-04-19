@@ -31,7 +31,7 @@ extern int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
 static int DO_SPI_FLASH(int argc, char * const argv[])
 {
     uint32_t i;
-    uint16_t x,y;
+    int x,y;
     #define SPI_FLASH_TEST_LEN  (1024*512)
     volatile uint8_t* buf_test = SRAM_START_ADDRESS;
     uint32_t ret;

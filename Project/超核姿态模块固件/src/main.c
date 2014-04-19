@@ -16,13 +16,15 @@
 #include "imu.h"
 #include "trans.h"
 #include "dma.h"
+#include "spi_abstraction.h"
+#include "spi.h"
 
-
+static uint8_t NRF2401RXBuffer[32];//无线接收数据
 
 #if 0
 
 static trans_user_data_t send_data;
-static uint8_t NRF2401RXBuffer[32];//无线接收数据
+
 imu_float_euler_angle_t angle;
 imu_raw_data_t raw_data;
 //实现姿态解算的回调并连接回调
@@ -114,12 +116,13 @@ int init_sensor(void)
     return ret;
 }
 
-
+extern int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
 int main(void)
 {
     int16_t x,y,z;
     uint32_t i;
     uint32_t ret;
+    uint32_t len;
     int32_t temperature;
     int32_t pressure;
     DelayInit();
@@ -136,32 +139,39 @@ int main(void)
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
     
     init_sensor();
-    
+    static struct spi_bus bus;
+    ret = kinetis_spi_bus_init(&bus, HW_SPI0);
+    nrf24l01_init(&bus, 2);
+    ret = NRF2401_Init();
+
+    if(ret)
+    {
+        printf("NRF2401 ERROR\r\n");
+        DelayMs(300);
+    }
+    NRF2401_SetRXMode(); //设置为接收模式
     while(1)
     {
         //mpu6050_read_gyro(&x, &y, &z);
         
-        bmp180_start_conversion(BMP180_T_MEASURE);
-        DelayMs(20);
+    //    bmp180_start_conversion(BMP180_T_MEASURE);
+    //    DelayMs(20);
        // mpu6050_read_data(&x, &y, &z);
        // printf("x:%04d, y:%04d, z:%04d  \r", x, y, z);
-        bmp180_read_temperature(&temperature);
-        bmp180_start_conversion(BMP180_P3_MEASURE);
-        DelayMs(20);
-        bmp180_read_pressure(&pressure);
-        printf("t:%d p:%d\r", temperature, pressure);
-        
-        DelayMs(10);
-        
+   //     bmp180_read_temperature(&temperature);
+   //     bmp180_start_conversion(BMP180_P3_MEASURE);
+   //     DelayMs(20);
+    //    bmp180_read_pressure(&pressure);
+        //printf("t:%d p:%d\r", temperature, pressure);
+        len = NRF2401_RecPacket(NRF2401RXBuffer);
+        while(len--)
+        {
+            printf("buf[%d]:%c \r\n", len , NRF2401RXBuffer[len]);
+        }
+        DelayMs(10); 
     }
     
-    
-    
-    
-    
-    
-    
-    
+  
     
     
    #if 0
@@ -188,7 +198,6 @@ int main(void)
     //初始化发送器
     trans_init();
 
-    
     while(1)
     {
         //压力采集程序 由于上位机不传送压力，所以先注释掉
@@ -205,9 +214,10 @@ int main(void)
         }
         */
         //如果DMA空闲 则 启动发送数据
-        if(DMA_IsTransferComplete(HW_DMA_CH1) == 0)
+      //  if(DMA_IsTransferComplete(HW_DMA_CH1) == 0)
         {
-            trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
+       //     NRF2401RXBuffer
+         //   trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
             //延时1MS以免发的太快上位机受不了
             DelayMs(1);
         }
@@ -215,7 +225,8 @@ int main(void)
         if(NRF2401_RecPacket(NRF2401RXBuffer) != NRF_OK) //接收到了数据
         {
             //目前这个版本不做任何处理
-        }	
+            printf("NRF2401 Rec!\r\n");
+        }
     }
     #endif
 }

@@ -28,33 +28,36 @@
 #define FLUSH_TX    0xE1   // 清除TX FIFO中的数据 应用于发射模式下
 #define FLUSH_RX    0xE2   // 清除RX FIFO中的数据 应用于接收模式下
 #define REUSE_TX_PL 0xE3   // 重新使用上一包有效数据
+#define R_RX_PL_WID 0x60
 #define NOP         0xFF   // 保留
 //********************************************************************************************************************// 
-// SPI(nRF24L01) 寄存器(地址)
-#define NCONFIG      0x00  //配置发送状态，CRC校验模式以及发收发状态响应方式
-#define EN_AA       0x01  //自动应答功能设置
-#define EN_RXADDR   0x02  //可用信道设置
-#define SETUP_AW    0x03  //收发地址宽度设置
-#define SETUP_RETR  0x04  //自动重发功能设设置
-#define RF_CH       0x05  //工作频率设定
-#define RF_SETUP    0x06
+/* register define */
+#define NCONFIG             0x00  //配置发送状态，CRC校验模式以及发收发状态响应方式
+#define EN_AA               0x01  //自动应答功能设置
+#define EN_RXADDR           0x02  //可用信道设置
+#define SETUP_AW            0x03  //收发地址宽度设置
+#define SETUP_RETR          0x04  //自动重发功能设设置
+#define RF_CH               0x05  //工作频率设定
+#define RF_SETUP            0x06
 #define NRF2401_STATUS      0x07
-#define OBSERVE_TX  0x08
-#define CD          0x09
-#define RX_ADDR_P0  0x0A
-#define RX_ADDR_P1  0x0B
-#define RX_ADDR_P2  0x0C
-#define RX_ADDR_P3  0x0D
-#define RX_ADDR_P4  0x0E
-#define RX_ADDR_P5  0x0F
-#define TX_ADDR     0x10
-#define RX_PW_P0    0x11
-#define RX_PW_P1    0x12
-#define RX_PW_P2    0x13
-#define RX_PW_P3    0x14
-#define RX_PW_P4    0x15
-#define RX_PW_P5    0x16
-#define FIFO_STATUS 0x17
+#define OBSERVE_TX          0x08
+#define CD                  0x09
+#define RX_ADDR_P0          0x0A
+#define RX_ADDR_P1          0x0B
+#define RX_ADDR_P2          0x0C
+#define RX_ADDR_P3          0x0D
+#define RX_ADDR_P4          0x0E
+#define RX_ADDR_P5          0x0F
+#define TX_ADDR             0x10
+#define RX_PW_P0            0x11
+#define RX_PW_P1            0x12
+#define RX_PW_P2            0x13
+#define RX_PW_P3            0x14
+#define RX_PW_P4            0x15
+#define RX_PW_P5            0x16
+#define FIFO_STATUS         0x17
+#define PYNPD               0x1C
+#define FEATURE             0x1D
 
 #define STATUS_MAX_RT 0x10
 #define STATUS_TX_DS  0x20
@@ -76,7 +79,7 @@ uint8_t NRF2401_SendPacket(uint8_t *txbuf, uint8_t len);
 void NRF2401_SetTXMode(void);
 void NRF2401_SetRXMode(void);
 uint8_t NRF2401_SendPacket(uint8_t *txbuf, uint8_t len);
-uint8_t NRF2401_RecPacket(uint8_t *rxbuf);
+uint32_t NRF2401_RecPacket(uint8_t *rxbuf);
 
 #endif
 

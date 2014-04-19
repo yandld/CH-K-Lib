@@ -33,6 +33,7 @@ Purpose     : Display controller initialization
 
 #include "GUI.h"
 #include "sram.h"
+#include <rtthread.h>
 /*********************************************************************
 *
 *       Defines
@@ -66,7 +67,7 @@ void GUI_X_Config(void)
 {
      //static U32 aMemory[GUI_NUMBYTES / 4];
     U32 * aMemory = (U32*)rt_malloc(GUI_NUMBYTES);
-    if(aMemory == NULL)
+    if(aMemory == RT_NULL)
     {
         rt_kprintf("out of memory!\r\n");
     }

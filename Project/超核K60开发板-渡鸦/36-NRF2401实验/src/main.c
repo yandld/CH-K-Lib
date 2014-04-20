@@ -1,10 +1,9 @@
 #include "gpio.h"
 #include "uart.h"
-#include "24l01.h"
+#include "nrf24l01.h"
 #include "ili9320.h"
 #include "spi.h"
 
-static struct spi_bus bus;
 extern int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
 static uint8_t NRF2401RXBuffer[32] = "HelloWorld\r\n";//无线接收数据
 static uint8_t* gpRevChar;
@@ -20,7 +19,6 @@ void UART_ISR(uint16_t ch)
 int main(void)
 {
     uint32_t i;
-    uint32_t ret;
     uint32_t len;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
@@ -38,7 +36,7 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 0 , kGPIO_Mode_OPP);
     /* 初始化2401 */
     static struct spi_bus bus;
-    ret = kinetis_spi_bus_init(&bus, HW_SPI1);
+    kinetis_spi_bus_init(&bus, HW_SPI1);
     nrf24l01_init(&bus, 0);
     if(nrf24l01_probe())
     {

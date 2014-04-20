@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    24l01.c
+  * @file    nrf24l01.c
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
@@ -8,7 +8,7 @@
   ******************************************************************************
   */
   
-#include "24l01.h"
+#include "nrf24l01.h"
 #include "spi_abstraction.h"
 
 #define NRF24L01_DEBUG		0
@@ -40,19 +40,19 @@
 #define OBSERVE_TX_PLOS_CNT_MASK    0xF0u
 #define OBSERVE_TX_PLOS_CNT_SHIFT   4
 //********************************************************************************************************************// 
-// SPI(nRF24L01) 指令
-#define READ_REG        0x00   // 读配置寄存器
-#define WRITE_REG       0x20   // 写配置寄存器
-#define RD_RX_PLOAD     0x61   // 读取RX FIFO中的数据
-#define WR_TX_PLOAD     0xA0   // 向TX FIFO中写入数据
-#define FLUSH_TX        0xE1   // 清除TX FIFO中的数据 应用于发射模式下
-#define FLUSH_RX        0xE2   // 清除RX FIFO中的数据 应用于接收模式下
-#define REUSE_TX_PL     0xE3   // 重新使用上一包有效数据
-#define R_RX_PL_WID     0x60
-#define NOP             0xFF   // 保留
+/* SPI(nRF24L01) 指令 */
+#define READ_REG                    0x00   // 读配置寄存器
+#define WRITE_REG                   0x20   // 写配置寄存器
+#define RD_RX_PLOAD                 0x61   // 读取RX FIFO中的数据
+#define WR_TX_PLOAD                 0xA0   // 向TX FIFO中写入数据
+#define FLUSH_TX                    0xE1   // 清除TX FIFO中的数据 应用于发射模式下
+#define FLUSH_RX                    0xE2   // 清除RX FIFO中的数据 应用于接收模式下
+#define REUSE_TX_PL                 0xE3   // 重新使用上一包有效数据
+#define R_RX_PL_WID                 0x60
+#define NOP                         0xFF   // 保留
 //********************************************************************************************************************// 
 /* register define */
-#define CONFIG             0x00  //配置发送状态，CRC校验模式以及发收发状态响应方式
+#define CONFIG              0x00  //配置发送状态，CRC校验模式以及发收发状态响应方式
 #define EN_AA               0x01  //自动应答功能设置
 #define EN_RXADDR           0x02  //可用信道设置
 #define SETUP_AW            0x03  //收发地址宽度设置
@@ -84,7 +84,6 @@ const uint8_t TX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //发送地址
 const uint8_t RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //接收地址
 
 
-
 static uint8_t read_reg(uint8_t addr)
 {
     uint8_t temp = READ_REG + addr;
@@ -100,7 +99,6 @@ static void write_reg(uint8_t addr, uint8_t val)
     spi_write(&device, &val, 1, true);
 }
 
-
 static void write_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
     uint8_t temp = WRITE_REG + addr;
@@ -114,7 +112,6 @@ static void read_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
     spi_write(&device, &temp, 1, false);
     spi_read(&device, buf, len, true);
 }
-
 
 int nrf24l01_probe(void)
 {

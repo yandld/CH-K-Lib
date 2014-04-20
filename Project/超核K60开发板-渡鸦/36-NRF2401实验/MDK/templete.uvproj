@@ -554,20 +554,10 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ucGUI</GroupName>
-          <Files>
             <File>
-              <FileName>GUILib.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\ucGUI\build\MDK\obj\GUILib.lib</FilePath>
-            </File>
-            <File>
-              <FileName>ucGuiFunc.c</FileName>
+              <FileName>nrf24l01.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ucGuiFunc.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\devices\src\nrf24l01.c</FilePath>
             </File>
           </Files>
         </Group>

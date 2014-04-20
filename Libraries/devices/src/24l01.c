@@ -85,9 +85,6 @@ const uint8_t RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //Ω” ’µÿ÷∑
 
 
 
-
-
-
 static uint8_t read_reg(uint8_t addr)
 {
     uint8_t temp = READ_REG + addr;

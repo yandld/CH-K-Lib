@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK10D5 URANUS LIB_DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\devices\inc;..\..\..\Libraries\utilities\board;..\..\..\Libraries\utilities\imu</IncludePath>
+              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\devices\inc;..\..\..\Libraries\utilities\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -518,11 +518,6 @@
               <FileName>bmp180.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\devices\src\bmp180.c</FilePath>
-            </File>
-            <File>
-              <FileName>24l01.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\src\24l01.c</FilePath>
             </File>
           </Files>
         </Group>

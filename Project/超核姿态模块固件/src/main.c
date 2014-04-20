@@ -19,7 +19,7 @@
 #include "spi_abstraction.h"
 #include "spi.h"
 
-static uint8_t NRF2401RXBuffer[32];//无线接收数据
+static uint8_t NRF2401RXBuffer[32] = "HelloWorld~~";//无线接收数据
 
 #if 0
 
@@ -121,6 +121,7 @@ int main(void)
 {
     int16_t x,y,z;
     uint32_t i;
+    uint32_t cnt = 0;
     uint32_t ret;
     uint32_t len;
     int32_t temperature;
@@ -144,21 +145,19 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOC, 7, kPinAlt2); //    
 
     PORT_PinMuxConfig(HW_GPIOC, BOARD_SPI_CS_PIN, kPinAlt2);
+    GPIO_QuickInit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN , kGPIO_Mode_OPP);
+    GPIO_QuickInit(BOARD_NRF2401_IRQ_PORT, BOARD_NRF2401_IRQ_PIN , kGPIO_Mode_IPU);
     static struct spi_bus bus;
     ret = kinetis_spi_bus_init(&bus, HW_SPI0);
     nrf24l01_init(&bus, 2);
-    NRF2401_Init();
+
     if(nrf24l01_probe())
     {
         printf("NRF2401 ERROR\r\n");
-        while(1);
+        //while(1);
     }
-    if(ret)
-    {
-        printf("NRF2401 ERROR\r\n");
-        DelayMs(300);
-    }
-    NRF2401_SetRXMode(); //设置为接收模式
+    nrf24l01_set_rx_mode();
+   // nrf24l01_set_tx_mode();
     while(1)
     {
         //mpu6050_read_gyro(&x, &y, &z);
@@ -172,12 +171,26 @@ int main(void)
    //     DelayMs(20);
     //    bmp180_read_pressure(&pressure);
         //printf("t:%d p:%d\r", temperature, pressure);
-        nrf24l01_read_packet(NRF2401RXBuffer, &len);
-        while(len--)
+        if(!nrf24l01_read_packet(NRF2401RXBuffer, &len))
         {
-            printf("buf[%d]:%c \r\n", len , NRF2401RXBuffer[len]);
+           
+           // if(nrf24l01_write_packet(NRF2401RXBuffer, 10))
+            {
+           //     printf("Tx failed\r\n");
+            }
+        //    DelayMs(10);
+        //    nrf24l01_set_tx_mode();
+          //  nrf24l01_write_packet(NRF2401RXBuffer, len);
+          //  nrf24l01_set_rx_amode();
+            printf("len:%d cnt:%d\r\n", len, cnt++);
+          //  while(len--)
+            {
+            //    printf("buf[%d]:%c \r\n", len , NRF2401RXBuffer[len]);
+            }
+
         }
-        DelayMs(10); 
+
+        //DelayMs(10); 
     }
     
   

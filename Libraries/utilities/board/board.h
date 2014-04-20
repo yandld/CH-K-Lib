@@ -32,6 +32,9 @@
 #define BOARD_OV7620_DATA_PORT      HW_GPIOA //PA8-15
 #define BOARD_OV7620_DATA_OFFSET    (8)
 
+#define BOARD_NRF2401_CE_PORT       HW_GPIOE
+#define BOARD_NRF2401_CE_PIN        (0)
+
 
 #elif CHK60EVB1
 

@@ -9,27 +9,36 @@
   */
   
 #include "24l01.h"
-#include "board.h"
-#include "gpio.h"
-#include "spi.h"
 #include "spi_abstraction.h"
 
 #define NRF24L01_DEBUG		0
 #if ( NRF24L01_DEBUG == 1 )
-#define NRF24L01_DEBUG	printf
+#define NRF24L01_TRACE	printf
 #else
-#define NRF24L01_DEBUG(...)
+#define NRF24L01_TRACE(...)
 #endif
 
-static struct spi_device device;
-
-//返回常量
-#define NRF_OK          (0x00)
-#define NRF_ERR         (0x01)
-#define MAX_TX  		(0x10)  //达到最大发送次数中断
-#define TX_OK   		(0x20)  //TX发送完成中断
-#define RX_OK   		(0x40)  //接收到数据中断
-
+/* STATUS Bit Fields */
+#define STATUS_RX_DR_MASK           0x40u 
+#define STATUS_TX_DS_MASK           0x20u
+#define STATUS_MAX_RT_MASK          0x10u
+#define STATUS_RX_P_NO_SHIFT        1
+#define STATUS_RX_P_NO_MASK         0x0Eu
+#define STATUS_RX_P_NO(x)           (((uint8_t)(((uint32_t)(x))<<STATUS_RX_P_NO_SHIFT))&STATUS_RX_P_NO_MASK)
+#define STATUS_TX_FULL              0x01u
+/* CONFIG bit Fields */
+#define CONFIG_PRIM_RX_MASK         0x01u
+#define CONFIG_PWR_UP_MASK          0x02u
+#define CONFIG_CRCO_MASK            0x04u
+#define CONFIG_EN_CRC_MASK          0x08u
+#define CONFIG_MASK_MAX_RT_MASK     0x10u
+#define CONFIG_MASK_TX_DS_MASK      0x20u
+#define CONFIG_MASK_RX_DS_MASK      0x40u
+/* OBSERVE_TX bit Fields */
+#define OBSERVE_TX_ARC_CNT_MASK     0x0Fu
+#define OBSERVE_TX_ARC_CNT_SHIFT    0
+#define OBSERVE_TX_PLOS_CNT_MASK    0xF0u
+#define OBSERVE_TX_PLOS_CNT_SHIFT   4
 //********************************************************************************************************************// 
 // SPI(nRF24L01) 指令
 #define READ_REG        0x00   // 读配置寄存器
@@ -43,7 +52,7 @@ static struct spi_device device;
 #define NOP             0xFF   // 保留
 //********************************************************************************************************************// 
 /* register define */
-#define NCONFIG             0x00  //配置发送状态，CRC校验模式以及发收发状态响应方式
+#define CONFIG             0x00  //配置发送状态，CRC校验模式以及发收发状态响应方式
 #define EN_AA               0x01  //自动应答功能设置
 #define EN_RXADDR           0x02  //可用信道设置
 #define SETUP_AW            0x03  //收发地址宽度设置
@@ -70,139 +79,79 @@ static struct spi_device device;
 #define PYNPD               0x1C
 #define FEATURE             0x1D
 
-#define STATUS_MAX_RT 0x10
-#define STATUS_TX_DS  0x20
-#define STATUS_RX_DR  0x40
+static struct spi_device device;
+const uint8_t TX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //发送地址
+const uint8_t RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //接收地址
 
 
-//24L01发送接收数据宽度定义
-#define TX_ADR_WIDTH    5   	//5字节的地址宽度
-#define RX_ADR_WIDTH    5   	//5字节的地址宽度
-#define TX_PLOAD_WIDTH  32  	//32字节的用户数据宽度
-#define RX_PLOAD_WIDTH  32  	//32字节的用户数据宽度
 
 
-#define CE_HIGH()     GPIO_WriteBit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN, 1)
-#define CE_LOW()      GPIO_WriteBit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN, 0)
 
-static uint8_t NRF2401_WriteBuffer(uint8_t reg, uint8_t *pData, uint8_t len)
+
+static uint8_t read_reg(uint8_t addr)
 {
-    uint8_t status;
-    status = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, reg, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
-    len--;
-    while(len--)
-    {
-        SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, *pData++, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
-    }
-    SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, *pData++, BOARD_SPI_NRF2401_CSn, kSPI_PCS_ReturnInactive);
-    return(status);          // return nRF24L01 status byte
+    uint8_t temp = READ_REG + addr;
+    spi_write(&device, &temp, 1, false);
+    spi_read(&device, &temp, 1, true);
+    return temp;
 }
 
-static uint8_t NRF2401_ReadWriteReg(uint8_t reg,uint8_t value)
+static void write_reg(uint8_t addr, uint8_t val)
 {
-    uint8_t status;
-    status = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, reg, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
-    SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, value, BOARD_SPI_NRF2401_CSn, kSPI_PCS_ReturnInactive);
-    return status;
-}
-
-const uint8_t TX_ADDRESS[TX_ADR_WIDTH]={0x34,0x43,0x10,0x10,0x01}; //发送地址
-const uint8_t RX_ADDRESS[RX_ADR_WIDTH]={0x34,0x43,0x10,0x10,0x01}; //接收地址
-unsigned char Bank0_Reg[][2]=
-{
-    {0,0x0F},//congig
-    {1,0x0F},//en_aa
-    {2,0x03},//en_rxaddr
-    {3,0x03},//setup_aw
-    {4,0x15},//setup_retr
-    {5,40},//rf_ch
-    {6,0X07},//rf_setup	//REG6,120517,0x0F or 0x2F:2Mbps; 0x07:1Mbps ; 0x27:250Kbps
-    {7,0x07},//status
-    {8,0x00},//observe_tx
-    {9,0x00},//cd
-    {12,0x11},//rx_addr_p2
-    {13,0x12},//rx_addr_p3
-    {14,0x13},//rx_addr_p4
-    {15,0x14},//rx_addr_p5
-    {17,0x20},//RX_PW_P0
-    {18,0x20},//RX_PW_P1
-    {19,0x20},//RX_PW_P2
-    {20,0x20},//RX_PW_P3
-    {21,0x20},//RX_PW_P4
-    {22,0x20},//RX_PW_P5
-    {23,0x00},//FIFO_STATUS,
-    {28,0x3F},//DYNPD
-    {29,0x04}, //FEATURE
-};
-
-static uint8_t NRF2401_ConfigStatus(void)
-{
-    uint8_t i;
-	for(i = 22; i > 0; i--)
-    {
-        NRF2401_ReadWriteReg(WRITE_REG+Bank0_Reg[i][0], Bank0_Reg[i][1]);    //刷新接收数据
-    }
-	
-	NRF2401_WriteBuffer(WRITE_REG+RX_ADDR_P0, (uint8_t*)RX_ADDRESS, RX_ADR_WIDTH);//写TX节点地址
-	NRF2401_WriteBuffer(WRITE_REG+TX_ADDR, (uint8_t*)RX_ADDRESS, RX_ADR_WIDTH);//写RX节点地址
-	i = NRF2401_ReadWriteReg(29,0xFF); //读取寄存器的状态 
-	if(i == 0) // i!=0 showed that chip has been actived.so do not active again.
-    {
-        NRF2401_ReadWriteReg(0X50,0x73);// Active
-    }
-	for(i = 22; i >= 21; i--)
-    {
-        NRF2401_ReadWriteReg((WRITE_REG|Bank0_Reg[i][0]), Bank0_Reg[i][1]);
-    }
-	return 0;
+    uint8_t temp = WRITE_REG + addr;
+    spi_write(&device, &temp, 1, false);
+    spi_write(&device, &val, 1, true);
 }
 
 
-static uint8_t NRF2401_ReadBuffer(uint8_t reg, uint8_t *pData, uint32_t len)
-{
-    uint8_t status;
-    /* Select register to write to and read status byte */
-    status = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, reg, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
-    len--;
-    while(len--)
-    { 
-        *pData++ = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, 0x00, BOARD_SPI_NRF2401_CSn, kSPI_PCS_KeepAsserted);
-    }
-    *pData++ = SPI_ReadWriteByte(HW_SPI0, HW_CTAR0, 0x00, BOARD_SPI_NRF2401_CSn, kSPI_PCS_ReturnInactive);
-	return(status);                    // return nRF24L01 status byte
-}
-
-static int write_register(uint8_t addr, uint8_t *buf, uint32_t len)
+static void write_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
     uint8_t temp = WRITE_REG + addr;
     spi_write(&device, &temp, 1, false);
     spi_write(&device, buf, len, true);
 }
 
-static int read_register(uint8_t addr, uint8_t *buf, uint32_t len)
+static void read_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
     uint8_t temp = READ_REG + addr;
     spi_write(&device, &temp, 1, false);
     spi_read(&device, buf, len, true);
 }
 
+
 int nrf24l01_probe(void)
 {
-	uint8_t buf[5]={0XA5,0XA5,0XA5,0XA5,0XA5};
-	uint8_t i = sizeof(buf);
-    write_register(TX_ADDR, buf, sizeof(buf));
-	for(i = 0; i < 5; i++)
-	{
-        buf[i] = 0;
-	}
-    read_register(TX_ADDR, buf, sizeof(buf));
-	for(i = 0; i < 5; i++)
-	{
-        if(buf[i] != 0xA5) return 1;
-	}
-	return 0;
+    uint8_t i;
+    uint8_t buf[5];
+    read_buffer(TX_ADDR, buf, 5);
+    for(i = 0; i < 5; i++)
+    {
+        if((buf[i]!= 0) && (buf[i] != 0xFF))
+        {
+            NRF24L01_CE_LOW();
+            /* init sequence */
+            write_reg(CONFIG, 0x0F); /* config */
+            write_reg(EN_AA, 0x03);/* aa */
+            write_reg(EN_RXADDR, 0x03); /* available pipe */
+            write_reg(SETUP_AW, 0x03);  /* setup_aw */
+            write_reg(SETUP_RETR, 0x07);/* setup_retr */
+            write_reg(RF_CH,40);/* RF freq */
+            write_reg(RF_SETUP, 0X04);
+            write_reg(RX_PW_P0, 0X20);
+            write_reg(RX_PW_P1, 0X20);
+            write_reg(RX_PW_P2, 0X20);
+            write_reg(RX_PW_P3, 0X20);
+            write_reg(RX_PW_P4, 0X20);
+            write_reg(RX_PW_P5, 0X20);
+            write_reg(PYNPD, 0x3F); /* enable dynmic playload whhich means packet len is varible */
+            write_reg(FEATURE, 0x07); /* enable dynmic playload whhich means packet len is varible */
+            write_buffer(RX_ADDR_P0, (uint8_t*)RX_ADDRESS, 5);
+            write_buffer(TX_ADDR, (uint8_t*)TX_ADDRESS, 5);
+            return 0;
+        }
+    }
+    return 1;
 }
-
 
 int nrf24l01_init(spi_bus_t bus, uint32_t cs)
 {
@@ -223,87 +172,103 @@ int nrf24l01_init(spi_bus_t bus, uint32_t cs)
     return ret;
 }
 
-uint8_t NRF2401_Init(void)
-{
-	GPIO_QuickInit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN , kGPIO_Mode_OPP);
-    GPIO_QuickInit(BOARD_NRF2401_IRQ_PORT, BOARD_NRF2401_IRQ_PIN , kGPIO_Mode_IPU);
-
-    CE_LOW();
-    
-  //  NRF2401_ReadWriteReg(WRITE_REG + 0x01, 0x3F);
-  //  NRF2401_ReadWriteReg(WRITE_REG + 0x1C, 0x3F);
-  //  NRF2401_ReadWriteReg(WRITE_REG + 0x1C, 0x3F);
- //   NRF2401_ReadWriteReg(WRITE_REG + 0x1D, 0x07);
-    NRF2401_ConfigStatus();
-  //  NRF2401_ReadWriteReg(WRITE_REG + 0x01, 0x3F);
-  //  NRF2401_ReadWriteReg(WRITE_REG + 0x1C, 0x3F);
-  //  NRF2401_ReadWriteReg(WRITE_REG + 0x1C, 0x3F);
-  //  NRF2401_ReadWriteReg(WRITE_REG + 0x1D, 0x07);
-    return 0;
-}
-
-
 
 //该函数初始化NRF24L01到TX模式
 //设置TX地址,写TX数据宽度,设置RX自动应答的地址,填充TX发送数据,选择RF频道,波特率和LNA HCURR
 //PWR_UP,CRC使能
 //当CE变高后,即进入RX模式,并可以接收数据了		   
-//CE为高大于10us,则启动发送.	 
-void NRF2401_SetTXMode(void)
+//CE为高大于10us,则启动发送.
+
+void nrf24l01_set_tx_mode(void)
 {
     uint8_t value;
-	NRF2401_ReadWriteReg(FLUSH_TX,  0x00);    //刷新接收数据 
-    CE_LOW();// chip enable
-    value=NRF2401_ReadWriteReg(NCONFIG, 0xFF); //读取寄存器的状态 
-    value |= 0xFE;//set bit 1
-    NRF2401_ReadWriteReg(WRITE_REG+NCONFIG, value);// Set PWR_UP bit, enable CRC(2 length) & Prim:RX. RX_DR enabled..
-    CE_HIGH(); //CE为高,进入接收模式 
+    value = FLUSH_TX;
+    spi_write(&device, &value, 1, true);
+    NRF24L01_CE_LOW();
+    value = read_reg(CONFIG);
+    value &= ~CONFIG_PRIM_RX_MASK;
+    write_reg(CONFIG, value); /* Set PWR_UP bit, enable CRC(2 length) & Prim:RX. RX_DR enabled.. */
+    NRF24L01_CE_HIGH();
 }
 
 //该函数初始化NRF24L01到RX模式
 //设置RX地址,写RX数据宽度,选择RF频道,波特率和LNA HCURR
-//当CE变高后,即进入RX模式,并可以接收数据了		   
-void NRF2401_SetRXMode(void)
+//当CE变高后,即进入RX模式,并可以接收数据了	
+void nrf24l01_set_rx_mode(void)
 {
 	uint8_t value;
-	NRF2401_ReadWriteReg(FLUSH_RX, 0x00);    //刷新接收数据
-	value=NRF2401_ReadWriteReg(STATUS, 0xFF); //读取寄存器的状态 
-	NRF2401_ReadWriteReg(WRITE_REG+STATUS, value);  //清除状态标志
-	CE_LOW();
-	value = NRF2401_ReadWriteReg(NCONFIG,0xFF); //读取寄存器的状态 
-	value |= 0x01;//set bit 1
-	NRF2401_ReadWriteReg(WRITE_REG+NCONFIG, value);// Set PWR_UP bit, enable CRC(2 length) & Prim:RX. RX_DR enabled..
-	CE_HIGH(); //CE为高,进入接收模式 
+    /* reflash data */
+    value = FLUSH_RX;
+    spi_write(&device, &value, 1, true);
+	NRF24L01_CE_LOW();
+    /* set CONFIG_PRIM_RX_MASK to enable Rx */
+    value = read_reg(CONFIG);
+    value |= CONFIG_PRIM_RX_MASK;
+    write_reg(CONFIG, value);
+	NRF24L01_CE_HIGH();
 }
 
 //启动NRF24L01发送一次数据
 //txbuf:待发送数据首地址
 //返回值:发送完成状况
-uint8_t NRF2401_SendPacket(uint8_t *txbuf, uint8_t len)
+int nrf24l01_write_packet(uint8_t *buf, uint32_t len)
 {
-    NRF2401_WriteBuffer(WR_TX_PLOAD,txbuf, len);//写数据到TX BUF  32个字节
-    return 0;
+    uint8_t status;
+    uint8_t plos;
+    /* clear bits */
+    status = read_reg(STATUS);
+    status |= STATUS_TX_DS_MASK | STATUS_MAX_RT_MASK;
+    write_reg(STATUS, status);
+    NRF24L01_CE_LOW();
+    /* clear PLOS */
+    write_reg(RF_CH, 40); 
+    /* write data */
+    uint8_t value = WR_TX_PLOAD;
+    spi_write(&device, &value, 1, false);
+    spi_write(&device, buf, len, true);
+    NRF24L01_CE_HIGH();
+    while(1)
+    {
+        status = read_reg(STATUS);
+        if(status & STATUS_TX_DS_MASK)
+        {
+            /* send complete */
+            status |= STATUS_TX_DS_MASK | STATUS_MAX_RT_MASK;
+            write_reg(STATUS, status);
+            return 0;
+        }
+        status = read_reg(OBSERVE_TX);
+        plos = (status & OBSERVE_TX_PLOS_CNT_MASK) >> OBSERVE_TX_PLOS_CNT_SHIFT;
+        if(plos && (status & STATUS_MAX_RT_MASK))
+        {
+            status = FLUSH_TX;
+            spi_write(&device, &status, 1, true);
+            return 1;
+        }
+    }
 }
 
-//启动NRF24L01发送一次数据
-//txbuf:待发送数据首地址
-//返回值:0，接收完成；其他，错误代码
-
-
-
+/* read a packet */
 int nrf24l01_read_packet(uint8_t *buf, uint32_t *len)
 {
 	uint8_t sta,rev_len;
-	sta = NRF2401_ReadWriteReg(STATUS, 0xFF);
-	if(sta & RX_OK)
+    sta = read_reg(STATUS);
+	if(sta & STATUS_RX_DR_MASK)
 	{
-        write_register(STATUS, &sta, 1);//清除TX_DS或MAX_RT中断标志
-        read_register(R_RX_PL_WID, &rev_len, 1);
-        read_register(RD_RX_PLOAD, buf, rev_len);// read receive payload from RX_FIFO buffer
+        /* clear pendign bit */
+        sta |= STATUS_RX_DR_MASK;
+        write_reg(STATUS, sta);
+        /* read len and data */
+        rev_len = read_reg(R_RX_PL_WID);
+        read_buffer(RD_RX_PLOAD, buf, rev_len);
         *len = rev_len;
+        /* if rev_len > 32 which means a error occur, usr FLUSH_RX to clear */
         if(rev_len > 32)
         {
-            NRF2401_ReadWriteReg(FLUSH_RX,0xff);//清除TX FIFO寄存器 
+            NRF24L01_TRACE("rev len > 32, error!\r\n");
+            sta = FLUSH_RX;
+            spi_write(&device, &sta, 1, true);
+            *len = 32;
             return 2;
         }
         return 0;
@@ -311,19 +276,4 @@ int nrf24l01_read_packet(uint8_t *buf, uint32_t *len)
     *len = 0;
     return 1;
 }
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
 

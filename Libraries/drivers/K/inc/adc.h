@@ -18,17 +18,17 @@
 #include <stdint.h>
 
 //!< ADC模块号
-#define HW_ADC0  (0) 
-#define HW_ADC1  (1)
-#define HW_ADC2  (2)
+#define HW_ADC0  (0) //ADC0模块
+#define HW_ADC1  (1) //ADC1模块
+#define HW_ADC2  (2) //ADC2模块
 
 
 //!< ADC 快速初始化宏
-#define ADC0_SE0_DP0        (0x0U)
-#define ADC0_SE1_DP1        (0x80000U)
-#define ADC0_SE3_DP3        (0x180000U)
-#define ADC0_SE4B_PC2       (0x204410U)
-#define ADC0_SE5B_PD1       (0x284218U)
+#define ADC0_SE0_DP0        (0x0U)      //ADC0模块的0通道，DP0引脚
+#define ADC0_SE1_DP1        (0x80000U)  //ADC0模块的1通道，DP1引脚
+#define ADC0_SE3_DP3        (0x180000U) //ADC0模块的3通道，DP3引脚
+#define ADC0_SE4B_PC2       (0x204410U) //ADC0模块的4B通道，PC2引脚
+#define ADC0_SE5B_PD1       (0x284218U) //ADC0模块的5B通道，PD1引脚
 #define ADC0_SE6B_PD5       (0x304a18U)
 #define ADC0_SE7B_PD6       (0x384c18U)
 #define ADC0_SE8_PB0        (0x404008U)
@@ -67,10 +67,10 @@
 #define ADC1_SE18           (0x00900001)
 
 
-//!< ADC 转换时钟分频因子
+//!< ADC 转换时钟分频因子,控制转换速度
 typedef enum
 {
-    kADC_ClockDiv1,
+    kADC_ClockDiv1,  
     kADC_ClockDiv2,
     kADC_ClockDiv4,
     kADC_ClockDiv8,
@@ -79,31 +79,31 @@ typedef enum
 //!< ADC转换精度定义
 typedef enum
 {
-    kADC_SingleDiff8or9 = 0,
-    kADC_SingleDiff12or13 = 1,
-    kADC_SingleDiff10or11 = 2,
-    kADC_SingleDIff16 = 3
+    kADC_SingleDiff8or9 = 0,    //8位或9位精度
+    kADC_SingleDiff12or13 = 1,  //12位或13位精度
+    kADC_SingleDiff10or11 = 2,  //10位或11位精度
+    kADC_SingleDIff16 = 3       //16位精度
 }ADC_ResolutionMode_Type;
 
 //!< ADC 触发方式定义
 typedef enum
 {
-    kADC_TriggerSoftware,
-    kADC_TriggerHardware,
+    kADC_TriggerSoftware,  //软件触发
+    kADC_TriggerHardware,  //硬件触发
 }ADC_TriggerSelect_Type;
 
 //!< 是否连续转换
 typedef enum
 {
-    kADC_ContinueConversionEnable,
-    kADC_ContinueConversionDisable,
+    kADC_ContinueConversionEnable,   //开启连续转换
+    kADC_ContinueConversionDisable,  //关闭连续转换
 }ADC_ContinueMode_Type;
 
 //!< 单端ADC还是查分ADC
 typedef enum
 {
-    kADC_Single,
-    kADC_Differential,
+    kADC_Single,         //单端模式
+    kADC_Differential,   //差分模式
 }ADC_SingleOrDiffMode_Type;
 
 //!< ADC 通道复用选择(每个ADC通道有2个ADC转换触发器 为MuxA 和 MuxB MuxB 只能硬件触发)
@@ -116,27 +116,27 @@ typedef enum
 //!< 模拟电压参考源
 typedef enum
 {
-    kADC_VoltageVREF,
-    kADC_VoltageVALT,
+    kADC_VoltageVREF,  //使用外部引脚作为参考电源
+    kADC_VoltageVALT,  //可选择，不用
 }ADC_VoltageRef_Type;
 
 //!< 硬件平均
 typedef enum
 {
-    kADC_HardwareAverageDisable,
-    kADC_HardwareAverage_4,
-    kADC_HardwareAverage_8,
+    kADC_HardwareAverageDisable,  //关闭硬件平均
+    kADC_HardwareAverage_4,       //4均值
+    kADC_HardwareAverage_8,       //8均值
     kADC_HardwareAverage_16,
-    kADC_HardwareAverage_32,
+    kADC_HardwareAverage_32,      //32均值
 }ADC_HardwareAveMode_Type;
 
 //!< ADC中断及DMA配置选择
 typedef enum
 {
-    kADC_IT_Disable,        //!< AD中断功能禁止
-    kADC_DMA_Disable,       //!< ADC DMA功能禁止
-    kADC_IT_EOF,            //!< 打开ADC 转换完成中断
-    kADC_DMA_EOF,           //!< 打开ADC DMA 完成中断
+    kADC_IT_Disable,        //AD中断功能禁止
+    kADC_DMA_Disable,       //ADC DMA功能禁止
+    kADC_IT_EOF,            //打开ADC 转换完成中断
+    kADC_DMA_EOF,           //打开ADC DMA 完成中断
 }ADC_ITDMAConfig_Type;
 
 //!< ADC 回调函数定义
@@ -145,14 +145,14 @@ typedef void (*ADC_CallBackType)(int32_t conversionValue);
 //!< ADC 初始化结构
 typedef struct
 {
-    uint32_t                    instance;                   //!< 模块号
-    ADC_TriggerSelect_Type      triggerMode;                //!< 触发模式 软件触发 或 硬件触发
-    ADC_ClockDiv_Type           clockDiv;                   //!< ADC时钟分频
-    ADC_ResolutionMode_Type     resolutionMode;             //!< 分频率选择 8 10 12 16位精度等
-    ADC_SingleOrDiffMode_Type   singleOrDiffMode;           //!< 单端 还是 差分输入
-    ADC_ContinueMode_Type       continueMode;               //!< 是否启动连续转换
-    ADC_HardwareAveMode_Type    hardwareAveMode;            //!< 硬件平均功能选择
-    ADC_VoltageRef_Type         vref;                       //!< 模拟电压参考源
+    uint32_t                    instance;                   //模块号
+    ADC_TriggerSelect_Type      triggerMode;                //触发模式 软件触发 或 硬件触发
+    ADC_ClockDiv_Type           clockDiv;                   //ADC时钟分频
+    ADC_ResolutionMode_Type     resolutionMode;             //分频率选择 8 10 12 16位精度等
+    ADC_SingleOrDiffMode_Type   singleOrDiffMode;           //单端 还是 差分输入
+    ADC_ContinueMode_Type       continueMode;               //是否启动连续转换
+    ADC_HardwareAveMode_Type    hardwareAveMode;            //硬件平均功能选择
+    ADC_VoltageRef_Type         vref;                       //模拟电压参考源
 }ADC_InitTypeDef;
 
 

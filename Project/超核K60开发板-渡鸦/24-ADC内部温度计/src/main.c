@@ -2,7 +2,16 @@
 #include "common.h"
 #include "uart.h"
 #include "adc.h"
-
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
+ 
+/*
+     实验名称：ADC内部温度计
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：监控芯片的温度，并通过串口发送出来  
+     芯片内部的ADC0模块的26通道连接芯片内部温度传感器
+*/
 
 int main(void)
 {
@@ -14,7 +23,7 @@ int main(void)
     
     /* 初始化ADC模块 通道26 芯片内连接内部温度传感器 */
     ADC_InitTypeDef AD_InitStruct1;
-    AD_InitStruct1.instance = HW_ADC0;
+    AD_InitStruct1.instance = HW_ADC0;  
     AD_InitStruct1.clockDiv = kADC_ClockDiv8;
     AD_InitStruct1.resolutionMode = kADC_SingleDiff12or13;
     AD_InitStruct1.triggerMode = kADC_TriggerSoftware; /* 软件触发转换 */
@@ -35,6 +44,7 @@ int main(void)
         ADC_StartConversion(HW_ADC0, 26, kADC_MuxA);
         while(ADC_IsConversionCompleted(HW_ADC0, kADC_MuxA));
         vtemp = ((float)ADC_ReadValue(HW_ADC0, kADC_MuxA)/4096)*3.3;
+        //以下程序为温度数据转换
         if(vtemp >= 0.7012)
         {
             temp = (vtemp-0.7012)/.001646;
@@ -44,6 +54,7 @@ int main(void)
             temp = (vtemp-0.7012)/.001769;
         }
         temp=25 - temp;
+        //结束
         printf("tempature:%2.3fC  \r", temp);   
         DelayMs(100);
         GPIO_ToggleBit(HW_GPIOE, 6);

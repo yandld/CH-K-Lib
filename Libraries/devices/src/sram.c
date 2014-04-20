@@ -11,6 +11,7 @@
 #include "flexbus.h"
 #include "common.h"
 
+//SRAM初始化配置
 void SRAM_Init(void)
 {
     /* set SRAM pinMux */
@@ -76,7 +77,7 @@ void SRAM_Init(void)
     FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group1, kFLEXBUS_CSPMCR_GROUP1_CS1);
 }
 
-
+//自测试程序，向sram中写数据，然后读出数据，验证数据的正确性
 uint32_t SRAM_SelfTest(void)
 {
     uint32_t i;

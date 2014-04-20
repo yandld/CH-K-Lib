@@ -61,7 +61,7 @@ int bmp180_init(struct i2c_bus* bus)
 {
     uint32_t ret = 0;
     /* i2c bus config */
-    device.config.baudrate = 200*1000;
+    device.config.baudrate = 400*1000;
     device.config.data_width = 8;
     device.config.mode = 0;
     device.subaddr_len = 1;

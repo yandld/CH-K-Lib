@@ -20,7 +20,7 @@
 //!< API functions
 int hmc5883_init(struct i2c_bus* bus);
 int hmc5883_probe(void);
-int mpu6050_read_data(int16_t* x, int16_t* y, int16_t* z);
+int hmc5883_read_data(int16_t* x, int16_t* y, int16_t* z);
 
 
 #endif

@@ -1,7 +1,7 @@
 #include "trans.h"
 #include <string.h>
 #include "dma.h"
-#include "24l01.h"
+#include "nrf24l01.h"
 #include "board.h"
 #include "uart.h"
 #include "common.h"
@@ -76,8 +76,9 @@ uint32_t trans_send_pactket(trans_user_data_t data, uint8_t mode)
             DMA_StartTransfer(HW_DMA_CH1);
             break;
         case TRANS_WITH_NRF2401:
-         //   NRF2401_SetTXMode();//配置到发送模式
-        //    NRF2401_SendPacket((uint8_t*)&packet_copy,sizeof(packet_copy));
+            nrf24l01_set_tx_mode();
+            nrf24l01_write_packet((uint8_t*)&packet_copy, sizeof(packet_copy));
+            nrf24l01_set_rx_mode();
             break;
         default:
             break;

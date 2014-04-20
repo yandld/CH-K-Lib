@@ -6,7 +6,7 @@
 #include "systick.h"
 #include "stdio.h"
 #include "pit.h"
-#include "24l01.h"
+#include "nrf24l01.h"
 #include "board.h"
 
 //包含 姿态模块所需的头文件
@@ -21,38 +21,15 @@
 
 static uint8_t NRF2401RXBuffer[32] = "HelloWorld~~";//无线接收数据
 
-#if 0
-
 static trans_user_data_t send_data;
-
-imu_float_euler_angle_t angle;
-imu_raw_data_t raw_data;
+static imu_float_euler_angle_t angle;
+static imu_raw_data_t raw_data;
 //实现姿态解算的回调并连接回调
-
-
-static uint32_t imu_get_mag(int16_t * mx, int16_t * my, int16_t *mz)
-{
-    hmc_device.read_data(&hmc_device, mx, my, mz);
-    return 0;
-}
-
-static uint32_t imu_get_accel(int16_t * ax, int16_t * ay, int16_t *az)
-{
-    mpu6050_device1.read_accel(&mpu6050_device1, ax,ay,az);
-    return 0;  
-}
-
-static uint32_t imu_get_gyro(int16_t * gx, int16_t * gy, int16_t * gz)
-{
-    mpu6050_device1.read_gyro(&mpu6050_device1, gx,gy,gz);
-    return 0;
-}
-
 static imu_io_install_t IMU_IOInstallStruct1 = 
 {
-    .imu_get_accel = imu_get_accel,
-    .imu_get_gyro = imu_get_gyro,
-    .imu_get_mag = imu_get_mag,
+    .imu_get_accel = mpu6050_read_accel,
+    .imu_get_gyro = mpu6050_read_gyro,
+    .imu_get_mag = hmc5883_read_data,
 };
 
 
@@ -69,19 +46,16 @@ static void PIT_CH0_ISR(void)
     send_data.trans_gyro[2] = raw_data.gz;
     send_data.trans_mag[0] = raw_data.mx;
     send_data.trans_mag[1] = raw_data.my;
-    send_data.trans_mag[2] = raw_data.mz;     
+    send_data.trans_mag[2] = raw_data.mz;
     send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
     send_data.trans_roll = (int16_t)angle.imu_roll*100;
     send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
 }
 
 
-
-#endif 
-
 static void PIT_CH1_ISR(void)
 {
-//    trans_send_pactket(send_data, TRANS_WITH_NRF2401);
+    trans_send_pactket(send_data, TRANS_WITH_NRF2401);
     GPIO_ToggleBit(HW_GPIOA, 1);
 }
 
@@ -130,16 +104,26 @@ int main(void)
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
     printf("UART Init OK!\r\n");
+    for(i = 0; i < 10; i++)
+    {
+        GPIO_ToggleBit(HW_GPIOA, 1);
+        DelayMs(50);
+    }
+    init_sensor();
+    //安装IMU 底层驱动函数
+    imu_io_install(&IMU_IOInstallStruct1);
     //开PIT0
     PIT_QuickInit(HW_PIT_CH0, 1000*4);
-    //PIT_CallbackInstall(HW_PIT_CH0, PIT_CH0_ISR);
-    //PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
+    PIT_CallbackInstall(HW_PIT_CH0, PIT_CH0_ISR);
+    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
     //开PIT1
     PIT_QuickInit(HW_PIT_CH1, 1000*20);
     PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
+    /* 初始化发送单元 */
+    trans_init();
     
-    init_sensor();
+    /* 初始化NRF的 PinMux*/
     PORT_PinMuxConfig(HW_GPIOC, 5, kPinAlt2); //
     PORT_PinMuxConfig(HW_GPIOC, 6, kPinAlt2); //
     PORT_PinMuxConfig(HW_GPIOC, 7, kPinAlt2); //    
@@ -147,25 +131,24 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOC, BOARD_SPI_CS_PIN, kPinAlt2);
     GPIO_QuickInit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN , kGPIO_Mode_OPP);
     GPIO_QuickInit(BOARD_NRF2401_IRQ_PORT, BOARD_NRF2401_IRQ_PIN , kGPIO_Mode_IPU);
+    /* 初始化NRF */
     static struct spi_bus bus;
     ret = kinetis_spi_bus_init(&bus, HW_SPI0);
     nrf24l01_init(&bus, 2);
-
     if(nrf24l01_probe())
     {
-        printf("NRF2401 ERROR\r\n");
-        //while(1);
+        printf("no nrf24l01 device found\r\n");
     }
     nrf24l01_set_rx_mode();
-   // nrf24l01_set_tx_mode();
     while(1)
     {
-        //mpu6050_read_gyro(&x, &y, &z);
+        if(DMA_IsTransferComplete(HW_DMA_CH1) == 0)
+        {
+            trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
+            //延时1MS以免发的太快上位机受不了
+            DelayMs(1);
+        }
         
-    //    bmp180_start_conversion(BMP180_T_MEASURE);
-    //    DelayMs(20);
-       // mpu6050_read_data(&x, &y, &z);
-       // printf("x:%04d, y:%04d, z:%04d  \r", x, y, z);
    //     bmp180_read_temperature(&temperature);
    //     bmp180_start_conversion(BMP180_P3_MEASURE);
    //     DelayMs(20);
@@ -173,84 +156,11 @@ int main(void)
         //printf("t:%d p:%d\r", temperature, pressure);
         if(!nrf24l01_read_packet(NRF2401RXBuffer, &len))
         {
-           
-           // if(nrf24l01_write_packet(NRF2401RXBuffer, 10))
-            {
-           //     printf("Tx failed\r\n");
-            }
-        //    DelayMs(10);
-        //    nrf24l01_set_tx_mode();
-          //  nrf24l01_write_packet(NRF2401RXBuffer, len);
-          //  nrf24l01_set_rx_amode();
-            printf("len:%d cnt:%d\r\n", len, cnt++);
-          //  while(len--)
-            {
-            //    printf("buf[%d]:%c \r\n", len , NRF2401RXBuffer[len]);
-            }
+            /* 从2401 接收到数据 */
 
         }
+    }
 
-        //DelayMs(10); 
-    }
-    
-  
-    
-    
-   #if 0
-    // 初始化LED
-    ret = NRF2401_Init();
-    if(ret)
-    {
-        printf("NRF2401 ERROR\r\n");
-        DelayMs(300);
-    }
-    for(i = 0; i < 10; i++)
-    {
-        GPIO_ToggleBit(HW_GPIOA, 1);
-        DelayMs(50);
-    }
-    //初始化传感器
-    ret = InitSensor();
-    if(ret)
-    {
-        printf("Sensor init failed! code:%d\r\n", ret);
-    }
-    //安装IMU 底层驱动函数
-    imu_io_install(&IMU_IOInstallStruct1);
-    //初始化发送器
-    trans_init();
-
-    while(1)
-    {
-        //压力采集程序 由于上位机不传送压力，所以先注释掉
-        /*
-        while(1)
-        {
-            bmp180_start_conversion(&bmp180_device1, BMP180_T_MEASURE);
-            DelayMs(50);
-            bmp180_read_temperature(&bmp180_device1, &temperature);
-            bmp180_start_conversion(&bmp180_device1, BMP180_P3_MEASURE);
-            DelayMs(50);
-            bmp180_read_pressure(&bmp180_device1, &pressure);
-            printf("T:%05d P:%05d\r\n", temperature, pressure);
-        }
-        */
-        //如果DMA空闲 则 启动发送数据
-      //  if(DMA_IsTransferComplete(HW_DMA_CH1) == 0)
-        {
-       //     NRF2401RXBuffer
-         //   trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
-            //延时1MS以免发的太快上位机受不了
-            DelayMs(1);
-        }
-        NRF2401_SetRXMode(); //设置为接收模式
-        if(NRF2401_RecPacket(NRF2401RXBuffer) != NRF_OK) //接收到了数据
-        {
-            //目前这个版本不做任何处理
-            printf("NRF2401 Rec!\r\n");
-        }
-    }
-    #endif
 }
 
 

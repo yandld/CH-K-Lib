@@ -11,7 +11,7 @@
 #define halfT          0.002f
 #define Gyro_G         0.0610351
 #define Gyro_Gr        0.0010653
-#define SLIDING_FILTER_DEEP  5
+#define SLIDING_FILTER_DEEP  3
    
 
 
@@ -69,7 +69,7 @@ static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * fil
     static int16_t fifo_magn_y[SLIDING_FILTER_DEEP];
     static int16_t fifo_magn_z[SLIDING_FILTER_DEEP];
     
-    for(int i=9;i>0;i--)
+    for(int i=SLIDING_FILTER_DEEP-1;i>0;i--)
     {
         fifo_accel_x[i] =  fifo_accel_x[i-1];
         fifo_accel_y[i] =  fifo_accel_y[i-1];
@@ -92,7 +92,7 @@ static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * fil
     fifo_magn_y[0] = raw_data.my;
     fifo_magn_z[0] = raw_data.mz;
     /**fifo calculate*/
-    for(int i=0;i<10;i++)
+    for(int i=0;i<SLIDING_FILTER_DEEP;i++)
     {
         sum_accel_x += fifo_accel_x[i];
         sum_accel_y += fifo_accel_y[i];

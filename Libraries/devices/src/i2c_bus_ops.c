@@ -59,7 +59,7 @@ int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance)
 {
     /* init hardware */
     I2C_InitTypeDef I2C_InitStruct1;
-    I2C_InitStruct1.baudrate = 100*1000;
+    I2C_InitStruct1.baudrate = 200*1000;
     I2C_InitStruct1.instance = instance;
     I2C_Init(&I2C_InitStruct1);
     /* register bus */

@@ -32,7 +32,7 @@ int hmc5883_init(struct i2c_bus* bus)
 {
     uint32_t ret = 0;
     /* i2c bus config */
-    device.config.baudrate = 200*1000;
+    device.config.baudrate = 400*1000;
     device.config.data_width = 8;
     device.config.mode = 0;
     device.subaddr_len = 1;
@@ -82,7 +82,7 @@ int hmc5883_probe(void)
     return 1; 
 }
 
-int mpu6050_read_data(int16_t* x, int16_t* y, int16_t* z)
+int hmc5883_read_data(int16_t* x, int16_t* y, int16_t* z)
 {
     uint8_t buf[6];
     device.subaddr = HMC_DX_MSB;

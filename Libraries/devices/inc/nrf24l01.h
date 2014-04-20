@@ -19,8 +19,8 @@
 #define NRF24L01_CE_HIGH()     do {PEout(0) = 1;} while(0)
 #define NRF24L01_CE_LOW()      do {PEout(0) = 0;} while(0)
 #elif URANUS
-#define NRF24L01_CE_HIGH()     do {PCout(2) = 1;} while(0)
-#define NRF24L01_CE_LOW()      do {PCout(2) = 0;} while(0)
+#define NRF24L01_CE_HIGH()     do {PBout(0) = 1;} while(0)
+#define NRF24L01_CE_LOW()      do {PBout(0) = 0;} while(0)
 #else
 #warning  "no NRF24L01 CE operation defined!"
 #define NRF24L01_CE_HIGH()     void(0)

@@ -10,6 +10,16 @@
 #include "mpu6050.h"
 #include "i2c_abstraction.h"
 
+
+
+
+#define MPU6050_DEBUG		1
+#if ( MPU6050_DEBUG == 1 )
+#define MPU6050_TRACE	printf
+#else
+#define MPU6050_TRACE(...)
+#endif
+
 /**********The register define of the MPU-6050***********************************/
 /*W&R : Louis Bradshaw  In GDUPT*/
 /*DataSheet Translate : Louis Bradshaw*/
@@ -164,7 +174,7 @@ int mpu6050_init(struct i2c_bus* bus)
 {
     uint32_t ret = 0;
     /* i2c bus config */
-    device.config.baudrate = 200*1000;
+    device.config.baudrate = 300*1000;
     device.config.data_width = 8;
     device.config.mode = 0;
     device.subaddr_len = 1;
@@ -175,32 +185,43 @@ int mpu6050_init(struct i2c_bus* bus)
 
 static int write_register(uint8_t addr, uint8_t value)
 {
-    
     uint8_t buf[1];
     device.subaddr = addr;
     buf[0] = value;
     if(device.bus->ops->write(&device, buf, 1))
     {
+        MPU6050_TRACE("mpu6050 i2c write failed!\r\n");
         return 1;
     }
     return 0;
 }
 
+static int read_register(uint8_t addr)
+{
+    uint8_t buf[1];
+    device.subaddr = addr;
+    if(device.bus->ops->read(&device, buf, 1))
+    {
+        MPU6050_TRACE("mpu6050 i2c read failed!\r\n");
+    }
+    return buf[0];
+}
+
 int mpu6050_probe(void)
 {
     uint32_t i;
-    uint8_t buf[3];
+    uint8_t buf[1];
     device.subaddr = WHO_AM_I;
     for(i=0;i<ARRAY_SIZE(chip_addr_table);i++)
     {
         device.chip_addr = chip_addr_table[i];
         if(device.bus->ops->read(&device, buf, 1) == I2C_EOK)
         {
-            /* find the device */
-            device.chip_addr = chip_addr_table[i];
             /* ID match */
             if(buf[0] == 0x68)
             {
+                /* find the device */
+                device.chip_addr = chip_addr_table[i];
                 write_register(PWR_MGMT_1, 0x00 );
                 write_register(SMPLRT_DIV, 0x07 );
                 write_register(CONFIG, 0x07 );
@@ -210,9 +231,7 @@ int mpu6050_probe(void)
                 write_register(I2C_MST_CTRL, 0x00);
                 write_register(INT_PIN_CFG, 0x02);
                 /* init sequence */
-                #if LIB_DEBUG
-                printf("mpu6050 found!\r\n");
-                #endif
+                MPU6050_TRACE("mpu6050 found!addr:0x%X\r\n", device.chip_addr);
                 return 0; 
             }
         }
@@ -220,12 +239,14 @@ int mpu6050_probe(void)
     return 1; 
 }
 
+
 int mpu6050_read_accel(int16_t* x, int16_t* y, int16_t* z)
 {
     uint8_t buf[6];
     device.subaddr = ACCEL_XOUT_H;
-    if(device.bus->ops->read(&device,buf, 6))
+    if(device.bus->ops->read(&device, buf, 6))
     {
+        MPU6050_TRACE("mpu6050 i2c read failed!\r\n");
         return 1;
     }
     *x=(int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
@@ -241,11 +262,12 @@ int mpu6050_read_gyro(int16_t* x, int16_t* y, int16_t* z)
     device.subaddr = GYRO_XOUT_H;
     if(device.bus->ops->read(&device,buf, 6))
     {
+        MPU6050_TRACE("mpu6050 i2c read failed!\r\n");
         return 1;
     }
     *x=(int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
     *y=(int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
     *z=(int16_t)(((uint16_t)buf[4]<<8)+buf[5]); 
-    return 0;     
+    return 0;  
 }
 

@@ -241,7 +241,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>0</Im2Chk>
+            <Im2Chk>1</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK10D5 URANUS LIB_DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\devices\inc;..\..\..\Libraries\utilities\inc</IncludePath>
+              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\devices\inc;..\..\..\Libraries\utilities\board;..\..\..\Libraries\utilities\imu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -518,6 +518,11 @@
               <FileName>bmp180.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\devices\src\bmp180.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf24l01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\devices\src\nrf24l01.c</FilePath>
             </File>
           </Files>
         </Group>

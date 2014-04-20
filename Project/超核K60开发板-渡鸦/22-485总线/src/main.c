@@ -1,7 +1,16 @@
 #include "gpio.h"
 #include "common.h"
 #include "uart.h"
-
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
+ 
+/*
+     实验名称：485总线
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：类似与串口，通过开发板上的485通信接口通信  
+        485通信采用3.3v的MAX3485或SP3485，自收发电路设计
+*/
 /* 发送一串字符 */
 static void UART_SendString(uint32_t instance, char * str)
 {

@@ -1,8 +1,7 @@
 #include "gpio.h"
 #include "uart.h"
 #include "can.h"
-/* CH Kinetis固件库 V2.50 版本 */
-/* 修改主频 请修改 CMSIS标准文件 startup_MKxxxx.c 中的 CLOCK_SETUP 宏 */
+
 
 /*
      实验名称：CAN通信测试
@@ -12,7 +11,7 @@
          使用2号邮箱向0x10地址的设备发生数据，时间间隔是500毫秒 
 */
 
-/* CAN通信 中断回调函数 */
+/* CAN通信 中断回调函数，在中断中处理接收到的数据 */
 void CAN_ISR(void)
 {
     static uint32_t cnt;
@@ -36,7 +35,7 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("CAN test\r\n");
-    /* 初始化 CAN */
+    /* 初始化 CAN 使用CAN1模块的PTE24/25引脚，通信速度为125k*/
     CAN_QuickInit(CAN1_TX_PE24_RX_PE25, kCAN_Baudrate_125K);
     
     /* 设置接收中断 安装回调函数 */

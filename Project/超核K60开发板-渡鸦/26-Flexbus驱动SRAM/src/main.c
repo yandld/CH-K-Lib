@@ -3,8 +3,16 @@
 #include "uart.h"
 #include "flexbus.h"
 
-#include "sram.h"
+#include "sram.h" 
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
+/*
+     实验名称：Flexbus驱动ARAM
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：测试外挂的SRAM工作情况  
+*/
 int main(void)
 {
     DelayInit();

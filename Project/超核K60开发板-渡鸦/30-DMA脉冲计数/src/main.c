@@ -6,7 +6,18 @@
 #include "ftm.h"
 #include "dma.h"
 #include "pit.h"
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
+/*
+     实验名称：DMA脉冲计数
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：使用DMA模块实现脉冲计数功能，这期间需要使用DMA、PIT模块协同
+       使用DMA的0通到连接到PTA5引脚脉冲计数
+       使用DMA的1通道连接到PTB23引脚脉冲计数
+       在PIT中断中处理脉冲计数结果
+*/
 static const uint32_t DMA_PORT_TriggerSourceTable[] = 
 {
     PORTA_DMAREQ,
@@ -52,7 +63,7 @@ static void DMA_PulseCountInit(uint32_t dmaChl, uint32_t instance, uint32_t pinI
     DMA_StartTransfer(dmaChl);
 }
 
-
+//中断函数处理
 static void PIT_ISR(void)
 {
     /* 由于DMA 是倒计数的 所需需要用最大值减一下 */
@@ -68,9 +79,7 @@ static void PIT_ISR(void)
     /* 开始下一次传输 */
     DMA_StartTransfer(HW_DMA_CH0);
     DMA_StartTransfer(HW_DMA_CH1);
-    printf("[CH%d]:%4dHz [CH%d]:%4dHz\r\n", 0, ch_value[0], 1, ch_value[1]); 
-    
-    
+    printf("[CH%d]:%4dHz [CH%d]:%4dHz\r\n", 0, ch_value[0], 1, ch_value[1]);
 }
 
 int main(void)
@@ -96,7 +105,6 @@ int main(void)
     PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
     PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
 
-   
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

@@ -85,8 +85,8 @@ uint32_t SRAM_SelfTest(void)
     volatile uint8_t * SRAM_START_ADDR = SRAM_START_ADDRESS;
     for(i = 0; i < SRAM_SIZE; i++)
     {
-        SRAM_START_ADDR[i] = i%0xFF;
-        if((SRAM_START_ADDR[i]) != (i%0xFF))
+        SRAM_START_ADDR[i] = i%0xFF; //向SRAM指定地址写数据
+        if((SRAM_START_ADDR[i]) != (i%0xFF))  //读取SRAM中的指定数据
         {
             err_cnt++;
         }

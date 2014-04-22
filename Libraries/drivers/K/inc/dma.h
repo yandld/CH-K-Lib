@@ -74,10 +74,10 @@
 
 
 //!< DMA通道
-#define HW_DMA_CH0    (0x00)
-#define HW_DMA_CH1    (0x01)
-#define HW_DMA_CH2    (0x02)
-#define HW_DMA_CH3    (0x03)
+#define HW_DMA_CH0    (0x00)  //DMA0通道
+#define HW_DMA_CH1    (0x01)  //DMA1通道
+#define HW_DMA_CH2    (0x02)  //DMA2通道
+#define HW_DMA_CH3    (0x03)  //DMA3通道
 
 //!< 触发模式选择
 typedef enum
@@ -89,10 +89,10 @@ typedef enum
 //!< DMA搬运数据端口位宽设置
 typedef enum
 {
-    kDMA_DataWidthBit_8,
-    kDMA_DataWidthBit_16,
-    kDMA_DataWidthBit_32,
-}DMA_DataWidthBit_Type;
+    kDMA_DataWidthBit_8,   //8位数据宽度
+    kDMA_DataWidthBit_16,  //16位数据宽度
+    kDMA_DataWidthBit_32,  //32位数据宽度
+}DMA_DataWidthBit_Type; 
 
 //!< 初始化结构体
 typedef struct 
@@ -118,10 +118,10 @@ typedef struct
 //!< interrupt select
 typedef enum
 {
-    kDMA_IT_Half_Disable,
-    kDMA_IT_Major_Disable,
-    kDMA_IT_Half,
-    kDMA_IT_Major,
+    kDMA_IT_Half_Disable, //传输一半中断关闭
+    kDMA_IT_Major_Disable,//传输完成中断关闭
+    kDMA_IT_Half,         //传输一半中断开启
+    kDMA_IT_Major,        //传输完成中断开启
 }DMA_ITConfig_Type;  
 
 //!< Callback Type

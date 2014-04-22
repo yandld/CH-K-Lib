@@ -12,6 +12,7 @@
      实验平台：渡鸦开发板
      板载芯片：MK60DN512ZVQ10
  实验效果：测试外挂的SRAM工作情况  
+       具体的SRAM应用请参见sram.c文件
 */
 int main(void)
 {
@@ -21,7 +22,7 @@ int main(void)
     
     printf("Flexbus SRAM test\r\n");
     
-    /* 初始化 SRAM */
+    /* 初始化外部SRAM */
     SRAM_Init();
     /* SRAM 自测 */
     if(!SRAM_SelfTest())

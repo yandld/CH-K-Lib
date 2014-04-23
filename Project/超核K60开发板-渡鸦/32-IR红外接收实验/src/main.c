@@ -2,8 +2,16 @@
 #include "common.h"
 #include "uart.h"
 #include "dma.h"
-
-/* 红外引脚定义 */
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
+ 
+/*
+     实验名称：IR红外接收实验
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：使用中断方式进行红外解码，通过串口将数据发送出去  
+*/
+/* 红外引脚定义PTE28 */
 #define IR_PORT  HW_GPIOE
 #define IR_PIN   (28)
 #define IR_DATA  PEin(IR_PIN)

@@ -15,8 +15,6 @@
 #include <stdint.h>
 #include "spi_abstraction.h"
 
-
-
 //!< API functions
 int ads7843_init(spi_bus_t bus, int cs);
 uint32_t ads7843_readX(int * value);

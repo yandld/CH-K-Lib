@@ -5,9 +5,17 @@
 #include "sram.h"
 #include "ili9320.h"
 #include "dma.h"
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
+/*
+     实验名称：OV7620摄像头实验
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：在液晶屏上显示图像，需要0V7620摄像头
+*/
 #define OV7620_W    (320) // 每行有多少像素
-#define OV7620_H    (240) //高度 有多少行
+#define OV7620_H    (240) // 高度有多少行
 
 //uint8_t CCDBufferPool[OV7620_W*OV7620_H];   //使用内部RAM
 volatile uint8_t * CCDBufferPool = SRAM_START_ADDRESS; //使用外部SRAM
@@ -16,18 +24,18 @@ volatile uint8_t * CCDBufferPool = SRAM_START_ADDRESS; //使用外部SRAM
 uint8_t * CCDBuffer[OV7620_H];
 /* 引脚定义 */
 #define BOARD_OV7620_PCLK_PORT      HW_GPIOA
-#define BOARD_OV7620_PCLK_PIN       (7)
+#define BOARD_OV7620_PCLK_PIN       (7)   //摄像头时钟引脚
 #define BOARD_OV7620_VSYNC_PORT     HW_GPIOA
-#define BOARD_OV7620_VSYNC_PIN      (16)
+#define BOARD_OV7620_VSYNC_PIN      (16) //摄像头像素中断
 #define BOARD_OV7620_HREF_PORT      HW_GPIOA
-#define BOARD_OV7620_HREF_PIN       (17)
-#define BOARD_OV7620_DATA_OFFSET    (8) /* PA8-PA15 只能为 0 8 16 24 */
+#define BOARD_OV7620_HREF_PIN       (17) //摄像头行中断
+#define BOARD_OV7620_DATA_OFFSET    (8) /* 摄像头数据引脚PTA8-PTA15 只能为 0 8 16 24 */
 
 /* 状态机定义 */
 typedef enum
 {
-    TRANSFER_IN_PROCESS,
-    NEXT_FRAME,
+    TRANSFER_IN_PROCESS, //数据在处理
+    NEXT_FRAME,          //下一帧数据
 }OV7620_Status;
 
 static void UserApp(void);
@@ -87,7 +95,7 @@ static void UserApp(void)
     } 
 }
 
-
+//ov7620摄像头初始化配置
 static void OV7620_Init(void)
 {
     DMA_InitTypeDef DMA_InitStruct1;

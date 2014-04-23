@@ -5,6 +5,7 @@
   * @version V2.5
   * @date    2013.12.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为触控芯片2046的驱动文件
   ******************************************************************************
   */
 
@@ -16,7 +17,7 @@
 #define ADS7843_CMD_READ_Y   (0X90)
 
 static struct spi_device device;
-
+//读X坐标的数据
 uint32_t ads7843_readX(int * value)
 {
     uint8_t buf[2];
@@ -26,7 +27,7 @@ uint32_t ads7843_readX(int * value)
     *value = ((buf[0]<<8) + buf[1])>>4; //12bit mode
     return SPI_EOK;
 }
-
+//读Y坐标的数据
 uint32_t ads7843_readY(int * value)
 {
     uint8_t buf[2];
@@ -37,7 +38,7 @@ uint32_t ads7843_readY(int * value)
     return SPI_EOK;
 }
 
-
+//触控芯片初始化
 int ads7843_init(spi_bus_t bus, int cs)
 {
     uint32_t ret;

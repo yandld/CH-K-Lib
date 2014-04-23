@@ -3,7 +3,19 @@
 #include "nrf24l01.h"
 #include "ili9320.h"
 #include "spi.h"
-
+/* CH Kinetis固件库 V2.50 版本 */
+/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
+ 
+/*
+     实验名称：NRF2401实验
+     实验平台：渡鸦开发板
+     板载芯片：MK60DN512ZVQ10
+ 实验效果：通过串口实现无线数据的收发功能，
+      无线通信支持的是NRF24L01模块
+    注意：底层驱动的编写针对2.4G的usb无线模块编写，需要配合USB-2.4G模块使用 
+      TX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //发送地址
+      RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //接收地址    
+*/
 extern int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
 static uint8_t NRF2401RXBuffer[32] = "HelloWorld\r\n";//无线接收数据
 static uint8_t* gpRevChar;
@@ -27,17 +39,18 @@ int main(void)
     UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
     
     printf("NRF24L01 test\r\n");
-    /* 初始化 SPI接口及片选 */
+    /* 初始化 NRF2401模块 的SPI接口及片选 */
     PORT_PinMuxConfig(HW_GPIOE, 1, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOE, 2, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOE, 3, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOE, 4, kPinAlt2);
     /* 初始化2401所需的CE引脚 */
     GPIO_QuickInit(HW_GPIOE, 0 , kGPIO_Mode_OPP);
-    /* 初始化2401 */
+    /* 初始化2401模块*/
     static struct spi_bus bus;
     kinetis_spi_bus_init(&bus, HW_SPI1);
     nrf24l01_init(&bus, 0);
+    //检测是否存在无线设备，并配置接收和发送地址
     if(nrf24l01_probe())
     {
         printf("no nrf24l01 device found!\r\n");

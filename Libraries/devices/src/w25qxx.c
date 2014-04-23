@@ -11,10 +11,11 @@
 #include "spi_abstraction.h"
 #include "w25qxx.h"
 
-#define W25X_PAGE_SIZE          (256)
+#define W25X_PAGE_SIZE          (256)      //一页尺寸
 #define W25X_SECTOR_SIZE        (4096)
 #define W25X_PBLOCK_SIZE        (64*1024)
 
+//芯片WQ25指令
 #define W25X_WriteEnable		0x06 
 #define W25X_WriteDisable		0x04 
 #define W25X_ReadStatusReg		0x05 
@@ -52,6 +53,7 @@ struct w25qxx_attr_t
     uint16_t id;
 };
 
+//W25芯片信息
 static const struct w25qxx_attr_t w25qxx_attr_table[] = 
 {
     {"W25Q10",    128*1024, 0xEF10},
@@ -67,7 +69,7 @@ static const struct w25qxx_attr_t w25qxx_attr_table[] =
 static struct spi_device device;
 struct w25qxx_attr_t w25qxx_type;
 
-
+//芯片上电
 static int w25qxx_power_up(void)
 {
     volatile uint32_t i;
@@ -79,7 +81,7 @@ static int w25qxx_power_up(void)
     return SPI_EOK;
 }
 
-
+//芯片读
 static uint8_t w25qxx_read_sr2(void)
 {
     uint8_t buf[1];
@@ -99,7 +101,7 @@ static uint8_t w25qxx_read_sr(void)
     return buf[0];
 }
 
-
+//芯片写使能
 static int w25qxx_write_enable(void)
 {
     uint8_t buf[1];
@@ -107,7 +109,7 @@ static int w25qxx_write_enable(void)
     spi_write(&device, buf, sizeof(buf), true);
     return SPI_EOK;
 }
-
+//芯片写
 static int w25qxx_write_sr(uint8_t value)
 {
     uint8_t buf[2];
@@ -117,7 +119,7 @@ static int w25qxx_write_sr(uint8_t value)
     spi_write(&device, buf, 2, true); 
     return SPI_EOK;
 }
-
+//芯片探测
 int w25qxx_probe(void)
 {
     uint32_t i;
@@ -154,22 +156,23 @@ int w25qxx_probe(void)
     return SPI_ERROR;
 }
 
+//获取芯片尺寸
 uint32_t w25qxx_get_size(void)
 {
     return w25qxx_type.size;
 }
-
+//获取芯片唯一ID
 uint32_t w25qxx_get_id(void)
 {
     return w25qxx_type.id;
 }
-
+//获取芯片型号
 const char * w25qxx_get_name(void)
 {
     return w25qxx_type.name;
 }
 
-
+//读取数据
 int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len)
 {
     uint8_t buf_send[4];
@@ -185,9 +188,7 @@ int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len)
     spi_read(&device, buf, len, true);
     return SPI_EOK;
 }
-
-
-
+//写一页数据
 static int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
 {
     uint8_t buf_send[4];
@@ -205,7 +206,7 @@ static int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
     while((w25qxx_read_sr() & 0x01) == 0x01);
     return SPI_EOK;
 }
-
+//写数据
 static int w25qxx_write_no_check(uint32_t addr, uint8_t *buf, uint32_t len)  
 { 			 		 
 	uint16_t pageremain;	   
@@ -230,7 +231,7 @@ static int w25qxx_write_no_check(uint32_t addr, uint8_t *buf, uint32_t len)
 	}
     return SPI_EOK;
 } 
-
+//擦除扇区
 static int w25qxx_erase_sector(uint32_t addr)
 {
     uint8_t buf_send[4];
@@ -246,7 +247,7 @@ static int w25qxx_erase_sector(uint32_t addr)
     while((w25qxx_read_sr() & 0x01) == 0x01);
     return SPI_EOK;
 }
-
+//擦除整个芯片
 int w25qxx_erase_chip(void)
 {
     uint8_t buf_send[1]; 
@@ -257,7 +258,7 @@ int w25qxx_erase_chip(void)
     while((w25qxx_read_sr() & 0x01) == 0x01);
     return SPI_EOK;
 }
-
+//向芯片写数据
 int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len)  
 { 
 	uint32_t secpos;
@@ -306,7 +307,7 @@ int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
 	}
     return SPI_EOK;
 }
-
+//芯片初始化
 int w25qxx_init(spi_bus_t bus, uint32_t cs)
 {
     uint32_t ret;

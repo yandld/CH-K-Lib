@@ -4,7 +4,8 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
-  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为NRF24L01无线模块的驱动，支持台产和挪威产芯片
   ******************************************************************************
   */
   
@@ -83,7 +84,7 @@ static struct spi_device device;
 const uint8_t TX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //发送地址
 const uint8_t RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //接收地址
 
-
+//读寄存器
 static uint8_t read_reg(uint8_t addr)
 {
     uint8_t temp = READ_REG + addr;
@@ -91,28 +92,28 @@ static uint8_t read_reg(uint8_t addr)
     spi_read(&device, &temp, 1, true);
     return temp;
 }
-
+//写寄存器
 static void write_reg(uint8_t addr, uint8_t val)
 {
     uint8_t temp = WRITE_REG + addr;
     spi_write(&device, &temp, 1, false);
     spi_write(&device, &val, 1, true);
 }
-
+//写数据
 static void write_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
     uint8_t temp = WRITE_REG + addr;
     spi_write(&device, &temp, 1, false);
     spi_write(&device, buf, len, true);
 }
-
+//读数据
 static void read_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
     uint8_t temp = READ_REG + addr;
     spi_write(&device, &temp, 1, false);
     spi_read(&device, buf, len, true);
 }
-
+//NRF设备检测，并配置接收和发送地址
 int nrf24l01_probe(void)
 {
     uint8_t i;
@@ -146,7 +147,7 @@ int nrf24l01_probe(void)
     }
     return 1;
 }
-
+//NRF模块初始化
 int nrf24l01_init(spi_bus_t bus, uint32_t cs)
 {
     uint32_t ret;
@@ -242,7 +243,7 @@ int nrf24l01_write_packet(uint8_t *buf, uint32_t len)
     }
 }
 
-/* read a packet */
+//NRF读一帧数据
 int nrf24l01_read_packet(uint8_t *buf, uint32_t *len)
 {
 	uint8_t sta,rev_len;

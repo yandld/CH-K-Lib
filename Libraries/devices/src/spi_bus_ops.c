@@ -5,11 +5,13 @@
   * @version V2.5
   * @date    2013.12.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为芯片SPI总线通信集成驱动文件  
   ******************************************************************************
   */
 #include "spi_abstraction.h"
 #include "spi.h"
 
+//spi 通信配置
 static int kinetis_spi_configure(spi_device_t device, struct spi_config *configuration)
 {
     SPI_FrameFormat_Type mode;
@@ -33,7 +35,7 @@ static int kinetis_spi_configure(spi_device_t device, struct spi_config *configu
     SPI_FrameConfig(device->bus->instance, HW_CTAR0, mode, configuration->data_width, kSPI_MSBFirst, configuration->baudrate);
     return 0;
 }
-
+//spi总线读数据
 static int kinetis_spi_read(spi_device_t device, uint8_t *buf, uint32_t len, bool cs_return_inactive)
 {
     uint16_t dummy = 0xFFFF;
@@ -52,7 +54,7 @@ static int kinetis_spi_read(spi_device_t device, uint8_t *buf, uint32_t len, boo
     }
     return SPI_EOK;
 }
-
+//spi写数据
 static int kinetis_spi_write(spi_device_t device, uint8_t *buf, uint32_t len, bool cs_return_inactive)
 {
     len--;
@@ -78,6 +80,7 @@ const static struct spi_ops kinetis_spi_ops =
     kinetis_spi_write,
 };
 
+//spi通信总线初始化
 int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance)
 {
     /* init hardware */

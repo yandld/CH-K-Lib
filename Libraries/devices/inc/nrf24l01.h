@@ -1,10 +1,11 @@
 /**
   ******************************************************************************
-  * @file    nrf24l01.h
+  * @file    nrf24l01.c
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
-  * @brief   CH KinetisLib: http://github.com/yandld   http://upcmcu.taobao.com 
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    此文件为NRF24L01无线模块的驱动，支持台产和挪威产芯片
   ******************************************************************************
   */
 #ifndef __NRF24L01_H

@@ -14,8 +14,8 @@
 #include <stdint.h>
 
 
-#define HW_DAC0     (0x00)
-#define HW_DAC1     (0x01)
+#define HW_DAC0     (0x00)  //DAC0模块
+#define HW_DAC1     (0x01)  //DAC1模块
 
 
 //!< DAC 回调函数定义
@@ -24,31 +24,31 @@ typedef void (*DAC_CallBackType)(void);
 
 typedef enum
 {
-    kDAC_TriggerSoftware,
-    kDAC_TriggerHardware,
+    kDAC_TriggerSoftware,  //软件触发
+    kDAC_TriggerHardware,  //硬件触发
 }DAC_TriggerSelect_Type;
 
 /*DAC 发送缓冲模式 选择 */
 typedef enum
 {
-    kDAC_Buffer_Disable,
-    kDAC_Buffer_Normal,
-    kDAC_Buffer_Swing,
-    kDAC_Buffer_OneTimeScan,
+    kDAC_Buffer_Disable,    //关闭DAC缓存
+    kDAC_Buffer_Normal,     //开启DAC缓存
+    kDAC_Buffer_Swing,      //dac摇摆模式
+    kDAC_Buffer_OneTimeScan,//DAC一次浏览
 }DAC_BufferMode_Type;
 
 typedef enum
 {
-    kDAC_Reference_1,       /* connected to VREF_OUT */
-    kDAC_Reference_2,       /* connected to VDDA */
+    kDAC_Reference_1,       /* 参考电压源 VREF_OUT */
+    kDAC_Reference_2,       /* 参考电压源 VDDA */
 }DAC_ReferenceSelect_Type;
 
 typedef struct
 {
-    uint32_t                    instance;
-    DAC_TriggerSelect_Type      triggerMode;
-    DAC_BufferMode_Type         bufferMode;
-    DAC_ReferenceSelect_Type    referenceMode; 
+    uint32_t                    instance;      //DAC模块号0~1
+    DAC_TriggerSelect_Type      triggerMode;   //DAC触发模式
+    DAC_BufferMode_Type         bufferMode;    //缓存类型
+    DAC_ReferenceSelect_Type    referenceMode; //参考源选择
 }DAC_InitTypeDef;
 
 

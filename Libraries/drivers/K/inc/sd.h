@@ -13,8 +13,8 @@
 #define __CH_LIB_SD_H__
 
 
- #include <stdint.h>
- #include <common.h>
+#include <stdint.h>
+#include <common.h>
 
 
 //SD卡类型定义
@@ -31,16 +31,11 @@
 //SD初始化结构体
 typedef struct 
 {
-	uint32_t SD_BaudRate;   //波特率
-	uint32_t SD_CardType;   //卡类型
-	uint32_t SD_Size;       //卡大小单位MB
-	uint32_t OCR;            //Operation Condition Register 保存电压信息及 初始化完成位 操作条件寄存器 对应真实卡OCR 39:8 位
-	uint32_t CID[4];         //Card IDentification (CID) register  CID[0-4] 对应 真实卡CID的 127:8
-	uint32_t CSD[4];         //Card-Specific Data register CSD 记录卡容量等重要信息 CSD[0-4] 对应 真实卡CSD 127:8
-	uint16_t RCA;            //卡相对地址寄存器 是HOST和卡通讯的基础 
-	uint32_t CSR[2];         //卡配置寄存器
+    uint32_t baudrate;
 }SD_InitTypeDef;
 //注意各个数据的值和SD卡手册的标准位不同，请注意换算
+
+
 
 //SD卡命令结构
 typedef struct 
@@ -130,7 +125,6 @@ typedef struct
 #define ESDHC_PROCTL_DTW_8BIT                (0x10)
 
 
-
 typedef enum
 {
 	SD_Flag_CLSL,                 //!< Command line single level
@@ -167,7 +161,7 @@ typedef enum
 
 //!< API funtctions
 uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct);
-uint32_t SD_GetCapacity(SD_InitTypeDef* SD_InitStruct);
+uint32_t SD_GetSizeInMB(void);
 uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buffer);
 uint8_t SD_WriteSingleBlock(uint32_t sector, const uint8_t *buffer);
 uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *pbuffer, uint16_t count);
@@ -177,7 +171,7 @@ void SD_ITConfig(SDHC_Type* SDx, SD_IT_TypeDef SD_IT, FunctionalState NewState);
 uint32_t SD_GetITStates(SDHC_Type* SDx, SD_IT_TypeDef SD_IT);
 void SD_ClearITPendingBit(SDHC_Type* SDx, SD_IT_TypeDef SD_IT);
 void SD_ClearAllITPendingFlag(void);
-
+uint32_t SD_QuickInit(uint32_t baudrate);
 #endif
 
 

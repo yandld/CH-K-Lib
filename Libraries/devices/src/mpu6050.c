@@ -13,7 +13,7 @@
 
 
 
-#define MPU6050_DEBUG		1
+#define MPU6050_DEBUG		0
 #if ( MPU6050_DEBUG == 1 )
 #define MPU6050_TRACE	printf
 #else

@@ -72,6 +72,12 @@
 #else
   #define assert_param(expr) ((void)0)
 #endif
+  
+#if defined(LIB_DEBUG)
+#define LIB_TRACE	printf
+#else
+#define LIB_TRACE(...)
+#endif
 
 typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
@@ -83,7 +89,7 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 #define MIN(a, b)       ((a) < (b) ? (a) : (b))
 #define MAX(a, b)       ((a) > (b) ? (a) : (b))
-#define  ABS(a)         (((a) < 0) ? (-(a)) : (a))
+#define ABS(a)         (((a) < 0) ? (-(a)) : (a))
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 
 #define BSWAP_16(x)     (uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))

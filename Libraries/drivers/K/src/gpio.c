@@ -89,7 +89,7 @@ void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pin
  * @brief  设置一个引脚的上下拉电阻功能 用户一般不必调用
  * @code
  *      // 将PORTA端口的3引脚设置为上拉电阻(在输入的情况下)
- *      PORT_PinMuxConfig(HW_GPIOA, 3, kPullUp);
+ *      PORT_PinPullConfig(HW_GPIOA, 3, kPullUp);
  * @endcode
  * @param  instance: GPIO模块号
  *         @arg HW_GPIOA :芯片的PORTA端口

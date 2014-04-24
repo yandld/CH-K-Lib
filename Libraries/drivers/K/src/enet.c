@@ -167,9 +167,7 @@ static uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t dat
     {
         if (ENET->EIR & ENET_EIR_MII_MASK)
         {
-            #if LIB_DEBUG
-            //printf("MII - timeout:%d\r\n", timeout);
-            #endif
+            LIB_TRACE("MII - timeout:%d\r\n", timeout);
             break;  
         }
     }
@@ -256,28 +254,24 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
         ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYIDR1, &usData );
     } while( usData == 0xffff );
 
-#ifdef LIB_DEBUG
-    printf("PHY_PHYIDR1=0x%X\r\n",usData);
+    LIB_TRACE("PHY_PHYIDR1=0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYIDR2, &usData );
-    printf("PHY_PHYIDR2=0x%X\r\n",usData); 
+    LIB_TRACE("PHY_PHYIDR2=0x%X\r\n",usData); 
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_ANLPAR, &usData );
-    printf("PHY_ANLPAR=0x%X\r\n",usData);
+    LIB_TRACE("PHY_ANLPAR=0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_ANLPARNP, &usData );
-    printf("PHY_ANLPARNP=0x%X\r\n",usData);
+    LIB_TRACE("PHY_ANLPARNP=0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYSTS, &usData );
-    printf("PHY_PHYSTS=0x%X\r\n",usData);
+    LIB_TRACE("PHY_PHYSTS=0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_MICR, &usData );
-    printf("PHY_MICR=0x%X\r\n",usData);
+    LIB_TRACE("PHY_MICR=0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_MISR, &usData );
-    printf("PHY_MISR=0x%X\r\n",usData);
-#endif 
+    LIB_TRACE("PHY_MISR=0x%X\r\n",usData);
     //开始自动协商
     ENET_MII_Write(CFG_PHY_ADDRESS, PHY_BMCR, ( PHY_BMCR_AN_RESTART | PHY_BMCR_AN_ENABLE ) );
 
-#ifdef LIB_DEBUG
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_BMCR, &usData );
-    printf("PHY_BMCR=0x%X\r\n",usData);
-#endif 
+    LIB_TRACE("PHY_BMCR=0x%X\r\n",usData);
   //等待自动协商完成
     do
     {
@@ -285,9 +279,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 		timeout++;
 		if(timeout > 30)
         {
-            #if LIB_DEBUG
-            printf("enet phy reset failed\r\n");
-            #endif
+            LIB_TRACE("enet phy reset failed\r\n");
             return ;
         }
         ENET_MII_Read(CFG_PHY_ADDRESS, PHY_BMSR, &usData );
@@ -311,9 +303,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     {
         ENET->RCR &= (unsigned long)~ENET_RCR_DRT_MASK;
         ENET->TCR |= ENET_TCR_FDEN_MASK;
-		#ifdef LIB_DEBUG
-        printf("full-duplex\r\n");
-		#endif 
+        LIB_TRACE("full-duplex\r\n");
     }
     else
     {

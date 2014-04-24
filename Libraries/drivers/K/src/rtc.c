@@ -207,9 +207,7 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
     if(((!RTC->TSR) || RTC_InitStruct->isUpdate) && (RTC_InitStruct->initialDateTime != NULL))
     {
         RTC_DateTimeToSecond(RTC_InitStruct->initialDateTime, &i);
-        #ifdef LIB_DEBUG
-        printf("RTC_Init() - Reconfig:%d\r\n", i);
-        #endif
+        LIB_TRACE("RTC_Init() - Reconfig:%d\r\n", i);
         RTC->SR &= ~RTC_SR_TCE_MASK;
         RTC->TSR = RTC_TSR_TSR(i);
         RTC->SR |= RTC_SR_TCE_MASK;

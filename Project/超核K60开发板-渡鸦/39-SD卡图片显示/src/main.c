@@ -113,11 +113,11 @@ int main(void)
     FATFS *fs = &fs_sd;
     /* 挂载文件系统 */
     f_mount(fs, "0:", 0);
-    scan_files("0:");
+    
     while(1)
     {
+        scan_files("0:");
         GPIO_ToggleBit(HW_GPIOE, 6);
-        DelayMs(500);
     }
 }
 

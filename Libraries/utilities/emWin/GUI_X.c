@@ -55,12 +55,9 @@ void  GUI_X_Delay (int ms)
 {
     rt_uint32_t delay;
     rt_uint32_t factor;
-    factor = 1000/RT_TICK_PER_SECOND;
-    delay = ms / factor;
-    if(ms % factor)
-    {
-        delay++;
-    }
+    factor = 1000/RT_TICK_PER_SECOND; /* how many ms in a tick */
+    delay = ms/factor;
+    if(!delay) delay = 1;
     rt_thread_delay(delay);
 }
 

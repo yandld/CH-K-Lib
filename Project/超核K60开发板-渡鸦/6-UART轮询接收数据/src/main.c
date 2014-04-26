@@ -32,7 +32,7 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     
     /* ¥Ú”°–≈œ¢ */
-    printf(" type any character whitch will echo...\r\n");
+    printf(" type any character whitch will echo your input...\r\n");
     
     while(1)
     {

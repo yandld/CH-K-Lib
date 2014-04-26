@@ -3,8 +3,6 @@
 #include "uart.h"
 #include "adc.h"
 #include "rtc.h"
-/* CH Kinetis固件库 V2.50 版本 */
-/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
 /*
      实验名称: RTC实时时钟
@@ -28,8 +26,12 @@ int main(void)
     td.month = 11;  //设置月 
     printf("RTC test\r\n");
     
-    /* 快速初始化 RTC模块 如果原来没有时间设定 则写入默认的时间设定 有则忽略这个参数 */
-    RTC_QuickInit(&td);
+    RTC_QuickInit();
+    /* 为初始化时间 或时间无效 */
+    if(RTC_GetTSR() == 0)
+    {
+        RTC_SetDateTime(&td);
+    }
     while(1)
     {
         /* 获得时间 */

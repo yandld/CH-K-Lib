@@ -29,15 +29,11 @@ static const uint16_t MONTH_DAYS[] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 2
 
 /**
  * @brief  RTC模块快速初始化配置
- * @note  如果RTC时钟有效 则忽略timedate参数 否则写入timedate
- * @param  RTC_DateTime_Type :RTC时钟数据结构体，详见rtc.h
  * @retval None
  */
-void RTC_QuickInit(RTC_DateTime_Type* timedate)
+void RTC_QuickInit(void)
 {
     RTC_InitTypeDef RTC_InitStruct1;
-    RTC_InitStruct1.initialDateTime = timedate;
-    RTC_InitStruct1.isUpdate = false; /* will not force to update */
     RTC_InitStruct1.oscLoad = kRTC_OScLoad_8PF;
     RTC_Init(&RTC_InitStruct1);
 }
@@ -203,19 +199,38 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
         default:
             break;
     }
-    /* see if we have to reconfig TSR */
-    if(((!RTC->TSR) || RTC_InitStruct->isUpdate) && (RTC_InitStruct->initialDateTime != NULL))
-    {
-        RTC_DateTimeToSecond(RTC_InitStruct->initialDateTime, &i);
-        LIB_TRACE("RTC_Init() - Reconfig:%d\r\n", i);
-        RTC->SR &= ~RTC_SR_TCE_MASK;
-        RTC->TSR = RTC_TSR_TSR(i);
-        RTC->SR |= RTC_SR_TCE_MASK;
-    }
     /* enable OSC */
     RTC->CR |= RTC_CR_OSCE_MASK;
 	for(i=0;i<0x600000;i++) {};
     /* enable RTC */
+    RTC->SR |= RTC_SR_TCE_MASK;
+}
+
+/**
+ * @brief  获得TSR值
+ * @retval TSR值 为0则说明无效
+ */
+uint32_t RTC_GetTSR(void)
+{
+    return RTC->TSR;
+}
+
+/**
+ * @brief  设置RTC的时间
+ * @param  datetime  :返回出来的年月日等信息结构体
+ * @retval None
+ */
+void RTC_SetDateTime(RTC_DateTime_Type * datetime)
+{
+    uint32_t i;
+    if(!datetime)
+    {
+        return;
+    }
+    RTC_DateTimeToSecond(datetime, &i);
+    LIB_TRACE("RTC_SetDateTime() - Reconfig:%d\r\n", i);
+    RTC->SR &= ~RTC_SR_TCE_MASK;
+    RTC->TSR = RTC_TSR_TSR(i);
     RTC->SR |= RTC_SR_TCE_MASK;
 }
 

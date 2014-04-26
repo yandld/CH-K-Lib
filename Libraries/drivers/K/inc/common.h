@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2013.12.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-	* @note    此文件为内部文件，用户无需调用和修改  
+  * @note    此文件为内部文件，用户无需调用和修改  
   ******************************************************************************
   */
 #ifndef __CH_LIB_COMMON_H__

@@ -70,24 +70,27 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
         default:
             break;
     }
-    //
+    /* 清空 ADDR */
     DMA0->TCD[DMA_InitStruct->chl].ATTR  = 0;
+    
     /* minor loop cnt */
-    DMA0->TCD[DMA_InitStruct->chl].NBYTES_MLNO = DMA_NBYTES_MLNO_NBYTES(DMA_InitStruct->minorByteTransferCount);
+    DMA0->TCD[DMA_InitStruct->chl].NBYTES_MLNO = DMA_NBYTES_MLNO_NBYTES(DMA_InitStruct->minorLoopByteCnt);
     /* major loop cnt */
-	DMA0->TCD[DMA_InitStruct->chl].CITER_ELINKNO = DMA_CITER_ELINKNO_CITER(DMA_InitStruct->majorTransferCount);
-	DMA0->TCD[DMA_InitStruct->chl].BITER_ELINKNO = DMA_BITER_ELINKNO_BITER(DMA_InitStruct->majorTransferCount);
+	DMA0->TCD[DMA_InitStruct->chl].CITER_ELINKNO = DMA_CITER_ELINKNO_CITER(DMA_InitStruct->majorLoopCnt);
+	DMA0->TCD[DMA_InitStruct->chl].BITER_ELINKNO = DMA_BITER_ELINKNO_BITER(DMA_InitStruct->majorLoopCnt);
     /* source config */
-    DMA0->TCD[DMA_InitStruct->chl].SADDR = DMA_InitStruct->sourceAddress;
-    DMA0->TCD[DMA_InitStruct->chl].SOFF = DMA_InitStruct->sourceAddressMinorAdj;
-    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_SSIZE(DMA_InitStruct->sourceDataWidth);
-    DMA0->TCD[DMA_InitStruct->chl].SLAST = DMA_SLAST_SLAST(DMA_InitStruct->sourceAddressMajorAdj);
+    DMA0->TCD[DMA_InitStruct->chl].SADDR = DMA_InitStruct->sAddr;
+    DMA0->TCD[DMA_InitStruct->chl].SOFF = DMA_InitStruct->sAddrOffset;
+    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_SSIZE(DMA_InitStruct->sDataWidth);
+    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_SMOD(DMA_InitStruct->sMod);
+    DMA0->TCD[DMA_InitStruct->chl].SLAST = DMA_SLAST_SLAST(DMA_InitStruct->sLastAddrAdj);
     /* destation config */
-    DMA0->TCD[DMA_InitStruct->chl].DADDR = DMA_InitStruct->destAddress;
-    DMA0->TCD[DMA_InitStruct->chl].DOFF = DMA_InitStruct->destAddressMinorAdj;
-    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_DSIZE(DMA_InitStruct->destDataWidth);
-    DMA0->TCD[DMA_InitStruct->chl].DLAST_SGA = DMA_DLAST_SGA_DLASTSGA(DMA_InitStruct->destAddressMajorAdj);
-    /* auto close enable */
+    DMA0->TCD[DMA_InitStruct->chl].DADDR = DMA_InitStruct->dAddr;
+    DMA0->TCD[DMA_InitStruct->chl].DOFF = DMA_InitStruct->dAddrOffset;
+    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_DSIZE(DMA_InitStruct->dDataWidth);
+    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_DMOD(DMA_InitStruct->dMod);
+    DMA0->TCD[DMA_InitStruct->chl].DLAST_SGA = DMA_DLAST_SGA_DLASTSGA(DMA_InitStruct->dLastAddrAdj);
+    /* auto close enable(disable req on major loop complete)*/
     DMA0->TCD[DMA_InitStruct->chl].CSR |= DMA_CSR_DREQ_MASK; 
 	/* enable DMAMUX */
 	DMAMUX->CHCFG[DMA_InitStruct->chl] |= DMAMUX_CHCFG_ENBL_MASK;
@@ -240,9 +243,14 @@ uint8_t DMA_IsTransferComplete(uint8_t chl)
  * @param address: 32位的目标数据地址
  * @retval None
  */
-void DMA_SetDestAddress(uint8_t chl, uint32_t address)
+void DMA_SetDestAddress(uint8_t ch, uint32_t address)
 {
-    DMA0->TCD[chl].DADDR = address;
+    DMA0->TCD[ch].DADDR = address;
+}
+
+uint32_t DMA_GetDestAddress(uint8_t ch)
+{
+    return DMA0->TCD[ch].DADDR;
 }
 
 /**
@@ -255,9 +263,14 @@ void DMA_SetDestAddress(uint8_t chl, uint32_t address)
  * @param address: 32位的源数据地址
  * @retval None
  */
-void DMA_SetSourceAddress(uint8_t chl, uint32_t address)
+void DMA_SetSourceAddress(uint8_t ch, uint32_t address)
 {
-    DMA0->TCD[chl].SADDR = address;
+    DMA0->TCD[ch].SADDR = address;
+}
+
+uint32_t DMA_GetSourceAddress(uint8_t ch)
+{
+    return DMA0->TCD[ch].SADDR;
 }
 
 /**

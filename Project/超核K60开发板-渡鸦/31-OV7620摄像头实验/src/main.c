@@ -98,7 +98,7 @@ static void UserApp(void)
 //ov7620摄像头初始化配置
 static void OV7620_Init(void)
 {
-    DMA_InitTypeDef DMA_InitStruct1;
+    DMA_InitTypeDef DMA_InitStruct1 = {0};
     uint32_t i;
     //把开辟的内存池付给指针
     for(i=0;i< OV7620_H;i++)
@@ -126,18 +126,18 @@ static void OV7620_Init(void)
     DMA_InitStruct1.chl = HW_DMA_CH2;
     DMA_InitStruct1.chlTriggerSource = PORTA_DMAREQ;
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
-    DMA_InitStruct1.minorByteTransferCount = OV7620_W;
-    DMA_InitStruct1.majorTransferCount = OV7620_H;
+    DMA_InitStruct1.minorLoopByteCnt = OV7620_W;
+    DMA_InitStruct1.majorLoopCnt = OV7620_H;
     
-    DMA_InitStruct1.sourceAddress = (uint32_t)&PTA->PDIR + BOARD_OV7620_DATA_OFFSET/8;
-    DMA_InitStruct1.sourceAddressMajorAdj = 0;
-    DMA_InitStruct1.sourceAddressMinorAdj = 0;
-    DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.sAddr = (uint32_t)&PTA->PDIR + BOARD_OV7620_DATA_OFFSET/8;
+    DMA_InitStruct1.sLastAddrAdj = 0;
+    DMA_InitStruct1.sAddrOffset = 0;
+    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
     
-    DMA_InitStruct1.destAddress = (uint32_t)CCDBuffer[0];
-    DMA_InitStruct1.destAddressMajorAdj = 0;
-    DMA_InitStruct1.destAddressMinorAdj = 1;
-    DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.dAddr = (uint32_t)CCDBuffer[0];
+    DMA_InitStruct1.dLastAddrAdj = 0;
+    DMA_InitStruct1.dAddrOffset = 1;
+    DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
 
     DMA_Init(&DMA_InitStruct1);
     /* 开始传输 */

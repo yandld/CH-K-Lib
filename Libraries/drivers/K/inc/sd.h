@@ -5,7 +5,8 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片SD模块的底层功能函数，具体应用请查看实例程序
+  * @note    此文件为芯片SD模块的底层功能函数
+              只支持SD及SDHC卡 不支持MMC！
   ******************************************************************************
   */
   
@@ -31,11 +32,8 @@
 //SD初始化结构体
 typedef struct 
 {
-    uint32_t baudrate;
+    uint32_t baudrate; //通信速度
 }SD_InitTypeDef;
-//注意各个数据的值和SD卡手册的标准位不同，请注意换算
-
-
 
 //SD卡命令结构
 typedef struct 
@@ -120,25 +118,25 @@ typedef struct
 #define ESDHC_CMD61  (SDHC_XFERTYP_CMDINX(61) | SDHC_XFERTYP_CICEN_MASK | SDHC_XFERTYP_CCCEN_MASK | SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_48BUSY))
 
 //Kinetis SDHC 控制器位宽定义
-#define ESDHC_PROCTL_DTW_1BIT                (0x00)
-#define ESDHC_PROCTL_DTW_4BIT                (0x01)
-#define ESDHC_PROCTL_DTW_8BIT                (0x10)
+#define ESDHC_PROCTL_DTW_1BIT                (0x00) //1位宽度
+#define ESDHC_PROCTL_DTW_4BIT                (0x01) //4位宽度
+#define ESDHC_PROCTL_DTW_8BIT                (0x10) //8位宽度
 
 
 typedef enum
 {
-	SD_Flag_CLSL,                 //!< Command line single level
-	SD_Flag_CINS,                 //!< Card inserted
-	SD_Flag_BREN,                 //!< Buffer Read Enable
-	SD_Flag_BWEN,                 //!< Buffer Write Enable
-	SD_Flag_RTA,                  //!< Read transfer active
-	SD_Flag_WTA,                  //!< Write transfer active
-	SD_Flag_SDOFF,                //!< SD clock gated off internaly
-	SD_Flag_PEROFF,               //!< SDHC gate clock off
-	SD_Flag_DLA,                  //1< Data line active
-	SD_Flag_CDIHB,                //!< Command inhibit(DAT)
-	SD_Flag_CIHB,                 //!< Command inhibit (CMD)
-}SD_Flag_TypeDef;
+	SD_Flag_CLSL,         //Command line single level
+	SD_Flag_CINS,         //Card inserted
+	SD_Flag_BREN,         //Buffer Read Enable
+	SD_Flag_BWEN,         //Buffer Write Enable
+	SD_Flag_RTA,          //Read transfer active
+	SD_Flag_WTA,          //Write transfer active
+	SD_Flag_SDOFF,        //SD clock gated off internaly
+	SD_Flag_PEROFF,       //SDHC gate clock off
+	SD_Flag_DLA,          //Data line active
+	SD_Flag_CDIHB,        //Command inhibit(DAT)
+	SD_Flag_CIHB,         //Command inhibit (CMD)
+}SD_Flag_TypeDef;         //SD卡标志类型
 
 typedef enum
 {

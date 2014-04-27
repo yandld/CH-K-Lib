@@ -3,16 +3,17 @@
   * @file    sd.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2014.3.26
+  * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片SD模块的底层功能函数，具体应用请查看实例程序
+  * @note    此文件为芯片SD模块的底层功能函数
+              只支持SD及SDHC卡 不支持MMC！
   ******************************************************************************
   */
-  
   
 #include "sd.h"
 #include "gpio.h"
 
+//SD卡信息
 struct sd_card_handler
 {
     uint32_t card_type;  
@@ -27,10 +28,12 @@ struct sd_card_handler
 
 static struct sd_card_handler sdh;
 
-//函数名称：SD_SetBaudRate                                                        
-//功能概要：设置SDHC模块的时钟。                                                                                       
-//         baudrate：波特率   参考官方程序                    
-//函数返回：无                                                               
+/**
+ * @brief 设置SD卡模块的通信速度
+ * @note  内部函数，用户无需调用
+ * @param  baudrate  :波特率   参考官方程序    
+ * @retval None
+ */                                                            
 void SD_SetBaudRate(uint32_t baudrate)
 {
 	uint32_t pres, div, min, minpres = 0x80, mindiv = 0x0F;
@@ -66,12 +69,22 @@ void SD_SetBaudRate(uint32_t baudrate)
 	SDHC->IRQSTAT |= SDHC_IRQSTAT_DTOE_MASK;  //取消TimeOut Error Status
 } 
 
+/**
+ * @brief 检测内存卡的运行状态
+ * @note  内部函数，用户无需调用
+ * @retval 0:未运行，1:运行
+ */      
 uint8_t SDHC_is_running(void)
 {
     return (0 != (SDHC->PRSSTAT & (SDHC_PRSSTAT_RTA_MASK | SDHC_PRSSTAT_WTA_MASK | SDHC_PRSSTAT_DLA_MASK | SDHC_PRSSTAT_CDIHB_MASK | SDHC_PRSSTAT_CIHB_MASK)));
 }   
 
-
+/**
+ * @brief SD模块快速初始化配置
+ * @note  用户调用函数
+ * @param  baudrate  :通信波特率
+ * @retval 0:正常  其它:未完成初始化
+ */       
 uint32_t SD_QuickInit(uint32_t baudrate)
 {
     uint32_t retry;
@@ -89,7 +102,7 @@ uint32_t SD_QuickInit(uint32_t baudrate)
     PORT_PinPullConfig(HW_GPIOE, 3, kPullUp);
     PORT_PinPullConfig(HW_GPIOE, 4, kPullUp);
     PORT_PinPullConfig(HW_GPIOE, 5, kPullUp);
-    	PORTE->PCR[0] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D1  */
+    PORTE->PCR[0] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D1  */
 	PORTE->PCR[1] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D0  */
 	PORTE->PCR[2] =  (PORT_PCR_MUX(4) | PORT_PCR_DSE_MASK);                                          /* ESDHC.CLK */
 	PORTE->PCR[3] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.CMD */
@@ -102,11 +115,12 @@ uint32_t SD_QuickInit(uint32_t baudrate)
     return retry;
 }
 
-
-//SD卡初始化
-//固定为 25M波特率 4线传输模式
-//成功:ESDHC_OK 失败：ESDHC_ERROR_INIT_FAILED
-//只支持SD及SDHC卡 不支持MMC！
+/**
+ * @brief SD模块初始化配置，4线传输
+ * @note  仅仅完成SD模块的初始化配置，需其它函数配合
+ * @param  SD_InitStruct  :SD模块设置结构体
+ * @retval ESDHC_OK:正常  ESDHC_ERROR_INIT_FAILED:未完成初始化
+ */   
 uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct)
 {
 	uint32_t delay_cnt = 0;
@@ -269,11 +283,13 @@ uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct)
 	return ESDHC_OK;	
 }
 
-//读SD卡的一个block
-//输入:uint32_t sector 取地址（sector值，非物理地址） 
-//     uint8_t *buffer 数据存储地址（大小至少512byte） 		   
-//返回值:0： 成功
-//       other：失败															  
+/**
+ * @brief 读SD卡的一个扇区
+ * @note  一个扇区至少为512字节
+ * @param  sector  :要读取的SD卡扇区号
+ * @param  buffer  :数据存储地址
+ * @retval ESDHC_OK:正常  其它:读取错误
+ */   															  
 uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buffer)
 {
     uint16_t results;
@@ -317,11 +333,13 @@ uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buffer)
     return ESDHC_OK;
 }
 
-//写入SD卡的一个block				    
-//输入:uint32_t sector 扇区地址（sector值，非物理地址） 
-//     uint8_t *buffer 数据存储地址   
-//返回值:0： 成功
-//       other：失败															  
+/**
+ * @brief 写SD卡的一个扇区
+ * @note  一个扇区至少为512字节
+ * @param  sector  :要写入的SD卡扇区号
+ * @param  buffer  :数据存储地址
+ * @retval ESDHC_OK:正常  其它:读取错误
+ */ 													  
 uint8_t SD_WriteSingleBlock(uint32_t sector, const uint8_t *buffer)
 {
 	uint16_t results;
@@ -390,8 +408,10 @@ uint8_t SD_WriteSingleBlock(uint32_t sector, const uint8_t *buffer)
 	return ESDHC_OK;
 }
 
-//获得卡容量
-//单位byte
+/**
+ * @brief 获得SD卡容量
+ * @retval SD卡容量，单位MB
+ */ 
 uint32_t SD_GetSizeInMB(void)
 {
 	uint32_t BlockBumber;  //快个数
@@ -433,8 +453,13 @@ uint32_t SD_GetSizeInMB(void)
         Capacity=Capacity/1024/1024;    //单位MB	
         return Capacity;
 	}
-}	    			
-//检测IRQSTAT寄存器状态
+}
+
+/**
+ * @brief 检测IRQSTAT寄存器状态
+ * @note  内部函数
+ * @retval SD模块的中断状态
+ */ 
 uint32_t SD_StatusWait (uint32_t  mask)
 {
     uint32_t result;
@@ -446,6 +471,12 @@ uint32_t SD_StatusWait (uint32_t  mask)
     return result;
 }
 
+/**
+ * @brief 向SD卡发送命令
+ * @note  内部函数
+ * @param  Command  :SD卡命令结构参数
+ * @retval ESDHC_OK:正常  其它:错误
+ */ 	
 uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
 {
     uint32_t xfertyp;
@@ -522,7 +553,14 @@ uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
     return ESDHC_OK;
 }
 
-														  
+/**
+ * @brief 读SD卡的多个扇区
+ * @note  一个扇区至少为512字节
+ * @param  sector  :要读取的SD卡扇区号
+ * @param  buffer  :数据存储地址
+ * @param  count   :连续读取的扇区数量
+ * @retval ESDHC_OK:正常  其它:读取错误
+ */ 		
 uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *pbuffer, uint16_t count)
 {
 	uint32_t i,j;
@@ -583,8 +621,6 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *pbuffer, uint16_t count)
             {
                 return ESDHC_ERROR_DATA_TRANSFER;  
             }
-                
-
 			if (SD_CommandStruct1.RESPONSE[0] & 0xFFD98008)
 			{
 					count = 0; /* necessary to get real number of written blocks */
@@ -595,7 +631,14 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *pbuffer, uint16_t count)
 	return ESDHC_OK;
 }
 
-//多块写指令
+/**
+ * @brief 写SD卡的多个扇区
+ * @note  一个扇区至少为512字节
+ * @param  sector  :要写入的SD卡扇区号
+ * @param  buffer  :数据存储地址
+ * @param  count   :连续写入的扇区数
+ * @retval ESDHC_OK:正常  其它:读取错误
+ */ 	
 uint8_t SD_WriteMultiBlock(uint32_t sector,const uint8_t *pbuffer, uint16_t count)
 {
 	uint32_t i,j;

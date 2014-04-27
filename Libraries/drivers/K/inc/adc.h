@@ -65,7 +65,8 @@
 #define ADC0_SE22           (0x00B00000)
 #define ADC1_SE16           (0x00800001)
 #define ADC1_SE18           (0x00900001)
-
+#define ADC0_SE23           (0x00B80000)
+#define ADC1_SE23           (0x00B80001)
 
 //!< ADC 转换时钟分频因子,控制转换速度
 typedef enum

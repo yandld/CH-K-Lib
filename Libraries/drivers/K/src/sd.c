@@ -74,7 +74,7 @@ uint8_t SDHC_is_running(void)
 
 uint32_t SD_QuickInit(uint32_t baudrate)
 {
-    uint32_t retry;
+    uint32_t retry = 0;
     SD_InitTypeDef SD_InitStruct1;
     SD_InitStruct1.baudrate = baudrate;
     /* init pinmux */

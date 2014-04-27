@@ -17,7 +17,7 @@ int main(void)
     while(1)
     {
         val = ADC_QuickReadValue(ADC1_SE16);
-        printf("ADC:%d | %0.3fV\r", val, (double)val*3.300/(1<<12));
+        printf("ADC:%d | %0.3fV  \r", val, (double)val*3.300/(1<<12));
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(500);
     }

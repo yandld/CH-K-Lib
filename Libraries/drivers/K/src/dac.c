@@ -220,6 +220,7 @@ void DAC_SoftwareStartConversion(uint32_t instance)
  */
 void DAC_SetWaterMark(uint32_t instance, DAC_WaterMarkMode_Type value)
 {
+    DAC_InstanceTable[instance]->C1 &= ~DAC_C1_DACBFWM_MASK;
 	switch(value)
 	{
 		case kDAC_WaterMark_1Word:
@@ -278,6 +279,21 @@ void DAC_CallbackInstall(uint8_t instance, DAC_CallBackType AppCBFun)
 
 void DAC0_IRQHandler(void)
 {
+    /* clear IT pending bit */
+    uint32_t C0 = DAC_InstanceTable[HW_DAC0]->C0;
+    if(C0 & DAC_C0_DACBWIEN_MASK)
+    {
+        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFWMF_MASK;
+    }
+    if(C0 & DAC_C0_DACBBIEN_MASK)
+    {
+        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFRPBF_MASK;
+    }
+    if(C0 & DAC_C0_DACBTIEN_MASK)
+    {
+        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFRPTF_MASK;
+    }
+    /* call back */
     if(DAC_CallBackTable[HW_DAC0] != NULL)
     {
         DAC_CallBackTable[HW_DAC0]();
@@ -287,6 +303,21 @@ void DAC0_IRQHandler(void)
 
 void DAC1_IRQHandler(void)
 {
+    /* clear IT pending bit */
+    uint32_t C0 = DAC_InstanceTable[HW_DAC0]->C0;
+    if(C0 & DAC_C0_DACBWIEN_MASK)
+    {
+        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFWMF_MASK;
+    }
+    if(C0 & DAC_C0_DACBBIEN_MASK)
+    {
+        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFRPBF_MASK;
+    }
+    if(C0 & DAC_C0_DACBTIEN_MASK)
+    {
+        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFRPTF_MASK;
+    }
+    /* call back */
     if(DAC_CallBackTable[HW_DAC1] != NULL)
     {
         DAC_CallBackTable[HW_DAC1]();

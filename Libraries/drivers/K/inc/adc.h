@@ -79,10 +79,10 @@ typedef enum
 //!< ADC转换精度定义
 typedef enum
 {
-    kADC_SingleDiff8or9 = 0,    //8位或9位精度
-    kADC_SingleDiff12or13 = 1,  //12位或13位精度
-    kADC_SingleDiff10or11 = 2,  //10位或11位精度
-    kADC_SingleDIff16 = 3       //16位精度
+    kADC_SingleDiff8or9 = 0,    /* 单端8位或 差分9位精度 */
+    kADC_SingleDiff12or13 = 1,  /* 单端12位或 差分13位精度 */
+    kADC_SingleDiff10or11 = 2,  
+    kADC_SingleDIff16 = 3,
 }ADC_ResolutionMode_Type;
 
 //!< ADC 触发方式定义
@@ -116,8 +116,8 @@ typedef enum
 //!< 模拟电压参考源
 typedef enum
 {
-    kADC_VoltageVREF,  //使用外部引脚作为参考电源
-    kADC_VoltageVALT,  //可选择，不用
+    kADC_VoltageVREF,  /* 使用外部引脚VREFH VREFL 作为参考电源 */
+    kADC_VoltageVALT,  /* 可选的第二电压参考源 不同的型号可能连接到不同的模块上 K60DN512Vxxx 连接到 VREF模块 */
 }ADC_VoltageRef_Type;
 
 //!< 硬件平均

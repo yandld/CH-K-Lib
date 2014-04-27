@@ -30,8 +30,8 @@ static const IRQn_Type DAC_IRQnTable[] =
  *  DAC_InitStruct.triggerMode = kDAC_TriggerSoftware; 
  *  DAC_Init(&DAC_InitStruct);
  * @endcode
- * @param  DAC_InitTypeDef: 串口工作配置存储结构体
- *         instance      :芯片串口端口
+ * @param  DAC_InitTypeDef: 
+ *         instance      :模块号
  *         @arg HW_DAC0 :芯片的DAC0 模块
  *         @arg HW_DAC1 :芯片的DAC1 模块
  * @retval None

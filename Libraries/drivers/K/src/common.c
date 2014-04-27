@@ -97,12 +97,8 @@ void QuickInitDecode(uint32_t map, QuickInit_Type * type)
  * @param  None
  * @retval None
  */
- #if (defined(__CC_ARM))
-__weak void DelayInit(void)
-#elif (defined(__ICCARM__))
 #pragma weak DelayInit
 void DelayInit(void)
-#endif
 {
     SYSTICK_DelayInit();
 }

@@ -2,7 +2,6 @@
 #include "common.h"
 #include "uart.h"
 #include "dma.h"
-#include "sram.h"
 
 #include <string.h>
 /* CH Kinetis¹Ì¼þ¿â V2.50 °æ±¾ */

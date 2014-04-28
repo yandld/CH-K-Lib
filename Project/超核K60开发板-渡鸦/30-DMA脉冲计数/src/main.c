@@ -46,18 +46,18 @@ static void DMA_PulseCountInit(uint32_t dmaChl, uint32_t instance, uint32_t pinI
     DMA_InitStruct1.chl = dmaChl;  
     DMA_InitStruct1.chlTriggerSource = DMA_PORT_TriggerSourceTable[instance];
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal; 
-    DMA_InitStruct1.minorByteTransferCount = 1;
-    DMA_InitStruct1.majorTransferCount = DMA_CITER_ELINKNO_CITER_MASK;
+    DMA_InitStruct1.minorLoopByteCnt = 1;
+    DMA_InitStruct1.majorLoopCnt = DMA_CITER_ELINKNO_CITER_MASK; /* 最大值 */
     
-    DMA_InitStruct1.sourceAddress = (uint32_t)&dummy1;
-    DMA_InitStruct1.sourceAddressMajorAdj = 0; 
-    DMA_InitStruct1.sourceAddressMinorAdj = 0;
-    DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.sAddr = (uint32_t)&dummy1;
+    DMA_InitStruct1.sLastAddrAdj = 0; 
+    DMA_InitStruct1.sAddrOffset = 0;
+    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
     
-    DMA_InitStruct1.destAddress = (uint32_t)&dummy2; 
-    DMA_InitStruct1.destAddressMajorAdj = 0;
-    DMA_InitStruct1.destAddressMinorAdj = 0; 
-    DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.dAddr = (uint32_t)&dummy2; 
+    DMA_InitStruct1.dLastAddrAdj = 0;
+    DMA_InitStruct1.dAddrOffset = 0; 
+    DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     DMA_Init(&DMA_InitStruct1);
     /* 启动传输 */
     DMA_StartTransfer(dmaChl);
@@ -89,15 +89,15 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("DMA pulse count test\r\n");
-    printf("connect A05&C01, B00&B23 \r\n");
+    printf("connect A06&C01, B00&B23 \r\n");
     
     /* 开启2路PWM通道 产生不同频率的PWM波 */
     FTM_PWM_QuickInit(FTM0_CH0_PC01, 10000);
     FTM_PWM_QuickInit(FTM1_CH0_PB00, 20000);
 
     
-    /* 开启DMA捕捉引脚脉冲信号 使用DMA0通道 触发源选择A 端口 5引脚 (每个端口只能测量一路DMA 也就是说DMA脉冲最多只能测量5路(PTA,PTB,PTC,PTD,PTE))*/
-    DMA_PulseCountInit(HW_DMA_CH0, HW_GPIOA, 5);
+    /* 开启DMA捕捉引脚脉冲信号 (每个端口只能测量一路DMA 也就是说DMA脉冲最多只能测量5路(PTA,PTB,PTC,PTD,PTE))*/
+    DMA_PulseCountInit(HW_DMA_CH0, HW_GPIOA, 6);
     DMA_PulseCountInit(HW_DMA_CH1, HW_GPIOB, 23);
     
     /* 开启一个PIT中断用于显示收到的计数 */

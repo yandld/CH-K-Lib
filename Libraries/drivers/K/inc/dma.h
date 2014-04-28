@@ -94,34 +94,74 @@ typedef enum
     kDMA_DataWidthBit_32,  //32位数据宽度
 }DMA_DataWidthBit_Type; 
 
+//!< DMA Moduluo 设置
+typedef enum 
+{
+    kDMA_ModuloDisable = 0x0U,
+    kDMA_Modulo2bytes = 0x1U,
+    kDMA_Modulo4bytes = 0x2U,
+    kDMA_Modulo8bytes = 0x3U,
+    kDMA_Modulo16bytes = 0x4U,
+    kDMA_Modulo32bytes = 0x5U,
+    kDMA_Modulo64bytes = 0x6U,
+    kDMA_Modulo128bytes = 0x7U,
+    kDMA_Modulo256bytes = 0x8U,
+    kDMA_Modulo512bytes = 0x9U,
+    kDMA_Modulo1Kbytes = 0xaU,
+    kDMA_Modulo2Kbytes = 0xbU,
+    kDMA_Modulo4Kbytes = 0xcU,
+    kDMA_Modulo8Kbytes = 0xdU,
+    kDMA_Modulo16Kbytes = 0xeU,
+    kDMA_Modulo32Kbytes = 0xfU,
+    kDMA_Modulo64Kbytes = 0x10U,
+    kDMA_Modulo128Kbytes = 0x11U,
+    kDMA_Modulo256Kbytes = 0x12U,
+    kDMA_Modulo512Kbytes = 0x13U,
+    kDMA_Modulo1Mbytes = 0x14U,
+    kDMA_Modulo2Mbytes = 0x15U,
+    kDMA_Modulo4Mbytes = 0x16U,
+    kDMA_Modulo8Mbytes = 0x17U,
+    kDMA_Modulo16Mbytes = 0x18U,
+    kDMA_Modulo32Mbytes = 0x19U,
+    kDMA_Modulo64Mbytes = 0x1aU,
+    kDMA_Modulo128Mbytes = 0x1bU,
+    kDMA_Modulo256Mbytes = 0x1cU,
+    kDMA_Modulo512Mbytes = 0x1dU,
+    kDMA_Modulo1Gbytes = 0x1eU,
+    kDMA_Modulo2Gbytes = 0x1fU
+} DMA_Modulo_Type;
+
 //!< 初始化结构体
 typedef struct 
 {
-    uint8_t         chl;                                /* DMA通道号0~15 */       
-    uint8_t         chlTriggerSource;                   /* DMA触发源选择 */
-    uint16_t        minorByteTransferCount;             /* MINOR LOOP 中一次传输的字节数 */
-    uint16_t        majorTransferCount;                 /* MAJOR LOOP 循环次数 */
-    DMA_TriggerSource_Type triggerSourceMode;           /* 触发模式选择 */
+    uint8_t                     chl;                                /* DMA通道号0~15 */       
+    uint8_t                     chlTriggerSource;                   /* DMA触发源选择 */
+    uint16_t                    minorLoopByteCnt;                   /* MINOR LOOP 中一次传输的字节数 */
+    uint16_t                    majorLoopCnt;                       /* MAJOR LOOP 循环次数 */
+    DMA_TriggerSource_Type      triggerSourceMode;                  /* 触发模式选择 */
+    
     /* 源地址配置 */
-    int32_t        sourceAddressMinorAdj;               /* 数据源地址在MINOR LOOP 每次传输时的偏移量，可正可负 */
-    uint32_t        sourceAddress;                      /* 数据源地址 */
-    DMA_DataWidthBit_Type        sourceDataWidth;       /* 数据源地址数据宽度 8 16 32 */
-    int32_t        sourceAddressMajorAdj;               /* 所有MAJOR LOOP循环完成后 源地址偏移量 */
+    int32_t                     sAddrOffset;                /* DMA每次读取sAddr之后 sAddr的偏移量 可正可负 */
+    uint32_t                    sAddr;                      /* 数据源地址 */
+    DMA_DataWidthBit_Type       sDataWidth;                 /* 数据源地址数据宽度 8 16 32 */
+    int32_t                     sLastAddrAdj;               /* 所有MAJOR LOOP循环完成后 源地址偏移量 */
+    DMA_Modulo_Type             sMod;                       /* Modulo 设置 参见 AN2898 */
     /* 目标地址属性配置 */
-    int32_t         destAddressMinorAdj;                /* 目标地址在MINOR LOOP 每次传输时的偏移量，可正可负 */
-    uint32_t        destAddress;                        /* 目标地址 */
-    DMA_DataWidthBit_Type        destDataWidth;         /* 目标地址数据宽度 8 16 32 */
-    int32_t         destAddressMajorAdj;                /* 所有MAJOR LOOP循环完成后 目标地址偏移量 */
+    int32_t                     dAddrOffset;                
+    uint32_t                    dAddr;                      
+    DMA_DataWidthBit_Type       dDataWidth;                 
+    int32_t                     dLastAddrAdj;               
+    DMA_Modulo_Type             dMod;                       
 }DMA_InitTypeDef;
-  
+
 
 //!< interrupt select
 typedef enum
 {
-    kDMA_IT_Half_Disable, //传输一半中断关闭
-    kDMA_IT_Major_Disable,//传输完成中断关闭
-    kDMA_IT_Half,         //传输一半中断开启
-    kDMA_IT_Major,        //传输完成中断开启
+    kDMA_IT_Half_Disable,       //传输一半中断关闭
+    kDMA_IT_Major_Disable,      //传输完成中断关闭
+    kDMA_IT_Half,               //传输一半中断开启
+    kDMA_IT_Major,              //传输完成中断开启
 }DMA_ITConfig_Type;  
 
 //!< Callback Type
@@ -138,7 +178,8 @@ void DMA_SetDestAddress(uint8_t chl, uint32_t address);
 void DMA_SetSourceAddress(uint8_t chl, uint32_t address);
 uint32_t DMA_GetMajorLoopCount(uint8_t chl);
 void DMA_SetMajorLoopCount(uint8_t chl, uint32_t val);
-
+uint32_t DMA_GetDestAddress(uint8_t ch);
+uint32_t DMA_GetSourceAddress(uint8_t ch);
 
 
 #endif

@@ -17,7 +17,7 @@
 /* 0 此次发送成功 else 此次发送失败 */
 static uint32_t UART0_SendWithDMA(uint32_t dmaChl, uint8_t *buf, uint32_t size)
 {
-    DMA_InitTypeDef DMA_InitStruct1;
+    DMA_InitTypeDef DMA_InitStruct1 = {0};
     if(DMA_IsTransferComplete(dmaChl))
     {
         /* DMA 通道正忙 */
@@ -26,18 +26,18 @@ static uint32_t UART0_SendWithDMA(uint32_t dmaChl, uint8_t *buf, uint32_t size)
     DMA_InitStruct1.chl = dmaChl;  /* 使用1通道 */
     DMA_InitStruct1.chlTriggerSource = UART0_TRAN_DMAREQ; /* 串口完成传输一帧后触发 */
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal; /* 普通模式 不是周期触发模式 */
-    DMA_InitStruct1.minorByteTransferCount = 1; //一次触发传输一字节
-    DMA_InitStruct1.majorTransferCount = size;  //总共传输的字节数
+    DMA_InitStruct1.minorLoopByteCnt = 1; //一次触发传输一字节
+    DMA_InitStruct1.majorLoopCnt = size;  //总共传输的字节数
     
-    DMA_InitStruct1.sourceAddress = (uint32_t)buf; /*源地址 */
-    DMA_InitStruct1.sourceAddressMajorAdj = 0; 
-    DMA_InitStruct1.sourceAddressMinorAdj = 1; //地址偏移1个字节
-    DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8; /* 8位数据位宽 */
+    DMA_InitStruct1.sAddr = (uint32_t)buf; /*源地址 */
+    DMA_InitStruct1.sLastAddrAdj = -size; 
+    DMA_InitStruct1.sAddrOffset = 1; //地址偏移1个字节
+    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8; /* 8位数据位宽 */
     
-    DMA_InitStruct1.destAddress = (uint32_t)&UART0->D; 
-    DMA_InitStruct1.destAddressMajorAdj = 0;
-    DMA_InitStruct1.destAddressMinorAdj = 0;  //目标地址不偏移
-    DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8; //8字节数据位宽
+    DMA_InitStruct1.dAddr = (uint32_t)&UART0->D; 
+    DMA_InitStruct1.dLastAddrAdj = 0;
+    DMA_InitStruct1.dAddrOffset = 0;
+    DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     DMA_Init(&DMA_InitStruct1);
     /* 启动传输 */
     DMA_StartTransfer(dmaChl);

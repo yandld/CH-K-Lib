@@ -2,7 +2,6 @@
 #include "common.h"
 #include "uart.h"
 #include "dma.h"
-#include "sram.h"
 
 #include <string.h>
 /* CH Kinetis固件库 V2.50 版本 */
@@ -27,44 +26,51 @@ int main(void)
     
     printf("DMA memcpy test\r\n");
     
-    /* 一次触发后 执行 minorByteTransferCount 完成后 叫做一次Minor Loop */
-    /* majorTransferCount 个 Minor Loop 循环执行后 DMA结束传输 */
+    /* 一次触发后 执行 minorLoopByteCnt 完成后 叫做一次Minor Loop */
+    /* 完成 majorLoopCnt个 Loop 循环执行后 一次 DMA Major Loop 结束 */
     
     /* 写入测试数据 并且将被测试数据清空*/
-    memset(SourceBuffer, 'T', ARRAY_SIZE(SourceBuffer)); //向数组中写入64字节的T
-    memset(DestBuffer, 0, ARRAY_SIZE(DestBuffer));       //清空数组中的数据
+    for(i = 0; i < sizeof(SourceBuffer); i++)
+    {
+        SourceBuffer[i] = i;
+    }
+    memset(DestBuffer, 0, sizeof(DestBuffer));       //清空数组中的数据
     
-    DMA_InitTypeDef DMA_InitStruct1;
+    DMA_InitTypeDef DMA_InitStruct1 = {0};
     DMA_InitStruct1.chl = HW_DMA_CH0;  /* 使用DMA0通道 */
     DMA_InitStruct1.chlTriggerSource = DMA_MUX1; /*尽最大努力传输 */
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal; /* 普通模式 不是周期触发模式 */
-    DMA_InitStruct1.minorByteTransferCount = ARRAY_SIZE(SourceBuffer); /*每次触发传输*/
-    DMA_InitStruct1.majorTransferCount = 1; /* 最大可以被触发 1次 */
+    DMA_InitStruct1.minorLoopByteCnt = sizeof(SourceBuffer);
+    DMA_InitStruct1.majorLoopCnt = 1;
     
-    DMA_InitStruct1.sourceAddress = (uint32_t)SourceBuffer; /*源地址 */
-    DMA_InitStruct1.sourceAddressMajorAdj = 0; /* 每次触发传输Minor Loop后源地址 偏移量 */
-    DMA_InitStruct1.sourceAddressMinorAdj = 1;  /* 每次触发传输Major Loop后源地址 偏移量 */
-    DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8; /* 8位数据位宽 */
+    DMA_InitStruct1.sAddr = (uint32_t)SourceBuffer; /*源地址 */
+    DMA_InitStruct1.sLastAddrAdj = 0; /* 所有Major Loop执行完后 sAddr偏移量 */
+    DMA_InitStruct1.sAddrOffset = 1;  /* 每次读取sAddr后的地址偏移 */
+    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8; /* 每次传输的位宽 */
+    DMA_InitStruct1.sMod = kDMA_ModuloDisable;  /* 禁止Modulo 模式 */
     
-    DMA_InitStruct1.destAddress = (uint32_t)DestBuffer; /* 目的地址 */
-    DMA_InitStruct1.destAddressMajorAdj = 0;
-    DMA_InitStruct1.destAddressMinorAdj = 1; /*每次传输后 目的地址+1 */
-    DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8;  /* 8位数据位宽 */
+    DMA_InitStruct1.dAddr = (uint32_t)DestBuffer;
+    DMA_InitStruct1.dLastAddrAdj = 0;
+    DMA_InitStruct1.dAddrOffset = 1;
+    DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.dMod = kDMA_ModuloDisable;
+    /* 初始化 */
     DMA_Init(&DMA_InitStruct1);
     /* 启动DMA传输 */
     DMA_StartTransfer(HW_DMA_CH0);
     /* 等待DMA传输结束 */
     while(DMA_IsTransferComplete(HW_DMA_CH0));
-    for(i=0;i<ARRAY_SIZE(DestBuffer);i++)
+
+    for(i=0;i<sizeof(DestBuffer);i++)
     {
         /* 如果拷贝不成功 */
         if(DestBuffer[i] != SourceBuffer[i])
         {
-            printf("DMA test error:%d\r\n", i);
+            printf("DMA test error on:%d\r\n", i);
             while(1);
         }
     }
-    printf("DMA memcpy test OK!");
+    printf("DMA memcpy test succ!\r\n");
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

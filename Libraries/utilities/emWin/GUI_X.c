@@ -45,61 +45,19 @@ We appreciate your understanding and fairness.
 #include <stdio.h>
 #include <rtthread.h>
 
-/*
-*********************************************************************************************************
-*                                         GLOBAL VARIABLES
-*********************************************************************************************************
-*/
-
-//static  OS_EVENT  *DispSem;
-//static  OS_EVENT  *EventMbox;
-
-//static  OS_EVENT  *KeySem;
-static  int        KeyPressed;
-static  char       KeyIsInited;
-
-
-/*
-*********************************************************************************************************
-*                                        TIMING FUNCTIONS
-*
-* Notes: Some timing dependent routines of uC/GUI require a GetTime and delay funtion. 
-*        Default time unit (tick), normally is 1 ms.
-*********************************************************************************************************
-*/
-
-
-
-volatile GUI_TIMER_TIME OS_TimeMS;
-/*
-void SysTick_Handler(void)
-{
-    OS_TimeMS++;
-    static U16 i;
-    i++; i%=20;
-    if(!i)
-    {
-        GUI_TOUCH_Exec();
-    }
-}
-*/
 
 GUI_TIMER_TIME GUI_X_GetTime (void) 
 {
     return (rt_tick_get()*(1000/RT_TICK_PER_SECOND));
 }
 
-
 void  GUI_X_Delay (int ms) 
 {
     rt_uint32_t delay;
     rt_uint32_t factor;
-    factor = 1000/RT_TICK_PER_SECOND;
-    delay = ms / factor;
-    if(ms % factor)
-    {
-        delay++;
-    }
+    factor = 1000/RT_TICK_PER_SECOND; /* how many ms in a tick */
+    delay = ms/factor;
+    if(!delay) delay = 1;
     rt_thread_delay(delay);
 }
 

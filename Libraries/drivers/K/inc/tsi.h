@@ -119,7 +119,7 @@ typedef struct
 typedef void (*TSI_CallBackType)(void);
 
 //!< API functions
-uint32_t TSI_QuickInit(uint32_t UARTxMAP);
+uint32_t TSI_QuickInit(uint32_t MAP);
 uint32_t TSI_GetCounter(uint32_t chl);
 void TSI_ITDMAConfig(TSI_ITDMAConfig_Type config);
 void TSI_Init(TSI_InitTypeDef* TSI_InitStruct);

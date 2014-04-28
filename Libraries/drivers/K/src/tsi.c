@@ -136,14 +136,14 @@ void TSI_Init(TSI_InitTypeDef* TSI_InitStruct)
  *    //快速初始化配置TSI模块的1通道的PTA0引脚做默认触控引脚
  *    TSI_QuickInit(TSI0_CH1_PA00);
  * @endcode
- * @param  UARTxMAP: TSI初始化预定义，详见tsi.h文件
+ * @param  MAP: TSI初始化预定义，详见tsi.h文件
  * @retval 通道号
  */
-uint32_t TSI_QuickInit(uint32_t UARTxMAP)
+uint32_t TSI_QuickInit(uint32_t MAP)
 {
     uint32_t i;
     TSI_InitTypeDef TSI_InitStruct;
-    QuickInit_Type * pq = (QuickInit_Type*)&UARTxMAP;
+    QuickInit_Type * pq = (QuickInit_Type*)&MAP;
     /* config pinmux */
     for(i = 0; i < pq->io_offset; i++)
     {

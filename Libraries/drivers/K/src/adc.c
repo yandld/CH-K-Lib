@@ -221,7 +221,7 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
  *    //读取AD转换结果
  *    value = ADC_QuickReadValue(ADC0_SE20_DM1);
  * @endcode
- * @param  ADCxMAP: 快速初始化宏，详见ADC.H文件
+ * @param  MAP: 快速初始化宏，详见ADC.H文件
  * @param  resolutionMode: 转换分辨率设置
  *         @arg kADC_SingleDiff8or9   :转换精度为8/9位
  *         @arg kADC_SingleDiff10or11 :转换精度为10/11位
@@ -229,10 +229,10 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
  *         @arg kADC_SingleDIff16     :转换精度为16位
  * @retval ADC模块号
  */
-uint8_t ADC_QuickInit(uint32_t ADCxMAP, ADC_ResolutionMode_Type resolutionMode)
+uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
 {
     uint8_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(ADCxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     ADC_InitTypeDef AD_InitStruct1;
     AD_InitStruct1.instance = pq->ip_instance;
     AD_InitStruct1.clockDiv = kADC_ClockDiv2;
@@ -318,15 +318,15 @@ int32_t ADC_ReadValue(uint32_t instance, uint32_t mux)
  *    uint32_t value;   //存储数据转换结果
  *    value = ADC_QuickReadValue(ADC0_SE20_DM1);
  * @endcode
- * @param  ADCxMAP: 快速初始化宏，详见ADC.H文件
+ * @param  MAP: 快速初始化宏，详见ADC.H文件
  * @retval 转换结果
  */
-int32_t ADC_QuickReadValue(uint32_t ADCxMAP)
+int32_t ADC_QuickReadValue(uint32_t MAP)
 {
-    QuickInit_Type * pADCxMap = (QuickInit_Type*)&(ADCxMAP);
-    uint32_t instance = pADCxMap->ip_instance;
-    uint32_t chl = pADCxMap->channel;
-    uint32_t mux = pADCxMap->reserved;
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    uint32_t instance = pq->ip_instance;
+    uint32_t chl = pq->channel;
+    uint32_t mux = pq->reserved;
     ADC_StartConversion(instance, chl, mux);
     /* waiting for ADC complete */
     while(ADC_IsConversionCompleted(instance, mux)) {};

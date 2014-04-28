@@ -237,7 +237,7 @@ void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type fram
  *     //使用SPI的1模块SCK-PE02 SOUT-PE01 SIN-PE03 通信速度为48000hz 极性和相位都是0 
  *     SPI_QuickInit(SPI1_SCK_PE02_SOUT_PE01_SIN_PE03, kSPI_CPOL0_CPHA0, 48000);
  * @endcode
- * @param  SPIxMAP :SPI通信快速配置引脚预定义，详见spi.h文件
+ * @param  MAP :SPI通信快速配置引脚预定义，详见spi.h文件
  * @param  frameFormat: SPI通信时的相位和极性的关系
  *         @arg kSPI_CPOL0_CPHA0
  *         @arg kSPI_CPOL1_CPHA0
@@ -246,10 +246,10 @@ void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type fram
  * @param  baudrate :SPI通信速度设置
  * @retval None
  */
-uint32_t SPI_QuickInit(uint32_t SPIxMAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate)
+uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate)
 {
     uint32_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(SPIxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     SPI_InitTypeDef SPI_InitStruct1;
     SPI_InitStruct1.baudrate = baudrate;
     SPI_InitStruct1.frameFormat = (SPI_FrameFormat_Type)frameFormat;

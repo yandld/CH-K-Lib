@@ -177,10 +177,10 @@ uint32_t LPTMR_PC_ReadCounter(void)
 	return (uint32_t)((LPTMR0->CNR & LPTMR_CNR_COUNTER_MASK) >> LPTMR_CNR_COUNTER_SHIFT); 
 }
 
-uint32_t LPTMR_PC_QuickInit(uint32_t LPTMRxMAP)
+uint32_t LPTMR_PC_QuickInit(uint32_t MAP)
 {
     uint32_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(LPTMRxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     LPTMR_PC_InitTypeDef LPTMR_PC_InitStruct1;
     LPTMR_PC_InitStruct1.counterOverflowValue = 0xFFFF;
     switch(pq->channel)

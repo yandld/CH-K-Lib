@@ -476,16 +476,16 @@ void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
  *      // 初始化 UART4 属性: 115200-N-8-N-1, Tx:PC15 Rx:PC14
  *      GPIO_QuickInit(UART4_RX_PC14_TX_PC15, 115200);
  * @endcode
- * @param  UARTxMAP  : 串口引脚配置缩略图
+ * @param  MAP  : 串口引脚配置缩略图
  *         例如 UART1_RX_PE01_TX_PE00 ：使用串口1的PTE1/PTE0引脚
  * @param  baudrate: 波特率 9600 115200...
  * @retval UART模块号
  */
-uint8_t UART_QuickInit(uint32_t UARTxMAP, uint32_t baudrate)
+uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
     UART_InitTypeDef UART_InitStruct1;
-    QuickInit_Type * pq = (QuickInit_Type*)&(UARTxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     UART_InitStruct1.baudrate = baudrate;
     UART_InitStruct1.instance = pq->ip_instance;
     UART_InitStruct1.parityMode = kUART_ParityDisabled;

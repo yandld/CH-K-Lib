@@ -198,13 +198,13 @@ void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
  *      //设置FTM1模块的PTA8/PTA9引脚在正交模式下
  *      FTM_QD_QuickInit(FTM1_QD_PHA_PA08_PHB_PA09); 
  * @endcode         
- * @param  FTMxMAP  : FTM工作在正交解码模式下的编码，详见ftm.h文件
+ * @param  MAP  : FTM工作在正交解码模式下的编码，详见ftm.h文件
  * @retval None
  */
-uint32_t FTM_QD_QuickInit(uint32_t FTMxMAP)
+uint32_t FTM_QD_QuickInit(uint32_t MAP)
 {
     uint8_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(FTMxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     FTM_QD_InitTypeDef FTM_QD_InitStruct1;
     FTM_QD_InitStruct1.instance = pq->ip_instance;
     FTM_QD_InitStruct1.mode = kQD_PHABEncoding;
@@ -434,14 +434,14 @@ void FTM_PWM_InvertPolarity(uint32_t instance, uint8_t chl, uint32_t config)
  * //设置FTM0模块的3通道在PTA6引脚中产生1000HZ的pwm波形
  *      FTM_PWM_QuickInit(FTM0_CH3_PA06, 1000); 
  * @endcode         
- * @param  FTMxMAP        : FTM工作在PWM模式下的编码，详见ftm.h文件
+ * @param  MAP        : FTM工作在PWM模式下的编码，详见ftm.h文件
  * @param  frequencyInHZ  : FTM工作工作频率设置
  * @retval None
  */
-uint8_t FTM_PWM_QuickInit(uint32_t FTMxMAP, uint32_t frequencyInHZ)
+uint8_t FTM_PWM_QuickInit(uint32_t MAP, uint32_t frequencyInHZ)
 {
     uint8_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(FTMxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     FTM_PWM_InitTypeDef FTM_InitStruct1;
     FTM_InitStruct1.instance = pq->ip_instance;
     FTM_InitStruct1.frequencyInHZ = frequencyInHZ;

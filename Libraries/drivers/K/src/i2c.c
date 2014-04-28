@@ -186,18 +186,18 @@ static void I2C_SetBaudrate(uint32_t instance, uint32_t sourceClockInHz, uint32_
  *      // 初始化I2C模块: 使用I2C1模块的SCL:PC10 SDA:PC11，通信速度:47000Hz
  *      I2C_QuickInit(I2C1_SCL_PC10_SDA_PC11, 47000);
  * @endcode
- * @param  I2CxMAP: I2C快速初始化选择项，详见i2c.h文件
+ * @param  MAP: I2C快速初始化选择项，详见i2c.h文件
  *         @arg I2C1_SCL_PE01_SDA_PE00
  *         @arg         ...
  *         @arg I2C1_SCL_PC10_SDA_PC11
  * @param  baudrate :通信速度 建议为: 48000Hz 76000Hz 96000Hz 376000Hz
  * @retval i2c模块号
  */
-uint8_t I2C_QuickInit(uint32_t I2CxMAP, uint32_t baudrate)
+uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
     I2C_InitTypeDef I2C_InitStruct1;
-    QuickInit_Type * pq = (QuickInit_Type*)&(I2CxMAP);
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     I2C_InitStruct1.baudrate = baudrate;
     I2C_InitStruct1.instance = pq->ip_instance;
     /* init pinmux and  open drain and pull up */

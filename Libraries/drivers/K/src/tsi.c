@@ -15,7 +15,7 @@
  
 static TSI_CallBackType TSI_CallBackTable[1] = {NULL};
  
-static const void* TSI_ChlCNTRTalbe[] =
+static const void* TSI_ChlCNTRTable[] =
 {
     (void*)&TSI0->CNTR1,
     (void*)&TSI0->CNTR1,
@@ -45,11 +45,11 @@ uint32_t TSI_GetCounter(uint32_t chl)
     uint32_t i;
     if(chl % 0x02)
     {
-        i= ((*(uint32_t*)TSI_ChlCNTRTalbe[chl]) >> 16 )&0x0000FFFF;
+        i= ((*(uint32_t*)TSI_ChlCNTRTable[chl]) >> 16 )&0x0000FFFF;
     }
     else
     {
-        i= ((*(uint32_t*)TSI_ChlCNTRTalbe[chl]) >>  0 )&0x0000FFFF; 
+        i= ((*(uint32_t*)TSI_ChlCNTRTable[chl]) >>  0 )&0x0000FFFF; 
     }  
     return i;
 }

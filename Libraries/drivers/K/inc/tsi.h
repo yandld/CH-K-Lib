@@ -59,8 +59,8 @@ typedef struct
 }TSI_InitTypeDef;
 
 //!< TSI QuickInit macro
-#define TSI0_CH0_PB00   (0x00004008)  //0通道的PTB0引脚
-#define TSI0_CH1_PA00   (0x00084000)  //1通道的PTA0引脚
+#define TSI0_CH0_PB00   (0x00004008)  //0通道的PTB0引脚 以下类推
+#define TSI0_CH1_PA00   (0x00084000)  
 #define TSI0_CH2_PA01   (0x00104200)
 #define TSI0_CH3_PA02   (0x00184400)
 #define TSI0_CH4_PA03   (0x00204600)
@@ -74,7 +74,7 @@ typedef struct
 #define TSI0_CH12_PB19  (0x00606608)
 #define TSI0_CH13_PC00  (0x00684010)
 #define TSI0_CH14_PC01  (0x00704210)
-#define TSI0_CH15_PC02  (0x00784410) //15通道的PTC2引脚
+#define TSI0_CH15_PC02  (0x00784410)
 
 
 //!< TSI CallBack Type

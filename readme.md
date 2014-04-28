@@ -29,21 +29,27 @@ Project文件夹:
 1. 安装MDK(Keil)5.00以上版本
 2. 打开\Project\超核K60开发板-渡鸦\0-工程模板\MDK 工程文件即可
 3. 工程下不同版本支持的芯片
-MK60DZ10:
-**     Processors:          MK60DN512ZVLL10
-**                          MK60DX256ZVLL10
-**                          MK60DN256ZVLL10
-**                          MK60DN512ZVLQ10
-**                          MK60DN256ZVLQ10
-**                          MK60DX256ZVLQ10
-**                          MK60DN512ZVMC10
-**                          MK60DN256ZVMC10
-**                          MK60DX256ZVMC10
-**                          MK60DN512ZVMD10
-**                          MK60DX256ZVMD10
-**                          MK60DN256ZVMD10
-MK10D5:
-MK10 32M及48M主频芯片
+
+Processors:   
+**MK60D10:**
+
+ - MK60DN512ZVLL10
+ - MK60DX256ZVLL10
+ - MK60DN256ZVLL10
+ - MK60DN512ZVLQ10
+ - MK60DN256ZVLQ10
+ - MK60DX256ZVLQ10
+ - MK60DN512ZVMC10
+ - MK60DN256ZVMC10
+ - MK60DX256ZVMC10
+ - MK60DN512ZVMD10
+ - MK60DX256ZVMD10
+ - MK60DN256ZVMD10
+
+
+**MK10D5:**
+
+ - MK10 32M及48M主频芯片
 
 ## 联系我们及获取最新固件库 ##
  - www.beyondcore.net

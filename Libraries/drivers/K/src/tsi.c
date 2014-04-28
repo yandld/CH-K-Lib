@@ -91,10 +91,19 @@ void TSI_Init(TSI_InitTypeDef* TSI_InitStruct)
 {
 	SIM->SCGC5 |= (SIM_SCGC5_TSI_MASK); 
     /* disalbe moudle */
-	TSI0->GENCS &= ~TSI_GENCS_TSIEN_MASK;
-    /* config general settings */
-    TSI0->GENCS |= ((TSI_GENCS_NSCN(10))|(TSI_GENCS_PS(3)));
-    TSI0->SCANC |= ((TSI_SCANC_EXTCHRG(3))|(TSI_SCANC_REFCHRG(31))|(TSI_SCANC_SMOD(0))|(TSI_SCANC_AMPSC(0)));
+    TSI0->GENCS = 0;
+    /* Number of Consecutive Scans Per Electrode Electrode */
+    TSI0->GENCS |= TSI_GENCS_NSCN(TSI_InitStruct->consecutiveScanTimes);
+    /* Electrode Oscillator Prescaler */
+    TSI0->GENCS |= TSI_GENCS_PS(TSI_InitStruct->electrodeOSCPrescaler);
+    /* clear SCANC */
+    TSI0->SCANC = 0;
+    /* Ref OSC Charge Current Select */
+    TSI0->SCANC |= TSI_SCANC_REFCHRG(TSI_InitStruct->refChargeCurrent);
+    /* External OSC Charge Current Select */
+    TSI0->SCANC |= TSI_SCANC_EXTCHRG(TSI_InitStruct->extChargeCurrent);
+    /* clock source is bus clock LPOSCCLK? */
+    TSI0->SCANC |= TSI_SCANC_SMOD(0)|TSI_SCANC_AMPSC(0);
     /* enable all pens */
     /* FIXME: seems if there is only one TSI pen, TSI cannot work in continues module(STM=1) */	
     TSI0->PEN |= (1<<TSI_InitStruct->chl|(1<<0));			
@@ -144,6 +153,10 @@ uint32_t TSI_QuickInit(uint32_t UARTxMAP)
     TSI_InitStruct.chl = pq->channel;
     TSI_InitStruct.triggerMode = kTSI_TriggerPeriodicalScan;
     TSI_InitStruct.threshld = 700;
+    TSI_InitStruct.consecutiveScanTimes = 10;
+    TSI_InitStruct.electrodeOSCPrescaler = kTSI_EletrodeOscDiv_4;
+    TSI_InitStruct.extChargeCurrent = kTSI_ChargeCurrent_6uA;
+    TSI_InitStruct.refChargeCurrent = kTSI_ChargeCurrent_6uA;
     TSI_Init(&TSI_InitStruct);
     return pq->ip_instance;
 }

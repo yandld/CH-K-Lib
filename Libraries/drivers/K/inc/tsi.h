@@ -50,12 +50,50 @@ typedef enum
     kTSI_IT_EndOfScan,      //扫描结束中断
 }TSI_ITDMAConfig_Type;
 
+typedef enum
+{
+    kTSI_EletrodeOscDiv_1,
+    kTSI_EletrodeOscDiv_2,
+    kTSI_EletrodeOscDiv_4,
+    kTSI_EletrodeOscDiv_8,
+    kTSI_EletrodeOscDiv_16,
+    kTSI_EletrodeOscDiv_32,
+    kTSI_EletrodeOscDiv_64,
+    kTSI_EletrodeOscDiv_128,
+}TSI_EletrodeOscPs_Type;
+
+typedef enum
+{
+    kTSI_ChargeCurrent_2uA,
+    kTSI_ChargeCurrent_4uA,
+    kTSI_ChargeCurrent_6uA,
+    kTSI_ChargeCurrent_8uA,
+    kTSI_ChargeCurrent_10uA,
+    kTSI_ChargeCurrent_12uA,
+    kTSI_ChargeCurrent_14uA,
+    kTSI_ChargeCurrent_16uA,
+    kTSI_ChargeCurrent_18uA,
+    kTSI_ChargeCurrent_20uA,
+    kTSI_ChargeCurrent_22uA,
+    kTSI_ChargeCurrent_24uA,
+    kTSI_ChargeCurrent_26uA,
+    kTSI_ChargeCurrent_28uA,
+    kTSI_ChargeCurrent_30uA,
+    kTSI_ChargeCurrent_32uA,
+}TSI_ChargeCurrent_Type;
+
 //TSI初始化结构
+
+
 typedef struct
 {
-    uint32_t                chl;            //通道号1~15
-    TSI_TriggerMode_Type    triggerMode;    //触发模式选择
-    uint32_t                threshld;       //发生超范围中断时的判断阀值
+    uint32_t                chl;                                    /* 通道号1~15 */
+    TSI_TriggerMode_Type    triggerMode;                            /* 触发模式选择 */
+    TSI_EletrodeOscPs_Type  electrodeOSCPrescaler;
+    uint32_t                consecutiveScanTimes;                   /* number of consecutive scans per electrode */
+    uint32_t                threshld;                               /* 发生超范围中断时的判断阀值 */
+    TSI_ChargeCurrent_Type  refChargeCurrent;                       /* 参考 OSC 充电电流 */
+    TSI_ChargeCurrent_Type  extChargeCurrent;                       /* 外部 OSC 充电电流 */
 }TSI_InitTypeDef;
 
 //!< TSI QuickInit macro

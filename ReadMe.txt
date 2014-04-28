@@ -14,21 +14,21 @@
 
 Libraries文件夹:
 
-1. devices 外部芯片支持代码
-2. drivers 固件库外设支持代码
+1. devices 一些外设芯片支持
+2. drivers 固件库源码
 3. startup 启动文件
-4. utilities 与硬件无关的组件(shell等)
+4. utilities 其他第三方组件
 
 Project文件夹:
 
-1. Examples 开发板配套例程
-2. Templete 工程模板
+1. 渡鸦开发板例程
+2. 姿态模块固件
 3. keilkill.bat Keil清楚编译中间文件的小工具
 
 
  如何开始 
-1. 安装MDK(Keil)4.5x以上版本
-2. 打开Project->Templete->Kseries->MDK-ARM->templete.uvproj工程文件即可
+1. 安装MDK(Keil)5.00以上版本
+2. 打开\Project\超核K60开发板-渡鸦\0-工程模板\MDK 工程文件即可
 3. 工程下不同版本支持的芯片
 MK60DZ10:
 **     Processors:          MK60DN512ZVLL10
@@ -48,8 +48,8 @@ MK10 32M及48M主频芯片
 
  联系我们及获取最新固件库 
  - www.beyondcore.net
- - github下载地址:
- - https://github.com/yandld/CH-K-Lib-V2.5-/archive/master.zip
+ - 代码仓库下载:
+   http://git.oschina.net/yandld/CH-K-Lib/repository/archive?ref=master
  - 技术讨论群:247160311
 
 

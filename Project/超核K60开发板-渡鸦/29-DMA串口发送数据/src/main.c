@@ -14,53 +14,78 @@
 */
 
 /* DMA 发送函数 */
-/* 0 此次发送成功 else 此次发送失败 */
-static uint32_t UART0_SendWithDMA(uint32_t dmaChl, uint8_t *buf, uint32_t size)
+static uint32_t UART_SendWithDMA(uint32_t dmaChl, const uint8_t *buf, uint32_t size)
 {
+    DMA_SetSourceAddress(dmaChl, (uint32_t)buf);
+    DMA_SetMajorLoopCount(dmaChl, size);
+    /* 启动传输 */
+    DMA_EnableRequest(dmaChl);
+    return 0;
+}
+
+
+
+static void UART_DMASendConfig(uint32_t uartInstnace, uint8_t dmaChl)
+{
+    
+static const void* UART_DataPortAddrTable[] = 
+{
+    (void*)&UART0->D,
+    (void*)&UART1->D,
+    (void*)&UART2->D,
+    (void*)&UART3->D,
+    (void*)&UART4->D,
+    (void*)&UART5->D,    
+};
+
+static const uint32_t UART_SendDMATriggerSourceTable[] = 
+{
+    UART0_TRAN_DMAREQ,
+    UART1_TRAN_DMAREQ,
+    UART2_TRAN_DMAREQ,
+    UART3_TRAN_DMAREQ,
+    UART4_TRAN_DMAREQ,
+    UART5_TRAN_DMAREQ,
+};
+
     DMA_InitTypeDef DMA_InitStruct1 = {0};
-    if(DMA_IsTransferComplete(dmaChl))
-    {
-        /* DMA 通道正忙 */
-        return 1;
-    }
-    DMA_InitStruct1.chl = dmaChl;  /* 使用1通道 */
-    DMA_InitStruct1.chlTriggerSource = UART0_TRAN_DMAREQ; /* 串口完成传输一帧后触发 */
-    DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal; /* 普通模式 不是周期触发模式 */
-    DMA_InitStruct1.minorLoopByteCnt = 1; //一次触发传输一字节
-    DMA_InitStruct1.majorLoopCnt = size;  //总共传输的字节数
+    DMA_InitStruct1.chl = dmaChl;
+    DMA_InitStruct1.chlTriggerSource = UART_SendDMATriggerSourceTable[uartInstnace];
+    DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
+    DMA_InitStruct1.minorLoopByteCnt = 1;
+    DMA_InitStruct1.majorLoopCnt = 0;
     
-    DMA_InitStruct1.sAddr = (uint32_t)buf; /*源地址 */
-    DMA_InitStruct1.sLastAddrAdj = -size; 
-    DMA_InitStruct1.sAddrOffset = 1; //地址偏移1个字节
-    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8; /* 8位数据位宽 */
+    DMA_InitStruct1.sAddr = NULL;
+    DMA_InitStruct1.sLastAddrAdj = 0; 
+    DMA_InitStruct1.sAddrOffset = 1;
+    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.sMod = kDMA_ModuloDisable;
     
-    DMA_InitStruct1.dAddr = (uint32_t)&UART0->D; 
+    DMA_InitStruct1.dAddr = (uint32_t)UART_DataPortAddrTable[uartInstnace]; 
     DMA_InitStruct1.dLastAddrAdj = 0;
     DMA_InitStruct1.dAddrOffset = 0;
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.dMod = kDMA_ModuloDisable;
     DMA_Init(&DMA_InitStruct1);
-    /* 启动传输 */
-    DMA_StartTransfer(dmaChl);
-    return 0;
 }
 
 int main(void)
 {
+    static const char String1[] = "This string is send via DMA\r\n";
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    
     printf("DMA UART transmit test\r\n");
-    
     /* 打开UART0 DMA发送使能 */
     UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx);
+    UART_DMASendConfig(HW_UART0, HW_DMA_CH2);
     
     while(1)
     {
         //通过串口使用dma功能实现数据发送
-        UART0_SendWithDMA(HW_DMA_CH0, "This string is send via DMA\r\n", 29);
+        UART_SendWithDMA(HW_DMA_CH2, (const uint8_t*)String1, sizeof(String1));
         /* 等待DMA传输结束 */
-        while(DMA_IsTransferComplete(HW_DMA_CH0) == 1);
+        while(DMA_IsMajorLoopComplete(HW_DMA_CH0));
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(50);
     }

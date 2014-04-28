@@ -49,7 +49,7 @@ void OV7620_ISR(uint32_t pinArray)
     {
         case TRANSFER_IN_PROCESS: /* 正在传输 */
             /* 查看DMA是否完成传送 */
-            if(DMA_IsTransferComplete(HW_DMA_CH2) == 0)
+            if(DMA_IsMajorLoopComplete(HW_DMA_CH2) == 0)
             {
                 GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_Disable);
                 /* 开始处理用户 函数 */
@@ -67,7 +67,7 @@ void OV7620_ISR(uint32_t pinArray)
         case NEXT_FRAME:
             /* 传输完成 复位buffer地址 开始下一场传输 */
             DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[0]);
-            DMA_StartTransfer(HW_DMA_CH2); 
+            DMA_EnableRequest(HW_DMA_CH2); 
             status =  TRANSFER_IN_PROCESS;
             break;
         default:
@@ -114,15 +114,10 @@ static void OV7620_Init(void)
     {
         GPIO_QuickInit(HW_GPIOA, BOARD_OV7620_DATA_OFFSET+i, kGPIO_Mode_IFT);
     }
-    /* 安装回调函数 */
     GPIO_CallbackInstall(BOARD_OV7620_VSYNC_PORT, OV7620_ISR);
-    /* 行中断配置为DMA触发 */
     GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_DMA_RisingEdge);
-    /* 场中断配置为中断触发 */
     GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);
-    /* 像素中断 */
   //  GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge); //实际并没有用到
-    /* 初始化DMA */
     DMA_InitStruct1.chl = HW_DMA_CH2;
     DMA_InitStruct1.chlTriggerSource = PORTA_DMAREQ;
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
@@ -141,7 +136,7 @@ static void OV7620_Init(void)
 
     DMA_Init(&DMA_InitStruct1);
     /* 开始传输 */
-    DMA_StartTransfer(HW_DMA_CH2); 
+    DMA_EnableRequest(HW_DMA_CH2); 
 }
 
 int main(void)

@@ -91,7 +91,7 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
     DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_DMOD(DMA_InitStruct->dMod);
     DMA0->TCD[DMA_InitStruct->chl].DLAST_SGA = DMA_DLAST_SGA_DLASTSGA(DMA_InitStruct->dLastAddrAdj);
     /* auto close enable(disable req on major loop complete)*/
-    DMA0->TCD[DMA_InitStruct->chl].CSR |= DMA_CSR_DREQ_MASK; 
+    DMA0->TCD[DMA_InitStruct->chl].CSR |= DMA_CSR_DREQ_MASK;
 	/* enable DMAMUX */
 	DMAMUX->CHCFG[DMA_InitStruct->chl] |= DMAMUX_CHCFG_ENBL_MASK;
 }
@@ -127,10 +127,10 @@ void DMA_SetMajorLoopCount(uint8_t chl, uint32_t val)
 }
 
 /**
- * @brief  开始一次DMA传输
+ * @brief  使能通道响应传输
  * @code
  *     //开启DMA 的0通道进行数据传输
- *     DMA_StartTransfer(HW_DMA_CH0);
+ *     DMA_EnableRequest(HW_DMA_CH0);
  * @endcode
  * @param  chl: DMA通道号
  *         @arg HW_DMA_CH0
@@ -139,10 +139,29 @@ void DMA_SetMajorLoopCount(uint8_t chl, uint32_t val)
  *         @arg HW_DMA_CH3
  * @retval None
  */
-void DMA_StartTransfer(uint8_t chl)
+void DMA_EnableRequest(uint8_t chl)
 {
-    DMA0->ERQ |= (1<<chl);
+    DMA0->SERQ = DMA_SERQ_SERQ(chl);
 }
+
+/**
+ * @brief  禁止通道响应传输
+ * @code
+ *     //开启DMA 的0通道进行数据传输
+ *     DMA_EnableRequest(HW_DMA_CH0);
+ * @endcode
+ * @param  chl: DMA通道号
+ *         @arg HW_DMA_CH0
+ *         @arg HW_DMA_CH1
+ *         @arg HW_DMA_CH2
+ *         @arg HW_DMA_CH3
+ * @retval None
+ */
+void DMA_DisableRequest(uint8_t chl)
+{
+    DMA0->CERQ = DMA_CERQ_CERQ(chl);
+}
+
 
 /**
  * @brief  设置DMA传输完成中断
@@ -206,7 +225,7 @@ void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun)
  * @brief  检测DMA传输是否完成
  * @code
  *     //检测DMA的0通道是否完成数据传输
- *     status = DMA_IsTransferComplete(HW_DMA_CH0);
+ *     status = IsMajorLoopComplete(HW_DMA_CH0);
  * @param  chl: DMA通道号
  *         @arg HW_DMA_CH0
  *         @arg HW_DMA_CH1
@@ -214,22 +233,24 @@ void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun)
  *         @arg HW_DMA_CH3
  * @retval 0:数据传输完成 1:数据传输未完成
  */
-uint8_t DMA_IsTransferComplete(uint8_t chl)
+
+uint8_t DMA_IsMajorLoopComplete(uint8_t chl)
 {
     if(DMA0->ERQ & (1 << chl))
     {
         if(DMA0->TCD[chl].CSR & DMA_CSR_DONE_MASK)
         {
             /* clear this bit */
-            DMA0->TCD[chl].CSR &= ~DMA_CSR_DONE_MASK;
+            DMA0->CDNE = DMA_CDNE_CDNE(chl);
             return 0;
         }
         else
         {
             return 1;
-        } 
+        }
     }
-    /* this chl is idle, so return 0; */
+    /* this chl is idle, so return 0 and clear DONE bit anyway; */
+    DMA0->CDNE = DMA_CDNE_CDNE(chl);
     return 0;
 }
 
@@ -292,82 +313,82 @@ void DMA_CancelTransfer(void)
  */
 void DMA0_IRQHandler(void)
 {
-    DMA0->INT |= (1<<0);
+    DMA0->CINT = DMA_CINT_CINT(0);
     if(DMA_CallBackTable[0]) DMA_CallBackTable[0]();
 }
 void DMA1_IRQHandler(void)
 {
-    DMA0->INT |= (1<<1);
+    DMA0->CINT = DMA_CINT_CINT(1);
     if(DMA_CallBackTable[1]) DMA_CallBackTable[1]();
 }
 void DMA2_IRQHandler(void)
 {
-    DMA0->INT |= (1<<2);
+    DMA0->CINT = DMA_CINT_CINT(2);
     if(DMA_CallBackTable[2]) DMA_CallBackTable[2]();
 }
 void DMA3_IRQHandler(void)
 {
-    DMA0->INT |= (1<<3);
+    DMA0->CINT = DMA_CINT_CINT(3);
     if(DMA_CallBackTable[3]) DMA_CallBackTable[3]();
 }
 void DMA4_IRQHandler(void)
 {
-    DMA0->INT |= (1<<4);
+    DMA0->CINT = DMA_CINT_CINT(4);
     if(DMA_CallBackTable[4]) DMA_CallBackTable[4]();
 }
 void DMA5_IRQHandler(void)
 {
-    DMA0->INT |= (1<<5);
+    DMA0->CINT = DMA_CINT_CINT(5);
     if(DMA_CallBackTable[5]) DMA_CallBackTable[5]();
 }
 void DMA6_IRQHandler(void)
 {
-    DMA0->INT |= (1<<6);
+    DMA0->CINT = DMA_CINT_CINT(6);
     if(DMA_CallBackTable[6]) DMA_CallBackTable[6]();
 }
 void DMA7_IRQHandler(void)
 {
-    DMA0->INT |= (1<<7);
+    DMA0->CINT = DMA_CINT_CINT(7);
     if(DMA_CallBackTable[7]) DMA_CallBackTable[7]();
 }
 void DMA8_IRQHandler(void)
 {
-    DMA0->INT |= (1<<8);
+    DMA0->CINT = DMA_CINT_CINT(8);
     if(DMA_CallBackTable[8]) DMA_CallBackTable[8]();
 }
 void DMA9_IRQHandler(void)
 {
-    DMA0->INT |= (1<<9);
+    DMA0->CINT = DMA_CINT_CINT(9);
     if(DMA_CallBackTable[9]) DMA_CallBackTable[9]();
 }
 void DMA10_IRQHandler(void)
 {
-    DMA0->INT |= (1<<10);
+    DMA0->CINT = DMA_CINT_CINT(10);
     if(DMA_CallBackTable[10]) DMA_CallBackTable[10]();
 }
 void DMA11_IRQHandler(void)
 {
-    DMA0->INT |= (1<<11);
+    DMA0->CINT = DMA_CINT_CINT(11);
     if(DMA_CallBackTable[11]) DMA_CallBackTable[11]();
 }
 void DMA12_IRQHandler(void)
 {
-    DMA0->INT |= (1<<12);
+    DMA0->CINT = DMA_CINT_CINT(12);
     if(DMA_CallBackTable[12]) DMA_CallBackTable[12]();
 }
 void DMA13_IRQHandler(void)
 {
-    DMA0->INT |= (1<<13);
+    DMA0->CINT = DMA_CINT_CINT(13);
     if(DMA_CallBackTable[13]) DMA_CallBackTable[13]();
 }
 void DMA14_IRQHandler(void)
 {
-    DMA0->INT |= (1<<14);
+    DMA0->CINT = DMA_CINT_CINT(14);
     if(DMA_CallBackTable[14]) DMA_CallBackTable[14]();
 }
 void DMA15_IRQHandler(void)
 {
-    DMA0->INT |= (1<<15);
+    DMA0->CINT = DMA_CINT_CINT(15);
     if(DMA_CallBackTable[15]) DMA_CallBackTable[15]();
 }
 

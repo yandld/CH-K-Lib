@@ -17,6 +17,22 @@
 static uint8_t SourceBuffer[64]; //源地址
 static uint8_t DestBuffer[64];   //目标地址
 
+void DMA_ISR(void)
+{
+    uint32_t i;
+    printf("DMA INT \r\n");
+    for(i=0;i<sizeof(DestBuffer);i++)
+    {
+        /* 如果拷贝不成功 */
+        if(DestBuffer[i] != SourceBuffer[i])
+        {
+            printf("DMA test error on:buf[%d]\r\n", i);
+            while(1);
+        }
+    }
+    printf("DMA memcpy test succ!\r\n");
+}
+
 int main(void)
 {
     uint32_t i;
@@ -37,40 +53,28 @@ int main(void)
     memset(DestBuffer, 0, sizeof(DestBuffer));       //清空数组中的数据
     
     DMA_InitTypeDef DMA_InitStruct1 = {0};
-    DMA_InitStruct1.chl = HW_DMA_CH0;  /* 使用DMA0通道 */
-    DMA_InitStruct1.chlTriggerSource = DMA_MUX1; /*尽最大努力传输 */
-    DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal; /* 普通模式 不是周期触发模式 */
+    DMA_InitStruct1.chl = HW_DMA_CH0;                                           /* 通道号 */
+    DMA_InitStruct1.chlTriggerSource = MUX1_DMAREQ;                             /* Always Enabled 传输 */
+    DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;              /* 普通模式 不是周期触发模式 */
     DMA_InitStruct1.minorLoopByteCnt = sizeof(SourceBuffer);
     DMA_InitStruct1.majorLoopCnt = 1;
     
-    DMA_InitStruct1.sAddr = (uint32_t)SourceBuffer; /*源地址 */
-    DMA_InitStruct1.sLastAddrAdj = 0; /* 所有Major Loop执行完后 sAddr偏移量 */
-    DMA_InitStruct1.sAddrOffset = 1;  /* 每次读取sAddr后的地址偏移 */
-    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8; /* 每次传输的位宽 */
-    DMA_InitStruct1.sMod = kDMA_ModuloDisable;  /* 禁止Modulo 模式 */
+    DMA_InitStruct1.sAddr = (uint32_t)SourceBuffer;                             /*源地址 */
+    DMA_InitStruct1.sLastAddrAdj = 0;                                           /* 所有Major Loop执行完后 sAddr偏移量 */
+    DMA_InitStruct1.sAddrOffset = 1;                                            /* 每次读取sAddr后的地址偏移 */
+    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;                           /* 每次传输的位宽 */
+    DMA_InitStruct1.sMod = kDMA_ModuloDisable;                                  /* 禁止Modulo 模式 */
     
     DMA_InitStruct1.dAddr = (uint32_t)DestBuffer;
     DMA_InitStruct1.dLastAddrAdj = 0;
     DMA_InitStruct1.dAddrOffset = 1;
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.dMod = kDMA_ModuloDisable;
-    /* 初始化 */
+    /* 初始化 并配置中断 */
     DMA_Init(&DMA_InitStruct1);
-    /* 启动DMA传输 */
-    DMA_StartTransfer(HW_DMA_CH0);
-    /* 等待DMA传输结束 */
-    while(DMA_IsTransferComplete(HW_DMA_CH0));
-
-    for(i=0;i<sizeof(DestBuffer);i++)
-    {
-        /* 如果拷贝不成功 */
-        if(DestBuffer[i] != SourceBuffer[i])
-        {
-            printf("DMA test error on:%d\r\n", i);
-            while(1);
-        }
-    }
-    printf("DMA memcpy test succ!\r\n");
+    DMA_CallbackInstall(HW_DMA_CH0, DMA_ISR);
+    DMA_ITConfig(HW_DMA_CH0, kDMA_IT_Major);
+    DMA_EnableRequest(HW_DMA_CH0);/* 启动DMA传输 */
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

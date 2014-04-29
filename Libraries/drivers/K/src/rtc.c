@@ -183,6 +183,37 @@ void RTC_SetAlarm(RTC_DateTime_Type *datetime)
 }
 
 /**
+ * @brief  设置RTC补偿寄存器
+ * @param  compensationInterval
+      Configures the compensation interval in seconds from 1 to 256 to control
+    *  how frequently the TCR should adjust the number of 32.768 kHz cycles in
+    *  each second. The value written should be one less than the number of
+    *  seconds (for example, write zero to configure for a compensation interval
+    *  of one second). This register is double buffered and writes do not take
+    *  affect until the end of the current compensation interval.
+ * @param  timeCompensation
+      Configures the number of 32.768 kHz clock cycles in each second. This
+    *  register is double buffered and writes do not take affect until the end
+    *  of the current compensation interval.\n
+    * \n
+    *    80h Time prescaler register overflows every 32896 clock cycles.\n
+    *    ... ...\n
+    *    FFh Time prescaler register overflows every 32769 clock cycles.\n
+    *    00h Time prescaler register overflows every 32768 clock cycles.\n
+    *    01h Time prescaler register overflows every 32767 clock cycles.\n
+    *    ... ...\n
+    *    7Fh Time prescaler register overflows every 32641 clock cycles.\n
+ * @retval None
+ */
+void RTC_SetCompensation(uint32_t compensationInterval, uint32_t timeCompensation)
+{
+    RTC->TCR &= ~RTC_TCR_CIR_MASK;
+    RTC->TCR &= ~RTC_TCR_TCR_MASK;
+    RTC->TCR |= RTC_TCR_CIR(compensationInterval);
+    RTC->TCR |= RTC_TCR_TCR(timeCompensation);
+}
+    
+/**
  * @brief  RTC模块初始化配置
  * @param  RTC_DateTime_Type :RTC工作模式配置，详见rtc.h
  * @retval None
@@ -232,7 +263,7 @@ uint32_t RTC_GetTAR(void)
 }
 /**
  * @brief  设置RTC的时间
- * @param  datetime  :返回出来的年月日等信息结构体
+ * @param  datetime  :时间戳结构
  * @retval None
  */
 void RTC_SetDateTime(RTC_DateTime_Type * datetime)

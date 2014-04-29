@@ -153,9 +153,9 @@ uint32_t TSI_QuickInit(uint32_t MAP)
     TSI_InitStruct.chl = pq->channel;
     TSI_InitStruct.triggerMode = kTSI_TriggerPeriodicalScan;
     TSI_InitStruct.threshld = 700;
-    TSI_InitStruct.consecutiveScanTimes = 10;
-    TSI_InitStruct.electrodeOSCPrescaler = kTSI_EletrodeOscDiv_4;
-    TSI_InitStruct.extChargeCurrent = kTSI_ChargeCurrent_8uA;
+    TSI_InitStruct.consecutiveScanTimes = 2;
+    TSI_InitStruct.electrodeOSCPrescaler = kTSI_EletrodeOscDiv_2;
+    TSI_InitStruct.extChargeCurrent = kTSI_ChargeCurrent_32uA;
     TSI_InitStruct.refChargeCurrent = kTSI_ChargeCurrent_32uA;
     TSI_Init(&TSI_InitStruct);
     return pq->ip_instance;

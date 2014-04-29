@@ -23,11 +23,10 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200); /* 为了代码简单 这里直接调用快速初始化了 */
     
-    printf("TSI test\r\n");
+    printf("TSI counter test\r\n");
     
-    /* 使能4个TSI 触摸引脚 注意 TSI上电需要校准 下载后 必须拔掉 JLINK 然后 复位 */
+    /* 使能1个TSI 触摸引脚 注意 TSI上电需要校准 下载后 必须拔掉 JLINK 然后 复位 */
     TSI_QuickInit(TSI0_CH1_PA00);  //使用PTA0引脚作为触控的1通道
-
 
     while(1)
     {

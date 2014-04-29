@@ -15,7 +15,7 @@
 */
 
 /* TSI计数阀值，控制触控的灵敏度 */
-#define TSI_THRESHOLD   (2000)
+#define TSI_THRESHOLD   (200)
 /* TSI 中断回调函数 */
 /*在中断中处理触控按键，对应按键下方的LED指示*/
 void TSI_ISR(void)
@@ -57,19 +57,23 @@ void TSI_ISR(void)
     value = out_of_rang_flag ^ last_flag;
     if(value & out_of_rang_flag & (1<<1))
     {
-        GPIO_ToggleBit(HW_GPIOE, 6);  //翻转小灯电平
+        printf("[%d]touch!\r\n", 4);
+        GPIO_ToggleBit(HW_GPIOE, 6);
     }
     if(value & out_of_rang_flag & (1<<2))
     {
-        GPIO_ToggleBit(HW_GPIOE, 12); //翻转小灯电平
+        printf("[%d]touch!\r\n", 1);
+        GPIO_ToggleBit(HW_GPIOE, 12);
     }
     if(value & out_of_rang_flag & (1<<3))
     {
-        GPIO_ToggleBit(HW_GPIOE, 11); //翻转小灯电平
+        printf("[%d]touch!\r\n", 2);
+        GPIO_ToggleBit(HW_GPIOE, 11);
     }
     if(value & out_of_rang_flag & (1<<4))
     {
-        GPIO_ToggleBit(HW_GPIOE, 7); //翻转小灯电平
+        printf("[%d]touch!\r\n", 3);
+        GPIO_ToggleBit(HW_GPIOE, 7);
     }
     last_flag = out_of_rang_flag;
     /*开启触控中断*/
@@ -90,10 +94,10 @@ int main(void)
     printf("TSI test\r\n");
     
     /* 使能4个TSI 触摸引脚 注意 TSI上电需要校准 下载后 必须拔掉 JLINK 然后 复位 */
-    TSI_QuickInit(TSI0_CH1_PA00);  //使用PTA0引脚作为触控的1通道
-    TSI_QuickInit(TSI0_CH2_PA01);  //使用PTA1引脚作为触控的2通道
-    TSI_QuickInit(TSI0_CH3_PA02);  //使用PTA2引脚作为触控的3通道
-    TSI_QuickInit(TSI0_CH4_PA03);  //使用PTA3引脚作为触控的4通道
+    TSI_QuickInit(TSI0_CH1_PA00);
+    TSI_QuickInit(TSI0_CH2_PA01);
+    TSI_QuickInit(TSI0_CH3_PA02);
+    TSI_QuickInit(TSI0_CH4_PA03);
     /* 安装 TSI中断回调函数 */
     TSI_CallbackInstall(TSI_ISR);
     /* 开启 TSI 扫描完成中断 */

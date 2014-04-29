@@ -142,7 +142,7 @@ int main(void)
     nrf24l01_set_rx_mode();
     while(1)
     {
-        if(DMA_IsTransferComplete(HW_DMA_CH1) == 0)
+        if(DMA_IsMajorLoopComplete(HW_DMA_CH1) == 0)
         {
             trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
             //延时1MS以免发的太快上位机受不了

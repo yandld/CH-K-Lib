@@ -4,12 +4,12 @@
 #include "adc.h"
 #include "rtc.h"
 
-/*
-     实验名称: RTC实时时钟
-     实验平台：渡鸦开发板
-     板载芯片：MK60DN512ZVQ10
- 实验效果：通过串口发送时钟时间   
-*/
+void RTC_ISR(void)
+{
+    printf("RTC INT\r\n");
+}
+
+
 int main(void)
 {
     DelayInit();
@@ -24,18 +24,27 @@ int main(void)
     td.second = 50;
     td.year = 2014;
     td.month = 11;
-    printf("RTC test\r\n");
+    printf("RTC alarm test\r\n");
     
     RTC_QuickInit();
-    /* 为初始化时间 或时间无效 */
     if(RTC_GetTSR() == 0)
     {
         RTC_SetDateTime(&td);
     }
+    /* 开启中断 */
+    RTC_CallbackInstall(RTC_ISR);
+    RTC_ITDMAConfig(kRTC_IT_TimeAlarm);
+    
+    /* 设置闹钟在当前3秒后 */
+    RTC_GetDateTime(&td);
+    td.second += 3;
+    RTC_SetAlarm(&td);
+
     while(1)
     {
         /* 获得时间 */
         RTC_GetDateTime(&td);//获得时间
+
         printf("%d-%d-%d %d:%d:%d\r\n", td.year, td.month, td.day, td.hour, td.minute, td.second);
         DelayMs(1000);
     }

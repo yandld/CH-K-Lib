@@ -63,5 +63,7 @@ void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config);
 void RTC_CallbackInstall(RTC_CallBackType AppCBFun);
 void RTC_SetDateTime(RTC_DateTime_Type * datetime);
 uint32_t RTC_GetTSR(void);
+void RTC_SetAlarm(RTC_DateTime_Type *datetime);
+
 
 #endif

@@ -171,6 +171,17 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
     RTC_SecondToDateTime(&i, datetime);
 }
 
+void RTC_SetAlarm(RTC_DateTime_Type *datetime)
+{
+    uint32_t i;
+    if(!datetime)
+    {
+        return;
+    }
+    RTC_DateTimeToSecond(datetime, &i);
+    RTC->TAR = i-1;
+}
+
 /**
  * @brief  RTC模块初始化配置
  * @param  RTC_DateTime_Type :RTC工作模式配置，详见rtc.h
@@ -201,7 +212,7 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
     }
     /* enable OSC */
     RTC->CR |= RTC_CR_OSCE_MASK;
-	for(i=0;i<0x600000;i++) {};
+	for(i=0;i<0x6000;i++) {};
     /* enable RTC */
     RTC->SR |= RTC_SR_TCE_MASK;
 }
@@ -215,6 +226,10 @@ uint32_t RTC_GetTSR(void)
     return RTC->TSR;
 }
 
+uint32_t RTC_GetTAR(void)
+{
+    return RTC->TAR;
+}
 /**
  * @brief  设置RTC的时间
  * @param  datetime  :返回出来的年月日等信息结构体
@@ -293,6 +308,15 @@ void RTC_IRQHandler(void)
     if(RTC_CallBackTable[0])
     {
         RTC_CallBackTable[0]();
+    }
+    /* clear pending bit if not cleared */
+    if((RTC->IER & RTC_IER_TOIE_MASK) && (RTC->SR & RTC_SR_TOF_MASK))
+    {
+        RTC->TSR = RTC->TSR;
+    }
+    if((RTC->IER & RTC_IER_TAIE_MASK) && (RTC->SR & RTC_SR_TAF_MASK))
+    {
+        RTC->TAR = RTC->TAR;
     }
 }
 

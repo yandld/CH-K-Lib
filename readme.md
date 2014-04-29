@@ -29,8 +29,6 @@ Project文件夹:
 1. 安装MDK(Keil)5.00以上版本
 2. 打开\Project\超核K60开发板-渡鸦\0-工程模板\MDK 工程文件即可
 3. 工程下不同版本支持的芯片
-4. 快速入门手册： http://git.oschina.net/yandld/CH-K-Lib/wikis/home
-
 
 ##Processors: ##
 
@@ -56,8 +54,6 @@ Project文件夹:
 
 ## 联系我们及获取最新固件库 ##
  - www.beyondcore.net
- - 代码仓库下载:
-   http://git.oschina.net/yandld/CH-K-Lib/repository/archive?ref=master
  - 技术讨论群:247160311
 
 

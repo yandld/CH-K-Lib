@@ -1,10 +1,10 @@
-# 超核Kinetis 开发包(固件库) #
+## 超核Kinetis 开发包(固件库)
 
 包含Freescale K系列及KL系列底层驱动及实例代码
 
 ----------
 
-## 文件说明: ##
+### 文件说明
  - Libraries 固件库源文件
  - Project   工程文件及例程存放目录
  - Document  文档
@@ -25,12 +25,12 @@ Project文件夹:
 3. keilkill.bat Keil清楚编译中间文件的小工具
 
 
-## 如何开始 ##
+### 如何开始
 1. 安装MDK(Keil)5.00以上版本
 2. 打开\Project\超核K60开发板-渡鸦\0-工程模板\MDK 工程文件即可
 3. 工程下不同版本支持的芯片
 
-##Processors: ##
+### Processors:
 
 **MK60D10:**
 
@@ -52,7 +52,7 @@ Project文件夹:
 
  - MK10 32M及48M主频芯片
 
-## 联系我们及获取最新固件库 ##
+### 联系我们及获取最新固件库
  - www.beyondcore.net
  - 技术讨论群:247160311
 

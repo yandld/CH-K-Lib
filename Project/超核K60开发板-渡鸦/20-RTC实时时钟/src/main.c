@@ -1,7 +1,6 @@
 #include "gpio.h"
 #include "common.h"
 #include "uart.h"
-#include "adc.h"
 #include "rtc.h"
 
 /*
@@ -25,10 +24,9 @@ int main(void)
     td.year = 2014;
     td.month = 11;
     printf("RTC test\r\n");
-    
     RTC_QuickInit();
     /* 为初始化时间 或时间无效 */
-    if(RTC_GetTSR() == 0)
+    if(RTC_IsTimeValid())
     {
         RTC_SetDateTime(&td);
     }
@@ -37,6 +35,7 @@ int main(void)
         /* 获得时间 */
         RTC_GetDateTime(&td);//获得时间
         printf("%d-%d-%d %d:%d:%d\r\n", td.year, td.month, td.day, td.hour, td.minute, td.second);
+        GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(1000);
     }
 }

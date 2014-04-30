@@ -1,7 +1,6 @@
 #include "gpio.h"
 #include "common.h"
 #include "uart.h"
-#include "adc.h"
 #include "rtc.h"
 
 void RTC_ISR(void)
@@ -26,7 +25,7 @@ int main(void)
     printf("RTC clk out test, second pulse in on PE26\r\n");
     
     RTC_QuickInit();
-    if(RTC_GetTSR() == 0)
+    if(RTC_IsTimeValid() == 0)
     {
         RTC_SetDateTime(&td);
     }

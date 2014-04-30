@@ -171,12 +171,21 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
     RTC_SecondToDateTime(&i, datetime);
 }
 
+uint32_t RTC_IsTimeValid(void)
+{
+    if(RTC->TSR)
+    {
+        return 0;
+    }
+    return 1;
+}
+
 /**
  * @brief  设置闹钟时间
  * @param  datetime  : 时间戳结构体
  * @retval None
  */
-void RTC_SetAlarm(RTC_DateTime_Type *datetime)
+void RTC_SetAlarm(RTC_DateTime_Type * datetime)
 {
     uint32_t i;
     if(!datetime)

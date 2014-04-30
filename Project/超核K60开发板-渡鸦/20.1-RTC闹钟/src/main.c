@@ -1,7 +1,6 @@
 #include "gpio.h"
 #include "common.h"
 #include "uart.h"
-#include "adc.h"
 #include "rtc.h"
 
 void RTC_ISR(void)
@@ -27,7 +26,7 @@ int main(void)
     printf("RTC alarm test\r\n");
     
     RTC_QuickInit();
-    if(RTC_GetTSR() == 0)
+    if(RTC_IsTimeValid() == 0)
     {
         RTC_SetDateTime(&td);
     }
@@ -44,8 +43,8 @@ int main(void)
     {
         /* 获得时间 */
         RTC_GetDateTime(&td);//获得时间
-
         printf("%d-%d-%d %d:%d:%d\r\n", td.year, td.month, td.day, td.hour, td.minute, td.second);
+        GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(1000);
     }
 }

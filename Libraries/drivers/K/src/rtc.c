@@ -228,6 +228,8 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
     uint32_t i;
     SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;
     // RTC->CR = 0;
+    /* disable osc */
+    RTC->CR &= ~RTC_CR_OSCE_MASK;
     /* OSC load config */
     switch(RTC_InitStruct->oscLoad)
     {

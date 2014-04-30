@@ -34,6 +34,5 @@ void VREF_DeInit(void);
 void VREF_QuickInit(void);
 void VREF_SetTrimValue(uint32_t val);
 
-
 #endif
 

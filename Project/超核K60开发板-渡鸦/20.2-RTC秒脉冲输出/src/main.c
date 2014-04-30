@@ -9,7 +9,6 @@ void RTC_ISR(void)
     printf("RTC INT\r\n");
 }
 
-
 int main(void)
 {
     DelayInit();
@@ -42,8 +41,8 @@ int main(void)
     while(1)
     {
         RTC_GetDateTime(&td);
-
         printf("%d-%d-%d %d:%d:%d\r\n", td.year, td.month, td.day, td.hour, td.minute, td.second);
+        GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(1000);
     }
 }

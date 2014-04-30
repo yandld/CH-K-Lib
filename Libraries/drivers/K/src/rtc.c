@@ -5,7 +5,6 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片RTC模块的底层功能函数
   ******************************************************************************
   */
   
@@ -51,7 +50,8 @@ int RTC_GetWeekFromYMD(int year, int month, int days)
     int i, y = year - 1;  
     for (i=0; i<month; ++i) days += mdays[i];  
     if (month > 2) 
-    { // Increment date if this is a leap year after February  
+    { 
+         /* Increment date if this is a leap year after February */
         if (((year%400) == 0) || ((year&3) == 0 && (year%100))) ++days;  
     }  
     return (y+y/4-y/100+y/400+days)%7;  
@@ -171,6 +171,11 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
     RTC_SecondToDateTime(&i, datetime);
 }
 
+/**
+ * @brief  设置闹钟时间
+ * @param  datetime  : 时间戳结构体
+ * @retval None
+ */
 void RTC_SetAlarm(RTC_DateTime_Type *datetime)
 {
     uint32_t i;

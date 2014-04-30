@@ -5,7 +5,6 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片RTC模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __CH_LIB_RTC_H__
@@ -28,7 +27,7 @@ typedef struct
 
 typedef enum
 {
-    kRTC_OScLoad_0PF, //芯片内部晶振电容配置
+    kRTC_OScLoad_0PF,   /* 电容配置 */
     kRTC_OScLoad_2PF,
     kRTC_OScLoad_4PF,
     kRTC_OScLoad_8PF,
@@ -44,10 +43,10 @@ typedef struct
 //!< interrupt and DMA select
 typedef enum
 {
-    kRTC_IT_TimeOverflow_Disable,  //关闭时间中断
-    kRTC_IT_TimeAlarm_Disable,     //关闭闹钟中断
-    kRTC_IT_TimeAlarm,             //开启闹钟中断 
-    kRTC_IT_TimeOverflow,          //开启时间溢出中断     
+    kRTC_IT_TimeOverflow_Disable,  /* 关闭时间中断 */
+    kRTC_IT_TimeAlarm_Disable,     /* 关闭闹钟中断 */
+    kRTC_IT_TimeAlarm,             /* 开启闹钟中断 */
+    kRTC_IT_TimeOverflow,          /* 开启时间溢出中断 */    
 }RTC_ITDMAConfig_Type;
 
 //!< CallbackType
@@ -59,7 +58,7 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime);
 void RTC_SetDateTime(RTC_DateTime_Type * datetime);
 void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config);
 void RTC_CallbackInstall(RTC_CallBackType AppCBFun);
-//!< function which may not be used 
+//!< function which may not be used as a beginger
 void RTC_Init(RTC_InitTypeDef * RTC_InitStruct);
 int  RTC_GetWeekFromYMD(int year, int month, int days);
 uint32_t RTC_GetTSR(void);

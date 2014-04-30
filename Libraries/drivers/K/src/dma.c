@@ -70,9 +70,9 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
         default:
             break;
     }
-    /* Çå¿Õ ADDR */
+    /* clear some register */
     DMA0->TCD[DMA_InitStruct->chl].ATTR  = 0;
-    
+    DMA0->TCD[DMA_InitStruct->chl].CSR   = 0;
     /* minor loop cnt */
     DMA0->TCD[DMA_InitStruct->chl].NBYTES_MLNO = DMA_NBYTES_MLNO_NBYTES(DMA_InitStruct->minorLoopByteCnt);
     /* major loop cnt */

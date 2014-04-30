@@ -85,7 +85,7 @@ int main(void)
         //通过串口使用dma功能实现数据发送
         UART_SendWithDMA(HW_DMA_CH2, (const uint8_t*)String1, sizeof(String1));
         /* 等待DMA传输结束 */
-        while(DMA_IsMajorLoopComplete(HW_DMA_CH0));
+        while(DMA_IsMajorLoopComplete(HW_DMA_CH2));
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(50);
     }

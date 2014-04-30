@@ -456,10 +456,10 @@ uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint8_t *buf, uint8_t *len
         word[1] = CAN_InstanceTable[instance]->MB[mb].WORD1;
         for(i = 0; i < len1; i++)
         {  
-           if(i<4)
-           (*(buf+i))=(word[0]>>((3-i)*8));
-           else							
-           (*(buf+i))=(word[1]>>((7-i)*8));
+            if(i < 4)
+            (*(buf + i))=(word[0]>>((3-i)*8));
+            else							
+            (*(buf + i))=(word[1]>>((7-i)*8));
         }
         *len = len1;
         i = CAN_InstanceTable[instance]->TIMER; /* unlock MB */
@@ -472,8 +472,6 @@ uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint8_t *buf, uint8_t *len
 
 /**
  * @brief  中断处理函数入口
- * @param  CAN0_ORed_Message_buffer_IRQHandler :芯片的CAN0模块数据收发中断函数入口
- *         CAN1_ORed_Message_buffer_IRQHandler :芯片的CAN1模块数据收发中断函数入口
  * @note 函数内部用于中断事件处理
  */
 void CAN0_ORed_Message_buffer_IRQHandler(void)

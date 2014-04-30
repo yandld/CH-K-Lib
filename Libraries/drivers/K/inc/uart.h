@@ -31,7 +31,7 @@
 
 /*!< UART 快速初始化宏 */                      
 #define UART1_RX_PE01_TX_PE00   (0x80E1U) //芯片的UART1端口，使用PTE1引脚为接收引脚，使用PTE0引脚为发送引脚
-#define UART0_RX_PF17_TX_PF18   (0xA528U) //芯片的UART0端口，使用PTE17引脚为接收引脚，使用PTE18引脚为发送引脚
+#define UART0_RX_PF17_TX_PF18   (0xA528U)
 #define UART3_RX_PE05_TX_PE04   (0x88E3U)
 #define UART5_RX_PF19_TX_PF20   (0xA72DU)
 #define UART5_RX_PE09_TX_PE08   (0x90E5U)

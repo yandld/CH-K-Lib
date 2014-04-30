@@ -196,6 +196,7 @@ void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config)
             break;
         case kDMA_IT_Major:
             NVIC_EnableIRQ(DMA_IRQnTable[chl]);
+            DMA0->TCD[chl].CSR &= ~DMA_CSR_INTHALF_MASK;
             DMA0->TCD[chl].CSR |= DMA_CSR_INTMAJOR_MASK;
             break; 
         default:

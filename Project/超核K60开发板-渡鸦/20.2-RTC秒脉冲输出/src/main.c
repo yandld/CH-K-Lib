@@ -24,7 +24,7 @@ int main(void)
     td.second = 50;
     td.year = 2014;
     td.month = 11;
-    printf("RTC alarm test\r\n");
+    printf("RTC clk out test, second pulse in on PE26\r\n");
     
     RTC_QuickInit();
     if(RTC_GetTSR() == 0)
@@ -41,8 +41,7 @@ int main(void)
     
     while(1)
     {
-        /* 获得时间 */
-        RTC_GetDateTime(&td);//获得时间
+        RTC_GetDateTime(&td);
 
         printf("%d-%d-%d %d:%d:%d\r\n", td.year, td.month, td.day, td.hour, td.minute, td.second);
         DelayMs(1000);

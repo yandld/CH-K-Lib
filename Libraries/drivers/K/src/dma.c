@@ -177,6 +177,14 @@ void DMA_EnableAutoDisableRequest(uint8_t chl , bool flag)
     }
 }
 
+/**
+ * @brief  使能Major LoopLink 功能
+ * @note   当一个通道结束MajorLoopLink后 自动开始另一个通道的传输
+ * @param  chl: DMA通道号
+ * @param  linkChl: 需要连接到通道号
+ * @param  flag 使能或者关闭
+ * @retval None
+ */
 void DMA_EnableMajorLink(uint8_t chl , uint8_t linkChl, bool flag)
 {
     if(flag)

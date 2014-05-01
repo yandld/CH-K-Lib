@@ -70,10 +70,10 @@
 #define FTM3_CH5_DMAREQ         55
 #define FTM3_CH6_DMAREQ         56
 #define FTM3_CH7_DMAREQ         57
-#define MUX1_DMAREQ             54
-#define MUX2_DMAREQ             55
-#define MUX3_DMAREQ             56
-
+#define MUX0_DMAREQ             54
+#define MUX1_DMAREQ             55
+#define MUX2_DMAREQ             56
+#define MUX3_DMAREQ             57
 
 //!< DMA通道
 #define HW_DMA_CH0    (0x00)  //DMA0通道
@@ -91,9 +91,9 @@ typedef enum
 //!< DMA搬运数据端口位宽设置
 typedef enum
 {
-    kDMA_DataWidthBit_8,   //8位数据宽度
-    kDMA_DataWidthBit_16,  //16位数据宽度
-    kDMA_DataWidthBit_32,  //32位数据宽度
+    kDMA_DataWidthBit_8,   /* 8 bit data width */
+    kDMA_DataWidthBit_16,  /* 16 bit data width */
+    kDMA_DataWidthBit_32,  /* 32 bit data width*/
 }DMA_DataWidthBit_Type; 
 
 //!< DMA Moduluo 设置

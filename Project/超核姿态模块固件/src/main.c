@@ -93,7 +93,6 @@ int init_sensor(void)
 extern int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
 int main(void)
 {
-    int16_t x,y,z;
     uint32_t i;
     uint32_t cnt = 0;
     uint32_t ret;

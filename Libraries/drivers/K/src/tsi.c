@@ -15,24 +15,24 @@
  
 static TSI_CallBackType TSI_CallBackTable[1] = {NULL};
  
-static const void* TSI_ChlCNTRTable[] =
+static const uint16_t * TSI_ChlCNTRTable[] =
 {
-    (void*)&TSI0->CNTR1,
-    (void*)&TSI0->CNTR1,
-    (void*)&TSI0->CNTR3,
-    (void*)&TSI0->CNTR3,
-    (void*)&TSI0->CNTR5,
-    (void*)&TSI0->CNTR5,
-    (void*)&TSI0->CNTR7,
-    (void*)&TSI0->CNTR7,
-    (void*)&TSI0->CNTR9,
-    (void*)&TSI0->CNTR9,
-    (void*)&TSI0->CNTR11,
-    (void*)&TSI0->CNTR11,
-    (void*)&TSI0->CNTR13,
-    (void*)&TSI0->CNTR13,
-    (void*)&TSI0->CNTR15,
-    (void*)&TSI0->CNTR15, 
+    (uint16_t*)&TSI0->CNTR1 + 0,
+    (uint16_t*)&TSI0->CNTR1 + 1,
+    (uint16_t*)&TSI0->CNTR3 + 0,
+    (uint16_t*)&TSI0->CNTR3 + 1,
+    (uint16_t*)&TSI0->CNTR5 + 0,
+    (uint16_t*)&TSI0->CNTR5 + 1,
+    (uint16_t*)&TSI0->CNTR7 + 0,
+    (uint16_t*)&TSI0->CNTR7 + 1,
+    (uint16_t*)&TSI0->CNTR9 + 0,
+    (uint16_t*)&TSI0->CNTR9 + 1,
+    (uint16_t*)&TSI0->CNTR11 + 0,
+    (uint16_t*)&TSI0->CNTR11 + 1,
+    (uint16_t*)&TSI0->CNTR13 + 0,
+    (uint16_t*)&TSI0->CNTR13 + 1,
+    (uint16_t*)&TSI0->CNTR15 + 0,
+    (uint16_t*)&TSI0->CNTR15 + 1,
 };
 
 /**
@@ -42,16 +42,7 @@ static const void* TSI_ChlCNTRTable[] =
  */
 uint32_t TSI_GetCounter(uint32_t chl)
 {
-    uint32_t i;
-    if(chl % 0x02)
-    {
-        i= ((*(uint32_t*)TSI_ChlCNTRTable[chl]) >> 16 )&0x0000FFFF;
-    }
-    else
-    {
-        i= ((*(uint32_t*)TSI_ChlCNTRTable[chl]) >>  0 )&0x0000FFFF; 
-    }  
-    return i;
+    return *TSI_ChlCNTRTable[chl];
 }
 
 /**

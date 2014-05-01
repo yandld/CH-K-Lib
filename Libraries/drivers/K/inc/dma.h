@@ -12,6 +12,7 @@
 #define __CH_LIB_DMA_H__
   
 #include <stdint.h>
+#include <stdbool.h>
 
 //!< DMA ´¥·¢Ô´Ñ¡Ôñ
 #define DISABLE_DMAREQ          0
@@ -169,7 +170,7 @@ typedef void (*DMA_CallBackType)(void);
 
 //!< API functions
 void DMA_Init(DMA_InitTypeDef *DMA_InitStruct);
-/* get vars */
+/* get vars and status */
 uint32_t DMA_GetDestAddress(uint8_t ch);
 uint32_t DMA_GetSourceAddress(uint8_t ch);
 uint8_t DMA_IsMajorLoopComplete(uint8_t chl);
@@ -181,9 +182,13 @@ void DMA_SetDestAddress(uint8_t chl, uint32_t address);
 void DMA_SetSourceAddress(uint8_t chl, uint32_t address);
 void DMA_EnableRequest(uint8_t chl);
 void DMA_DisableRequest(uint8_t chl);
+void DMA_EnableAutoDisableRequest(uint8_t chl , bool flag);
 /* IT funtions */
 void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config);
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun);
+/* chl link */
+void DMA_EnableMajorLink(uint8_t chl , uint8_t linkChl, bool flag);
+
 
 #endif
   

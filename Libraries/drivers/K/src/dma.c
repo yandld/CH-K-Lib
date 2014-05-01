@@ -162,6 +162,36 @@ void DMA_DisableRequest(uint8_t chl)
     DMA0->CERQ = DMA_CERQ_CERQ(chl);
 }
 
+/**
+ * @brief  在Majloop 结束后  是否自动关闭Request
+ */
+void DMA_EnableAutoDisableRequest(uint8_t chl , bool flag)
+{
+    if(flag)
+    {
+        DMA0->TCD[chl].CSR |= DMA_CSR_DREQ_MASK;
+    }
+    else
+    {
+        DMA0->TCD[chl].CSR &= ~DMA_CSR_DREQ_MASK;  
+    }
+}
+
+void DMA_EnableMajorLink(uint8_t chl , uint8_t linkChl, bool flag)
+{
+    if(flag)
+    {
+        /* enable major loop link */
+        DMA0->TCD[chl].CSR |= DMA_CSR_MAJORELINK_MASK;
+        /* set chl */
+        DMA0->TCD[chl].CSR &= ~DMA_CSR_MAJORLINKCH_MASK;
+        DMA0->TCD[chl].CSR |= DMA_CSR_MAJORLINKCH(linkChl);
+    }
+    else
+    {
+        DMA0->TCD[chl].CSR &= ~DMA_CSR_MAJORELINK_MASK;
+    }
+}
 
 /**
  * @brief  设置DMA传输完成中断

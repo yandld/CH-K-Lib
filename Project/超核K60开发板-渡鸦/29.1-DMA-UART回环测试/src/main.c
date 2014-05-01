@@ -3,11 +3,12 @@
 #include "uart.h"
 #include "dma.h"
 
+/* 定义使用的DMA通道号 */
 #define DMA_SEND_CH             HW_DMA_CH1
 #define DMA_REV_CH              HW_DMA_CH2
 
 /* 接收缓冲区 */
-static uint8_t UART_RxBuffer[16];
+static uint8_t UART_Buffer[16];
 /* UART 模块数据寄存器 */
 static const void* UART_DataPortAddrTable[] = 
 {
@@ -28,7 +29,7 @@ static const uint32_t UART_SendDMATriggerSourceTable[] =
     UART4_TRAN_DMAREQ,
     UART5_TRAN_DMAREQ,
 };
-
+/* UART 接收触发源编号 */
 static const uint32_t UART_RevDMATriggerSourceTable[] = 
 {
     UART0_REV_DMAREQ,
@@ -38,28 +39,18 @@ static const uint32_t UART_RevDMATriggerSourceTable[] =
     UART4_REV_DMAREQ,
     UART5_REV_DMAREQ,
 };
-
-/* DMA 发送函数 */
-static uint32_t UART_SendWithDMA(uint32_t dmaChl, const uint8_t *buf, uint32_t size)
-{
-    DMA_SetSourceAddress(dmaChl, (uint32_t)buf);
-    DMA_SetMajorLoopCount(dmaChl, size);
-    /* 启动传输 */
-    DMA_EnableRequest(dmaChl);
-    return 0;
-}
 /* DMA 串口发送 配置 */
-static void UART_DMASendInit(uint32_t uartInstnace, uint8_t dmaChl)
+static void UART_DMASendInit(uint32_t uartInstnace, uint8_t dmaChl, uint8_t * txBuf)
 {
     DMA_InitTypeDef DMA_InitStruct1 = {0};
     DMA_InitStruct1.chl = dmaChl;
     DMA_InitStruct1.chlTriggerSource = UART_SendDMATriggerSourceTable[uartInstnace];
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
     DMA_InitStruct1.minorLoopByteCnt = 1;
-    DMA_InitStruct1.majorLoopCnt = 0;
+    DMA_InitStruct1.majorLoopCnt = 1;
     
-    DMA_InitStruct1.sAddr = NULL;
-    DMA_InitStruct1.sLastAddrAdj = 0; 
+    DMA_InitStruct1.sAddr = (uint32_t)txBuf;
+    DMA_InitStruct1.sLastAddrAdj = -1; 
     DMA_InitStruct1.sAddrOffset = 1;
     DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.sMod = kDMA_ModuloDisable;
@@ -70,9 +61,10 @@ static void UART_DMASendInit(uint32_t uartInstnace, uint8_t dmaChl)
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.dMod = kDMA_ModuloDisable;
     DMA_Init(&DMA_InitStruct1);
+    DMA_EnableRequest(dmaChl);
 }
 /* DMA 串口接收 配置 */
-static void UART_DMARevInit(uint32_t uartInstnace, uint8_t dmaChl)
+static void UART_DMARevInit(uint32_t uartInstnace, uint8_t dmaChl, uint8_t * rxBuf)
 {
     DMA_InitTypeDef DMA_InitStruct1 = {0};
     DMA_InitStruct1.chl = dmaChl;
@@ -87,24 +79,14 @@ static void UART_DMARevInit(uint32_t uartInstnace, uint8_t dmaChl)
     DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.sMod = kDMA_ModuloDisable;
     
-    DMA_InitStruct1.dAddr = NULL; 
+    DMA_InitStruct1.dAddr = (uint32_t)rxBuf; 
     DMA_InitStruct1.dLastAddrAdj = 0;
     DMA_InitStruct1.dAddrOffset = 0;
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.dMod = kDMA_ModuloDisable;
     DMA_Init(&DMA_InitStruct1); 
-}
-
-/* DMA 中断函数 */
-void DMA_ISR(void)
-{
-    static uint8_t ch;
-    ch = UART_RxBuffer[0];
-    /*DMA 发送 */
-    UART_SendWithDMA(DMA_SEND_CH, &ch, 1);
-    /* 重新开启 DMA接收 */
-    DMA_SetMajorLoopCount(DMA_REV_CH, 1);
-    DMA_EnableRequest(DMA_REV_CH);
+    /* 完成 Major Loop 后不停止 Request 继续等待DMA硬件触发源触发 */
+    DMA_EnableAutoDisableRequest(dmaChl, false);
 }
 
 int main(void)
@@ -113,22 +95,20 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
-    printf("DMA UART transmit test\r\n");
+    printf("DMA UART loop-back test\r\n");
     
     /* 配置DMA 打开UART_Tx_DMA功能 */
     UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx);
-    UART_DMASendInit(HW_UART0, DMA_SEND_CH);
+    UART_DMASendInit(HW_UART0, DMA_SEND_CH, UART_Buffer);
     
     /* 配置DMA 打开UART_Rx_DMA功能 */
     UART_ITDMAConfig(HW_UART0, kUART_DMA_Rx);
-    UART_DMARevInit(HW_UART0, DMA_REV_CH);
+    UART_DMARevInit(HW_UART0, DMA_REV_CH, UART_Buffer);
     
-    /* 打开 DMA 中断 */
-    DMA_CallbackInstall(DMA_REV_CH, DMA_ISR);
-    DMA_ITConfig(DMA_REV_CH, kDMA_IT_Major);
+    /* Chl-Chl Link: 当接收通道完成后 自动开启发送DMA通道 */
+    DMA_EnableMajorLink(DMA_REV_CH, DMA_SEND_CH, true);
     
-    /* 设置接收缓冲区 使能DMA接收 */
-    DMA_SetDestAddress(DMA_REV_CH, (uint32_t)UART_RxBuffer);
+    /*使能DMA接收 */
     DMA_EnableRequest(DMA_REV_CH);
     
     while(1)

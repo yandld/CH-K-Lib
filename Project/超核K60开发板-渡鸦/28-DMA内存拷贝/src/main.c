@@ -23,12 +23,7 @@ void DMA_ISR(void)
     printf("DMA INT \r\n");
     for(i=0;i<sizeof(DestBuffer);i++)
     {
-        /* 如果拷贝不成功 */
-        if(DestBuffer[i] != SourceBuffer[i])
-        {
-            printf("DMA test error on:buf[%d]\r\n", i);
-            while(1);
-        }
+        printf("DestBuf[%d]:0x%X\r\n", i, DestBuffer[i]);
     }
     printf("DMA_sAddr:%x\r\n", DMA_GetSourceAddress(HW_DMA_CH0));
     printf("DMA_dAddr:%x\r\n", DMA_GetDestAddress(HW_DMA_CH0));

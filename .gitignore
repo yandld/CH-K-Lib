@@ -3,7 +3,6 @@
 *.ko
 *.o.*
 *.uvgui.*
-*.uvopt
 *.bat
 *.__i
 *.dbgdt

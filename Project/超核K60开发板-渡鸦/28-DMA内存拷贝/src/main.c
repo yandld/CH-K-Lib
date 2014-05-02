@@ -30,6 +30,10 @@ void DMA_ISR(void)
             while(1);
         }
     }
+    printf("DMA_sAddr:%x\r\n", DMA_GetSourceAddress(HW_DMA_CH0));
+    printf("DMA_dAddr:%x\r\n", DMA_GetDestAddress(HW_DMA_CH0));
+    printf("DMA_sAddr - SouceAddr:%d\r\n", DMA_GetSourceAddress(HW_DMA_CH0) - (uint32_t)SourceBuffer);
+    printf("DMA_dAddr - DestAddr:%d\r\n", DMA_GetDestAddress(HW_DMA_CH0) - (uint32_t)DestBuffer);
     printf("DMA memcpy test succ!\r\n");
 }
 
@@ -51,7 +55,8 @@ int main(void)
         SourceBuffer[i] = i;
     }
     memset(DestBuffer, 0, sizeof(DestBuffer));       //清空数组中的数据
-    
+    printf("SouceAddr:%p\r\n", SourceBuffer);
+    printf("DestAddr :%p\r\n", DestBuffer);
     DMA_InitTypeDef DMA_InitStruct1 = {0};
     DMA_InitStruct1.chl = HW_DMA_CH0;                                           /* 通道号 */
     DMA_InitStruct1.chlTriggerSource = MUX1_DMAREQ;                             /* Always Enabled 传输 */

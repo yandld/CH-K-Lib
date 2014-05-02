@@ -34,9 +34,9 @@ Purpose     : Configures abilities, fonts etc.
 *         Configuration of available packages
 */
 
-#define GUI_WINSUPPORT            0  /* Window manager package available */
-#define GUI_SUPPORT_MEMDEV        0  /* Memory devices available */
-#define GUI_SUPPORT_AA            0  /* Anti aliasing available */
+#define GUI_WINSUPPORT            1  /* Window manager package available */
+#define GUI_SUPPORT_MEMDEV        1  /* Memory devices available */
+#define GUI_SUPPORT_AA            1  /* Anti aliasing available */
 
 #endif  /* Avoid multiple inclusion */
 

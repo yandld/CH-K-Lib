@@ -13,21 +13,6 @@
  实验效果：使用串口发送数据，仅仅是使用了DMA功能，处理速度更快
 */
 
-/* DMA 发送函数 */
-static uint32_t UART_SendWithDMA(uint32_t dmaChl, const uint8_t *buf, uint32_t size)
-{
-    DMA_SetSourceAddress(dmaChl, (uint32_t)buf);
-    DMA_SetMajorLoopCount(dmaChl, size);
-    /* 启动传输 */
-    DMA_EnableRequest(dmaChl);
-    return 0;
-}
-
-
-
-static void UART_DMASendConfig(uint32_t uartInstnace, uint8_t dmaChl)
-{
-    
 static const void* UART_DataPortAddrTable[] = 
 {
     (void*)&UART0->D,
@@ -48,6 +33,18 @@ static const uint32_t UART_SendDMATriggerSourceTable[] =
     UART5_TRAN_DMAREQ,
 };
 
+/* DMA 发送函数 */
+static uint32_t UART_SendWithDMA(uint32_t dmaChl, const uint8_t *buf, uint32_t size)
+{
+    DMA_SetSourceAddress(dmaChl, (uint32_t)buf);
+    DMA_SetMajorLoopCount(dmaChl, size);
+    /* 启动传输 */
+    DMA_EnableRequest(dmaChl);
+    return 0;
+}
+
+static void UART_DMASendConfig(uint32_t uartInstnace, uint8_t dmaChl)
+{
     DMA_InitTypeDef DMA_InitStruct1 = {0};
     DMA_InitStruct1.chl = dmaChl;
     DMA_InitStruct1.chlTriggerSource = UART_SendDMATriggerSourceTable[uartInstnace];
@@ -82,12 +79,12 @@ int main(void)
     
     while(1)
     {
-        //通过串口使用dma功能实现数据发送
+        /* 通过串口使用dma功能实现数据发送 */
         UART_SendWithDMA(HW_DMA_CH2, (const uint8_t*)String1, sizeof(String1));
         /* 等待DMA传输结束 */
         while(DMA_IsMajorLoopComplete(HW_DMA_CH2));
         GPIO_ToggleBit(HW_GPIOE, 6);
-        DelayMs(50);
+        DelayMs(200);
     }
 }
 

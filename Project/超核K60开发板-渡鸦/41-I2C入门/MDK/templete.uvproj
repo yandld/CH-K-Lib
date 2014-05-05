@@ -138,7 +138,7 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>0</RestoreTracepoints>
             <RestoreTracepoints>1</RestoreTracepoints>
             <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
@@ -524,25 +524,15 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\dac.c</FilePath>
             </File>
-            <File>
-              <FileName>vref.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\vref.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>devices</GroupName>
           <Files>
             <File>
-              <FileName>sram.c</FileName>
+              <FileName>i2c_bus_ops.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
-              <FileName>ili9320.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\devices\src\i2c_bus_ops.c</FilePath>
             </File>
           </Files>
         </Group>

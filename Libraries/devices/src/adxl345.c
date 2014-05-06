@@ -45,11 +45,12 @@
 #define FIFO_STATUS		0X39
 
 static struct i2c_device device;
+extern void DelayMs(uint32_t ms);
 /* ADXL345 2 possible addr */
 static const uint8_t adxl345_addr[] = {0x53, 0x1D};
 
 
-#define ADXL345_DEBUG		1
+#define ADXL345_DEBUG		0
 #if ( ADXL345_DEBUG == 1 )
 #define ADXL345_TRACE	printf
 #else

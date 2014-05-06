@@ -127,7 +127,7 @@ void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct);
 void FTM_PWM_InvertPolarity(uint32_t instance, uint8_t chl, uint32_t config);
 uint32_t FTM_QD_QuickInit(uint32_t MAP);
 void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct);
-void FTM_QD_GetData(uint32_t instance, uint32_t* value, uint8_t* direction);
+void FTM_QD_GetData(uint32_t instance, int* value, uint8_t* direction);
 void FTM_QD_ClearCount(uint32_t instance);
 
 

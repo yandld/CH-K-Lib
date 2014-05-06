@@ -151,7 +151,7 @@ void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
     /* enable clock gate */
     *(uint32_t*)SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].addr |= SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].mask;
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->MOD = FTM_MOD_MOD_MASK; //设置为最大
-    FTM_InstanceTable[FTM_QD_InitStruct->instance]->CNTIN = FTM_CNTIN_INIT_MASK/2; //最大值的一半
+    FTM_InstanceTable[FTM_QD_InitStruct->instance]->CNTIN = 0;
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK; //禁止写保护
     FTM_InstanceTable[FTM_QD_InitStruct->instance]->MODE |= FTM_MODE_FTMEN_MASK; //FTMEN=1,关闭TPM兼容模式，开启FTM所有功能
     switch(FTM_QD_InitStruct->PHA_Polarity)
@@ -235,14 +235,15 @@ uint32_t FTM_QD_QuickInit(uint32_t MAP)
  * @param  direction :脉冲方向存储地址
  * @retval None
  */
-void FTM_QD_GetData(uint32_t instance, uint32_t* value, uint8_t* direction)
+void FTM_QD_GetData(uint32_t instance, int* value, uint8_t* direction)
 {
     *direction = (FTM_InstanceTable[instance]->QDCTRL>>FTM_QDCTRL_QUADIR_SHIFT & 1);
-	*value = (FTM_InstanceTable[instance]->CNT);
+	*value = (FTM_InstanceTable[instance]->CNT & 0xFFFF);
 }
 
 void FTM_QD_ClearCount(uint32_t instance)
 {
+    /* write any value to CNT will set CNT to CNTIN */
     FTM_InstanceTable[instance]->CNT = 0;
 }
 

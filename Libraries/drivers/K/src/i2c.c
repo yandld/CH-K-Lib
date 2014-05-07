@@ -737,6 +737,69 @@ uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t
     return I2C_BurstRead(instance, deviceAddress, registerAddress, 1, pData, 1);
 }
 
+
+int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData)
+{
+    uint32_t time_out = 0;
+    I2C_GenerateSTART(instance);
+    /* Send 7bit Data with WRITE operation */
+    I2C_Send7bitAddress(instance, chipAddr, kI2C_Write);
+    if(I2C_WaitAck(instance))
+    {
+        I2C_GenerateSTOP(instance);
+        time_out = 0;
+        while(!I2C_IsBusy(instance) && (time_out < 10000))
+        {
+            time_out++;
+        }
+        return 1;
+    }
+    /* send reg address */
+    I2C_SendData(instance, subAddr);
+    if(I2C_WaitAck(instance))
+    {
+        I2C_GenerateSTOP(instance);
+        time_out = 0;
+        while(!I2C_IsBusy(instance)  && (time_out < 10000))
+        {
+            time_out++;
+        }
+        return 2;
+    }
+    I2C_GenerateSTOP(instance);
+    while(!I2C_IsBusy(instance));
+    time_out = 0;
+    /* generate START signal */
+    I2C_GenerateSTART(instance);
+    /* resend 7bit Address, This time we use READ Command */
+    I2C_Send7bitAddress(instance, chipAddr, kI2C_Read);
+    if(I2C_WaitAck(instance))
+    {
+        I2C_GenerateSTOP(instance);
+        time_out = 0;
+        while(!I2C_IsBusy(instance));
+        return 3;
+    }
+    /* set master in slave mode */
+    I2C_SetMasterMode(instance,kI2C_Read);
+    /* dummy read */
+    I2C_ReadData(instance);
+	I2C_GenerateAck(instance);
+	I2C_WaitAck(instance);
+    *pData = I2C_ReadData(instance);
+    /* stop and finish */
+    I2C_GenerateNAck(instance);
+    I2C_WaitAck(instance);
+    I2C_GenerateSTOP(instance);
+    while(!I2C_IsBusy(instance));
+    return 0;
+}
+
+int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data)
+{
+    return I2C_WriteSingleRegister(instance, chipAddr, subAddr, data);
+}
+
 //! @}
 
 //! @}

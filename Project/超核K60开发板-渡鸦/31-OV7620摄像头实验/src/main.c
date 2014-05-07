@@ -5,17 +5,13 @@
 #include "sram.h"
 #include "ili9320.h"
 #include "dma.h"
-/* CH Kinetis固件库 V2.50 版本 */
-/* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
+#include "i2c.h"
 
-/*
-     实验名称：OV7620摄像头实验
-     实验平台：渡鸦开发板
-     板载芯片：MK60DN512ZVQ10
- 实验效果：在液晶屏上显示图像，需要0V7620摄像头
-*/
-#define OV7620_W    (320) // 每行有多少像素
-#define OV7620_H    (240) // 高度有多少行
+
+
+#define OV7620_W    (320) /* 每行有多少像素 */
+#define OV7620_H    (240) /* 高度有多少行 */
+#define OV7620_I2C_CHIP_ADDR   0x21   /* I2C OV7620 I2C地址 */
 
 //uint8_t CCDBufferPool[OV7620_W*OV7620_H];   //使用内部RAM
 volatile uint8_t * CCDBufferPool = SRAM_START_ADDRESS; //使用外部SRAM
@@ -139,6 +135,24 @@ static void OV7620_Init(void)
     DMA_EnableRequest(HW_DMA_CH2); 
 }
 
+void OV7620_Reset(void)
+{
+    SCCB_WriteSingleRegister(HW_I2C0, OV7620_I2C_CHIP_ADDR, 0x12, 0x80);
+}
+
+void SCCB_Init(void)
+{
+    I2C_QuickInit(I2C0_SCL_PB00_SDA_PB01, 100*1000);
+    /* 只是复位 全部做默认设置 */
+    /* Yandld: 如果是默认出厂配置, 则无需配置SCCB */
+    OV7620_Reset();
+    DelayMs(10);
+    /* 默认配置如下 */
+    /* 0x12,0x64
+       0x06,0xA0
+       0x03,0x80 */
+}
+
 int main(void)
 {
     DelayInit();
@@ -153,7 +167,7 @@ int main(void)
     SIM->CLKDIV1 &= ~SIM_CLKDIV1_OUTDIV3_MASK;
     SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(2);
     OV7620_Init();
-
+    SCCB_Init();
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

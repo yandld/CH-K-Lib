@@ -65,6 +65,9 @@ void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
     {
         FB->CS[FLEXBUS_InitStruct->CSn].CSCR |= FB_CSCR_BEM_MASK;
     }
+    /* assert wait status */
+    FB->CS[FLEXBUS_InitStruct->CSn].CSCR &= ~FB_CSCR_WS_MASK;
+    FB->CS[FLEXBUS_InitStruct->CSn].CSCR |= FB_CSCR_WS(1);
 }
 
 

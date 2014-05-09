@@ -126,6 +126,7 @@ void ili9320_init(void)
     PORTD->PCR[1]  = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;          // CS0
     PORTA->PCR[26] = PORT_PCR_MUX(6)|PORT_PCR_DSE_MASK;          // A27
     PORTC->PCR[16] = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;          // FB_BE_23_16
+    
     /*
     PORTB->PCR[18] = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;           //  FB_AD15
     PORTC->PCR[0]  = PORT_PCR_MUX(5)|PORT_PCR_DSE_MASK;           //  FB_AD14
@@ -170,7 +171,7 @@ void ili9320_init(void)
     FLEXBUS_InitStruct.dataWidth = kFLEXBUS_PortSize_16Bit;
     FLEXBUS_InitStruct.baseAddress = ILI9320_BASE;
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
-    FLEXBUS_InitStruct.div = 5;
+    FLEXBUS_InitStruct.div = 0;
     FLEXBUS_Init(&FLEXBUS_InitStruct);
     /* ≈‰÷√Flexbus “˝Ω≈∏¥”√ */
     FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);

@@ -59,10 +59,11 @@ void RTC_SetDateTime(RTC_DateTime_Type * datetime);
 void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config);
 uint32_t RTC_IsTimeValid(void);
 void RTC_CallbackInstall(RTC_CallBackType AppCBFun);
-//!< function which may not be used as a beginger
+//!< function which may not be used
 void RTC_Init(RTC_InitTypeDef * RTC_InitStruct);
 int  RTC_GetWeekFromYMD(int year, int month, int days);
 uint32_t RTC_GetTSR(void);
+void RTC_SetTSR(uint32_t val);
 void RTC_SetAlarm(RTC_DateTime_Type * datetime);
 void RTC_SetCompensation(uint32_t compensationInterval, uint32_t timeCompensation);
 

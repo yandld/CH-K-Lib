@@ -82,47 +82,28 @@ void GUI_X_ExecIdle (void)
 *             GUI_OS 1   needs to be in GUIConf.h
 *********************************************************************************************************
 */
+static rt_mutex_t gui_x_mutex = RT_NULL;
 
-static struct rt_semaphore static_sem;
 void  GUI_X_InitOS (void)
 { 
-    rt_err_t result;
-    //  DispSem   = OSSemCreate(1);
-    //  EventMbox = OSMboxCreate((void *)0);
-    rt_kprintf("GUI_X_InitOS.\n");
-    /* 初始化静态信号量，初始值是0 */
-    result = rt_sem_init(&static_sem, "ssem", 10, RT_IPC_FLAG_FIFO);
-    if (result != RT_EOK)
+    gui_x_mutex = rt_mutex_create("gui_x_mutex", RT_IPC_FLAG_FIFO);
+    if (gui_x_mutex == RT_NULL)
     {
-        rt_kprintf("init static semaphore failed.\n");
-        return ;
+        rt_kprintf("gui_x_mutex create failed\r\n");
+        return;
     }
 }
 
-
-void  GUI_X_Lock (void)
+void GUI_X_Lock (void)
 { 
-    rt_err_t result;
-   // rt_sem_release(&static_sem);
- //   INT8U  err;
-    
-  //  rt_kprintf("lock\r\n");
-  //  OSSemPend(DispSem, 0, &err);
+   // result = rt_mutex_take(gui_x_mutex, RT_WAITING_FOREVER);
+
 }
 
 
-void  GUI_X_Unlock (void)
+void GUI_X_Unlock (void)
 { 
-    rt_err_t result;
- //   result = rt_sem_take(&static_sem, RT_WAITING_FOREVER);
-    if (result != RT_EOK)
-    {
-        /* 不成功则测试失败 */
-   //     rt_kprintf("take a static semaphore, failed.\n");
-        return ;
-    }
-    
- //   OSSemPost(DispSem);
+   // rt_mutex_release(gui_x_mutex);
 }
 
 

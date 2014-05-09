@@ -296,6 +296,13 @@ void RTC_SetDateTime(RTC_DateTime_Type * datetime)
     RTC->SR |= RTC_SR_TCE_MASK;
 }
 
+void RTC_SetTSR(uint32_t val)
+{
+    RTC->SR &= ~RTC_SR_TCE_MASK;
+    RTC->TSR = RTC_TSR_TSR(val);
+    RTC->SR |= RTC_SR_TCE_MASK;  
+}
+
 /**
  * @brief  设置RTC中断功能
  * @code

@@ -19,7 +19,7 @@ static OS_TCBP OS_TCB_TABLE[OS_TASK_MAX_NUM];
  * @param  None
  * @retval None
  */
-void _OSTaskSwitch(void)
+void _OS_Scheduling(void)
 {
     uint32_t i;
     for(i = 0; i < OS_TASK_MAX_NUM; i++)
@@ -57,7 +57,7 @@ void _TaskEnd(void)
         }
     }
     OS_TCB_TABLE[end_task_id] = NULL;
-    _OSTaskSwitch();
+    _OS_Scheduling();
 }
 
 void _TaskIdle(void)
@@ -65,7 +65,7 @@ void _TaskIdle(void)
     printf("Task Idle Enter\r\n");
     while(1)
     {
-        _OSTaskSwitch();
+        _OS_Scheduling();
     }
 }
 
@@ -78,14 +78,14 @@ void OSInit(void)
 
 void OSStart(void)
 {
-    _OSTaskSwitch();
+    _OS_Scheduling();
 }
 
 void OSTimeDly(uint32_t ticks)
 {
     OSTCBCur->TimeDly = ticks;
     OSTCBCur->State = TASK_DELAY;
-    _OSTaskSwitch();
+    _OS_Scheduling();
 }
 
  /**

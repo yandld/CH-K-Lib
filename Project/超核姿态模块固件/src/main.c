@@ -50,6 +50,7 @@ static void PIT_CH0_ISR(void)
     send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
     send_data.trans_roll = (int16_t)angle.imu_roll*100;
     send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
+    
 }
 
 
@@ -145,9 +146,9 @@ int main(void)
         {
             trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
             //延时1MS以免发的太快上位机受不了
-            DelayMs(1);
+            DelayMs(5);
         }
-        
+       // printf("P:%4d R:%4d Y:%4d  \r", (int)angle.imu_pitch, (int)angle.imu_roll, (int)angle.imu_yaw);
    //     bmp180_read_temperature(&temperature);
    //     bmp180_start_conversion(BMP180_P3_MEASURE);
    //     DelayMs(20);

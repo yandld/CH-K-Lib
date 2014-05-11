@@ -23,22 +23,24 @@ trans_packet_t packet;
 uint8_t trans_init(void)
 {
     
-    DMA_InitTypeDef DMA_InitStruct1;
+    DMA_InitTypeDef DMA_InitStruct1= {0};
     DMA_InitStruct1.chl = HW_DMA_CH1;
     DMA_InitStruct1.chlTriggerSource = UART1_TRAN_DMAREQ;
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
-    DMA_InitStruct1.majorLoopCnt = 1;
-    DMA_InitStruct1.minorLoopByteCnt = sizeof(packet);
-        
+    DMA_InitStruct1.majorLoopCnt = sizeof(packet);
+    DMA_InitStruct1.minorLoopByteCnt = 1;
+    
     DMA_InitStruct1.sAddr = (uint32_t)&packet;
     DMA_InitStruct1.sLastAddrAdj = -sizeof(packet);
     DMA_InitStruct1.sAddrOffset = 1;
     DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.sMod = kDMA_ModuloDisable;
         
     DMA_InitStruct1.dAddr = (uint32_t)&UART1->D;
     DMA_InitStruct1.dLastAddrAdj = 0;
     DMA_InitStruct1.dAddrOffset = 0;
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.dMod = kDMA_ModuloDisable;
     DMA_Init(&DMA_InitStruct1);
     return 0;
 }
@@ -74,6 +76,7 @@ uint32_t trans_send_pactket(trans_user_data_t data, uint8_t mode)
         case TRANS_UART_WITH_DMA:
             UART_ITDMAConfig(BOARD_UART_INSTANCE, kUART_DMA_Tx);
             DMA_EnableRequest(HW_DMA_CH1);
+            
             break;
         case TRANS_WITH_NRF2401:
             nrf24l01_set_tx_mode();

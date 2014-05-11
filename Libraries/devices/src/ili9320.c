@@ -171,7 +171,7 @@ void ili9320_init(void)
     FLEXBUS_InitStruct.dataWidth = kFLEXBUS_PortSize_16Bit;
     FLEXBUS_InitStruct.baseAddress = ILI9320_BASE;
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
-    FLEXBUS_InitStruct.div = 0;
+    FLEXBUS_InitStruct.div = 1;
     FLEXBUS_Init(&FLEXBUS_InitStruct);
     /* ≈‰÷√Flexbus “˝Ω≈∏¥”√ */
     FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);

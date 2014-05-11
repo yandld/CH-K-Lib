@@ -67,7 +67,7 @@ void SRAM_Init(void)
     FLEXBUS_InitStruct.CSn = kFLEXBUS_CS1; /*使用CS1片选信号 */
     FLEXBUS_InitStruct.dataAlignMode = kFLEXBUS_DataLeftAligned; /*数据左对齐 */
     FLEXBUS_InitStruct.dataWidth = kFLEXBUS_PortSize_16Bit; /*数据位宽 16位 */
-    FLEXBUS_InitStruct.baseAddress = SDRAM_ADDRESS_BASE; /* 基地址 */
+    FLEXBUS_InitStruct.baseAddress = SRAM_ADDRESS_BASE; /* 基地址 */
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedReadWrite; /* 在读写操作的时候都插入 位使能信号 */
     FLEXBUS_InitStruct.div = 0;
     FLEXBUS_Init(&FLEXBUS_InitStruct);

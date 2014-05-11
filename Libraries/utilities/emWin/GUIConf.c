@@ -71,7 +71,7 @@ void GUI_X_Config(void)
     {
         rt_kprintf("out of memory!\r\n");
     }
-    //U32 *aMemory = (U32 *)(SDRAM_ADDRESS_BASE);
+    //U32 *aMemory = (U32 *)(SRAM_ADDRESS_BASE);
     GUI_ALLOC_AssignMemory(aMemory, GUI_NUMBYTES);
     GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);
     GUI_SetDefaultFont(GUI_FONT_6X8);

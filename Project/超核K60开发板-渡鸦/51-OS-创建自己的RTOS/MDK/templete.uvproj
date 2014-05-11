@@ -424,6 +424,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
+            <File>
+              <FileName>osport.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\src\osport.asm</FilePath>
+            </File>
+            <File>
+              <FileName>myos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\myos.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

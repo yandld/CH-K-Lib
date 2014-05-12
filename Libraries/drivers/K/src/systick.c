@@ -8,7 +8,9 @@
   * @note    此文件为芯片ARM内核中的SysTick模块的底层功能函数
   ******************************************************************************
   */
+  
 #include "systick.h"
+#include "common.h"
 
 static uint32_t fac_us = 0;     //!< usDelay Mut
 static uint32_t fac_ms = 0;
@@ -55,7 +57,7 @@ void SYSTICK_Init(uint32_t timeInUs)
 void SYSTICK_DelayInit(void)
 {
     SYSTICK_Init(1234);
-    SYSTICK_Cmd(ENABLE);
+    SYSTICK_Cmd(true);
     SYSTICK_ITConfig(DISABLE);
 }
 
@@ -63,16 +65,16 @@ void SYSTICK_DelayInit(void)
  * @brief  开启或者停止SysTick时钟
  * @code
  *      //开启时钟
- *      SYSTICK_Cmd(ENABLE);
+ *      SYSTICK_Cmd(true);
  * @endcode
  * @param  NewState:使能或者关闭
  *         @arg ENABLE :使能
  *         @arg DISABLE:停止
  * @retval None
  */
-void SYSTICK_Cmd(FunctionalState NewState)
+void SYSTICK_Cmd(bool NewState)
 {
-    (ENABLE == NewState)?(SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk):(SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk);
+    (true == NewState)?(SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk):(SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk);
 }
 
  /**
@@ -86,9 +88,9 @@ void SYSTICK_Cmd(FunctionalState NewState)
  *         @arg DISABLE:禁止
  * @retval None
  */
-void SYSTICK_ITConfig(FunctionalState NewState)
+void SYSTICK_ITConfig(bool NewState)
 {
-    (ENABLE == NewState)?(SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk):(SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk);
+    (true == NewState)?(SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk):(SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk);
 }
 
  /**

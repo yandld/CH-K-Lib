@@ -58,7 +58,7 @@ void SYSTICK_DelayInit(void)
 {
     SYSTICK_Init(1234);
     SYSTICK_Cmd(true);
-    SYSTICK_ITConfig(DISABLE);
+    SYSTICK_ITConfig(false);
 }
 
  /**
@@ -68,8 +68,8 @@ void SYSTICK_DelayInit(void)
  *      SYSTICK_Cmd(true);
  * @endcode
  * @param  NewState:使能或者关闭
- *         @arg ENABLE :使能
- *         @arg DISABLE:停止
+ *         @arg true :使能
+ *         @arg false:停止
  * @retval None
  */
 void SYSTICK_Cmd(bool NewState)
@@ -81,11 +81,11 @@ void SYSTICK_Cmd(bool NewState)
  * @brief  开启SysTick中断
  * @code
  *      //开启中断功能
- *      SYSTICK_ITConfig(ENABLE);
+ *      SYSTICK_ITConfig(true);
  * @endcode
  * @param  NewState:使能或者关闭
- *         @arg ENABLE :使能
- *         @arg DISABLE:禁止
+ *         @arg true :使能
+ *         @arg false:禁止
  * @retval None
  */
 void SYSTICK_ITConfig(bool NewState)

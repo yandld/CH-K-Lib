@@ -11,6 +11,15 @@
 #include "flexbus.h"
 #include "common.h"
 
+
+#define SRAM_DEBUG		1
+#if ( SRAM_DEBUG == 1 )
+#include <stdio.h>
+#define SRAM_TRACE	printf
+#else
+#define SRAM_TRACE(...)
+#endif
+
 //SRAM初始化配置
 void SRAM_Init(void)
 {
@@ -81,17 +90,99 @@ void SRAM_Init(void)
 uint32_t SRAM_SelfTest(void)
 {
     uint32_t i;
-    uint32_t err_cnt = 0;
-    volatile uint8_t * SRAM_START_ADDR = SRAM_START_ADDRESS;
-    for(i = 0; i < SRAM_SIZE; i++)
+    uint32_t address,size;
+    address = SRAM_ADDRESS_BASE;
+    size = SRAM_SIZE;
+    SRAM_TRACE("memtest,address: 0x%08X size: 0x%08X\r\n", address, size);
+    
+    /**< 8bit test */
     {
-        SRAM_START_ADDR[i] = i%0xFF; //向SRAM指定地址写数据
-        if((SRAM_START_ADDR[i]) != (i%0xFF))  //读取SRAM中的指定数据
+        uint8_t * p_uint8_t = (uint8_t *)address;
+        for(i=0; i<size/sizeof(uint8_t); i++)
         {
-            err_cnt++;
+            *p_uint8_t++ = (uint8_t)i;
         }
+
+        p_uint8_t = (uint8_t *)address;
+        for(i=0; i<size/sizeof(uint8_t); i++)
+        {
+            if( *p_uint8_t != (uint8_t)i )
+            {
+                printf("8bit test fail @ 0x%08X\r\nsystem halt!!!!!",(uint32_t)p_uint8_t);
+                while(1);
+            }
+            p_uint8_t++;
+        }
+        printf("8bit test pass!!\r\n");
     }
-    return  err_cnt;
+    
+    /**< 16bit test */
+    {
+        uint16_t * p_uint16_t = (uint16_t *)address;
+        for(i=0; i<size/sizeof(uint16_t); i++)
+        {
+            *p_uint16_t++ = (uint16_t)i;
+        }
+
+        p_uint16_t = (uint16_t *)address;
+        for(i=0; i<size/sizeof(uint16_t); i++)
+        {
+            if( *p_uint16_t != (uint16_t)i )
+            {
+                printf("16bit test fail @ 0x%08X\r\nsystem halt!!!!!",(uint32_t)p_uint16_t);
+                while(1);
+            }
+            p_uint16_t++;
+        }
+        printf("16bit test pass!!\r\n");
+    }
+
+    /**< 32bit test */
+    {
+        uint32_t * p_uint32_t = (uint32_t *)address;
+        for(i=0; i<size/sizeof(uint32_t); i++)
+        {
+            *p_uint32_t++ = (uint32_t)i;
+        }
+
+        p_uint32_t = (uint32_t *)address;
+        for(i=0; i<size/sizeof(uint32_t); i++)
+        {
+            if( *p_uint32_t != (uint32_t)i )
+            {
+                printf("32bit test fail @ 0x%08X\r\nsystem halt!!!!!",(uint32_t)p_uint32_t);
+                while(1);
+            }
+            p_uint32_t++;
+        }
+        printf("32bit test pass!!\r\n");
+    }
+
+    /**< 32bit Loopback test */
+    {
+        uint32_t * p_uint32_t = (uint32_t *)address;
+        for(i=0; i<size/sizeof(uint32_t); i++)
+        {
+            *p_uint32_t  = (uint32_t)p_uint32_t;
+            *p_uint32_t++;
+        }
+
+        p_uint32_t = (uint32_t *)address;
+        for(i=0; i<size/sizeof(uint32_t); i++)
+        {
+            if( *p_uint32_t != (uint32_t)p_uint32_t )
+            {
+                printf("32bit Loopback test fail @ 0x%08X", (uint32_t)p_uint32_t);
+                printf(" data:0x%08X \r\n", (uint32_t)*p_uint32_t);
+                printf("system halt!!!!!");
+                while(1);
+            }
+            p_uint32_t++;
+        }
+        printf("32bit Loopback test pass!!\r\n");
+    }
+    
+    return  0;
 }
 
 

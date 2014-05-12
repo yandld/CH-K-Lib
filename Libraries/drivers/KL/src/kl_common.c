@@ -8,7 +8,7 @@
   * @note    此文件为内部文件，用户无需调用和修改  
   ******************************************************************************
   */
-#include "common.h"
+#include "kl_common.h"
 #include <string.h>
 //#include "systick.h"
 

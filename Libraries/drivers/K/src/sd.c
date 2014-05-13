@@ -13,6 +13,8 @@
 #include "sd.h"
 #include "gpio.h"
 
+static uint32_t SD_SendCommand(SD_CommandTypeDef* Command);
+
 //SD卡信息
 struct sd_card_handler
 {
@@ -480,7 +482,7 @@ uint32_t SD_StatusWait (uint32_t  mask)
  * @param  Command  :SD卡命令结构参数
  * @retval ESDHC_OK:正常  其它:错误
  */ 	
-uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
+static uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
 {
     uint32_t xfertyp;
     uint32_t blkattr;

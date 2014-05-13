@@ -53,18 +53,18 @@ int CMD_UART(int argc, char * const * argv)
         DMA_InitStruct1.chl = 1;
         DMA_InitStruct1.chlTriggerSource = UART0_TRAN_DMAREQ;
         DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
-        DMA_InitStruct1.minorByteTransferCount = 1;
-        DMA_InitStruct1.majorTransferCount = ARRAY_SIZE(TestBuffer);
+        DMA_InitStruct1.minorLoopByteCnt = 1;
+        DMA_InitStruct1.majorLoopCnt = ARRAY_SIZE(TestBuffer);
         
-        DMA_InitStruct1.sourceAddress = (uint32_t)TestBuffer;
-        DMA_InitStruct1.sourceAddressMajorAdj = -ARRAY_SIZE(TestBuffer);
-        DMA_InitStruct1.sourceAddressMinorAdj = 1;
-        DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8;
+        DMA_InitStruct1.sAddr = (uint32_t)TestBuffer;
+        DMA_InitStruct1.sLastAddrAdj = -ARRAY_SIZE(TestBuffer);
+        DMA_InitStruct1.sAddrOffset = 1;
+        DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
         
-        DMA_InitStruct1.destAddress = (uint32_t)&UART0->D;
-        DMA_InitStruct1.destAddressMajorAdj = 0;
-        DMA_InitStruct1.destAddressMinorAdj = 0;
-        DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8;
+        DMA_InitStruct1.dAddr = (uint32_t)&UART0->D;
+        DMA_InitStruct1.dLastAddrAdj = 0;
+        DMA_InitStruct1.dAddrOffset = 0;
+        DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
         DMA_Init(&DMA_InitStruct1);
         DMA_CallbackInstall(1, DMA_ISR);
         DMA_ITConfig(1, kDMA_IT_Major);
@@ -72,8 +72,8 @@ int CMD_UART(int argc, char * const * argv)
         UART_ITDMAConfig(instance, kUART_DMA_Tx); //¿ªÆôUART0 DMA ·¢ËÍ
         for(i=0;i<10;i++)
         {
-            DMA_StartTransfer(1);
-            while(DMA_IsTransferComplete(1) == 1);
+            DMA_EnableRequest(1);
+            while(DMA_IsMajorLoopComplete(1) == 1);
         }
         UART_ITDMAConfig(instance, kUART_DMA_Tx_Disable);
     }

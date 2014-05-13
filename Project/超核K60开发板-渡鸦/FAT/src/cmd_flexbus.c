@@ -69,7 +69,7 @@ int CMD_FLEXBUS(int argc, char * const * argv)
     FLEXBUS_InitStruct.CSn = kFLEXBUS_CS1;
     FLEXBUS_InitStruct.dataAlignMode = kFLEXBUS_DataLeftAligned;
     FLEXBUS_InitStruct.dataWidth = kFLEXBUS_PortSize_16Bit;
-    FLEXBUS_InitStruct.baseAddress = SDRAM_ADDRESS_BASE;
+    FLEXBUS_InitStruct.baseAddress = SRAM_ADDRESS_BASE;
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedReadWrite;
     FLEXBUS_Init(&FLEXBUS_InitStruct);
     // enable flexbus for LCD

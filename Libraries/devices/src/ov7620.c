@@ -31,7 +31,7 @@ static void OV7620_ISR(uint32_t pinArray)
     switch(status)
     {
         case TRANSFER_IN_PROCESS:
-            if(DMA_IsTransferComplete(HW_DMA_CH2) == 0)
+            if(DMA_IsMajorLoopComplete(HW_DMA_CH2) == 0)
             {
                 GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_Disable);
                 if(OV7620_CallBackTable[0])
@@ -48,7 +48,7 @@ static void OV7620_ISR(uint32_t pinArray)
             break;
         case NEXT_FRAME:
             DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[0]);
-            DMA_StartTransfer(HW_DMA_CH2); 
+            DMA_EnableRequest(HW_DMA_CH2); 
             status =  TRANSFER_IN_PROCESS;
             break;
         default:
@@ -90,20 +90,20 @@ void OV7620_Init(void)
     DMA_InitStruct1.chl = HW_DMA_CH2;
     DMA_InitStruct1.chlTriggerSource = PORTA_DMAREQ;
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
-    DMA_InitStruct1.minorByteTransferCount = OV7620_W;
-    DMA_InitStruct1.majorTransferCount = OV7620_H;
+    DMA_InitStruct1.minorLoopByteCnt = OV7620_W;
+    DMA_InitStruct1.majorLoopCnt = OV7620_H;
     
-    DMA_InitStruct1.sourceAddress = (uint32_t)PORT_DataAddressTable[BOARD_OV7620_DATA_PORT] + BOARD_OV7620_DATA_OFFSET/8;
-    DMA_InitStruct1.sourceAddressMajorAdj = 0;
-    DMA_InitStruct1.sourceAddressMinorAdj = 0;
-    DMA_InitStruct1.sourceDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.sAddr = (uint32_t)PORT_DataAddressTable[BOARD_OV7620_DATA_PORT] + BOARD_OV7620_DATA_OFFSET/8;
+    DMA_InitStruct1.sLastAddrAdj = 0;
+    DMA_InitStruct1.sAddrOffset = 0;
+    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
     
-    DMA_InitStruct1.destAddress = (uint32_t)CCDBuffer[0];
-    DMA_InitStruct1.destAddressMajorAdj = 0;
-    DMA_InitStruct1.destAddressMinorAdj = 1;
-    DMA_InitStruct1.destDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct1.dAddr = (uint32_t)CCDBuffer[0];
+    DMA_InitStruct1.dLastAddrAdj = 0;
+    DMA_InitStruct1.dAddrOffset = 1;
+    DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     //初始化DMA
     DMA_Init(&DMA_InitStruct1);
     //开始传输
-    DMA_StartTransfer(HW_DMA_CH2); 
+    DMA_EnableRequest(HW_DMA_CH2); 
 }

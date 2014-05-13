@@ -20,7 +20,7 @@ int CMD_RTC(int argc, char * const argv[])
     ts.hour = 0;
     ts.minute = 0;
     ts.second = 15;
-    RTC_QuickInit(&ts);
+    RTC_QuickInit();
     //RTC_ITDMAConfig(kRTC_IT_TimeOverflow);
     //RTC_CallbackInstall(RTC_ISR);
     while(1)

@@ -34,34 +34,34 @@ static void ENET_BDInit(void)
 {
     unsigned long ux;
     unsigned char *pcBufPointer;
-	// find a 16bit agligned for TxDescriptors
+	/* find a 16bit agligned for TxDescriptors */
 	pcBufPointer = &( xENETTxDescriptors_unaligned[ 0 ] );
 	while( ( ( uint32_t ) pcBufPointer & 0x0fUL ) != 0 )
 	{
 		pcBufPointer++;
 	}
 	pxENETTxDescriptor = ( NBUF * ) pcBufPointer;	
-	// find a 16bit agligned for RxDescriptors
+	/* find a 16bit agligned for RxDescriptors */
 	pcBufPointer = &( xENETRxDescriptors_unaligned[ 0 ] );
 	while( ( ( uint32_t ) pcBufPointer & 0x0fUL ) != 0 )
 	{
 		pcBufPointer++;
 	}
 	pxENETRxDescriptors = ( NBUF * ) pcBufPointer;
-    // Tx Descriptor settings
+    /* Tx Descriptor settings */
 	for( ux = 0; ux < CFG_NUM_ENET_TX_BUFFERS; ux++ )
 	{
         pxENETTxDescriptor[ux].length = 0;
         pxENETTxDescriptor[ux].status = 0;
         pxENETTxDescriptor[ux].ebd_status = TX_BD_IINS | TX_BD_PINS;   
     }
-	// find a 16bit agligned for Rx buffer
+	/* find a 16bit agligned for Rx buffer */
 	pcBufPointer = &( ucENETRxBuffers[ 0 ] );
 	while((( uint32_t ) pcBufPointer & 0x0fUL ) != 0 )
 	{
 		pcBufPointer++;
 	}
-	// Rx Descriptor settings
+	/* Rx Descriptor settings */
 	for( ux = 0; ux < CFG_NUM_ENET_RX_BUFFERS; ux++ )
 	{
 	    pxENETRxDescriptors[ ux ].status = RX_BD_E;
@@ -71,7 +71,7 @@ static void ENET_BDInit(void)
 	    pxENETRxDescriptors[ ux ].bdu = 0x00000000;
 	    pxENETRxDescriptors[ ux ].ebd_status = RX_BD_INT;
 	}
-	// set last Descriptor as a ring
+	/* set last Descriptor as a ring */
     pxENETTxDescriptor[CFG_NUM_ENET_TX_BUFFERS - 1].status |= TX_BD_W;
 	pxENETRxDescriptors[CFG_NUM_ENET_RX_BUFFERS - 1].status |= RX_BD_W;
 }
@@ -113,10 +113,8 @@ static uint8_t ENET_HashAddress(const uint8_t* addr)
 static void ENET_SetAddress(const uint8_t *pa)
 {
     uint8_t crc;
-    //设置物理地址
     ENET->PALR = (uint32_t)((pa[0]<<24) | (pa[1]<<16) | (pa[2]<<8) | pa[3]);
     ENET->PAUR = (uint32_t)((pa[4]<<24) | (pa[5]<<16));
-    //根据物理地址计算并设置独立地址哈希寄存器的值
     crc = ENET_HashAddress(pa);
     if(crc >= 32)
     ENET->IAUR |= (uint32_t)(1 << (crc - 32));
@@ -133,9 +131,9 @@ static void ENET_MII_Init(void)
 {
     uint32_t i;
     uint32_t clock;
-	// Enable the ENET clock.
+	/* enable the ENET clock. */
     SIM->SCGC2 |= SIM_SCGC2_ENET_MASK;
-    //FSL: allow concurrent access to MPU controller. Example: ENET uDMA to SRAM, otherwise bus error
+    /* FSL: allow concurrent access to MPU controller. Example: ENET uDMA to SRAM, otherwise bus error */
     MPU->CESR = 0;   
     CLOCK_GetClockFrequency(kBusClock, &clock);
     i = (clock/1000)/1000;
@@ -152,9 +150,9 @@ static void ENET_MII_Init(void)
 static uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
 {
     uint32_t timeout;
-    // clear MII it pending bit
+    /* clear MII it pending bit */
     ENET->EIR |= ENET_EIR_MII_MASK;
-    // initiatate the MII Management write
+    /* initiatate the MII Management write */
     ENET->MMFR = 0
             | ENET_MMFR_ST(0x01)
             | ENET_MMFR_OP(0x01)
@@ -162,7 +160,7 @@ static uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t dat
             | ENET_MMFR_RA(reg_addr)
             | ENET_MMFR_TA(0x02)
             | ENET_MMFR_DATA(data);
-    // waitting for transfer complete
+    /* waitting for transfer complete */
     for (timeout = 0; timeout < MII_TIMEOUT; timeout++)
     {
         if (ENET->EIR & ENET_EIR_MII_MASK)
@@ -175,7 +173,7 @@ static uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t dat
     {
         return timeout;
     }
-    // software clear it
+    /* software clear it */
     ENET->EIR |= ENET_EIR_MII_MASK;
     return 0;
 }
@@ -190,9 +188,9 @@ static uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t dat
 static uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
 {
     uint32_t timeout;
-    // clear MII IT(interrupt) pending bit
+    /* clear MII IT(interrupt) pending bit */
     ENET->EIR |= ENET_EIR_MII_MASK;
-    // initiatate the MII Management write
+    /* initiatate the MII Management write */
     ENET->MMFR = 0
             | ENET_MMFR_ST(0x01)
             | ENET_MMFR_OP(0x02)
@@ -200,7 +198,7 @@ static uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *dat
             | ENET_MMFR_RA(reg_addr)
             | ENET_MMFR_TA(0x02);
   
-	// waitting for transfer complete
+	/* waitting for transfer complete */
     for (timeout = 0; timeout < MII_TIMEOUT; timeout++)
     {
         if (ENET->EIR & ENET_EIR_MII_MASK)
@@ -212,7 +210,7 @@ static uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *dat
     {
         return timeout;
     }
-    // software clear it
+    /* software clear it */
     ENET->EIR |= ENET_EIR_MII_MASK;
     *data = ENET->MMFR & 0x0000FFFF;
     return 0;
@@ -228,31 +226,24 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 {
 	uint16_t usData;
 	uint16_t timeout = 0;
-    //使能ENET时钟
     SIM->SCGC2 |= SIM_SCGC2_ENET_MASK;
-    //允许并发访问MPU控制器
     MPU->CESR = 0;         
-    //缓冲区描述符初始化
     ENET_BDInit();
-	//很重要。。
 	MCG->C2 &= ~MCG_C2_EREFS0_MASK;
-	//复位以太网
 	ENET->ECR = ENET_ECR_RESET_MASK;
 	for( usData = 0; usData < 100; usData++ )
 	{
 		__NOP();
 	}
-    //初始化MII接口
     ENET_MII_Init();  
-    //等待PHY收发器复位完成
     do
     {
         DelayMs(10);
         timeout++;
-        if(timeout > 500) return ;
-        usData = 0xffff;
+        if(timeout > 50) break;
+        usData = 0xFFFF;
         ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYIDR1, &usData );
-    } while( usData == 0xffff );
+    } while( (usData == 0xFFFF) || (usData == 0x0000));
 
     LIB_TRACE("PHY_PHYIDR1=0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYIDR2, &usData );
@@ -267,12 +258,12 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     LIB_TRACE("PHY_MICR=0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_MISR, &usData );
     LIB_TRACE("PHY_MISR=0x%X\r\n",usData);
-    //开始自动协商
+    /* 开始自动协商 */
     ENET_MII_Write(CFG_PHY_ADDRESS, PHY_BMCR, ( PHY_BMCR_AN_RESTART | PHY_BMCR_AN_ENABLE ) );
 
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_BMCR, &usData );
     LIB_TRACE("PHY_BMCR=0x%X\r\n",usData);
-  //等待自动协商完成
+    /* 等待自动协商完成 */
     do
     {
         DelayMs(100);
@@ -280,15 +271,15 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 		if(timeout > 30)
         {
             LIB_TRACE("enet phy reset failed\r\n");
-            return ;
+            break;
         }
         ENET_MII_Read(CFG_PHY_ADDRESS, PHY_BMSR, &usData );
     } while( !( usData & PHY_BMSR_AN_COMPLETE ) );
-    //根据协商结果设置ENET模块
+    /* 根据协商结果设置ENET模块 */
     usData = 0;
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_STATUS, &usData );	
   
-    //清除单独和组地址哈希寄存器
+    /* 清除单独和组地址哈希寄存器 */
     ENET->IALR = 0;
     ENET->IAUR = 0;
     ENET->GALR = 0;
@@ -309,24 +300,22 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     {
         ENET->RCR |= ENET_RCR_DRT_MASK;
         ENET->TCR &= (unsigned long)~ENET_TCR_FDEN_MASK;
-		#ifdef LIBDEBUG
-		printf("half-duplex\r\n");
-		#endif 
+        LIB_TRACE("half-duplex\r\n");
     }
     //通信速率设置
     if( usData & PHY_SPEED_STATUS )
     {
-        //10Mbps
+        /* 10Mbps */
         ENET->RCR |= ENET_RCR_RMII_10T_MASK;
     }
-    //使用增强型缓冲区描述符
+    /* 使用增强型缓冲区描述符 */
     ENET->ECR = ENET_ECR_EN1588_MASK;
-    //max receiced packet size 
+    /* max receiced packet size */
     ENET->MRBR |= ENET_MRBR_R_BUF_SIZE_MASK;
-	// tell NENT the descriptors address
+	/* tell NENT the descriptors address */
 	ENET->RDSR = (uint32_t)  pxENETRxDescriptors;
 	ENET->TDSR = (uint32_t) pxENETTxDescriptor;
-	//clear all IT pending bit
+	/* clear all IT pending bit */
 	ENET->EIR = ( uint32_t ) 0xFFFFFFFF;
 	ENET->ECR |= ENET_ECR_ETHEREN_MASK;
 	ENET->RDAR = ENET_RDAR_RDAR_MASK;
@@ -341,15 +330,15 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
  */
 void ENET_MacSendData(uint8_t *data, uint16_t len)
 {
-    // check if buffer is readly
+    /* check if buffer is readly */
     while( pxENETTxDescriptor->status & TX_BD_R ) {};
-    //set Tx Descriptor
+    /* set Tx Descriptor */
     pxENETTxDescriptor->data = (uint8_t *)__REV((uint32_t)data);		
     pxENETTxDescriptor->length = __REVSH(len);
     pxENETTxDescriptor->bdu = 0x00000000;
 	pxENETTxDescriptor->ebd_status = TX_BD_INT | TX_BD_TS;// | TX_BD_IINS | TX_BD_PINS;
 	pxENETTxDescriptor->status = ( TX_BD_R | TX_BD_L | TX_BD_TC | TX_BD_W );
-    //enable transmit
+    /* enable transmit */
     ENET->TDAR = ENET_TDAR_TDAR_MASK;
 }
 

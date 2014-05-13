@@ -17,14 +17,14 @@
      
 #include <stdint.h>
   
-//!< TSI 触发模式选择
+/* TSI 触发模式选择 */
 typedef enum
 {
-    kTSI_TriggerSoftware,               //软件触发
-    kTSI_TriggerPeriodicalScan,         //硬件周期性扫描
+    kTSI_TriggerSoftware,               /* 软件触发 */
+    kTSI_TriggerPeriodicalScan,         /* 硬件周期性扫描 */
 } TSI_TriggerMode_Type;
   
-#define HW_TSI_CH0      (0x00)  //触控的0通道
+#define HW_TSI_CH0      (0x00)  /* 触控的0通道 */
 #define HW_TSI_CH1      (0x01)
 #define HW_TSI_CH2      (0x02)
 #define HW_TSI_CH3      (0x03)
@@ -42,12 +42,12 @@ typedef enum
 #define HW_TSI_CH15     (0x0F)
 
 
-//!< TSI 中断DMA配置
+/* TSI 中断DMA配置 */
 typedef enum
 {
-    kTSI_IT_Disable,        //关闭中断
-    kTSI_IT_OutOfRange,     //溢出中断
-    kTSI_IT_EndOfScan,      //扫描结束中断
+    kTSI_IT_Disable,        /* 关闭中断 */
+    kTSI_IT_OutOfRange,     /* 溢出中断 */
+    kTSI_IT_EndOfScan,      /* 扫描结束中断 */
 }TSI_ITDMAConfig_Type;
 
 typedef enum
@@ -82,7 +82,6 @@ typedef enum
     kTSI_ChargeCurrent_32uA,
 }TSI_ChargeCurrent_Type;
 
-//TSI初始化结构
 
 
 typedef struct
@@ -115,10 +114,10 @@ typedef struct
 #define TSI0_CH15_PC02  (0x00784410)
 
 
-//!< TSI CallBack Type
+/*!< TSI CallBack Type */
 typedef void (*TSI_CallBackType)(void);
 
-//!< API functions
+/*!< API functions */
 uint32_t TSI_QuickInit(uint32_t MAP);
 uint32_t TSI_GetCounter(uint32_t chl);
 void TSI_ITDMAConfig(TSI_ITDMAConfig_Type config);

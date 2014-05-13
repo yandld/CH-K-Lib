@@ -20,26 +20,12 @@
 
 #ifdef MKL25Z4
 #include "MKL25Z4.h"
-#elif MK10D10
-#include "MK10D10.h"
-#elif MK20D10
-#include "MK20D10.h"
-#elif MK40D10
-#include "MK40D10.h"
-#elif MK60D10
-#include "MK60D10.h"
-#elif MK60DZ10
-#include "MK60DZ10.h"
-#elif MK70F12
-#include "MK70F12.h"
-#elif MK70F15
-#include "MK70F15.h"
 
 #else
-#define MK60DZ10
-#include "MK60D10.h"
+#define MKL25Z4
+#include "MKL25Z4.h"
 #warning "No CPU defined!"
-#warning "Default: MK60D10"
+#warning "Default: MKL25Z4"
 
 #endif
 

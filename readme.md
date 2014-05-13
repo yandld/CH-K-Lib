@@ -4,6 +4,9 @@
 
 ----------
 
+### 工具安装及最基础入门
+请参见免费视频：http://www.moore8.com/courses/87#/course/87
+
 ### 文件说明
  - Libraries 固件库源文件
  - Project   工程文件及例程存放目录

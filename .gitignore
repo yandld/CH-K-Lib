@@ -39,6 +39,7 @@ Release
 lib_html
 d4d
 RTOS
+FAT
 
 # Libraries
 *.lib

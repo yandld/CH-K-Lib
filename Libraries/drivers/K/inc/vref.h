@@ -21,7 +21,7 @@ typedef enum
     kVREF_BufferMode_Lv2,  /* Low-power buffer mode enabled */
 }VREF_BufferMode_Type;
 
-/* VREF 初始化结构 */
+/* VREF init struct */
 typedef struct
 {
     uint32_t                    instance;

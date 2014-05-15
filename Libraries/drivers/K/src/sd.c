@@ -32,11 +32,10 @@ static struct sd_card_handler sdh;
 
 /**
  * @brief 设置SD卡模块的通信速度
- * @note  内部函数，用户无需调用
- * @param  baudrate  :波特率   参考官方程序    
+ * @param  baudrate  单位Hz
  * @retval None
  */                                                            
-void SD_SetBaudRate(uint32_t baudrate)
+static void SD_SetBaudRate(uint32_t baudrate)
 {
 	uint32_t pres, div, min, minpres = 0x80, mindiv = 0x0F;
 	uint32_t  val,clock;
@@ -59,16 +58,16 @@ void SD_SetBaudRate(uint32_t baudrate)
 			}
 		}
    }
-	//禁止SDHC模块时钟
+	/* disable SDHC */
 	SDHC->SYSCTL &= (~ SDHC_SYSCTL_SDCLKEN_MASK);
-	//修改分频因子
+	/* set prescaler */
 	div = SDHC->SYSCTL & (~ (SDHC_SYSCTL_DTOCV_MASK | SDHC_SYSCTL_SDCLKFS_MASK | SDHC_SYSCTL_DVS_MASK));
 	SDHC->SYSCTL = div | (SDHC_SYSCTL_DTOCV(0x0E) | SDHC_SYSCTL_SDCLKFS(minpres >> 1) | SDHC_SYSCTL_DVS(mindiv - 1));
-	//等待时钟稳定
+	/* waitting for stabile */
 	while (0 == (SDHC->PRSSTAT & SDHC_PRSSTAT_SDSTB_MASK));
-	//使能SDHC模块时钟
-	SDHC->SYSCTL |= SDHC_SYSCTL_SDCLKEN_MASK; //时能SD时钟
-	SDHC->IRQSTAT |= SDHC_IRQSTAT_DTOE_MASK;  //取消TimeOut Error Status
+	/* enable module */
+	SDHC->SYSCTL |= SDHC_SYSCTL_SDCLKEN_MASK;
+	SDHC->IRQSTAT |= SDHC_IRQSTAT_DTOE_MASK;
 } 
 
 /**
@@ -83,7 +82,6 @@ uint8_t SDHC_is_running(void)
 
 /**
  * @brief SD模块快速初始化配置
- * @note  用户调用函数
  * @param  baudrate  :通信波特率
  * @retval 0:正常  其它:未完成初始化
  */       
@@ -107,11 +105,11 @@ uint32_t SD_QuickInit(uint32_t baudrate)
     #if 0
 
     PORTE->PCR[0] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D1  */
-	PORTE->PCR[1] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D0  */
-	PORTE->PCR[2] =  (PORT_PCR_MUX(4) | PORT_PCR_DSE_MASK);                                          /* ESDHC.CLK */
-	PORTE->PCR[3] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.CMD */
-	PORTE->PCR[4] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D3  */
-	PORTE->PCR[5] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D2  */
+    PORTE->PCR[1] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D0  */
+    PORTE->PCR[2] =  (PORT_PCR_MUX(4) | PORT_PCR_DSE_MASK);                                          /* ESDHC.CLK */
+    PORTE->PCR[3] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.CMD */
+    PORTE->PCR[4] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D3  */
+    PORTE->PCR[5] =  (PORT_PCR_MUX(4) | PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_DSE_MASK);    /* ESDHC.D2  */
     #endif
     while(SD_Init(&SD_InitStruct1) && retry < 10)
     {

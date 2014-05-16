@@ -235,7 +235,10 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 	{
 		__NOP();
 	}
-    ENET_MII_Init();  
+    ENET_MII_Init();
+    /* software reset PHY */
+    ENET_MII_Write(CFG_PHY_ADDRESS, PHY_BMCR, PHY_BMCR_RESET);
+    DelayMs(10);
     do
     {
         DelayMs(10);
@@ -245,22 +248,31 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
         ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYIDR1, &usData );
     } while( (usData == 0xFFFF) || (usData == 0x0000));
 
-    LIB_TRACE("PHY_PHYIDR1=0x%X\r\n",usData);
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_BMCR, &usData );
+    LIB_TRACE("PHY_BMCR:0x%X\r\n",usData);
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYIDR1, &usData );
+    LIB_TRACE("PHY_PHYIDR1:0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYIDR2, &usData );
-    LIB_TRACE("PHY_PHYIDR2=0x%X\r\n",usData); 
+    LIB_TRACE("PHY_PHYIDR2:0x%X\r\n",usData);
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_ANAR, &usData );
+    LIB_TRACE("PHY_ANAR:0x%X\r\n",usData);
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_ANLPAR, &usData );
-    LIB_TRACE("PHY_ANLPAR=0x%X\r\n",usData);
-    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_ANLPARNP, &usData );
-    LIB_TRACE("PHY_ANLPARNP=0x%X\r\n",usData);
-    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYSTS, &usData );
-    LIB_TRACE("PHY_PHYSTS=0x%X\r\n",usData);
-    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_MICR, &usData );
-    LIB_TRACE("PHY_MICR=0x%X\r\n",usData);
-    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_MISR, &usData );
-    LIB_TRACE("PHY_MISR=0x%X\r\n",usData);
-    /* 开始自动协商 */
-    ENET_MII_Write(CFG_PHY_ADDRESS, PHY_BMCR, ( PHY_BMCR_AN_RESTART | PHY_BMCR_AN_ENABLE ) );
+    LIB_TRACE("PHY_ANLPAR:0x%X\r\n",usData);
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_ANER, &usData );
+    LIB_TRACE("PHY_ANER:0x%X\r\n",usData);
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_LPNPA, &usData );
+    LIB_TRACE("PHY_LPNPA:0x%X\r\n",usData);
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_RXERC, &usData );
+    LIB_TRACE("PHY_RXERC:0x%X\r\n",usData);
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_ICS, &usData );
+    LIB_TRACE("PHY_ICS:0x%X\r\n",usData);
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYC1, &usData );
+    LIB_TRACE("PHY_PHYC1:0x%X\r\n",usData);
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_PHYC1, &usData );
+    LIB_TRACE("PHY_PHYC1:0x%X\r\n",usData);
 
+    /* 开始自动协商 */
+    ENET_MII_Write(CFG_PHY_ADDRESS, PHY_BMCR, (PHY_BMCR_AN_RESTART | PHY_BMCR_AN_ENABLE ));
     ENET_MII_Read(CFG_PHY_ADDRESS, PHY_BMCR, &usData );
     LIB_TRACE("PHY_BMCR=0x%X\r\n",usData);
     /* 等待自动协商完成 */
@@ -270,14 +282,14 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 		timeout++;
 		if(timeout > 30)
         {
-            LIB_TRACE("enet phy reset failed\r\n");
+            LIB_TRACE("enet Auto-Negotiation failed\r\n");
             break;
         }
         ENET_MII_Read(CFG_PHY_ADDRESS, PHY_BMSR, &usData );
     } while( !( usData & PHY_BMSR_AN_COMPLETE ) );
     /* 根据协商结果设置ENET模块 */
     usData = 0;
-    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_STATUS, &usData );	
+    	
   
     /* 清除单独和组地址哈希寄存器 */
     ENET->IALR = 0;
@@ -290,6 +302,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     ENET->RCR = ENET_RCR_MAX_FL(CFG_ENET_MAX_PACKET_SIZE) | ENET_RCR_MII_MODE_MASK | ENET_RCR_CRCFWD_MASK | ENET_RCR_RMII_MODE_MASK;
     //清除发送接收控制
     ENET->TCR = 0;
+    ENET_MII_Read(CFG_PHY_ADDRESS, PHY_STATUS, &usData );
     if( usData & PHY_DUPLEX_STATUS )
     {
         ENET->RCR &= (unsigned long)~ENET_RCR_DRT_MASK;
@@ -306,6 +319,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     if( usData & PHY_SPEED_STATUS )
     {
         /* 10Mbps */
+        LIB_TRACE("speed:10M\r\n");
         ENET->RCR |= ENET_RCR_RMII_10T_MASK;
     }
     /* 使用增强型缓冲区描述符 */
@@ -421,6 +435,16 @@ void ENET_CallbackRxInstall(ENET_CallBackRxType AppCBFun)
     {
         ENET_CallBackRxTable[0] = AppCBFun;
     }
+}
+
+uint32_t ENET_IsTransmitComplete(void)
+{
+    if(ENET->EIR & ENET_EIMR_TXF_MASK)
+    {
+        ENET->EIR |= ENET_EIMR_TXF_MASK;
+        return 1;
+    }
+    return 0;
 }
 
 void ENET_Transmit_IRQHandler(void)

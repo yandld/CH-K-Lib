@@ -20,19 +20,21 @@
 #include <stdint.h>
      
 /* MII¼Ä´æÆ÷µØÖ· */
-#define PHY_BMCR                    (0x00)
-#define PHY_BMSR                    (0x01)
-#define PHY_PHYIDR1                 (0x02)
-#define PHY_PHYIDR2                 (0x03)
-#define PHY_ANAR                    (0x04)
-#define PHY_ANLPAR                  (0x05)
-#define PHY_ANLPARNP                (0x05)
-#define PHY_ANER                    (0x06)
-#define PHY_ANNPTR                  (0x07)
-#define PHY_PHYSTS                  (0x10)
-#define PHY_MICR                    (0x11)
-#define PHY_MISR                    (0x12)
-#define PHY_PAGESEL                 (0x13)
+#define PHY_BMCR                    (0x00) /* Basic Control */
+#define PHY_BMSR                    (0x01) /* Basic Status */
+#define PHY_PHYIDR1                 (0x02) /* PHY Identifer 1 */
+#define PHY_PHYIDR2                 (0x03) /* PHY Identifer 2 */
+#define PHY_ANAR                    (0x04) /* Auto-Negotiation Advertisement */
+#define PHY_ANLPAR                  (0x05) /* Auto-Negotiation Link Partner Ability */
+#define PHY_ANER                    (0x06) /* Auto-Negotiation Expansion */
+#define PHY_LPNPA                   (0x07) /* Link Partner Next Page Ability */
+#define PHY_RXERC                   (0x15) /* RXER Counter */
+#define PHY_ICS                     (0x1B) /* Interrupt Control/Status */
+#define PHY_PHYC1                   (0x1E) /* PHY Control 1 */
+#define PHY_PHYC2                   (0x1F) /* PHY Control 2 */     
+     
+     
+    
 
 
 /* PHY_BMCR¼Ä´æÆ÷Î»¶¨Òå */
@@ -213,7 +215,7 @@ uint16_t ENET_MacReceiveData(uint8_t *data);
 void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config);
 void ENET_CallbackTxInstall(ENET_CallBackTxType AppCBFun);
 void ENET_CallbackRxInstall(ENET_CallBackRxType AppCBFun);
-
+uint32_t ENET_IsTransmitComplete(void);
 
 #ifdef __cplusplus
 }

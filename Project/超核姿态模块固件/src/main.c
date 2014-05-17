@@ -44,7 +44,7 @@ static void PIT_CH0_ISR(void)
 static void PIT_CH1_ISR(void)
 {
    // trans_send_pactket(send_data, TRANS_WITH_NRF2401);
-    GPIO_ToggleBit(HW_GPIOA, 1);
+   // GPIO_ToggleBit(HW_GPIOA, 1);
 }
 
 int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance);
@@ -149,7 +149,7 @@ int main(void)
     send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
     send_data.trans_roll = (int16_t)angle.imu_roll*100;
     send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
-        
+    GPIO_ToggleBit(HW_GPIOA, 1);
         // printf("P:%4d R:%4d Y:%4d  \r", (int)angle.imu_pitch, (int)angle.imu_roll, (int)angle.imu_yaw);
         //     bmp180_read_temperature(&temperature);
         //     bmp180_start_conversion(BMP180_P3_MEASURE);

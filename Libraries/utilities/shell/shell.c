@@ -114,11 +114,6 @@ void shell_io_install(shell_io_install_t * IOInstallStruct)
     if(IOInstallStruct != NULL)
     {
         gpIOInstallStruct = IOInstallStruct;
-        return 0;
-    }
-    else
-    {
-        return 1;
     }
 #endif
 }
@@ -635,10 +630,12 @@ void shell_init(void)
     extern const int FSymTab$$Base;
     extern const int FSymTab$$Limit;
     _system_function_section_init(&FSymTab$$Base, &FSymTab$$Limit);
+    
 #elif defined (__ICCARM__)      /* for IAR Compiler */
     finsh_system_function_init(__section_begin("FSymTab"),
                                __section_end("FSymTab"));
 #endif
+    
 }
 
 void shell_main_loop(char * prompt)
@@ -648,6 +645,7 @@ void shell_main_loop(char * prompt)
     int8_t result;
     const cmd_tbl_t * cmdtp;
     char * argv[SHELL_MAX_ARGS];	/* NULL terminated	*/
+    
     for (;;)
     {
         len = readline(prompt);

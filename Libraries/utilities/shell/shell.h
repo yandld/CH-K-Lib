@@ -16,6 +16,7 @@
 
 #include "shell_config.h"
 
+
 #ifndef SHELL_CB_SIZE
 #define SHELL_CB_SIZE   (128)
 #endif

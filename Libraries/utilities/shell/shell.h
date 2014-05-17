@@ -1,32 +1,12 @@
-/*
- * Copyright (c) 2013 - 2014, Freescale Semiconductor, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+/**
+  ******************************************************************************
+  * @file    shell.h
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2014.3.24
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #ifndef __shell_H__
 #define __shell_H__
 
@@ -35,6 +15,26 @@
 #include <ctype.h>
 
 #include "shell_config.h"
+
+#ifndef SHELL_CB_SIZE
+#define SHELL_CB_SIZE   (128)
+#endif
+
+#ifndef SHELL_MAX_ARGS
+#define SHELL_MAX_ARGS  (8)
+#endif
+
+#ifndef HIST_MAX
+#define HIST_MAX        (10)
+#endif
+
+#ifdef __CC_ARM                         /* ARM Compiler */
+    #include <stdarg.h>
+    #define SECTION(x)                  __attribute__((section(x)))
+#elif defined (__IAR_SYSTEMS_ICC__)     /* for IAR Compiler */
+    #include <stdarg.h>
+    #define SECTION(x)                  @ x
+#endif
 
 typedef struct
 {
@@ -51,11 +51,42 @@ typedef struct
     char		*name;		/* Command Name			*/
     uint8_t		maxargs;	/* maximum number of arguments	*/
     uint8_t		repeatable;	/* autorepeat allowed?		*/
-    int		(*cmd)(int argc, char * const argv[]);  /* Implementation function	*/
+    int         (*cmd)(int argc, char * const argv[]);  /* Implementation function	*/
     char		*usage;		/* Usage message	(short)	*/
     char		*help;		/* Help  message	(long)	*/
-    int		(*complete)(int argc, char * const argv[], char last_char, int maxv, char *cmdv[]); 	/* do auto completion on the arguments */
+    int         (*complete)(int argc, char * const argv[], char last_char, int maxv, char *cmdv[]); 	/* do auto completion on the arguments */
 }cmd_tbl_t;
+
+
+#define SHELL_EXPORT_CMD(func, cmd, usage)                      \
+    const char __fsym_##cmd##_name[] = #cmd;                    \
+    const char __fsym_##cmd##_usage[] = #usage;                 \
+    const cmd_tbl_t __fsym_##cmd SECTION("FSymTab")=            \
+    {                                                           \
+        (char *)__fsym_##cmd##_name,                            \
+        8,                                                      \
+        0,                                                      \
+        func,                                                   \
+        (char *)__fsym_##cmd##_usage,                           \
+        0,                                                      \
+        0,                                                      \
+    };
+    
+#define SHELL_EXPORT_CMD_EX(func, complete, cmd, usage, help)   \
+    const char __fsym_##cmd##_name[] = #cmd;                    \
+    const char __fsym_##cmd##_usage[] = #usage;                 \
+    const char __fsym_##cmd##_help[] = #help;                   \
+    const cmd_tbl_t __fsym_##cmd SECTION("FSymTab")=            \
+    {                                                           \
+        (char *)__fsym_##cmd##_name,                            \
+        8,                                                      \
+        0,                                                      \
+        func,                                                   \
+        (char *)__fsym_##cmd##_usage,                           \
+        (char *)__fsym_##cmd##_help,                            \
+        complete,                                               \
+    }; 
+    
 
 typedef enum
 {
@@ -65,16 +96,14 @@ typedef enum
 }command_ret_t;
 
 //!< API funcions
-uint8_t shell_register_function(const cmd_tbl_t * pAddress);
-void shell_register_function_array(const cmd_tbl_t * pAddress, uint8_t num);
-uint8_t shell_unregister_function(char * name);
-int shell_printf(const char * format,...);
-void shell_beep(void);
-const cmd_tbl_t *shell_find_command (const char * cmd);
-uint8_t shell_io_install(shell_io_install_t * IOInstallStruct);
-const cmd_tbl_t ** shell_get_cmd_tbl(void);
-char ** shell_get_hist_data_list(uint8_t * num, uint8_t * cur_index);
+void shell_init(void);
 void shell_main_loop(char * prompt);
+//!< internal functions
+int shell_printf(const char * format,...);
+const cmd_tbl_t *shell_find_command (const char * cmd);
+void shell_io_install(shell_io_install_t * IOInstallStruct);
+char ** shell_get_hist_data_list(uint8_t * num, uint8_t * cur_index);
+
 
 #endif
 

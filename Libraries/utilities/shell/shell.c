@@ -1,52 +1,34 @@
-/*
- * Copyright (c) 2013 - 2014, Freescale Semiconductor, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+/**
+  ******************************************************************************
+  * @file    shell.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2014.3.24
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #include <stdio.h>
 #include <stdarg.h>
 #include "shell.h"
+
 
 #if __ICCARM__
 #include <yfuns.h>
 #endif
 
-/*******************************************************************************
- * Defination
- ******************************************************************************/
- 
 #define CTL_CH(c)		((c) - 'a' + 1)
 #define CTL_BACKSPACE		('\b')
 #define DEL       ((char)255)
 #define DEL7			((char)127)
 #define CREAD_HIST_CHAR		('!')
 #define putstr(str)  do {while (* str != '\0') {sputc(*str++);}} while (0)
-#define sgetc()      gpIOInstallStruct->sh_getc()
-#define sputc(ch)    gpIOInstallStruct->sh_putc(ch)
+#ifdef SHELL_CONFIG_USE_STDIO
+#define sgetc()      getchar()
+#define sputc(ch)    putchar(ch)
+#else
+#define sgetc()         gpIOInstallStruct->sh_getc()
+#define sputc(ch)       gpIOInstallStruct->sh_putc(ch)
+#endif
 
 #define BEGINNING_OF_LINE() {			\
 	while (num) {				\
@@ -81,9 +63,11 @@ static void putnstr(char * str, uint8_t n);
 /********************************************************************************
  * Variables
  ******************************************************************************/
- 
-static shell_io_install_t * gpIOInstallStruct;   /* install struct	*/
-static const cmd_tbl_t * gpCmdTable[SHELL_MAX_FUNCTION_NUM];  /* cmd table array pointer	*/
+cmd_tbl_t *_syscall_table_begin 	= NULL;
+cmd_tbl_t *_syscall_table_end 	= NULL;
+#ifndef SHELL_CONFIG_USE_STDIO
+static shell_io_install_t * gpIOInstallStruct;
+#endif
 static char console_buffer[SHELL_CB_SIZE + 1];	/* console I/O buffer	*/
 /* hist support */
 #ifdef SHELL_CONFIG_USE_HIST
@@ -93,93 +77,16 @@ static int8_t hist_cur = -1;
 static int8_t hist_num;
 /* hist buffer */
 static char *hist_list[HIST_MAX];
-static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
+static char hist_lines[HIST_MAX][SHELL_CB_SIZE + 1];	/* Save room for NULL */
 static char *hist_list[HIST_MAX];
-static char hist_lines[HIST_MAX][HIST_SIZE + 1];	/* Save room for NULL */
+static char hist_lines[HIST_MAX][SHELL_CB_SIZE + 1];	/* Save room for NULL */
 #endif /* SHELL_CONFIG_USE_HIST */
  /*******************************************************************************
  * Code
  ******************************************************************************/
+
  
 #ifdef SHELL_CONFIG_USE_STDIO
-
-#ifdef __CC_ARM /* MDK Support */
-struct __FILE 
-{ 
-	int handle; 
-	/* Whatever you require here. If the only file you are using is */ 
-	/* standard output using printf() for debugging, no file handling */ 
-	/* is required. */ 
-}; 
-/* FILE is typedef¡¯ d in stdio.h. */ 
-FILE __stdout; 
-int fputc(int ch,FILE *f)
-{
-	sputc(ch);
-	return ch;
-}
-
-int fgetc(FILE *f)
-{
-    return sgetc();
-}
-#elif __ICCARM__/* IAR Support */
-
-size_t __write(int handle, const unsigned char * buffer, size_t size)
-{
-    size_t nChars = 0;
-    if (buffer == 0)
-    {
-        /* This means that we should flush internal buffers.  Since we*/
-        /* don't we just return.  (Remember, "handle" == -1 means that all*/
-        /* handles should be flushed.)*/
-        return 0;
-    }
-    /* This function only writes to "standard out" and "standard err",*/
-    /* for all other file handles it returns failure.*/
-    if ((handle != _LLIO_STDOUT) && (handle != _LLIO_STDERR))
-    {
-        return _LLIO_ERROR;
-    }
-    /* Send data.*/
-    while (size--)
-    {
-        sputc(*buffer++);
-        ++nChars;
-    }
-    return nChars;
-}
-
-#elif CW/* CodeWarrior Support */
-/* It is not supported currently */
-    #error "It is not supported in this version!"
-
-
-#elif __GNUC__/* GCC Support */
-int _write (int handle, char * buffer, int size)
-{
-    int nChars = 0;
-    if (buffer == 0)
-    {
-        /* return -1 if error */
-        return -1;
-    }
-    /* This function only writes to "standard out" and "standard err",*/
-    /* for all other file handles it returns failure.*/
-    if ((handle != 1) && (handle != 2))
-    {
-        return -1;
-    }
-    /* Send data.*/
-    while (size--)
-    {
-        sputc(*buffer++);
-        ++nChars;
-    }
-    return nChars;
-}
-
-#endif
 
 #else
  /*!
@@ -201,8 +108,9 @@ int shell_printf(const char * format,...)
  /*!
  * @brief install shell io function.
  */
-uint8_t shell_io_install(shell_io_install_t * IOInstallStruct)
+void shell_io_install(shell_io_install_t * IOInstallStruct)
 {
+#ifndef SHELL_CONFIG_USE_STDIO
     if(IOInstallStruct != NULL)
     {
         gpIOInstallStruct = IOInstallStruct;
@@ -212,12 +120,7 @@ uint8_t shell_io_install(shell_io_install_t * IOInstallStruct)
     {
         return 1;
     }
-    /*
-    for (i = 0; i < SHELL_MAX_FUNCTION_NUM; i++)
-    {
-      gpCmdTable[i] = NULL;
-    }
-    */
+#endif
 }
  /*!
  * @brief beep consult
@@ -226,13 +129,7 @@ void shell_beep(void)
 {
     sputc('\a');
 }
- /*!
- * @brief get global cmdstruct table address
- */
-const cmd_tbl_t ** shell_get_cmd_tbl(void)
-{
-    return gpCmdTable;
-}
+
  /*!
  * @brief send n chars
  */
@@ -244,67 +141,7 @@ static void putnstr(char * str, uint8_t n)
     }
 
 }
- /*!
- * @brief register a user function
- */
-uint8_t shell_register_function(const cmd_tbl_t * pAddress)
-{
-    uint32_t i = 0;
-    /* check name conflict */
-    while ((gpCmdTable[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
-    {
-        if (!strcmp(gpCmdTable[i]->name, pAddress->name))
-        {
-            return 1;
-        }
-        i++;
-    }
-    /* insert */
-    for (i = 0; i< SHELL_MAX_FUNCTION_NUM; i++)
-    {
-        if (gpCmdTable[i] == NULL)
-        {
-            gpCmdTable[i] =  pAddress;
-            return 0;
-        }
-    }
-    return 1;
-}
- /*!
- * @brief register function array
- */
-void shell_register_function_array(const cmd_tbl_t * pAddress, uint8_t num)
-{
-    const cmd_tbl_t * cmdtp =  pAddress;
-    while (num--)
-    {
-        shell_register_function(cmdtp++);
-    }
-}
 
- /*!
- * @brief unregister function
- */
-uint8_t shell_unregister_function(char * name)
-{
-    uint8_t i,j;
-    i = 0;
-    while ((gpCmdTable[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
-    {
-        if (!strcmp(name, gpCmdTable[i]->name))
-        {
-            j = i + 1;
-            while (gpCmdTable[j] != NULL)
-            {
-                gpCmdTable[j-1] = gpCmdTable[j];
-                j++;
-            }
-            gpCmdTable[j-1] = NULL;
-        }
-        i++;
-    }
-    return 0;
-}
 #ifdef SHELL_CONFIG_USE_HIST
  /*!
  * @brief init history buffer and vars
@@ -559,7 +396,7 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
         case CTL_CH('c'):	/* ^C - break */
             *buf = '\0';	/* discard input */
             return (-1);
-            break; /* have to follow MISRA */
+            //break; /* have to follow MISRA */
         case CTL_CH('f'):
             if (num < eol_num)
             {
@@ -652,7 +489,7 @@ static int cread_line(const char * const prompt, char * buf, uint8_t * len)
             eol_num = strlen(buf);
             REFRESH_TO_EOL()
             continue;
-            break; /* have to follow MISRA */
+            //break; /* have to follow MISRA */
         }
 #else
         {
@@ -771,27 +608,37 @@ static int parse_line (char * line, char * argv[])
  */
 const cmd_tbl_t * shell_find_command (const char * cmd)
 {
-    uint8_t i = 0, n_found = 0;
     const cmd_tbl_t *cmdtp_temp = NULL;
     if (cmd == NULL) 
     {
         return NULL;
     }
-    while ((gpCmdTable[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
+    for(cmdtp_temp = _syscall_table_begin; cmdtp_temp < _syscall_table_end; cmdtp_temp++)
     {
-        if (!strcmp(cmd, gpCmdTable[i]->name))
+        if (!strcmp(cmd, cmdtp_temp->name))
         {
-            cmdtp_temp = gpCmdTable[i];
-            n_found++;
+            return cmdtp_temp;
         }
-        i++;
-    }
-    /* we need exactly one match */
-    if (n_found == 1)
-    {
-        return cmdtp_temp;
     }
     return NULL;
+}
+
+static void _system_function_section_init(const void* begin, const void* end)
+{
+    _syscall_table_begin = ( cmd_tbl_t*) begin;
+    _syscall_table_end = ( cmd_tbl_t*) end;
+}
+
+void shell_init(void)
+{
+#ifdef __CC_ARM                 /* ARM C Compiler */
+    extern const int FSymTab$$Base;
+    extern const int FSymTab$$Limit;
+    _system_function_section_init(&FSymTab$$Base, &FSymTab$$Limit);
+#elif defined (__ICCARM__)      /* for IAR Compiler */
+    finsh_system_function_init(__section_begin("FSymTab"),
+                               __section_end("FSymTab"));
+#endif
 }
 
 void shell_main_loop(char * prompt)
@@ -850,8 +697,3 @@ void shell_main_loop(char * prompt)
     }
 }
 
-/*******************************************************************************
- * EOF
- ******************************************************************************/
- 
- 

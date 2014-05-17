@@ -36,27 +36,14 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 //中断服务
 static void PIT_CH0_ISR(void)
 {
-    //获取欧拉角 获取原始角度
-    imu_get_euler_angle(&angle, &raw_data);
-    send_data.trans_accel[0] = raw_data.ax;
-    send_data.trans_accel[1] = raw_data.ay;
-    send_data.trans_accel[2] = raw_data.az;
-    send_data.trans_gyro[0] = raw_data.gx;
-    send_data.trans_gyro[1] = raw_data.gy;
-    send_data.trans_gyro[2] = raw_data.gz;
-    send_data.trans_mag[0] = raw_data.mx;
-    send_data.trans_mag[1] = raw_data.my;
-    send_data.trans_mag[2] = raw_data.mz;
-    send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
-    send_data.trans_roll = (int16_t)angle.imu_roll*100;
-    send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
+
     
 }
 
 
 static void PIT_CH1_ISR(void)
 {
-    trans_send_pactket(send_data, TRANS_WITH_NRF2401);
+   // trans_send_pactket(send_data, TRANS_WITH_NRF2401);
     GPIO_ToggleBit(HW_GPIOA, 1);
 }
 
@@ -132,14 +119,14 @@ int main(void)
     GPIO_QuickInit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN , kGPIO_Mode_OPP);
     GPIO_QuickInit(BOARD_NRF2401_IRQ_PORT, BOARD_NRF2401_IRQ_PIN , kGPIO_Mode_IPU);
     /* 初始化NRF */
-    static struct spi_bus bus;
-    ret = kinetis_spi_bus_init(&bus, HW_SPI0);
-    nrf24l01_init(&bus, 2);
-    if(nrf24l01_probe())
+   // static struct spi_bus bus;
+   // ret = kinetis_spi_bus_init(&bus, HW_SPI0);
+    //nrf24l01_init(&bus, 2);
+    // if(nrf24l01_probe())
     {
-        printf("no nrf24l01 device found\r\n");
+    //     printf("no nrf24l01 device found\r\n");
     }
-    nrf24l01_set_rx_mode();
+    //nrf24l01_set_rx_mode();
     while(1)
     {
         if(DMA_IsMajorLoopComplete(HW_DMA_CH1) == 0)
@@ -148,19 +135,33 @@ int main(void)
             //延时1MS以免发的太快上位机受不了
             DelayMs(5);
         }
-       // printf("P:%4d R:%4d Y:%4d  \r", (int)angle.imu_pitch, (int)angle.imu_roll, (int)angle.imu_yaw);
-   //     bmp180_read_temperature(&temperature);
-   //     bmp180_start_conversion(BMP180_P3_MEASURE);
-   //     DelayMs(20);
-    //    bmp180_read_pressure(&pressure);
+    //获取欧拉角 获取原始角度
+    imu_get_euler_angle(&angle, &raw_data);
+    send_data.trans_accel[0] = raw_data.ax;
+    send_data.trans_accel[1] = raw_data.ay;
+    send_data.trans_accel[2] = raw_data.az;
+    send_data.trans_gyro[0] = raw_data.gx;
+    send_data.trans_gyro[1] = raw_data.gy;
+    send_data.trans_gyro[2] = raw_data.gz;
+    send_data.trans_mag[0] = raw_data.mx;
+    send_data.trans_mag[1] = raw_data.my;
+    send_data.trans_mag[2] = raw_data.mz;
+    send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
+    send_data.trans_roll = (int16_t)angle.imu_roll*100;
+    send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
+        
+        // printf("P:%4d R:%4d Y:%4d  \r", (int)angle.imu_pitch, (int)angle.imu_roll, (int)angle.imu_yaw);
+        //     bmp180_read_temperature(&temperature);
+        //     bmp180_start_conversion(BMP180_P3_MEASURE);
+        //     DelayMs(20);
+        //    bmp180_read_pressure(&pressure);
         //printf("t:%d p:%d\r", temperature, pressure);
-        if(!nrf24l01_read_packet(NRF2401RXBuffer, &len))
+        //  if(!nrf24l01_read_packet(NRF2401RXBuffer, &len))
         {
             /* 从2401 接收到数据 */
 
         }
     }
-
 }
 
 

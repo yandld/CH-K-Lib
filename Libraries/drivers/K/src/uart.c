@@ -82,7 +82,8 @@ struct __FILE
 	/* is required. */ 
 }; 
 /* FILE is typedef¡¯ d in stdio.h. */ 
-FILE __stdout; 
+FILE __stdout;
+FILE __stdin;
 int fputc(int ch,FILE *f)
 {
 	UART_WriteByte(UART_DebugInstance, ch);

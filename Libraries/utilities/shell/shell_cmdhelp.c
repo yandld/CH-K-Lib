@@ -1,72 +1,43 @@
-/*
- * Copyright (c) 2013 - 2014, Freescale Semiconductor, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+/**
+  ******************************************************************************
+  * @file    shell_cmdhelp.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2014.3.26
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
+  
 #include "shell.h"
 
-/*******************************************************************************
- * Defination
- ******************************************************************************/
-
-/*******************************************************************************
- * Variables
- ******************************************************************************/
- 
- /*******************************************************************************
- * Code
- ******************************************************************************/
- 
+extern cmd_tbl_t *_syscall_table_begin;
+extern cmd_tbl_t *_syscall_table_end;
+              
  /*!
  * @brief help command.
  */
-static int DoHelp(int argc, char * const argv[])
+int DoHelp(int argc, char * const argv[])
 {
     uint8_t i;
-    const cmd_tbl_t ** cmdtpt = shell_get_cmd_tbl();
+    const cmd_tbl_t * cmdp;
     if (argc == 1)
     {
         i = 0;
-        while ((cmdtpt[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
+        for(cmdp = _syscall_table_begin; cmdp < _syscall_table_end; cmdp++)
         {
-            shell_printf("%-*s(%d)- %s\r\n", 8, cmdtpt[i]->name, i, cmdtpt[i]->usage);
-            i++;
+            shell_printf("%-*s(%d)- %s\r\n", 8, cmdp->name, i++, cmdp->usage);
         }
     }
     if (argc == 2)
     {
         i = 0;
-        while ((cmdtpt[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
+        for(cmdp = _syscall_table_begin; cmdp < _syscall_table_end; cmdp++)
         {
-            if (!strcmp(argv[1], cmdtpt[i]->name))
+            if (!strcmp(argv[1], cmdp->name))
             {
-                if (cmdtpt[i]->help != NULL)
+                if (cmdp->help != NULL)
                 {
-                    shell_printf("%-*s- %s\r\n", 8, cmdtpt[i]->name, cmdtpt[i]->help);
+                    shell_printf("%-*s- %s\r\n", 8, cmdp->name, cmdp->help);
                     return CMD_RET_SUCCESS;
                 }
                 else
@@ -75,7 +46,6 @@ static int DoHelp(int argc, char * const argv[])
                     return CMD_RET_SUCCESS;
                 }
             }
-            i++;
         }
         shell_printf ("- No command available.\r\n");
     }
@@ -89,45 +59,32 @@ static int DoHelpComplete(int argc, char * const argv[], char last_char, int max
 {
     uint8_t str_len;
     uint8_t found = 0;
-    uint8_t i;
     str_len = strlen(argv[argc-1]);
-    const cmd_tbl_t **cmdtpt = shell_get_cmd_tbl();
-    switch(argc)
+    const cmd_tbl_t * cmdp;
+    if(argc == 2)
     {
-        case 2:
-            i = 0;
-            while ((cmdtpt[i] != NULL) && (i < SHELL_MAX_FUNCTION_NUM))
+        for(cmdp = _syscall_table_begin; cmdp < _syscall_table_end; cmdp++)
+        {
+            if (!strncmp(argv[argc-1], cmdp->name, str_len))
             {
-                if (!strncmp(argv[argc-1], cmdtpt[i]->name, str_len))
-                {
-                    cmdv[found] = cmdtpt[i]->name;
-                    found++;
-                }  
-                i++;
-            }
-            break;
-        default:
-            break;
+                cmdv[found] = cmdp->name;
+                found++;
+            }  
+        }
     }
     return found;
 }
 
-
-const cmd_tbl_t CommandFun_Help = 
+const cmd_tbl_t __fsym_help SECTION("FSymTab")=            
 {
-    .name = "help",
-    .maxargs = 2,
-    .repeatable = 1,
-    .cmd = DoHelp,
-    .usage = "print command description/usage",
-    .complete = DoHelpComplete,
-    .help = "\r\n"
+    "help",                            
+    8,                                                      
+    0,                                                      
+    DoHelp,                                                   
+    "print command description/usage",                           
+    "\r\n"
             "	- print brief description of all commands\r\n"
             "help <command>\r\n"
-            "	- print detailed usage of 'command'\r\n"
+            "	- print detailed usage of 'command'\r\n",                                             
+    DoHelpComplete,                                                      
 };
-
-/*******************************************************************************
- * EOF
- ******************************************************************************/
-

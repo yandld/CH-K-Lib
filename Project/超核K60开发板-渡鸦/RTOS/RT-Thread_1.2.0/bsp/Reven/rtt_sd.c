@@ -8,7 +8,7 @@ static  rt_mutex_t mutex;
     
 static rt_err_t rt_sd_init (rt_device_t dev)
 {
-    SD_QuickInit(5000000);
+    SD_QuickInit(10000000);
     rt_kprintf("Size:%dMB\r\n", SD_GetSizeInMB());
     mutex = rt_mutex_create("sd_mutex", RT_IPC_FLAG_FIFO);
     if (mutex == RT_NULL)

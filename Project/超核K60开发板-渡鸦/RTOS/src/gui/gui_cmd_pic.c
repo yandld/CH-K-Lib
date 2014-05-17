@@ -90,7 +90,8 @@ int cmd_pic(int argc, char** argv)
     {
         show_pic(argv[1]);
     }
-
     return 0;
 }
+
+
 FINSH_FUNCTION_EXPORT_ALIAS(cmd_pic, __cmd_pic, show a picture file.);

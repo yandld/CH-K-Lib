@@ -20,10 +20,7 @@
 #define RT_DEBUG
 
 #define RT_USING_OVERFLOW_CHECK
-
-/* Using Hook */
-#define RT_USING_HOOK
-
+//#define RT_USING_HOOK
 #define IDLE_THREAD_STACK_SIZE     1024
 
 /* Using Software Timer */
@@ -80,11 +77,10 @@
 #define RT_USING_DFS_ELMFAT
 #define RT_DFS_ELM_WORD_ACCESS
 #define DFS_USING_WORKDIR
-
 /* Reentrancy (thread safe) of the FatFs module.  */
 #define RT_DFS_ELM_REENTRANT
 /* Number of volumes (logical drives) to be used. */
-#define RT_DFS_ELM_DRIVES			2
+#define RT_DFS_ELM_DRIVES			    2
 //#define RT_DFS_ELM_USE_LFN			3 
 #define RT_DFS_ELM_MAX_LFN			255
 /* Maximum sector size to be handled. */
@@ -94,7 +90,7 @@
 #define RT_NFS_HOST_EXPORT "192.168.1.202:/"
 
 /* the max number of mounted filesystem */
-#define DFS_FILESYSTEMS_MAX			4
+#define DFS_FILESYSTEMS_MAX			3
 /* the max number of opened files 		*/
 #define DFS_FD_MAX					4
 
@@ -115,20 +111,20 @@
 /* Enable DNS */
 #define RT_LWIP_DNS
 #define RT_LWIP_DEBUG
-
+#define RT_LWIP_DHCP
 /* the number of simulatenously active TCP connections*/
 #define RT_LWIP_TCP_PCB_NUM	5
 
 /* ip address of target*/
 #define RT_LWIP_IPADDR0	192
 #define RT_LWIP_IPADDR1	168
-#define RT_LWIP_IPADDR2	1
+#define RT_LWIP_IPADDR2	0
 #define RT_LWIP_IPADDR3	201
 
 /* gateway address of target*/
 #define RT_LWIP_GWADDR0	192
 #define RT_LWIP_GWADDR1	168
-#define RT_LWIP_GWADDR2	1
+#define RT_LWIP_GWADDR2	0
 #define RT_LWIP_GWADDR3	1
 
 /* mask address of target*/

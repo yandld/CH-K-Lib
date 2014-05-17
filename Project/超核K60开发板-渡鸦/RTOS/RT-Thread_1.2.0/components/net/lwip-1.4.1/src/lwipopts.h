@@ -252,7 +252,7 @@
 #define DHCP_DOES_ARP_CHECK         (LWIP_DHCP)
 
 /* ---------- AUTOIP options ------- */
-#define LWIP_AUTOIP                 0
+#define LWIP_AUTOIP                 1
 #define LWIP_DHCP_AUTOIP_COOP       (LWIP_DHCP && LWIP_AUTOIP)
 
 /* ---------- UDP options ---------- */

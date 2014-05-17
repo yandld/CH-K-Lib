@@ -8,7 +8,7 @@ static  rt_mutex_t mutex;
     
 static rt_err_t rt_sd_init (rt_device_t dev)
 {
-    SD_QuickInit(1000000);
+    SD_QuickInit(5000000);
     rt_kprintf("Size:%dMB\r\n", SD_GetSizeInMB());
     mutex = rt_mutex_create("sd_mutex", RT_IPC_FLAG_FIFO);
     if (mutex == RT_NULL)
@@ -51,7 +51,8 @@ static rt_size_t rt_sd_read (rt_device_t dev, rt_off_t pos, const void* buffer, 
 static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
-    SD_WriteMultiBlock(pos, buffer, size);
+    rt_thread_delay(1);
+    SD_WriteMultiBlock(pos, (rt_uint8_t *)buffer, size);
     rt_mutex_release(mutex);
     return size;
 }

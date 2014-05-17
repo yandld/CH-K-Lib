@@ -1,7 +1,7 @@
 #include <rtthread.h>
 #include <rthw.h>
 
-//DFS
+/* DFS */
 #include <dfs_fs.h>
 #include <dfs_posix.h>
 #include <dfs_elm.h>
@@ -10,18 +10,50 @@
 
 extern void gui_thread_entry(void* parameter);
 extern void led_thread_entry(void* parameter);
-/* static thread source */
-static rt_uint8_t gui_thread_stack[1024*4];
-static struct rt_thread gui_thread;
 
 void init_thread_entry(void* parameter)
 {
     struct rt_spi_device *spi_device;
     rt_thread_t thread;
     rt_err_t result;
-    rt_kprintf("start init thread\r\n");
-    dfs_init();
-    elm_init();
+    
+    rt_kprintf("start init thread @ LWIP:\r\n");
+#ifdef RT_USING_LWIP
+	/* initialize lwip stack */
+    eth_system_device_init();
+	/* register ethernetif device */
+    rt_hw_ksz8041_init();
+	/* initialize lwip system */
+	lwip_system_init();
+	rt_kprintf("TCP/IP initialized!\n");
+#endif  /* RT_USING_LWIP */
+    
+    rt_kprintf("start init thread @ DFS:\r\n");
+#ifdef RT_USING_DFS
+	/* initialize the device file system */
+	dfs_init();
+    
+#ifdef RT_USING_DFS_ELMFAT
+	/* initialize the elm chan FatFS file system*/
+	elm_init();
+#endif
+    
+#ifdef RT_USING_DFS_YAFFS2
+	dfs_yaffs2_init();
+#endif
+    
+#ifdef RT_USING_DFS_UFFS
+	dfs_uffs_init();
+#endif 
+
+#if defined(RT_USING_DFS_NFS) && defined(RT_USING_LWIP)
+	/* initialize NFSv3 client file system */
+    rt_kprintf("init nfs\r\n");
+	nfs_init();
+#endif
+
+#endif /* RT_USING_DFS */
+
     /* check device */
     spi_device = (struct rt_spi_device *)rt_device_find("spi21");
     if(spi_device == RT_NULL)
@@ -67,42 +99,11 @@ void init_thread_entry(void* parameter)
     {
         rt_kprintf("sd0 mount to /SD failed!\n");
     }
-   
-#ifdef RT_USING_LWIP
-    
-	/* initialize lwip stack */
-    eth_system_device_init();
-	/* register ethernetif device */
-    rt_hw_ksz8041_init();
-	/* initialize lwip system */
-	lwip_system_init();
-	rt_kprintf("TCP/IP initialized!\n");
-#endif
-#if defined(RT_USING_DFS) && defined(RT_USING_LWIP) && defined(RT_USING_DFS_NFS)
-{
-
-/* NFSv3 Initialization */
-    rt_kprintf("begin init NFSv3 File System ...\n");
-    nfs_init();
-    if (dfs_mount(RT_NULL, "/NFS", "nfs", 0, RT_NFS_HOST_EXPORT) == 0)
-    rt_kprintf("NFSv3 File System initialized!\n");
-    else
-    rt_kprintf("NFSv3 File System initialzation failed!\n");
-}
-#endif
-    /* gui thread , use static thread*/
-    result = rt_thread_init(&gui_thread,
-                            "gui",
-                            gui_thread_entry,
-                            RT_NULL,
-                            &gui_thread_stack[0],
-                            sizeof(gui_thread_stack),
-                            0x23,
-                            20);
-   // thread = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*8, 0x23, 20);                                                      
-    if (result == RT_EOK)
+   /* gui thread */
+    thread = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*8, 0x23, 20);                                                      
+    if (thread != RT_NULL)
     {
-        rt_thread_startup(&gui_thread);		
+        rt_thread_startup(thread);		
     }
     /* led thread */
     thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*4, 0x21, 20);                                                      

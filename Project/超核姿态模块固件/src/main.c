@@ -97,7 +97,9 @@ int main(void)
         DelayMs(50);
     }
     init_sensor();
-    //安装IMU 底层驱动函数
+    /* 安装IMU 底层驱动函数 */
+    trans_init();
+    /* 初始化发送单元 */
     imu_io_install(&IMU_IOInstallStruct1);
     //开PIT0
     PIT_QuickInit(HW_PIT_CH0, 1000*4);
@@ -107,8 +109,7 @@ int main(void)
     PIT_QuickInit(HW_PIT_CH1, 1000*20);
     PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
-    /* 初始化发送单元 */
-    trans_init();
+
     
     /* 初始化NRF的 PinMux*/
     PORT_PinMuxConfig(HW_GPIOC, 5, kPinAlt2); //
@@ -150,6 +151,7 @@ int main(void)
     send_data.trans_roll = (int16_t)angle.imu_roll*100;
     send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
     GPIO_ToggleBit(HW_GPIOA, 1);
+    DelayMs(5);
         // printf("P:%4d R:%4d Y:%4d  \r", (int)angle.imu_pitch, (int)angle.imu_roll, (int)angle.imu_yaw);
         //     bmp180_read_temperature(&temperature);
         //     bmp180_start_conversion(BMP180_P3_MEASURE);

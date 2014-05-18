@@ -632,8 +632,10 @@ void shell_init(void)
     _system_function_section_init(&FSymTab$$Base, &FSymTab$$Limit);
     
 #elif defined (__ICCARM__)      /* for IAR Compiler */
-    finsh_system_function_init(__section_begin("FSymTab"),
+    #pragma section="FSymTab"
+    _system_function_section_init(__section_begin("FSymTab"),
                                __section_end("FSymTab"));
+
 #endif
     
 }

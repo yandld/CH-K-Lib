@@ -9,6 +9,7 @@
 *                                                                    *
 **********************************************************************
 
+
 ** emWin V5.22 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the

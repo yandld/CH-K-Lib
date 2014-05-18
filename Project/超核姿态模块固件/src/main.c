@@ -36,7 +36,7 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 
 static void PIT_CH1_ISR(void)
 {
-    //WDOG_Refresh();
+    WDOG_Refresh();
     send_data.trans_accel[0] = raw_data.ax;
     send_data.trans_accel[1] = raw_data.ay;
     send_data.trans_accel[2] = raw_data.az;
@@ -129,7 +129,7 @@ int main(void)
     PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
     
-    //WDOG_QuickInit(100);
+    WDOG_QuickInit(100);
     
     /* ³õÊ¼»¯NRFµÄ PinMux*/
     PORT_PinMuxConfig(HW_GPIOC, 5, kPinAlt2); //

@@ -479,6 +479,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Libraries\drivers\K\src\common.c</FilePath>
             </File>
+            <File>
+              <FileName>wdog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Libraries\drivers\K\src\wdog.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -7,6 +7,7 @@
 #include "stdio.h"
 #include "pit.h"
 #include "nrf24l01.h"
+#include "wdog.h"
 #include "board.h"
 
 //包含 姿态模块所需的头文件
@@ -19,7 +20,7 @@
 #include "spi_abstraction.h"
 #include "spi.h"
 
-static uint8_t NRF2401RXBuffer[32] = "HelloWorld~~";//无线接收数据
+//static uint8_t NRF2401RXBuffer[32] = "HelloWorld~~";//无线接收数据
 
 static trans_user_data_t send_data;
 static imu_float_euler_angle_t angle;
@@ -33,30 +34,54 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 };
 
 
-//中断服务
-static void PIT_CH0_ISR(void)
-{
-
-    
-}
-
-
 static void PIT_CH1_ISR(void)
 {
+    //WDOG_Refresh();
+    send_data.trans_accel[0] = raw_data.ax;
+    send_data.trans_accel[1] = raw_data.ay;
+    send_data.trans_accel[2] = raw_data.az;
+    send_data.trans_gyro[0] = raw_data.gx;
+    send_data.trans_gyro[1] = raw_data.gy;
+    send_data.trans_gyro[2] = raw_data.gz;
+    send_data.trans_mag[0] = raw_data.mx;
+    send_data.trans_mag[1] = raw_data.my;
+    send_data.trans_mag[2] = raw_data.mz;
+    send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
+    send_data.trans_roll = (int16_t)angle.imu_roll*100;
+    send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
+    if(DMA_IsMajorLoopComplete(HW_DMA_CH1) == 0)
+    {
+        trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
+    }
    // trans_send_pactket(send_data, TRANS_WITH_NRF2401);
-   // GPIO_ToggleBit(HW_GPIOA, 1);
 }
 
 int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance);
 
 int init_sensor(void)
 {
+    uint32_t i;
     uint32_t ret;
     static struct i2c_bus bus;
+    /* befonre init I2C bus ,use GPIO to swap bus */
+    GPIO_QuickInit(HW_GPIOE, 18, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOE, 19, kGPIO_Mode_OPP);
+    for(i = 0 ; i< 10; i++)
+    {
+        PEout(18) = !PEout(18);
+        PEout(19) = !PEout(19);
+        DelayMs(5);
+    }
+    
     ret = kinetis_i2c_bus_init(&bus, BOARD_I2C_INSTANCE);
     /* enable pinmux */
     PORT_PinMuxConfig(HW_GPIOE, 18, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOE, 19, kPinAlt4);
+    PORT_PinOpenDrainConfig(HW_GPIOE, 18, ENABLE);
+    PORT_PinOpenDrainConfig(HW_GPIOE, 19, ENABLE);
+    PORT_PinPullConfig(HW_GPIOE, 18, kPullUp);
+    PORT_PinPullConfig(HW_GPIOE, 19, kPullUp);
+    
     ret = mpu6050_init(&bus);
     ret = hmc5883_init(&bus);
     ret = bmp180_init(&bus);
@@ -82,11 +107,9 @@ extern int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
 int main(void)
 {
     uint32_t i;
-    uint32_t cnt = 0;
     uint32_t ret;
-    uint32_t len;
-    int32_t temperature;
-    int32_t pressure;
+    //int32_t temperature;
+    //int32_t pressure;
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
@@ -101,15 +124,12 @@ int main(void)
     trans_init();
     /* 初始化发送单元 */
     imu_io_install(&IMU_IOInstallStruct1);
-    //开PIT0
-    PIT_QuickInit(HW_PIT_CH0, 1000*4);
-    PIT_CallbackInstall(HW_PIT_CH0, PIT_CH0_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
     //开PIT1
     PIT_QuickInit(HW_PIT_CH1, 1000*20);
     PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
-
+    
+    //WDOG_QuickInit(100);
     
     /* 初始化NRF的 PinMux*/
     PORT_PinMuxConfig(HW_GPIOC, 5, kPinAlt2); //
@@ -124,34 +144,24 @@ int main(void)
    // ret = kinetis_spi_bus_init(&bus, HW_SPI0);
     //nrf24l01_init(&bus, 2);
     // if(nrf24l01_probe())
-    {
+    //{
     //     printf("no nrf24l01 device found\r\n");
-    }
+    //}
     //nrf24l01_set_rx_mode();
     while(1)
     {
-        if(DMA_IsMajorLoopComplete(HW_DMA_CH1) == 0)
+        //获取欧拉角 获取原始角度
+        DisableInterrupts();
+        ret = imu_get_euler_angle(&angle, &raw_data);
+        EnableInterrupts();
+        if(ret)
         {
-            trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
-            //延时1MS以免发的太快上位机受不了
-            DelayMs(5);
+            DisableInterrupts();
+            printf("imu module fail!\r\n");
+            while(1);
         }
-    //获取欧拉角 获取原始角度
-    imu_get_euler_angle(&angle, &raw_data);
-    send_data.trans_accel[0] = raw_data.ax;
-    send_data.trans_accel[1] = raw_data.ay;
-    send_data.trans_accel[2] = raw_data.az;
-    send_data.trans_gyro[0] = raw_data.gx;
-    send_data.trans_gyro[1] = raw_data.gy;
-    send_data.trans_gyro[2] = raw_data.gz;
-    send_data.trans_mag[0] = raw_data.mx;
-    send_data.trans_mag[1] = raw_data.my;
-    send_data.trans_mag[2] = raw_data.mz;
-    send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
-    send_data.trans_roll = (int16_t)angle.imu_roll*100;
-    send_data.trans_yaw = (int16_t)angle.imu_yaw*10;
-    GPIO_ToggleBit(HW_GPIOA, 1);
-    DelayMs(5);
+        GPIO_ToggleBit(HW_GPIOA, 1);
+        DelayMs(5);
         // printf("P:%4d R:%4d Y:%4d  \r", (int)angle.imu_pitch, (int)angle.imu_roll, (int)angle.imu_yaw);
         //     bmp180_read_temperature(&temperature);
         //     bmp180_start_conversion(BMP180_P3_MEASURE);
@@ -159,10 +169,10 @@ int main(void)
         //    bmp180_read_pressure(&pressure);
         //printf("t:%d p:%d\r", temperature, pressure);
         //  if(!nrf24l01_read_packet(NRF2401RXBuffer, &len))
-        {
+       // {
             /* 从2401 接收到数据 */
 
-        }
+        //}
     }
 }
 

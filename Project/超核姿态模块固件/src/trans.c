@@ -17,7 +17,7 @@ typedef __packed struct
     uint8_t sum;
 }trans_packet_t;
 
-trans_packet_t packet;
+static trans_packet_t packet;
 
 //安装回调函数
 uint8_t trans_init(void)
@@ -51,7 +51,7 @@ uint32_t trans_send_pactket(trans_user_data_t data, uint8_t mode)
 {
     uint8_t i;
     uint8_t *p = (uint8_t*)&packet;
-    trans_packet_t packet_copy;
+  //  trans_packet_t packet_copy;
     uint8_t sum = 0;
     memcpy(packet.trans_header, trans_header_table, sizeof(trans_header_table));
     for(i=0;i<3;i++)
@@ -70,7 +70,7 @@ uint32_t trans_send_pactket(trans_user_data_t data, uint8_t mode)
       sum += *p++;
     }
     packet.sum = sum;
-    packet_copy = packet;
+    //packet_copy = packet;
     switch(mode)
     {
         case TRANS_UART_WITH_DMA:
@@ -79,9 +79,9 @@ uint32_t trans_send_pactket(trans_user_data_t data, uint8_t mode)
             
             break;
         case TRANS_WITH_NRF2401:
-            nrf24l01_set_tx_mode();
-            nrf24l01_write_packet((uint8_t*)&packet_copy, sizeof(packet_copy));
-            nrf24l01_set_rx_mode();
+     //       nrf24l01_set_tx_mode();
+      //      nrf24l01_write_packet((uint8_t*)&packet_copy, sizeof(packet_copy));
+      //      nrf24l01_set_rx_mode();
             break;
         default:
             break;

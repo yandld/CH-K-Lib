@@ -538,6 +538,17 @@ void FTM_ITDMAConfig(uint32_t instance, FTM_ITDMAConfig_Type config, bool flag)
         case kFTM_IT_CH7: 
             (flag)?(FTM_InstanceTable[instance]->CONTROLS[config-1].CnSC |= FTM_CnSC_CHIE_MASK):(FTM_InstanceTable[instance]->CONTROLS[config-1].CnSC &= ~FTM_CnSC_CHIE_MASK);
             break;
+        case kFTM_DMA_CH0:
+        case kFTM_DMA_CH1:
+        case kFTM_DMA_CH2:
+        case kFTM_DMA_CH3:
+        case kFTM_DMA_CH4:
+        case kFTM_DMA_CH5:
+        case kFTM_DMA_CH6:
+        case kFTM_DMA_CH7: 
+            (flag)?(FTM_InstanceTable[instance]->CONTROLS[config-1-8].CnSC |= FTM_CnSC_CHIE_MASK):(FTM_InstanceTable[instance]->CONTROLS[config-1-8].CnSC &= ~FTM_CnSC_CHIE_MASK);
+            (flag)?(FTM_InstanceTable[instance]->CONTROLS[config-1-8].CnSC |= FTM_CnSC_DMA_MASK):(FTM_InstanceTable[instance]->CONTROLS[config-1-8].CnSC &= ~FTM_CnSC_DMA_MASK);
+            break;
         default:
             LIB_TRACE("FTM_ITDMAConfig error!\r\n");
             break;

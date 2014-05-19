@@ -1,61 +1,35 @@
-## 超核Kinetis 开发包(固件库)
+# 超核Kinetis 开发包(固件库)
 
 包含Freescale K系列及KL系列底层驱动及实例代码
 
 ----------
 
-### 工具安装及最基础入门
-请参见免费视频：http://www.moore8.com/courses/87#/course/87
+## 如何开始
+1. 请参见[免费入门视频](http://http://www.moore8.com/courses/87#/course/87) 按照视频下载工具软件
+2. 安装MDK(Keil)5.00以上版本
+3. 打开\Project\超核K60开发板-渡鸦\0-工程模板\MDK 工程文件即可
+4. 工程下不同版本支持的芯片
 
-### 文件说明
- - Libraries 固件库源文件
- - Project   工程文件及例程存放目录
- - Document  文档
+## 文件说明
+**Libraries:**
 
-----------
+* devices 一些外设芯片支持 
+* drivers 固件库源码 
+* startup 启动文件
+* utilities 其他第三方组件
 
-Libraries文件夹:
+**Project**
 
-1. devices 一些外设芯片支持
-2. drivers 固件库源码
-3. startup 启动文件
-4. utilities 其他第三方组件
+* 渡鸦开发板例程
+* 姿态模块固件
+* keilkill.bat Keil清楚编译中间文件的小工具
 
-Project文件夹:
+**Document**
 
-1. 渡鸦开发板例程
-2. 姿态模块固件
-3. keilkill.bat Keil清楚编译中间文件的小工具
-
-
-### 如何开始
-1. 安装MDK(Keil)5.00以上版本
-2. 打开\Project\超核K60开发板-渡鸦\0-工程模板\MDK 工程文件即可
-3. 工程下不同版本支持的芯片
-
-### Processors:
-
-**MK60D10:**
-
- - MK60DN512ZVLL10
- - MK60DX256ZVLL10
- - MK60DN256ZVLL10
- - MK60DN512ZVLQ10
- - MK60DN256ZVLQ10
- - MK60DX256ZVLQ10
- - MK60DN512ZVMC10
- - MK60DN256ZVMC10
- - MK60DX256ZVMC10
- - MK60DN512ZVMD10
- - MK60DX256ZVMD10
- - MK60DN256ZVMD10
+* 文档
 
 
-**MK10D5:**
-
- - MK10 32M及48M主频芯片
-
-### 联系我们及获取最新固件库
+## 联系我们及获取最新固件库
  - www.beyondcore.net
  - 技术讨论群:247160311
 

@@ -432,16 +432,15 @@ uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req)
     return pq->ip_instance;
 }
 
-
 /**
  * @brief  更改指定引脚的PWM波形占空比
  * @code
  *      //设置FTM0模块的3通道的PWM波形占空比为50%
  *      FTM_PWM_ChangeDuty(HW_FTM0, 3, 5000); 
  * @endcode         
- * @param  instance       : FTM模块号0~2
- * @param  chl            : FTM模块下的通道号
- * @param  pwmDuty        : PWM波形占空比0~10000
+ * @param  instance       : 模块号
+ * @param  chl            : FTM 通道号
+ * @param  pwmDuty        : 占空比
  * @retval None
  */
 void FTM_PWM_ChangeDuty(uint32_t instance, uint8_t chl, uint32_t pwmDuty)
@@ -469,6 +468,12 @@ void FTM_PWM_ChangeDuty(uint32_t instance, uint8_t chl, uint32_t pwmDuty)
     }
 }
 
+/**
+ * @brief  初始化FTM 输入捕捉功能
+ * @param  MAP          : 快速初始化通道列表
+ * @param  ps           : 分频
+ * @retval None
+ */
 void FTM_IC_QuickInit(uint32_t MAP, FTM_ClockDiv_Type ps)
 {
     uint32_t i;
@@ -479,8 +484,16 @@ void FTM_IC_QuickInit(uint32_t MAP, FTM_ClockDiv_Type ps)
         PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
     }
     _FTM_InitBasic(pq->ip_instance, FTM_MOD_MOD_MASK, ps);
+    FTM_SetMode(pq->ip_instance, pq->channel, kFTM_Mode_InputCapture);
 }
 
+/**
+ * @brief  设置输入捕捉触发模式
+ * @param  instance     : 模块号
+ * @param  chl          : 通道
+ * @param  mode         : 触发模式
+ * @retval None
+ */
 void FTM_IC_SetTriggerMode(uint32_t instance, uint32_t chl, FTM_IC_Mode_Type mode)
 {
     /* clear ELSB & ELSA */
@@ -503,16 +516,34 @@ void FTM_IC_SetTriggerMode(uint32_t instance, uint32_t chl, FTM_IC_Mode_Type mod
     }
 }
 
+/**
+ * @brief  获得FTM通道计数值
+ * @param  instance     : 模块号
+ * @param  chl          : 通道
+ * @retval 通道Counter值
+ */
 uint32_t FTM_GetChlCounter(uint32_t instance, uint32_t chl)
 {
     return FTM_InstanceTable[instance]->CONTROLS[chl].CnV;
 }
 
+/**
+ * @brief  设置FTM主计数Counter值
+ * @param  instance     : 模块号
+ * @param  val          : Value
+ * @retval None
+ */
 void FTM_SetMoudleCounter(uint32_t instance, uint32_t val)
 {
     FTM_InstanceTable[instance]->CNT = val;
 }
 
+/**
+ * @brief  设置FTM回调函数
+ * @param  instance     : 模块号
+ * @param  AppCBFun     : 回调函数指针
+ * @retval None
+ */
 void FTM_CallbackInstall(uint32_t instance, FTM_CallBackType AppCBFun)
 {
     if(AppCBFun != NULL)
@@ -521,6 +552,13 @@ void FTM_CallbackInstall(uint32_t instance, FTM_CallBackType AppCBFun)
     }
 }
 
+/**
+ * @brief  FTM中断DMA控制
+ * @param  instance     : 模块号
+ * @param  config       : 控制参数
+ * @param  flag         : 时能或者禁止
+ * @retval None
+ */
 void FTM_ITDMAConfig(uint32_t instance, FTM_ITDMAConfig_Type config, bool flag)
 {
     switch(config)

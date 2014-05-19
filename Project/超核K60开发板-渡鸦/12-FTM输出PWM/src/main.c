@@ -67,21 +67,11 @@ int main(void)
     printf("ftm test, pwm will be generated on PA06\r\n");
     
     /* Ê¹ÓÃ¿ìËÙ³õÊ¼»¯ °ïÖú³õÑ§ÕßÍê³É±ØÒªÅäÖÃ */
-    FTM_PWM_QuickInit(FTM0_CH3_PA06, 3000); //Ê¹ÓÃFTM0Ä£¿éµÄ3Í¨µÀ£¬ÔÚPTA6Òı½Å²úÉú3KHzÆµÂÊµÄÕ¼¿Õ±È£¬´ËÊ±µÄÕ¼¿Õ±ÈÎª0
+    FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, 3000);
     
-//    /* ÁíÍâÒ»ÖÖ·½·¨ ÆÕÍ¨Ä£Ê½ ³õÊ¼»¯FTMÄ£¿é ÍÆ¼ö */
-//    FTM_PWM_InitTypeDef FTM_PWM_InitStruct1 = {0};
-//    FTM_PWM_InitStruct1.chl = HW_FTM_CH3; /* Í¨µÀ0 */
-//    FTM_PWM_InitStruct1.frequencyInHZ = 3000; /* 3Khz */
-//    FTM_PWM_InitStruct1.instance = HW_FTM0; //FTM0Ä£¿é
-//    FTM_PWM_InitStruct1.mode = kPWM_EdgeAligned; /* ±ßÑØ¶ÔÆëÄ£Ê½ ²úÉúÆÕÍ¨ PWM²¨ */
-//    FTM_PWM_Init(&FTM_PWM_InitStruct1);
-//    
-//    /* ³õÊ¼»¯¶ÔÓ¦µÄPWMÒı½Å */
-//    PORT_PinMuxConfig(HW_GPIOA, 6, kPinAlt3);
     
     /* ÉèÖÃFTM0Ä£¿é3Í¨µÀµÄÕ¼¿Õ±È */
-    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH3, 5000); // 50%Õ¼¿Õ±È £º0-10000 ¶ÔÓ¦ 0-100%
+    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH3, 5000); //º0-10000 ¶ÔÓ¦ 0-100%
     
     while(1)
     {

@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片FTM模块的底层功能函数
+  * @note    此模块为芯片FTM模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __CH_LIB_FTM_H_
@@ -16,6 +16,7 @@
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
 
 /* FTM 硬件模块号 */
 #define HW_FTM0    (0x00)
@@ -32,58 +33,76 @@
 #define HW_FTM_CH6 (0x06)
 #define HW_FTM_CH7 (0x07)
 
-
-//FTM  模式选择
+/* PWM 波形输出 */
 typedef enum
 {
 	kPWM_EdgeAligned,           //边沿对齐 最常用
 	kPWM_Combine,               //组合模式
     kPWM_Complementary,         //互补模式 类似组合模式 但是Chl(n) 和 Chl(n+1) 是互补输出
-    #if 0
-    kPWM_CenterAligned,         //中心对齐 频率是边沿对齐的一半
-    #endif
 }FTM_PWM_Mode_Type;
-
-//FTM 极性模式选择 反转占空比
+/* PWM 极性反转 */
 #define kFTM_PWM_HighTrue       (0x00)
 #define kFTM_PWM_LowTrue        (0x01)
 
-//单端PWM占空比输出 初始化结构
-typedef struct
-{
-    uint32_t            instance; //FTM模块号：HW_FTM0~HW_FTM2
-    uint32_t            chl;     //FTM通道号：HW_FTM_CH0~HW_FTM_CH7
-    uint32_t            frequencyInHZ; //PWM波形占空比
-    FTM_PWM_Mode_Type   mode;    //PWM模式选择
-}FTM_PWM_InitTypeDef;
-
-//正交解码AB相极性选择
+/** QD 正交解码 */
 typedef enum
 {
-    kFTM_QD_NormalPolarity,  //正常极性
-    kFTM_QD_InvertedPolarity,//反正极性
+    kFTM_QD_NormalPolarity,     /* 正常极性 */
+    kFTM_QD_InvertedPolarity,   /*反正极性 */
 }FTM_QD_PolarityMode_Type;
  
-
-/* QD 正交解码模式选择 */
 typedef enum
 {
-	kQD_PHABEncoding,    //AB相解码
-	kQD_CountDirectionEncoding, //方向解码
+	kQD_PHABEncoding,           /* 使用AB相编码器 */
+	kQD_CountDirectionEncoding, /* 使用方向-脉冲型编码器 */
 }FTM_QD_Mode_Type;
 
-/* QD初始化 */
-typedef struct
+/* IC 输入捕捉 */
+typedef enum
 {
-    uint32_t                            instance;    //FTM模块号：HW_FTM0~HW_FTM2
-    FTM_QD_PolarityMode_Type            PHA_Polarity; //A相极性
-    FTM_QD_PolarityMode_Type            PHB_Polarity; //B相极性
-    FTM_QD_Mode_Type                    mode;   //正交解码模式
-}FTM_QD_InitTypeDef;
+	kFTM_IC_FallingEdge,
+	kFTM_IC_RisingEdge,
+	kFTM_IC_RisingFallingEdge,
+}FTM_IC_Mode_Type;
+
+//!< FTM 中断及DMA 配置
+typedef enum
+{
+    kFTM_IT_TOF,
+    kFTM_IT_CH0,
+    kFTM_IT_CH1,
+    kFTM_IT_CH2,
+    kFTM_IT_CH3,
+    kFTM_IT_CH4,
+    kFTM_IT_CH5,
+    kFTM_IT_CH6,
+    kFTM_IT_CH7,
+    kFTM_DMA_CH0,
+    kFTM_DMA_CH1,
+    kFTM_DMA_CH2,
+    kFTM_DMA_CH3,
+    kFTM_DMA_CH4,
+    kFTM_DMA_CH5,
+    kFTM_DMA_CH6,
+    kFTM_DMA_CH7,
+}FTM_ITDMAConfig_Type;
+
+/* 分频 */
+typedef enum
+{
+    kFTM_ClockDiv1,
+    kFTM_ClockDiv2,
+    kFTM_ClockDiv4,
+    kFTM_ClockDiv8,
+    kFTM_ClockDiv16,
+    kFTM_ClockDiv32,
+    kFTM_ClockDiv64,
+    kFTM_ClockDiv128,
+}FTM_ClockDiv_Type;
 
 //!< FTM PWM 快速初始化
-#define FTM0_CH4_PB12   (0x205908U)  //FTM0模块的4通道 PTB12引脚
-#define FTM0_CH5_PB13   (0x285b08U)  //FTM0模块的5通道 PTB13引脚
+#define FTM0_CH4_PB12   (0x205908U)  /* FTM0模块的4通道 PTB12引脚 以下类推 */
+#define FTM0_CH5_PB13   (0x285b08U)
 #define FTM0_CH5_PA00   (0x2840c0U)
 #define FTM0_CH6_PA01   (0x3042c0U)
 #define FTM0_CH7_PA02   (0x3844c0U)
@@ -113,22 +132,36 @@ typedef struct
 #define FTM2_CH0_PB18   (0x64caU)
 #define FTM2_CH1_PB19   (0x866caU)
 //!< FTM 正交解码快速初始化
-#define FTM1_QD_PHA_PA08_PHB_PA09       (0x9181U) //FTM1模块的PTA8、PTA9为正交解码
+#define FTM1_QD_PHA_PA08_PHB_PA09       (0x9181U) /* FTM1模块的PTA8、PTA9为正交解码 */
 #define FTM1_QD_PHA_PA12_PHB_PA13       (0x99c1U)
 #define FTM1_QD_PHA_PB00_PHB_PB01       (0x8189U)
 #define FTM2_QD_PHA_PA10_PHB_PA11       (0x9582U)
 #define FTM2_QD_PHA_PB18_PHB_PB19       (0xa58aU)
 
+//!< Callback
+typedef void (*FTM_CallBackType)(void);
 
 //!< API functions
+
+/* PWM functions */
+uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req);
 void FTM_PWM_ChangeDuty(uint32_t instance, uint8_t chl, uint32_t pwmDuty);
-uint8_t FTM_PWM_QuickInit(uint32_t MAP, uint32_t frequencyInHZ);
-void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct);
 void FTM_PWM_InvertPolarity(uint32_t instance, uint8_t chl, uint32_t config);
-uint32_t FTM_QD_QuickInit(uint32_t MAP);
-void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct);
+/* QD functions */
+uint32_t FTM_QD_QuickInit(uint32_t MAP, FTM_QD_PolarityMode_Type polarity, FTM_QD_Mode_Type mode);
 void FTM_QD_GetData(uint32_t instance, int* value, uint8_t* direction);
 void FTM_QD_ClearCount(uint32_t instance);
+/* IC functions */
+void FTM_IC_QuickInit(uint32_t MAP, FTM_ClockDiv_Type ps);
+void FTM_IC_SetTriggerMode(uint32_t instance, uint32_t chl, FTM_IC_Mode_Type mode);
+/* IT & DMA config */
+void FTM_ITDMAConfig(uint32_t instance, FTM_ITDMAConfig_Type config, bool flag);
+void FTM_CallbackInstall(uint32_t instance, FTM_CallBackType AppCBFun);
+/* control function */
+uint32_t FTM_GetChlCounter(uint32_t instance, uint32_t chl);
+void FTM_SetMoudleCounter(uint32_t instance, uint32_t val);
+
+
 
 
 #ifdef __cplusplus

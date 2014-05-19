@@ -23,16 +23,25 @@
         #define FTM_BASES {FTM0, FTM1}
     #endif
 #endif
-        
+
+
 /* global vars */
 FTM_Type * const FTM_InstanceTable[] = FTM_BASES;
+static FTM_CallBackType FTM_CallBackTable[ARRAY_SIZE(FTM_InstanceTable)] = {NULL};
 
 #if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15))
+static const uint32_t FTM_ChlMaxTable[] = {8,2,2}; /* reference to chip configuration->flextimer configuration */
 static const struct reg_ops SIM_FTMClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM0_MASK},
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM1_MASK},
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM2_MASK},
+};
+static const IRQn_Type FTM_IRQnTable[] = 
+{
+    FTM0_IRQn,
+    FTM1_IRQn,
+    FTM2_IRQn,
 };
 #elif (defined(MK10D5))
 static const struct reg_ops SIM_FTMClockGateTable[] =
@@ -43,7 +52,7 @@ static const struct reg_ops SIM_FTMClockGateTable[] =
 
 #endif
 
-/* FTM  模式选择 */
+/* FTM dual pin mode select */
 typedef enum
 {
 	kFTM_Combine,
@@ -54,162 +63,93 @@ typedef enum
     kFTM_FaultControl,
 }FTM_DualChlConfig_Type;
 
+/* internal use, FTM mode select */
+typedef enum
+{
+    kFTM_Mode_EdgeAligned,
+    kFTM_Mode_CenterAligned,
+    kFTM_Mode_Combine,
+    kFTM_Mode_Complementary,
+    kFTM_Mode_InputCapture,
+    kFTM_Mode_QuadratureDecoder,
+}FTM_Mode_Type;
+
 /* static functions declareation */
-static void FTM_PWM_SetMode(uint32_t instance, uint8_t chl, FTM_PWM_Mode_Type mode);
+static void FTM_SetMode(uint32_t instance, uint8_t chl, FTM_Mode_Type mode);
 void FTM_PWM_InvertPolarity(uint32_t instance, uint8_t chl, uint32_t config);
 
-/**
- * @brief  初始化FTM模块实现PWM功能
- * @note  需要配合PORT_PinMuxConfig使用
- * @code
- *      //设置FTM2模块的1通道产生1000Hz频率的边沿对其方波
- *       FTM_PWM_InitTypeDef FTM_InitStruct1; //申请一个结构体
- *       FTM_InitStruct1.instance = HW_FTM2;  //选择FTM2模块
- *       FTM_InitStruct1.frequencyInHZ = 1000;//设置频率为1000
- *       FTM_InitStruct1.chl = HW_FTM_CH1;    //选择1通道
- *       FTM_InitStruct1.mode = kPWM_EdgeAligned;//设置为边沿对其
- *       FTM_PWM_Init(&FTM_InitStruct1); 
- * @endcode         
- * @param  FTM_PWM_InitTypeDef  : FTM工作在PWM模式下的结构体
- *         @arg instance        :FTM模块号
- *         @arg chl             :PWM发生通道号
- *         @arg frequencyInHZ   :PWM波频率
- *         @arg mode            :PWM波形模式设置
- * @retval None
- */
-void FTM_PWM_Init(FTM_PWM_InitTypeDef* FTM_InitStruct)
+static void _FTM_InitBasic(uint32_t instance, uint32_t modulo, FTM_ClockDiv_Type ps)
 {
-    int32_t pres;
-    uint8_t ps;
-    int32_t i;
-    uint32_t clock;
-    uint32_t min_val = 0xFFFF;
     /* enable clock gate */
-    *(uint32_t*)SIM_FTMClockGateTable[FTM_InitStruct->instance].addr |= SIM_FTMClockGateTable[FTM_InitStruct->instance].mask;
+    *(uint32_t*)SIM_FTMClockGateTable[instance].addr |= SIM_FTMClockGateTable[instance].mask;
+    
     /* disable FTM, we must set CLKS(0) before config FTM! */
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC = 0;
+    FTM_InstanceTable[instance]->SC = 0;
+    
     /* enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function) */
-    FTM_InstanceTable[FTM_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK;
-    /* cal ps */
-    CLOCK_GetClockFrequency(kBusClock, &clock);
-    pres = (clock/FTM_InitStruct->frequencyInHZ)/FTM_MOD_MOD_MASK;
-    if((clock/FTM_InitStruct->frequencyInHZ)/pres > FTM_MOD_MOD_MASK)
-    {
-        pres++;
-    }
-    for(i = 0; i < 7; i++)
-    {
-        if((ABS(pres - (1<<i))) < min_val)
-        {
-            ps = i;
-            min_val = ABS(pres - (1<<i));
-        }
-    }
-    if(pres > (1<<ps)) ps++;
-    if(ps > 7) ps = 7;
-    LIB_TRACE("freq:%dHz\r\n", FTM_InitStruct->frequencyInHZ);
-    LIB_TRACE("input_clk:%d\r\n", clock);
-    LIB_TRACE("pres:%d\r\n", pres);
+    FTM_InstanceTable[instance]->MODE |= FTM_MODE_WPDIS_MASK;
+    
     /* set CNT and CNTIN */
-    FTM_InstanceTable[FTM_InitStruct->instance]->CNT = 0;
-    FTM_InstanceTable[FTM_InitStruct->instance]->CNTIN = 0;
+    FTM_InstanceTable[instance]->CNT = 0;
+    FTM_InstanceTable[instance]->CNTIN = 0;
+    
     /* set modulo */
-    FTM_InstanceTable[FTM_InitStruct->instance]->MOD = (clock/(1<<ps))/FTM_InitStruct->frequencyInHZ;
+    FTM_InstanceTable[instance]->MOD = modulo;
+    
     /* set LOCK bit to load MOD value */
-    FTM_InstanceTable[FTM_InitStruct->instance]->PWMLOAD = 0xFFFFFFFF;
-    LIB_TRACE("MOD Should be:%d\r\n",  (clock/(1<<ps))/FTM_InitStruct->frequencyInHZ);
-    LIB_TRACE("MOD acutall is:%d\r\n", FTM_InstanceTable[FTM_InitStruct->instance]->MOD);
-    LIB_TRACE("ps:%d\r\n", ps);
+    FTM_InstanceTable[instance]->PWMLOAD = 0xFFFFFFFF;
+    
     /* set FTM clock to system clock */
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_CLKS_MASK;
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_CLKS(1);
+    FTM_InstanceTable[instance]->SC &= ~FTM_SC_CLKS_MASK;
+    FTM_InstanceTable[instance]->SC |= FTM_SC_CLKS(1);
+    
     /* set ps, this must be done after set modulo */
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC &= ~FTM_SC_PS_MASK;
-    FTM_InstanceTable[FTM_InitStruct->instance]->SC |= FTM_SC_PS(ps); 
-    /* set FTM mode */
-    FTM_PWM_SetMode(FTM_InitStruct->instance, FTM_InitStruct->chl, FTM_InitStruct->mode);
+    FTM_InstanceTable[instance]->SC &= ~FTM_SC_PS_MASK;
+    FTM_InstanceTable[instance]->SC |= FTM_SC_PS(ps); 
 }
 
-//!< 正交解码初始化
-/**
- * @brief  初始化FTM模块实现正交解码功能
- * @note   需要配合PORT_PinMuxConfig等函数使用
- * @code
- *      //设置FTM2模块为正交解码方式A相位正B相位负
- *       FTM_PWM_InitTypeDef FTM_QD_InitStruct; //申请一个结构体,
- *       FTM_QD_InitStruct.instance = HW_FTM2;  //选择FTM2模块
- *       FTM_QD_InitStruct.PHA_Polarity = kFTM_QD_NormalPolarity;      //A相位正
- *       FTM_QD_InitStruct.PHA_Polarity = kFTM_QD_InvertedPolarity;    //A相位负
- *       FTM_QD_InitStruct.mode = kQD_PHABEncoding;   //设置AB相解码
- *       FTM_PWM_Init(&FTM_QD_InitStruct); 
- * @endcode         
- * @param  FTM_QD_InitTypeDef  : FTM工作在正交解码模式下的结构体
- * @retval None
- */
-void FTM_QD_Init(FTM_QD_InitTypeDef * FTM_QD_InitStruct)
-{
-    /* enable clock gate */
-    *(uint32_t*)SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].addr |= SIM_FTMClockGateTable[FTM_QD_InitStruct->instance].mask;
-    FTM_InstanceTable[FTM_QD_InitStruct->instance]->MOD = FTM_MOD_MOD_MASK; //设置为最大
-    FTM_InstanceTable[FTM_QD_InitStruct->instance]->CNTIN = 0;
-    FTM_InstanceTable[FTM_QD_InitStruct->instance]->MODE |= FTM_MODE_WPDIS_MASK; //禁止写保护
-    FTM_InstanceTable[FTM_QD_InitStruct->instance]->MODE |= FTM_MODE_FTMEN_MASK; //FTMEN=1,关闭TPM兼容模式，开启FTM所有功能
-    switch(FTM_QD_InitStruct->PHA_Polarity)
-    {
-        case kFTM_QD_NormalPolarity:
-            FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL &= ~FTM_QDCTRL_PHAPOL_MASK;
-            break;
-        case kFTM_QD_InvertedPolarity:
-            FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL |= FTM_QDCTRL_PHAPOL_MASK;
-            break;
-        default:
-            break;
-    }
-    switch(FTM_QD_InitStruct->PHB_Polarity)
-    {
-        case kFTM_QD_NormalPolarity:
-            FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL &= ~FTM_QDCTRL_PHBPOL_MASK;
-            break;
-        case kFTM_QD_InvertedPolarity:
-            FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL |= FTM_QDCTRL_PHBPOL_MASK;
-            break;
-        default:
-            break;
-    }
-    switch(FTM_QD_InitStruct->mode)
-    {
-        case kQD_PHABEncoding:
-            FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL &= ~FTM_QDCTRL_QUADMODE_MASK;
-            break;
-        case kQD_CountDirectionEncoding:
-            FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL |= FTM_QDCTRL_QUADMODE_MASK;
-            break;
-        default:
-            break;
-    }
-    FTM_InstanceTable[FTM_QD_InitStruct->instance]->QDCTRL |= FTM_QDCTRL_QUADEN_MASK;
-    /* set clock source and prescaler */
-    FTM_InstanceTable[FTM_QD_InitStruct->instance]->SC |= FTM_SC_CLKS(1)|FTM_SC_PS(3);
-}
 
 /**
- * @brief  快速配置初始化FTM模块实现正交解码功能
- * @code
- *      //设置FTM1模块的PTA8/PTA9引脚在正交模式下
- *      FTM_QD_QuickInit(FTM1_QD_PHA_PA08_PHB_PA09); 
- * @endcode         
+ * @brief  快速配置初始化FTM模块实现正交解码功能       
  * @param  MAP  : FTM工作在正交解码模式下的编码，详见ftm.h文件
  * @retval None
  */
-uint32_t FTM_QD_QuickInit(uint32_t MAP)
+uint32_t FTM_QD_QuickInit(uint32_t MAP, FTM_QD_PolarityMode_Type polarity, FTM_QD_Mode_Type mode)
 {
     uint8_t i;
     QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
-    FTM_QD_InitTypeDef FTM_QD_InitStruct1;
-    FTM_QD_InitStruct1.instance = pq->ip_instance;
-    FTM_QD_InitStruct1.mode = kQD_PHABEncoding;
-    FTM_QD_InitStruct1.PHA_Polarity = kFTM_QD_NormalPolarity;
-    FTM_QD_InitStruct1.PHB_Polarity = kFTM_QD_NormalPolarity;
+    
+    /* init moudle */
+    _FTM_InitBasic(pq->ip_instance, FTM_MOD_MOD_MASK, kFTM_ClockDiv16);
+    
+    /* set FTM to QD mode */
+    FTM_SetMode(pq->ip_instance, 0, kFTM_Mode_QuadratureDecoder);
+    
+    /* QD mode config */
+    switch(polarity)
+    {
+        case kFTM_QD_NormalPolarity:
+            FTM_InstanceTable[pq->ip_instance]->QDCTRL &= ~FTM_QDCTRL_PHAPOL_MASK;
+            FTM_InstanceTable[pq->ip_instance]->QDCTRL &= ~FTM_QDCTRL_PHBPOL_MASK;
+            break;
+        case kFTM_QD_InvertedPolarity:
+            FTM_InstanceTable[pq->ip_instance]->QDCTRL |= FTM_QDCTRL_PHAPOL_MASK;
+            FTM_InstanceTable[pq->ip_instance]->QDCTRL |= FTM_QDCTRL_PHBPOL_MASK;
+            break;
+        default:
+            break;
+    }
+    switch(mode)
+    {
+        case kQD_PHABEncoding:
+            FTM_InstanceTable[pq->ip_instance]->QDCTRL &= ~FTM_QDCTRL_QUADMODE_MASK;
+            break;
+        case kQD_CountDirectionEncoding:
+            FTM_InstanceTable[pq->ip_instance]->QDCTRL |= FTM_QDCTRL_QUADMODE_MASK;
+            break;
+        default:
+            break;
+    }
     /* init pinmux and pull up */
     for(i = 0; i < pq->io_offset; i++)
     {
@@ -218,18 +158,11 @@ uint32_t FTM_QD_QuickInit(uint32_t MAP)
         PORT_PinOpenDrainConfig(pq->io_instance, pq->io_base + i, ENABLE);
     }
     /* init moudle */
-    FTM_QD_Init(&FTM_QD_InitStruct1);
     return pq->ip_instance;
 }
 
 /**
- * @brief  获得正交解码的数据
- * @code
- *      //获得FTM1正交解码的数据
- *       uint32_t value；  //存储脉冲计数的数据
- *       uint8_t  dire；   //存储方向
- *      FTM_QD_GetData(HW_FTM1, @value, @dire); 
- * @endcode         
+ * @brief  获得正交解码的数据     
  * @param  instance  :FTM模块号
  * @param  value     :脉冲数据存储地址
  * @param  direction :脉冲方向存储地址
@@ -317,11 +250,11 @@ static void FTM_DualChlConfig(uint32_t instance, uint8_t chl, FTM_DualChlConfig_
 /**
  * @brief  内部函数，用户无需调用
  */
-static void FTM_PWM_SetMode(uint32_t instance, uint8_t chl, FTM_PWM_Mode_Type mode)
+static void FTM_SetMode(uint32_t instance, uint8_t chl, FTM_Mode_Type mode)
 {
     switch(mode)
     {
-        case kPWM_EdgeAligned:
+        case kFTM_Mode_EdgeAligned:
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
@@ -334,8 +267,7 @@ static void FTM_PWM_SetMode(uint32_t instance, uint8_t chl, FTM_PWM_Mode_Type mo
             FTM_DualChlConfig(instance, chl, kFTM_Sync, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
             break;
-             #if 0
-        case kPWM_CenterAligned:
+        case kFTM_Mode_CenterAligned:
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->SC |= FTM_SC_CPWMS_MASK;
@@ -346,17 +278,7 @@ static void FTM_PWM_SetMode(uint32_t instance, uint8_t chl, FTM_PWM_Mode_Type mo
             FTM_DualChlConfig(instance, chl, kFTM_Sync, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
             break;
-           
-        case kInputCaptureFallingEdge:   
-            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_ELSB_MASK);
-            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSA_MASK);
-            
-        case kInputCaptureRisingEdge: 
-            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSB_MASK);
-            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_ELSA_MASK);
-            
-        case kInputCaptureBothEdge:  
-            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSB_MASK|FTM_CnSC_ELSA_MASK);
+        case kFTM_Mode_InputCapture:   
             /* all configuration on input capture */
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->MODE &= ~FTM_MODE_FTMEN_MASK;
@@ -369,8 +291,7 @@ static void FTM_PWM_SetMode(uint32_t instance, uint8_t chl, FTM_PWM_Mode_Type mo
             FTM_DualChlConfig(instance, chl, kFTM_Sync, DISABLE);
             FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
             break;
-            #endif
-        case kPWM_Complementary:
+        case kFTM_Mode_Complementary:
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
             FTM_InstanceTable[instance]->MODE |= FTM_MODE_WPDIS_MASK;
@@ -386,7 +307,7 @@ static void FTM_PWM_SetMode(uint32_t instance, uint8_t chl, FTM_PWM_Mode_Type mo
             FTM_InstanceTable[instance]->SYNC = FTM_SYNC_CNTMIN_MASK|FTM_SYNC_CNTMAX_MASK;
 			FTM_InstanceTable[instance]->SYNC |= FTM_SYNC_SWSYNC_MASK;
             break;
-        case kPWM_Combine:
+        case kFTM_Mode_Combine:
             FTM_InstanceTable[instance]->QDCTRL &= ~FTM_QDCTRL_QUADEN_MASK;
             FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
             FTM_InstanceTable[instance]->MODE |= FTM_MODE_WPDIS_MASK;
@@ -401,7 +322,19 @@ static void FTM_PWM_SetMode(uint32_t instance, uint8_t chl, FTM_PWM_Mode_Type mo
             FTM_PWM_InvertPolarity(instance, chl, kFTM_PWM_HighTrue);
             FTM_InstanceTable[instance]->SYNC = FTM_SYNC_CNTMIN_MASK|FTM_SYNC_CNTMAX_MASK;
 			FTM_InstanceTable[instance]->SYNC |= FTM_SYNC_SWSYNC_MASK;
-            break;          
+            break;   
+        case  kFTM_Mode_QuadratureDecoder:
+            FTM_InstanceTable[instance]->QDCTRL |= FTM_QDCTRL_QUADEN_MASK;
+            FTM_InstanceTable[instance]->SC &= ~FTM_SC_CPWMS_MASK;
+            FTM_InstanceTable[instance]->MODE |= FTM_MODE_WPDIS_MASK;
+            FTM_InstanceTable[instance]->MODE |= FTM_MODE_FTMEN_MASK;
+            FTM_DualChlConfig(instance, chl, kFTM_Combine, ENABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_Complementary, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_DualEdgeCapture, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_DeadTime, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_Sync, DISABLE);
+            FTM_DualChlConfig(instance, chl, kFTM_FaultControl, DISABLE);
+            break;
         default:
             break;
     }
@@ -428,6 +361,7 @@ void FTM_PWM_InvertPolarity(uint32_t instance, uint8_t chl, uint32_t config)
     }
 }
 
+
 /**
  * @brief  快速配置初始化FTM模块实现PWM功能
  * @code
@@ -439,26 +373,65 @@ void FTM_PWM_InvertPolarity(uint32_t instance, uint8_t chl, uint32_t config)
  * @param  frequencyInHZ  : FTM工作工作频率设置
  * @retval None
  */
-uint8_t FTM_PWM_QuickInit(uint32_t MAP, uint32_t frequencyInHZ)
+uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req)
 {
     uint8_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
-    FTM_PWM_InitTypeDef FTM_InitStruct1;
-    FTM_InitStruct1.instance = pq->ip_instance;
-    FTM_InitStruct1.frequencyInHZ = frequencyInHZ;
-    FTM_InitStruct1.mode = kPWM_EdgeAligned;
-    FTM_InitStruct1.chl = pq->channel;
+    uint32_t modulo;
+    uint32_t clock;
+    int32_t pres;
+    uint8_t ps;
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP); 
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
     {
         PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
     }
-    /* init moudle */
-    FTM_PWM_Init(&FTM_InitStruct1);
+    /* calc req and ps */
+    uint32_t min_val = 0xFFFF;
+    /* cal ps */
+    CLOCK_GetClockFrequency(kBusClock, &clock);
+    pres = (clock/req)/FTM_MOD_MOD_MASK;
+    if((clock/req)/pres > FTM_MOD_MOD_MASK)
+    {
+        pres++;
+    }
+    for(i = 0; i < 7; i++)
+    {
+        if((ABS(pres - (1<<i))) < min_val)
+        {
+            ps = i;
+            min_val = ABS(pres - (1<<i));
+        }
+    }
+    if(pres > (1<<ps)) ps++;
+    if(ps > 7) ps = 7;
+    modulo = (clock/(1<<ps))/req;
+    LIB_TRACE("input frequency:%dHz\r\n", req);
+    LIB_TRACE("input clk:%d\r\n", clock);
+    LIB_TRACE("ps:%d\r\n", pres);
+    LIB_TRACE("modulo:%d\r\n", modulo);
+    _FTM_InitBasic(pq->ip_instance, modulo, (FTM_ClockDiv_Type)ps);
+    /* set FTM mode */
+    switch(mode)
+    {
+        case kPWM_EdgeAligned:
+            FTM_SetMode(pq->ip_instance, pq->channel, kFTM_Mode_EdgeAligned);
+            break;
+        case kPWM_Combine:
+            FTM_SetMode(pq->ip_instance, pq->channel, kFTM_Mode_Combine);
+            break;
+        case kPWM_Complementary:
+            FTM_SetMode(pq->ip_instance, pq->channel, kFTM_Mode_Complementary);
+            break;
+        default:
+            LIB_TRACE("error in FTM_PWM_Init\r\n");
+            break;
+    }
     /* set duty to 50% */
     FTM_PWM_ChangeDuty(pq->ip_instance, pq->channel, 5000);
     return pq->ip_instance;
 }
+
 
 /**
  * @brief  更改指定引脚的PWM波形占空比
@@ -476,7 +449,7 @@ void FTM_PWM_ChangeDuty(uint32_t instance, uint8_t chl, uint32_t pwmDuty)
     uint32_t cv = ((FTM_InstanceTable[instance]->MOD) * pwmDuty) / 10000;
     /* combine mode */
     if(FTM_InstanceTable[instance]->COMBINE & (FTM_COMBINE_COMBINE0_MASK|FTM_COMBINE_COMBINE1_MASK|FTM_COMBINE_COMBINE2_MASK|FTM_COMBINE_COMBINE3_MASK))
-    { 
+    {
         if(chl%2)
         {
             FTM_InstanceTable[instance]->CONTROLS[chl-1].CnV = 0;
@@ -491,111 +464,155 @@ void FTM_PWM_ChangeDuty(uint32_t instance, uint8_t chl, uint32_t pwmDuty)
     }
     else
     {
-    /* single chl */
-    FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv; 
+        /* single chl */
+        FTM_InstanceTable[instance]->CONTROLS[chl].CnV = cv; 
+    }
+}
+
+void FTM_IC_QuickInit(uint32_t MAP, FTM_ClockDiv_Type ps)
+{
+    uint32_t i;
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    /* init pinmux */
+    for(i = 0; i < pq->io_offset; i++)
+    {
+        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+    }
+    _FTM_InitBasic(pq->ip_instance, FTM_MOD_MOD_MASK, ps);
+}
+
+void FTM_IC_SetTriggerMode(uint32_t instance, uint32_t chl, FTM_IC_Mode_Type mode)
+{
+    /* clear ELSB & ELSA */
+    FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_ELSB_MASK|FTM_CnSC_ELSA_MASK);
+    switch(mode)
+    {
+        case kFTM_IC_FallingEdge:
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_ELSB_MASK);
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSA_MASK);
+            break;
+        case kFTM_IC_RisingEdge:
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSB_MASK);
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC &= ~(FTM_CnSC_ELSA_MASK);
+            break;
+        case kFTM_IC_RisingFallingEdge:
+            FTM_InstanceTable[instance]->CONTROLS[chl].CnSC |= (FTM_CnSC_ELSB_MASK|FTM_CnSC_ELSA_MASK);
+            break;
+        default:
+            break;
+    }
+}
+
+uint32_t FTM_GetChlCounter(uint32_t instance, uint32_t chl)
+{
+    return FTM_InstanceTable[instance]->CONTROLS[chl].CnV;
+}
+
+void FTM_SetMoudleCounter(uint32_t instance, uint32_t val)
+{
+    FTM_InstanceTable[instance]->CNT = val;
+}
+
+void FTM_CallbackInstall(uint32_t instance, FTM_CallBackType AppCBFun)
+{
+    if(AppCBFun != NULL)
+    {
+        FTM_CallBackTable[instance] = AppCBFun;
+    }
+}
+
+void FTM_ITDMAConfig(uint32_t instance, FTM_ITDMAConfig_Type config, bool flag)
+{
+    switch(config)
+    {
+        case kFTM_IT_TOF:
+            (flag)?(FTM_InstanceTable[instance]->SC |= FTM_SC_TOIE_MASK):(FTM_InstanceTable[instance]->SC &= ~FTM_SC_TOIE_MASK);
+            break;
+        case kFTM_IT_CH0:
+        case kFTM_IT_CH1:
+        case kFTM_IT_CH2:
+        case kFTM_IT_CH3:
+        case kFTM_IT_CH4:
+        case kFTM_IT_CH5:
+        case kFTM_IT_CH6:
+        case kFTM_IT_CH7: 
+            (flag)?(FTM_InstanceTable[instance]->CONTROLS[config-1].CnSC |= FTM_CnSC_CHIE_MASK):(FTM_InstanceTable[instance]->CONTROLS[config-1].CnSC &= ~FTM_CnSC_CHIE_MASK);
+            break;
+        default:
+            LIB_TRACE("FTM_ITDMAConfig error!\r\n");
+            break;
+    }
+    NVIC_EnableIRQ(FTM_IRQnTable[instance]);
+}
+
+void FTM0_IRQHandler(void)
+{
+    uint32_t i;
+    if(FTM_CallBackTable[0] != NULL)
+    {
+        FTM_CallBackTable[0]();
+    }
+    /* clear pending register */
+    if(FTM_InstanceTable[0]->SC & (FTM_SC_TOF_MASK | FTM_SC_TOIE_MASK))
+    {
+        FTM_InstanceTable[0]->SC &= ~FTM_SC_TOF_MASK;
+    }
+    for(i = 0; i < FTM_ChlMaxTable[0]; i++)
+    {
+        if(FTM_InstanceTable[0]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
+        {
+            FTM_InstanceTable[0]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
+            break;
+        }
+    }
+}
+
+void FTM1_IRQHandler(void)
+{
+    uint32_t i;
+    if(FTM_CallBackTable[1] != NULL)
+    {
+        FTM_CallBackTable[1]();
+    }
+    /* clear pending register */
+    if(FTM_InstanceTable[1]->SC & (FTM_SC_TOF_MASK | FTM_SC_TOIE_MASK))
+    {
+        FTM_InstanceTable[1]->SC &= ~FTM_SC_TOF_MASK;
+    }
+    for(i = 0; i < FTM_ChlMaxTable[1]; i++)
+    {
+        if(FTM_InstanceTable[1]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
+        {
+            FTM_InstanceTable[1]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
+            break;
+        }
+    }
+}
+
+void FTM2_IRQHandler(void)
+{
+    uint32_t i;
+    if(FTM_CallBackTable[2] != NULL)
+    {
+        FTM_CallBackTable[2]();
+    }
+    /* clear pending register */
+    if(FTM_InstanceTable[2]->SC & (FTM_SC_TOF_MASK | FTM_SC_TOIE_MASK))
+    {
+        FTM_InstanceTable[2]->SC &= ~FTM_SC_TOF_MASK;
+    }
+    for(i = 0; i < FTM_ChlMaxTable[2]; i++)
+    {
+        if(FTM_InstanceTable[2]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
+        {
+            FTM_InstanceTable[2]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
+            break;
+        }
     }
 }
 
 
-#if 0
-
-/***********************************************************************************************
- 功能：FTM 获得正交编码数据
- 形参：ftm: FTM模块号
-       value: 编码计数值指针
-       dir：  方向指针 0正向 1反相 
- 返回：0
- 详解：Added in 2013-12-12
-************************************************************************************************/
-void FTM_QDGetData(FTM_Type *ftm, uint32_t* value, uint8_t* dir)
-{
-	*dir = (((ftm->QDCTRL)>>FTM_QDCTRL_QUADIR_SHIFT)&1);
-	*value = (ftm->CNT);
-}
-
-
-void FTM_ITConfig(FTM_Type* FTMx, uint16_t FTM_IT, FunctionalState NewState)
-{
-	//参数检查
-	assert_param(IS_FTM_ALL_PERIPH(FTMx));
-	assert_param(IS_FUNCTIONAL_STATE(NewState));
-	
-	switch(FTM_IT)
-	{
-		case FTM_IT_TOF:
-			(ENABLE == NewState)?(FTMx->SC |= FTM_SC_TOIE_MASK):(FTMx->SC &= ~FTM_SC_TOIE_MASK);
-			break;
-		case FTM_IT_CHF0:
-		case FTM_IT_CHF1:
-		case FTM_IT_CHF2:
-		case FTM_IT_CHF3:
-		case FTM_IT_CHF4:
-		case FTM_IT_CHF5:
-		case FTM_IT_CHF6:
-		case FTM_IT_CHF7:	
-			(ENABLE == NewState)?(FTMx->CONTROLS[FTM_IT].CnSC |= FTM_CnSC_CHIE_MASK):(FTMx->CONTROLS[FTM_IT].CnSC &= ~FTM_CnSC_CHIE_MASK);		
-			break;
-		default:break;
-	}
-}
-
-ITStatus FTM_GetITStatus(FTM_Type* FTMx, uint16_t FTM_IT)
-{
-	ITStatus retval;
-	//参数检查
-	assert_param(IS_FTM_ALL_PERIPH(FTMx));
-	assert_param(IS_FTM_IT(FTM_IT));
-	
-
-	switch(FTM_IT)
-	{
-		case FTM_IT_TOF:
-			(FTMx->SC & FTM_SC_TOF_MASK)?(retval = SET):(retval = RESET);
-		break;
-		case FTM_IT_CHF0:
-		case FTM_IT_CHF1:
-		case FTM_IT_CHF2:
-		case FTM_IT_CHF3:
-		case FTM_IT_CHF4:
-		case FTM_IT_CHF5:
-		case FTM_IT_CHF6:
-		case FTM_IT_CHF7:	
-			(FTMx->CONTROLS[FTM_IT].CnSC& FTM_CnSC_CHF_MASK)?(retval = SET):(retval = RESET);
-			break;
-	}
-	return retval;
-}
-
-void FTM_ClearITPendingBit(FTM_Type *FTMx,uint16_t FTM_IT)
-{
-	uint32_t read_value = 0;
-	//参数检查
-	assert_param(IS_FTM_ALL_PERIPH(FTMx));
-	assert_param(IS_FTM_IT(FTM_IT));
-	
-	read_value = read_value;
-	switch(FTM_IT)
-	{
-		case FTM_IT_TOF:
-			read_value = FTMx->SC;
-		break;
-		case FTM_IT_CHF0:
-		case FTM_IT_CHF1:
-		case FTM_IT_CHF2:
-		case FTM_IT_CHF3:
-		case FTM_IT_CHF4:
-		case FTM_IT_CHF5:
-		case FTM_IT_CHF6:
-		case FTM_IT_CHF7:	
-			read_value = FTMx->CONTROLS[FTM_IT].CnSC;
-			break;
-	}
-}
-#endif
-
-
-
-#if 0
+/*
 static const QuickInit_Type FTM_QD_QuickInitTable[] = 
 {
     { 1, 0, 6,  8, 2, 0}, //FTM1_QD_PHA_PA08_PHB_PA09 6
@@ -638,6 +655,5 @@ static const QuickInit_Type FTM_QuickInitTable[] =
     { 2, 1, 3, 18, 1, 0}, //FTM2_CH0_PB18  3
     { 2, 1, 3, 19, 1, 1}, //FTM2_CH1_PB19  3
 };
-
-#endif
+*/
 

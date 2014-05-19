@@ -66,22 +66,11 @@ int main(void)
     printf("kPWM_Complementary test, pwm will be generated on PC01 and PC02\r\n");
     
     /* 初始化互补PWM 必须调用2次FTM_PWM_Init 硬件会自动连接相邻的2个通道*/
-    FTM_PWM_InitTypeDef FTM_PWM_InitStruct1 = {0};
-    FTM_PWM_InitStruct1.chl = HW_FTM_CH0; /* 通道0 */
-    FTM_PWM_InitStruct1.frequencyInHZ = 3000; /* 3Khz */
-    FTM_PWM_InitStruct1.instance = HW_FTM0; //使用FTM0模块
-    FTM_PWM_InitStruct1.mode = kPWM_Complementary; /* 互补模式 */
-    FTM_PWM_Init(&FTM_PWM_InitStruct1);
-    /* 初始化另外一个互补通道 其他设置不变*/
-    FTM_PWM_InitStruct1.chl = HW_FTM_CH1; /* 通道1 */
-    FTM_PWM_Init(&FTM_PWM_InitStruct1);
-    
-    /* 初始化对应的引脚 */
-    PORT_PinMuxConfig(HW_GPIOC, 1, kPinAlt4);
-    PORT_PinMuxConfig(HW_GPIOC, 2, kPinAlt4);
+    FTM_PWM_QuickInit(FTM0_CH0_PC01, kPWM_Complementary, 3000);
+    FTM_PWM_QuickInit(FTM0_CH1_PC02, kPWM_Complementary, 3000);
     
     /* 设置FTM 的占空比 */
-    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH0, 5000); // 50%占空比 0-10000 对应 0-100%
+    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH0, 5000); // 50%占空比 0-10000 对应 0-100% 设置任意一个通道则会一起改变
     
     while(1)
     {

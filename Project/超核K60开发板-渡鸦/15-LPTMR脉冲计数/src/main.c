@@ -38,7 +38,7 @@ int main(void)
     printf("lptrm pulse counter test connect PC05&PC01\r\n");
     
     /* 在PC01 上产生一定频率的方波 便于脉冲计数测量 */
-    FTM_PWM_QuickInit(FTM0_CH0_PC01, 1000);
+    FTM_PWM_QuickInit(FTM0_CH0_PC01, kPWM_EdgeAligned, 1000);
     /* 设置FTM 的占空比 */
     FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH0, 5000); // 50%占空比 0-10000 对应 0-100%
     

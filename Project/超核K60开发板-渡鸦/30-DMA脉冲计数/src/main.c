@@ -94,8 +94,8 @@ int main(void)
     printf("connect A06&C01, B00&B23 \r\n");
     
     /* 开启2路PWM通道 产生不同频率的PWM波 */
-    FTM_PWM_QuickInit(FTM0_CH0_PC01, 10000);
-    FTM_PWM_QuickInit(FTM1_CH0_PB00, 20000);
+    FTM_PWM_QuickInit(FTM0_CH0_PC01, kPWM_EdgeAligned, 10000);
+    FTM_PWM_QuickInit(FTM1_CH0_PB00, kPWM_EdgeAligned, 20000);
     
     /* 开启DMA捕捉引脚脉冲信号 (每个端口只能测量一路DMA 也就是说DMA脉冲最多只能测量5路(PTA,PTB,PTC,PTD,PTE))*/
     DMA_PulseCountInit(HW_DMA_CH0, HW_GPIOA, 6);

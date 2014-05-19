@@ -31,8 +31,8 @@ void PIT_ISR(void)
     uint8_t dir; /* 记录编码器旋转方向1 */
     /* 获取正交解码数据 */
     FTM_QD_GetData(HW_FTM1, &value, &dir);
-    printf("value:%d dir:%d  \r", value, dir);
-    FTM_QD_ClearCount(HW_FTM1);  
+    printf("value:%6d dir:%d  \r", value, dir);
+    //FTM_QD_ClearCount(HW_FTM1); /* 如测量频率则需要定时清除Count值  */
 }
 
 int main(void)
@@ -44,16 +44,7 @@ int main(void)
     printf("PWM_QD test, connect encoder for PA08 PA09\r\n");
      
     /* 初始化正交解码通道 */
-    FTM_QD_InitTypeDef FTM_QD_InitStruct1 = {0};
-    FTM_QD_InitStruct1.instance = HW_FTM1;  //使用FTM1模块
-    FTM_QD_InitStruct1.mode = kQD_PHABEncoding; /* 编码器类型 普通2线 AB相编码器 */
-    FTM_QD_InitStruct1.PHA_Polarity = kFTM_QD_NormalPolarity; /* 正常极性 */
-    FTM_QD_InitStruct1.PHB_Polarity = kFTM_QD_NormalPolarity;
-    FTM_QD_Init(&FTM_QD_InitStruct1);
-    
-    /* 初始化正交解码引脚 */
-    PORT_PinMuxConfig(HW_GPIOA, 8, kPinAlt6);
-    PORT_PinMuxConfig(HW_GPIOA, 9, kPinAlt6);
+    FTM_QD_QuickInit(FTM1_QD_PHA_PA08_PHB_PA09, kFTM_QD_NormalPolarity, kQD_PHABEncoding);
     
     /* 开启PIT中断 */
     PIT_QuickInit(HW_PIT_CH0, 1000*10);

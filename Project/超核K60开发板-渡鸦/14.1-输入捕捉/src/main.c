@@ -24,7 +24,7 @@ int main(void)
 
     printf("ftm intput capture test, pwm will be generated on PA06 and input pin: PA08\r\n");
     
-    FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, 1000);
+    FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, 200);
     
     /* 配置IC 功能 设置中断 */
     FTM_IC_QuickInit(FTM1_CH0_PA08, kFTM_ClockDiv128);

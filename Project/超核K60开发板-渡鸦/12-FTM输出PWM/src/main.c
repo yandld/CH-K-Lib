@@ -53,25 +53,15 @@ int main(void)
     DelayInit();
     
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP); /* LED */
-    
-    /* ³õÊ¼»¯Ò»¸öÄ£¿éµÄÒ»°ãÄ£Ê½: ³õÊ¼»¯Ä£¿é±¾Éí->¸ù¾ÝÐ¾Æ¬ÊÖ²á ³õÊ¼»¯¶ÔÓ¦µÄ¸´ÓÃÒý½Å->Ê¹ÓÃÄ£¿é */
-    UART_InitTypeDef UART_InitStruct1 = {0};
-    UART_InitStruct1.instance = HW_UART0;
-    UART_InitStruct1.baudrate = 115200;
-    UART_Init(&UART_InitStruct1);
-    
-    /* ³õÊ¼»¯´®¿Ú0¶ÔÓ¦µÄÒý½Å D6 D7*/
-    PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
-    PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("ftm test, pwm will be generated on PA06\r\n");
     
     /* Ê¹ÓÃ¿ìËÙ³õÊ¼»¯ °ïÖú³õÑ§ÕßÍê³É±ØÒªÅäÖÃ */
-    FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, 3000);
-    
+    FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, 5000);
     
     /* ÉèÖÃFTM0Ä£¿é3Í¨µÀµÄÕ¼¿Õ±È */
-    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH3, 5000); //º0-10000 ¶ÔÓ¦ 0-100%
+    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH3, 6000); /* 0-10000 ¶ÔÓ¦ 0-100% */
     
     while(1)
     {

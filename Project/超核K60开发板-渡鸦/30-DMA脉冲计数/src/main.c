@@ -9,6 +9,8 @@
 /* CH Kinetis固件库 V2.50 版本 */
 /* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
+static uint32_t ChlValue[2];
+
 /*
      实验名称：DMA脉冲计数
      实验平台：渡鸦开发板
@@ -37,7 +39,7 @@ static const uint32_t DMA_PORT_TriggerSourceTable[] =
 static void DMA_PulseCountInit(uint32_t dmaChl, uint32_t instance, uint32_t pinIndex)
 {
     /* 开启2路引脚 配置为DMA触发 */
-    GPIO_QuickInit(instance, pinIndex, kGPIO_Mode_IPU);
+    GPIO_QuickInit(instance, pinIndex, kGPIO_Mode_IFT);
     /* 配置为DMA上升沿触发 */
     GPIO_ITDMAConfig(instance, pinIndex, kGPIO_DMA_RisingEdge);
     /* 配置DMA */
@@ -69,11 +71,10 @@ static void DMA_PulseCountInit(uint32_t dmaChl, uint32_t instance, uint32_t pinI
 static void PIT_ISR(void)
 {
     /* 由于DMA 是倒计数的 所需需要用最大值减一下 */
-    uint32_t ch_value[2];
     /* CH0 */
-    ch_value[0] = DMA_CITER_ELINKNO_CITER_MASK - DMA_GetMajorLoopCount(HW_DMA_CH0);
+    ChlValue[0] = DMA_CITER_ELINKNO_CITER_MASK - DMA_GetMajorLoopCount(HW_DMA_CH0);
     /* CH1 */
-    ch_value[1] = DMA_CITER_ELINKNO_CITER_MASK - DMA_GetMajorLoopCount(HW_DMA_CH1);
+    ChlValue[1] = DMA_CITER_ELINKNO_CITER_MASK - DMA_GetMajorLoopCount(HW_DMA_CH1);
     /* 清零计数 */
     DMA_CancelTransfer();
     DMA_SetMajorLoopCount(HW_DMA_CH0, DMA_CITER_ELINKNO_CITER_MASK);
@@ -81,7 +82,6 @@ static void PIT_ISR(void)
     /* 开始下一次传输 */
     DMA_EnableRequest(HW_DMA_CH0);
     DMA_EnableRequest(HW_DMA_CH1);
-    printf("[CH%d]:%4dHz [CH%d]:%4dHz\r\n", 0, ch_value[0], 1, ch_value[1]);
 }
 
 int main(void)
@@ -108,6 +108,7 @@ int main(void)
 
     while(1)
     {
+        printf("[CH%d]:%4dHz [CH%d]:%4dHz\r\n", 0, ChlValue[0], 1, ChlValue[1]);
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(500);
     }

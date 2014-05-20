@@ -405,7 +405,7 @@ uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req)
     }
     if(pres > (1<<ps)) ps++;
     if(ps > 7) ps = 7;
-    modulo = ((clock/(1<<ps))/req) - (2^ps);
+    modulo = ((clock/(1<<ps))/req) - 1;
     LIB_TRACE("input frequency:%dHz\r\n", req);
     LIB_TRACE("input clk:%d\r\n", clock);
     LIB_TRACE("ps:%d\r\n", pres);

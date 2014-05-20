@@ -70,7 +70,7 @@ int main(void)
     FTM_PWM_QuickInit(FTM0_CH1_PC02, kPWM_Complementary, 3000);
     
     /* 设置FTM 的占空比 */
-    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH0, 5000); // 50%占空比 0-10000 对应 0-100% 设置任意一个通道则会一起改变
+    FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH0, 8000); // 50%占空比 0-10000 对应 0-100% 设置任意一个通道则会一起改变
     
     while(1)
     {

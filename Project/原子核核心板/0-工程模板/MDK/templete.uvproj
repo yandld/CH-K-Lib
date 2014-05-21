@@ -138,7 +138,7 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>0</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
             <RestoreTracepoints>1</RestoreTracepoints>
             <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10 RAVEN DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\ucGUI\inc;..\..\..\..\Libraries\utilities\ucGUI\inc\Config</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -520,54 +520,14 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
             </File>
             <File>
-              <FileName>dac.c</FileName>
+              <FileName>can.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\dac.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>devices</GroupName>
-          <Files>
-            <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\can.c</FilePath>
             </File>
             <File>
-              <FileName>ili9320.c</FileName>
+              <FileName>vref.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
-            </File>
-            <File>
-              <FileName>w25qxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\w25qxx.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi_bus_ops.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\spi_bus_ops.c</FilePath>
-            </File>
-            <File>
-              <FileName>ads7843.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ucGUI</GroupName>
-          <Files>
-            <File>
-              <FileName>GUILib.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\ucGUI\build\MDK\obj\GUILib.lib</FilePath>
-            </File>
-            <File>
-              <FileName>ucGuiFunc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ucGuiFunc.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\vref.c</FilePath>
             </File>
           </Files>
         </Group>

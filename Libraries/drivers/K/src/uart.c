@@ -57,6 +57,22 @@ static const IRQn_Type UART_IRQnTable[] =
     UART4_RX_TX_IRQn,
     UART5_RX_TX_IRQn,
 };
+#elif (defined(MK21D5))
+static const struct reg_ops SIM_UARTClockGateTable[] =
+{
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART3_MASK},
+};
+/* interrupt handler table */
+static const IRQn_Type UART_IRQnTable[] = 
+{
+    UART0_RX_TX_IRQn,
+    UART1_RX_TX_IRQn,
+    UART2_RX_TX_IRQn,
+    UART3_RX_TX_IRQn,
+};
 #elif (defined(MK10D5))
 static const struct reg_ops SIM_UARTClockGateTable[] =
 {

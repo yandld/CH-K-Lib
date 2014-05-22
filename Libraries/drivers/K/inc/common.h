@@ -34,6 +34,8 @@
 #include "MK70F12.h"
 #elif MK70F15
 #include "MK70F15.h"
+#elif MK21D5
+#include "MK21D5.h"
 
 #else
 #define MK60DZ10

@@ -29,7 +29,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   int     NCode;
   int     Id;
 
-    rt_kprintf("pMsg:%d\r\n", pMsg->MsgId);
+rt_kprintf("pMsg:%d\r\n", pMsg->MsgId);
     
   switch (pMsg->MsgId) {
   case WM_INIT_DIALOG:
@@ -38,23 +38,24 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;
     switch(Id) {
-    case ID_BUTTON_0: // Notifications sent by 'Button'
+    case ID_BUTTON_0:
       switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
+      case WM_NOTIFICATION_RELEASED:
           MYGUI_DLG_Calender(WM_HBKWIN);
         break;
       }
       break;
-    case ID_BUTTON_1: // Notifications sent by 'Button'
+    case ID_BUTTON_1:
       switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
+      case WM_NOTIFICATION_RELEASED:
           MYGUI_DLG_ChFile(WM_HBKWIN);
         break;
       }
       break;
-    case ID_BUTTON_2: // Notifications sent by 'Button'
+    case ID_BUTTON_2:
       switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
+
+      case WM_NOTIFICATION_RELEASED:
           MYGUI_DLG_Time(WM_HBKWIN);
         break;
       }
@@ -62,7 +63,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case ID_BUTTON_4: // Notifications sent by 'Button'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-          MYGUI_DLG_Time(WM_HBKWIN);
+          MYGUI_DLG_Notepad(WM_HBKWIN, "/MAIN.C");
         break;
       }
       break;
@@ -70,8 +71,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     // USER END
     }
     break;
-  // USER START (Optionally insert additional message handling)
-  // USER END
+
   default:
     WM_DefaultProc(pMsg);
     break;

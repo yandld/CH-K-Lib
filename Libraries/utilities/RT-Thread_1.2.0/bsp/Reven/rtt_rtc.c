@@ -17,10 +17,6 @@ static rt_err_t rt_rtc_open(rt_device_t dev, rt_uint16_t oflag)
     return RT_EOK;
 }
 
-static rt_size_t rt_rtc_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
-{
-    return RT_EOK;
-}
 
 static rt_err_t rt_rtc_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
@@ -49,7 +45,7 @@ int rt_hw_rtc_init(void)
     rtc.init 	= RT_NULL;
     rtc.open 	= rt_rtc_open;
     rtc.close	= RT_NULL;
-    rtc.read 	= rt_rtc_read;
+    rtc.read 	= RT_NULL;
     rtc.write	= RT_NULL;
     rtc.control = rt_rtc_control;
 

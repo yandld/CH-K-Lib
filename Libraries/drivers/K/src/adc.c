@@ -87,7 +87,12 @@ static const IRQn_Type ADC_IRQnTable[] =
  */
 uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
 {
-    return (!((ADC_InstanceTable[instance]->SC1[mux]) & ADC_SC1_COCO_MASK) >> ADC_SC1_COCO_SHIFT);  
+    if(ADC_InstanceTable[instance]->SC1[mux] & ADC_SC1_COCO_MASK)
+    {
+        return 0;
+    }
+    return 1;
+    //return (!((ADC_InstanceTable[instance]->SC1[mux]) & ADC_SC1_COCO_MASK) >> ADC_SC1_COCO_SHIFT);  
 }
 
 /**
@@ -109,6 +114,7 @@ uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
  */
 static int32_t ADC_Calibration(uint32_t instance)
 {
+    uint32_t i;
     uint32_t PG, MG;
     // set max avarage to get the best cal results
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_AVGS_MASK;
@@ -118,7 +124,8 @@ static int32_t ADC_Calibration(uint32_t instance)
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_CALF_MASK; /* Clear the calibration's flag */
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_CAL_MASK;  /* Enable the calibration */
     ADC_ITDMAConfig(instance, kADC_MuxA, kADC_IT_Disable);
-    while(ADC_IsConversionCompleted(instance, 0)) {};      /* Wait conversion is competed */
+    for(i=0;i<100000;i++);
+    //while(ADC_IsConversionCompleted(instance, 0)) {};      /* Wait conversion is competed */
     if(ADC_InstanceTable[instance]->SC3 & ADC_SC3_CALF_MASK)
     {
         /* cal failed */
@@ -329,7 +336,7 @@ int32_t ADC_QuickReadValue(uint32_t MAP)
     uint32_t mux = pq->reserved;
     ADC_StartConversion(instance, chl, mux);
     /* waiting for ADC complete */
-    while(ADC_IsConversionCompleted(instance, mux)) {};
+    while((ADC_InstanceTable[instance]->SC1[mux] & ADC_SC1_COCO_MASK) == 0);
     return ADC_ReadValue(instance, mux);
 }
 

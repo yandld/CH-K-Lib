@@ -79,7 +79,7 @@
          Core clock = 100MHz, BusClock = 50MHz
    4 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
-         Core clock = 96MHz, BusClock = 48MHz   
+         Core clock = 96MHz, BusClock = 48MHz
 */
 
 /*----------------------------------------------------------------------------

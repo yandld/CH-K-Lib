@@ -2,40 +2,82 @@
 #include "DIALOG.h"
 #include "gui_image.h"
 
-typedef struct {
-  const GUI_BITMAP * pBitmap;
-  const char       * pText;
-  const char       * pExplanation;
-} BITMAP_ITEM;
 
-GUI_CONST_STORAGE GUI_BITMAP _bmRead = {
-  48, /* XSize */
-  48, /* YSize */
-  192, /* BytesPerLine */
-  32, /* BitsPerPixel */
-  (unsigned char *)NULL,  /* Pointer to picture data */
-  NULL  /* Pointer to palette */
- ,GUI_DRAW_BMP8888
+#define ID_FRAMEWIN_0        (GUI_ID_USER + 0x00)
+#define ID_BUTTON_0        (GUI_ID_USER + 0x01)
+#define ID_BUTTON_1        (GUI_ID_USER + 0x02)
+#define ID_BUTTON_2        (GUI_ID_USER + 0x03)
+#define ID_BUTTON_3        (GUI_ID_USER + 0x04)
+
+
+static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
+  { FRAMEWIN_CreateIndirect, "Desktop", ID_FRAMEWIN_0, 0, -1, 240, 320, 0, 0x64, 0 },
+  { BUTTON_CreateIndirect, "Cal", ID_BUTTON_0, 5, 9, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "CF", ID_BUTTON_1, 71, 9, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "Time", ID_BUTTON_2, 140, 9, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "NetWork", ID_BUTTON_3, 5, 50, 60, 35, 0, 0x0, 0 },
+  // USER START (Optionally insert additional widgets)
+  // USER END
 };
 
+char * MYGUI_DLG_ChFileGetPath(WM_HWIN hItem);
+
+static void _cbDialog(WM_MESSAGE * pMsg) {
+  WM_HWIN hItem;
+  int     NCode;
+  int     Id;
+
+    rt_kprintf("pMsg:%d\r\n", pMsg->MsgId);
+    
+  switch (pMsg->MsgId) {
+  case WM_INIT_DIALOG:
+    hItem = pMsg->hWin;
+  case WM_NOTIFY_PARENT:
+    Id    = WM_GetId(pMsg->hWinSrc);
+    NCode = pMsg->Data.v;
+    switch(Id) {
+    case ID_BUTTON_0: // Notifications sent by 'Button'
+      switch(NCode) {
+      case WM_NOTIFICATION_CLICKED:
+          MYGUI_DLG_Calender(WM_HBKWIN);
+        break;
+      }
+      break;
+    case ID_BUTTON_1: // Notifications sent by 'Button'
+      switch(NCode) {
+      case WM_NOTIFICATION_CLICKED:
+          MYGUI_DLG_ChFile(WM_HBKWIN);
+        break;
+      }
+      break;
+    case ID_BUTTON_2: // Notifications sent by 'Button'
+      switch(NCode) {
+      case WM_NOTIFICATION_CLICKED:
+          MYGUI_DLG_Time(WM_HBKWIN);
+        break;
+      }
+      break;
+    // USER START (Optionally insert additional code for further Ids)
+    // USER END
+    }
+    break;
+  // USER START (Optionally insert additional message handling)
+  // USER END
+  default:
+    WM_DefaultProc(pMsg);
+    break;
+  }
+}
 
 
-static const BITMAP_ITEM _aBitmapItem[] = {
-  {&_bmRead, "Browser",  "Use the browser to explore the www"},
-  {&_bmRead,   "Clock",    "Adjust current time and date"},
-  {&_bmRead,    "Date",     "Use the diary"},
-  {&_bmRead,   "Email",    "Read an email"},
-  {&_bmRead,    "Picture",     "Read a document"},
-};
-
-
-static void _cbBk(WM_MESSAGE * pMsg) {
-  GUI_RECT   Rect       = { 0, 0, 0, 0 };
-  WM_HWIN    hItem;
-  WM_HWIN    hDlg;
-  int        NCode;
-  int        Sel;
-  int        Id;
+#if 0
+static void _cbDialog(WM_MESSAGE * pMsg)
+{
+    WM_HWIN    hItem;
+    WM_HWIN    hDlg;
+    int        NCode;
+    int        Sel;
+    int        Id;
     hDlg = pMsg->hWin;
     switch (pMsg->MsgId)
     {
@@ -48,22 +90,22 @@ static void _cbBk(WM_MESSAGE * pMsg) {
                     switch (NCode)
                     {
                         case WM_NOTIFICATION_SEL_CHANGED:
-                        Sel   = ICONVIEW_GetSel(pMsg->hWinSrc);
-                        hItem = WM_GetDialogItem(hDlg, GUI_ID_TEXT1);
-                        TEXT_SetText(hItem, _aBitmapItem[Sel].pExplanation);
                         switch(Sel)
                         {
                             case 2:
-                            GUI_X_Delay(10);
-                            CreateCalendar();
+                            MYGUI_DLG_Calender(pMsg->hWinSrc);
                                 break;
                             case 1:
                            // GUI_X_Delay(10);
                             CreateClock();
                                 break;
+                            case 3:
+                                MYGUI_DLG_ChooseFile(pMsg->hWinSrc);
+                               // CreateChooseFile(NULL);
+                                break;
                             case 4:
-                            GUI_IMAGE_CreateWidget(pMsg->hWinSrc);
-                            WM_HideWindow(pMsg->hWinSrc);
+                                GUI_IMAGE_CreateWidget(pMsg->hWinSrc);
+                                WM_HideWindow(pMsg->hWinSrc);
                                 break;
                         }
                         //WM_InvalidateWindow(pMsg->hWinSrc);
@@ -84,49 +126,25 @@ static void _cbBk(WM_MESSAGE * pMsg) {
             WM_DefaultProc(pMsg);
     }
 }
+#endif
 
-
-
-WM_HWIN GUI_Desktop(void)
+WM_HWIN MYGUI_DLG_CreateDesktop(void)
 {
-    WM_HWIN       hWin;
-    int           xSize;
-    U32           i;
-
-    // GUIDEMO_ShowIntro("Icon View Demo", "Demonstrates the use of\nthe ICONVIEW widget");
-    // GUIDEMO_HideInfoWin();
-    WM_EnableMemdev(WM_HBKWIN);
-    WM_SetCallback(WM_HBKWIN, _cbBk);
-
-    // _ScreenX0 = (xSize - XSIZE_MIN) / 2; 
-    //  _ScreenY0 = (ySize - YSIZE_MIN) / 2; 
-    //
-    // Create title of sample
-    //
-     //hTextTitle = TEXT_CreateEx(_ScreenX0, (ySize - _bmDog.YSize) / 2 - TITLE_HEIGHT, XSIZE_MIN, TITLE_HEIGHT, WM_HBKWIN, WM_CF_SHOW, 0, GUI_ID_TEXT0, "emWin ICONVIEW sample");
-    // TEXT_SetFont(hTextTitle, &GUI_FontRounded22);
-    //  TEXT_SetTextAlign(hTextTitle, GUI_TA_HCENTER | GUI_TA_VCENTER);
-    // TEXT_SetTextColor(hTextTitle, TITLE_COLOR);
-    //
-    // Create explanation
-    //
-     // hTextExpl = TEXT_CreateEx(xSize / 2, (ySize - XSIZE_MIN) / 2 + 40, 140, 100, WM_HBKWIN, WM_CF_SHOW, 0, GUI_ID_TEXT1, "");
-    //  GUI_SIF_CreateFont(_acFramed24B, &Font, GUI_SIF_TYPE_PROP_FRM);
-    //  TEXT_SetFont(hTextExpl, &Font);
-    //  TEXT_SetTextColor(hTextExpl, GUI_WHITE);
-    //  TEXT_SetWrapMode(hTextExpl, GUI_WRAPMODE_WORD);
-    // TEXT_SetTextAlign(hTextExpl, GUI_TA_HCENTER | GUI_TA_VCENTER);
-    //
-    // Create ICONVIEW widget
-    //
-    hWin = ICONVIEW_CreateEx(0,0, 240, 320, WM_HBKWIN, WM_CF_SHOW | WM_CF_HASTRANS, ICONVIEW_CF_AUTOSCROLLBAR_V, GUI_ID_ICONVIEW0, 55, 60);
-    for (i = 0; i < GUI_COUNTOF(_aBitmapItem); i++)
+    WM_HWIN hWin;
+    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    while(1)
     {
-        ICONVIEW_AddBitmapItem(hWin, _aBitmapItem[i].pBitmap, _aBitmapItem[i].pText);
+        static char *p;
+        while(p == NULL)
+        {
+            p = MYGUI_DLG_ChFileGetPath(WM_HBKWIN);
+            rt_thread_delay(10);
+        }
+        rt_kprintf("%s\r\n", p);
+        p = NULL;
     }
-    ICONVIEW_SetBkColor(hWin, ICONVIEW_CI_SEL, GUI_BLUE | 0xC0000000);
-    ICONVIEW_SetFont(hWin, &GUI_Font13B_ASCII);
-    WM_SetFocus(hWin);
+    rt_thread_delay(5);
     return hWin;
 }
+
 

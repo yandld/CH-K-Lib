@@ -9,12 +9,12 @@ static void thread_entry(void* parameter)
 {
     WM_HWIN  hWin;
     int r;
-    hWin = GUI_Desktop();
-    hWin = CreateChooseFile();
-   // r = GUI_ExecCreatedDialog(hWin);
-   // rt_kprintf("r:%d\r\n", r);
+  //  hWin = GUI_Desktop();
+    hWin = MYGUI_DLG_ChooseFile(WM_HBKWIN);
     while (1)
     {
+        
+       // rt_kprintf("!!!!!\r\n");
         //GUI_DispString("Hello");
         rt_thread_delay(10);
     }

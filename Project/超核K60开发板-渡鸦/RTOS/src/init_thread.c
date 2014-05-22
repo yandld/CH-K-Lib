@@ -106,7 +106,7 @@ void init_thread_entry(void* parameter)
         rt_thread_startup(thread);		
     }
     /* led thread */
-    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*4, 0x21, 20);                                                      
+    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*8, 0x21, 20);                                                      
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);		

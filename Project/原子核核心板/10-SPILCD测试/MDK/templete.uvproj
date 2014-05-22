@@ -544,11 +544,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\spi_bus_ops.c</FilePath>
             </File>
-            <File>
-              <FileName>ili9320.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

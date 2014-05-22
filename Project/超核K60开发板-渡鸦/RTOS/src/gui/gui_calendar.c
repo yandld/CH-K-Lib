@@ -82,10 +82,10 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 }
 
 
-WM_HWIN CreateCalendar(void) {
-  WM_HWIN hWin;
-
-    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-  return hWin;
+WM_HWIN MYGUI_DLG_Calender(WM_HWIN hParent)
+{
+    WM_HWIN hWin;
+    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, hParent, 0, 0);
+    return hWin;
 }
 

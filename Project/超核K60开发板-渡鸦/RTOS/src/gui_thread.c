@@ -23,12 +23,12 @@ void gui_thread_entry(void* parameter)
 
     WM_HWIN hWin;
   //  GUI_CURSOR_Show();
-  //  hWin = GUI_Desktop();
+    hWin = MYGUI_DLG_CreateDesktop();
 
    // MainMenu_Init();
 
 	while(1)
 	{
-        rt_thread_delay(5);
+        rt_thread_delay(1);
 	}
 }

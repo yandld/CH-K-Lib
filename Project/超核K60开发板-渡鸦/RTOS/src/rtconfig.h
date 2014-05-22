@@ -3,16 +3,9 @@
 #define __RTTHREAD_CFG_H__
 
 
-/* RT_NAME_MAX*/
 #define RT_NAME_MAX	   8
-
-/* RT_ALIGN_SIZE*/
 #define RT_ALIGN_SIZE	8
-
-/* PRIORITY_MAX */
 #define RT_THREAD_PRIORITY_MAX	64
-
-/* Tick per Second */
 #define RT_TICK_PER_SECOND	100
 
 /* SECTION: RT_DEBUG */
@@ -30,23 +23,12 @@
 #define RT_TIMER_TICK_PER_SECOND	10
 
 /* SECTION: IPC */
-/* Using Semaphore*/
 #define RT_USING_SEMAPHORE
-
-/* Using Mutex */
 #define RT_USING_MUTEX
-
-/* Using Event */
 #define RT_USING_EVENT
-
-/* Using MailBox */
 #define RT_USING_MAILBOX
-
-/* Using Message Queue */
 #define RT_USING_MESSAGEQUEUE
 
-/* SECTION: Memory Management */
-/* Using Memory Pool Management*/
 #define RT_USING_MEMPOOL
 
 /* Using Dynamic Heap Management */
@@ -86,7 +68,7 @@
 /* Maximum sector size to be handled. */
 #define RT_DFS_ELM_MAX_SECTOR_SIZE  4096
 
-#define RT_USING_DFS_NFS
+//#define RT_USING_DFS_NFS
 #define RT_NFS_HOST_EXPORT "192.168.1.202:/"
 
 /* the max number of mounted filesystem */
@@ -99,7 +81,7 @@
 
 
 /* SECTION: lwip, a lighwight TCP/IP protocol stack */
-#define RT_USING_LWIP
+// #define RT_USING_LWIP
 /* LwIP uses RT-Thread Memory Management */
 #define RT_LWIP_USING_RT_MEM
 /* Enable ICMP protocol*/

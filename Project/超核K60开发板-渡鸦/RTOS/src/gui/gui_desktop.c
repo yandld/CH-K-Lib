@@ -63,7 +63,7 @@ rt_kprintf("pMsg:%d\r\n", pMsg->MsgId);
     case ID_BUTTON_4: // Notifications sent by 'Button'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-          MYGUI_DLG_Notepad(WM_HBKWIN, "/MAIN.C");
+          THREAD_Notepad();
         break;
       }
       break;
@@ -79,63 +79,6 @@ rt_kprintf("pMsg:%d\r\n", pMsg->MsgId);
 }
 
 
-#if 0
-static void _cbDialog(WM_MESSAGE * pMsg)
-{
-    WM_HWIN    hItem;
-    WM_HWIN    hDlg;
-    int        NCode;
-    int        Sel;
-    int        Id;
-    hDlg = pMsg->hWin;
-    switch (pMsg->MsgId)
-    {
-        case WM_NOTIFY_PARENT:
-            Id    = WM_GetId(pMsg->hWinSrc);      /* Id of widget */
-            NCode = pMsg->Data.v;                 /* Notification code */
-            switch (Id)
-            {
-                case GUI_ID_ICONVIEW0:
-                    switch (NCode)
-                    {
-                        case WM_NOTIFICATION_SEL_CHANGED:
-                        switch(Sel)
-                        {
-                            case 2:
-                            MYGUI_DLG_Calender(pMsg->hWinSrc);
-                                break;
-                            case 1:
-                           // GUI_X_Delay(10);
-                            CreateClock();
-                                break;
-                            case 3:
-                                MYGUI_DLG_ChooseFile(pMsg->hWinSrc);
-                               // CreateChooseFile(NULL);
-                                break;
-                            case 4:
-                                GUI_IMAGE_CreateWidget(pMsg->hWinSrc);
-                                WM_HideWindow(pMsg->hWinSrc);
-                                break;
-                        }
-                        //WM_InvalidateWindow(pMsg->hWinSrc);
-                        
-                        //ICONVIEW_SetSel(pMsg->hWinSrc, 0);
-                        Sel = 255;
-                        break;
-                    }
-                    break;
-            }
-            break;
-
-        case WM_PAINT:
-            GUI_SetBkColor(GUI_BLACK);
-            GUI_Clear();
-            break;
-        default:
-            WM_DefaultProc(pMsg);
-    }
-}
-#endif
 
 WM_HWIN MYGUI_DLG_CreateDesktop(void)
 {
@@ -143,16 +86,16 @@ WM_HWIN MYGUI_DLG_CreateDesktop(void)
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     while(1)
     {
-        static char *p;
-        while(p == NULL)
-        {
-            p = MYGUI_DLG_ChFileGetPath(WM_HBKWIN);
-            rt_thread_delay(10);
-        }
-        rt_kprintf("%s\r\n", p);
-        p = NULL;
+        //static char *p;
+        //while(p == NULL)
+        //{
+       //     p = MYGUI_DLG_ChFileGetPath(WM_HBKWIN);
+        //    rt_thread_delay(10);
+        //}
+       // rt_kprintf("%s\r\n", p);
+       // p = NULL;
+        rt_thread_delay(1);
     }
-    rt_thread_delay(5);
     return hWin;
 }
 

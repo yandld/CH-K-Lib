@@ -10,7 +10,6 @@
 #define ID_BUTTON_0    (GUI_ID_USER + 0x03)
 #define ID_BUTTON_1    (GUI_ID_USER + 0x04)
 
-static const char * gpPath;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { FRAMEWIN_CreateIndirect, "Notepad", ID_FRAMEWIN_0, 0, 0, 240, 320, 0, 0x0, 0 },
   { MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, -2, 1, 235, 275, 0, 0x0, 0 },
@@ -61,15 +60,12 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   WM_HWIN hItem;
   int     NCode;
   int     Id;
-  // USER START (Optionally insert additional variables)
-  // USER END
 
   switch (pMsg->MsgId) {
   case WM_INIT_DIALOG:
     hItem = pMsg->hWin;
     //FRAMEWIN_SetMoveable(hItem, 1);
     FRAMEWIN_SetFont(hItem, GUI_FONT_13B_1);
-    FRAMEWIN_SetText(hItem, gpPath);
     FRAMEWIN_AddCloseButton(hItem, FRAMEWIN_BUTTON_RIGHT,  0);
     FRAMEWIN_AddMaxButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
     FRAMEWIN_AddMinButton(hItem, FRAMEWIN_BUTTON_RIGHT, 1);
@@ -77,7 +73,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIEDIT_0);
     MULTIEDIT_SetWrapWord(hItem);
     MULTIEDIT_SetInsertMode(hItem, 0);
-    MYGUI_DLG_NotepadAddText(hItem, gpPath, 4096);
     //MULTIEDIT_SetReadOnly(hItem, 1);
     MULTIEDIT_SetFocussable(hItem, 0);
     MULTIEDIT_SetAutoScrollV(hItem, 1);
@@ -86,24 +81,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;
     switch(Id) {
-    case ID_MULTIEDIT_0: // Notifications sent by 'Multiedit'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-
-        break;
-      case WM_NOTIFICATION_RELEASED:
-
-        break;
-      case WM_NOTIFICATION_VALUE_CHANGED:
-
-        break;
-
-      }
-      break;
     case ID_BUTTON_0: // Notifications sent by 'open'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        GUI_EndDialog(pMsg->hWin, 0);
+         
+        //GUI_EndDialog(pMsg->hWin, 0);
         break;
       }
       break;
@@ -124,12 +106,32 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 }
 
 
+static rt_thread_t tid1 = RT_NULL;
+char * MYGUI_DLG_ChFileGetPath(WM_HWIN hItem);
 
-WM_HWIN MYGUI_DLG_Notepad(WM_HWIN hParent, const char * FilePath)
+static void thread_entry(void* parameter)
 {
-    gpPath = FilePath;
-    WM_HWIN hWin;
-    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, hParent, 0, 0);
-    return hWin;
+    char *p;
+    U32 r;
+    WM_HWIN  hWin;
+    hWin = MYGUI_DLG_ChFile(WM_HBKWIN);
+    r = GUI_ExecCreatedDialog(hWin);
+    p = MYGUI_DLG_ChFileGetPath(hWin);
+    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    hWin = WM_GetDialogItem(hWin, ID_MULTIEDIT_0);
+    MYGUI_DLG_NotepadAddText(hWin, p, 1024);
+    rt_kprintf("~~~%s\r\n", "!!");
 }
+
+int THREAD_Notepad(void)
+{
+    tid1 = rt_thread_create("t_notepad", thread_entry, (void*)1, 4096, 20, 5);
+    if (tid1 != RT_NULL)
+    {
+        rt_thread_startup(tid1); 
+    }
+    return 0;
+}
+
+
 

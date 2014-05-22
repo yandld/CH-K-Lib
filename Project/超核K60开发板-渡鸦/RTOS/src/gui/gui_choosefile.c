@@ -69,7 +69,6 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     {
         closedir(dir);
     }
-    rt_kprintf("!!%s\r\n", pInfo->pRoot);
     return r;
 }
 
@@ -122,5 +121,29 @@ WM_HWIN MYGUI_DLG_ChFile(WM_HWIN hParent)
     hWin = CHOOSEFILE_Create(hParent, 0, 0, 240, 320, apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
     WM_SetCallback(hParent, _cbBk);
     return hWin;
+}
+
+static void thread_entry(void* parameter)
+{
+    WM_HWIN hWin;
+    char const      * apDrives[1]         = { working_directory };
+    const char        acMask[]            = "*.*";
+    Info.pfGetData = _GetData;
+    Info.pMask     = acMask;
+    CHOOSEFILE_SetDelim('/');
+    hWin = CHOOSEFILE_Create(WM_HBKWIN, 0, 0, 240, 320, apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
+    WM_SetCallback(WM_HBKWIN, _cbBk);
+    //GUI_ExecDilog()
+    rt_kprintf("~~~%s\r\n", "!!");
+}
+
+void THREAD_ChFile(WM_HWIN hParent)
+{
+    rt_thread_t tid1 = RT_NULL;
+    tid1 = rt_thread_create("t_cf", thread_entry, (void*)1, 4096, 20, 5);
+    if (tid1 != RT_NULL)
+    {
+        rt_thread_startup(tid1); 
+    }
 }
 

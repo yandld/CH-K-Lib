@@ -50,7 +50,6 @@ int main(void)
         if(ADC_IsConversionCompleted(HW_ADC0, kADC_MuxA) == 0)
         {
             printf("ADC:%04d\r", ADC_ReadValue(HW_ADC0, kADC_MuxA));
-            DelayMs(5);
         }
     }
 }

@@ -107,7 +107,7 @@ typedef enum
     kADC_Differential,   //差分模式
 }ADC_SingleOrDiffMode_Type;
 
-//!< ADC 通道复用选择(每个ADC通道有2个ADC转换触发器 为MuxA 和 MuxB MuxB 只能硬件触发)
+//!< ADC 通道复用选择(每个ADC通道有2个ADC转换触发器 为MuxA 和 MuxB. MuxB 只能硬件触发)
 #define kADC_MuxA                (0x00)
 #define kADC_MuxB                (0x01)
 //!< ADC 通道复用选择(SEA 还是SEB)
@@ -141,7 +141,7 @@ typedef enum
 }ADC_ITDMAConfig_Type;
 
 //!< ADC 回调函数定义
-typedef void (*ADC_CallBackType)(int32_t conversionValue);
+typedef void (*ADC_CallBackType)(void);
 
 //!< ADC 初始化结构
 typedef struct

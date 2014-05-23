@@ -246,9 +246,9 @@ uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
     AD_InitStruct1.resolutionMode = resolutionMode;
     AD_InitStruct1.triggerMode = kADC_TriggerSoftware;
     AD_InitStruct1.singleOrDiffMode = kADC_Single;
-    AD_InitStruct1.continueMode = kADC_ContinueConversionEnable;
+    AD_InitStruct1.continueMode = kADC_ContinueConversionDisable;
     AD_InitStruct1.hardwareAveMode = kADC_HardwareAverageDisable;
-    AD_InitStruct1.vref = kADC_VoltageVREF;     
+    AD_InitStruct1.vref = kADC_VoltageVREF;    
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
     {
@@ -333,11 +333,10 @@ int32_t ADC_QuickReadValue(uint32_t MAP)
     QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     uint32_t instance = pq->ip_instance;
     uint32_t chl = pq->channel;
-    uint32_t mux = pq->reserved;
-    ADC_StartConversion(instance, chl, mux);
+    ADC_StartConversion(instance, chl, kADC_MuxA);
     /* waiting for ADC complete */
-    while((ADC_InstanceTable[instance]->SC1[mux] & ADC_SC1_COCO_MASK) == 0);
-    return ADC_ReadValue(instance, mux);
+    while((ADC_InstanceTable[instance]->SC1[kADC_MuxA] & ADC_SC1_COCO_MASK) == 0);
+    return ADC_ReadValue(instance, kADC_MuxA);
 }
 
 /**
@@ -412,37 +411,16 @@ void ADC_CallbackInstall(uint32_t instance, ADC_CallBackType AppCBFun)
  */
 void ADC0_IRQHandler(void)
 {
-    uint32_t value;
-    /*make sure clear COCO bit and read value*/
-    if(!(ADC_InstanceTable[HW_ADC0]->CFG2 & ADC_CFG2_MUXSEL_MASK))
-    {
-        value = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxA];
-    }
-    else
-    {
-        value = ADC_InstanceTable[HW_ADC0]->R[kADC_MuxB];
-    }
     if(ADC_CallBackTable[HW_ADC0] != NULL)
     {
-        ADC_CallBackTable[HW_ADC0](value);
+        ADC_CallBackTable[HW_ADC0]();
     }
 }
 
 void ADC1_IRQHandler(void)
 {
-    uint32_t value;
-    /*make sure clear COCO bit and read value*/
-    if(!(ADC_InstanceTable[HW_ADC1]->CFG2 & ADC_CFG2_MUXSEL_MASK))
-    {
-        value = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxA];
-    }
-    else
-    {
-        value = ADC_InstanceTable[HW_ADC1]->R[kADC_MuxB];
-    }
     if(ADC_CallBackTable[HW_ADC1] != NULL)
     {
-        ADC_CallBackTable[HW_ADC1](value);
+        ADC_CallBackTable[HW_ADC1]();
     }
-
 }

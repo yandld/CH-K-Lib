@@ -24,11 +24,11 @@
 
 
 //!< ADC 快速初始化宏
-#define ADC0_SE0_DP0        (0x0U)      //ADC0模块的0通道，DP0引脚
-#define ADC0_SE1_DP1        (0x80000U)  //ADC0模块的1通道，DP1引脚
-#define ADC0_SE3_DP3        (0x180000U) //ADC0模块的3通道，DP3引脚
-#define ADC0_SE4B_PC2       (0x204410U) //ADC0模块的4B通道，PC2引脚
-#define ADC0_SE5B_PD1       (0x284218U) //ADC0模块的5B通道，PD1引脚
+#define ADC0_SE0_DP0        (0x0U)      /* ADC0模块的0通道，DP0引脚 */
+#define ADC0_SE1_DP1        (0x80000U)  
+#define ADC0_SE3_DP3        (0x180000U) 
+#define ADC0_SE4B_PC2       (0x204410U) /* ADC0模块的4B通道，PC2引脚  使用B通道时，需要设置 ADC_ChlMuxConfig */ 
+#define ADC0_SE5B_PD1       (0x284218U) 
 #define ADC0_SE6B_PD5       (0x304a18U)
 #define ADC0_SE7B_PD6       (0x384c18U)
 #define ADC0_SE8_PB0        (0x404008U)

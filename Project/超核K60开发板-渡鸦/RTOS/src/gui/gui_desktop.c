@@ -29,7 +29,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   int     NCode;
   int     Id;
 
-rt_kprintf("pMsg:%d\r\n", pMsg->MsgId);
+    //rt_kprintf("pMsg:%d\r\n", pMsg->MsgId);
     
   switch (pMsg->MsgId) {
   case WM_INIT_DIALOG:
@@ -48,7 +48,7 @@ rt_kprintf("pMsg:%d\r\n", pMsg->MsgId);
     case ID_BUTTON_1:
       switch(NCode) {
       case WM_NOTIFICATION_RELEASED:
-          MYGUI_DLG_ChFile(WM_HBKWIN);
+      //    MYGUI_DLG_ChFile(WM_HBKWIN);
         break;
       }
       break;
@@ -63,7 +63,8 @@ rt_kprintf("pMsg:%d\r\n", pMsg->MsgId);
     case ID_BUTTON_4: // Notifications sent by 'Button'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-          THREAD_Notepad();
+          THREAD_Notepad(WM_HBKWIN, "/MAIN.C");
+            
         break;
       }
       break;
@@ -86,15 +87,7 @@ WM_HWIN MYGUI_DLG_CreateDesktop(void)
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     while(1)
     {
-        //static char *p;
-        //while(p == NULL)
-        //{
-       //     p = MYGUI_DLG_ChFileGetPath(WM_HBKWIN);
-        //    rt_thread_delay(10);
-        //}
-       // rt_kprintf("%s\r\n", p);
-       // p = NULL;
-        rt_thread_delay(1);
+        rt_thread_delay(10);
     }
     return hWin;
 }

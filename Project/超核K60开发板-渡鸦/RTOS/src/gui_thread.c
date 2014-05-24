@@ -19,7 +19,8 @@ void gui_thread_entry(void* parameter)
     rt_kprintf("gui_thread_entry\r\n");
     GUI_Init();
     GUI_SettingInit();
-	GUI_DispString("GUI system OK");//œ‘ æ≤‚ ‘
+	GUI_DispString("GUI system OK\r\n");//œ‘ æ≤‚ ‘
+    GUI_DispString(GUI_GetVersionString());
 
     WM_HWIN hWin;
   //  GUI_CURSOR_Show();
@@ -29,6 +30,6 @@ void gui_thread_entry(void* parameter)
 
 	while(1)
 	{
-        rt_thread_delay(1);
+        rt_thread_delay(10);
 	}
 }

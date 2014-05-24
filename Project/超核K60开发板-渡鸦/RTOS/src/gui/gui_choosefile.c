@@ -21,7 +21,7 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     {
         case CHOOSEFILE_FINDFIRST:
                 dir = opendir(pInfo->pRoot); 
-                //rt_kprintf("CHOOSEFILE_FINDFIRST:%d\r\n", dir);
+                
                 if(dir == RT_NULL)
                 {
                     return 1;
@@ -72,8 +72,6 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     return r;
 }
 
-static CHOOSEFILE_INFO Info = { 0 };
-static bool gIsSelected = false;
 
 static void _cbBk(WM_MESSAGE * pMsg)
 {
@@ -90,8 +88,7 @@ static void _cbBk(WM_MESSAGE * pMsg)
             NCode = pMsg->Data.v;
             if(WM_NOTIFICATION_CHILD_DELETED == NCode)
             {
-                gIsSelected = true;
-                rt_kprintf("Disalbe CLOSED:%d\r\n", Id);
+              //  rt_kprintf("Disalbe CLOSED:%d\r\n", Id);
             }
             break;
         default:
@@ -100,50 +97,25 @@ static void _cbBk(WM_MESSAGE * pMsg)
     }
 }
 
-char * MYGUI_DLG_ChFileGetPath(WM_HWIN hItem)
-{
-    if(gIsSelected == true)
-    {
-        gIsSelected = false;
-        return Info.pRoot;
-    }
-    return RT_NULL;
-}
 
-WM_HWIN MYGUI_DLG_ChFile(WM_HWIN hParent)
+const char *MYGUI_ExecDialog_ChFile(WM_HWIN hParent, const char *pMask)
 {
+    int r;
     WM_HWIN hWin;
-    char const      * apDrives[1]         = { working_directory };
-    const char        acMask[]            = "*.*";
+    static CHOOSEFILE_INFO Info = { 0 };
+    static char const      * apDrives[1]         = {"/"};
     Info.pfGetData = _GetData;
-    Info.pMask     = acMask;
+    Info.pMask     = pMask;
     CHOOSEFILE_SetDelim('/');
-    hWin = CHOOSEFILE_Create(hParent, 0, 0, 240, 320, apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
-    WM_SetCallback(hParent, _cbBk);
-    return hWin;
-}
-
-static void thread_entry(void* parameter)
-{
-    WM_HWIN hWin;
-    char const      * apDrives[1]         = { working_directory };
-    const char        acMask[]            = "*.*";
-    Info.pfGetData = _GetData;
-    Info.pMask     = acMask;
-    CHOOSEFILE_SetDelim('/');
-    hWin = CHOOSEFILE_Create(WM_HBKWIN, 0, 0, 240, 320, apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
-    WM_SetCallback(WM_HBKWIN, _cbBk);
-    //GUI_ExecDilog()
-    rt_kprintf("~~~%s\r\n", "!!");
-}
-
-void THREAD_ChFile(WM_HWIN hParent)
-{
-    rt_thread_t tid1 = RT_NULL;
-    tid1 = rt_thread_create("t_cf", thread_entry, (void*)1, 4096, 20, 5);
-    if (tid1 != RT_NULL)
+    hWin = CHOOSEFILE_Create(hParent, 10,10,LCD_GetXSize()*3/4,LCD_GetYSize()*2/3, apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
+    WM_ShowWindow(hWin);
+   // rt_kprintf("exit MYGUI_ExecDialog_ChFile\r\n");
+    r = GUI_ExecCreatedDialog(hWin);
+    //rt_kprintf("ChFile Diolag end\r\n");
+    if(r == 1)
     {
-        rt_thread_startup(tid1); 
+        return NULL;
     }
+    return Info.pRoot;
 }
 

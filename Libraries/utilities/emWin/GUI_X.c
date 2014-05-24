@@ -53,12 +53,7 @@ GUI_TIMER_TIME GUI_X_GetTime (void)
 
 void  GUI_X_Delay (int ms) 
 {
-    rt_uint32_t delay;
-    rt_uint32_t factor;
-    factor = 1000/RT_TICK_PER_SECOND; /* how many ms in a tick */
-    delay = ms/factor;
-    if(!delay) delay = 1;
-    rt_thread_delay(delay);
+    rt_thread_delay(ms);
 }
 
 
@@ -73,15 +68,6 @@ void GUI_X_ExecIdle (void)
 }
 
 
-/*
-*********************************************************************************************************
-*                                    MULTITASKING INTERFACE FUNCTIONS
-*
-* Note(1): 1) The following routines are required only if uC/GUI is used in a true multi task environment, 
-*             which means you have more than one thread using the uC/GUI API.  In this case the #define 
-*             GUI_OS 1   needs to be in GUIConf.h
-*********************************************************************************************************
-*/
 static rt_mutex_t gui_x_mutex = RT_NULL;
 
 void  GUI_X_InitOS (void)
@@ -112,44 +98,79 @@ U32  GUI_X_GetTaskId (void)
 
 }
 
-void GUI_TOUCH_X_ActivateX(void) 
-{
 
+static rt_device_t touch_device;
+
+#define SAMP_CNT 4
+#define SAMP_CNT_DIV2 2
+static int buf[2];
+/* ÂË²¨ */
+static int ads_filter(int* buf)
+{
+    int i, j, k, min;
+    int temp;
+    int tempXY[2][SAMP_CNT];
+    rt_uint8_t buf1[2];
+    for(i=0; i<SAMP_CNT; i++)
+    {
+        if(touch_device != RT_NULL)
+        {
+            touch_device->read(touch_device, 0, buf1, 2);
+            tempXY[0][i] = ((buf1[0]<<8) + buf1[1])>>4; //12bit mode
+            touch_device->read(touch_device, 1, buf1, 2);
+            tempXY[1][i] = ((buf1[0]<<8) + buf1[1])>>4; //12bit mode
+        }
+    }
+    for(k=0; k<2; k++)
+    {
+        for(i=0; i<SAMP_CNT-1; i++)
+        {
+            min=i;
+            for (j=i+1; j<SAMP_CNT; j++)
+            {
+                if (tempXY[k][min] > tempXY[k][j]) min=j;
+            }
+            temp = tempXY[k][i];
+            tempXY[k][i] = tempXY[k][min];
+            tempXY[k][min] = temp;
+        }
+        if((tempXY[k][SAMP_CNT_DIV2]-tempXY[k][SAMP_CNT_DIV2-1]) > 5)
+        return 1;
+        buf[k] = (tempXY[k][SAMP_CNT_DIV2]+tempXY[k][SAMP_CNT_DIV2-1]) / 2;
+    }
+    return 0;
 }
 
 
-void GUI_TOUCH_X_ActivateY(void)
-{
-
-}
+void GUI_TOUCH_X_ActivateX(void)  {}
+void GUI_TOUCH_X_ActivateY(void)  {}
 
 
 int  GUI_TOUCH_X_MeasureX(void) 
 {
-    rt_uint8_t buf[2];
-    rt_uint16_t value;
-    rt_device_t touch_device = rt_device_find("ads7843");
-    if(touch_device != RT_NULL)
-    {
-        touch_device->read(touch_device, 0, buf, 2);
-        value = ((buf[0]<<8) + buf[1])>>4; //12bit mode
-    }
-    return value;
+    ads_filter(buf);
+    return buf[0];
 }
 
 
 int  GUI_TOUCH_X_MeasureY(void) 
 {
-    rt_uint8_t buf[2];
-    rt_uint16_t value;
-    rt_device_t touch_device = rt_device_find("ads7843");
-    if(touch_device != RT_NULL)
-    {
-        touch_device->read(touch_device, 1, buf, 2);
-        value = ((buf[0]<<8) + buf[1])>>4; //12bit mode
-    }
-    return value;
+    return buf[1];
 }
+
+void GUI_X_ErrorOut(const char * s)
+{
+    rt_kprintf("%s\r\n", s);
+}
+void GUI_X_Warn(const char * s)
+{
+    rt_kprintf("%s\r\n", s);
+}
+void GUI_X_Log(const char * s)
+{
+    rt_kprintf("%s\r\n", s);
+}
+
 /*
 *********************************************************************************************************
 *                                        GUI_X_WaitEvent()
@@ -179,5 +200,6 @@ static  void  CheckInit (void)
 
 void GUI_X_Init (void) 
 {
+    touch_device = rt_device_find("ads7843");
   //  KeySem = OSSemCreate(0);
 }

@@ -4,20 +4,24 @@
 #include "DIALOG.h"
 
 static rt_thread_t tid1 = RT_NULL;
+const char *MYGUI_ExecDialog_ChFile(WM_HWIN hParent, const char *pMask);
 
 static void thread_entry(void* parameter)
 {
-    WM_HWIN  hWin;
+    
+    THREAD_Notepad(WM_HBKWIN, "/MAIN.C");
+    #if 0
     int r;
-  //  hWin = GUI_Desktop();
-    hWin = MYGUI_DLG_ChooseFile(WM_HBKWIN);
-    while (1)
+    WM_HWIN  hWin;
+    const char *p;
+    p = MYGUI_ExecDialog_ChFile(WM_HBKWIN, "*.*");
+    if(p != NULL)
     {
-        
-       // rt_kprintf("!!!!!\r\n");
-        //GUI_DispString("Hello");
-        rt_thread_delay(10);
+        rt_kprintf("FileName:%s\r\n", p);
+        return;
     }
+    rt_kprintf("NoFile\r\n");
+    #endif
 }
 
 static int _tc_thread_choose_file()

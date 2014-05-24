@@ -23,9 +23,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   int     NCode;
   int     Id;
   time_t now;
+ // rt_kprintf("ID%d\r\n", pMsg->MsgId);
     switch (pMsg->MsgId)
     {
         case WM_TIMER:
+            //rt_kprintf("WM_TIMER\r\n");
             WM_RestartTimer(pMsg->Data.v, 1000);
             now = time(0);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
@@ -44,16 +46,18 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             TEXT_SetFont(hItem, GUI_FONT_16B_1);
             TEXT_SetTextColor(hItem, 0x000000FF);
             TEXT_SetText(hItem, ctime(&now));
-            
             break;
         case WM_NOTIFY_PARENT:
             Id    = WM_GetId(pMsg->hWinSrc);
             NCode = pMsg->Data.v;
+            //rt_kprintf("Id:%d NCode:%d\r\n", Id, NCode);
             switch(Id)
             {
                 case ID_BUTTON_0: // Notifications sent by 'OK'
+                //rt_kprintf("NCode:%d\r\n", NCode);
                 switch(NCode)
                 {
+                    case WM_NOTIFICATION_LOST_FOCUS:
                     case WM_NOTIFICATION_CLICKED:
                         GUI_EndDialog(pMsg->hWin, 0);
                         break;

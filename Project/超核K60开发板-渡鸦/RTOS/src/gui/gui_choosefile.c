@@ -9,7 +9,6 @@
 #define _MAX_PATH 256
 static char fullpath[_MAX_PATH];
 
-
 static int _GetData(CHOOSEFILE_INFO * pInfo)
 {
     int         r;
@@ -109,7 +108,7 @@ const char *MYGUI_ExecDialog_ChFile(WM_HWIN hParent, const char *pMask)
     CHOOSEFILE_SetDelim('/');
     hWin = CHOOSEFILE_Create(hParent, 10,10,LCD_GetXSize()*3/4,LCD_GetYSize()*2/3, apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
     WM_ShowWindow(hWin);
-   // rt_kprintf("exit MYGUI_ExecDialog_ChFile\r\n");
+    //rt_kprintf("exit MYGUI_ExecDialog_ChFile\r\n");
     r = GUI_ExecCreatedDialog(hWin);
     //rt_kprintf("ChFile Diolag end\r\n");
     if(r == 1)

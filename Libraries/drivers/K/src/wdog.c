@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬¿´ÃÅ¹·Ä£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡çœ‹é—¨ç‹—æ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #include "wdog.h"
@@ -13,7 +13,7 @@
 
 static WDOG_CallBackType WDOG_CallBackTable[1] = {NULL};
 /**
- * @brief  ¿´ÃÅ¹·½âËø ÄÚ²¿º¯Êı
+ * @brief  çœ‹é—¨ç‹—è§£é” å†…éƒ¨å‡½æ•°
  * @param  None
  * @retval None
  */
@@ -23,12 +23,12 @@ static void WDOG_Unlock(void)
     WDOG->UNLOCK = 0xD928u;
 }
 /**
- * @brief  ¿´ÃÅ¹·¿ìËÙ³õÊ¼»¯ÅäÖÃ
+ * @brief  çœ‹é—¨ç‹—å¿«é€Ÿåˆå§‹åŒ–é…ç½®
  * @code
- *      //ÅäÖÃ¿´ÃÅ¹·µÄÊ±¼äÎª100ms
+ *      //é…ç½®çœ‹é—¨ç‹—çš„æ—¶é—´ä¸º100ms
  *      WDOG_QuickInit(100); 
  * @endcode
- * @param  timeInMs: ¿´ÃÅ¹·´¥·¢Ê±¼ä µ¥Î»ms
+ * @param  timeInMs: çœ‹é—¨ç‹—è§¦å‘æ—¶é—´ å•ä½ms
  * @retval None
  */
 void WDOG_QuickInit(uint32_t timeInMs)
@@ -40,16 +40,16 @@ void WDOG_QuickInit(uint32_t timeInMs)
     WDOG_Init(&WDOG_InitStruct1);
 }
 /**
- * @brief  ¿´ÃÅ¹·ÏêÏ¸³õÊ¼»¯ÅäÖÃ
+ * @brief  çœ‹é—¨ç‹—è¯¦ç»†åˆå§‹åŒ–é…ç½®
  * @code
- *      //ÅäÖÃ¿´ÃÅ¹·ÔÚÕı³£Ä£Ê½ÏÂ£¬Ê±¼äÎª100ms
- *    WDOG_InitTypeDef WDOG_InitStruct1;        //ÉêÇëÒ»¸ö½á¹¹±äÁ¿
- *    WDOG_InitStruct1.mode = kWDOG_Mode_Normal;//Ñ¡Ôñ¿´ÃÅ¹·´¦ÓÚÕı³£Ä£Ê½
- *    WDOG_InitStruct1.timeOutInMs = 100;       //ÉèÖÃ¼ä¸ôÊ±¼äÎª100ms
- *    WDOG_InitStruct1.windowInMs  = 20;        //ÔÚÕı³£Ä£Ê½ÏÂÎŞÒâÒå
+ *      //é…ç½®çœ‹é—¨ç‹—åœ¨æ­£å¸¸æ¨¡å¼ä¸‹ï¼Œæ—¶é—´ä¸º100ms
+ *    WDOG_InitTypeDef WDOG_InitStruct1;        //ç”³è¯·ä¸€ä¸ªç»“æ„å˜é‡
+ *    WDOG_InitStruct1.mode = kWDOG_Mode_Normal;//é€‰æ‹©çœ‹é—¨ç‹—å¤„äºæ­£å¸¸æ¨¡å¼
+ *    WDOG_InitStruct1.timeOutInMs = 100;       //è®¾ç½®é—´éš”æ—¶é—´ä¸º100ms
+ *    WDOG_InitStruct1.windowInMs  = 20;        //åœ¨æ­£å¸¸æ¨¡å¼ä¸‹æ— æ„ä¹‰
  *    WDOG_Init(&WDOG_InitStruct1); 
  * @endcode
- * @param  WDOG_InitStruct: ¿´ÃÅ¹·¹¤×÷Ä£Ê½ÅäÖÃ½á¹¹Ìå   
+ * @param  WDOG_InitStruct: çœ‹é—¨ç‹—å·¥ä½œæ¨¡å¼é…ç½®ç»“æ„ä½“   
  * @retval None
  */
 void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
@@ -85,12 +85,12 @@ void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
 }
 
 /**
- * @brief  ¿´ÃÅ¹·ÖĞ¶ÏÅäÖÃ
+ * @brief  çœ‹é—¨ç‹—ä¸­æ–­é…ç½®
  * @code
- *      //¿ªÆô¿´ÃÅ¹·ÖĞ¶Ï¹¦ÄÜ    
- *      WDOG_ITDMAConfig(ENABLE);  //ÖĞ¶Ï²»³£ÓÃ
+ *      //å¼€å¯çœ‹é—¨ç‹—ä¸­æ–­åŠŸèƒ½    
+ *      WDOG_ITDMAConfig(ENABLE);  //ä¸­æ–­ä¸å¸¸ç”¨
  * @endcode
- * @param  NewState: ENABLE ¿ªÆôÖĞ¶Ï  DISABLE ¹Ø±ÕÖĞ¶Ï
+ * @param  NewState: ENABLE å¼€å¯ä¸­æ–­  DISABLE å…³é—­ä¸­æ–­
  * @retval None
  */
 void WDOG_ITDMAConfig(FunctionalState NewState)
@@ -101,10 +101,10 @@ void WDOG_ITDMAConfig(FunctionalState NewState)
 }
 
 /**
- * @brief  ×¢²áÖĞ¶Ï»Øµ÷º¯Êı
- * @param AppCBFun: »Øµ÷º¯ÊıÖ¸ÕëÈë¿Ú
+ * @brief  æ³¨å†Œä¸­æ–­å›è°ƒå‡½æ•°
+ * @param AppCBFun: å›è°ƒå‡½æ•°æŒ‡é’ˆå…¥å£
  * @retval None
- * @note ¶ÔÓÚ´Ëº¯ÊıµÄ¾ßÌåÓ¦¸ÃÇë²éÔÄÓ¦ÓÃÊµÀı
+ * @note å¯¹äºæ­¤å‡½æ•°çš„å…·ä½“åº”è¯¥è¯·æŸ¥é˜…åº”ç”¨å®ä¾‹
  */
 void WDOG_CallbackInstall(WDOG_CallBackType AppCBFun)
 {
@@ -115,13 +115,13 @@ void WDOG_CallbackInstall(WDOG_CallBackType AppCBFun)
 }
 
 /**
- * @brief  ¶ÁÈ¡¿´ÃÅ¹·¼ÆÊıÆ÷µÄÊıÖµ
+ * @brief  è¯»å–çœ‹é—¨ç‹—è®¡æ•°å™¨çš„æ•°å€¼
  * @code
- *      //»ñÈ¡µ±Ç°¿´ÃÅ¹·ÖĞ¼ÆÊ±Æ÷µÄÊıÖµ 
- *      uint32_t counter;    //ÉêÇëÒ»¸ö±äÁ¿
- *      counter = WDOG_GetResetCounter();  //»ñÈ¡¼ÆÊ±Æ÷µÄÊıÖµ£¬´æ´¢ÔÚcounterÖĞ
+ *      //è·å–å½“å‰çœ‹é—¨ç‹—ä¸­è®¡æ—¶å™¨çš„æ•°å€¼ 
+ *      uint32_t counter;    //ç”³è¯·ä¸€ä¸ªå˜é‡
+ *      counter = WDOG_GetResetCounter();  //è·å–è®¡æ—¶å™¨çš„æ•°å€¼ï¼Œå­˜å‚¨åœ¨counterä¸­
  * @endcode
- * @retval µ±Ç°¼ÆÊıÆ÷µÄÊıÖµ
+ * @retval å½“å‰è®¡æ•°å™¨çš„æ•°å€¼
  */
 uint32_t WDOG_GetResetCounter(void)
 {
@@ -129,9 +129,9 @@ uint32_t WDOG_GetResetCounter(void)
 }
 
 /**
- * @brief  Çå³ı¿´ÃÅ¹·¼ÆÊıÆ÷µÄÊıÖµ
+ * @brief  æ¸…é™¤çœ‹é—¨ç‹—è®¡æ•°å™¨çš„æ•°å€¼
  * @code
- *      //Çå³ıµ±Ç°¿´ÃÅ¹·ÖĞ¼ÆÊ±Æ÷µÄÊıÖµ 
+ *      //æ¸…é™¤å½“å‰çœ‹é—¨ç‹—ä¸­è®¡æ—¶å™¨çš„æ•°å€¼ 
  *      WDOG_ClearResetCounter(); 
  * @endcode
  * @retval None
@@ -150,11 +150,11 @@ uint32_t WDOG_GetCurrentCounter(void)
 }
 
 /**
- * @brief  Î¹¹·
+ * @brief  å–‚ç‹—
  * @code
- *     WDOG_Refresh();  //Î¹¹·
+ *     WDOG_Refresh();  //å–‚ç‹—
  * @endcode
- * @retval µ±Ç°¼ÆÊıÆ÷µÄÊıÖµ
+ * @retval å½“å‰è®¡æ•°å™¨çš„æ•°å€¼
  */
 void WDOG_Refresh(void)
 {
@@ -170,7 +170,8 @@ void WDOG_Refresh(void)
     }
 }
 
-//Ã²ËÆ½ø²»È¥ÖĞ¶Ï
+//!< Wdog Interrupt
+#if 0
 void Watchdog_IRQHandler(void)
 {
     WDOG->STCTRLL |= WDOG_STCTRLL_INTFLG_MASK;    
@@ -179,4 +180,4 @@ void Watchdog_IRQHandler(void)
         WDOG_CallBackTable[0]();
     }
 }
-
+#endif

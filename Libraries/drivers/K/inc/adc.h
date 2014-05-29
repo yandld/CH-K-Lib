@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬ADCÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡ADCæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #ifndef __CH_LIB_ADC_H__
@@ -17,17 +17,17 @@
 
 #include <stdint.h>
 
-//!< ADCÄ£¿éºÅ
-#define HW_ADC0  (0) //ADC0Ä£¿é
-#define HW_ADC1  (1) //ADC1Ä£¿é
-#define HW_ADC2  (2) //ADC2Ä£¿é
+//!< ADCå¤–è®¾æ¨¡å—å·
+#define HW_ADC0  (0) //ADC0æ¨¡å—
+#define HW_ADC1  (1) //ADC1æ¨¡å—
+#define HW_ADC2  (2) //ADC2æ¨¡å—
 
 
-//!< ADC ¿ìËÙ³õÊ¼»¯ºê
-#define ADC0_SE0_DP0        (0x0U)      /* ADC0Ä£¿éµÄ0Í¨µÀ£¬DP0Òı½Å */
+//!< ADC å¿«é€Ÿåˆå§‹åŒ–å®
+#define ADC0_SE0_DP0        (0x0U)      /* ADC0æ¨¡å—çš„0é€šé“ï¼ŒDP0å¼•è„š */
 #define ADC0_SE1_DP1        (0x80000U)  
 #define ADC0_SE3_DP3        (0x180000U) 
-#define ADC0_SE4B_PC2       (0x204410U) /* ADC0Ä£¿éµÄ4BÍ¨µÀ£¬PC2Òı½Å  Ê¹ÓÃBÍ¨µÀÊ±£¬ĞèÒªÉèÖÃ ADC_ChlMuxConfig */ 
+#define ADC0_SE4B_PC2       (0x204410U) /* ADC0æ¨¡å—çš„4Bé€šé“ï¼ŒPC2å¼•è„š  ä½¿ç”¨Bé€šé“æ—¶ï¼Œéœ€è¦è®¾ç½® ADC_ChlMuxConfig */ 
 #define ADC0_SE5B_PD1       (0x284218U) 
 #define ADC0_SE6B_PD5       (0x304a18U)
 #define ADC0_SE7B_PD6       (0x384c18U)
@@ -68,7 +68,7 @@
 #define ADC0_SE23           (0x00B80000)
 #define ADC1_SE23           (0x00B80001)
 
-//!< ADC ×ª»»Ê±ÖÓ·ÖÆµÒò×Ó,¿ØÖÆ×ª»»ËÙ¶È
+//!< ADC è½¬æ¢æ—¶é’Ÿåˆ†é¢‘å› å­,æ§åˆ¶è½¬æ¢é€Ÿåº¦
 typedef enum
 {
     kADC_ClockDiv1,  
@@ -77,83 +77,83 @@ typedef enum
     kADC_ClockDiv8,
 }ADC_ClockDiv_Type;
 
-//!< ADC×ª»»¾«¶È¶¨Òå
+//!< ADCè½¬æ¢ç²¾åº¦å®šä¹‰
 typedef enum
 {
-    kADC_SingleDiff8or9 = 0,    /* µ¥¶Ë8Î»»ò ²î·Ö9Î»¾«¶È */
-    kADC_SingleDiff12or13 = 1,  /* µ¥¶Ë12Î»»ò ²î·Ö13Î»¾«¶È */
+    kADC_SingleDiff8or9 = 0,    /* å•ç«¯8ä½æˆ– å·®åˆ†9ä½ç²¾åº¦ */
+    kADC_SingleDiff12or13 = 1,  /* å•ç«¯12ä½æˆ– å·®åˆ†13ä½ç²¾åº¦ */
     kADC_SingleDiff10or11 = 2,  
     kADC_SingleDIff16 = 3,
 }ADC_ResolutionMode_Type;
 
-//!< ADC ´¥·¢·½Ê½¶¨Òå
+//!< ADC è§¦å‘æ–¹å¼å®šä¹‰
 typedef enum
 {
-    kADC_TriggerSoftware,  //Èí¼ş´¥·¢
-    kADC_TriggerHardware,  //Ó²¼ş´¥·¢
+    kADC_TriggerSoftware,  //è½¯ä»¶è§¦å‘
+    kADC_TriggerHardware,  //ç¡¬ä»¶è§¦å‘
 }ADC_TriggerSelect_Type;
 
-//!< ÊÇ·ñÁ¬Ğø×ª»»
+//!< æ˜¯å¦è¿ç»­è½¬æ¢
 typedef enum
 {
-    kADC_ContinueConversionEnable,   //¿ªÆôÁ¬Ğø×ª»»
-    kADC_ContinueConversionDisable,  //¹Ø±ÕÁ¬Ğø×ª»»
+    kADC_ContinueConversionEnable,   //å¼€å¯è¿ç»­è½¬æ¢
+    kADC_ContinueConversionDisable,  //å…³é—­è¿ç»­è½¬æ¢
 }ADC_ContinueMode_Type;
 
-//!< µ¥¶ËADC»¹ÊÇ²é·ÖADC
+//!< å•ç«¯ADCè¿˜æ˜¯æŸ¥åˆ†ADC
 typedef enum
 {
-    kADC_Single,         //µ¥¶ËÄ£Ê½
-    kADC_Differential,   //²î·ÖÄ£Ê½
+    kADC_Single,         //å•ç«¯æ¨¡å¼
+    kADC_Differential,   //å·®åˆ†æ¨¡å¼
 }ADC_SingleOrDiffMode_Type;
 
-//!< ADC Í¨µÀ¸´ÓÃÑ¡Ôñ(Ã¿¸öADCÍ¨µÀÓĞ2¸öADC×ª»»´¥·¢Æ÷ ÎªMuxA ºÍ MuxB. MuxB Ö»ÄÜÓ²¼ş´¥·¢)
+//!< ADC é€šé“è§¦å‘å™¨å¤ç”¨é€‰æ‹©(æ¯ä¸ªADCé€šé“æœ‰2ä¸ªADCè½¬æ¢è§¦å‘å™¨ ä¸ºMuxA å’Œ MuxB. MuxB åªèƒ½ç¡¬ä»¶è§¦å‘)
 #define kADC_MuxA                (0x00)
 #define kADC_MuxB                (0x01)
-//!< ADC Í¨µÀ¸´ÓÃÑ¡Ôñ(SEA »¹ÊÇSEB)
+//!< ADC é€šé“å¤ç”¨é€‰æ‹©(SEA è¿˜æ˜¯SEB) ç¡¬ä»¶é€šé“é€‰æ‹©
 #define kADC_ChlMuxA             (0x00)
 #define kADC_ChlMuxB             (0x01)
 
-//!< Ä£ÄâµçÑ¹²Î¿¼Ô´
+//!< æ¨¡æ‹Ÿç”µå‹å‚è€ƒæº
 typedef enum
 {
-    kADC_VoltageVREF,  /* Ê¹ÓÃÍâ²¿Òı½ÅVREFH VREFL ×÷Îª²Î¿¼µçÔ´ */
-    kADC_VoltageVALT,  /* ¿ÉÑ¡µÄµÚ¶şµçÑ¹²Î¿¼Ô´ ²»Í¬µÄĞÍºÅ¿ÉÄÜÁ¬½Óµ½²»Í¬µÄÄ£¿éÉÏ K60DN512Vxxx Á¬½Óµ½ VREFÄ£¿é */
+    kADC_VoltageVREF,  /* ä½¿ç”¨å¤–éƒ¨å¼•è„šVREFH VREFL ä½œä¸ºå‚è€ƒç”µæº */
+    kADC_VoltageVALT,  /* å¯é€‰çš„ç¬¬äºŒç”µå‹å‚è€ƒæº ä¸åŒçš„å‹å·å¯èƒ½è¿æ¥åˆ°ä¸åŒçš„æ¨¡å—ä¸Š K60DN512Vxxx è¿æ¥åˆ° VREFæ¨¡å— */
 }ADC_VoltageRef_Type;
 
-//!< Ó²¼şÆ½¾ù
+//!< ç¡¬ä»¶å¹³å‡
 typedef enum
 {
-    kADC_HardwareAverageDisable,  //¹Ø±ÕÓ²¼şÆ½¾ù
-    kADC_HardwareAverage_4,       //4¾ùÖµ
-    kADC_HardwareAverage_8,       //8¾ùÖµ
+    kADC_HardwareAverageDisable,  //å…³é—­ç¡¬ä»¶å¹³å‡
+    kADC_HardwareAverage_4,       //4å‡å€¼
+    kADC_HardwareAverage_8,       //8å‡å€¼
     kADC_HardwareAverage_16,
-    kADC_HardwareAverage_32,      //32¾ùÖµ
+    kADC_HardwareAverage_32,      //32å‡å€¼
 }ADC_HardwareAveMode_Type;
 
-//!< ADCÖĞ¶Ï¼°DMAÅäÖÃÑ¡Ôñ
+//!< ADCä¸­æ–­åŠDMAé…ç½®é€‰æ‹©
 typedef enum
 {
-    kADC_IT_Disable,        //ADÖĞ¶Ï¹¦ÄÜ½ûÖ¹
-    kADC_DMA_Disable,       //ADC DMA¹¦ÄÜ½ûÖ¹
-    kADC_IT_EOF,            //´ò¿ªADC ×ª»»Íê³ÉÖĞ¶Ï
-    kADC_DMA_EOF,           //´ò¿ªADC DMA Íê³ÉÖĞ¶Ï
+    kADC_IT_Disable,        //ADä¸­æ–­åŠŸèƒ½ç¦æ­¢
+    kADC_DMA_Disable,       //ADC DMAåŠŸèƒ½ç¦æ­¢
+    kADC_IT_EOF,            //æ‰“å¼€ADC è½¬æ¢å®Œæˆä¸­æ–­
+    kADC_DMA_EOF,           //æ‰“å¼€ADC DMA å®Œæˆä¸­æ–­
 }ADC_ITDMAConfig_Type;
 
-//!< ADC »Øµ÷º¯Êı¶¨Òå
+//!< ADC å›è°ƒå‡½æ•°å®šä¹‰
 typedef void (*ADC_CallBackType)(void);
 
-//!< ADC ³õÊ¼»¯½á¹¹
+//!< ADC åˆå§‹åŒ–ç»“æ„
 typedef struct
 {
-    uint32_t                    instance;                   //Ä£¿éºÅ
-    ADC_TriggerSelect_Type      triggerMode;                //´¥·¢Ä£Ê½ Èí¼ş´¥·¢ »ò Ó²¼ş´¥·¢
-    ADC_ClockDiv_Type           clockDiv;                   //ADCÊ±ÖÓ·ÖÆµ
-    ADC_ResolutionMode_Type     resolutionMode;             //·ÖÆµÂÊÑ¡Ôñ 8 10 12 16Î»¾«¶ÈµÈ
-    ADC_SingleOrDiffMode_Type   singleOrDiffMode;           //µ¥¶Ë »¹ÊÇ ²î·ÖÊäÈë
-    ADC_ContinueMode_Type       continueMode;               //ÊÇ·ñÆô¶¯Á¬Ğø×ª»»
-    ADC_HardwareAveMode_Type    hardwareAveMode;            //Ó²¼şÆ½¾ù¹¦ÄÜÑ¡Ôñ
-    ADC_VoltageRef_Type         vref;                       //Ä£ÄâµçÑ¹²Î¿¼Ô´
+    uint32_t                    instance;                   //æ¨¡å—å·
+    ADC_TriggerSelect_Type      triggerMode;                //è§¦å‘æ¨¡å¼ è½¯ä»¶è§¦å‘ æˆ– ç¡¬ä»¶è§¦å‘
+    ADC_ClockDiv_Type           clockDiv;                   //ADCæ—¶é’Ÿåˆ†é¢‘
+    ADC_ResolutionMode_Type     resolutionMode;             //åˆ†é¢‘ç‡é€‰æ‹© 8 10 12 16ä½ç²¾åº¦ç­‰
+    ADC_SingleOrDiffMode_Type   singleOrDiffMode;           //å•ç«¯ è¿˜æ˜¯ å·®åˆ†è¾“å…¥
+    ADC_ContinueMode_Type       continueMode;               //æ˜¯å¦å¯åŠ¨è¿ç»­è½¬æ¢
+    ADC_HardwareAveMode_Type    hardwareAveMode;            //ç¡¬ä»¶å¹³å‡åŠŸèƒ½é€‰æ‹©
+    ADC_VoltageRef_Type         vref;                       //æ¨¡æ‹Ÿç”µå‹å‚è€ƒæº
 }ADC_InitTypeDef;
 
 

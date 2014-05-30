@@ -171,7 +171,6 @@ void WDOG_Refresh(void)
 }
 
 //!< Wdog Interrupt
-#if 0
 void Watchdog_IRQHandler(void)
 {
     WDOG->STCTRLL |= WDOG_STCTRLL_INTFLG_MASK;    
@@ -180,4 +179,4 @@ void Watchdog_IRQHandler(void)
         WDOG_CallBackTable[0]();
     }
 }
-#endif
+

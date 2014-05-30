@@ -219,7 +219,7 @@ static uint32_t get_channel_pair_index(uint8_t channel)
 #define FTM_COMBINE_CHAN_CTRL_WIDTH  (8)
 static void FTM_DualChlConfig(uint32_t instance, uint8_t chl, FTM_DualChlConfig_Type mode, FunctionalState newState)
 {
-    uint32_t mask;
+    uint32_t mask = 0;
     switch(mode)
     {
         case kFTM_Combine:
@@ -379,7 +379,7 @@ uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req)
     uint32_t modulo;
     uint32_t clock;
     int32_t pres;
-    uint8_t ps;
+    uint8_t ps = 0;
     QuickInit_Type * pq = (QuickInit_Type*)&(MAP); 
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)

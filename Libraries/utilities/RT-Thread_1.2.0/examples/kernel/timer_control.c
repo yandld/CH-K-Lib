@@ -45,7 +45,7 @@ void timer_control_init()
 int _tc_timer_control()
 {
     /* 设置TestCase清理回调函数 */
-    tc_cleanup(_tc_cleanup);
+    //tc_cleanup(_tc_cleanup);
 
     /* 执行定时器例程 */
     count = 0;

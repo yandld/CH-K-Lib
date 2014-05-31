@@ -51,7 +51,7 @@ int thread_dynamic_simple_init()
 int _tc_thread_dynamic_simple()
 {
     /* 设置TestCase清理回调函数 */
-    tc_cleanup(_tc_cleanup);
+//    tc_cleanup(_tc_cleanup);
     thread_dynamic_simple_init();
 
     /* 返回TestCase运行的最长时间 */

@@ -103,7 +103,7 @@ int mbox_simple_init()
 int _tc_mbox_simple()
 {
     /* 设置TestCase清理回调函数 */
-    tc_cleanup(_tc_cleanup);
+//    tc_cleanup(_tc_cleanup);
     mbox_simple_init();
 
     /* 返回TestCase运行的最长时间 */

@@ -118,7 +118,7 @@ int semaphore_producer_consumer_init()
 int _tc_semaphore_producer_consumer()
 {
     /* 设置TestCase清理回调函数 */
-    tc_cleanup(_tc_cleanup);
+//    tc_cleanup(_tc_cleanup);
     semaphore_producer_consumer_init();
 
     /* 返回TestCase运行的最长时间 */

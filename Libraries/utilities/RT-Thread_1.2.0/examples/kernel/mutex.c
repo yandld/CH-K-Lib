@@ -52,7 +52,7 @@ static void thread2_entry(void* parameter)
 }
 
 
-int mutex_simple_init()
+static int mutex_simple_init()
 {
     /* 创建互斥锁 */
     mutex = rt_mutex_create("mutex", RT_IPC_FLAG_FIFO);
@@ -81,7 +81,7 @@ int mutex_simple_init()
     return 0;
 }
 
-int _tc_mutex_simple()
+static int _tc_mutex_simple()
 {
     /* 设置TestCase清理回调函数 */
     mutex_simple_init();

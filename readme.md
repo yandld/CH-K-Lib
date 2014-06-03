@@ -6,9 +6,7 @@
 
 ## 如何开始
 1. 请参见[免费入门视频](http://www.moore8.com/courses/87) 按照视频下载工具软件
-2. 安装MDK(Keil)5.00以上版本
-3. 打开\Project\超核K60开发板-渡鸦\0-工程模板\MDK 工程文件即可
-4. 工程下不同版本支持的芯片
+2. API 参考文档:  http://git.oschina.net/yandld/CH-K-Lib/wikis/home
 
 ## 文件说明
 **Libraries:**

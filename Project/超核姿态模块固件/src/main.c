@@ -99,8 +99,8 @@ int init_sensor(void)
     /* enable pinmux */
     PORT_PinMuxConfig(HW_GPIOE, 18, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOE, 19, kPinAlt4);
-    //PORT_PinOpenDrainConfig(HW_GPIOE, 18, ENABLE);
-    //PORT_PinOpenDrainConfig(HW_GPIOE, 19, ENABLE);
+    PORT_PinOpenDrainConfig(HW_GPIOE, 18, ENABLE);
+    PORT_PinOpenDrainConfig(HW_GPIOE, 19, ENABLE);
     PORT_PinPullConfig(HW_GPIOE, 18, kPullUp);
     PORT_PinPullConfig(HW_GPIOE, 19, kPullUp);
     
@@ -143,9 +143,11 @@ void MagnetometerCalibration(struct calibration_data * cal)
     if(cal->flag == 0x5A)
     {
         printf("flash data read succ\r\n");
+        printf("Gain X:%f Y:%f Z:%f\r\n", cal->meg_x_gain, cal->meg_y_gain, cal->meg_z_gain);
+        printf("Off X:%d Y:%d Z:%d\r\n", cal->meg_x_off, cal->meg_y_off, cal->meg_z_off);
         return;
     }
-    for(i=0;i<1100;i++)
+    for(i=0;i<1000;i++)
     {
         r = hmc5883_read_data(&x, &y, &z);
         if(!r)
@@ -157,7 +159,6 @@ void MagnetometerCalibration(struct calibration_data * cal)
             if(zmax < z) zmax = z;
             if(zmin > z) zmin = z; 
         }
-
         DelayMs(10);
         printf("time:%04d xmax:%04d xmin:%04d ymax:%04d ymin%04d zmax:%04d zmin:%04d\r", i,xmax,xmin,ymax,ymin,zmax,zmin);
     }
@@ -167,6 +168,18 @@ void MagnetometerCalibration(struct calibration_data * cal)
     cal->meg_y_gain= (float)(xmax - xmin) / (float)(ymax -ymin);
     cal->meg_z_off = (zmax + zmin) / 2;
     cal->meg_z_gain= (float)(xmax - xmin) / (float)(zmax -zmin);
+    /* see if we get data correct */
+    if((xmax < 300) || (ymax < 300) || (zmax < 300) || (cal->meg_y_gain < 0.8) || (cal->meg_z_gain < 0.8))
+    {
+        printf("cal failed, setting to default param\r\n");
+        /* injecc with default data */
+        cal->meg_x_off = 0;
+        cal->meg_y_off = 0;
+        cal->meg_z_off = 0;
+        cal->meg_x_gain = 1;
+        cal->meg_y_gain = 1;
+        cal->meg_z_gain = 1;
+    }
     printf("Gain X:%f Y:%f Z:%f\r\n", cal->meg_x_gain, cal->meg_y_gain, cal->meg_z_gain);
     printf("Off X:%d Y:%d Z:%d\r\n", cal->meg_x_off, cal->meg_y_off, cal->meg_z_off);
     cal->flag = 0x5A;
@@ -187,11 +200,18 @@ int main(void)
     /* force I2C bus */
     GPIO_QuickInit(HW_GPIOE, 18, kGPIO_Mode_OPP);
     GPIO_QuickInit(HW_GPIOE, 19, kGPIO_Mode_OPP);
-    for(i=0;i<10;i++)
+    /* release I2C bus incase I2C lock */
+    for(i=0;i<18;i++)
     {
-        PEout(18) = !PEout(18);
-        PEout(19) = !PEout(19);
-        DelayMs(10);
+        PEout(19) = !PEout(19); //SCL:E19
+        DelayMs(1);
+    }
+    
+    /* show power on */
+    for(i=0;i<20;i++)
+    {
+        PAout(1) = !PAout(1);
+        DelayMs(30);
     }
     
     /* flash operation */

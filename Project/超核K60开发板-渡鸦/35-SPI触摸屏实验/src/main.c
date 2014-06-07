@@ -23,7 +23,7 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
-    printf("w25qxx test\r\n");
+    printf("spi touch screen test\r\n");
     /* 初始化SPI2 接口连接触控屏的触控芯片*/
     kinetis_spi_bus_init(&bus, HW_SPI2);
     PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); /* SPI2_SCK */

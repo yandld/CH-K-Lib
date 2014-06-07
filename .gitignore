@@ -42,7 +42,6 @@ FAT
 FAT1
 
 # Libraries
-*.lib
 *.a
 
 # Shared objects (inc. Windows DLLs)

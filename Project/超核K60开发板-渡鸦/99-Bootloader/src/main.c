@@ -5,12 +5,13 @@
 #include "FlashOS.H"
 
 
-/* 
-bootloader程序 配合 dnw 上位机下载 
-1. 将 Bootlaoder固件(本工程)下载到开发板 
-2. 打开dnw 设置COM口打开串口 baud 设置为115200 并连接串口
-3. 打开0-工程模板 切换到 Bootloader工程配置 编译 生成的bin 在OBJ/booloader/下
-4. 复位开发板 使用dnw 加载 bin文件按程序提示下载到目标板即可 
+/*  
+bootloader demo:
+1. Download firmware(this project) to board via Debugger(Jlink)
+2. Open DNW, set COM setting(baud:115200) and get connectted
+3. Reset board, press 'D' to tell program a download is needed.
+   use DNW to open bin file(we offer an test.bin in this folder) and download
+4. after above, open 0-工程模板 and switch to bootloader setting, complile and generate your boolader bin file in ./OBJ/bootloader
 */
 
 #define SECTER_SIZE             0x000800
@@ -126,7 +127,7 @@ int main(void)
         uint16_t ch;
         if((UART_ReadByte(HW_UART0, &ch) == 0) && (ch == 'D' || ch == 'd'))
         {
-            BOOTLAODER_LOG("waitting for file...(do NOT press any key now)\r");  
+            BOOTLAODER_LOG("waitting for file...(do NOT press any key form NOW)\r");  
             break;
         }
         if(i > 2000)

@@ -95,7 +95,7 @@ void OV_ISR(uint32_t index)
     {
         DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[href_counter++]);
         i = DMA_GetMajorLoopCount(HW_DMA_CH2);
-        DMA_SetMajorLoopCount(HW_DMA_CH2, 40);
+        DMA_SetMajorLoopCounter(HW_DMA_CH2, 40);
         DMA_EnableRequest(HW_DMA_CH2); 
         return;
     }

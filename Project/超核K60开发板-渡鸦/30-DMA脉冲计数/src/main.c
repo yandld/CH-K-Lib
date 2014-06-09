@@ -77,8 +77,8 @@ static void PIT_ISR(void)
     ChlValue[1] = DMA_CITER_ELINKNO_CITER_MASK - DMA_GetMajorLoopCount(HW_DMA_CH1);
     /* 清零计数 */
     DMA_CancelTransfer();
-    DMA_SetMajorLoopCount(HW_DMA_CH0, DMA_CITER_ELINKNO_CITER_MASK);
-    DMA_SetMajorLoopCount(HW_DMA_CH1, DMA_CITER_ELINKNO_CITER_MASK);
+    DMA_SetMajorLoopCounter(HW_DMA_CH0, DMA_CITER_ELINKNO_CITER_MASK);
+    DMA_SetMajorLoopCounter(HW_DMA_CH1, DMA_CITER_ELINKNO_CITER_MASK);
     /* 开始下一次传输 */
     DMA_EnableRequest(HW_DMA_CH0);
     DMA_EnableRequest(HW_DMA_CH1);

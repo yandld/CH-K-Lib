@@ -37,7 +37,7 @@ static const uint32_t UART_SendDMATriggerSourceTable[] =
 static uint32_t UART_SendWithDMA(uint32_t dmaChl, const uint8_t *buf, uint32_t size)
 {
     DMA_SetSourceAddress(dmaChl, (uint32_t)buf);
-    DMA_SetMajorLoopCount(dmaChl, size);
+    DMA_SetMajorLoopCounter(dmaChl, size);
     /* Æô¶¯´«Êä */
     DMA_EnableRequest(dmaChl);
     return 0;

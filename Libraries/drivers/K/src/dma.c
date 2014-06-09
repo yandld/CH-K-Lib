@@ -120,11 +120,12 @@ uint32_t DMA_GetMajorLoopCount(uint8_t chl)
  * @retval None
  * @note   数值不能超过 DMA_CITER_ELINKNO_CITER_MASK
  */
-void DMA_SetMajorLoopCount(uint8_t chl, uint32_t val)
+void DMA_SetMajorLoopCounter(uint8_t chl, uint32_t val)
 {
     DMA0->TCD[chl].CITER_ELINKNO &= ~DMA_CITER_ELINKNO_CITER_MASK;
     DMA0->TCD[chl].CITER_ELINKNO |= DMA_CITER_ELINKNO_CITER(val);
 }
+
 
 /**
  * @brief  使能通道响应传输

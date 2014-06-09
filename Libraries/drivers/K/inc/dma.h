@@ -176,7 +176,7 @@ uint32_t DMA_GetSourceAddress(uint8_t ch);
 uint8_t DMA_IsMajorLoopComplete(uint8_t chl);
 uint32_t DMA_GetMajorLoopCount(uint8_t chl);
 /* control */
-void DMA_SetMajorLoopCount(uint8_t chl, uint32_t val);
+void DMA_SetMajorLoopCounter(uint8_t chl, uint32_t val);
 void DMA_CancelTransfer(void);
 void DMA_SetDestAddress(uint8_t chl, uint32_t address);
 void DMA_SetSourceAddress(uint8_t chl, uint32_t address);

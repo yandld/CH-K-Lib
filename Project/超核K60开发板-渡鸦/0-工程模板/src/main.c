@@ -27,6 +27,7 @@
  UART5_RX_PD08_TX_PD09   
 */
  
+ 
 int main(void)
 {
     DelayInit();
@@ -36,7 +37,6 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("HelloWorld!\r\n");
-    
     while(1)
     {
         /* …¡À∏–°µ∆ */

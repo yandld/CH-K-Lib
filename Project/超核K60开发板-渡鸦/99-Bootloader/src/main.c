@@ -6,12 +6,19 @@
 
 
 /*  
+
 bootloader demo:
+
+bootlaoder demo use UART to download bin image file(addr must be at 0x5000) via DNW(a file download software running on PC)
+
+instructions:
+
 1. Download firmware(this project) to board via Debugger(Jlink)
-2. Open DNW, set COM setting(baud:115200) and get connectted
-3. Reset board, press 'D' to tell program a download is needed.
-   use DNW to open bin file(we offer an test.bin in this folder) and download
-4. after above, open 0-工程模板 and switch to bootloader setting, complile and generate your boolader bin file in ./OBJ/bootloader
+2. Open DNW, set COM settings(baud:115200) and get connectted.(Serial Port->Connection)
+3. Reset board, infomation will be printed on DNW, then, press 'D' to indicate that a new download is needed(within 2S).
+4. Use DNW to open bin file(we offer a test.bin in this folder) and download will begin automically.
+5. Create your own bootloader bin file: open 0-工程模板 and switch to bootloader project setting, complile and generate your boolader bin file in ./OBJ/bootloader/xxx.bin
+
 */
 
 #define SECTER_SIZE             0x000800
@@ -118,10 +125,14 @@ int main(void)
     DelayInit();
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     BOOTLAODER_LOG("press [D] to download...\r\n");
+    
+    /* initilize ssd(stand flash driver) */
     MKP512FlashInit();
+    
+    /* initalize message queue */
     mq_init();
 
-    /* waitting for key */
+    /* waitting for download key */
     while(1)
     {
         uint16_t ch;
@@ -148,6 +159,7 @@ int main(void)
     transfer_size = 4;
     DMA_SetMajorLoopCounter(HW_DMA_CH0, transfer_size);
     
+    /* set DMA callback and initalize transfer */
     DMA_CallbackInstall(HW_DMA_CH0, DMA_ISR);
     DMA_ITConfig(HW_DMA_CH0, kDMA_IT_Major);
     DMA_EnableRequest(HW_DMA_CH0);
@@ -158,6 +170,7 @@ int main(void)
         if(mq_msg_exist())
         {
             pMsg = mq_pop();
+            /* first 4 byte indicate file size */
             if(transfer_size == 4)
             {
                 file_size = pMsg->p[0] + (pMsg->p[1]<<8) + (pMsg->p[2]<<16) - 6;
@@ -196,6 +209,8 @@ int main(void)
                 EnableInterrupts();
                 BOOTLAODER_LOG("ok\r\n");
                 program_addr += SECTER_SIZE;
+                
+                /* download complete, running */
                 if(file_counter == file_size)
                 {
                     RunningApplication(PROGRAM_ADDR_BASE);

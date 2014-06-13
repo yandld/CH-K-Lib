@@ -142,6 +142,7 @@ void DelayUs(uint32_t us)
 
 void assert_failed(char * file, uint32_t line)
 {
+    LIB_TRACE("assert failed @ %s in %d\r\n", file, line);
 	//∂œ—‘ ß∞‹ºÏ≤‚
 	while(1);
 }

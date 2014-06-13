@@ -170,19 +170,24 @@ int main(void)
         if(mq_msg_exist())
         {
             pMsg = mq_pop();
-            /* first 4 byte indicate file size */
+            /* first 4 byte indicate total transfer size(size(4) + data(n) + cs(2) ) */
             if(transfer_size == 4)
             {
-                file_size = pMsg->p[0] + (pMsg->p[1]<<8) + (pMsg->p[2]<<16) - 6;
-                /* calc transfer size */
+                
+                /* calc image file size */
+                file_size = pMsg->p[0] + (pMsg->p[1]<<8) + (pMsg->p[2]<<16) + (pMsg->p[2]<<24) - 6;
+                
+                /* calc transfer block size */
                 if(file_size < SECTER_SIZE)
                 {
-                    transfer_size = file_size;
+                    transfer_size = file_size; /* last transfer */
                 }
                 else
                 {
                     transfer_size = SECTER_SIZE;
                 }
+                
+                /* inject dma transfer counter and lunch dma */
                 DMA_SetMajorLoopCounter(HW_DMA_CH0, transfer_size);
                 DMA_EnableRequest(HW_DMA_CH0);
                 BOOTLAODER_LOG("file size:%d\r\n", file_size);

@@ -172,7 +172,7 @@ void MagnetometerCalibration(struct calibration_data * cal)
     if((xmax < 300) || (ymax < 300) || (zmax < 300) || (cal->meg_y_gain < 0.8) || (cal->meg_z_gain < 0.8))
     {
         printf("cal failed, setting to default param\r\n");
-        /* injecc with default data */
+        /* inject with default data */
         cal->meg_x_off = 0;
         cal->meg_y_off = 0;
         cal->meg_z_off = 0;
@@ -197,10 +197,9 @@ int main(void)
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
     
-    /* force I2C bus */
+    /* force I2C bus to unlock */
     GPIO_QuickInit(HW_GPIOE, 18, kGPIO_Mode_OPP);
     GPIO_QuickInit(HW_GPIOE, 19, kGPIO_Mode_OPP);
-    /* release I2C bus incase I2C lock */
     for(i=0;i<18;i++)
     {
         PEout(19) = !PEout(19); //SCL:E19

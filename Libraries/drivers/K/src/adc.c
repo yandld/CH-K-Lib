@@ -248,7 +248,8 @@ uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
     AD_InitStruct1.singleOrDiffMode = kADC_Single;
     AD_InitStruct1.continueMode = kADC_ContinueConversionDisable;
     AD_InitStruct1.hardwareAveMode = kADC_HardwareAverageDisable;
-    AD_InitStruct1.vref = kADC_VoltageVREF;    
+    AD_InitStruct1.vref = kADC_VoltageVREF;
+    
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
     {
@@ -257,6 +258,10 @@ uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
     }
     /* init moudle */
     ADC_Init(&AD_InitStruct1);
+    
+    /* init adc chlmux */
+    ADC_ChlMuxConfig(pq->ip_instance, pq->reserved);
+    
     return pq->ip_instance;
 }
   
@@ -424,3 +429,53 @@ void ADC1_IRQHandler(void)
         ADC_CallBackTable[HW_ADC1]();
     }
 }
+
+/*
+const QuickInit_Type FTM_QuickInitTable[] =
+{
+    { 0, 0, 0, 0, 0, 0, 0}, //ADC0_SE0_DP0
+    { 0, 0, 0, 0, 0, 1, 0}, //ADC0_SE1_DP1
+    { 0, 0, 0, 0, 0, 3, 0}, //ADC0_SE3_DP3
+    { 0, 2, 0, 2, 1, 4, 1}, //ADC0_SE4B_PC2
+    { 0, 3, 0, 1, 1, 5, 1}, //ADC0_SE5B_PD1
+    { 0, 3, 0, 5, 1, 6, 1}, //ADC0_SE6B_PD5
+    { 0, 3, 0, 6, 1, 7, 1}, //ADC0_SE7B_PD6
+    { 0, 1, 0, 0, 1, 8, 0}, //ADC0_SE8_PB0
+    { 0, 1, 0, 1, 1, 9, 0}, //ADC0_SE9_PB1
+    { 0, 1, 0, 2, 1,12, 0}, //ADC0_SE12_PB2
+    { 0, 1, 0, 3, 1,13, 0}, //ADC0_SE13_PB3
+    { 0, 2, 0, 0, 1,14, 0}, //ADC0_SE14_PC0
+    { 0, 2, 0, 1, 1,15, 0}, //ADC0_SE15_PC1
+    { 0, 4, 0,24, 1,17, 0}, //ADC0_SE17_E24
+    { 0, 4, 0,25, 1,18, 0}, //ADC0_SE18_E25
+    { 0, 0, 0, 0, 0,19, 0}, //ADC0_SE19_DM0
+    { 0, 0, 0, 0, 0,20, 0}, //ADC0_SE20_DM1
+    { 0, 0, 0, 0, 0,26, 0}, //ADC0_SE26_TEMP
+    { 1, 0, 0, 0, 0, 0, 0}, //ADC1_SE0_DP0
+    { 1, 0, 0, 0, 0, 1, 0}, //ADC1_SE1_DP1
+    { 1, 0, 0, 0, 0, 3, 0}, //ADC1_SE3_DP3
+    { 1, 4, 0, 0, 1, 4, 0}, //ADC1_SE4_PE0
+    { 1, 4, 0, 1, 1, 5, 0}, //ADC1_SE5_PE1
+    { 1, 4, 0, 2, 1, 6, 0}, //ADC1_SE6_PE2
+    { 1, 4, 0, 3, 1, 7, 0}, //ADC1_SE7_PE3
+    { 1, 2, 0, 8, 1, 4, 1}, //ADC1_SE4B_PC8
+    { 1, 2, 0, 9, 1, 5, 1}, //ADC1_SE5B_PC9
+    { 1, 2, 0,10, 1, 6, 1}, //ADC1_SE6B_PC10
+    { 1, 2, 0,11, 1, 7, 1}, //ADC1_SE7B_PC11
+    { 1, 1, 0, 0, 1, 8, 0}, //ADC1_SE8_PB0
+    { 1, 1, 0, 1, 1, 9, 0}, //ADC1_SE9_PB1
+    { 1, 1, 0,10, 1,14, 0}, //ADC1_SE14_PB10
+    { 1, 1, 0,11, 1,15, 0}, //ADC1_SE15_PB11
+    { 1, 0, 0,17, 1,17, 0}, //ADC1_SE17_PA17
+    { 1, 0, 0, 0, 0,19, 0}, //ADC1_SE19_DM0
+    { 1, 0, 0, 0, 0,20, 0}, //ADC1_SE20_DM1
+    { 1, 0, 0, 0, 0,26, 0}, //ADC1_SE26_TEMP
+    { 0, 0, 0, 0, 0,21, 0}, //ADC0_SE21
+    { 0, 0, 0, 0, 0,22, 0}, //ADC0_SE22
+    { 1, 0, 0, 0, 0,16, 0}, //ADC1_SE16
+    { 1, 0, 0, 0, 0,18, 0}, //ADC1_SE18
+    { 0, 0, 0, 0, 0,23, 0}, //ADC0_SE23
+    { 1, 0, 0, 0, 0,23, 0}, //ADC1_SE23
+};
+*/
+

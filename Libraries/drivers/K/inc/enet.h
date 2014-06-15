@@ -18,97 +18,8 @@
 #endif
 
 #include <stdint.h>
-     
-/* MII寄存器地址 */
-#define PHY_BMCR                    (0x00) /* Basic Control */
-#define PHY_BMSR                    (0x01) /* Basic Status */
-#define PHY_PHYIDR1                 (0x02) /* PHY Identifer 1 */
-#define PHY_PHYIDR2                 (0x03) /* PHY Identifer 2 */
-#define PHY_ANAR                    (0x04) /* Auto-Negotiation Advertisement */
-#define PHY_ANLPAR                  (0x05) /* Auto-Negotiation Link Partner Ability */
-#define PHY_ANER                    (0x06) /* Auto-Negotiation Expansion */
-#define PHY_LPNPA                   (0x07) /* Link Partner Next Page Ability */
-#define PHY_RXERC                   (0x15) /* RXER Counter */
-#define PHY_ICS                     (0x1B) /* Interrupt Control/Status */
-#define PHY_PHYC1                   (0x1E) /* PHY Control 1 */
-#define PHY_PHYC2                   (0x1F) /* PHY Control 2 */     
-     
-     
-    
-
-
-/* PHY_BMCR寄存器位定义 */
-#define PHY_BMCR_RESET              (0x8000)
-#define PHY_BMCR_LOOP               (0x4000)
-#define PHY_BMCR_SPEED              (0x2000)
-#define PHY_BMCR_AN_ENABLE          (0x1000)
-#define PHY_BMCR_POWERDOWN          (0x0800)
-#define PHY_BMCR_ISOLATE            (0x0400)
-#define PHY_BMCR_AN_RESTART         (0x0200)
-#define PHY_BMCR_FDX                (0x0100)
-#define PHY_BMCR_COL_TEST           (0x0080)
-
-/* PHY_BMSR寄存器位定义 */
-#define PHY_BMSR_100BT4             (0x8000)
-#define PHY_BMSR_100BTX_FDX         (0x4000)
-#define PHY_BMSR_100BTX             (0x2000)
-#define PHY_BMSR_10BT_FDX           (0x1000)
-#define PHY_BMSR_10BT               (0x0800)
-#define PHY_BMSR_NO_PREAMBLE        (0x0040)
-#define PHY_BMSR_AN_COMPLETE        (0x0020)
-#define PHY_BMSR_REMOTE_FAULT       (0x0010)
-#define PHY_BMSR_AN_ABILITY         (0x0008)
-#define PHY_BMSR_LINK               (0x0004)
-#define PHY_BMSR_JABBER             (0x0002)
-#define PHY_BMSR_EXTENDED           (0x0001)
-
-/* PHY_ANAR寄存器位定义 */
-#define PHY_ANAR_NEXT_PAGE          (0x8001)
-#define PHY_ANAR_REM_FAULT          (0x2001)
-#define PHY_ANAR_PAUSE              (0x0401)
-#define PHY_ANAR_100BT4             (0x0201)
-#define PHY_ANAR_100BTX_FDX         (0x0101)
-#define PHY_ANAR_100BTX             (0x0081)
-#define PHY_ANAR_10BT_FDX           (0x0041)
-#define PHY_ANAR_10BT               (0x0021)
-#define PHY_ANAR_802_3              (0x0001)
-
-/* PHY_ANLPAR寄存器位定义 */
-#define PHY_ANLPAR_NEXT_PAGE        (0x8000)
-#define PHY_ANLPAR_ACK              (0x4000)
-#define PHY_ANLPAR_REM_FAULT        (0x2000)
-#define PHY_ANLPAR_PAUSE            (0x0400)
-#define PHY_ANLPAR_100BT4           (0x0200)
-#define PHY_ANLPAR_100BTX_FDX       (0x0100)
-#define PHY_ANLPAR_100BTX           (0x0080)
-#define PHY_ANLPAR_10BTX_FDX        (0x0040)
-#define PHY_ANLPAR_10BT             (0x0020)
-
-
-/* PHY_PHYSTS寄存器位定义 */
-#define PHY_PHYSTS_MDIXMODE         (0x4000)
-#define PHY_PHYSTS_RX_ERR_LATCH     (0x2000)
-#define PHY_PHYSTS_POL_STATUS       (0x1000)
-#define PHY_PHYSTS_FALSECARRSENSLAT (0x0800)
-#define PHY_PHYSTS_SIGNALDETECT     (0x0400)
-#define PHY_PHYSTS_PAGERECEIVED     (0x0100)
-#define PHY_PHYSTS_MIIINTERRUPT     (0x0080)
-#define PHY_PHYSTS_REMOTEFAULT      (0x0040)
-#define PHY_PHYSTS_JABBERDETECT     (0x0020)
-#define PHY_PHYSTS_AUTONEGCOMPLETE  (0x0010)
-#define PHY_PHYSTS_LOOPBACKSTATUS   (0x0008)
-#define PHY_PHYSTS_DUPLEXSTATUS     (0x0004)
-#define PHY_PHYSTS_SPEEDSTATUS      (0x0002)
-#define PHY_PHYSTS_LINKSTATUS       (0x0001)
-
-/* PHY硬件特性 */
-#define PHY_STATUS                  ( 0x1F )
-#define PHY_DUPLEX_STATUS           ( 4<<2 )
-#define PHY_SPEED_STATUS            ( 1<<2 )
-/* PHY收发器硬件地址 */
-#define CFG_PHY_ADDRESS             (0x01)
-     
-//Freescale处理器相关定义
+#include <stdbool.h>
+   
 
 /* TX缓冲区描述符位定义 */
 #define TX_BD_R			0x0080
@@ -190,10 +101,19 @@ typedef struct
   	uint32_t reserverd_word2;
 } NBUF;
 
+typedef enum
+{
+    kENET_RMII_10M,
+    kENET_RMII_100M,
+}ENET_RMII_SpeedType;
+
+
 //!< 以太网初始化结构
 typedef struct
 {
     uint8_t* pMacAddress;
+    bool is10MSpped;
+    bool isHalfDuplex;
 }ENET_InitTypeDef;
      
 typedef enum
@@ -209,6 +129,13 @@ typedef void (*ENET_CallBackTxType)(void);
 typedef void (*ENET_CallBackRxType)(void);
 
 //!< API functions
+
+/* RMII API */
+void ENET_MII_Init(void);
+uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data);
+uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data);
+
+/* controller API */
 void ENET_Init(ENET_InitTypeDef* ENET_InitStrut);
 void ENET_MacSendData(uint8_t *data, uint16_t len);
 uint16_t ENET_MacReceiveData(uint8_t *data);

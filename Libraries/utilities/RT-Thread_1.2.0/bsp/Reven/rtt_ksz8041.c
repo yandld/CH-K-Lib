@@ -4,11 +4,14 @@
 #include <netif/ethernetif.h>
 #include "gpio.h"
 #include "enet.h"
+#include "ksz8041.h"
+
 static struct eth_device device;
 static uint8_t gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
 static uint8_t     gRxBuffer[1500];
 static uint8_t     gTxBuffer[1500];
 uint32_t    rx_len;
+
 void ENET_ISR(void)
 {
     uint32_t len;
@@ -28,7 +31,8 @@ void ENET_ISR(void)
 
 static rt_err_t rt_ksz8041_init(rt_device_t dev)
 {
-    rt_kprintf("rt_ksz8041_init\r\n");
+    int r;
+    rt_kprintf("rt_ksz8041_init is called\r\n");
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOB, 1, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 5, kPinAlt4);
@@ -39,8 +43,22 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
+    r = ksz8041_init(0x01);
+    if(r)
+    {
+        rt_kprintf("ksz8041 init failed! code:%d\r\n", r);
+        return RT_ERROR;
+    }
+    if(!ksz8041_is_linked())
+    {
+        rt_kprintf("no wire connected\r\n");
+    }
+    
     ENET_InitTypeDef ENET_InitStruct1;
     ENET_InitStruct1.pMacAddress = gCfgLoca_MAC;
+    ENET_InitStruct1.is10MSpped = ksz8041_is_phy_10m_speed();
+    ENET_InitStruct1.isHalfDuplex = !ksz8041_is_phy_full_dpx();
+
     ENET_Init(&ENET_InitStruct1);
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);
@@ -155,8 +173,6 @@ int rt_hw_ksz8041_init(void)
     device.eth_tx     = rt_ksz8041_tx;
 
     eth_device_init(&device, "e0");
-
-    rt_kprintf("KSZ8041 inited!\r\n");
 }
 
 

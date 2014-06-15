@@ -2,6 +2,7 @@
 #include "common.h"
 #include "uart.h"
 #include "enet.h"
+#include "ksz8041.h"
 
 #define     ENET_TYPE_ARP   {0x08, 0x06}
 #define     ENET_TYPE_IP    {0x08, 0x00}
@@ -25,17 +26,15 @@ void ENET_ISR(void)
 
 int main(void)
 {
+    int r;
     uint32_t clock;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("ENET test!\r\n");
-    CLOCK_GetClockFrequency(kBusClock, &clock);
-    if(clock != 50000000)
-    {
-        printf("clock setting not correct, enet may malfunction!\r\n");
-    }
+    printf("RMII clock is fiexd to OSCERCLK and must be 50Mhz\r\n");
+    
     /* enable PinMux */
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOB, 1, kPinAlt4);
@@ -47,8 +46,21 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
+    r = ksz8041_init(0x01);
+    if(r)
+    {
+        printf("ksz8041 init failed! code:%d\r\n", r);
+        while(1);
+    }
+    if(!ksz8041_is_linked())
+    {
+        printf("no wire connected\r\n");
+    }
+    
     ENET_InitTypeDef ENET_InitStruct1;
     ENET_InitStruct1.pMacAddress = gCfgLoca_MAC;
+    ENET_InitStruct1.is10MSpped = ksz8041_is_phy_10m_speed();
+    ENET_InitStruct1.isHalfDuplex = !ksz8041_is_phy_full_dpx();
     ENET_Init(&ENET_InitStruct1);
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);

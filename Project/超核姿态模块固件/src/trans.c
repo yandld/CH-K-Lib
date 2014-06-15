@@ -6,87 +6,75 @@
 #include "uart.h"
 #include "common.h"
 
-//数据头
-const char trans_header_table[3] = {0x88, 0xAF, 0x1C};
-//数据内容
-typedef __packed struct
-{
-    uint8_t trans_header[3];
-    trans_user_data_t user_data;
-    uint8_t trans_reserved[4];
-    uint8_t sum;
-}trans_packet_t;
 
-static trans_packet_t packet;
+struct 
+{
+    uint32_t dmaChl;
+    uint32_t uartInstance;
+}trans_hander;
+
+static uint32_t DMA_UART_TxRequestSourceTable[] = 
+{
+    UART0_TRAN_DMAREQ,
+    UART1_TRAN_DMAREQ,
+    UART2_TRAN_DMAREQ,
+};
+
+static uint32_t DMA_UART_DataRegisterAddrTable[] = 
+{
+    (uint32_t)&UART0->D,
+    (uint32_t)&UART1->D,
+    (uint32_t)&UART2->D,
+};
 
 //安装回调函数
-uint8_t trans_init(void)
+
+int trans_init(uint8_t dmaChl, uint32_t uartInstance)
 {
-    
     DMA_InitTypeDef DMA_InitStruct1= {0};
-    DMA_InitStruct1.chl = HW_DMA_CH1;
-    DMA_InitStruct1.chlTriggerSource = UART1_TRAN_DMAREQ;
+    DMA_InitStruct1.chl = dmaChl;
+    DMA_InitStruct1.chlTriggerSource = DMA_UART_TxRequestSourceTable[uartInstance];
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
-    DMA_InitStruct1.majorLoopCnt = sizeof(packet);
+    DMA_InitStruct1.majorLoopCnt = 0;
     DMA_InitStruct1.minorLoopByteCnt = 1;
-    
-    DMA_InitStruct1.sAddr = (uint32_t)&packet;
-    DMA_InitStruct1.sLastAddrAdj = -sizeof(packet);
+    DMA_InitStruct1.sAddr = NULL;
+    DMA_InitStruct1.sLastAddrAdj = 0;
     DMA_InitStruct1.sAddrOffset = 1;
     DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.sMod = kDMA_ModuloDisable;
         
-    DMA_InitStruct1.dAddr = (uint32_t)&UART1->D;
+    DMA_InitStruct1.dAddr = DMA_UART_DataRegisterAddrTable[uartInstance];
     DMA_InitStruct1.dLastAddrAdj = 0;
     DMA_InitStruct1.dAddrOffset = 0;
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.dMod = kDMA_ModuloDisable;
     DMA_Init(&DMA_InitStruct1);
+    UART_ITDMAConfig(uartInstance, kUART_DMA_Tx);
+    
+    trans_hander.dmaChl = dmaChl;
+    trans_hander.uartInstance = uartInstance;
     return 0;
 }
 
-
-//发送数据包
-uint32_t trans_send_pactket(trans_user_data_t data, uint8_t mode)
+int trans_start_send_data(uint8_t* buf, uint32_t size)
 {
-    uint8_t i;
-    uint8_t *p = (uint8_t*)&packet;
-  //  trans_packet_t packet_copy;
-    uint8_t sum = 0;
-    memcpy(packet.trans_header, trans_header_table, sizeof(trans_header_table));
-    for(i=0;i<3;i++)
+    if(DMA_IsMajorLoopComplete(trans_hander.dmaChl) == 0)
     {
-        data.trans_accel[i] = __REV16(data.trans_accel[i]);
-        data.trans_gyro[i] = __REV16(data.trans_gyro[i]);
-        data.trans_mag[i] = __REV16(data.trans_mag[i]);
+        DMA_SetSourceAddress(trans_hander.dmaChl, (uint32_t)buf);
+        DMA_SetMajorLoopCounter(trans_hander.dmaChl, size);
+        DMA_EnableRequest(trans_hander.dmaChl); 
+        return 0;
     }
-    data.trans_yaw = __REV16(data.trans_yaw);
-    data.trans_pitch = __REV16(data.trans_pitch);
-    data.trans_roll = __REV16(data.trans_roll);
-    memcpy(&packet.user_data, &data, sizeof(data));
-    memset(packet.trans_reserved,0,sizeof(packet.trans_reserved));
-    for(i = 0; i < sizeof(packet) - 1;i++)
-    {
-      sum += *p++;
-    }
-    packet.sum = sum;
-    //packet_copy = packet;
-    switch(mode)
-    {
-        case TRANS_UART_WITH_DMA:
-            UART_ITDMAConfig(BOARD_UART_INSTANCE, kUART_DMA_Tx);
-            DMA_EnableRequest(HW_DMA_CH1);
-            
-            break;
-        case TRANS_WITH_NRF2401:
-     //       nrf24l01_set_tx_mode();
-      //      nrf24l01_write_packet((uint8_t*)&packet_copy, sizeof(packet_copy));
-      //      nrf24l01_set_rx_mode();
-            break;
-        default:
-            break;
-        
-    }
-    return 0;
+    return 1;
 }
+
+int trans_is_transmission_complete(void)
+{
+    if(DMA_IsMajorLoopComplete(trans_hander.dmaChl) == 0)
+    {
+        return 0;
+    }        
+    return 1;
+}
+
 

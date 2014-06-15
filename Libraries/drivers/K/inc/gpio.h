@@ -134,7 +134,7 @@ uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex);
 void GPIO_ToggleBit(uint32_t instance, uint8_t pinIndex);
 void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config);
 void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun);
-//!< low level functions 一般不必调用
+//!< low level functions
 void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull);
 void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode);
 void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);

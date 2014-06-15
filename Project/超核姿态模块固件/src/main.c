@@ -9,6 +9,7 @@
 #include "nrf24l01.h"
 #include "wdog.h"
 #include "board.h"
+#include "protocol.h"
 
 //包含 姿态模块所需的头文件
 #include "mpu6050.h"
@@ -36,8 +37,6 @@ struct calibration_data
 
 static struct calibration_data cal_data;
 //static uint8_t NRF2401RXBuffer[32] = "HelloWorld~~";//无线接收数据
-
-static trans_user_data_t send_data;
 static imu_float_euler_angle_t angle;
 static imu_raw_data_t raw_data;
 
@@ -66,7 +65,9 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 
 static void PIT_CH1_ISR(void)
 {
-    
+    uint32_t len;
+    static transmit_user_data send_data;
+    static uint8_t buf[64];
     send_data.trans_accel[0] = raw_data.ax;
     send_data.trans_accel[1] = raw_data.ay;
     send_data.trans_accel[2] = raw_data.az;
@@ -79,10 +80,10 @@ static void PIT_CH1_ISR(void)
     send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
     send_data.trans_roll = (int16_t)angle.imu_roll*100;
     send_data.trans_yaw = 1800 + (int16_t)angle.imu_yaw*10;
-    if(DMA_IsMajorLoopComplete(HW_DMA_CH1) == 0)
-    {
-        trans_send_pactket(send_data, TRANS_UART_WITH_DMA);
-    }
+    
+    len = user_data2buffer(&send_data, buf);
+    trans_start_send_data(buf, len);
+    
     GPIO_ToggleBit(HW_GPIOA, 1);
     WDOG_Refresh();
    // trans_send_pactket(send_data, TRANS_WITH_NRF2401);
@@ -190,12 +191,13 @@ int main(void)
 {
     int i;
     uint32_t ret;
+    uint32_t uart_instance;
     //int32_t temperature;
     //int32_t pressure;
     /* basic hardware */
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
-    UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
+    uart_instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
     
     /* force I2C bus to unlock */
     GPIO_QuickInit(HW_GPIOE, 18, kGPIO_Mode_OPP);
@@ -207,7 +209,7 @@ int main(void)
     }
     
     /* show power on */
-    for(i=0;i<20;i++)
+    for(i=0;i<6;i++)
     {
         PAout(1) = !PAout(1);
         DelayMs(30);
@@ -219,14 +221,14 @@ int main(void)
     /* init sensor */
     init_sensor();
     
-    /* init transfer */
-    trans_init();
-    
     /* install imu raw date callback */
     imu_io_install(&IMU_IOInstallStruct1);
     
     /* read meg cal data */
     MagnetometerCalibration(&cal_data);
+    
+    /* init transfer */
+    trans_init(HW_DMA_CH2, uart_instance);
     
     WDOG_QuickInit(100);
     

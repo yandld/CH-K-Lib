@@ -6,14 +6,12 @@
  * Defination
  ******************************************************************************/
 #define PI             3.14159
-#define Kp             100.0f     // proportional gain governs rate of convergence to accelerometer/magnetometer
-#define Ki             0.008f     // integral gain governs rate of convergence of gyroscope biases
+#define Kp             100.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
+#define Ki             0.008f     /* integral gain governs rate of convergence of gyroscope biases */
 #define halfT          0.002f
 #define Gyro_G         0.0610351
 #define Gyro_Gr        0.0010653
-#define SLIDING_FILTER_DEEP  3
    
-
 
 typedef struct 
 {
@@ -28,13 +26,7 @@ typedef struct
     float mz;
 }imu_float_data_t;
 
-/*******************************************************************************
- * Prototypes
- ******************************************************************************/
 
-/********************************************************************************
- * Variables
- ******************************************************************************/
 static imu_io_install_t * gpIOInstallStruct;   /* install struct	*/
  /*******************************************************************************
  * Code
@@ -46,30 +38,25 @@ uint32_t imu_io_install(imu_io_install_t * IOInstallStruct)
     return 0;
 }
 
-
+/* sliding filter */
 static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * filter_data)
 {
-    int32_t sum_accel_x =  0;
-    int32_t sum_accel_y =  0;
-    int32_t sum_accel_z =  0;
-    int32_t sum_gyro_x =   0;
-    int32_t sum_gyro_y =  0;
-    int32_t sum_gyro_z =  0;
-    int32_t sum_magn_x = 0;
-    int32_t sum_magn_y = 0;
-    int32_t sum_magn_z = 0;
-    //fifo
+    int32_t sum_accel_x = 0;
+    int32_t sum_accel_y = 0;
+    int32_t sum_accel_z = 0;
+    int32_t sum_gyro_x = 0;
+    int32_t sum_gyro_y = 0;
+    int32_t sum_gyro_z = 0;
+    
+    /* fifo */
     static int16_t fifo_accel_x[SLIDING_FILTER_DEEP];
     static int16_t fifo_accel_y[SLIDING_FILTER_DEEP];
     static int16_t fifo_accel_z[SLIDING_FILTER_DEEP];
     static int16_t fifo_gyro_x[SLIDING_FILTER_DEEP];
     static int16_t fifo_gyro_y[SLIDING_FILTER_DEEP];
     static int16_t fifo_gyro_z[SLIDING_FILTER_DEEP];
-    static int16_t fifo_magn_x[SLIDING_FILTER_DEEP];
-    static int16_t fifo_magn_y[SLIDING_FILTER_DEEP];
-    static int16_t fifo_magn_z[SLIDING_FILTER_DEEP];
     
-    for(int i=SLIDING_FILTER_DEEP-1;i>0;i--)
+    for(int i = SLIDING_FILTER_DEEP-1; i > 0; i--)
     {
         fifo_accel_x[i] =  fifo_accel_x[i-1];
         fifo_accel_y[i] =  fifo_accel_y[i-1];
@@ -77,22 +64,18 @@ static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * fil
         fifo_gyro_x[i] =  fifo_gyro_x[i-1];
         fifo_gyro_y[i] =  fifo_gyro_y[i-1];
         fifo_gyro_z[i] =  fifo_gyro_z[i-1];
-        fifo_magn_x[i] =  fifo_magn_x[i-1];
-        fifo_magn_y[i] =  fifo_magn_y[i-1];
-        fifo_magn_z[i] =  fifo_magn_z[i-1];
     }
-    /*fifo input*/
+    
+    /* fifo input */
     fifo_accel_x[0] = raw_data.ax;
     fifo_accel_y[0] = raw_data.ay;
     fifo_accel_z[0] = raw_data.az;
     fifo_gyro_x[0] = raw_data.gx;
     fifo_gyro_y[0] = raw_data.gy;
     fifo_gyro_z[0] = raw_data.gz;
-    fifo_magn_x[0] = raw_data.mx;
-    fifo_magn_y[0] = raw_data.my;
-    fifo_magn_z[0] = raw_data.mz;
-    /**fifo calculate*/
-    for(int i=0;i<SLIDING_FILTER_DEEP;i++)
+    
+    /** fifo calculate */
+    for(int i=0; i < SLIDING_FILTER_DEEP; i++)
     {
         sum_accel_x += fifo_accel_x[i];
         sum_accel_y += fifo_accel_y[i];
@@ -100,9 +83,6 @@ static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * fil
         sum_gyro_x += fifo_gyro_x[i];
         sum_gyro_y += fifo_gyro_y[i];
         sum_gyro_z += fifo_gyro_z[i];	
-        sum_magn_x += fifo_magn_x[i];
-        sum_magn_y += fifo_magn_y[i];
-        sum_magn_z += fifo_magn_z[i];	
     }
     filter_data->ax = sum_accel_x/SLIDING_FILTER_DEEP;
     filter_data->ay = sum_accel_y/SLIDING_FILTER_DEEP; 
@@ -135,7 +115,7 @@ static uint32_t imu_format_data(imu_raw_data_t * raw_data, imu_float_data_t * fl
 }
 
 //!< the mx my mz order are related to PCB layout!!
-void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float mx,float mz,float my, imu_float_euler_angle_t * angle)
+static void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float mx,float mz,float my, imu_float_euler_angle_t * angle)
 {
     float norm = 0;
     float hx = 0, hy = 0, hz = 0, bx = 0, bz = 0;			
@@ -188,7 +168,8 @@ void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float mx,f
 
     wx = 2*bx*(0.5 - q2q2 - q3q3) + 2*bz*(q1q3 - q0q2);
     wy = 2*bx*(q1q2 - q0q3) + 2*bz*(q0q1 + q2q3);
-    wz = 2*bx*(q0q2 + q1q3) + 2*bz*(0.5 - q1q1 - q2q2);  
+    wz = 2*bx*(q0q2 + q1q3) + 2*bz*(0.5 - q1q1 - q2q2);
+    
     /* error is sum of cross product between reference direction of fields and direction measured by sensors */
     ex = (ay*vz - az*vy) + (my*wz - mz*wy);
     ey = (az*vx - ax*vz) + (mz*wx - mx*wz);
@@ -245,12 +226,13 @@ uint32_t imu_get_euler_angle(imu_float_euler_angle_t * angle, imu_raw_data_t * r
     raw_data->my = my;
     raw_data->mz = mz;
 
-    //I need rawdata I give you filtered data
+    /* I need rawdata I give you filtered data */
     imu_sliding_filter(*raw_data, &filter_data);
 
-    // I need filtered data I give you float data
-    imu_format_data(raw_data, &float_data);
-    //I need float data I give you euler angles
+    /* I need filtered data I give you float data */
+    imu_format_data(&filter_data, &float_data);
+    
+    /* I need float data I give you euler angles */
     updateAHRS( float_data.gx * Gyro_Gr,
                 float_data.gy * Gyro_Gr,
                 float_data.gz * Gyro_Gr,

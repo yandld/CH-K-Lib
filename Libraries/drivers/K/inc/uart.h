@@ -16,18 +16,19 @@
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
 	 
 #ifdef UART_USE_STDIO
 #define UART_printf(fmt,args...)    printf (fmt ,##args)
 #endif
 
-/*!< UART 模块号 */
-#define HW_UART0  (0x00U)  //芯片的UART0端口
-#define HW_UART1  (0x01U)  //芯片的UART1端口
-#define HW_UART2  (0x02U)  //芯片的UART2端口
-#define HW_UART3  (0x03U)  //芯片的UART3端口
-#define HW_UART4  (0x04U)  //芯片的UART4端口
-#define HW_UART5  (0x05U)  //芯片的UART5端口
+/*!< UART 硬件模块号 */
+#define HW_UART0  (0x00U)  /* 芯片的UART0端口 */
+#define HW_UART1  (0x01U)
+#define HW_UART2  (0x02U)
+#define HW_UART3  (0x03U)
+#define HW_UART4  (0x04U)
+#define HW_UART5  (0x05U)
 
 /*!< UART 快速初始化宏 */                      
 #define UART1_RX_PE01_TX_PE00   (0x80E1U) //芯片的UART1端口，使用PTE1引脚为接收引脚，使用PTE0引脚为发送引脚
@@ -67,10 +68,6 @@ typedef enum
 /*!< 中断及DMA配置 */
 typedef enum
 {
-    kUART_IT_Tx_Disable,        // 禁止发送中断 
-    kUART_IT_Rx_Disable,        // 禁止接收中断 
-    kUART_DMA_Tx_Disable,       // 禁止DMA发送
-    kUART_DMA_Rx_Disable,       // 禁止DMA接收 
     kUART_IT_Tx,                // 开启每发送一帧传输完成中断 
     kUART_DMA_Tx,               // 开启每发送一帧传输完成触发DMA 
     kUART_IT_Rx,                // 开启每接收一帧传输完成中断 
@@ -96,10 +93,13 @@ void UART_Init(UART_InitTypeDef * UART_InitStruct);
 int UART_printf(const char *format,...);
 uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch);
 void UART_WriteByte(uint32_t instance, uint16_t ch);
+void UART_SelectDebugInstance(uint32_t instance);
+void UART_EnableTxFIFO(uint32_t instance, bool status);
+void UART_EnableRxFIFO(uint32_t instance, bool status);
 /* Interrupt and DMA functions */
 void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun);
 void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun);
-void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config);
+void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool status);
 
 #ifdef UART_USE_STDIO
 int printf(const char *fmt, ...);

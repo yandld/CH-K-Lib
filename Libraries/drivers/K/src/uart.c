@@ -5,7 +5,6 @@
   * @version V2.5
   * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片UART模块的底层功能函数
   ******************************************************************************
   */
 #include "uart.h"
@@ -255,12 +254,16 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     uint8_t brfa; 
     uint32_t clock;
     static bool is_fitst_init = true;
+    
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(UART_InitStruct->instance));
+    
     /* enable clock gate */
     *((uint32_t*) SIM_UARTClockGateTable[UART_InitStruct->instance].addr) |= SIM_UARTClockGateTable[UART_InitStruct->instance].mask;
+    
     /* disable Tx Rx first */
     UART_InstanceTable[UART_InitStruct->instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    
     /* get clock */
     CLOCK_GetClockFrequency(kBusClock, &clock);
     if((UART_InitStruct->instance == 0) || (UART_InitStruct->instance == 1))
@@ -269,10 +272,12 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     }
     sbr = (uint16_t)((clock)/((UART_InitStruct->baudrate)*16));
     brfa = (32*clock/((UART_InitStruct->baudrate)*16)) - 32*sbr;
+    
     /* config baudrate */
     UART_InstanceTable[UART_InitStruct->instance]->BDH |= UART_BDH_SBR(sbr>>8); 
     UART_InstanceTable[UART_InitStruct->instance]->BDL = UART_BDL_SBR(sbr); 
     UART_InstanceTable[UART_InitStruct->instance]->C4 |= UART_C4_BRFA(brfa);
+    
     /* parity */
     switch(UART_InitStruct->parityMode)
     {
@@ -291,6 +296,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
         default:
             break;
     }
+    
     /* bit per char */
     /* note: Freescale's bit size config in register are including parity bit! */
     switch(UART_InitStruct->bitPerChar)
@@ -325,16 +331,37 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
             break;
     }
     UART_InstanceTable[UART_InitStruct->instance]->S2 &= ~UART_S2_MSBF_MASK; /* LSB */
+    
     /* enable Tx Rx */
     UART_InstanceTable[UART_InitStruct->instance]->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
-    /* link debug instance */
     
+    /* link debug instance */
     /* if it's first initalized ,link getc and putc to it */
     if(is_fitst_init)
     {
         UART_DebugInstance = UART_InitStruct->instance;
     }
     is_fitst_init = false;
+}
+
+void UART_SelectDebugInstance(uint32_t instance)
+{
+	/* param check */
+    assert_param(IS_UART_ALL_INSTANCE(instance));
+    
+    UART_DebugInstance = instance;
+}
+
+void UART_EnableTxFIFO(uint32_t instance, bool status)
+{
+    (status)?(UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_TXFE_MASK):
+    (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_TXFE_MASK);
+}
+
+void UART_EnableRxFIFO(uint32_t instance, bool status)
+{
+    (status)?(UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_RXFE_MASK):
+    (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_RXFE_MASK);
 }
 
 /**
@@ -404,7 +431,7 @@ uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
  * @brief  配置UART模块的中断或DMA属性
  * @code
  *      //配置UART0模块开启接收中断功能
- *      UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
+ *      UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
  * @endcode
  * @param  instance      :芯片串口端口
  *         @arg HW_UART0 :芯片的UART0端口
@@ -413,52 +440,47 @@ uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
  *         @arg HW_UART3 :芯片的UART3端口
  *         @arg HW_UART4 :芯片的UART4端口
  *         @arg HW_UART5 :芯片的UART5端口
+ * @param  status      :开关
  * @param  config: 工作模式选择
- *         @arg kUART_IT_Tx_Disable    :关闭发送中断
- *         @arg kUART_IT_Rx_Disable    :关闭接收中断
- *         @arg kUART_DMA_Tx_Disable   :关闭DMA发送中断
- *         @arg kUART_DMA_Rx_Disable   :关闭DMA接收中断
  *         @arg kUART_IT_Tx:
  *         @arg kUART_DMA_Tx:
  *         @arg kUART_IT_Rx:
  *         @arg kUART_DMA_Rx:
  * @retval None
  */
-void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config)
+void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool status)
 {
     /* enable clock gate */
     *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
     switch(config)
     {
-        case kUART_IT_Tx_Disable:
-            UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK;
-            break;
-        case kUART_IT_Rx_Disable:
-            UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK;
-            break;
-        case kUART_DMA_Tx_Disable:
-            UART_InstanceTable[instance]->C5 &= ~UART_C5_TDMAS_MASK;
-            UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK;
-            break;
-        case kUART_DMA_Rx_Disable:
-            UART_InstanceTable[instance]->C5 &= ~UART_C5_RDMAS_MASK;
-            UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK;
-            break;
         case kUART_IT_Tx:
-            UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK;
+            (status)?
+            (UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK):
+            (UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK);
             NVIC_EnableIRQ(UART_IRQnTable[instance]);
             break; 
         case kUART_IT_Rx:
-            UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK;
+            (status)?
+            (UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK):
+            (UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK);
             NVIC_EnableIRQ(UART_IRQnTable[instance]);
             break;
         case kUART_DMA_Tx:
-            UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK;
-            UART_InstanceTable[instance]->C5 |= UART_C5_TDMAS_MASK;
+            (status)?
+            (UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK):
+            (UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK);
+            (status)?
+            (UART_InstanceTable[instance]->C5 |= UART_C5_TDMAS_MASK):
+            (UART_InstanceTable[instance]->C5 &= ~UART_C5_TDMAS_MASK);
             break;
         case kUART_DMA_Rx:
-            UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK;
-            UART_InstanceTable[instance]->C5 |= UART_C5_RDMAS_MASK;
+            (status)?
+            (UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK):
+            (UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK);
+            (status)?
+            (UART_InstanceTable[instance]->C5 |= UART_C5_RDMAS_MASK):
+            (UART_InstanceTable[instance]->C5 &= ~UART_C5_RDMAS_MASK);
             break;
         default:
             break;
@@ -482,6 +504,7 @@ void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
+    
     /* enable clock gate */
     *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
     if(AppCBFun != NULL)
@@ -507,6 +530,7 @@ void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
+    
     /* enable clock gate */
     *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
     if(AppCBFun != NULL)
@@ -535,13 +559,20 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     UART_InitStruct1.instance = pq->ip_instance;
     UART_InitStruct1.parityMode = kUART_ParityDisabled;
     UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
+    
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
     {
         PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
     }
+    
     /* init UART */
     UART_Init(&UART_InitStruct1);
+    
+    /* default settings */
+    UART_EnableTxFIFO(pq->ip_instance, false);
+    UART_EnableRxFIFO(pq->ip_instance, false);
+    
     return pq->ip_instance;
 }
 
@@ -703,7 +734,7 @@ void UART5_RX_TX_IRQHandler(void)
 #endif /* (!defined(MK10D5)) */
 
 
-#if 0
+/*
 static const QuickInit_Type UART_QuickInitTable[] =
 {
     { 1, 4, 3, 0, 2, 0}, //UART1_RX_PE01_TX_PE00
@@ -716,7 +747,7 @@ static const QuickInit_Type UART_QuickInitTable[] =
     { 0, 0, 2, 1, 2, 0}, //UART0_RX_PA01_TX_PA02 2
     { 0, 0, 3,14, 2, 0}, //UART0_RX_PA15_TX_PA14 3
     { 3, 1, 3,10, 2, 0}, //UART3_RX_PB10_TX_PB11 3
-    { 0, 1, 3,16, 2,  0}, //UART0_RX_PB16_TX_PB17 3
+    { 0, 1, 3,16, 2, 0}, //UART0_RX_PB16_TX_PB17 3
     { 1, 2, 3, 3, 2, 0}, //UART1_RX_PC03_TX_PC04 3
     { 4, 2, 3,14, 2, 0}, //UART4_RX_PC14_TX_PC15 3
     { 3, 2, 3,16, 2, 0}, //UART3_RX_PC16_TX_PC17 3
@@ -725,7 +756,7 @@ static const QuickInit_Type UART_QuickInitTable[] =
     { 2, 5, 4,13, 2, 0}, //UART2_RX_PF13_TX_PF14 4
     { 5, 3, 3, 8, 2, 0}, //UART5_RX_PD08_TX_PD09 3
 };
-#endif
+*/
 
 
 

@@ -12,7 +12,7 @@ static void UART_TX_ISR(uint16_t * byteToSend)
     if((p - UART_String1) == sizeof(UART_String1))
     {
         p = UART_String1;
-        UART_ITDMAConfig(HW_UART0, kUART_IT_Tx_Disable);  
+        UART_ITDMAConfig(HW_UART0, kUART_IT_Tx, false);  
     }
 }
 
@@ -21,8 +21,7 @@ int main(void)
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     
-    /* 初始化一个模块的一般模式: 初始化模块本身->根据芯片手册 初始化对应的复用引脚->使用模块 */
-		/**install modul*/
+    /** install module */
     UART_InitTypeDef UART_InitStruct1 = {0};
     UART_InitStruct1.instance = HW_UART0;
     UART_InitStruct1.baudrate = 115200;
@@ -30,23 +29,25 @@ int main(void)
     UART_InitStruct1.parityMode = kUART_ParityDisabled;
     UART_Init(&UART_InitStruct1);
     
-		/**Initation pin for UART which you chosen*/
-    /* 初始化串口0对应的引脚 D6 D7*/
+    /** Initation pin for UART which you chosen*/
     PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
     PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
-    /**print message before mode change*/
+    
+    /** print message before mode change*/
     printf("uart will be send on interrupt mode...\r\n");
-    /* 注册发送中断回调函数 */
-		/**regist callback function*/
+    
+    /** register callback function*/
     UART_CallbackTxInstall(HW_UART0, UART_TX_ISR);
-    /* 打开发送完成中断 */
-		/**Standby interrupt mode*/
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Tx);
+    
+    /** open TX interrupt */
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Tx, true);
+    
     /**main loop*/
     while(1)
     {
-				/**the code as follow shows that the main function is runnning as well as */
-        GPIO_ToggleBit(HW_GPIOE,6);
+        /** indicate program is running */
+        GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(500);
     }
 }
+

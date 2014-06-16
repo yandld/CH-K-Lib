@@ -63,7 +63,7 @@ static void RunningApplication(uint32_t addr)
     DelayMs(1);
     
     /* close UART RX IT */
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx_Disable);
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, false);
     
     /* reset vector table */
     SCB->VTOR = addr;
@@ -153,7 +153,7 @@ int main(void)
     /* init transfer */
     UART_DMARevInit(HW_DMA_CH0);
     DMA_SetDestAddress(HW_DMA_CH0, (uint32_t)SwitchBuffer(Buf1, Buf2));
-    UART_ITDMAConfig(HW_UART0, kUART_DMA_Rx);
+    UART_ITDMAConfig(HW_UART0, kUART_DMA_Rx, true);
     
     /* protrol: download = size(4) + data(n) + cs(2) */
     transfer_size = 4;

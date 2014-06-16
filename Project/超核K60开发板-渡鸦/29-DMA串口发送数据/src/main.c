@@ -74,7 +74,7 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     printf("DMA UART transmit test\r\n");
     /* 打开UART0 DMA发送使能 */
-    UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx);
+    UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx, true);
     UART_DMASendConfig(HW_UART0, HW_DMA_CH2);
     
     while(1)

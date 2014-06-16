@@ -70,7 +70,7 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
     UART_Init(&UART_InitStruct1);
     
     UART_CallbackRxInstall(HW_UART0, UART_ISR);
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
 	return RT_EOK;
 }
 
@@ -83,11 +83,11 @@ static rt_err_t kinetis_control(struct rt_serial_device *serial, int cmd, void *
     {
     case RT_DEVICE_CTRL_CLR_INT:
         /* disable rx irq */
-        UART_ITDMAConfig(HW_UART0, kUART_IT_Rx_Disable);
+        UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, false);
         break;
     case RT_DEVICE_CTRL_SET_INT:
         /* enable rx irq */
-        UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
+        UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
         break;
     }
 

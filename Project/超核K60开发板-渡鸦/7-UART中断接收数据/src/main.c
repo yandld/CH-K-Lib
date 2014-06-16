@@ -42,7 +42,7 @@ int main(void)
     /*  配置UART 中断配置 打开接收中断 安装中断回调函数 */
     UART_CallbackRxInstall(HW_UART0, UART_RX_ISR);
     /* 打开串口接收中断功能 IT 就是中断的意思*/
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     
     while(1)
     {

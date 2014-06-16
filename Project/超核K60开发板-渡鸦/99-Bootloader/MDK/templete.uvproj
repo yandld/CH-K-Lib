@@ -406,14 +406,14 @@
           <GroupName>startup</GroupName>
           <Files>
             <File>
-              <FileName>system_MK60D10.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\system_MK60D10.c</FilePath>
-            </File>
-            <File>
               <FileName>startup_MK60D10.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60D10.s</FilePath>
+            </File>
+            <File>
+              <FileName>system_MK60D10.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\system_MK60D10.c</FilePath>
             </File>
           </Files>
         </Group>

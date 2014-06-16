@@ -354,14 +354,16 @@ void UART_SelectDebugInstance(uint32_t instance)
 
 void UART_EnableTxFIFO(uint32_t instance, bool status)
 {
-    (status)?(UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_TXFE_MASK):
-    (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_TXFE_MASK);
+    (status)?
+    (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_TXFE_MASK):
+    (UART_InstanceTable[instance]->PFIFO &= ~UART_PFIFO_TXFE_MASK);
 }
 
 void UART_EnableRxFIFO(uint32_t instance, bool status)
 {
-    (status)?(UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_RXFE_MASK):
-    (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_RXFE_MASK);
+    (status)?
+    (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_RXFE_MASK):
+    (UART_InstanceTable[instance]->PFIFO &= ~UART_PFIFO_RXFE_MASK);
 }
 
 /**

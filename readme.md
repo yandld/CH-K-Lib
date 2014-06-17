@@ -1,6 +1,6 @@
 # 超核Kinetis 开发包(固件库)
 
-包含Freescale K系列及KL系列底层驱动及实例代码
+包含Freescale Kinetis K 系列及 KL 系列底层驱动及实例代码
 
 ----------
 

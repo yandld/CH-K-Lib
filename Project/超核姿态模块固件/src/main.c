@@ -265,7 +265,8 @@ int main(void)
             printf("imu module fail!\r\n");
             while(1);
         }
-        DelayMs(5);
+       // DelayMs(3);
+        
         #if 0
         printf("P:%4d R:%4d Y:%4d  \r", (int)angle.imu_pitch, (int)angle.imu_roll, (int)angle.imu_yaw);
         bmp180_read_temperature(&temperature);

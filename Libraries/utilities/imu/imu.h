@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 
-#define SLIDING_FILTER_DEEP     (3)
+#define SLIDING_FILTER_DEEP     (1)
 
 //!< return 0 if you get data succ. reutrn else if data get failed
 typedef struct

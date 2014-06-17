@@ -421,7 +421,7 @@ void UART_WriteByte(uint32_t instance, uint16_t ch)
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
 
-    if(UART0->PFIFO & UART_PFIFO_TXFE_MASK)
+    if(UART_InstanceTable[instance]->PFIFO & UART_PFIFO_TXFE_MASK)
     {
         /* buffer is used */
         while(UART_InstanceTable[instance]->TCFIFO >= UART_GetTxFIFOSize(instance));

@@ -87,6 +87,8 @@ static const IRQn_Type UART_IRQnTable[] =
 };
 #endif
 
+static const uint32_t UART_TIFOSizeTable[] = {1, 4, 8, 16, 32, 64, 128};
+
 #ifdef UART_USE_STDIO
 #ifdef __CC_ARM // MDK Support
 struct __FILE 
@@ -354,9 +356,13 @@ void UART_SelectDebugInstance(uint32_t instance)
 
 void UART_EnableTxFIFO(uint32_t instance, bool status)
 {
+    /* waitting for all data has been shifted out */
+    while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
+    
     (status)?
     (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_TXFE_MASK):
     (UART_InstanceTable[instance]->PFIFO &= ~UART_PFIFO_TXFE_MASK);
+    
 }
 
 void UART_EnableRxFIFO(uint32_t instance, bool status)
@@ -364,6 +370,33 @@ void UART_EnableRxFIFO(uint32_t instance, bool status)
     (status)?
     (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_RXFE_MASK):
     (UART_InstanceTable[instance]->PFIFO &= ~UART_PFIFO_RXFE_MASK);
+}
+
+uint32_t UART_GetTxFIFOSize(uint32_t instance)
+{
+    return UART_TIFOSizeTable[(UART_InstanceTable[instance]->PFIFO  \
+    & UART_PFIFO_TXFIFOSIZE_MASK) >> UART_PFIFO_TXFIFOSIZE_SHIFT];
+}
+
+uint32_t UART_GetRxFIFOSize(uint32_t instance)
+{
+    return UART_TIFOSizeTable[(UART_InstanceTable[instance]->PFIFO  \
+    & UART_PFIFO_RXFIFOSIZE_MASK) >> UART_PFIFO_RXFIFOSIZE_SHIFT];
+}
+
+void UART_SetTxFIFOWatermark(uint32_t instance, uint32_t size)
+{
+    /* disable transmiter and renable it */
+    UART_InstanceTable[instance]->C2 &= ~UART_C2_TE_MASK;
+    UART_InstanceTable[instance]->TWFIFO = size;
+    UART_InstanceTable[instance]->C2 |= UART_C2_TE_MASK;
+}
+
+void UART_SetRxFIFOWatermark(uint32_t instance, uint32_t size)
+{
+    UART_InstanceTable[instance]->C2 &= ~UART_C2_RE_MASK;
+    UART_InstanceTable[instance]->RWFIFO = size;
+    UART_InstanceTable[instance]->C2 |= UART_C2_RE_MASK;
 }
 
 /**
@@ -387,11 +420,23 @@ void UART_WriteByte(uint32_t instance, uint16_t ch)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
+
+    if(UART0->PFIFO & UART_PFIFO_TXFE_MASK)
+    {
+        /* buffer is used */
+        while(UART_InstanceTable[instance]->TCFIFO >= UART_GetTxFIFOSize(instance));
+    }
+    else
+    {
+        /* no buffer is used */
+        while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
+    }
+    
+    UART_InstanceTable[instance]->D = (uint8_t)(ch & 0xFF);
+    
     /* config ninth bit */
     uint8_t ninth_bit = (ch >> 8) & 0x01U;
     (ninth_bit)?(UART_InstanceTable[instance]->C3 |= UART_C3_T8_MASK):(UART_InstanceTable[instance]->C3 &= ~UART_C3_T8_MASK);
-    while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
-    UART_InstanceTable[instance]->D = (uint8_t)(ch & 0xFF);
 }
 
 
@@ -571,7 +616,7 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     /* init UART */
     UART_Init(&UART_InitStruct1);
     
-    /* default settings */
+    /* disable hardware buffer */
     UART_EnableTxFIFO(pq->ip_instance, false);
     UART_EnableRxFIFO(pq->ip_instance, false);
     

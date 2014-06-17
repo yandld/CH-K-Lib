@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 
-#define SLIDING_FILTER_DEEP     (5)
+#define SLIDING_FILTER_DEEP     (3)
 
 //!< return 0 if you get data succ. reutrn else if data get failed
 typedef struct
@@ -18,9 +18,9 @@ typedef struct
 
 typedef struct 
 {
-    float imu_pitch;
-    float imu_roll;
-    float imu_yaw;
+    double imu_pitch;
+    double imu_roll;
+    double imu_yaw;
 }imu_float_euler_angle_t;
 
 typedef struct 

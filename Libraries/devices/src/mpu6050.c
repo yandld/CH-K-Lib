@@ -222,12 +222,12 @@ int mpu6050_probe(void)
             {
                 /* find the device */
                 device.chip_addr = chip_addr_table[i];
-                write_register(PWR_MGMT_1, 0x00 );
-                write_register(SMPLRT_DIV, 0x07 );
-                write_register(CONFIG, 0x07 );
+                write_register(PWR_MGMT_1, 0x00);
+                write_register(SMPLRT_DIV, 0x0A);
+                write_register(CONFIG, 0x00);
                 write_register(AUX_VDDIO,0x80);
-                write_register(GYRO_CONFIG, 0x18 );
-                write_register(ACCEL_CONFIG, 0x01 );
+                write_register(GYRO_CONFIG, 0x18);
+                write_register(ACCEL_CONFIG, 0x00);
                 write_register(I2C_MST_CTRL, 0x00);
                 write_register(INT_PIN_CFG, 0x02);
                 /* init sequence */

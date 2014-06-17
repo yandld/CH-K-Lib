@@ -77,9 +77,9 @@ static void PIT_CH1_ISR(void)
     send_data.trans_mag[0] = raw_data.mx;
     send_data.trans_mag[1] = raw_data.my;
     send_data.trans_mag[2] = raw_data.mz;
-    send_data.trans_pitch = (int16_t)angle.imu_pitch*100;
-    send_data.trans_roll = (int16_t)angle.imu_roll*100;
-    send_data.trans_yaw = 1800 + (int16_t)angle.imu_yaw*10;
+    send_data.trans_pitch = (int16_t)(angle.imu_pitch*100);
+    send_data.trans_roll = (int16_t)(angle.imu_roll*100);
+    send_data.trans_yaw = 1800 + (int16_t)(angle.imu_yaw*10);
     
     len = user_data2buffer(&send_data, buf);
     trans_start_send_data(buf, len);

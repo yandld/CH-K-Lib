@@ -49,7 +49,7 @@ int trans_init(uint8_t dmaChl, uint32_t uartInstance)
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.dMod = kDMA_ModuloDisable;
     DMA_Init(&DMA_InitStruct1);
-    UART_ITDMAConfig(uartInstance, kUART_DMA_Tx);
+    UART_ITDMAConfig(uartInstance, kUART_DMA_Tx, true);
     
     trans_hander.dmaChl = dmaChl;
     trans_hander.uartInstance = uartInstance;

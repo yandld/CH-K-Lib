@@ -88,14 +88,22 @@ typedef void (*UART_CallBackTxType)(uint16_t * pbyteToSend);
 typedef void (*UART_CallBackRxType)(uint16_t byteReceived);
 
 /*!< API functions */
+
 uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate);
 void UART_Init(UART_InitTypeDef * UART_InitStruct);
 int UART_printf(const char *format,...);
 uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch);
 void UART_WriteByte(uint32_t instance, uint16_t ch);
 void UART_SelectDebugInstance(uint32_t instance);
+
+/* FIFO functions */
 void UART_EnableTxFIFO(uint32_t instance, bool status);
 void UART_EnableRxFIFO(uint32_t instance, bool status);
+uint32_t UART_GetTxFIFOSize(uint32_t instance);
+uint32_t UART_GetRxFIFOSize(uint32_t instance);
+void UART_SetTxFIFOWatermark(uint32_t instance, uint32_t size);
+void UART_SetRxFIFOWatermark(uint32_t instance, uint32_t size);
+
 /* Interrupt and DMA functions */
 void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun);
 void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun);

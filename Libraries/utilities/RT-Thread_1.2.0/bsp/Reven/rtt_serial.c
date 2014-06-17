@@ -69,6 +69,10 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
     
     UART_Init(&UART_InitStruct1);
     
+    /* enable Tx hardware FIFO to enhance proformence */
+    UART_EnableTxFIFO(HW_UART0, true);
+    UART_SetTxFIFOWatermark(HW_UART0, UART_GetTxFIFOSize(HW_UART0));
+    
     UART_CallbackRxInstall(HW_UART0, UART_ISR);
     UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
 	return RT_EOK;

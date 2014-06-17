@@ -7,6 +7,7 @@
 ## 如何开始
 1. 请参见[免费入门视频](http://www.moore8.com/courses/87) 按照视频下载工具软件
 2. API 参考文档:  http://git.oschina.net/yandld/CH-K-Lib/wikis/home
+3. 其他所有资料，包括所需要软件工具等 都可以从 www.beyondcore.net 主导航中寻找获得。
 
 ## 文件说明
 **Libraries:**

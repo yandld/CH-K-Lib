@@ -47,6 +47,7 @@ static void UART_ISR(uint16_t byteReceived)
     ch = byteReceived;
     gRevCh = &byteReceived;
     rt_hw_serial_isr(&serial);
+    
     /* leave interrupt */
     rt_interrupt_leave();
 }
@@ -73,6 +74,7 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
     UART_EnableTxFIFO(UART_InitStruct1.instance, true);
     UART_SetTxFIFOWatermark(UART_InitStruct1.instance, UART_GetTxFIFOSize(HW_UART0));
     
+    /* enable Rx IT */
     UART_CallbackRxInstall(UART_InitStruct1.instance, UART_ISR);
     UART_ITDMAConfig(UART_InitStruct1.instance, kUART_IT_Rx, true);
 	return RT_EOK;
@@ -86,11 +88,9 @@ static rt_err_t kinetis_control(struct rt_serial_device *serial, int cmd, void *
     switch (cmd)
     {
     case RT_DEVICE_CTRL_CLR_INT:
-        /* disable rx irq */
         UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, false);
         break;
     case RT_DEVICE_CTRL_SET_INT:
-        /* enable rx irq */
         UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, true);
         break;
     }
@@ -140,9 +140,11 @@ int rt_hw_usart_init(uint32_t instance, const char * name)
     serial.int_rx = &uart_int_rx;
     serial.config = config;
     
-    rt_hw_serial_register(&serial, name,
+    return rt_hw_serial_register(&serial, name,
                           RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_STREAM,
                           RT_NULL);
+     
 }
+
 
 

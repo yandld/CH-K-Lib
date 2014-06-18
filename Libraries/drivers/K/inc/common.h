@@ -99,7 +99,10 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
  * Return the most contiguous size aligned at specified width. RT_ALIGN(13, 4)
  * would return 16.
  */
+#ifndef ALIGN
 #define ALIGN(size, align)           (((size) + (align) - 1) & ~((align) - 1))
+#endif
+
 #define BSWAP_16(x)     (uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))
 #define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))

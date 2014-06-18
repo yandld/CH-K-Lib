@@ -56,7 +56,7 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
     UART_InitTypeDef UART_InitStruct1;
     RT_ASSERT(serial != RT_NULL);
     RT_ASSERT(cfg != RT_NULL);
-    UART_InitStruct1.instance = HW_UART0;
+    UART_InitStruct1.instance = serial->config.reserved;
     switch(cfg->baud_rate)
     {
         case BAUD_RATE_9600:
@@ -70,11 +70,11 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
     UART_Init(&UART_InitStruct1);
     
     /* enable Tx hardware FIFO to enhance proformence */
-    UART_EnableTxFIFO(HW_UART0, true);
-    UART_SetTxFIFOWatermark(HW_UART0, UART_GetTxFIFOSize(HW_UART0));
+    UART_EnableTxFIFO(UART_InitStruct1.instance, true);
+    UART_SetTxFIFOWatermark(UART_InitStruct1.instance, UART_GetTxFIFOSize(HW_UART0));
     
-    UART_CallbackRxInstall(HW_UART0, UART_ISR);
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
+    UART_CallbackRxInstall(UART_InitStruct1.instance, UART_ISR);
+    UART_ITDMAConfig(UART_InitStruct1.instance, kUART_IT_Rx, true);
 	return RT_EOK;
 }
 
@@ -87,20 +87,19 @@ static rt_err_t kinetis_control(struct rt_serial_device *serial, int cmd, void *
     {
     case RT_DEVICE_CTRL_CLR_INT:
         /* disable rx irq */
-        UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, false);
+        UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, false);
         break;
     case RT_DEVICE_CTRL_SET_INT:
         /* enable rx irq */
-        UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
+        UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, true);
         break;
     }
-
     return RT_EOK;
 }
 
 static int kinetis_putc(struct rt_serial_device *serial, char c)
 {
-    UART_WriteByte(HW_UART0, c);
+    UART_WriteByte(serial->config.reserved, c);
     return 1;
 }
 
@@ -127,7 +126,7 @@ static const struct rt_uart_ops kinetis_uart_ops =
 
 
 
-int rt_hw_usart_init(void)
+int rt_hw_usart_init(uint32_t instance, const char * name)
 {
     struct serial_configure config;
     config.baud_rate = BAUD_RATE_115200;
@@ -136,17 +135,14 @@ int rt_hw_usart_init(void)
     config.parity    = PARITY_NONE;
     config.stop_bits = STOP_BITS_1;
     config.invert    = NRZ_NORMAL;
-    
+    config.reserved  = instance;
     serial.ops    = &kinetis_uart_ops;
     serial.int_rx = &uart_int_rx;
     serial.config = config;
     
-    rt_hw_serial_register(&serial, "uart0",
+    rt_hw_serial_register(&serial, name,
                           RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_STREAM,
                           RT_NULL);
-    /* pinmux */
-    PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
-    PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
 }
 
 

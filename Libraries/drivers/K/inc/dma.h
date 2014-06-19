@@ -34,6 +34,8 @@
 #define SPI0_TRAN_DMAREQ        17
 #define SPI1_REV_DMAREQ         18
 #define SPI1_TRAN_DMAREQ        19
+#define SPI2_REV_DMAREQ         20
+#define SPI2_TRAN_DMAREQ        21
 #define I2C0_DMAREQ             22
 #define I2C1_DMAREQ             23
 #define FTM0_CH0_DMAREQ         24

@@ -36,7 +36,7 @@ static rt_err_t rt_rtc_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     return RT_EOK;
 }
 
-int rt_hw_rtc_init(void)
+int rt_hw_rtc_init(const char* name)
 {
     rtc.type	= RT_Device_Class_RTC;
     RTC_QuickInit();
@@ -51,6 +51,6 @@ int rt_hw_rtc_init(void)
 
     /* no private */
     rtc.user_data = RT_NULL;
-    rt_device_register(&rtc, "rtc", RT_DEVICE_FLAG_RDWR);
+    rt_device_register(&rtc, name, RT_DEVICE_FLAG_RDWR);
     return 0;
 }

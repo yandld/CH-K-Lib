@@ -13,6 +13,7 @@
 #define __CH_LIB_SPI_H__
 
 #include <stdint.h>
+#include <stdbool.h>
   
 //!< SPI模块设备
 #define HW_SPI0     (0x00)
@@ -46,8 +47,9 @@ typedef enum
 //!< interrupt and DMA select
 typedef enum
 {
-    kSPI_IT_TCF_Disable,    //!< 禁止TCF中断(TCF:传输一次完成)
     kSPI_IT_TCF,            //!< SPI传输一次完成中断使能
+    kSPI_DMA_TFFF,          //!< transmit FIFO full
+    kSPI_DMA_RFDF,          //!< receive FIFO drain
 }SPI_ITDMAConfig_Type;
 
 
@@ -84,11 +86,14 @@ typedef void (*SPI_CallBackType)(void);
 //!< API functions
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct);
 uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, uint16_t csState);
-void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config);
+void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status);
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
 uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate);
-void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate);
+void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate);
 
+/* FIFO functions */
+void SPI_EnableTxFIFO(uint32_t instance, bool status);
+void SPI_EnableRxFIFO(uint32_t instance, bool status);
 
 #endif
 

@@ -37,7 +37,7 @@ static int kinetis_spi_configure(spi_device_t device, struct spi_config *configu
         default:
             break;
     }
-    SPI_FrameConfig(device->bus->instance, HW_CTAR0, mode, configuration->data_width, kSPI_MSBFirst, configuration->baudrate);
+    SPI_CTARConfig(device->bus->instance, HW_CTAR0, mode, configuration->data_width, kSPI_MSBFirst, configuration->baudrate);
     return 0;
 }
 

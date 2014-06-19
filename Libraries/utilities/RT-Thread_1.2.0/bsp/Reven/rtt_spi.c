@@ -9,7 +9,7 @@
 #include "rtt_spi.h"
 static struct rt_spi_bus kinetis_spi;
 
-#define  RTT_SPI_DRIVER_DEBUG  0
+#define  RTT_SPI_DRIVER_DEBUG  1
 
 #if (RTT_SPI_DRIVER_DEBUG == 1)
 #define RTT_SPI_DRIVER_TRACE	rt_kprintf
@@ -76,6 +76,7 @@ static rt_uint32_t xfer(struct rt_spi_device* device, struct rt_spi_message* mes
     const rt_uint8_t * send_ptr = message->send_buf;
     rt_uint8_t * recv_ptr = message->recv_buf;
     struct kinetis_spi_cs * kinetis_spi_cs = device->parent.user_data;
+    //rt_kprintf("spi size:%d\r\n", size);
     while(size--)
     {
         rt_uint16_t data = 0xFF;
@@ -108,13 +109,11 @@ static struct rt_spi_ops kinetis_spi_ops =
     xfer
 };
 
-int rt_hw_spi_bus_init(void)
+int rt_hw_spi_bus_init(uint32_t instance, const char *name)
 {
     kinetis_spi.ops = &kinetis_spi_ops;
-    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
-    return rt_spi_bus_register(&kinetis_spi, "spi2", &kinetis_spi_ops); 
+    
+    return rt_spi_bus_register(&kinetis_spi, name, &kinetis_spi_ops); 
 }
 
 

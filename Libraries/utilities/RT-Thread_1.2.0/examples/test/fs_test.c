@@ -22,8 +22,8 @@ static rt_thread_t fsrw1_thread = RT_NULL;
 static rt_thread_t fsrw2_thread = RT_NULL;
 
 #define fsrw1_fn                   "/test1.dat"
-#define fsrw1_data_len             120               /* Less than 256 */
-#define fsrw1_write_times          100
+#define fsrw1_data_len             4096               /* Less than 256 */
+#define fsrw1_write_times          40
 static void fsrw1_thread_entry(void* parameter)
 {
     int fd;

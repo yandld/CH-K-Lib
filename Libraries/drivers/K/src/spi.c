@@ -140,7 +140,6 @@ static uint32_t dspi_hal_set_baud(uint32_t instance, uint8_t whichCtar, uint32_t
  */
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
 {
-
     /* enable clock gate */
     *(uint32_t*)SIM_SPIClockGateTable[SPI_InitStruct->instance].addr |= SIM_SPIClockGateTable[SPI_InitStruct->instance].mask;
     
@@ -167,33 +166,28 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
     /* disable FIFO and clear FIFO flag */
     SPI_InstanceTable[SPI_InitStruct->instance]->MCR |= 
         SPI_MCR_PCSIS_MASK |
-        SPI_MCR_HALT_MASK |
+        SPI_MCR_HALT_MASK  |
         SPI_MCR_CLR_TXF_MASK|
         SPI_MCR_CLR_RXF_MASK|
         SPI_MCR_DIS_TXF_MASK|
         SPI_MCR_DIS_RXF_MASK;
     
     /* config frame format */
-    SPI_FrameConfig(SPI_InitStruct->instance, SPI_InitStruct->ctar, SPI_InitStruct->frameFormat, SPI_InitStruct->dataSize, SPI_InitStruct->bitOrder, SPI_InitStruct->baudrate);
+    SPI_CTARConfig(SPI_InitStruct->instance, SPI_InitStruct->ctar, SPI_InitStruct->frameFormat, SPI_InitStruct->dataSize, SPI_InitStruct->bitOrder, SPI_InitStruct->baudrate);
     
     /* clear all flags */
-    SPI_InstanceTable[SPI_InitStruct->instance]->SR = SPI_SR_EOQF_MASK   
-            | SPI_SR_TFUF_MASK    
-            | SPI_SR_TFFF_MASK 
-            | SPI_SR_RFOF_MASK 
-            | SPI_SR_RFDF_MASK
-            | SPI_SR_TCF_MASK;
+    SPI_InstanceTable[SPI_InitStruct->instance]->SR = 0xFFFFFFFF;
     
     /* launch */
     SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_HALT_MASK;
 }
+
  
 /**
- * @brief  SPI数据帧配置
- * @note   内部函数，用户无需调用
+ * @brief  SPI 波特率及传输控制寄存器配置
  * @retval None
  */
-void SPI_FrameConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate)
+void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate)
 {
     uint32_t clock;
     
@@ -279,30 +273,67 @@ uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t 
     return pq->ip_instance;
 }
 
+void SPI_EnableTxFIFO(uint32_t instance, bool status)
+{
+    /* enable SPI clock */
+    SPI_InstanceTable[instance]->MCR &= ~SPI_MCR_MDIS_MASK;
+    
+    (status)?
+    (SPI_InstanceTable[instance]->MCR &= ~SPI_MCR_DIS_TXF_MASK):
+    (SPI_InstanceTable[instance]->MCR |= SPI_MCR_DIS_TXF_MASK);
+}
+
+void SPI_EnableRxFIFO(uint32_t instance, bool status)
+{
+    /* enable SPI clock */
+    SPI_InstanceTable[instance]->MCR &= ~SPI_MCR_MDIS_MASK;
+    
+    (status)?
+    (SPI_InstanceTable[instance]->MCR &= ~SPI_MCR_DIS_RXF_MASK):
+    (SPI_InstanceTable[instance]->MCR |= SPI_MCR_DIS_RXF_MASK);
+}
+
+
+
 /**
  * @brief  SPI模块 中断和DMA功能配置
  * @code
  *     //使用SPI的1模块发送完成中断
- *     SPI_ITDMAConfig(HW_SPI1, kSPI_IT_TCF);
+ *     SPI_ITDMAConfig(HW_SPI1, kSPI_IT_TCF, true);
  * @endcode
  * @param  instance :SPI通信模块号 HW_SPI0~2
  * @param  SPI_ITDMAConfig_Type: SPI中断类型
- *         @arg kSPI_IT_TCF_Disable  :关闭中断
  *         @arg kSPI_IT_TCF          :开启发送完成中断
+ *         @arg kSPI_DMA_TFFF        :TxFIFO 空 DMA请求
+ *         @arg kSPI_DMA_RFDF        :RxFIFO 空 DMA请求
  * @param  baudrate :SPI通信速度设置
  * @retval None
  */
-void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config)
+void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status)
 {
     switch(config)
     {
-        case kSPI_IT_TCF_Disable: 
-            SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_TCF_RE_MASK;
-            NVIC_DisableIRQ(SPI_IRQnTable[instance]);
-            break;
         case kSPI_IT_TCF: 
+            (status)?
+            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_TCF_RE_MASK):
+            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_TCF_RE_MASK);
             NVIC_EnableIRQ(SPI_IRQnTable[instance]);
-            SPI_InstanceTable[instance]->RSER |= SPI_RSER_TCF_RE_MASK;
+            break;
+        case kSPI_DMA_TFFF:
+            (status)?
+            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_TFFF_RE_MASK):
+            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_TFFF_RE_MASK); 
+            (status)?
+            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_TFFF_DIRS_MASK):
+            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_TFFF_DIRS_MASK); 
+            break;
+        case kSPI_DMA_RFDF:
+            (status)?
+            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_RFDF_RE_MASK):
+            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_RFDF_RE_MASK); 
+            (status)?
+            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_RFDF_DIRS_MASK):
+            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_RFDF_DIRS_MASK);   
             break;
         default:
             break;
@@ -332,8 +363,8 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
  * @endcode
  * @param  instance :SPI通信模块号 HW_SPI0~2
  * @param  ctar :SPI通信通道选择
- *          @arg HW_CTAR0  :0通道
- *          @arg HW_CTAR1  :1通道
+ *          @arg HW_CTAR0  :0配置寄存器
+ *          @arg HW_CTAR1  :1配置寄存器
  * @param  data    : 要发送的一字节数据
  * @param  CSn     : 片选信号端口选择
  * @param  csState : 片选信号最后的状态
@@ -344,20 +375,37 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
 uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, uint16_t csState)
 {
     uint16_t read_data;
+    
 	SPI_InstanceTable[instance]->PUSHR = (((uint32_t)(((csState))<<SPI_PUSHR_CONT_SHIFT))&SPI_PUSHR_CONT_MASK) 
             | SPI_PUSHR_CTAS(ctar)      
             | SPI_PUSHR_PCS(1<<CSn)
             | SPI_PUSHR_TXDATA(data);
+    
+    /* waitting for complete */
     if(!(SPI_InstanceTable[instance]->RSER & SPI_RSER_TCF_RE_MASK)) // if it is polling mode
     {
-        /* wait for transfer complete */
-        while(!(SPI_InstanceTable[instance]->SR & SPI_SR_TCF_MASK)){};
-        /* clear flag */
+        while(!(SPI_InstanceTable[instance]->SR & SPI_SR_TCF_MASK));
         SPI_InstanceTable[instance]->SR |= SPI_SR_TCF_MASK;
     }
+    
     read_data = (uint16_t)SPI_InstanceTable[instance]->POPR;
     return read_data;
 }
+
+
+/*
+void SPI_WaitSync(uint32_t instance)
+{
+    uint16_t pointer; 
+    while(pointer != 0)
+    {
+        pointer = (SPI_InstanceTable[instance]->SR & SPI_SR_TXCTR_MASK) >> SPI_SR_TXCTR_SHIFT;
+    }
+    SPI_InstanceTable[instance]->SR |= SPI_SR_TCF_MASK;
+    while(!(SPI_InstanceTable[instance]->SR & SPI_SR_TCF_MASK));
+    SPI_InstanceTable[instance]->SR |= SPI_SR_TCF_MASK;
+}
+*/
 
 /**
  * @brief  中断处理函数入口

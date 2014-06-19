@@ -16,6 +16,8 @@
 #include "components.h"
 
 
+#include "spi.h"
+
 #ifdef __CC_ARM
 extern int Image$$RW_IRAM1$$ZI$$Limit;
 #define KINETIS_SRAM_BEGIN    (&Image$$RW_IRAM1$$ZI$$Limit)
@@ -31,14 +33,25 @@ extern int __bss_end;
 #define KINETIS_SRAM_END                (0x20000000 + KINETIS_SRAM_SIZE_IN_KB * 1024)
 
 
+int rt_hw_usart_init(uint32_t instance, const char * name);
+int rt_hw_spi_bus_init(uint32_t instance, const char *name);
+int rt_hw_rtc_init(const char* name);
+
 void rt_hw_board_init(void)
 {
-    rt_hw_usart_init();
+    rt_hw_usart_init(HW_UART0, "uart0");
+    PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
+    PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
+    
 	rt_console_set_device("uart0");
     rt_hw_sd_init();
    // rt_hw_lcd_init();
-    rt_hw_rtc_init();
-    rt_hw_spi_bus_init();
+    rt_hw_rtc_init("rtc");
+    rt_hw_spi_bus_init(HW_SPI2, "spi2");
+    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
+    
     /* attacted spi2 - 1*/
     {
         static struct rt_spi_device spi_device;

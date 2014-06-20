@@ -23,7 +23,7 @@ static rt_err_t touch_ads7843_read(rt_device_t dev, rt_off_t pos, void *buffer, 
 }
 
 
-rt_err_t touch_ads7843_init(const char * flash_device_name, const char * spi_device_name)
+rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name)
 {
 
     rt_spi_device = (struct rt_spi_device *)rt_device_find(spi_device_name);
@@ -53,7 +53,7 @@ rt_err_t touch_ads7843_init(const char * flash_device_name, const char * spi_dev
     /* no private */
     ads7843_device.user_data = RT_NULL;
 
-    rt_device_register(&ads7843_device, flash_device_name,
+    rt_device_register(&ads7843_device, name,
                        RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STANDALONE);
 
     return RT_EOK;

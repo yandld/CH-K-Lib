@@ -110,9 +110,7 @@ void rtthread_startup(void)
     
     
 	rt_system_scheduler_init();
-#ifdef RT_USING_FINSH
-	finsh_system_init(); /* init finsh */
-#endif
+
 	rt_device_init_all(); /* register all devices */
     rt_system_timer_thread_init(); /* enable software timer system */
 	rt_thread_idle_init(); /* init idle thread */

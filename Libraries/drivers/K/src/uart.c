@@ -753,7 +753,7 @@ void UART4_RX_TX_IRQHandler(void)
     }
 }
 
-#if (defined(MK70F12)|| defined(MK70F15))
+#if (defined(MK70F12)|| defined(MK70F15) || defined(MK60D10))
 void UART5_RX_TX_IRQHandler(void)
 {
     uint16_t ch;

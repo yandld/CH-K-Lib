@@ -52,6 +52,7 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     if(!ksz8041_is_linked())
     {
         rt_kprintf("no wire connected\r\n");
+        eth_device_linkchange(&device, false);
     }
     
     ENET_InitTypeDef ENET_InitStruct1;
@@ -83,13 +84,12 @@ static rt_size_t rt_ksz8041_read(rt_device_t dev, rt_off_t pos, void* buffer, rt
 
 static rt_size_t rt_ksz8041_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
-    rt_kprintf("rt_ksz8041_write\r\n");
-    while(1);
     return RT_EOK;
 }
 
 static rt_err_t rt_ksz8041_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
+    printf("rt_ksz8041_control:%d\r\n", cmd);
     switch (cmd)
     {
     case NIOCTL_GADDR:
@@ -122,7 +122,6 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
             struct pbuf* q;  
             for (q = p; q != RT_NULL; q = q->next)
             {
-            //    rt_kprintf("rt_ksz8041_rx:%d\r\n", q->len);
                 rt_memcpy((rt_uint8_t*)q->payload, (rt_uint8_t*)&gRxBuffer[i], q->len);
                 send_cnt += q->len;
             }
@@ -144,10 +143,21 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
     i = 0;
     for (q = p; q != RT_NULL; q = q->next)
     {
-        
         rt_memcpy((rt_uint8_t*)&gTxBuffer[i], (rt_uint8_t*)q->payload, q->len);
         i += q->len;
     }
+    
+    /* check if still linked */
+    if(!ksz8041_is_linked())
+    {
+        eth_device_linkchange(&device, false);
+        return RT_ERROR;
+    }
+    else
+    {
+        eth_device_linkchange(&device, true);
+    }
+    
     ENET_MacSendData(gTxBuffer, i);
     while(ENET_IsTransmitComplete() == 0);
     return RT_EOK;
@@ -155,10 +165,6 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
 
 int rt_hw_ksz8041_init(void)
 {
-
-
-   // rt_sem_init(&sem_ack, "tx_ack", 1, RT_IPC_FLAG_FIFO);
-   // rt_sem_init(&sem_lock, "eth_lock", 1, RT_IPC_FLAG_FIFO);
 
     device.parent.init       = rt_ksz8041_init;
     device.parent.open       = rt_ksz8041_open;
@@ -174,5 +180,4 @@ int rt_hw_ksz8041_init(void)
 
     eth_device_init(&device, "e0");
 }
-
 

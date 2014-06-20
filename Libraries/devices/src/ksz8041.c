@@ -81,7 +81,7 @@
 
 #define KSZ8041_PHY_PHYIDR1_VALUE   (0x22)
 
-#define KSZ8041_DEBUG		0
+#define KSZ8041_DEBUG		1
 #if ( KSZ8041_DEBUG == 1 )
 #define KSZ8041_TRACE	printf
 #else

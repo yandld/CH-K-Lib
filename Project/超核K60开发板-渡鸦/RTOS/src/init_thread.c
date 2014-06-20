@@ -10,6 +10,7 @@
 
 extern void gui_thread_entry(void* parameter);
 extern void led_thread_entry(void* parameter);
+rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 
 void init_thread_entry(void* parameter)
 {
@@ -71,13 +72,11 @@ void init_thread_entry(void* parameter)
     if(touch_ads7843_init("ads7843", "spi20") != RT_EOK)
     {
         rt_kprintf("init touch failed\r\n");
-        rt_thread_suspend(thread); 
     }
     /* attacted ads7843 to spi21 */
     if(w25qxx_init("spi_flash", "spi21")!= RT_EOK)
     {
         rt_kprintf("init spi flash failed\r\n");
-        rt_thread_suspend(thread); 
     }
     /* mount spi_flash */
     if (dfs_mount("spi_flash", "/", "elm", 0, 0) == 0)
@@ -99,6 +98,11 @@ void init_thread_entry(void* parameter)
     {
         rt_kprintf("sd0 mount to /SD failed!\n");
     }
+    
+#ifdef RT_USING_FINSH
+	finsh_system_init(); /* init finsh */
+#endif
+    
    /* gui thread */
     thread = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*8, 0x23, 20);                                                      
     if (thread != RT_NULL)

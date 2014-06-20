@@ -250,6 +250,9 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 		__NOP();
 	}
     
+    /* reinit enet MII */
+    ENET_MII_Init();
+    
     /* init buffer desipicter */
     ENET_BDInit();
     

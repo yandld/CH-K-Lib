@@ -89,7 +89,6 @@ static rt_size_t rt_ksz8041_write (rt_device_t dev, rt_off_t pos, const void* bu
 
 static rt_err_t rt_ksz8041_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
-    printf("rt_ksz8041_control:%d\r\n", cmd);
     switch (cmd)
     {
     case NIOCTL_GADDR:

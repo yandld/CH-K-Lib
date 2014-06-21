@@ -32,7 +32,7 @@
 
 /* Using Dynamic Heap Management */
 #define RT_USING_HEAP
-//#define RT_USING_MEMPOOL
+#define RT_USING_MEMPOOL
 //#define RT_USING_MEMHEAP_AS_HEAP
 /* Using Small MM */
 #define RT_USING_SMALL_MEM

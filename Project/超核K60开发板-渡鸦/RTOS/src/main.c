@@ -2,7 +2,6 @@
 
 #include <rtthread.h>
 #include <rthw.h>
-#include <finsh.h>
 #include <stdint.h>
 
 void SysTick_Handler(void)
@@ -17,6 +16,7 @@ void DelayMs(uint32_t ms)
     rt_thread_delay(ms/10 + 1);
 }
 
+void rtthread_startup(void);
 
 int main(void)
 {

@@ -7,7 +7,7 @@ struct rt_spi_device * rt_spi_device;
 #define ADS7843_CMD_READ_X   (0xD0)
 #define ADS7843_CMD_READ_Y   (0X90)
 
-static rt_err_t touch_ads7843_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size)
+static rt_size_t touch_ads7843_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size)
 {
     rt_uint8_t send_buffer[1];
     if(pos == 0)

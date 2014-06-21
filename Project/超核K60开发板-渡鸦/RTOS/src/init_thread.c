@@ -1,12 +1,10 @@
 #include <rtthread.h>
 #include <rthw.h>
 
-/* DFS */
-#include <dfs_fs.h>
-#include <dfs_posix.h>
-#include <dfs_elm.h>
+#include "components.h"
 
 #include <drivers/spi.h>
+#include "spi_flash_w25qxx.h"
 
 extern void gui_thread_entry(void* parameter);
 extern void led_thread_entry(void* parameter);
@@ -18,7 +16,6 @@ void init_thread_entry(void* parameter)
     rt_thread_t thread;
     rt_err_t result;
     
-    rt_kprintf("start init thread @ LWIP:\r\n");
 #ifdef RT_USING_LWIP
 	/* initialize lwip stack */
     eth_system_device_init();
@@ -26,7 +23,6 @@ void init_thread_entry(void* parameter)
     rt_hw_ksz8041_init();
 	/* initialize lwip system */
 	lwip_system_init();
-	rt_kprintf("TCP/IP initialized!\n");
 #endif  /* RT_USING_LWIP */
     
     rt_kprintf("start init thread @ DFS:\r\n");
@@ -55,19 +51,6 @@ void init_thread_entry(void* parameter)
 
 #endif /* RT_USING_DFS */
 
-    /* check device */
-    spi_device = (struct rt_spi_device *)rt_device_find("spi21");
-    if(spi_device == RT_NULL)
-    {
-        rt_kprintf("no spi device(bus2 - device1) found\r\n");
-        rt_thread_suspend(thread);
-    }
-    spi_device = (struct rt_spi_device *)rt_device_find("spi20");
-    if(spi_device == RT_NULL)
-    {
-        rt_kprintf("no spi device(bus2 - device0) found\r\n");
-        rt_thread_suspend(thread);
-    }
     /* attacted ads7843 to spi20 */
     if(touch_ads7843_init("ads7843", "spi20") != RT_EOK)
     {

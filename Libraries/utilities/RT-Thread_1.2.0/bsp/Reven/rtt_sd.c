@@ -8,19 +8,14 @@ static  rt_mutex_t mutex;
     
 static rt_err_t rt_sd_init (rt_device_t dev)
 {
-    uint32_t ret;
-    ret = SD_QuickInit(10000000);
-    if(ret)
+    int r;
+    r = SD_QuickInit(10000000);
+    if(r)
     {
+        rt_kprintf("SD hardware init failed code:%d\r\n", r);
         return RT_ERROR;
     }
-    rt_kprintf("Size:%dMB\r\n", SD_GetSizeInMB());
     mutex = rt_mutex_create("sd_mutex", RT_IPC_FLAG_FIFO);
-    if (mutex == RT_NULL)
-    {
-        rt_kprintf("mutex create failed\r\n");
-        return 0;
-    }
     return RT_EOK;
 }
 
@@ -52,7 +47,7 @@ static rt_size_t rt_sd_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size
 }
 
 
-static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
+static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
     rt_thread_delay(1);
@@ -85,7 +80,7 @@ rt_err_t rt_sd_txcomplete(rt_device_t dev, void *buffer)
 	return RT_EOK;
 }
 
-void rt_hw_sd_init(void)
+void rt_hw_sd_init(uint32_t instance, const char *name)
 {
 
 	sd_device.type 		= RT_Device_Class_Block;
@@ -99,7 +94,7 @@ void rt_hw_sd_init(void)
 	sd_device.control 	= rt_sd_control;
 	sd_device.user_data	= rt_sd_txcomplete;
 	
-    rt_device_register(&sd_device, "sd0", RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STANDALONE | RT_DEVICE_FLAG_REMOVABLE);
+    rt_device_register(&sd_device, name, RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STANDALONE | RT_DEVICE_FLAG_REMOVABLE);
 }
 
 

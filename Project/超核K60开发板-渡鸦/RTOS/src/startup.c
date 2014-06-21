@@ -14,8 +14,6 @@
 #include "rtt_spi.h"
 
 #include "components.h"
-
-
 #include "spi.h"
 
 #ifdef __CC_ARM
@@ -36,6 +34,7 @@ extern int __bss_end;
 int rt_hw_usart_init(uint32_t instance, const char * name);
 int rt_hw_spi_bus_init(uint32_t instance, const char *name);
 int rt_hw_rtc_init(const char* name);
+void rt_hw_sd_init(uint32_t instance, const char *name);
 
 void rt_hw_board_init(void)
 {
@@ -44,7 +43,7 @@ void rt_hw_board_init(void)
     PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     
 	rt_console_set_device("uart0");
-    rt_hw_sd_init();
+    rt_hw_sd_init(0, "sd0");
    // rt_hw_lcd_init();
     rt_hw_rtc_init("rtc");
     rt_hw_spi_bus_init(HW_SPI2, "spi2");
@@ -57,16 +56,15 @@ void rt_hw_board_init(void)
         static struct rt_spi_device spi_device;
         static struct kinetis_spi_cs spi_cs_0;
         spi_cs_0.ch = 1;
-        /* pinMux */
         PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
         rt_spi_bus_attach_device(&spi_device, "spi21", "spi2", &spi_cs_0);
     }
+    
     /* attacted spi2 - 0*/
     {
         static struct rt_spi_device spi_device;
         static struct kinetis_spi_cs spi_cs_0;
         spi_cs_0.ch = 0;
-        /* pinMux */
         PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
         rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", &spi_cs_0);
     }

@@ -17,7 +17,7 @@ static void GUI_SettingInit(void)
 void gui_thread_entry(void* parameter)
 {
     rt_thread_t thread = rt_thread_self();
-    rt_kprintf("gui_thread_entry\r\n");
+    rt_kprintf("thread-%s start\r\n", thread->name);
     //GUI_Init();
    // GUI_SettingInit();
 	//GUI_DispString("GUI system OK\r\n");//œ‘ æ≤‚ ‘

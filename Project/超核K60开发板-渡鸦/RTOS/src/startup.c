@@ -9,6 +9,7 @@
 #include "finsh.h"
 #include "shell.h"
 #include "sram.h"
+#include "sd.h"
 
 #include <drivers/spi.h>
 #include "rtt_spi.h"
@@ -109,11 +110,11 @@ void rtthread_startup(void)
     
 	rt_system_scheduler_init();
 
-	rt_device_init_all(); /* register all devices */
-    rt_system_timer_thread_init(); /* enable software timer system */
-	rt_thread_idle_init(); /* init idle thread */
-    rt_application_init(); /* init application */
-	rt_system_scheduler_start(); /* running the system */
+	rt_device_init_all();
+    rt_system_timer_thread_init();
+	rt_thread_idle_init();
+    rt_application_init();
+	rt_system_scheduler_start();
 }
 
 

@@ -8,27 +8,30 @@ static  rt_mutex_t mutex;
     
 static rt_err_t rt_sd_init (rt_device_t dev)
 {
-    int r;
-    r = SD_QuickInit(20*1000*1000);
-    if(r)
-    {
-        rt_kprintf("SD hardware init failed code:%d\r\n", r);
-        return RT_ERROR;
-    }
+    SD_InitTypeDef sdi;
+    sdi.baudrate = 20*1000*1000;
+    SD_Init(&sdi);
     mutex = rt_mutex_create("sd_mutex", RT_IPC_FLAG_FIFO);
     return RT_EOK;
 }
 
 static rt_err_t rt_sd_open(rt_device_t dev, rt_uint16_t oflag)
 {
-	rt_kprintf("sd driver - I need open\r\n");
+    int r;
+    rt_mutex_take(mutex, RT_WAITING_FOREVER);
+    r = SD_QuickInit(20*1000*1000);
+    rt_mutex_release(mutex);
+    if(r)
+    {
+        dev->open_flag = RT_DEVICE_OFLAG_CLOSE;
+        return RT_ERROR;
+    }
+    dev->open_flag = RT_DEVICE_OFLAG_OPEN;
 	return RT_EOK;
 }
 
 static rt_err_t rt_sd_close(rt_device_t dev)
 {
-    rt_mutex_delete(mutex);
-	rt_kprintf("sd driver - I need close\r\n");
 	return RT_EOK;
 }
 
@@ -42,17 +45,16 @@ static rt_size_t rt_sd_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size
 {
     int r;
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
-   // r = SD_ReadSingleBlock(pos, (rt_uint8_t *)buffer);
     r = SD_ReadMultiBlock(pos, (rt_uint8_t *)buffer, size);
     rt_mutex_release(mutex);
     if(r)
     {
         rt_kprintf("sd_read error!%d\r\n", r);
+        dev->open_flag = RT_DEVICE_OFLAG_CLOSE;
         return 0;
     }
 	return size;
 }
-
 
 static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
@@ -62,7 +64,8 @@ static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, const void* buffer,
     rt_mutex_release(mutex);
     if(r)
     {
-        rt_kprintf("sd_write error!\r\n", r);
+        rt_kprintf("sd_write error!%d\r\n", r);
+        dev->open_flag = RT_DEVICE_OFLAG_CLOSE;
         return 0;
     }
     return size;
@@ -106,7 +109,7 @@ void rt_hw_sd_init(uint32_t instance, const char *name)
 	sd_device.read 		= rt_sd_read;
 	sd_device.write     = rt_sd_write;
 	sd_device.control 	= rt_sd_control;
-	sd_device.user_data	= rt_sd_txcomplete;
+	sd_device.user_data	= RT_NULL;
 	
     rt_device_register(&sd_device, name, RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STANDALONE | RT_DEVICE_FLAG_REMOVABLE);
 }

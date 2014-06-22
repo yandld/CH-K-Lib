@@ -14,7 +14,7 @@ void led_thread_entry(void* parameter)
 //        GUI_Exec();
   //      GUI_TOUCH_Exec();
         GPIO_ToggleBit(HW_GPIOE, 6);
-        rt_thread_delay(1);
+        rt_thread_delay(10);
 	}
 }
 

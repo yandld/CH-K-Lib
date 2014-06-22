@@ -47,7 +47,6 @@ void init_thread_entry(void* parameter)
 
 #if defined(RT_USING_DFS_NFS) && defined(RT_USING_LWIP)
 	/* initialize NFSv3 client file system */
-    rt_kprintf("init nfs\r\n");
 	nfs_init();
 #endif
 
@@ -71,7 +70,7 @@ void init_thread_entry(void* parameter)
 	finsh_system_init(); /* init finsh */
 #endif
     /* sd_thread */
-    thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 512, 0x23, 20); 
+    thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);		

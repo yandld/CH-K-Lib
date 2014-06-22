@@ -19,6 +19,13 @@ void sd_thread_entry(void* parameter)
         rt_thread_suspend(thread); 
     }
     
+	DIR *dir;
+	dir = opendir("/SD");
+    if (dir == RT_NULL)
+    {
+        mkdir("/SD", 0x777);
+    }
+    
     dfs_mount("sd0", "/SD", "elm", 0, 0);
 
 	while(1)

@@ -19,7 +19,7 @@
  */
 static int kinetis_spi_configure(spi_device_t device, struct spi_config *configuration)
 {
-    SPI_FrameFormat_Type mode = {0};
+    SPI_FrameFormat_Type mode;
     switch(configuration->mode & (SPI_CPHA | SPI_CPHA))
     {
         case SPI_MODE_0:

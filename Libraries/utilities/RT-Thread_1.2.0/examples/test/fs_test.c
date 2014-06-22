@@ -131,7 +131,7 @@ static void fsrw1_thread_entry(void* parameter)
 }
 
 #define fsrw2_fn                   "/SD/test2.dat"
-#define fsrw2_data_len             180              /* Less than 256 */
+#define fsrw2_data_len             256              /* Less than 256 */
 static void fsrw2_thread_entry(void* parameter)
 {
     int fd;

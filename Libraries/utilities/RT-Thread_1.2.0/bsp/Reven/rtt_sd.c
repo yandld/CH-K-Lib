@@ -9,7 +9,7 @@ static  rt_mutex_t mutex;
 static rt_err_t rt_sd_init (rt_device_t dev)
 {
     int r;
-    r = SD_QuickInit(10000000);
+    r = SD_QuickInit(20*1000*1000);
     if(r)
     {
         rt_kprintf("SD hardware init failed code:%d\r\n", r);
@@ -40,24 +40,37 @@ rt_err_t rt_sd_indicate(rt_device_t dev, rt_size_t size)
 
 static rt_size_t rt_sd_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
+    int r;
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
-    SD_ReadMultiBlock(pos, (rt_uint8_t *)buffer, size);
+   // r = SD_ReadSingleBlock(pos, (rt_uint8_t *)buffer);
+    r = SD_ReadMultiBlock(pos, (rt_uint8_t *)buffer, size);
     rt_mutex_release(mutex);
+    if(r)
+    {
+        rt_kprintf("sd_read error!%d\r\n", r);
+        return 0;
+    }
 	return size;
 }
 
 
 static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
+    int r;
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
-    rt_thread_delay(1);
-    SD_WriteMultiBlock(pos, (rt_uint8_t *)buffer, size);
+    r = SD_WriteMultiBlock(pos, (rt_uint8_t *)buffer, size);
     rt_mutex_release(mutex);
+    if(r)
+    {
+        rt_kprintf("sd_write error!\r\n", r);
+        return 0;
+    }
     return size;
 }
 
 static rt_err_t rt_sd_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
+    uint32_t size;
     struct rt_device_blk_geometry geometry;
     rt_memset(&geometry, 0, sizeof(geometry));
 	switch (cmd)
@@ -65,7 +78,8 @@ static rt_err_t rt_sd_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 	case RT_DEVICE_CTRL_BLK_GETGEOME:
 		geometry.block_size = 512;
 		geometry.bytes_per_sector = 512;
-		geometry.sector_count = SD_GetSizeInMB()*1024*2;
+        size = SD_GetSizeInMB();
+		geometry.sector_count = size*1024*2;
 		rt_memcpy(args, &geometry, sizeof(struct rt_device_blk_geometry));
 		break;
 	default: 

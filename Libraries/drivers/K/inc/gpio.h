@@ -38,7 +38,6 @@ typedef enum
     kPinAlt5,  //5功能复用
     kPinAlt6,  //6功能复用
     kPinAlt7,  //7功能复用
-    kPinAltNameCount,
 }PORT_PinMux_Type;
 
 /* 端口上下拉配置 ，电阻阻值约为20K*/
@@ -47,7 +46,6 @@ typedef enum
     kPullDisabled,  //关闭上下拉电阻功能
     kPullUp,        //开启上拉电阻功能
     kPullDown,      //开启下拉电阻功能
-    kPullNameCount, //规则检测使用，无意义
 }PORT_Pull_Type;
 
 /* GPIO端口模式配置 */
@@ -58,7 +56,6 @@ typedef enum
     kGPIO_Mode_IPU = 0x02,       //上拉输入
     kGPIO_Mode_OOD = 0x03,       //开漏输出
     kGPIO_Mode_OPP = 0x04,       //推挽输出
-    kGPIO_ModeNameCount,         //规则检测使用，无意义
 }GPIO_Mode_Type;
 
 /* 端口输入输出模式选择 */
@@ -66,14 +63,11 @@ typedef enum
 {
     kInput,                  //引脚输入模式
     kOutput,                 //引脚输出模式
-    kPinConfigNameCount,     //规则检测使用，无意义
 }GPIO_PinConfig_Type;
 
 /* 端口中断及DMA配置选择 */
 typedef enum
 {
-    kGPIO_IT_Disable,             //关闭引脚中断
-    kGPIO_DMA_Disable,            //关闭DMA功能
     kGPIO_DMA_RisingEdge,	      //上升沿触发DMA
     kGPIO_DMA_FallingEdge,        //下降沿触发DMA
     kGPIO_DMA_RisingFallingEdge,  //上升沿和下降沿触发DMA
@@ -82,7 +76,6 @@ typedef enum
     kGPIO_IT_FallingEdge,         //下降沿触发中断
     kGPIO_IT_RisingFallingEdge,   //上升沿和下降沿触发中断
     kGPIO_IT_High,                //高电平触发中断
-    kGPIO_ITDMAConfigNameCount,   //规则检测使用，无意义
 }GPIO_ITDMAConfig_Type;
 
 /* 端口初始化结构体 */
@@ -132,7 +125,7 @@ uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode);
 void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data);
 uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex);
 void GPIO_ToggleBit(uint32_t instance, uint8_t pinIndex);
-void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config);
+void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status);
 void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun);
 //!< low level functions
 void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull);

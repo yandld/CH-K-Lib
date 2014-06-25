@@ -449,7 +449,7 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
  *         @arg kGPIO_IT_High 高电平触发中断
  * @retval None
  */
-void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config)
+void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
@@ -458,13 +458,15 @@ void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type
     /* init moudle */
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
+    
+    if(!status)
+    {
+        NVIC_DisableIRQ(GPIO_IRQnTable[instance]);
+        return;
+    }
+    
     switch(config)
     {
-        case kGPIO_IT_Disable:
-            NVIC_DisableIRQ(GPIO_IRQnTable[instance]);
-            break;
-        case kGPIO_DMA_Disable:
-            break;
         case kGPIO_DMA_RisingEdge:
             PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(1);
             break;

@@ -41,7 +41,7 @@ static void DMA_PulseCountInit(uint32_t dmaChl, uint32_t instance, uint32_t pinI
     /* 开启2路引脚 配置为DMA触发 */
     GPIO_QuickInit(instance, pinIndex, kGPIO_Mode_IFT);
     /* 配置为DMA上升沿触发 */
-    GPIO_ITDMAConfig(instance, pinIndex, kGPIO_DMA_RisingEdge);
+    GPIO_ITDMAConfig(instance, pinIndex, kGPIO_DMA_RisingEdge, true);
     /* 配置DMA */
     static uint8_t dummy1, dummy2;
     DMA_InitTypeDef DMA_InitStruct1 = {0};  

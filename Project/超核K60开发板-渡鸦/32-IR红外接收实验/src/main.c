@@ -59,7 +59,7 @@ static uint8_t InfraredExec(uint8_t * code)
 void GPIO_ISR(uint32_t pinArray)
 {
     /* 关闭中断 */
-    GPIO_ITDMAConfig(IR_PORT, IR_PIN, kGPIO_IT_Disable);
+    GPIO_ITDMAConfig(IR_PORT, IR_PIN, kGPIO_IT_FallingEdge, false);
     uint8_t code[4];
     if(!InfraredExec(code))
     {
@@ -69,7 +69,7 @@ void GPIO_ISR(uint32_t pinArray)
         DelayMs(100);
         GPIO_WriteBit(HW_GPIOA, 6, 0);
     }
-    GPIO_ITDMAConfig(IR_PORT, IR_PIN, kGPIO_IT_FallingEdge);
+    GPIO_ITDMAConfig(IR_PORT, IR_PIN, kGPIO_IT_FallingEdge, true);
 }
 
 int main(void)
@@ -86,7 +86,7 @@ int main(void)
     GPIO_QuickInit(IR_PORT, IR_PIN, kGPIO_Mode_IPU);
     /* 设置中断回调 以及开始中断 */
     GPIO_CallbackInstall(IR_PORT, GPIO_ISR);
-    GPIO_ITDMAConfig(IR_PORT, IR_PIN, kGPIO_IT_FallingEdge);
+    GPIO_ITDMAConfig(IR_PORT, IR_PIN, kGPIO_IT_FallingEdge, true);
     
     while(1)
     {

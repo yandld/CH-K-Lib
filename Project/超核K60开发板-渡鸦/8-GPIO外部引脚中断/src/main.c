@@ -16,13 +16,13 @@
 /* 回调函数中的 array 的32位每一位代表一个引脚，1为 该脚中断被触发 0代表该脚中断未触发 */
 static void GPIO_ISR(uint32_t array)
 {
-    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_Disable);
+    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_FallingEdge, false);
     printf("KEY:0x%X\r\n", array);
     if(array & (1 << 26)) /*对应的按键中断 翻转对应的LED电平 */
     {
         GPIO_ToggleBit(HW_GPIOE, 12);
     }
-    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_FallingEdge);
+    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_FallingEdge, true);
 }
 
 int main(void)
@@ -39,7 +39,7 @@ int main(void)
     /* 设置GPIO外部引脚中断回调函数 */
     GPIO_CallbackInstall(HW_GPIOE, GPIO_ISR);
     /* 打开PTE26引脚的中断 上升沿触发 */
-    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_FallingEdge);
+    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_FallingEdge, true);
     
     printf("press any key1 to let LED toggle\r\n");
     

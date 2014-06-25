@@ -24,18 +24,8 @@ int main(void)
 {
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    
-    /* 初始化一个模块的一般模式: 初始化模块本身->根据芯片手册 初始化对应的复用引脚->使用模块 */
-    UART_InitTypeDef UART_InitStruct1 = {0};
-    UART_InitStruct1.instance = HW_UART0;
-    UART_InitStruct1.baudrate = 115200;
-    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
-    UART_InitStruct1.parityMode = kUART_ParityDisabled;
-    UART_Init(&UART_InitStruct1);
-    
-    /* 初始化串口0对应的引脚 D6 D7*/
-    PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
-    PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
+
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("type any character which will echo...\r\n");
     

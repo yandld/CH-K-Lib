@@ -32,6 +32,9 @@ int main(void)
     DelayInit();
     /* 初始化一个引脚 设置为推挽输出 */
     GPIO_QuickInit(HW_GPIOC, 16, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOC, 17, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOC, 18, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOD, 1, kGPIO_Mode_OPP);
     /* 初始化一个串口 使用UART0端口的PTD6引脚和PTD7引脚作为接收和发送，默认设置 baud 115200 */
     UART_QuickInit(UART4_RX_PC14_TX_PC15, 115200);
     
@@ -41,6 +44,9 @@ int main(void)
     {
         /* 闪烁小灯 */
         GPIO_ToggleBit(HW_GPIOC, 16);
+        GPIO_ToggleBit(HW_GPIOC, 17);
+        GPIO_ToggleBit(HW_GPIOC, 18);
+        GPIO_ToggleBit(HW_GPIOD, 1);
         DelayMs(500);
     }
 }

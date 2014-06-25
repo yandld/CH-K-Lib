@@ -21,17 +21,7 @@ int main(void)
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     
-    /** install module */
-    UART_InitTypeDef UART_InitStruct1 = {0};
-    UART_InitStruct1.instance = HW_UART0;
-    UART_InitStruct1.baudrate = 115200;
-    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
-    UART_InitStruct1.parityMode = kUART_ParityDisabled;
-    UART_Init(&UART_InitStruct1);
-    
-    /** Initation pin for UART which you chosen*/
-    PORT_PinMuxConfig(HW_GPIOD, 6, kPinAlt3);
-    PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     /** print message before mode change*/
     printf("uart will be send on interrupt mode...\r\n");

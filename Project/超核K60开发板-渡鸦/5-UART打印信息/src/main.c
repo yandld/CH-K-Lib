@@ -41,7 +41,6 @@ int main(void)
     uint32_t clock;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    /* 使用快速初始化 */
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     /* 打印芯片信息 */
     printf("%s - %dP\r\n", CPUIDY_GetFamID(), CPUIDY_GetPinCount());

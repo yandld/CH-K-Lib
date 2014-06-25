@@ -77,6 +77,7 @@ typedef enum
 /*!< UART初始化结构 */
 typedef struct
 {
+    uint32_t                srcClock;       // 时钟源频率
     uint8_t                 instance;       // UART 模块号 HW_UART0~HW_UART5
     uint32_t                baudrate;       // UART 波特率 
     UART_ParityMode_Type    parityMode;     // UART 校验位 

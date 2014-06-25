@@ -254,7 +254,6 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
 {
     uint16_t sbr;
     uint8_t brfa; 
-    uint32_t clock;
     static bool is_fitst_init = true;
     
 	/* param check */
@@ -266,14 +265,9 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     /* disable Tx Rx first */
     UART_InstanceTable[UART_InitStruct->instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     
-    /* get clock */
-    CLOCK_GetClockFrequency(kBusClock, &clock);
-    if((UART_InitStruct->instance == 0) || (UART_InitStruct->instance == 1))
-    {
-        CLOCK_GetClockFrequency(kCoreClock, &clock); /* UART0 UART1 are use core clock */
-    }
-    sbr = (uint16_t)((clock)/((UART_InitStruct->baudrate)*16));
-    brfa = (32*clock/((UART_InitStruct->baudrate)*16)) - 32*sbr;
+    /* baud rate generation */
+    sbr = (uint16_t)((UART_InitStruct->srcClock)/((UART_InitStruct->baudrate)*16));
+    brfa = ((32*UART_InitStruct->srcClock)/((UART_InitStruct->baudrate)*16)) - 32*sbr;
     
     /* config baudrate */
     UART_InstanceTable[UART_InitStruct->instance]->BDH |= UART_BDH_SBR(sbr>>8); 
@@ -600,12 +594,21 @@ void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
+    uint32_t clock;
     UART_InitTypeDef UART_InitStruct1;
     QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     UART_InitStruct1.baudrate = baudrate;
     UART_InitStruct1.instance = pq->ip_instance;
     UART_InitStruct1.parityMode = kUART_ParityDisabled;
     UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
+    
+    /* src clock */
+    CLOCK_GetClockFrequency(kBusClock, &clock);
+    if((pq->ip_instance == HW_UART0) || (pq->ip_instance == HW_UART1))
+    {
+        CLOCK_GetClockFrequency(kCoreClock, &clock); /* UART0 UART1 are use core clock */
+    }
+    UART_InitStruct1.srcClock = clock;
     
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
@@ -616,7 +619,7 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     /* init UART */
     UART_Init(&UART_InitStruct1);
     
-    /* disable hardware buffer */
+    /* default: disable hardware buffer */
     UART_EnableTxFIFO(pq->ip_instance, false);
     UART_EnableRxFIFO(pq->ip_instance, false);
     

@@ -41,8 +41,8 @@ int main(void)
     GPIO_QuickInit(HW_GPIOA, 4, kGPIO_Mode_IPU);
     GPIO_CallbackInstall(HW_GPIOE, PORTE_ISR);
     GPIO_CallbackInstall(HW_GPIOA, PORTA_ISR);
-    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_RisingEdge);
-    GPIO_ITDMAConfig(HW_GPIOA, 4,  kGPIO_IT_RisingEdge);
+    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_RisingEdge, true);
+    GPIO_ITDMAConfig(HW_GPIOA, 4,  kGPIO_IT_RisingEdge, true);
     
     printf("NVIC test connect E26&A04\r\n");
     /* 将系统 中断优先级分组 可以配置 16个 抢占优先级 和16个 子优先级 */

@@ -29,7 +29,7 @@ DSTATUS disk_initialize (
 	switch (pdrv)
     {
         case SD_CARD :
-            SD_QuickInit(8*1000*1000);
+            SD_QuickInit(12*1000*1000);
             return RES_OK;
 	}
 	return STA_NOINIT;

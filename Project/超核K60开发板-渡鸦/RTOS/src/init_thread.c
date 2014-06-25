@@ -53,15 +53,11 @@ void init_thread_entry(void* parameter)
 #endif /* RT_USING_DFS */
 
     /* attacted ads7843 to spi20 */
-    if(touch_ads7843_init("ads7843", "spi20") != RT_EOK)
-    {
-        rt_kprintf("init touch failed\r\n");
-    }
+    touch_ads7843_init("ads7843", "spi20");
+
     /* attacted ads7843 to spi21 */
-    if(w25qxx_init("spi_flash", "spi21")!= RT_EOK)
-    {
-        rt_kprintf("init spi flash failed\r\n");
-    }
+    w25qxx_init("spi_flash", "spi21");
+
     /* mount spi_flash */
     dfs_mount("spi_flash", "/", "elm", 0, 0);
 

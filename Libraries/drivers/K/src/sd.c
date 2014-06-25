@@ -108,7 +108,9 @@ static void SD_SetBaudRate(uint32_t baudrate)
 	uint32_t pres, div, min, minpres = 0x80, mindiv = 0x0F;
 	int  val;
     uint32_t clock;
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    SIM->SOPT2 &= ~SIM_SOPT2_SDHCSRC_MASK;
+    SIM->SOPT2 |= SIM_SOPT2_SDHCSRC(0);
+    CLOCK_GetClockFrequency(kCoreClock, &clock);
     
     /* Find closest setting */
     min = (uint32_t)-1;

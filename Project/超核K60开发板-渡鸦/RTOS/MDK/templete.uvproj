@@ -498,6 +498,11 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>sd_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sd_thread.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

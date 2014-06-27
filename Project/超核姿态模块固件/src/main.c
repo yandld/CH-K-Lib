@@ -65,6 +65,8 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 
 static void PIT_CH1_ISR(void)
 {
+    int32_t pressure;
+    int32_t temperature;
     uint32_t len;
     static transmit_user_data send_data;
     static uint8_t buf[64];
@@ -81,6 +83,13 @@ static void PIT_CH1_ISR(void)
     send_data.trans_roll = (int16_t)(angle.imu_roll*100);
     send_data.trans_yaw = 1800 + (int16_t)(angle.imu_yaw*10);
     
+    /* pressure */
+    bmp180_read_pressure(&pressure);
+    send_data.trans_pressure = pressure;
+    bmp180_start_conversion(BMP180_P2_MEASURE);
+    
+    
+    /* set buffer */
     len = user_data2buffer(&send_data, buf);
     trans_start_send_data(buf, len);
     
@@ -274,7 +283,7 @@ int main(void)
         DelayMs(20);
         bmp180_read_pressure(&pressure);
         printf("t:%d p:%d\r", temperature, pressure);
-          if(!nrf24l01_read_packet(NRF2401RXBuffer, &len))
+        if(!nrf24l01_read_packet(NRF2401RXBuffer, &len))
         {
             /* 从2401 接收到数据 */
 

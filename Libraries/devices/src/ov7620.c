@@ -33,13 +33,13 @@ static void OV7620_ISR(uint32_t pinArray)
         case TRANSFER_IN_PROCESS:
             if(DMA_IsMajorLoopComplete(HW_DMA_CH2) == 0)
             {
-                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_Disable);
+                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge, false);
                 if(OV7620_CallBackTable[0])
                 {
                     OV7620_CallBackTable[0]();
                 }
                 status = NEXT_FRAME;
-                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);  
+                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge, true);  
             }
             else
             {
@@ -83,8 +83,8 @@ void OV7620_Init(void)
     }
     
     GPIO_CallbackInstall(BOARD_OV7620_VSYNC_PORT, OV7620_ISR); 
-    GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_DMA_RisingEdge);
-    GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);
+    GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_DMA_RisingEdge, true);
+    GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge, true);
   //  GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge); //实际并没有用到
     //初始化DMA
     DMA_InitStruct1.chl = HW_DMA_CH2;

@@ -20,12 +20,12 @@
 
 #ifdef MKL25Z4
 #include "MKL25Z4.h"
-
+#elif  MKL03Z4
+#include "MKL03Z4.h"
 #else
 #define MKL25Z4
 #include "MKL25Z4.h"
-#warning "No CPU defined!"
-#warning "Default: MKL25Z4"
+#error "No CPU defined!"
 
 #endif
 

@@ -8,15 +8,14 @@
   * @note    此文件为内部文件，用户无需调用和修改  
   ******************************************************************************
   */
-#include "kl_common.h"
+#include "common.h"
 #include <string.h>
-//#include "systick.h"
+#include "systick.h"
 
-#if 0
 
 #define MCGOUT_TO_CORE_DIVIDER           (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
 #define MCGOUT_TO_SYSTEM_DIVIDER         (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
-#define MCGOUT_TO_BUS_DIVIDER            (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT) + 1)
+#define MCGOUT_TO_BUS_DIVIDER            (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV4_SHIFT)>>SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)
 #define MCGOUT_TO_PERIPHERAL_DIVIDER     (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT) + 1)
 #define MCGOUT_TO_FLEXBUS_DIVIDER        (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT) + 1)
 #define MCGOUT_TO_FLASH_DIVIDER          (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)
@@ -140,7 +139,6 @@ void DelayUs(uint32_t us)
 
 
 #if (defined(LIB_DEBUG))
-
 void assert_failed(char * file, uint32_t line)
 {
 	//断言失败检测
@@ -148,33 +146,9 @@ void assert_failed(char * file, uint32_t line)
 }
 #endif
 
-/* 非可屏蔽中断 non maskable interrupt*/
 void NMI_Handler(void)
 {
-    /* clear NMI pending bit */
-//    MCM->ISR |= MCM_ISR_NMI_MASK;
-    //printf("NMI ENTER\r\n");
+    
 }
-
-#endif
-
-#if (defined(LIB_DEBUG) && defined(DEBUG_FAULT_HANDLER))
-
-
-void HardFault_Handler(void)
-{
-    printf("HardFault_Handler\r\n");
-    while(1);
-}
-
-void BusFault_Handler(void)
-{
-    printf("BusFault_Handler\r\n");
-    while(1);
-}
-
-#endif
-
-
 
 

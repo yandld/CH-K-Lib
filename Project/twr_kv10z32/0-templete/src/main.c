@@ -40,7 +40,6 @@ int main(void)
     instance = UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     UART_CallbackRxInstall(instance, UART_ISR);
     UART_ITDMAConfig(instance, kUART_IT_Rx, true);
-    UART_EnableTxFIFO(instance, true);
     printf("HelloWorld!\r\n");
     while(1)
     {

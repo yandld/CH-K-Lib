@@ -548,72 +548,7 @@ void PORTA_IRQHandler(void)
     }	
 }
 
-void PORTB_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOB]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOB]->ISFR = 0xFFFFFFFF;
-    if(GPIO_CallBackTable[HW_GPIOB])
-    {
-        GPIO_CallBackTable[HW_GPIOB](ISFR);
-    }	
-}
 
-void PORTC_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOC]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOC]->ISFR = PORT_ISFR_ISF_MASK;
-    if(GPIO_CallBackTable[HW_GPIOC])
-    {
-        GPIO_CallBackTable[HW_GPIOC](ISFR);
-    }
-}
-
-void PORTD_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOD]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOD]->ISFR = PORT_ISFR_ISF_MASK;
-    if(GPIO_CallBackTable[HW_GPIOD])
-    {
-        GPIO_CallBackTable[HW_GPIOD](ISFR);
-    }	
-}
-
-void PORTE_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOE]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOE]->ISFR = PORT_ISFR_ISF_MASK;
-    if(GPIO_CallBackTable[HW_GPIOE])
-    {
-        GPIO_CallBackTable[HW_GPIOE](ISFR);
-    }	
-}
-
-#if (defined(MK70F12))
-void PORTF_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOF]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOF]->ISFR = PORT_ISFR_ISF_MASK;
-    if(GPIO_CallBackTable[HW_GPIOF])
-    {
-        GPIO_CallBackTable[HW_GPIOF](ISFR);
-    }
-}
-#endif
 
 
 //! @}

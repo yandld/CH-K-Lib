@@ -38,8 +38,6 @@ Tool
 Release
 lib_html
 d4d
-FAT
-FAT1
 
 # Libraries
 *.a

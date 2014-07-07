@@ -462,6 +462,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\KV\src\uart.c</FilePath>
             </File>
+            <File>
+              <FileName>pdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KV\src\pdb.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

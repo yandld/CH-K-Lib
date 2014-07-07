@@ -13,7 +13,6 @@
 
 //!< Internal vars
 static uint32_t fac_us; //!< usDelay Mut
-static uint32_t fac_ms; //!< msDelay Mut
 
 static PIT_CallBackType PIT_CallBackTable[4] = {NULL};
 static const IRQn_Type PIT_IRQnTable[] = 
@@ -50,8 +49,6 @@ void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
     /* get clock */
     CLOCK_GetClockFrequency(kBusClock, &fac_us);
     fac_us /= 1000000;
-    fac_ms = (fac_us * 1000);
-    fac_ms = fac_ms;
     PIT->CHANNEL[PIT_InitStruct->chl].LDVAL = fac_us * PIT_InitStruct->timeInUs;
     PIT->CHANNEL[PIT_InitStruct->chl].TCTRL |= (PIT_TCTRL_TEN_MASK);
     /* enable PIT module */

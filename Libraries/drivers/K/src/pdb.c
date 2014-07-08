@@ -21,34 +21,39 @@ void PDB_SoftwareTrigger(void)
 static void _PDB_SetCounterPeriod(uint32_t srcClock, uint32_t timeInUs)
 {
     static const uint8_t MULT[4] = {1, 10, 20, 40};
-    uint32_t p;
+    uint32_t clkDiv,mult;
     uint32_t i,j;
-    // (1<<i) 
-    uint32_t fac_us = 
-    p = (srcClock/1000) / 0xFFFF;
+    uint32_t factor;
     for(i=0;i<8;i++)
     {
         for(j=0;j<4;j++)
         {
-         //   fac_us = srcClock/1000000/(1<<i)/MULT[j];
             if((srcClock/1000000)*timeInUs/((1<<i)*MULT[j]) < 0xFFFF)
             {
-                printf("i:%d j:%d\r\n",i, j);
-            }
-          //  if(> timeInUs)
-            {
-         //       fac_us*timeInUs*
+                clkDiv = i;
+                mult = j;
+                break;
             }
         }
     }
     
+    LIB_TRACE("clkDiv:%d Mult:%d\r\n",clkDiv, mult);
+    
+    /* clk div */
+    PDB0->SC &= ~PDB_SC_PRESCALER_MASK;
+    PDB0->SC |= PDB_SC_PRESCALER(clkDiv);
+    
+    /* muti */
+    PDB0->SC &= ~PDB_SC_MULT_MASK;
+    PDB0->SC |= PDB_SC_MULT(mult);
+    
+    LIB_TRACE("MOD:%d\r\n", (srcClock/1000000)*timeInUs/((1<<clkDiv)*MULT[mult]));
+    PDB0->MOD = (srcClock/1000000)*timeInUs/((1<<clkDiv)*MULT[mult]);
+    PDB0->IDLY = (srcClock/1000000)*timeInUs/((1<<clkDiv)*MULT[mult]);
 }
 
 void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
 {
-	uint8_t i;
-	uint32_t p;
-	
     /* enable clock gate */
     SIM->SCGC6 |= SIM_SCGC6_PDB_MASK ;
     
@@ -61,40 +66,19 @@ void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
     /* if continues mode */
     (PDB_InitStruct->isContinuesMode)?(PDB0->SC |= PDB_SC_CONT_MASK):(PDB0->SC &= ~PDB_SC_CONT_MASK);
     
-    /* MUTI is lock to 1 */
-    PDB0->SC &= ~PDB_SC_MULT_MASK;
-    PDB0->SC |= PDB_SC_MULT(0);
-    
-    /* clk div */
-    PDB0->SC &= ~PDB_SC_PRESCALER_MASK;
-    PDB0->SC |= PDB_SC_PRESCALER(PDB_InitStruct->clkDiv);
-    
-    /* mod */
-    PDB0->MOD = PDB_InitStruct->mod;
-    
-    /* */
-   // PDB_InitStruct->srcClock
-	//p = ((CPUInfo.BusClock)*PDB_InitStruct->PDB_Period)/65535;
-	for(i=0;i<8;i++)
-	{
-		if(p/(1<<i) < 40) break;
-	}
-	if(i > 7) i = 7;
-
-//  PDB0->SC |= PDB_SC_MULT(PDB_MULT_40);
-	PDB0->SC |= PDB_SC_PRESCALER(i);
-
-    PDB0->MOD = 10000;
-    PDB0->IDLY = 10000;
-//	PDB0->MOD =  ((PDB_InitStruct->PDB_Period)*(CPUInfo.BusClock/1000))/(40*(1<<i));
-//	PDB0->IDLY = ((PDB_InitStruct->PDB_Period)*(CPUInfo.BusClock/1000))/(40*(1<<i));
+    /* set PDB period */
+    _PDB_SetCounterPeriod(PDB_InitStruct->srcClock, 1000*1000);
 
     /* enable PDB */
 	PDB0->SC |= PDB_SC_PDBEN_MASK; 
 
     /* enable LOCK */
 	PDB0->SC |= PDB_SC_LDOK_MASK;
+}
 
+void PDB_SetADCTrigDelayValue(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue)
+{
+    PDB0->CH[adcInstance].DLY[adcMux] = dlyValue;
 }
 
 

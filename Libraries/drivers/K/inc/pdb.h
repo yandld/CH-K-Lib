@@ -18,7 +18,11 @@
 #include <stdint.h>
      
     
+#define HW_PDB_CH0
+#define HW_PDB_CH1
      
+#define HW_PDB_TRIG_CH0
+#define HW_PDB_TRIG_CH1
      
 //!< PIT CallBack Type
 typedef void (*PDB_CallBackType)(void);
@@ -45,7 +49,7 @@ void PDB_Init(PDB_InitTypeDef * PDB_InitStruct);
 void PDB_SoftwareTrigger(void);
 void PDB_ITDMAConfig(PDB_ITDMAConfig_Type config, bool status);
 void PDB_CallbackInstall(PDB_CallBackType AppCBFun);
-
+void PDB_SetADCTrigDelayValue(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue);
 
 #ifdef __cplusplus
 }

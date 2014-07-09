@@ -88,16 +88,21 @@ void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
  * @brief  看门狗中断配置
  * @code
  *      //开启看门狗中断功能    
- *      WDOG_ITDMAConfig(ENABLE);  //中断不常用
+ *      WDOG_ITDMAConfig(true);  //中断不常用
  * @endcode
- * @param  NewState: ENABLE 开启中断  DISABLE 关闭中断
+ * @param  status: true 开启中断  false 关闭中断
  * @retval None
  */
-void WDOG_ITDMAConfig(FunctionalState NewState)
+void WDOG_ITDMAConfig(bool status)
 {
     WDOG_Unlock();
-    (ENABLE == NewState)?(WDOG->STCTRLH |= WDOG_STCTRLH_IRQRSTEN_MASK):(WDOG->STCTRLH &= ~(WDOG_STCTRLH_IRQRSTEN_MASK));
-    (ENABLE == NewState)?(NVIC_EnableIRQ(Watchdog_IRQn)):(NVIC_DisableIRQ(Watchdog_IRQn));
+    (true == status)?
+    (WDOG->STCTRLH |= WDOG_STCTRLH_IRQRSTEN_MASK):
+    (WDOG->STCTRLH &= ~(WDOG_STCTRLH_IRQRSTEN_MASK));
+
+    (true == status)?
+    NVIC_EnableIRQ(Watchdog_IRQn):
+    NVIC_DisableIRQ(Watchdog_IRQn);
 }
 
 /**

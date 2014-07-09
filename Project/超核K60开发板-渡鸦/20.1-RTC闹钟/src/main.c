@@ -32,7 +32,7 @@ int main(void)
     }
     /* 开启中断 */
     RTC_CallbackInstall(RTC_ISR);
-    RTC_ITDMAConfig(kRTC_IT_TimeAlarm);
+    RTC_ITDMAConfig(kRTC_IT_TimeAlarm, true);
     
     /* 设置闹钟在当前3秒后 */
     RTC_GetDateTime(&td);

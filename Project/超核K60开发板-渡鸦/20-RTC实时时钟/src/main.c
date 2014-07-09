@@ -25,7 +25,7 @@ int main(void)
     td.month = 11;
     printf("RTC test\r\n");
     RTC_QuickInit();
-    /* 为初始化时间 或时间无效 */
+    /* 当时间无效(从来未执行过RTC时) 初始化时间 */
     if(RTC_IsTimeValid())
     {
         RTC_SetDateTime(&td);

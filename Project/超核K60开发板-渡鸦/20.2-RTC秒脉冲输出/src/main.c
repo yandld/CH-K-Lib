@@ -25,13 +25,13 @@ int main(void)
     printf("RTC clk out test, second pulse in on PE26\r\n");
     
     RTC_QuickInit();
-    if(RTC_IsTimeValid() == 0)
+    if(RTC_IsTimeValid() != 0)
     {
         RTC_SetDateTime(&td);
     }
     /* ¿ªÆôÖÐ¶Ï */
     RTC_CallbackInstall(RTC_ISR);
-    RTC_ITDMAConfig(kRTC_IT_TimeAlarm);
+    RTC_ITDMAConfig(kRTC_IT_TimeAlarm, true);
     
     /* RTC_CLKOUT Êä³ö */
     SIM->SOPT2 &= ~SIM_SOPT2_RTCCLKOUTSEL_MASK;

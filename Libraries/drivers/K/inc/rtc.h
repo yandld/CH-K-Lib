@@ -43,8 +43,6 @@ typedef struct
 //!< interrupt and DMA select
 typedef enum
 {
-    kRTC_IT_TimeOverflow_Disable,  /* 关闭时间中断 */
-    kRTC_IT_TimeAlarm_Disable,     /* 关闭闹钟中断 */
     kRTC_IT_TimeAlarm,             /* 开启闹钟中断 */
     kRTC_IT_TimeOverflow,          /* 开启时间溢出中断 */    
 }RTC_ITDMAConfig_Type;
@@ -56,7 +54,7 @@ typedef void (*RTC_CallBackType)(void);
 void RTC_QuickInit(void);
 void RTC_GetDateTime(RTC_DateTime_Type * datetime);
 void RTC_SetDateTime(RTC_DateTime_Type * datetime);
-void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config);
+void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config, bool status);
 uint32_t RTC_IsTimeValid(void);
 void RTC_CallbackInstall(RTC_CallBackType AppCBFun);
 //!< function which may not be used

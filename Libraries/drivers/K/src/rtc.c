@@ -171,6 +171,10 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
     RTC_SecondToDateTime(&i, datetime);
 }
 
+/**
+ * @brief  判断当前RTC时钟模块时间是否有效
+ * @retval 0: 有效 !0 无效
+ */
 uint32_t RTC_IsTimeValid(void)
 {
     if(RTC->TSR)
@@ -290,7 +294,7 @@ void RTC_SetDateTime(RTC_DateTime_Type * datetime)
         return;
     }
     RTC_DateTimeToSecond(datetime, &i);
-    LIB_TRACE("RTC_SetDateTime() - Reconfig:%d\r\n", i);
+    LIB_TRACE("Reconfig:%d  %s\r\n", i, __func__);
     RTC->SR &= ~RTC_SR_TCE_MASK;
     RTC->TSR = RTC_TSR_TSR(i);
     RTC->SR |= RTC_SR_TCE_MASK;
@@ -307,32 +311,31 @@ void RTC_SetTSR(uint32_t val)
  * @brief  设置RTC中断功能
  * @code
  *      //设置RTC开启闹钟中断
- *      RTC_ITDMAConfig(kRTC_IT_TimeAlarm); 
+ *      RTC_ITDMAConfig(kRTC_IT_TimeAlarm, true); 
  * @endcode
  * @param config: 配置中断类型
- *         @arg kRTC_IT_TimeOverflow_Disable :关闭时间溢出中断
- *         @arg kRTC_IT_TimeAlarm_Disable    :关闭闹钟中断
- *         @arg kRTC_IT_TimeAlarm            :开启闹钟中断
- *         @arg kRTC_IT_TimeOverflow         :开启时间溢出中断
+ *         @arg kRTC_IT_TimeAlarm            :闹钟中断
+ *         @arg kRTC_IT_TimeOverflow         :时间溢出中断
  * @retval None
  */
-void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config)
+void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config, bool status)
 {
+    if(status)
+    {
+        NVIC_EnableIRQ(RTC_IRQn);
+    }
+    
     switch(config)
     {
-        case kRTC_IT_TimeOverflow_Disable:
-            RTC->IER &= ~RTC_IER_TOIE_MASK;
-            break;
         case kRTC_IT_TimeOverflow:
-            RTC->IER |= RTC_IER_TOIE_MASK;
-            NVIC_EnableIRQ(RTC_IRQn);
-            break;
-        case kRTC_IT_TimeAlarm_Disable:
-            RTC->IER &= ~RTC_IER_TAIE_MASK;
+            (status)?
+            (RTC->IER |= RTC_IER_TOIE_MASK):
+            (RTC->IER &= ~RTC_IER_TOIE_MASK);
             break;
         case kRTC_IT_TimeAlarm:
-            RTC->IER |= RTC_IER_TAIE_MASK;
-            NVIC_EnableIRQ(RTC_IRQn);
+            (status)?
+            (RTC->IER |= RTC_IER_TAIE_MASK):
+            (RTC->IER &= ~RTC_IER_TAIE_MASK);
             break;
         default:
             break;

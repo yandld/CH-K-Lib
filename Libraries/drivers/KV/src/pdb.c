@@ -23,7 +23,6 @@ static void _PDB_SetCounterPeriod(uint32_t srcClock, uint32_t timeInUs)
     static const uint8_t MULT[4] = {1, 10, 20, 40};
     uint32_t clkDiv,mult;
     uint32_t i,j;
-    uint32_t factor;
     for(i=0;i<8;i++)
     {
         for(j=0;j<4;j++)
@@ -47,7 +46,7 @@ static void _PDB_SetCounterPeriod(uint32_t srcClock, uint32_t timeInUs)
     PDB0->SC &= ~PDB_SC_MULT_MASK;
     PDB0->SC |= PDB_SC_MULT(mult);
     
-    LIB_TRACE("MOD:%d\r\n", (srcClock/1000000)*timeInUs/((1<<clkDiv)*MULT[mult]));
+    LIB_TRACE("MOD:%d |in %s\r\n", (srcClock/1000000)*timeInUs/((1<<clkDiv)*MULT[mult]), __func__);
     PDB0->MOD = (srcClock/1000000)*timeInUs/((1<<clkDiv)*MULT[mult]);
     PDB0->IDLY = (srcClock/1000000)*timeInUs/((1<<clkDiv)*MULT[mult]);
 }
@@ -76,6 +75,11 @@ void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
 	PDB0->SC |= PDB_SC_LDOK_MASK;
 }
 
+//void PDB_SetChl
+uint32_t PDB_GetModValue(void)
+{
+    return PDB0->MOD;
+}
 
 void PDB_ITDMAConfig(PDB_ITDMAConfig_Type config, bool status)
 {

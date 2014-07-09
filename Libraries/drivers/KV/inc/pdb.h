@@ -16,10 +16,7 @@
 	 
 #include "common.h"
 #include <stdint.h>
-     
-    
-     
-     
+
 //!< PIT CallBack Type
 typedef void (*PDB_CallBackType)(void);
 
@@ -45,7 +42,7 @@ void PDB_Init(PDB_InitTypeDef * PDB_InitStruct);
 void PDB_SoftwareTrigger(void);
 void PDB_ITDMAConfig(PDB_ITDMAConfig_Type config, bool status);
 void PDB_CallbackInstall(PDB_CallBackType AppCBFun);
-
+uint32_t PDB_GetModValue(void);
 
 #ifdef __cplusplus
 }

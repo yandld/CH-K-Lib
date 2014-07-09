@@ -362,7 +362,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MKV10Z7 RAVEN DEBUG</Define>
+              <Define>MKV10Z7 RAVEN LIB_DEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KV\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\shell</IncludePath>
             </VariousControls>
@@ -436,6 +436,11 @@
               <FileName>cmd_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_pdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_pdb.c</FilePath>
             </File>
           </Files>
         </Group>

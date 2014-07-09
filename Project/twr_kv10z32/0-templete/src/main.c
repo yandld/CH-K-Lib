@@ -2,7 +2,6 @@
 #include "common.h"
 #include "uart.h"
 
-
 /*
  UART1_RX_PE01_TX_PE00   
  UART0_RX_PF17_TX_PF18   

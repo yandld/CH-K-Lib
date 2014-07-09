@@ -4,7 +4,7 @@
 
 void PDB_ISR(void)
 {
-    printf("!!!\r\n");
+    printf("PDB ISR enter\r\n");
 }
 
 static int DoPDB(int argc, char * const argv[])

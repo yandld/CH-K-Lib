@@ -9,6 +9,10 @@
 2. API 参考文档:  http://git.oschina.net/yandld/CH-K-Lib/wikis/home
 3. 其他所有资料，包括所需要软件工具等 都可以从 www.beyondcore.net 主导航中寻找获得。
 
+## 所支持的IDE
+* Keil(MDK) V4.53 以上版本
+* IAR 6.5 以上版本
+
 ## 文件说明
 **Libraries:**
 

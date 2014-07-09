@@ -39,7 +39,7 @@ int main(void)
 //    instance = UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
    // UART_CallbackRxInstall(instance, UART_ISR);
    // UART_ITDMAConfig(instance, kUART_IT_Rx, true);
-   // printf("HelloWorld!\r\n");
+   // printf("HelloWorld!\r\n", __func__);
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOB, 13);

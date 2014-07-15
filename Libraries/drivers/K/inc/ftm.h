@@ -124,7 +124,7 @@ typedef enum
 #define FTM1_CH0_PA08   (0x50c1U)
 #define FTM1_CH1_PA09   (0x852c1U)
 #define FTM1_CH0_PA12   (0x58c1U)
-#define FTM1_CH1_PA13   (0x858c1U)
+#define FTM1_CH1_PA13   (0x85ac1U)
 #define FTM1_CH0_PB00   (0x40c9U)
 #define FTM1_CH1_PB01   (0x842c9U)
 #define FTM2_CH0_PA10   (0x54c2U)

@@ -18,7 +18,7 @@
 #include <stdio.h>
 #endif
 
-#if (!defined(GPIO_BASES))
+#if (!defined(UART_BASES))
 
     #if     (defined(MK60DZ10))
     #define UART_BASES {UART0, UART1, UART2, UART3, UART4, UART5}

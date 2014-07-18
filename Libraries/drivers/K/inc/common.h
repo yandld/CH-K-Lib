@@ -37,11 +37,7 @@
 #include "MK21D5.h"
 
 #else
-#define MK60DZ10
-#include "MK60D10.h"
-#warning "No CPU defined!"
-#warning "Default: MK60D10"
-
+#error "No CPU defined! please define CPU Type in Preprocessor Symbols, eg: MK60D10"
 #endif
 
 

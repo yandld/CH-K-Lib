@@ -34,6 +34,7 @@ int bmp180_probe(void);
 int bmp180_read_temperature(int32_t * temperature);
 int bmp180_start_conversion(uint8_t cmd);
 int bmp180_read_pressure(int32_t * pressure);
+int bmp180_read_altitude(int32_t *altitude);
 
 
 #endif

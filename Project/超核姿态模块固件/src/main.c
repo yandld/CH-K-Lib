@@ -107,6 +107,7 @@ int init_sensor(void)
   
     ret = kinetis_i2c_bus_init(&bus, BOARD_I2C_INSTANCE);
     /* enable pinmux */
+		
     PORT_PinMuxConfig(HW_GPIOE, 18, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOE, 19, kPinAlt4);
     PORT_PinOpenDrainConfig(HW_GPIOE, 18, ENABLE);
@@ -199,10 +200,12 @@ void MagnetometerCalibration(struct calibration_data * cal)
 int main(void)
 {
     int i;
+
     uint32_t ret;
     uint32_t uart_instance;
-    //int32_t temperature;
-    //int32_t pressure;
+    int32_t temperature;
+    int32_t pressure;
+	int32_t altitude;
     /* basic hardware */
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
@@ -225,70 +228,23 @@ int main(void)
     }
     
     /* flash operation */
-    SSDInit();
+    SSDInit();//eep
     
     /* init sensor */
     init_sensor();
-    
-    /* install imu raw date callback */
-    imu_io_install(&IMU_IOInstallStruct1);
-    
-    /* read meg cal data */
-    MagnetometerCalibration(&cal_data);
-    
-    /* init transfer */
-    trans_init(HW_DMA_CH2, uart_instance);
-    
-    WDOG_QuickInit(100);
-    
-    PIT_QuickInit(HW_PIT_CH1, 1000*20);
-    PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
-    
-    /* 初始化NRF的 PinMux*/
-    PORT_PinMuxConfig(HW_GPIOC, 5, kPinAlt2); //
-    PORT_PinMuxConfig(HW_GPIOC, 6, kPinAlt2); //
-    PORT_PinMuxConfig(HW_GPIOC, 7, kPinAlt2); //    
-
-    PORT_PinMuxConfig(HW_GPIOC, BOARD_SPI_CS_PIN, kPinAlt2);
-    GPIO_QuickInit(BOARD_NRF2401_CE_PORT, BOARD_NRF2401_CE_PIN , kGPIO_Mode_OPP);
-    GPIO_QuickInit(BOARD_NRF2401_IRQ_PORT, BOARD_NRF2401_IRQ_PIN , kGPIO_Mode_IPU);
-    /* 初始化NRF */
-   // static struct spi_bus bus;
-   // ret = kinetis_spi_bus_init(&bus, HW_SPI0);
-    //nrf24l01_init(&bus, 2);
-    // if(nrf24l01_probe())
-    //{
-    //     printf("no nrf24l01 device found\r\n");
-    //}
-    //nrf24l01_set_rx_mode();
+  
+ 
     while(1)
     {
-        //获取欧拉角 获取原始角度
-        DisableInterrupts();
-        ret = imu_get_euler_angle(&angle, &raw_data);
-        EnableInterrupts();
-        if(ret)
-        {
-            DisableInterrupts();
-            printf("imu module fail!\r\n");
-            while(1);
-        }
-       // DelayMs(3);
-        
-        #if 0
-        printf("P:%4d R:%4d Y:%4d  \r", (int)angle.imu_pitch, (int)angle.imu_roll, (int)angle.imu_yaw);
+      
         bmp180_read_temperature(&temperature);
         bmp180_start_conversion(BMP180_P3_MEASURE);
         DelayMs(20);
         bmp180_read_pressure(&pressure);
-        printf("t:%d p:%d\r", temperature, pressure);
-        if(!nrf24l01_read_packet(NRF2401RXBuffer, &len))
-        {
-            /* 从2401 接收到数据 */
+		bmp180_read_altitude(&altitude);
+		printf("t:%d p:%d a:%d\r", temperature, pressure,altitude);
 
-        }
-        #endif
+
     }
 }
 

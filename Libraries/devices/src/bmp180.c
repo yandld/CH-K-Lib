@@ -8,7 +8,11 @@
   ******************************************************************************
   */
 #include "bmp180.h"
+#include "common.h"
 #include <string.h>
+#include <math.h>
+#include "uart.h"
+
 
 /* BMP180 registers */
 #define BMP180_PROM_START_ADDR          0xAA /* E2PROM calibration data start register */
@@ -100,6 +104,7 @@ static int dump_calibration_data(void)
     printf("AC3:%d\r\n", cal.AC3);
     printf("AC4:%d\r\n", cal.AC4); 
     printf("AC5:%d\r\n", cal.AC5);
+		printf("B5:%d\r\n", cal.AC6);
     printf("B1:%d\r\n", cal.B1);
     printf("B2:%d\r\n", cal.B2);
     printf("B5:%d\r\n", cal.B5);
@@ -162,7 +167,7 @@ static int read_register(uint8_t addr, uint8_t * value)
     return 0;
 }
 
-/*!
+/*
  * @brief start bmp180 conversion
  *
  * @param pointer of the bmp180 device struct
@@ -186,13 +191,21 @@ int bmp180_start_conversion(uint8_t cmd)
  */
 static int read_raw_temperature(int32_t * data)
 {
-    uint8_t buf[2];
+		uint8_t buf[2];
     device.subaddr = BMP180_ADC_OUT_MSB_REG;
-    if(device.bus->ops->read(&device, buf, sizeof(buf)))
+
+		if(device.bus->ops->read(&device, buf, sizeof(buf)))
     {
         return 1;
     }
-    *data = (buf[0] << 8) + buf[1];
+
+			buf[0] = ~((uint8_t)buf[0])&0x000000ff;
+			buf[1] = ~((uint8_t)buf[1])&0x000000ff;
+//			printf("MSB = %x\n\rLSB = %x\n\r",buf[0],buf[1]);
+
+			*data = ((((int16_t)(buf[0])) << 8) + (int16_t)(buf[1]));
+			*data +=7;
+
     return 0;
 }
 
@@ -249,6 +262,7 @@ int bmp180_read_temperature(int32_t * temperature)
 {
     int32_t raw_temperature;
     int32_t x1, x2;
+
     if(is_conversion_busy())
     {
         return 1;
@@ -257,10 +271,22 @@ int bmp180_read_temperature(int32_t * temperature)
     {
         return 2;
     }
-    x1 = (raw_temperature - cal.AC6) * cal.AC5 >> 15;
-    x2 = ((int32_t)cal.MC << 11) / (x1 + cal.MD);
+#ifdef LIB_DEBUG
+//		printf("raw_t = %d\n\r",raw_temperature);
+//		printf("ac6 = %d\n\r",cal.AC6);
+//		printf("ac5 = %d\n\r",cal.AC5);
+//		printf("ac5/32768 = %f\n\r",((float)cal.AC5)/32768);
+//		printf("raw_t-ac6 = %d\n\r",(raw_temperature - cal.AC6));
+#endif
+    x1 = (int32_t)((raw_temperature - cal.AC6) * (int32_t)cal.AC5) >> 15;
+//					printf("x1 = %d\n\r",x1);
+		x2 = (int32_t)(cal.MC <<11) / (x1 + cal.MD);
+//					printf("x2 = %d\n\r",x2);
     cal.B5 = x1 + x2;
-    *temperature = ((x1 + x2) + 8) >> 4;
+//		printf("b5 = %d\n\r",cal.B5);
+    *temperature = (cal.B5 + (int32_t)8) >> 4;
+//		printf("temp = %d\n\r",*temperature);
+
     return 0;
 }
 
@@ -314,7 +340,17 @@ int bmp180_read_pressure(int32_t * pressure)
     x1 = (x1 * 3038) >> 16;
     x2 = (-7357 * result) >> 16;
     result += ((x1 + x2 + 3791) >> 4);
+		
     *pressure = result;
     return 0;
+}
+
+int bmp180_read_altitude(int32_t *altitude){
+	int32_t pressure = 0;	
+	bmp180_read_pressure(&pressure);
+	*altitude =(int32_t)(44330.0 * (1.0-pow((double)(pressure) / 101325.0, 1.0/5.255)) );
+
+	printf("altitude = %dM",altitude);
+	return 0;
 }
 

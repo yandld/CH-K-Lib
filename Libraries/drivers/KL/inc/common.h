@@ -101,7 +101,6 @@ typedef enum
     kCoreClock,
     kSystemClock,
     kBusClock,
-    kFlexBusClock,
     kFlashClock,
     kMCGOutClock,
     kClockNameCount,

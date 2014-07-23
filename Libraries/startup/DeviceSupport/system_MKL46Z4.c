@@ -55,7 +55,7 @@
 
 #define DISABLE_WDOG    1
 
-#define CLOCK_SETUP     1
+#define CLOCK_SETUP     3
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
@@ -66,6 +66,9 @@
    2 ... Multipurpose Clock Generator (MCG) in Bypassed Low Power External (BLPE) mode
          Core clock/Bus clock derived directly from an external crystal 8MHz with no multiplication
          Core clock = 8MHz, BusClock = 8MHz
+   3 ... Multipurpose Clock Generator (MCG) in PLL Engaged External (PEE) mode
+         Reference clock source for MCG module is an external crystal 8MHz
+         Core clock = 96MHz, BusClock = 48MHz
 */
 
 /*----------------------------------------------------------------------------
@@ -86,7 +89,12 @@
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
     #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
     #define DEFAULT_SYSTEM_CLOCK            8000000u /* Default System clock value */
-#endif /* (CLOCK_SETUP == 2) */
+#elif (CLOCK_SETUP == 3)
+    #define CPU_XTAL_CLK_HZ                 8000000u /* Value of the external crystal or oscillator clock frequency in Hz */
+    #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
+    #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
+    #define DEFAULT_SYSTEM_CLOCK            140000000u /* Default System clock value */
+#endif /* (CLOCK_SETUP == 3) */
 
 
 /* ----------------------------------------------------------------------------
@@ -194,7 +202,45 @@ void SystemInit (void) {
   MCG->C2 = (uint8_t)((MCG->C2 & (uint8_t)~(uint8_t)0x99U) | (uint8_t)0x26U);
   while((MCG->S & 0x0CU) != 0x08U) {    /* Wait until external reference clock is selected as MCG output */
   }
-#endif /* (CLOCK_SETUP == 2) */
+#elif (CLOCK_SETUP == 3)
+  /* SIM->SCGC5: PORTA=1 */
+  SIM->SCGC5 |= (uint32_t)0x0200UL;     /* Enable clock gate for ports to enable pin routing */
+  /* SIM->CLKDIV1: OUTDIV1=1,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,OUTDIV4=1,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0 */
+  SIM->CLKDIV1 = (uint32_t)0x00040000UL; /* Update system prescalers */
+  /* PORTA->PCR18: ISF=0,MUX=0 */
+  PORTA->PCR[18] &= (uint32_t)~0x01000700UL;
+  /* PORTA->PCR19: ISF=0,MUX=0 */
+  PORTA->PCR[19] &= (uint32_t)~0x01000700UL;
+  /* Switch to FBE Mode */
+  /* MCG_C2: LOCRE0=0,RANGE0=2,HGO0=0,EREFS0=1,LP=0,IRCS=0 */
+  MCG->C2 = (uint8_t)((MCG->C2 & (uint8_t)~(uint8_t)0x9BU) | (uint8_t)0x24U);
+  /* OSC0->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=1,SC4P=0,SC8P=0,SC16P=0 */
+  OSC0->CR = (uint8_t)0x80U;
+  /* MCG_C1: CLKS=2,FRDIV=3,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
+  MCG->C1 = (uint8_t)0x9AU;
+  /* MCG->C4: DMX32=0,DRST_DRS=0 */
+  MCG->C4 &= (uint8_t)~(uint8_t)0xE0U;
+  /* MCG->C5: ??=0,PLLCLKEN0=0,PLLSTEN0=0,PRDIV0=1 */
+  MCG->C5 = (uint8_t)0x01U;
+  /* MCG->C6: LOLIE0=0,PLLS=0,CME0=0,VDIV0=0 */
+  MCG->C6 = (uint8_t)0x00U;
+  while((MCG->S & MCG_S_IREFST_MASK) != 0x00U) { /* Check that the source of the FLL reference clock is the external reference clock. */
+  }
+  while((MCG->S & 0x0CU) != 0x08U) {    /* Wait until external reference clock is selected as MCG output */
+  }
+  /* Switch to PBE Mode */
+  /* MCG->C6: LOLIE0=0,PLLS=1,CME0=0,VDIV0=0 */
+  MCG->C6 = (uint8_t)0x40U | MCG_C6_VDIV0(11);
+  while((MCG->S & 0x0CU) != 0x08U) {    /* Wait until external reference clock is selected as MCG output */
+  }
+  while((MCG->S & MCG_S_LOCK0_MASK) == 0x00U) { /* Wait until locked */
+  }
+  /* Switch to PEE Mode */
+  /* MCG->C1: CLKS=0,FRDIV=3,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
+  MCG->C1 = (uint8_t)0x1AU;
+  while((MCG->S & 0x0CU) != 0x0CU) {    /* Wait until output of the PLL is selected */
+  }
+#endif /* (CLOCK_SETUP == 3) */
 }
 
 /* ----------------------------------------------------------------------------

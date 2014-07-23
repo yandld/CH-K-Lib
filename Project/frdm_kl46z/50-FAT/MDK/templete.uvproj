@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>mkl46z_flash</TargetName>
+      <TargetName>mkl46z4_flash</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -364,7 +364,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MKL46Z4 FRDM LIB_DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\shell</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -397,7 +397,7 @@
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
+            <Misc>--keep __fsym_*</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -427,6 +427,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
+            <File>
+              <FileName>shell_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\shell_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_gpio.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -451,6 +461,31 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\KL\src\uart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>shell</GroupName>
+          <Files>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\shell\shell.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_autocomplete.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_autocomplete.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_cmdhelp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhelp.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell_cmdhist.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
             </File>
           </Files>
         </Group>

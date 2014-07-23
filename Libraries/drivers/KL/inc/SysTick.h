@@ -8,8 +8,8 @@
   * @note    此文件为芯片ARM内核中的SysTick模块的底层功能函数
   ******************************************************************************
   */
-#ifndef __CH_LIB_SYSTICK_H__
-#define __CH_LIB_SYSTICK_H__
+#ifndef __CH_LIB_KL_SYSTICK_H__
+#define __CH_LIB_KL_SYSTICK_H__
 
 #include <stdint.h>
 #include <stdbool.h>

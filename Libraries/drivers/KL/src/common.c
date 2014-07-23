@@ -15,7 +15,7 @@
 
 #define MCGOUT_TO_CORE_DIVIDER           (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
 #define MCGOUT_TO_SYSTEM_DIVIDER         (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
-#define MCGOUT_TO_BUS_DIVIDER            (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV4_SHIFT)>>SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)
+#define MCGOUT_TO_BUS_DIVIDER            (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)
 #define MCGOUT_TO_PERIPHERAL_DIVIDER     (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT) + 1)
 #define MCGOUT_TO_FLEXBUS_DIVIDER        (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT) + 1)
 #define MCGOUT_TO_FLASH_DIVIDER          (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)
@@ -49,13 +49,16 @@ int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* Frequenct
             *FrequenctInHz = MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
             break;
         case kSystemClock:
-            *FrequenctInHz = MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
+            *FrequenctInHz = MCGOutClock / MCGOUT_TO_SYSTEM_DIVIDER;
             break;	
         case kBusClock:
-            *FrequenctInHz = MCGOutClock / MCGOUT_TO_BUS_DIVIDER;
+            *FrequenctInHz = SystemCoreClock / MCGOUT_TO_BUS_DIVIDER;
             break;
         case kFlashClock:
-            *FrequenctInHz = MCGOutClock / MCGOUT_TO_FLASH_DIVIDER;	
+            *FrequenctInHz = SystemCoreClock / MCGOUT_TO_FLASH_DIVIDER;	
+            break;
+        case kMCGOutClock:
+            *FrequenctInHz = MCGOutClock;
             break;
         default:
             return 1;

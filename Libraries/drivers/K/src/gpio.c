@@ -427,7 +427,7 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
  * @brief  设置GPIO引脚中断类型或者DMA功能
  * @code
  *      //设置PORTB端口的10引脚为下降沿触发中断
- *      GPIO_ITDMAConfig(HW_GPIOB, 10, kGPIO_IT_FallingEdge); 
+ *      GPIO_ITDMAConfig(HW_GPIOB, 10, kGPIO_IT_FallingEdge, true); 
  * @endcode
  * @param  instance: GPIO模块号
  *         @arg HW_GPIOA :芯片的PORTA端口
@@ -437,8 +437,6 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
  *         @arg HW_GPIOE :芯片的PORTE端口
  * @param  pinIndex  :端口上的引脚号 0~31
  * @param config: 配置模式
- *         @arg kGPIO_IT_Disable 禁止中断功能
- *         @arg kGPIO_DMA_Disable 禁止DMA功能
  *         @arg kGPIO_DMA_RisingEdge DMA上升沿触发
  *         @arg kGPIO_DMA_FallingEdge DMA下降沿触发
  *         @arg kGPIO_DMA_RisingFallingEdge DMA上升和下降沿都触发

@@ -22,9 +22,9 @@
 #include "MKL25Z4.h"
 #elif  MKL03Z4
 #include "MKL03Z4.h"
+#elif  MKL46Z4
+#include "MKL46Z4.h"
 #else
-#define MKL25Z4
-#include "MKL25Z4.h"
 #error "No CPU defined!"
 
 #endif

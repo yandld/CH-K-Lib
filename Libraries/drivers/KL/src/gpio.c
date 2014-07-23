@@ -5,24 +5,11 @@
   * @version V2.5
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ??????GPIO?????????
   ******************************************************************************
   */
 
 #include "gpio.h"
 
-/* leagacy support for Kineis Z version(inital version) */
-#if (!defined(GPIO_BASES))
-
-    #if (defined(MK60DZ10))
-        #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
-        #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
-    #endif
-    #if (defined(MK10D5))
-        #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
-        #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
-    #endif
-#endif
 
 /* gloabl vars */
 static GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
@@ -32,11 +19,14 @@ static const uint32_t SIM_GPIOClockGateTable[] =
 {
     SIM_SCGC5_PORTA_MASK,
     SIM_SCGC5_PORTB_MASK,
+    SIM_SCGC5_PORTC_MASK,
+    SIM_SCGC5_PORTD_MASK,
+    SIM_SCGC5_PORTE_MASK,
 };
 static const IRQn_Type GPIO_IRQnTable[] = 
 {
     PORTA_IRQn,
-    PORTB_IRQn,
+    PORTC_PORTD_IRQn,
 };
 
 //! @defgroup CHKinetis
@@ -48,25 +38,25 @@ static const IRQn_Type GPIO_IRQnTable[] =
 //! @{
 
  /**
- * @brief ???????? ????????????????????
- * @note  ??????? Reference Manual ? Signal Multiplexing and Signal Descriptions ?? 
+ * @brief 设置引脚复用功能 这个函数会被很多其他外设模块驱动程序调用
+ * @note  复用功能可参考 Reference Manual 的 Signal Multiplexing and Signal Descriptions 章节 
  * @code
- *      // ??PORTA???3?????1??.
+ *      // 将一PORTA端口的3引脚复用成1模式.
  *      PORT_PinMuxConfig(HW_GPIOA, 3, kPinAlt1);
  * @endcode
- * @param  instance: GPIO??? 
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
- * @param  pinMux    :??????,?????????????
- *         @arg kPinAlt0 :?????0??
+ * @param  instance: GPIO模块号 
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pinMux    :复用功能选项，不同的复用值代表不同的功能
+ *         @arg kPinAlt0 :引脚复用成0模式
  *         @arg        . : .
  *         @arg        . : .
  *         @arg        . : .
- *         @arg kPinAlt7 :?????7??
+ *         @arg kPinAlt7 :引脚复用成7模式
  * @retval None
  */
 void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
@@ -80,22 +70,22 @@ void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pin
     PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
 }
  /**
- * @brief  ?????????????? ????????
+ * @brief  设置一个引脚的上下拉电阻功能 用户一般不必调用
  * @code
- *      // ?PORTA???3?????????(???????)
+ *      // 将PORTA端口的3引脚设置为上拉电阻(在输入的情况下)
  *      PORT_PinPullConfig(HW_GPIOA, 3, kPullUp);
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
- * @param  pull      :????????
- *         @arg kPullDisabled :???????
- *         @arg kPullUp       :????
- *         @arg kPullDown     :????
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pull      :引脚电阻模式选择
+ *         @arg kPullDisabled :关闭电阻上下拉
+ *         @arg kPullUp       :上拉电阻
+ *         @arg kPullDown     :下拉电阻
  * @retval None
  */
 void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
@@ -122,46 +112,24 @@ void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull
             break;
     }
 }
-/**
- * @brief  ??????????? ????????
- * @code
- *      // ?PORTA???3????????? 
- *      PORT_PinOpenDrainConfig(HW_GPIOA, 3, ENABLE);
- * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
- * @param  newState  :??????
- *         @arg ENABLE   :????
- *         @arg DISABLE  :????
- * @retval None
- */
-void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pinIndex, FunctionalState newState)
-{
-    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-//    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
-}
+
 
 /**
- * @brief  ???????????? ???????
+ * @brief  端口引脚的开启无源滤波器 作为输入时有效
  * @code
- *      // ?PORTA???3????????? 
+ *      // 将PORTA端口的3引脚设置为开漏状态 
  *      PORT_PinPassiveFilterConfig(HW_GPIOA, 3, ENABLE);
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
- * @param  newState  :??????
- *         @arg ENABLE   :????
- *         @arg DISABLE  :????
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  newState  :功能开关控制
+ *         @arg ENABLE   :开启功能
+ *         @arg DISABLE  :关闭功能
  * @retval None
  */
 void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pinIndex, FunctionalState newState)
@@ -171,22 +139,22 @@ void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pinIndex, Functional
 }
 
  /**
- * @brief  ?????????????  ????????
- * @note   ???????GPIO?????
+ * @brief  设置引脚为输入还是输出功能  用户一般不必调用
+ * @note   只有当引脚作为GPIO时才有意义
  * @code
- *      // ?PORTB???3????????
+ *      // 将PORTB端口的3引脚设置输入引脚
  *      GPIO_PinConfig(HW_GPIOB, 3, kInpput);
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
- * @param  mode      :????????
- *         @arg kInpput  :??????
- *         @arg kOutput  :??????
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  mode      :输入或者输出设置
+ *         @arg kInpput  :输入功能选择
+ *         @arg kOutput  :输出功能选择
  * @retval None
  */
 void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode)
@@ -200,18 +168,18 @@ void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mod
 }
 
  /**
- * @brief  GPIO?????
+ * @brief  GPIO初始化配置
  * @code
- *    //?????PORTB???10?????????
- *    GPIO_InitTypeDef GPIO_InitStruct1;      //????????
- *    GPIO_InitStruct1.instance = HW_GPIOB;   //??PORTB??
- *    GPIO_InitStruct1.mode = kGPIO_Mode_OPP; //????
- *    GPIO_InitStruct1.pinx = 10;             //??10??
- *    //?????GPIO?? 
+ *    //初始化配置PORTB端口的10引脚为推挽输出引脚
+ *    GPIO_InitTypeDef GPIO_InitStruct1;      //申请一个结构变量
+ *    GPIO_InitStruct1.instance = HW_GPIOB;   //选择PORTB端口
+ *    GPIO_InitStruct1.mode = kGPIO_Mode_OPP; //推挽输出
+ *    GPIO_InitStruct1.pinx = 10;             //选择10引脚
+ *    //调用初始化GPIO函数 
  *    GPIO_Init(&GPIO_InitStruct1);
  * @endcode
- * @param  GPIO_InitStruct: GPIO??????,?????????  
-           GPIO_InitStruct.instance   :??? HW_GPIOA ~ HW_GPIOE
+ * @param  GPIO_InitStruct: GPIO初始化结构体，包含了引脚状态参数  
+           GPIO_InitStruct.instance   :端口号 HW_GPIOA ~ HW_GPIOE
  * @retval None
  */
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
@@ -225,27 +193,18 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
     {
         case kGPIO_Mode_IFT:
             PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled);
-            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, DISABLE);
             GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInput);
             break;
         case kGPIO_Mode_IPD:
             PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDown);
-            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, DISABLE);
             GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInput);
             break;
         case kGPIO_Mode_IPU:
             PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp);
-            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, DISABLE);
             GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInput);
-            break;
-        case kGPIO_Mode_OOD:
-            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp);
-            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, ENABLE);
-            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
             break;
         case kGPIO_Mode_OPP:
             PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled);
-            PORT_PinOpenDrainConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, DISABLE);
             GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
             break;
         default:
@@ -256,24 +215,24 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 }
 
  /**
- * @brief  ???????GPIO?? ????GPIO_Init??????
+ * @brief  快速初始化一个GPIO引脚 实际上是GPIO_Init的最简单配置
  * @code
- *      //?????PORTB???10?????????
+ *      //初始化配置PORTB端口的10引脚为推挽输出引脚
  *      GPIO_QuickInit(HW_GPIOB, 10, kGPIO_Mode_OPP);
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
- * @param  mode  :??????
- *         @arg kGPIO_Mode_IFT :????
- *         @arg kGPIO_Mode_IPD :????
- *         @arg kGPIO_Mode_IPU :????
- *         @arg kGPIO_Mode_OOD :????
- *         @arg kGPIO_Mode_OPP :????
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  mode  :引脚工作模式
+ *         @arg kGPIO_Mode_IFT :悬空输入
+ *         @arg kGPIO_Mode_IPD :下拉输入
+ *         @arg kGPIO_Mode_IPU :上拉输入
+ *         @arg kGPIO_Mode_OOD :开漏输出
+ *         @arg kGPIO_Mode_OPP :推挽输出
  * @retval None
  */
 uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
@@ -287,22 +246,22 @@ uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
 }
 
  /**
- * @brief  ????????????????
- * @note   ????????????
+ * @brief  设置指定引脚输出高电平或者低电平
+ * @note   此引脚首先配置成输出引脚
  * @code
- *      //??PORTB???10???????
+ *      //设置PORTB端口的10引脚输出高电平
  *      GPIO_WriteBit(HW_GPIOB, 10, 1);
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
- * @param  data   : ???????  
- *         @arg 0 : ??? 
- *         @arg 1 : ???
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  data   : 引脚的电平状态  
+ *         @arg 0 : 低电平 
+ *         @arg 1 : 高电平
  * @retval None
  */
 void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data)
@@ -314,22 +273,22 @@ void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data)
     (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pinIndex));
 }
  /**
- * @brief  ????????????
+ * @brief  读取一个引脚上的电平状态
  * @code
- *      //??PORTB???10???????
- *      uint8_t status ; //?????????
- *      status = GPIO_ReadBit(HW_GPIOB, 10); //???????????status?
+ *      //读取PORTB端口的10引脚的电平状态
+ *      uint8_t status ; //用于存储引脚的状态
+ *      status = GPIO_ReadBit(HW_GPIOB, 10); //获取引脚的状态并存储到status中
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
  * @retval 
- *         @arg 0 : ???
- *         @arg 1 : ???
+ *         @arg 0 : 低电平
+ *         @arg 1 : 高电平
  */
 uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex)
 {
@@ -349,18 +308,18 @@ uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex)
 }
 
  /**
- * @brief  ???????????
+ * @brief  翻转一个引脚的电平状态
  * @code
- *      //??PORTB???10???????
+ *      //翻转PORTB端口的10引脚的电平状态
  *      GPIO_ToggleBit(HW_GPIOB, 10); 
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
  * @retval None
  */
 void GPIO_ToggleBit(uint32_t instance, uint8_t pinIndex)
@@ -373,19 +332,19 @@ void GPIO_ToggleBit(uint32_t instance, uint8_t pinIndex)
 }
 
 /**
- * @brief  ??????32????
+ * @brief  读取一个端口32位的数据
  * @code
- *      //??PORTB????????????
- *      uint32_t status ; //?????????
- *      status = GPIO_ReadPort(HW_GPIOB); //???????????status?
+ *      //获取PORTB端口的所有引脚的电平状态
+ *      uint32_t status ; //用于存储引脚的状态
+ *      status = GPIO_ReadPort(HW_GPIOB); //获取引脚的状态并存储到status中
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @retval ???32???
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @retval 端口的32位数据
  */
 uint32_t GPIO_ReadPort(uint32_t instance)
 {
@@ -395,18 +354,18 @@ uint32_t GPIO_ReadPort(uint32_t instance)
     return (GPIO_InstanceTable[instance]->PDIR);
 }
 /**
- * @brief  ???????32???
+ * @brief  向一个端口写入32位数据
  * @code
- *      //?PORTB????0xFFFFFFFF
+ *      //向PORTB端口写入0xFFFFFFFF
  *      GPIO_WriteByte(HW_GPIOB, 0xFFFFFFFF); 
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  data  :32???
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  data  :32位数据
  * @retval None
  */
 void GPIO_WritePort(uint32_t instance, uint32_t data)
@@ -418,29 +377,27 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
 }
 
 /**
- * @brief  ??GPIO????????DMA??
+ * @brief  设置GPIO引脚中断类型或者DMA功能
  * @code
- *      //??PORTB???10??????????
- *      GPIO_ITDMAConfig(HW_GPIOB, 10, kGPIO_IT_FallingEdge); 
+ *      //设置PORTB端口的10引脚为下降沿触发中断
+ *      GPIO_ITDMAConfig(HW_GPIOB, 10, kGPIO_IT_FallingEdge, true); 
  * @endcode
- * @param  instance: GPIO???
- *         @arg HW_GPIOA :???PORTA??
- *         @arg HW_GPIOB :???PORTB??
- *         @arg HW_GPIOC :???PORTC??
- *         @arg HW_GPIOD :???PORTD??
- *         @arg HW_GPIOE :???PORTE??
- * @param  pinIndex  :??????? 0~31
- * @param config: ????
- *         @arg kGPIO_IT_Disable ??????
- *         @arg kGPIO_DMA_Disable ??DMA??
- *         @arg kGPIO_DMA_RisingEdge DMA?????
- *         @arg kGPIO_DMA_FallingEdge DMA?????
- *         @arg kGPIO_DMA_RisingFallingEdge DMA?????????
- *         @arg kGPIO_IT_Low ???????
- *         @arg kGPIO_IT_RisingEdge ???????
- *         @arg kGPIO_IT_FallingEdge ???????
- *         @arg kGPIO_IT_RisingFallingEdge ???????????
- *         @arg kGPIO_IT_High ???????
+ * @param  instance: GPIO模块号
+ *         @arg HW_GPIOA :芯片的PORTA端口
+ *         @arg HW_GPIOB :芯片的PORTB端口
+ *         @arg HW_GPIOC :芯片的PORTC端口
+ *         @arg HW_GPIOD :芯片的PORTD端口
+ *         @arg HW_GPIOE :芯片的PORTE端口
+ * @param  pinIndex  :端口上的引脚号 0~31
+ * @param config: 配置模式
+ *         @arg kGPIO_DMA_RisingEdge DMA上升沿触发
+ *         @arg kGPIO_DMA_FallingEdge DMA下降沿触发
+ *         @arg kGPIO_DMA_RisingFallingEdge DMA上升和下降沿都触发
+ *         @arg kGPIO_IT_Low 低电平触发中断
+ *         @arg kGPIO_IT_RisingEdge 上升沿触发中断
+ *         @arg kGPIO_IT_FallingEdge 下降沿触发中断
+ *         @arg kGPIO_IT_RisingFallingEdge 上升和下降沿都触发中断
+ *         @arg kGPIO_IT_High 高电平触发中断
  * @retval None
  */
 void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status)
@@ -495,16 +452,16 @@ void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type
     }
 }
 /**
- * @brief  ????????
- * @param  instance: GPIO???????
- *         @arg HW_GPIOA :???PORTA??????
- *         @arg HW_GPIOB :???PORTB??????
- *         @arg HW_GPIOC :???PORTC??????
- *         @arg HW_GPIOD :???PORTD??????
- *         @arg HW_GPIOE :???PORTE??????
- * @param AppCBFun: ????????
+ * @brief  注册中断回调函数
+ * @param  instance: GPIO模块中断入口号
+ *         @arg HW_GPIOA :芯片的PORTA端口中断入口
+ *         @arg HW_GPIOB :芯片的PORTB端口中断入口
+ *         @arg HW_GPIOC :芯片的PORTC端口中断入口
+ *         @arg HW_GPIOD :芯片的PORTD端口中断入口
+ *         @arg HW_GPIOE :芯片的PORTE端口中断入口
+ * @param AppCBFun: 回调函数指针入口
  * @retval None
- * @note ?????????????????
+ * @note 对于此函数的具体应用请查阅应用实例
  */
 void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun)
 {
@@ -522,15 +479,6 @@ void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun)
 //! @}
 
 
-/**
- * @brief  ????????
- * @param  PORTA_IRQHandler :???PORTA????????
- *         PORTB_IRQHandler :???PORTB????????
- *         PORTC_IRQHandler :???PORTC????????
- *         PORTD_IRQHandler :???PORTD????????
- *         PORTE_IRQHandler :???PORTE????????
- * @note ????????????
- */
 void PORTA_IRQHandler(void)
 {
     uint32_t ISFR;
@@ -544,72 +492,7 @@ void PORTA_IRQHandler(void)
     }	
 }
 
-void PORTB_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOB]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOB]->ISFR = 0xFFFFFFFF;
-    if(GPIO_CallBackTable[HW_GPIOB])
-    {
-        GPIO_CallBackTable[HW_GPIOB](ISFR);
-    }	
-}
 
-void PORTC_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOC]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOC]->ISFR = PORT_ISFR_ISF_MASK;
-    if(GPIO_CallBackTable[HW_GPIOC])
-    {
-        GPIO_CallBackTable[HW_GPIOC](ISFR);
-    }
-}
-
-void PORTD_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOD]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOD]->ISFR = PORT_ISFR_ISF_MASK;
-    if(GPIO_CallBackTable[HW_GPIOD])
-    {
-        GPIO_CallBackTable[HW_GPIOD](ISFR);
-    }	
-}
-
-void PORTE_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOE]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOE]->ISFR = PORT_ISFR_ISF_MASK;
-    if(GPIO_CallBackTable[HW_GPIOE])
-    {
-        GPIO_CallBackTable[HW_GPIOE](ISFR);
-    }	
-}
-
-#if (defined(MK70F12))
-void PORTF_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-    ISFR = PORT_InstanceTable[HW_GPIOF]->ISFR;
-    /* clear IT pending bit */
-    PORT_InstanceTable[HW_GPIOF]->ISFR = PORT_ISFR_ISF_MASK;
-    if(GPIO_CallBackTable[HW_GPIOF])
-    {
-        GPIO_CallBackTable[HW_GPIOF](ISFR);
-    }
-}
-#endif
 
 
 //! @}

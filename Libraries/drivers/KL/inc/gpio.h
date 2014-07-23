@@ -5,7 +5,6 @@
   * @version V2.5
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片GPIO模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __CH_LIB_KL_GPIO_H__

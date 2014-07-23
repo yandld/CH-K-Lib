@@ -437,6 +437,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_gpio.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_pit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_pit.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -461,6 +471,16 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\KL\src\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>pit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\pit.c</FilePath>
             </File>
           </Files>
         </Group>

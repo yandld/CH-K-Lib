@@ -23,11 +23,21 @@ static const uint32_t SIM_GPIOClockGateTable[] =
     SIM_SCGC5_PORTD_MASK,
     SIM_SCGC5_PORTE_MASK,
 };
+#if defined(MKL46Z4)
 static const IRQn_Type GPIO_IRQnTable[] = 
 {
     PORTA_IRQn,
     PORTC_PORTD_IRQn,
 };
+#elif defined(MKL25Z4)
+static const IRQn_Type GPIO_IRQnTable[] = 
+{
+    PORTA_IRQn,
+    PORTD_IRQn,
+};
+#else
+#error "No CPU defined!"
+#endif
 
 //! @defgroup CHKinetis
 //! @{

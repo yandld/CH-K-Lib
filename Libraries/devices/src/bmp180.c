@@ -13,8 +13,6 @@
 #include <math.h>
 #include "uart.h"
 
-<<<<<<< HEAD
-=======
 
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
@@ -22,7 +20,6 @@
 #ifndef SWAP16
 #define  SWAP16(s) ((((s) & 0xff) << 8) | (((s) >> 8) & 0xff)) 
 #endif
->>>>>>> Refine BMP180 driver
 
 /* BMP180 registers */
 #define BMP180_PROM_START_ADDR          0xAA /* E2PROM calibration data start register */
@@ -108,22 +105,6 @@ static int dump_calibration_data(void)
     cal.MB = SWAP16(cal.MB);
     cal.MC = SWAP16(cal.MC);
     cal.MD = SWAP16(cal.MD);
-<<<<<<< HEAD
-    #ifdef LIB_DEBUG
-    printf("AC1:%d\r\n", cal.AC1);
-    printf("AC2:%d\r\n", cal.AC2);
-    printf("AC3:%d\r\n", cal.AC3);
-    printf("AC4:%d\r\n", cal.AC4); 
-    printf("AC5:%d\r\n", cal.AC5);
-		printf("B5:%d\r\n", cal.AC6);
-    printf("B1:%d\r\n", cal.B1);
-    printf("B2:%d\r\n", cal.B2);
-    printf("B5:%d\r\n", cal.B5);
-    printf("MB:%d\r\n", cal.MB);
-    printf("MC:%d\r\n", cal.MC);
-    printf("MD:%d\r\n", cal.MD);
-    #endif
-=======
     LIB_TRACE("AC1:%d\r\n", cal.AC1);
     LIB_TRACE("AC2:%d\r\n", cal.AC2);
     LIB_TRACE("AC3:%d\r\n", cal.AC3);
@@ -136,7 +117,6 @@ static int dump_calibration_data(void)
     LIB_TRACE("MB:%d\r\n", cal.MB);
     LIB_TRACE("MC:%d\r\n", cal.MC);
     LIB_TRACE("MD:%d\r\n", cal.MD);
->>>>>>> Refine BMP180 driver
     return 0;
 }
 
@@ -214,25 +194,13 @@ int bmp180_start_conversion(uint8_t cmd)
  */
 static int read_raw_temperature(int32_t * data)
 {
-		uint8_t buf[2];
+    uint8_t buf[2];
     device.subaddr = BMP180_ADC_OUT_MSB_REG;
-
-		if(device.bus->ops->read(&device, buf, sizeof(buf)))
+    if(device.bus->ops->read(&device, buf, sizeof(buf)))
     {
         return 1;
     }
-<<<<<<< HEAD
-
-			buf[0] = ~((uint8_t)buf[0])&0x000000ff;
-			buf[1] = ~((uint8_t)buf[1])&0x000000ff;
-//			printf("MSB = %x\n\rLSB = %x\n\r",buf[0],buf[1]);
-
-			*data = ((((int16_t)(buf[0])) << 8) + (int16_t)(buf[1]));
-			*data +=7;
-
-=======
     *data = ((((int16_t)(buf[0])) << 8) + (int16_t)(buf[1]));
->>>>>>> Refine BMP180 driver
     return 0;
 }
 
@@ -298,23 +266,6 @@ int bmp180_read_temperature(int32_t * temperature)
     {
         return 2;
     }
-<<<<<<< HEAD
-#ifdef LIB_DEBUG
-//		printf("raw_t = %d\n\r",raw_temperature);
-//		printf("ac6 = %d\n\r",cal.AC6);
-//		printf("ac5 = %d\n\r",cal.AC5);
-//		printf("ac5/32768 = %f\n\r",((float)cal.AC5)/32768);
-//		printf("raw_t-ac6 = %d\n\r",(raw_temperature - cal.AC6));
-#endif
-    x1 = (int32_t)((raw_temperature - cal.AC6) * (int32_t)cal.AC5) >> 15;
-//					printf("x1 = %d\n\r",x1);
-		x2 = (int32_t)(cal.MC <<11) / (x1 + cal.MD);
-//					printf("x2 = %d\n\r",x2);
-    cal.B5 = x1 + x2;
-//		printf("b5 = %d\n\r",cal.B5);
-    *temperature = (cal.B5 + (int32_t)8) >> 4;
-//		printf("temp = %d\n\r",*temperature);
-=======
 
     LIB_TRACE("raw_t = %d\n\r",raw_temperature);
     LIB_TRACE("ac6 = %d\n\r",cal.AC6);
@@ -326,7 +277,6 @@ int bmp180_read_temperature(int32_t * temperature)
     x2 = (int32_t)(cal.MC <<11) / (x1 + cal.MD);
     cal.B5 = x1 + x2;
     *temperature = (cal.B5 + (int32_t)8) >> 4;
->>>>>>> Refine BMP180 driver
 
     return 0;
 }
@@ -386,18 +336,9 @@ int bmp180_read_pressure(int32_t * pressure)
     return 0;
 }
 
-<<<<<<< HEAD
-int bmp180_read_altitude(int32_t *altitude){
-	int32_t pressure = 0;	
-	bmp180_read_pressure(&pressure);
-	*altitude =(int32_t)(44330.0 * (1.0-pow((double)(pressure) / 101325.0, 1.0/5.255)) );
-
-	printf("altitude = %dM",altitude);
-=======
 int bmp180_pressure2altitude(int32_t pressure, int32_t *altitude)
 {
 	*altitude =(int32_t)(44330.0 * (1.0-pow((double)(pressure) / 101325.0, 1.0/5.255)) );
->>>>>>> Refine BMP180 driver
 	return 0;
 }
 

@@ -228,21 +228,45 @@ int main(void)
     }
     
     /* flash operation */
-    SSDInit();//eep
+    SSDInit();
     
     /* init sensor */
     init_sensor();
+    
+    /* init transfer */
+    trans_init(HW_DMA_CH1, uart_instance);
+    
+    /* install imu raw date callback */
+    imu_io_install(&IMU_IOInstallStruct1);
+    
+    /* read meg cal data */
+    MagnetometerCalibration(&cal_data);
+    
+    WDOG_QuickInit(100);
+    
+    PIT_QuickInit(HW_PIT_CH1, 1000*20);
+    PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
+    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
   
  
     while(1)
     {
-      
-        bmp180_read_temperature(&temperature);
-        bmp180_start_conversion(BMP180_P3_MEASURE);
-        DelayMs(20);
-        bmp180_read_pressure(&pressure);
-		bmp180_read_altitude(&altitude);
-		printf("t:%d p:%d a:%d\r", temperature, pressure,altitude);
+        //获取欧拉角 获取原始角度
+        DisableInterrupts();
+        ret = imu_get_euler_angle(&angle, &raw_data);
+        EnableInterrupts();
+        if(ret)
+        {
+            DisableInterrupts();
+            printf("imu module fail!\r\n");
+            while(1);
+        }
+//         bmp180_read_temperature(&temperature);
+//         bmp180_start_conversion(BMP180_P3_MEASURE);
+//         DelayMs(20);
+//         bmp180_read_pressure(&pressure);
+// 		bmp180_read_altitude(&altitude);
+// 		printf("t:%d p:%d a:%d\r", temperature, pressure,altitude);
 
 
     }

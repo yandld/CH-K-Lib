@@ -39,6 +39,8 @@ static struct calibration_data cal_data;
 //static uint8_t NRF2401RXBuffer[32] = "HelloWorld~~";//无线接收数据
 static imu_float_euler_angle_t angle;
 static imu_raw_data_t raw_data;
+static int32_t temperature;
+static int32_t pressure;
 
 int hmc5883_read_data2(int16_t* x, int16_t* y, int16_t* z)
 {
@@ -63,10 +65,9 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 };
 
 
+
 static void PIT_CH1_ISR(void)
 {
-    int32_t pressure;
-    int32_t temperature;
     uint32_t len;
     static transmit_user_data send_data;
     static uint8_t buf[64];
@@ -84,18 +85,13 @@ static void PIT_CH1_ISR(void)
     send_data.trans_yaw = 1800 + (int16_t)(angle.imu_yaw*10);
     
     /* pressure */
-    bmp180_read_pressure(&pressure);
     send_data.trans_pressure = pressure;
-    bmp180_start_conversion(BMP180_P2_MEASURE);
-    
     
     /* set buffer */
     len = user_data2buffer(&send_data, buf);
     trans_start_send_data(buf, len);
-    
     GPIO_ToggleBit(HW_GPIOA, 1);
     WDOG_Refresh();
-   // trans_send_pactket(send_data, TRANS_WITH_NRF2401);
 }
 
 int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance);
@@ -197,14 +193,19 @@ void MagnetometerCalibration(struct calibration_data * cal)
     SSD_Write(cal, sizeof(struct calibration_data));
 }
 
+#define BMP_STATUS_T_START          (0x00)
+#define BMP_STATUS_T_COMPLETE       (0x01)
+#define BMP_STATUS_P_START          (0x02)
+#define BMP_STATUS_P_COMPLETE       (0x03)
+#define BMP_STATUS_T_WAIT           (0x04)
+#define BMP_STATUS_P_WAIT           (0x05)
+
 int main(void)
 {
     int i;
-
+    static int bmpStatus = BMP_STATUS_T_START;
     uint32_t ret;
     uint32_t uart_instance;
-    int32_t temperature;
-    int32_t pressure;
 	int32_t altitude;
     /* basic hardware */
     DelayInit();
@@ -247,7 +248,6 @@ int main(void)
     PIT_QuickInit(HW_PIT_CH1, 1000*20);
     PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
-  
  
     while(1)
     {
@@ -261,14 +261,40 @@ int main(void)
             printf("imu module fail!\r\n");
             while(1);
         }
-//         bmp180_read_temperature(&temperature);
-//         bmp180_start_conversion(BMP180_P3_MEASURE);
-//         DelayMs(20);
-//         bmp180_read_pressure(&pressure);
-// 		bmp180_read_altitude(&altitude);
-// 		printf("t:%d p:%d a:%d\r", temperature, pressure,altitude);
-
-
+        /* sample temperature and pressure */
+        switch(bmpStatus)
+        {
+            case BMP_STATUS_T_START:
+                bmp180_start_conversion(BMP180_T_MEASURE);
+                bmpStatus = BMP_STATUS_T_WAIT;
+                break;
+            case BMP_STATUS_T_WAIT:
+                if(!is_conversion_busy())
+                {
+                    bmpStatus = BMP_STATUS_T_COMPLETE;
+                }
+                break;
+            case BMP_STATUS_T_COMPLETE:
+                bmp180_read_temperature(&temperature);
+                bmpStatus = BMP_STATUS_P_START;
+                break;
+            case BMP_STATUS_P_START:
+                bmp180_start_conversion(BMP180_P3_MEASURE);
+                bmpStatus = BMP_STATUS_P_WAIT;
+                break;
+            case BMP_STATUS_P_WAIT:
+                if(!is_conversion_busy())
+                {
+                    bmpStatus = BMP_STATUS_P_COMPLETE;
+                }
+                break;
+            case BMP_STATUS_P_COMPLETE:
+                bmp180_read_pressure(&pressure);
+                bmpStatus = BMP_STATUS_T_START;
+                break;
+            default:
+                break;
+        }
     }
 }
 

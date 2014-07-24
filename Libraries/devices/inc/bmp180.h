@@ -28,6 +28,6 @@ int bmp180_start_conversion(uint8_t cmd);
 int bmp180_read_pressure(int32_t * pressure);
 int bmp180_read_altitude(int32_t *altitude);
 int bmp180_pressure2altitude(int32_t pressure, int32_t *altitude);
-
+int is_conversion_busy(void);
 #endif
 

@@ -234,7 +234,7 @@ static int read_raw_pressure(int32_t * data, uint8_t *oss)
  * @param pointer of the bmp180 device struct
  * @retval 1:busy 0:idle
  */
-static int is_conversion_busy(void)
+int is_conversion_busy(void)
 {
     uint8_t reg1;
     read_register(BMP180_CTRL_MEAS_REG, &reg1);

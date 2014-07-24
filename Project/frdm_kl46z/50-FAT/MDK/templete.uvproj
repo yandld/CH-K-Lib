@@ -141,7 +141,7 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>0</RestoreTracepoints>
             <RestoreSysVw>1</RestoreSysVw>
             <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
@@ -447,6 +447,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_pit.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_adc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -481,6 +486,16 @@
               <FileName>pit.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\KL\src\pit.c</FilePath>
+            </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>tpm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\tpm.c</FilePath>
             </File>
           </Files>
         </Group>

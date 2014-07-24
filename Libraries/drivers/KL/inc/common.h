@@ -65,7 +65,6 @@
 #define LIB_TRACE(...)
 #endif
 
-typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 
 #define NVIC_PriorityGroup_0         ((uint32_t)0x7) /*!< 0 bits for pre-emption priority   4 bits for subpriority */                                               
 #define NVIC_PriorityGroup_1         ((uint32_t)0x6) /*!< 1 bits for pre-emption priority   3 bits for subpriority */                                                  

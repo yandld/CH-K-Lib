@@ -131,7 +131,6 @@ void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mod
 void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
 uint32_t GPIO_ReadPort(uint32_t instance);
 void GPIO_WritePort(uint32_t instance, uint32_t data);
-void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pinIndex, FunctionalState newState);
     
 #ifdef __cplusplus
 }

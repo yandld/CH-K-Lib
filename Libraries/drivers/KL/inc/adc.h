@@ -16,11 +16,10 @@
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
 
 //!< ADC外设模块号
 #define HW_ADC0  (0) //ADC0模块
-#define HW_ADC1  (1) //ADC1模块
-#define HW_ADC2  (2) //ADC2模块
 
 
 //!< ADC 快速初始化宏
@@ -67,6 +66,29 @@
 #define ADC1_SE18           (0x00900001U)
 #define ADC0_SE23           (0x00B80000U)
 #define ADC1_SE23           (0x00B80001U)
+
+
+
+#define ADC0_SE1A_PE16      (0x00086020U)
+#define ADC0_SE5A_PE17      (0x00286220U)
+#define ADC0_SE2A_PE18      (0x00106420U)
+#define ADC0_SE6A_PE19      (0x00306620U)
+#define ADC0_SE0A_PE20      (0x00006820U)
+#define ADC0_SE4A_PE21      (0x00206A20U)
+#define ADC0_SE3A_PE22      (0x00186C20U)
+#define ADC0_SE7A_PE23      (0x00386E20U)
+#define ADC0_SE4B_PE29      (0x01207A20U)
+#define ADC0_SE23A_PE30     (0x00B87C20U)
+#define ADC0_SE8A_PB00      (0x00404008U)
+#define ADC0_SE9A_PB01      (0x00484208U)
+#define ADC0_SE12A_PB02     (0x00604408U)
+#define ADC0_SE13A_PB03     (0x00684608U)
+#define ADC0_SE14A_PC00     (0x00704010U)
+#define ADC0_SE15A_PC01     (0x00784210U)
+#define ADC0_SE11A_PC02     (0x00584410U)
+#define ADC0_SE5B_PD01      (0x01284218U)
+#define ADC0_SE6B_PD05      (0x01304A18U)
+#define ADC0_SE7B_PD06      (0x01384C18U)
 
 //!< ADC 转换时钟分频因子,控制转换速度
 typedef enum
@@ -134,10 +156,8 @@ typedef enum
 //!< ADC中断及DMA配置选择
 typedef enum
 {
-    kADC_IT_Disable,        //AD中断功能禁止
-    kADC_DMA_Disable,       //ADC DMA功能禁止
-    kADC_IT_EOF,            //打开ADC 转换完成中断
-    kADC_DMA_EOF,           //打开ADC DMA 完成中断
+    kADC_IT_EOF,            //ADC 转换完成中断
+    kADC_DMA_EOF,           //ADC DMA 完成中断
 }ADC_ITDMAConfig_Type;
 
 //!< ADC 回调函数定义
@@ -161,7 +181,7 @@ typedef struct
 void ADC_CallbackInstall(uint32_t instance, ADC_CallBackType AppCBFun);
 void ADC_Init(ADC_InitTypeDef* ADC_InitStruct);
 uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode);
-void ADC_ITDMAConfig(uint32_t instance, uint32_t mux, ADC_ITDMAConfig_Type config);
+void ADC_ITDMAConfig(uint32_t instance, uint32_t mux, ADC_ITDMAConfig_Type config, bool status);
 int32_t ADC_QuickReadValue(uint32_t MAP);
 int32_t ADC_ReadValue(uint32_t instance, uint32_t mux);
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux);

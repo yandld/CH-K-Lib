@@ -380,7 +380,11 @@ void UART_WriteByte(uint32_t instance, uint16_t ch)
 uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
 {
     UART_Type * UARTx = (UART_Type*)UART_InstanceTable[instance];
-    if((UARTx->S1 & UART_S1_RDRF_MASK) != 0)
+    
+    /* clear OverRun */
+    UARTx->S1 |= UART_S1_OR_MASK;
+    
+    if(UARTx->S1 & UART_S1_RDRF_MASK)
     {
         *ch = (uint8_t)(UARTx->D);	
         return 0; 		  

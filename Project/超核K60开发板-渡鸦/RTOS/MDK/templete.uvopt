@@ -76,6 +76,16 @@
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>14</CpuCode>
+      <DllOpt>
+        <SimDllName>SARMCM3.DLL</SimDllName>
+        <SimDllArguments> </SimDllArguments>
+        <SimDlgDllName>DCM.DLL</SimDlgDllName>
+        <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
+        <TargetDllName>SARMCM3.DLL</TargetDllName>
+        <TargetDllArguments></TargetDllArguments>
+        <TargetDlgDllName>TCM.DLL</TargetDlgDllName>
+        <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
+      </DllOpt>
       <DebugOpt>
         <uSim>0</uSim>
         <uTrg>1</uTrg>
@@ -93,13 +103,9 @@
         <tRmem>1</tRmem>
         <tRfunc>0</tRfunc>
         <tRbox>1</tRbox>
-        <tRtrace>1</tRtrace>
-        <sRSysVw>1</sRSysVw>
-        <tRSysVw>1</tRSysVw>
-        <tPdscDbg>1</tPdscDbg>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
-        <nTsel>6</nTsel>
+        <nTsel>7</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -145,9 +151,6 @@
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
-      <Tracepoint>
-        <THDelay>0</THDelay>
-      </Tracepoint>
       <DebugFlag>
         <trace>0</trace>
         <periodic>0</periodic>
@@ -184,7 +187,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>1</GroupNumber>
       <FileNumber>1</FileNumber>
@@ -198,8 +200,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\system_MK60D10.c</PathWithFileName>
       <FilenameWithoutPath>system_MK60D10.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
@@ -214,17 +214,14 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60D10.s</PathWithFileName>
       <FilenameWithoutPath>startup_MK60D10.s</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
   <Group>
     <GroupName>application</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>2</GroupNumber>
       <FileNumber>3</FileNumber>
@@ -238,8 +235,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -254,8 +249,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\rtconfig.h</PathWithFileName>
       <FilenameWithoutPath>rtconfig.h</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -270,8 +263,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\startup.c</PathWithFileName>
       <FilenameWithoutPath>startup.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -286,8 +277,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\init_thread.c</PathWithFileName>
       <FilenameWithoutPath>init_thread.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -302,8 +291,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\led_thread.c</PathWithFileName>
       <FilenameWithoutPath>led_thread.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -318,8 +305,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui_thread.c</PathWithFileName>
       <FilenameWithoutPath>gui_thread.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -334,8 +319,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\my_gui.c</PathWithFileName>
       <FilenameWithoutPath>my_gui.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -350,17 +333,14 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\sd_thread.c</PathWithFileName>
       <FilenameWithoutPath>sd_thread.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
   <Group>
     <GroupName>lib-drivers</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>3</GroupNumber>
       <FileNumber>11</FileNumber>
@@ -374,8 +354,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\gpio.c</PathWithFileName>
       <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -390,8 +368,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\uart.c</PathWithFileName>
       <FilenameWithoutPath>uart.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -406,8 +382,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\pit.c</PathWithFileName>
       <FilenameWithoutPath>pit.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -422,8 +396,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</PathWithFileName>
       <FilenameWithoutPath>cpuidy.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -438,8 +410,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\adc.c</PathWithFileName>
       <FilenameWithoutPath>adc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -454,8 +424,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\ftm.c</PathWithFileName>
       <FilenameWithoutPath>ftm.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -470,8 +438,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\i2c.c</PathWithFileName>
       <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -486,8 +452,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\spi.c</PathWithFileName>
       <FilenameWithoutPath>spi.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -502,8 +466,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\dma.c</PathWithFileName>
       <FilenameWithoutPath>dma.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -518,8 +480,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\flexbus.c</PathWithFileName>
       <FilenameWithoutPath>flexbus.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -534,8 +494,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\systick.c</PathWithFileName>
       <FilenameWithoutPath>systick.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -550,8 +508,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\rtc.c</PathWithFileName>
       <FilenameWithoutPath>rtc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -566,8 +522,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\enet.c</PathWithFileName>
       <FilenameWithoutPath>enet.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -582,8 +536,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\common.c</PathWithFileName>
       <FilenameWithoutPath>common.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>3</GroupNumber>
@@ -598,8 +550,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\sd.c</PathWithFileName>
       <FilenameWithoutPath>sd.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -608,7 +558,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>4</GroupNumber>
       <FileNumber>26</FileNumber>
@@ -622,8 +571,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\ili9320.c</PathWithFileName>
       <FilenameWithoutPath>ili9320.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
@@ -638,8 +585,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\sram.c</PathWithFileName>
       <FilenameWithoutPath>sram.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>4</GroupNumber>
@@ -654,8 +599,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\ksz8041.c</PathWithFileName>
       <FilenameWithoutPath>ksz8041.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -664,7 +607,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>5</GroupNumber>
       <FileNumber>29</FileNumber>
@@ -678,8 +620,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\clock.c</PathWithFileName>
       <FilenameWithoutPath>clock.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -694,8 +634,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\device.c</PathWithFileName>
       <FilenameWithoutPath>device.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -710,8 +648,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\idle.c</PathWithFileName>
       <FilenameWithoutPath>idle.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -726,8 +662,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\ipc.c</PathWithFileName>
       <FilenameWithoutPath>ipc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -742,8 +676,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\irq.c</PathWithFileName>
       <FilenameWithoutPath>irq.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -758,8 +690,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\kservice.c</PathWithFileName>
       <FilenameWithoutPath>kservice.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -774,8 +704,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\mem.c</PathWithFileName>
       <FilenameWithoutPath>mem.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -790,8 +718,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\memheap.c</PathWithFileName>
       <FilenameWithoutPath>memheap.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -806,8 +732,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\mempool.c</PathWithFileName>
       <FilenameWithoutPath>mempool.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -822,8 +746,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\module.c</PathWithFileName>
       <FilenameWithoutPath>module.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -838,8 +760,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\object.c</PathWithFileName>
       <FilenameWithoutPath>object.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -854,8 +774,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\scheduler.c</PathWithFileName>
       <FilenameWithoutPath>scheduler.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -870,8 +788,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\slab.c</PathWithFileName>
       <FilenameWithoutPath>slab.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -886,8 +802,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\thread.c</PathWithFileName>
       <FilenameWithoutPath>thread.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
@@ -902,8 +816,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\src\timer.c</PathWithFileName>
       <FilenameWithoutPath>timer.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -912,7 +824,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>6</GroupNumber>
       <FileNumber>44</FileNumber>
@@ -926,8 +837,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\libcpu\arm\cortex-m4\cpuport.c</PathWithFileName>
       <FilenameWithoutPath>cpuport.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
@@ -942,8 +851,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\libcpu\arm\common\backtrace.c</PathWithFileName>
       <FilenameWithoutPath>backtrace.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
@@ -958,8 +865,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\libcpu\arm\common\div0.c</PathWithFileName>
       <FilenameWithoutPath>div0.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
@@ -974,8 +879,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\libcpu\arm\common\showmem.c</PathWithFileName>
       <FilenameWithoutPath>showmem.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
@@ -990,8 +893,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\libcpu\arm\cortex-m4\context_rvds.S</PathWithFileName>
       <FilenameWithoutPath>context_rvds.S</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -1000,7 +901,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>7</GroupNumber>
       <FileNumber>49</FileNumber>
@@ -1014,8 +914,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\cmd.c</PathWithFileName>
       <FilenameWithoutPath>cmd.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1030,8 +928,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_compiler.c</PathWithFileName>
       <FilenameWithoutPath>finsh_compiler.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1046,8 +942,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_error.c</PathWithFileName>
       <FilenameWithoutPath>finsh_error.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1062,8 +956,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_heap.c</PathWithFileName>
       <FilenameWithoutPath>finsh_heap.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1078,8 +970,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_init.c</PathWithFileName>
       <FilenameWithoutPath>finsh_init.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1094,8 +984,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_node.c</PathWithFileName>
       <FilenameWithoutPath>finsh_node.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1110,8 +998,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_ops.c</PathWithFileName>
       <FilenameWithoutPath>finsh_ops.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1126,8 +1012,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_parser.c</PathWithFileName>
       <FilenameWithoutPath>finsh_parser.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1142,8 +1026,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_token.c</PathWithFileName>
       <FilenameWithoutPath>finsh_token.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1158,8 +1040,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_var.c</PathWithFileName>
       <FilenameWithoutPath>finsh_var.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1174,8 +1054,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\finsh_vm.c</PathWithFileName>
       <FilenameWithoutPath>finsh_vm.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1190,8 +1068,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh.c</PathWithFileName>
       <FilenameWithoutPath>msh.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1206,8 +1082,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</PathWithFileName>
       <FilenameWithoutPath>msh_cmd.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1222,8 +1096,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\shell.c</PathWithFileName>
       <FilenameWithoutPath>shell.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>7</GroupNumber>
@@ -1238,17 +1110,14 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\symbol.c</PathWithFileName>
       <FilenameWithoutPath>symbol.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
   <Group>
     <GroupName>rtt-driver</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>8</GroupNumber>
       <FileNumber>64</FileNumber>
@@ -1262,8 +1131,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_ili9320.c</PathWithFileName>
       <FilenameWithoutPath>rtt_ili9320.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
@@ -1278,8 +1145,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_ksz8041.c</PathWithFileName>
       <FilenameWithoutPath>rtt_ksz8041.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
@@ -1294,8 +1159,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_rtc.c</PathWithFileName>
       <FilenameWithoutPath>rtt_rtc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
@@ -1310,8 +1173,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_sd.c</PathWithFileName>
       <FilenameWithoutPath>rtt_sd.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
@@ -1326,8 +1187,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</PathWithFileName>
       <FilenameWithoutPath>rtt_serial.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
@@ -1342,8 +1201,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_spi.c</PathWithFileName>
       <FilenameWithoutPath>rtt_spi.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
@@ -1358,8 +1215,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\spi_flash_w25qxx.c</PathWithFileName>
       <FilenameWithoutPath>spi_flash_w25qxx.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>8</GroupNumber>
@@ -1374,8 +1229,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\touch_ads7843.c</PathWithFileName>
       <FilenameWithoutPath>touch_ads7843.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -1384,7 +1237,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>9</GroupNumber>
       <FileNumber>72</FileNumber>
@@ -1398,8 +1250,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\rtc\alarm.c</PathWithFileName>
       <FilenameWithoutPath>alarm.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
@@ -1414,8 +1264,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\rtc\rrtc.c</PathWithFileName>
       <FilenameWithoutPath>rrtc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
@@ -1430,8 +1278,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\serial\serial.c</PathWithFileName>
       <FilenameWithoutPath>serial.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
@@ -1446,8 +1292,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\spi\spi_core.c</PathWithFileName>
       <FilenameWithoutPath>spi_core.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
@@ -1462,8 +1306,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\spi\spi_dev.c</PathWithFileName>
       <FilenameWithoutPath>spi_dev.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
@@ -1478,8 +1320,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\src\completion.c</PathWithFileName>
       <FilenameWithoutPath>completion.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
@@ -1494,8 +1334,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\src\dataqueue.c</PathWithFileName>
       <FilenameWithoutPath>dataqueue.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
@@ -1510,8 +1348,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\src\pipe.c</PathWithFileName>
       <FilenameWithoutPath>pipe.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
@@ -1526,8 +1362,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\src\portal.c</PathWithFileName>
       <FilenameWithoutPath>portal.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>9</GroupNumber>
@@ -1542,8 +1376,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\src\ringbuffer.c</PathWithFileName>
       <FilenameWithoutPath>ringbuffer.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -1552,7 +1384,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>10</GroupNumber>
       <FileNumber>82</FileNumber>
@@ -1566,8 +1397,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\src\dfs.c</PathWithFileName>
       <FilenameWithoutPath>dfs.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1582,8 +1411,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\src\dfs_file.c</PathWithFileName>
       <FilenameWithoutPath>dfs_file.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1598,8 +1425,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\src\dfs_fs.c</PathWithFileName>
       <FilenameWithoutPath>dfs_fs.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1614,8 +1439,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\src\dfs_posix.c</PathWithFileName>
       <FilenameWithoutPath>dfs_posix.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1630,8 +1453,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\dfs_nfs.c</PathWithFileName>
       <FilenameWithoutPath>dfs_nfs.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1646,8 +1467,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\mount_clnt.c</PathWithFileName>
       <FilenameWithoutPath>mount_clnt.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1662,8 +1481,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\mount_xdr.c</PathWithFileName>
       <FilenameWithoutPath>mount_xdr.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1678,8 +1495,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\nfs_clnt.c</PathWithFileName>
       <FilenameWithoutPath>nfs_clnt.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1694,8 +1509,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\nfs_xdr.c</PathWithFileName>
       <FilenameWithoutPath>nfs_xdr.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1710,8 +1523,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\auth_none.c</PathWithFileName>
       <FilenameWithoutPath>auth_none.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1726,8 +1537,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\clnt_generic.c</PathWithFileName>
       <FilenameWithoutPath>clnt_generic.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1742,8 +1551,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\clnt_udp.c</PathWithFileName>
       <FilenameWithoutPath>clnt_udp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1758,8 +1565,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\pmap.c</PathWithFileName>
       <FilenameWithoutPath>pmap.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1774,8 +1579,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\rpc_prot.c</PathWithFileName>
       <FilenameWithoutPath>rpc_prot.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1790,8 +1593,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\xdr.c</PathWithFileName>
       <FilenameWithoutPath>xdr.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1806,8 +1607,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\xdr_mem.c</PathWithFileName>
       <FilenameWithoutPath>xdr_mem.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1822,8 +1621,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\elmfat\dfs_elm.c</PathWithFileName>
       <FilenameWithoutPath>dfs_elm.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>10</GroupNumber>
@@ -1838,8 +1635,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\elmfat\ff.c</PathWithFileName>
       <FilenameWithoutPath>ff.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -1848,7 +1643,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>11</GroupNumber>
       <FileNumber>100</FileNumber>
@@ -1862,8 +1656,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Lib\GUI_CM3.lib</PathWithFileName>
       <FilenameWithoutPath>GUI_CM3.lib</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
@@ -1878,8 +1670,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\GUI_X.c</PathWithFileName>
       <FilenameWithoutPath>GUI_X.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
@@ -1894,8 +1684,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\GUIConf.c</PathWithFileName>
       <FilenameWithoutPath>GUIConf.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>11</GroupNumber>
@@ -1910,8 +1698,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\LCDConf.c</PathWithFileName>
       <FilenameWithoutPath>LCDConf.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -1920,7 +1706,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>12</GroupNumber>
       <FileNumber>104</FileNumber>
@@ -1934,8 +1719,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -1950,8 +1733,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_AntialiasedText.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_AntialiasedText.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -1966,8 +1747,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Automotive.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Automotive.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -1982,8 +1761,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_BarGraph.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_BarGraph.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -1998,8 +1775,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Bitmap.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Bitmap.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2014,8 +1789,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_ColorBar.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_ColorBar.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2030,8 +1803,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Conf.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Conf.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2046,8 +1817,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Cursor.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Cursor.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2062,8 +1831,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Fading.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Fading.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2078,8 +1845,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Graph.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Graph.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2094,8 +1859,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_IconView.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_IconView.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2110,8 +1873,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_ImageFlow.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_ImageFlow.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2126,8 +1887,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Intro.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Intro.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2142,8 +1901,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Listview.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Listview.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2158,8 +1915,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_RadialMenu.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_RadialMenu.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2174,8 +1929,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Resource.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Resource.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2190,8 +1943,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Skinning.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Skinning.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2206,8 +1957,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Speed.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Speed.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2222,8 +1971,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Speedometer.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Speedometer.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2238,8 +1985,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Start.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Start.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2254,8 +1999,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_TransparentDialog.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_TransparentDialog.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2270,8 +2013,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Treeview.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Treeview.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2286,8 +2027,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_VScreen.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_VScreen.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2302,8 +2041,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_WashingMachine.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_WashingMachine.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>12</GroupNumber>
@@ -2318,8 +2055,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_ZoomAndRotate.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_ZoomAndRotate.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -2328,7 +2063,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>13</GroupNumber>
       <FileNumber>129</FileNumber>
@@ -2342,8 +2076,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_clock.c</PathWithFileName>
       <FilenameWithoutPath>gui_clock.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
@@ -2358,8 +2090,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_calendar.c</PathWithFileName>
       <FilenameWithoutPath>gui_calendar.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
@@ -2374,8 +2104,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_desktop.c</PathWithFileName>
       <FilenameWithoutPath>gui_desktop.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
@@ -2390,8 +2118,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_image.c</PathWithFileName>
       <FilenameWithoutPath>gui_image.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
@@ -2406,8 +2132,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_choosefile.c</PathWithFileName>
       <FilenameWithoutPath>gui_choosefile.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>13</GroupNumber>
@@ -2422,8 +2146,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_notepad.c</PathWithFileName>
       <FilenameWithoutPath>gui_notepad.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -2432,7 +2154,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>14</GroupNumber>
       <FileNumber>135</FileNumber>
@@ -2446,8 +2167,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\cpuusage.c</PathWithFileName>
       <FilenameWithoutPath>cpuusage.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2462,8 +2181,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\event_simple.c</PathWithFileName>
       <FilenameWithoutPath>event_simple.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2478,8 +2195,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\heap_malloc.c</PathWithFileName>
       <FilenameWithoutPath>heap_malloc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2494,8 +2209,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\heap_realloc.c</PathWithFileName>
       <FilenameWithoutPath>heap_realloc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2510,8 +2223,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\mbox_send_wait.c</PathWithFileName>
       <FilenameWithoutPath>mbox_send_wait.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2526,8 +2237,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\mbox_simple.c</PathWithFileName>
       <FilenameWithoutPath>mbox_simple.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2542,8 +2251,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\memp_simple.c</PathWithFileName>
       <FilenameWithoutPath>memp_simple.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2558,8 +2265,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\messageq_simple.c</PathWithFileName>
       <FilenameWithoutPath>messageq_simple.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2574,8 +2279,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\mutex.c</PathWithFileName>
       <FilenameWithoutPath>mutex.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2590,8 +2293,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\mutex_simple.c</PathWithFileName>
       <FilenameWithoutPath>mutex_simple.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2606,8 +2307,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\sem.c</PathWithFileName>
       <FilenameWithoutPath>sem.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2622,8 +2321,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\semaphore_buffer_worker.c</PathWithFileName>
       <FilenameWithoutPath>semaphore_buffer_worker.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2638,8 +2335,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\semaphore_dynamic.c</PathWithFileName>
       <FilenameWithoutPath>semaphore_dynamic.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2654,8 +2349,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\semaphore_priority.c</PathWithFileName>
       <FilenameWithoutPath>semaphore_priority.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2670,8 +2363,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\semaphore_producer_consumer.c</PathWithFileName>
       <FilenameWithoutPath>semaphore_producer_consumer.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2686,8 +2377,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\semaphore_static.c</PathWithFileName>
       <FilenameWithoutPath>semaphore_static.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2702,8 +2391,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\tc_comm.c</PathWithFileName>
       <FilenameWithoutPath>tc_comm.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2718,8 +2405,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\tc_sample.c</PathWithFileName>
       <FilenameWithoutPath>tc_sample.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2734,8 +2419,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_critical_var.c</PathWithFileName>
       <FilenameWithoutPath>thread_critical_var.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2750,8 +2433,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_delay.c</PathWithFileName>
       <FilenameWithoutPath>thread_delay.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2766,8 +2447,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_delete.c</PathWithFileName>
       <FilenameWithoutPath>thread_delete.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2782,8 +2461,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_detach.c</PathWithFileName>
       <FilenameWithoutPath>thread_detach.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2798,8 +2475,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_dynamic.c</PathWithFileName>
       <FilenameWithoutPath>thread_dynamic.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2814,8 +2489,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_dynamic_simple.c</PathWithFileName>
       <FilenameWithoutPath>thread_dynamic_simple.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2830,8 +2503,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_priority.c</PathWithFileName>
       <FilenameWithoutPath>thread_priority.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2846,8 +2517,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_resume.c</PathWithFileName>
       <FilenameWithoutPath>thread_resume.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2862,8 +2531,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_same_priority.c</PathWithFileName>
       <FilenameWithoutPath>thread_same_priority.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2878,8 +2545,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_static.c</PathWithFileName>
       <FilenameWithoutPath>thread_static.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2894,8 +2559,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_static_simple.c</PathWithFileName>
       <FilenameWithoutPath>thread_static_simple.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2910,8 +2573,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_suspend.c</PathWithFileName>
       <FilenameWithoutPath>thread_suspend.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2926,8 +2587,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\thread_yield.c</PathWithFileName>
       <FilenameWithoutPath>thread_yield.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2942,8 +2601,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\timer_control.c</PathWithFileName>
       <FilenameWithoutPath>timer_control.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2958,8 +2615,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\timer_dynamic.c</PathWithFileName>
       <FilenameWithoutPath>timer_dynamic.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2974,8 +2629,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\timer_static.c</PathWithFileName>
       <FilenameWithoutPath>timer_static.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -2990,8 +2643,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\timer_stop_self.c</PathWithFileName>
       <FilenameWithoutPath>timer_stop_self.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>14</GroupNumber>
@@ -3006,17 +2657,14 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\timer_timeout.c</PathWithFileName>
       <FilenameWithoutPath>timer_timeout.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
   <Group>
     <GroupName>hw_test_examples</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>15</GroupNumber>
       <FileNumber>171</FileNumber>
@@ -3030,8 +2678,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\fs_test.c</PathWithFileName>
       <FilenameWithoutPath>fs_test.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -3040,7 +2686,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>16</GroupNumber>
       <FileNumber>172</FileNumber>
@@ -3054,8 +2699,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\listdir.c</PathWithFileName>
       <FilenameWithoutPath>listdir.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>16</GroupNumber>
@@ -3070,8 +2713,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\readspeed.c</PathWithFileName>
       <FilenameWithoutPath>readspeed.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>16</GroupNumber>
@@ -3086,8 +2727,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\readwrite.c</PathWithFileName>
       <FilenameWithoutPath>readwrite.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>16</GroupNumber>
@@ -3102,8 +2741,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\seekdir.c</PathWithFileName>
       <FilenameWithoutPath>seekdir.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>16</GroupNumber>
@@ -3118,8 +2755,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\writespeed.c</PathWithFileName>
       <FilenameWithoutPath>writespeed.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -3128,7 +2763,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>17</GroupNumber>
       <FileNumber>177</FileNumber>
@@ -3142,8 +2776,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_cmd_pic.c</PathWithFileName>
       <FilenameWithoutPath>gui_cmd_pic.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>17</GroupNumber>
@@ -3158,8 +2790,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_cmd_choosefile.c</PathWithFileName>
       <FilenameWithoutPath>gui_cmd_choosefile.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>17</GroupNumber>
@@ -3174,8 +2804,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_cmd_screenshot.c</PathWithFileName>
       <FilenameWithoutPath>gui_cmd_screenshot.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>17</GroupNumber>
@@ -3190,8 +2818,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_cmd_demo.c</PathWithFileName>
       <FilenameWithoutPath>gui_cmd_demo.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -3200,7 +2826,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>18</GroupNumber>
       <FileNumber>181</FileNumber>
@@ -3214,8 +2839,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\def.c</PathWithFileName>
       <FilenameWithoutPath>def.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3230,8 +2853,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\dhcp.c</PathWithFileName>
       <FilenameWithoutPath>dhcp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3246,8 +2867,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\dns.c</PathWithFileName>
       <FilenameWithoutPath>dns.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3262,8 +2881,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\init.c</PathWithFileName>
       <FilenameWithoutPath>init.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3278,8 +2895,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\memp.c</PathWithFileName>
       <FilenameWithoutPath>memp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3294,8 +2909,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\netif.c</PathWithFileName>
       <FilenameWithoutPath>netif.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3310,8 +2923,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\pbuf.c</PathWithFileName>
       <FilenameWithoutPath>pbuf.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3326,8 +2937,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\raw.c</PathWithFileName>
       <FilenameWithoutPath>raw.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3342,8 +2951,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\stats.c</PathWithFileName>
       <FilenameWithoutPath>stats.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3358,8 +2965,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\sys.c</PathWithFileName>
       <FilenameWithoutPath>sys.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3374,8 +2979,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\tcp.c</PathWithFileName>
       <FilenameWithoutPath>tcp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3390,8 +2993,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\tcp_in.c</PathWithFileName>
       <FilenameWithoutPath>tcp_in.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3406,8 +3007,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\tcp_out.c</PathWithFileName>
       <FilenameWithoutPath>tcp_out.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3422,8 +3021,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\timers.c</PathWithFileName>
       <FilenameWithoutPath>timers.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3438,8 +3035,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\udp.c</PathWithFileName>
       <FilenameWithoutPath>udp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3454,8 +3049,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\ipv4\autoip.c</PathWithFileName>
       <FilenameWithoutPath>autoip.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3470,8 +3063,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\ipv4\icmp.c</PathWithFileName>
       <FilenameWithoutPath>icmp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3486,8 +3077,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\ipv4\igmp.c</PathWithFileName>
       <FilenameWithoutPath>igmp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3502,8 +3091,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\ipv4\inet.c</PathWithFileName>
       <FilenameWithoutPath>inet.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3518,8 +3105,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\ipv4\inet_chksum.c</PathWithFileName>
       <FilenameWithoutPath>inet_chksum.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3534,8 +3119,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\ipv4\ip.c</PathWithFileName>
       <FilenameWithoutPath>ip.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3550,8 +3133,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\ipv4\ip_addr.c</PathWithFileName>
       <FilenameWithoutPath>ip_addr.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>18</GroupNumber>
@@ -3566,8 +3147,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\core\ipv4\ip_frag.c</PathWithFileName>
       <FilenameWithoutPath>ip_frag.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -3576,7 +3155,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>19</GroupNumber>
       <FileNumber>204</FileNumber>
@@ -3590,8 +3168,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\api\api_lib.c</PathWithFileName>
       <FilenameWithoutPath>api_lib.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>19</GroupNumber>
@@ -3606,8 +3182,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\api\api_msg.c</PathWithFileName>
       <FilenameWithoutPath>api_msg.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>19</GroupNumber>
@@ -3622,8 +3196,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\api\err.c</PathWithFileName>
       <FilenameWithoutPath>err.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>19</GroupNumber>
@@ -3638,8 +3210,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\api\netbuf.c</PathWithFileName>
       <FilenameWithoutPath>netbuf.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>19</GroupNumber>
@@ -3654,8 +3224,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\api\netdb.c</PathWithFileName>
       <FilenameWithoutPath>netdb.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>19</GroupNumber>
@@ -3670,8 +3238,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\api\netifapi.c</PathWithFileName>
       <FilenameWithoutPath>netifapi.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>19</GroupNumber>
@@ -3686,8 +3252,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\api\sockets.c</PathWithFileName>
       <FilenameWithoutPath>sockets.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>19</GroupNumber>
@@ -3702,8 +3266,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\api\tcpip.c</PathWithFileName>
       <FilenameWithoutPath>tcpip.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -3712,7 +3274,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>20</GroupNumber>
       <FileNumber>212</FileNumber>
@@ -3726,8 +3287,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\arch\sys_arch.c</PathWithFileName>
       <FilenameWithoutPath>sys_arch.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -3736,7 +3295,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>21</GroupNumber>
       <FileNumber>213</FileNumber>
@@ -3750,8 +3308,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\etharp.c</PathWithFileName>
       <FilenameWithoutPath>etharp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3766,8 +3322,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ethernetif.c</PathWithFileName>
       <FilenameWithoutPath>ethernetif.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3782,8 +3336,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\slipif.c</PathWithFileName>
       <FilenameWithoutPath>slipif.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3798,8 +3350,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\auth.c</PathWithFileName>
       <FilenameWithoutPath>auth.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3814,8 +3364,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\chap.c</PathWithFileName>
       <FilenameWithoutPath>chap.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3830,8 +3378,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\chpms.c</PathWithFileName>
       <FilenameWithoutPath>chpms.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3846,8 +3392,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\fsm.c</PathWithFileName>
       <FilenameWithoutPath>fsm.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3862,8 +3406,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\ipcp.c</PathWithFileName>
       <FilenameWithoutPath>ipcp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3878,8 +3420,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\lcp.c</PathWithFileName>
       <FilenameWithoutPath>lcp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3894,8 +3434,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\magic.c</PathWithFileName>
       <FilenameWithoutPath>magic.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3910,8 +3448,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\md5.c</PathWithFileName>
       <FilenameWithoutPath>md5.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3926,8 +3462,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\pap.c</PathWithFileName>
       <FilenameWithoutPath>pap.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3942,8 +3476,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\ppp.c</PathWithFileName>
       <FilenameWithoutPath>ppp.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3958,8 +3490,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\ppp_oe.c</PathWithFileName>
       <FilenameWithoutPath>ppp_oe.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3974,8 +3504,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\randm.c</PathWithFileName>
       <FilenameWithoutPath>randm.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>21</GroupNumber>
@@ -3990,8 +3518,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\netif\ppp\vj.c</PathWithFileName>
       <FilenameWithoutPath>vj.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -4000,7 +3526,6 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>22</GroupNumber>
       <FileNumber>229</FileNumber>
@@ -4014,8 +3539,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\dns_demo.c</PathWithFileName>
       <FilenameWithoutPath>dns_demo.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
@@ -4030,8 +3553,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\nfs.c</PathWithFileName>
       <FilenameWithoutPath>nfs.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
@@ -4046,8 +3567,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpclient.c</PathWithFileName>
       <FilenameWithoutPath>tcpclient.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
@@ -4062,8 +3581,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpsendpacket.c</PathWithFileName>
       <FilenameWithoutPath>tcpsendpacket.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
@@ -4078,8 +3595,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpserver.c</PathWithFileName>
       <FilenameWithoutPath>tcpserver.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
@@ -4094,8 +3609,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpclient.c</PathWithFileName>
       <FilenameWithoutPath>udpclient.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>22</GroupNumber>
@@ -4110,8 +3623,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpserver.c</PathWithFileName>
       <FilenameWithoutPath>udpserver.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
     </File>
   </Group>
 

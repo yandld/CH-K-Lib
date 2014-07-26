@@ -13,6 +13,13 @@
 * Keil(MDK) V4.53 以上版本
 * IAR 6.5 以上版本
 
+## 适用型号
+* MK60DNxxx
+* MK60DNZxxx
+* MK10DN32xxx
+* MKL25Zxxx
+* MKL46Zxxx
+
 ## 文件说明
 **Libraries:**
 

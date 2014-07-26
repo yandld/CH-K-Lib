@@ -408,3 +408,4 @@ const QuickInit_Type ADC_QuickInitTable[] =
     { 0, 3, 0, 6, 1, 7, 1}, //ADC0_SE7B_PD06
 };
 */
+

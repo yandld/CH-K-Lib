@@ -449,6 +449,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_dma.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

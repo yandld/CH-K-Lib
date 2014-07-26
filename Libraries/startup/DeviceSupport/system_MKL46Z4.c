@@ -55,7 +55,7 @@
 
 #define DISABLE_WDOG    1
 
-#define CLOCK_SETUP     1
+#define CLOCK_SETUP     3
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
@@ -206,7 +206,7 @@ void SystemInit (void) {
   /* SIM->SCGC5: PORTA=1 */
   SIM->SCGC5 |= (uint32_t)0x0200UL;     /* Enable clock gate for ports to enable pin routing */
   /* SIM->CLKDIV1: OUTDIV1=1,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,OUTDIV4=1,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0 */
-  SIM->CLKDIV1 = (uint32_t)0x00040000UL; /* Update system prescalers */
+  SIM->CLKDIV1 = (uint32_t)0x00030000UL; /* Update system prescalers */
   /* PORTA->PCR18: ISF=0,MUX=0 */
   PORTA->PCR[18] &= (uint32_t)~0x01000700UL;
   /* PORTA->PCR19: ISF=0,MUX=0 */

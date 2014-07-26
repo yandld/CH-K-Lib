@@ -53,7 +53,7 @@
 #define FTM3_CH0_DMAREQ         36
 #define FTM3_CH1_DMAREQ         37
 #define FTM3_CH2_DMAREQ         38
-#define FTM1_CH3_DMAREQ         39  
+#define FTM3_CH3_DMAREQ         39  
 #define ADC0_DMAREQ             40
 #define ADC1_DMAREQ             41
 #define CMP0_DMAREQ             42

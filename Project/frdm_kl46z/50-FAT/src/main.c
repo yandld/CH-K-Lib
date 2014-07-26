@@ -8,7 +8,7 @@ int main(void)
 {
     DelayInit();
 
-    UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     printf("HelloWorld!\r\n");
     shell_init();
     while(1)

@@ -375,7 +375,3 @@ static const QuickInit_Type TPM_QuickInitTable[] =
 };
 */
 
-
-
-
-

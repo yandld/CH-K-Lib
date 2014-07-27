@@ -597,7 +597,7 @@ void FTM_ITDMAConfig(uint32_t instance, FTM_ITDMAConfig_Type config, bool flag)
 void FTM0_IRQHandler(void)
 {
     uint32_t i;
-    if(FTM_CallBackTable[0] != NULL)
+    if(FTM_CallBackTable[0])
     {
         FTM_CallBackTable[0]();
     }
@@ -619,14 +619,14 @@ void FTM0_IRQHandler(void)
 void FTM1_IRQHandler(void)
 {
     uint32_t i;
-    if(FTM_CallBackTable[1] != NULL)
+    if(FTM_CallBackTable[1])
     {
         FTM_CallBackTable[1]();
     }
     /* clear pending register */
     if(FTM_InstanceTable[1]->SC & (FTM_SC_TOF_MASK | FTM_SC_TOIE_MASK))
     {
-        FTM_InstanceTable[1]->SC &= ~FTM_SC_TOF_MASK;
+        FTM_InstanceTable[1]->SC |= FTM_SC_TOF_MASK;
     }
     for(i = 0; i < FTM_ChlMaxTable[1]; i++)
     {
@@ -641,7 +641,7 @@ void FTM1_IRQHandler(void)
 void FTM2_IRQHandler(void)
 {
     uint32_t i;
-    if(FTM_CallBackTable[2] != NULL)
+    if(FTM_CallBackTable[2])
     {
         FTM_CallBackTable[2]();
     }

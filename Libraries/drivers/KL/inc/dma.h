@@ -95,7 +95,7 @@ typedef enum
 //!< 初始化结构体
 typedef struct 
 {
-    uint8_t                     chl;                                /* DMA通道号0~15 */       
+    uint8_t                     chl;                                /* DMA通道号 */       
     uint8_t                     chlTriggerSource;                   /* DMA触发源选择 */
     uint16_t                    transferByteCnt;
     DMA_TriggerSource_Type      triggerSourceMode;                  /* 触发模式选择 */
@@ -137,8 +137,6 @@ void DMA_EnableAutoDisableRequest(uint8_t chl , bool flag);
 /* IT funtions */
 void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config, bool status);
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun);
-
-
 
 
 

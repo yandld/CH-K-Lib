@@ -454,6 +454,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_dma.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_tpm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_tpm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

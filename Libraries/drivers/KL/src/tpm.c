@@ -198,13 +198,17 @@ uint8_t TPM_PWM_QuickInit(uint32_t MAP, TPM_PWM_Mode_Type mode, uint32_t req)
 
 
 
-void TPM_ITDMAConfig(uint32_t instance, TPM_ITDMAConfig_Type config, bool flag)
+void TPM_ITDMAConfig(uint32_t instance, TPM_ITDMAConfig_Type config, bool status)
 {
-    NVIC_EnableIRQ(TPM_IRQnTable[instance]);
+    if(status)
+    {
+        NVIC_EnableIRQ(TPM_IRQnTable[instance]);
+    }
+
     switch(config)
     {
         case kTPM_IT_TOF:
-            (flag)?
+            (status)?
             (TPM_InstanceTable[instance]->SC |= TPM_SC_TOIE_MASK):
             (TPM_InstanceTable[instance]->SC &= ~TPM_SC_TOIE_MASK);
             break;
@@ -214,7 +218,7 @@ void TPM_ITDMAConfig(uint32_t instance, TPM_ITDMAConfig_Type config, bool flag)
         case kTPM_IT_CH3:
         case kTPM_IT_CH4:
         case kTPM_IT_CH5:
-            (flag)?
+            (status)?
             (TPM_InstanceTable[instance]->CONTROLS[config].CnSC |= TPM_CnSC_CHIE_MASK):
             (TPM_InstanceTable[instance]->CONTROLS[config].CnSC &= ~TPM_CnSC_CHIE_MASK);
         case kTPM_DMA_CH0:
@@ -223,10 +227,10 @@ void TPM_ITDMAConfig(uint32_t instance, TPM_ITDMAConfig_Type config, bool flag)
         case kTPM_DMA_CH3:
         case kTPM_DMA_CH4:
         case kTPM_DMA_CH5:
-            (flag)?
+            (status)?
             (TPM_InstanceTable[instance]->CONTROLS[config].CnSC |= TPM_CnSC_CHIE_MASK):
             (TPM_InstanceTable[instance]->CONTROLS[config].CnSC &= ~TPM_CnSC_CHIE_MASK);
-            (flag)?
+            (status)?
             (TPM_InstanceTable[instance]->CONTROLS[config].CnSC |= TPM_CnSC_DMA_MASK):
             (TPM_InstanceTable[instance]->CONTROLS[config].CnSC &= ~TPM_CnSC_DMA_MASK);
         default:

@@ -120,7 +120,7 @@ void TPM_PWM_InvertPolarity(uint32_t instance, uint8_t chl, uint32_t config);
 //void FTM_IC_QuickInit(uint32_t MAP, FTM_ClockDiv_Type ps);
 //void FTM_IC_SetTriggerMode(uint32_t instance, uint32_t chl, FTM_IC_Mode_Type mode);
 /* IT & DMA config */
-void TPM_ITDMAConfig(uint32_t instance, TPM_ITDMAConfig_Type config, bool flag);
+void TPM_ITDMAConfig(uint32_t instance, TPM_ITDMAConfig_Type config, bool status);
 void TPM_CallbackInstall(uint32_t instance, TPM_CallBackType AppCBFun);
 /* control function */
 uint32_t TPM_GetChlCounter(uint32_t instance, uint32_t chl);

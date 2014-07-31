@@ -12,18 +12,24 @@
 
 static PDB_CallBackType PDB_CallBackTable[1] = {NULL};
 
-
+/**
+ * @brief  软件触发PDB开始转换一次  
+ * @retval None
+ */
 void PDB_SoftwareTrigger(void)
 {
     PDB0->SC |= PDB_SC_SWTRIG_MASK;
 }
 
+/**
+ * @brief  设置PDB转换频率
+ * @retval None
+ */
 static void _PDB_SetCounterPeriod(uint32_t srcClock, uint32_t timeInUs)
 {
     static const uint8_t MULT[4] = {1, 10, 20, 40};
     uint32_t clkDiv,mult;
     uint32_t i,j;
-    uint32_t factor;
     for(i=0;i<8;i++)
     {
         for(j=0;j<4;j++)
@@ -52,6 +58,15 @@ static void _PDB_SetCounterPeriod(uint32_t srcClock, uint32_t timeInUs)
     PDB0->IDLY = (srcClock/1000000)*timeInUs/((1<<clkDiv)*MULT[mult]);
 }
 
+/**
+ * @brief  获得PDB Mod 寄存器
+ * @retval MOD寄存器值
+ */
+uint32_t PDB_GetMODValue(void)
+{
+    return PDB0->MOD;
+}
+
 void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
 {
     /* enable clock gate */
@@ -76,11 +91,21 @@ void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
 	PDB0->SC |= PDB_SC_LDOK_MASK;
 }
 
-void PDB_SetADCTrigDelayValue(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue)
+
+void PDB_SetADCPreTrigger(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue, bool status)
 {
     PDB0->CH[adcInstance].DLY[adcMux] = dlyValue;
+    (status)?
+    (PDB0->CH[adcInstance].C1 |= PDB_C1_EN(1<<adcMux)):
+    (PDB0->CH[adcInstance].C1 &= ~PDB_C1_EN(1<<adcMux));
 }
 
+void PDB_SetBackToBackMode(uint32_t adcInstance, uint32_t adcMux, bool status)
+{
+    (status)?
+    (PDB0->CH[adcInstance].C1 |= PDB_C1_BB(1<<adcMux)):
+    (PDB0->CH[adcInstance].C1 &= ~PDB_C1_BB(1<<adcMux));
+}
 
 void PDB_ITDMAConfig(PDB_ITDMAConfig_Type config, bool status)
 {

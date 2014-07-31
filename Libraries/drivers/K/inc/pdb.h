@@ -49,7 +49,11 @@ void PDB_Init(PDB_InitTypeDef * PDB_InitStruct);
 void PDB_SoftwareTrigger(void);
 void PDB_ITDMAConfig(PDB_ITDMAConfig_Type config, bool status);
 void PDB_CallbackInstall(PDB_CallBackType AppCBFun);
-void PDB_SetADCTrigDelayValue(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue);
+uint32_t PDB_GetMODValue(void);
+//!< ADC trigger function
+void PDB_SetADCPreTrigger(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue, bool status);
+void PDB_SetBackToBackMode(uint32_t adcInstance, uint32_t adcMux, bool status);
+
 
 #ifdef __cplusplus
 }

@@ -55,7 +55,7 @@
 
 #define DISABLE_WDOG    1
 
-#define CLOCK_SETUP     1
+#define CLOCK_SETUP     3
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
@@ -68,7 +68,7 @@
          Core clock = 8MHz, BusClock = 8MHz
    3 ... Multipurpose Clock Generator (MCG) in PLL Engaged External (PEE) mode
          Reference clock source for MCG module is an external crystal 8MHz
-         Core clock = 96MHz, BusClock = 48MHz
+         Core clock = 136MHz, BusClock = 34MHz
 */
 
 /*----------------------------------------------------------------------------
@@ -93,7 +93,7 @@
     #define CPU_XTAL_CLK_HZ                 8000000u /* Value of the external crystal or oscillator clock frequency in Hz */
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
     #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
-    #define DEFAULT_SYSTEM_CLOCK            136000000u /* Default System clock value */
+    #define DEFAULT_SYSTEM_CLOCK            132000000 /* Default System clock value */
 #endif /* (CLOCK_SETUP == 3) */
 
 
@@ -230,7 +230,7 @@ void SystemInit (void) {
   }
   /* Switch to PBE Mode */
   /* MCG->C6: LOLIE0=0,PLLS=1,CME0=0,VDIV0=0 */
-  MCG->C6 = (uint8_t)0x40U | MCG_C6_VDIV0(10);
+  MCG->C6 = (uint8_t)0x40U | MCG_C6_VDIV0(9);
   while((MCG->S & 0x0CU) != 0x08U) {    /* Wait until external reference clock is selected as MCG output */
   }
   while((MCG->S & MCG_S_LOCK0_MASK) == 0x00U) { /* Wait until locked */

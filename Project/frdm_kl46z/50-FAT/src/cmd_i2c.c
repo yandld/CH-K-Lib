@@ -27,11 +27,7 @@ static int DoI2C(int argc, char * const argv[])
     uint32_t instance;
     printf("i2c bus test\r\n");
     /* init i2c */
-    instance = I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
-    PORT_PinMuxConfig(HW_GPIOB, 2, kPinAlt0);
-    PORT_PinMuxConfig(HW_GPIOB, 3, kPinAlt0);
-    PORT_PinMuxConfig(HW_GPIOC, 6, kPinAlt7);
-    PORT_PinMuxConfig(HW_GPIOC, 7, kPinAlt7);
+    instance = I2C_QuickInit(I2C0_SCL_PE19_SDA_PE18, 100*1000);
     I2C_Scan(instance);
 }
 

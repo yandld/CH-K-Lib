@@ -67,6 +67,20 @@ uint32_t PDB_GetMODValue(void)
     return PDB0->MOD;
 }
 
+void PDB_QuickInit(PDB_TriggerSrc_Type triggerSrc, uint32_t timeInUs)
+{
+    uint32_t clock;
+    PDB_InitTypeDef  PDB_InitStruct1;
+    
+    CLOCK_GetClockFrequency(kBusClock, &clock);
+
+    PDB_InitStruct1.inputTrigSource = kPDB_SoftwareTrigger;  /* software Trigger */
+    PDB_InitStruct1.isContinuesMode = true;
+    PDB_InitStruct1.srcClock = clock;
+    PDB_InitStruct1.timeInUs = timeInUs;
+    PDB_Init(&PDB_InitStruct1);
+}
+
 void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
 {
     /* enable clock gate */
@@ -82,7 +96,7 @@ void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
     (PDB_InitStruct->isContinuesMode)?(PDB0->SC |= PDB_SC_CONT_MASK):(PDB0->SC &= ~PDB_SC_CONT_MASK);
     
     /* set PDB period */
-    _PDB_SetCounterPeriod(PDB_InitStruct->srcClock, 1000*1000);
+    _PDB_SetCounterPeriod(PDB_InitStruct->srcClock, PDB_InitStruct->timeInUs);
 
     /* enable PDB */
 	PDB0->SC |= PDB_SC_PDBEN_MASK; 
@@ -91,13 +105,24 @@ void PDB_Init(PDB_InitTypeDef * PDB_InitStruct)
 	PDB0->SC |= PDB_SC_LDOK_MASK;
 }
 
-
+/**
+ * @brief  设置PDB触发ADC
+ * @param  adcInstance: 需要触发的ADC模块号 如HW_ADC0
+ * @param  adcMux:     ADC转换通道
+ * @param  dlyValue:   延时计数值
+ * @param  status:     开关
+ * @retval None
+ */
 void PDB_SetADCPreTrigger(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue, bool status)
 {
-    PDB0->CH[adcInstance].DLY[adcMux] = dlyValue;
+    /* disable PDB */
     (status)?
     (PDB0->CH[adcInstance].C1 |= PDB_C1_EN(1<<adcMux)):
     (PDB0->CH[adcInstance].C1 &= ~PDB_C1_EN(1<<adcMux));
+    
+    (status)?
+    (PDB0->CH[adcInstance].C1 |= PDB_C1_TOS(1<<adcMux)):
+    (PDB0->CH[adcInstance].C1 &= ~PDB_C1_TOS(1<<adcMux));
 }
 
 void PDB_SetBackToBackMode(uint32_t adcInstance, uint32_t adcMux, bool status)

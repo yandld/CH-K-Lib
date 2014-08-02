@@ -16,6 +16,7 @@
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
 
 //!< ADC外设模块号
 #define HW_ADC0  (0) //ADC0模块
@@ -168,6 +169,8 @@ void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux);
 uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux);
 void ADC_ChlMuxConfig(uint32_t instance, uint32_t mux);
 
+//hardware trigger 
+void ADC_EnableHardwareTrigger(uint32_t instance, bool status);
 
 #ifdef __cplusplus
 }

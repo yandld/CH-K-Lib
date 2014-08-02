@@ -22,7 +22,6 @@ int DoLPTMR(int argc, char * const argv[])
     printf("begin test LPTMR PC\r\n");
     LPTMR_PC_QuickInit(LPTMR_ALT1_PA19);
     
-    
     return 0;
 }
 

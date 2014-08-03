@@ -154,7 +154,16 @@ uint8_t TPM_PWM_QuickInit(uint32_t MAP, TPM_PWM_Mode_Type mode, uint32_t req)
     /* calc req and ps */
     uint32_t min_val = 0xFFFF;
     /* cal ps */
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    CLOCK_GetClockFrequency(kMCGOutClock, &clock);
+    if(MCG->C6 & MCG_C6_PLLS_MASK) /* PLL */
+    {
+        clock /= 2;
+    }
+    else /* FLL */
+    {
+        
+    }
+    LIB_TRACE("%s %d\r\n", __func__, clock);
     pres = (clock/req)/TPM_MOD_MOD_MASK;
     if((clock/req)/pres > TPM_MOD_MOD_MASK)
     {

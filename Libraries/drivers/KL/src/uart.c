@@ -12,6 +12,10 @@
 #include "gpio.h"
 #include "common.h"
 
+#ifdef UART_USE_STDIO
+#include <stdio.h>
+#endif
+
 #define UARTN_BASES {(void*)UART0, (void*)UART1, (void*)UART2}
 /* gloabl const table defination */
 const void* UART_InstanceTable[] = UARTN_BASES;

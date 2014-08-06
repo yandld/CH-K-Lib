@@ -67,6 +67,12 @@
 #define BOARD_UART_DEBUG_MAP        UART1_RX_PC03_TX_PC04
 #define BOARD_UART_INSTANCE         (HW_UART1)
 
+#elif defined(FRDM)
+
+#if defined(MK64F12)
+#define BOARD_UART_DEBUG_MAP  UART0_RX_PB16_TX_PB17
+
+#endif
 
 #else
 

@@ -35,6 +35,8 @@
 #include "MK70F15.h"
 #elif MK21D5
 #include "MK21D5.h"
+#elif MK64F12
+#include "MK64F12.h"
 
 #else
 #error "No CPU defined! please define CPU Type in Preprocessor Symbols, eg: MK60D10"

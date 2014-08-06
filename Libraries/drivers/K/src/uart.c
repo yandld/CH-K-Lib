@@ -36,7 +36,7 @@ static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] 
 /* special use for printf */
 static uint8_t UART_DebugInstance;
 /* instance clock gate table */
-#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15))
+#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15) || defined(MK64F12))
 static const struct reg_ops SIM_UARTClockGateTable[] =
 {
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},

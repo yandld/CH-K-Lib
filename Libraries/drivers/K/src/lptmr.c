@@ -19,6 +19,18 @@ static const IRQn_Type PIT_IRQnTable[] =
     LPTimer_IRQn,
 };
 
+#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15))
+static const struct reg_ops SIM_LPTMRClockGateTable[] =
+{
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_LPTIMER_MASK},
+};
+#elif (defined(MK64F12))
+static const struct reg_ops SIM_LPTMRClockGateTable[] =
+{
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_LPTMR_MASK},
+};
+#endif
+
 /**
  * @brief  初始化配置LPTM模块处于计时器模式
  * @code
@@ -34,7 +46,8 @@ static const IRQn_Type PIT_IRQnTable[] =
 void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct)
 {
 	/* open clock gate */
-	SIM->SCGC5 |= SIM_SCGC5_LPTIMER_MASK; 
+    *(uint32_t*)SIM_LPTMRClockGateTable[0].addr |= SIM_LPTMRClockGateTable[0].mask;
+    
     LPTMR0->CSR = 0x00; 
     LPTMR0->PSR = 0x00;
     LPTMR0->CMR = 0x00;
@@ -75,7 +88,8 @@ void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct)
 void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
 {
 	/* open clock gate */
-	SIM->SCGC5 |= SIM_SCGC5_LPTIMER_MASK; 
+    *(uint32_t*)SIM_LPTMRClockGateTable[0].addr |= SIM_LPTMRClockGateTable[0].mask;
+    
     LPTMR0->CSR = 0x00; 
     LPTMR0->PSR = 0x00;
     LPTMR0->CMR = 0x00;
@@ -141,7 +155,10 @@ void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
  */
 void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config)
 {
-    SIM->SCGC5 |= SIM_SCGC5_LPTIMER_MASK; 
+    
+    /* enable clock gate */
+    *(uint32_t*)SIM_LPTMRClockGateTable[0].addr |= SIM_LPTMRClockGateTable[0].mask;
+    
     switch (config)
     {
         case kLPTMR_IT_Disable:
@@ -165,7 +182,9 @@ void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config)
  */
 void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun)
 {
-    SIM->SCGC5 |= SIM_SCGC5_LPTIMER_MASK; 
+	/* open clock gate */
+    *(uint32_t*)SIM_LPTMRClockGateTable[0].addr |= SIM_LPTMRClockGateTable[0].mask;
+    
     if(AppCBFun != NULL)
     {
         LPTMR_CallBackTable[0] = AppCBFun;

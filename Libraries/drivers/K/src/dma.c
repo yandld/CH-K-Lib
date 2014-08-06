@@ -13,7 +13,7 @@
 #include "common.h"
 
 static DMA_CallBackType DMA_CallBackTable[16] = {NULL};
-#if     (defined(MK60DZ10) || defined(MK60D10))
+#if     (defined(MK60DZ10) || defined(MK60D10) || defined(MK64F12))
 /* DMA中断向量入口 */
 static const IRQn_Type DMA_IRQnTable[] = 
 {

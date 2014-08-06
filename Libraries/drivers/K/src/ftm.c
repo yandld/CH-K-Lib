@@ -29,7 +29,7 @@
 FTM_Type * const FTM_InstanceTable[] = FTM_BASES;
 static FTM_CallBackType FTM_CallBackTable[ARRAY_SIZE(FTM_InstanceTable)] = {NULL};
 
-#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15))
+#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15) || defined(MK64F12))
 static const uint32_t FTM_ChlMaxTable[] = {8,2,2}; /* reference to chip configuration->flextimer configuration */
 static const struct reg_ops SIM_FTMClockGateTable[] =
 {

@@ -26,7 +26,7 @@
 ADC_Type * const ADC_InstanceTable[] = ADC_BASES;
 static ADC_CallBackType ADC_CallBackTable[ARRAY_SIZE(ADC_InstanceTable)] = {NULL};
 
-#if (defined(MK60DZ10) || defined(MK60D10))
+#if (defined(MK60DZ10) || defined(MK60D10) || defined(MK64F12))
 static const struct reg_ops SIM_ADCClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC0_MASK},

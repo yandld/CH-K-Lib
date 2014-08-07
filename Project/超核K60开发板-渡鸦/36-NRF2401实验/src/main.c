@@ -36,7 +36,7 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     UART_CallbackRxInstall(HW_UART0, UART_ISR);
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx);
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     
     printf("NRF24L01 test\r\n");
     /* 初始化 NRF2401模块 的SPI接口及片选 */

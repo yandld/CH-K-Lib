@@ -7,19 +7,19 @@
 
   <Targets>
     <Target>
-      <TargetName>mk10d5</TargetName>
+      <TargetName>mk60d10</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
-          <Device>MK10DN32xxx5</Device>
+          <Device>MK60DN512xxx10</Device>
           <Vendor>Freescale Semiconductor</Vendor>
-          <Cpu>IRAM(0x1FFFF000-0x1FFFFFFF) IRAM2(0x20000000-0x20000FFF) IROM(0x0-0x7FFF) CLOCK(12000000) CPUTYPE("Cortex-M4") ELITTLE</Cpu>
+          <Cpu>IROM(0x00000000,0x80000) IRAM(0x20000000,0x10000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") CLOCK(100000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
-          <StartupFile>"STARTUP\Freescale\Kinetis\startup_MK10D5.s" ("Freescale MK10Xxxxxxx5 Startup Code")</StartupFile>
-          <FlashDriverDll>ULP2CM3(-O2510 -S0 -C0 -FO15 -FD20000000 -FC800 -FN1 -FF0MK_P32_50MHZ -FS00 -FL08000)</FlashDriverDll>
-          <DeviceId>6215</DeviceId>
-          <RegisterFile>MK10D5.H</RegisterFile>
+          <StartupFile></StartupFile>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0MK_P512 -FS00 -FL080000 -FP0($$Device:MK60DN512xxx10$Flash\MK_P512.FLM))</FlashDriverDll>
+          <DeviceId>5854</DeviceId>
+          <RegisterFile>$$Device:MK60DN512xxx10$Device\Include\MK60D10.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -29,13 +29,14 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>SFD\Freescale\Kinetis\MK10D5.sfr</SFDFile>
+          <SFDFile>$$Device:MK60DN512xxx10$SVD\MK60D10.svd</SFDFile>
+          <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
           <IncludePath></IncludePath>
           <LibPath></LibPath>
-          <RegisterFilePath>Freescale\Kinetis\</RegisterFilePath>
-          <DBRegisterFilePath>Freescale\Kinetis\</DBRegisterFilePath>
+          <RegisterFilePath></RegisterFilePath>
+          <DBRegisterFilePath></DBRegisterFilePath>
           <TargetStatus>
             <Error>0</Error>
             <ExitCodeStop>0</ExitCodeStop>
@@ -47,7 +48,7 @@
           <OutputName>templete</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\</ListingPath>
@@ -97,10 +98,11 @@
           <StopOnExitCode>3</StopOnExitCode>
           <CustomArgument></CustomArgument>
           <IncludeLibraryModules></IncludeLibraryModules>
+          <ComprImg>1</ComprImg>
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments></SimDllArguments>
+          <SimDllArguments> </SimDllArguments>
           <SimDlgDll>DCM.DLL</SimDlgDll>
           <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
@@ -136,9 +138,12 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>7</TargetSelection>
+          <TargetSelection>6</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -162,11 +167,16 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4099</DriverSelection>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
-          <Flash2>Segger\JL2CM3.dll</Flash2>
+          <bUseTDR>1</bUseTDR>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
+          <pFcarmOut></pFcarmOut>
+          <pFcarmGrp></pFcarmGrp>
+          <pFcArmRoot></pFcArmRoot>
+          <FcArmLst>0</FcArmLst>
         </Utilities>
         <TargetArmAds>
           <ArmAdsMisc>
@@ -265,13 +275,13 @@
               </Ocm6>
               <IRAM>
                 <Type>0</Type>
-                <StartAddress>0x1ffff000</StartAddress>
-                <Size>0x1000</Size>
+                <StartAddress>0x20000000</StartAddress>
+                <Size>0x10000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x8000</Size>
+                <Size>0x80000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -296,7 +306,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x8000</Size>
+                <Size>0x80000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -320,20 +330,20 @@
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
-                <StartAddress>0x1ffff000</StartAddress>
-                <Size>0x1000</Size>
+                <StartAddress>0x20000000</StartAddress>
+                <Size>0x10000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
-                <Size>0x1000</Size>
+                <StartAddress>0x1fff0000</StartAddress>
+                <Size>0x10000</Size>
               </OCR_RVCT10>
             </OnChipMemories>
             <RvctStartVector></RvctStartVector>
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -344,11 +354,14 @@
             <Rwpi>0</Rwpi>
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
+            <uSurpInc>0</uSurpInc>
+            <uC99>0</uC99>
+            <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK10D5 URANUS</Define>
+              <Define>MK60D10 RAVEN DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Libraries\startup\CoreSupport;..\..\..\Libraries\startup\DeviceSupport;..\..\..\Libraries\drivers\K\inc;..\..\..\Libraries\devices\inc;..\..\..\Libraries\utilities\board;..\..\..\Libraries\utilities\imu</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\imu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -359,6 +372,8 @@
             <SplitLS>0</SplitLS>
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
+            <uSurpInc>0</uSurpInc>
+            <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -375,6 +390,7 @@
             <useFile>0</useFile>
             <TextAddressRange>0x00000000</TextAddressRange>
             <DataAddressRange>0x1FFF8000</DataAddressRange>
+            <pXoBase></pXoBase>
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
@@ -389,14 +405,14 @@
           <GroupName>startup</GroupName>
           <Files>
             <File>
-              <FileName>system_MK10D5.c</FileName>
+              <FileName>system_MK60D10.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\startup\DeviceSupport\system_MK10D5.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\system_MK60D10.c</FilePath>
             </File>
             <File>
-              <FileName>startup_MK10D5.s</FileName>
+              <FileName>startup_MK60D10.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK10D5.s</FilePath>
+              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60D10.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -408,16 +424,6 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
-            <File>
-              <FileName>trans.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\trans.c</FilePath>
-            </File>
-            <File>
-              <FileName>protocol.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\protocol.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -426,107 +432,102 @@
             <File>
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\gpio.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
-            </File>
-            <File>
-              <FileName>pit.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\pit.c</FilePath>
-            </File>
-            <File>
-              <FileName>common.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\common.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
             </File>
             <File>
               <FileName>wdog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\wdog.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\wdog.c</FilePath>
+            </File>
+            <File>
+              <FileName>pit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\pit.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpuidy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
+            </File>
+            <File>
+              <FileName>adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>lptmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\lptmr.c</FilePath>
+            </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>flexbus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flexbus.c</FilePath>
+            </File>
+            <File>
+              <FileName>systick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>enet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\enet.c</FilePath>
+            </File>
+            <File>
+              <FileName>tsi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\tsi.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>utilities</GroupName>
+          <GroupName>imu_rev</GroupName>
           <Files>
             <File>
-              <FileName>imu.c</FileName>
+              <FileName>imu_rev.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\utilities\imu\imu.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>devices</GroupName>
-          <Files>
-            <File>
-              <FileName>i2c_bus_ops.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\src\i2c_bus_ops.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi_bus_ops.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\src\spi_bus_ops.c</FilePath>
-            </File>
-            <File>
-              <FileName>mpu6050.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\src\mpu6050.c</FilePath>
-            </File>
-            <File>
-              <FileName>hmc5883.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\src\hmc5883.c</FilePath>
-            </File>
-            <File>
-              <FileName>bmp180.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\src\bmp180.c</FilePath>
-            </File>
-            <File>
-              <FileName>nrf24l01.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\Libraries\devices\src\nrf24l01.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>flash</GroupName>
-          <Files>
-            <File>
-              <FileName>MK_P32_50MHZ.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\Libraries\drivers\K\src\flash\lib\MK_P32_50MHZ.lib</FilePath>
-            </File>
-            <File>
-              <FileName>ssd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\ssd.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\imu\imu_rev.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "pit.h"
+#include "board.h"
 
 void PIT0_ISR(void)
 {

@@ -67,6 +67,17 @@
 #define BOARD_UART_DEBUG_MAP        UART1_RX_PC03_TX_PC04
 #define BOARD_UART_INSTANCE         (HW_UART1)
 
+
+#elif defined(RADIUM)
+
+#define BOARD_NAME                  "RADIUM"
+#define BOARD_UART_DEBUG_MAP        UART0_RX_PA01_TX_PA02
+#define BOARD_LED_GPIO_BASES        { HW_GPIOE, HW_GPIOD }
+#define BOARD_LED_PIN_BASES         { 6, 7 }
+#define BOARD_I2C_MAP               I2C0_SCL_PE19_SDA_PE18
+
+
+
 #elif defined(FRDM)
 
 #if defined(MK64F12)

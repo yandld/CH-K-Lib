@@ -1,11 +1,8 @@
 #include "shell.h"
 #include "gpio.h"
 #include "i2c.h"
+#include "board.h"
 
-void I2C_ISR(void)
-{
-    printf("I2C ISR enter\r\n");
-}
 
 /* i2c bus scan */
 static void I2C_Scan(uint32_t instance)
@@ -25,9 +22,10 @@ static void I2C_Scan(uint32_t instance)
 static int DoI2C(int argc, char * const argv[])
 {
     uint32_t instance;
-    printf("i2c bus test\r\n");
+    printf("board:%s fun:%s\r\n",BOARD_NAME, __func__);
     /* init i2c */
-    instance = I2C_QuickInit(I2C0_SCL_PE19_SDA_PE18, 100*1000);
+    instance = I2C_QuickInit(BOARD_I2C_MAP, 100*1000);
+    printf("i2c instance:%d\r\n", instance);
     I2C_Scan(instance);
 }
 

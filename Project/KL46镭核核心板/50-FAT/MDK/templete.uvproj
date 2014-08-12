@@ -72,8 +72,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopB1X>0</nStopB1X>
-            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
@@ -130,7 +128,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -142,8 +139,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -362,9 +359,9 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MKL46Z4 FRDM LIB_DEBUG</Define>
+              <Define>MKL46Z4 RADIUM LIB_DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\shell</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\shell;..\..\..\..\Libraries\utilities\board</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -433,21 +430,6 @@
               <FilePath>..\src\shell_config.h</FilePath>
             </File>
             <File>
-              <FileName>cmd_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_pit.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_pit.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_adc.c</FilePath>
@@ -466,11 +448,6 @@
               <FileName>cmd_lptmr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_lptmr.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_i2c.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -551,6 +528,31 @@
               <FileName>shell_cmdhist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>hw_test</GroupName>
+          <Files>
+            <File>
+              <FileName>cmd_test_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_pit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_pit.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_uart.c</FilePath>
             </File>
           </Files>
         </Group>

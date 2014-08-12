@@ -3559,7 +3559,7 @@ typedef struct {
 
 /* ENET - Peripheral instance base addresses */
 /** Peripheral ENET base address */
-#define ENET_BASE                                (0x400C1000u)
+#define ENET_BASE                                (0x400C0000u)
 /** Peripheral ENET base pointer */
 #define ENET                                     ((ENET_Type *)ENET_BASE)
 /** Array initializer of ENET peripheral base pointers */

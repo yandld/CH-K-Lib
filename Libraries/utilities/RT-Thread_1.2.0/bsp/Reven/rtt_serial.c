@@ -68,7 +68,7 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
             baudrate = 115200;
             break;
     }
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, baudrate);
+    //UART_QuickInit(UART0_RX_PD06_TX_PD07, baudrate);
     
     /* enable Tx hardware FIFO to enhance proformence */
     UART_EnableTxFIFO(UART_InitStruct1.instance, true);

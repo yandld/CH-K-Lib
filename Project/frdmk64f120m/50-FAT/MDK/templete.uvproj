@@ -442,6 +442,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_uart.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_enet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_enet.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_clkout.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\cmd_clkout.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -517,6 +527,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
             </File>
+            <File>
+              <FileName>enet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\enet.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -541,6 +556,16 @@
               <FileName>shell_cmdhist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>ksz8041.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
             </File>
           </Files>
         </Group>

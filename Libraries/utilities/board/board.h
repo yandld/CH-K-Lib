@@ -86,7 +86,12 @@
 #define BOARD_I2C_MAP               I2C0_SCL_PE19_SDA_PE18
 #define BOARD_LED_GPIO_BASES        {HW_GPIOB, HW_GPIOB, HW_GPIOE}
 #define BOARD_LED_PIN_BASES         {21, 22, 26}
-#define BOARD_LPTMR_PIN             LPTMR_ALT1_PA19
+#define BOARD_LPTMR_MAP             LPTMR_ALT1_PA19
+#define BOARD_KEY_GPIO_BASES        {HW_GPIOA, HW_GPIOC}
+#define BOARD_KEY_PIN_BASES         {4, 6}
+#define BOARD_ADC_MAP               ADC1_SE18
+
+
 
 #endif
 

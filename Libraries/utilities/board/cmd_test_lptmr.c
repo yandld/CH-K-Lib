@@ -20,7 +20,7 @@ int DoLPTMR(int argc, char * const argv[])
     
     DelayMs(2000);
     printf("begin test LPTMR PC\r\n");
-    LPTMR_PC_QuickInit(BOARD_LPTMR_PIN);
+    LPTMR_PC_QuickInit(BOARD_LPTMR_MAP);
     
     return 0;
 }

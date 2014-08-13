@@ -1,7 +1,7 @@
 #include "shell.h"
 #include "lptmr.h"
 #include "gpio.h"
-#include "tpm.h"
+#include "board.h"
 
 static void LPTMR_ISR(void)
 {

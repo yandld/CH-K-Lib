@@ -36,7 +36,7 @@ int main(void)
     LPTMR_TC_Init(&LPTMR_TC_InitStruct1);
     
     LPTMR_CallbackInstall(LPTMR_ISR); /* 注册回调函数 */
-    LPTMR_ITDMAConfig(kLPTMR_IT_TOF); /* 开启LPTMR中断 */
+    LPTMR_ITDMAConfig(kLPTMR_IT_TOF, true); /* 开启LPTMR中断 */
     
     while(1)
     {

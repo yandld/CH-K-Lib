@@ -428,21 +428,6 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_uart.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_enet.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_enet.c</FilePath>
@@ -566,6 +551,36 @@
               <FileName>ksz8041.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>hw_test</GroupName>
+          <Files>
+            <File>
+              <FileName>cmd_test_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_pit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_pit.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_lptmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_lptmr.c</FilePath>
             </File>
           </Files>
         </Group>

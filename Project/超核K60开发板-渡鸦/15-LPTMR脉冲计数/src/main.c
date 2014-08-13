@@ -48,7 +48,7 @@ int main(void)
     /* 开启一个PIT定时器 产生1S中断 在中断中读取LPTMR的计数值 */
     PIT_QuickInit(HW_PIT_CH0, 1000 * 1000);
     PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
+    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
     
     while(1)
     {

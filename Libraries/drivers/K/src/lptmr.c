@@ -146,28 +146,26 @@ void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
  * @brief  LPTM模块中断和DMA功能配置
  * @code
  *     //配置LPTM模块产生溢出中断
- *     LPTMR_ITDMAConfig(kLPTMR_IT_TOF);
+ *     LPTMR_ITDMAConfig(kLPTMR_IT_TOF, true);
  * @endcode
  * @param  LPTMR_ITDMAConfig_Type: LPTM中断类型
  *         @arg kLPTMR_IT_Disable  :关闭中断
  *         @arg kLPTMR_IT_TOF      :开启计数溢出中断
  * @retval None
  */
-void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config)
+void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config, bool status)
 {
     
     /* enable clock gate */
     *(uint32_t*)SIM_LPTMRClockGateTable[0].addr |= SIM_LPTMRClockGateTable[0].mask;
     
+    if(status) NVIC_EnableIRQ(PIT_IRQnTable[0]);
     switch (config)
     {
-        case kLPTMR_IT_Disable:
-            NVIC_DisableIRQ(PIT_IRQnTable[0]);
-            LPTMR0->CSR &= ~LPTMR_CSR_TIE_MASK;
-            break;
         case kLPTMR_IT_TOF:
-            NVIC_EnableIRQ(PIT_IRQnTable[0]);
-            LPTMR0->CSR |= LPTMR_CSR_TIE_MASK;
+            (status)?
+            (LPTMR0->CSR |= LPTMR_CSR_TIE_MASK):
+            (LPTMR0->CSR &= ~LPTMR_CSR_TIE_MASK);
             break;
         default:
             break;

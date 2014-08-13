@@ -12,6 +12,7 @@
 #define __CH_LIB_LPTMR_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 
 /* LPTMR 回调函数声明 */
@@ -20,7 +21,6 @@ typedef void (*LPTMR_CallBackType)(void);
 /* LPTMR 中断DMA配置 */
 typedef enum
 {
-    kLPTMR_IT_Disable,        /* 关闭中断 */
     kLPTMR_IT_TOF,            /* 开启计数器溢出中断 */
 }LPTMR_ITDMAConfig_Type;
 
@@ -60,7 +60,7 @@ typedef struct
 //!< API functions
 void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct);
 void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct);
-void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config);
+void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config, bool status);
 void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun);
 uint32_t LPTMR_PC_ReadCounter(void);
 uint32_t LPTMR_PC_QuickInit(uint32_t MAP);

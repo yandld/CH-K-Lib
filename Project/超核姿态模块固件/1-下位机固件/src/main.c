@@ -23,7 +23,10 @@
 
 #include "ssd.h"
 
+int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
+
 /* 校准数据 */
+
 struct calibration_data
 {
     int  flag;
@@ -34,6 +37,7 @@ struct calibration_data
     int   meg_y_off;
     int   meg_z_off;
 };
+
 
 static struct calibration_data cal_data;
 //static uint8_t NRF2401RXBuffer[32] = "HelloWorld~~";//无线接收数据
@@ -95,6 +99,33 @@ static void PIT_CH1_ISR(void)
 }
 
 int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance);
+
+int init_2401(void)
+{
+    int r,i;
+    static struct spi_bus bus;
+    QuickInit_Type pq;
+    QuickInitDecode(SPI0_SCK_PC05_SOUT_PC06_SIN_PC07, &pq);
+    SPI_QuickInit(BOARD_SPI_MAP, kSPI_CPOL0_CPHA0, 1000*1000);
+    r = kinetis_spi_bus_init(&bus, pq.ip_instance);
+    /* pinmux */
+    for(i = 0; i < pq.io_offset; i++)
+    {
+        PORT_PinMuxConfig(pq.io_instance, pq.io_base + i, (PORT_PinMux_Type) pq.mux); 
+    }
+    
+    PORT_PinMuxConfig(BOARD_SPI_CS_PORT, BOARD_SPI_CS_PIN, kPinAlt2);
+    GPIO_QuickInit(HW_GPIOB, 0, kGPIO_Mode_OPP);
+    
+    /* init 2401 */
+    r = nrf24l01_init(&bus, BOARD_SPI_CS);
+    r = nrf24l01_probe();
+    if(r)
+    {
+        printf("2401 init failed\r\n");
+    }
+    return r;
+}
 
 int init_sensor(void)
 {
@@ -206,7 +237,6 @@ int main(void)
     static int bmpStatus = BMP_STATUS_T_START;
     uint32_t ret;
     uint32_t uart_instance;
-	int32_t altitude;
     /* basic hardware */
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
@@ -231,9 +261,9 @@ int main(void)
     /* flash operation */
     SSDInit();
     
-    /* init sensor */
+    /* init sensor&2401 */
     init_sensor();
-    
+    init_2401();
     /* init transfer */
     trans_init(HW_DMA_CH1, uart_instance);
     
@@ -241,7 +271,7 @@ int main(void)
     imu_io_install(&IMU_IOInstallStruct1);
     
     /* read meg cal data */
-    MagnetometerCalibration(&cal_data);
+//    MagnetometerCalibration(&cal_data);
     
     WDOG_QuickInit(100);
     

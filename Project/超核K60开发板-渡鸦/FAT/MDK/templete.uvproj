@@ -443,11 +443,6 @@
               <FilePath>..\src\cmd_ftm.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_reset.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_nvic.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_nvic.c</FilePath>
@@ -1467,11 +1462,6 @@
               <FileName>cmd_ftm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_ftm.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_reset.c</FilePath>
             </File>
             <File>
               <FileName>cmd_nvic.c</FileName>

@@ -7,9 +7,16 @@ static int DoADC(int argc, char * const argv[])
 {
     int i;
     int result;
-
-    ADC_QuickInit(BOARD_ADC_MAP, kADC_SingleDiff12or13);
     
+    /* decode MAP */
+    uint32_t map = BOARD_ADC_MAP;
+    QuickInit_Type type;
+    QuickInitDecode(map, &type);
+    printf("ADC%d CH%d:\r\n", type.ip_instance, type.channel);
+    
+    
+    ADC_QuickInit(BOARD_ADC_MAP, kADC_SingleDiff12or13);
+
     for(i=0;i<20;i++)
     {
         result = ADC_QuickReadValue(BOARD_ADC_MAP);

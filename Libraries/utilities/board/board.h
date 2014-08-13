@@ -86,7 +86,7 @@
 #if defined(MK64F12)
 #define BOARD_NAME                  "frdmk64f120m"
 #define BOARD_UART_DEBUG_MAP        UART0_RX_PB16_TX_PB17
-#define BOARD_I2C_MAP               I2C0_SCL_PE19_SDA_PE18
+#define BOARD_I2C_MAP               I2C0_SCL_PE24_SDA_PE25
 #define BOARD_LED_GPIO_BASES        {HW_GPIOB, HW_GPIOB, HW_GPIOE}
 #define BOARD_LED_PIN_BASES         {21, 22, 26}
 #define BOARD_LPTMR_MAP             LPTMR_ALT1_PA19

@@ -592,6 +592,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_key.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_test_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_dma.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

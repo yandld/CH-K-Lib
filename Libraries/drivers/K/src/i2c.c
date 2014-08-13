@@ -844,5 +844,6 @@ static const QuickInit_Type I2C_QuickInitTable[] =
     { 0, 1, 2, 2, 2, 0}, //I2C0_SCL_PB02_SDA_PB03 2
     { 1, 2, 2,10, 2, 0}, //I2C1_SCL_PC10_SDA_PC11 2
     { 0, 3, 2, 8, 2, 0}, //I2C0_SCL_PD08_SDA_PD09 2
+    { 0, 4, 5,24, 2, 0}, //I2C0_SCL_PE24_SDA_PE25 5 //only on K64
 };
 #endif

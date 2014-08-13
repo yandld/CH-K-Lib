@@ -72,10 +72,10 @@
 #define FTM3_CH5_DMAREQ         55
 #define FTM3_CH6_DMAREQ         56
 #define FTM3_CH7_DMAREQ         57
-#define MUX0_DMAREQ             54
-#define MUX1_DMAREQ             55
-#define MUX2_DMAREQ             56
-#define MUX3_DMAREQ             57
+#define MUX0_DMAREQ             58
+#define MUX1_DMAREQ             59
+#define MUX2_DMAREQ             60
+#define MUX3_DMAREQ             61
 
 //!< DMA通道
 #define HW_DMA_CH0    (0x00)  //DMA0通道

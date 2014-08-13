@@ -13,6 +13,10 @@
 #include "sd.h"
 #include "gpio.h"
 
+#ifndef SDHC
+#error  "This chip does not have this moudle, please remove this file"
+#endif
+
 //DATA线位宽定义
 #define ESDHC_BUS_WIDTH_1BIT                 (0x00)
 #define ESDHC_BUS_WIDTH_4BIT                 (0x01)

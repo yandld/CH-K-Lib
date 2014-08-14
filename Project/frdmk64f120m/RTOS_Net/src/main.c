@@ -4,6 +4,8 @@
 #include <rthw.h>
 #include <stdint.h>
 
+void rtthread_startup(void);
+
 void SysTick_Handler(void)
 {
 	rt_interrupt_enter();
@@ -12,15 +14,19 @@ void SysTick_Handler(void)
 }
 
 void DelayMs(uint32_t ms)
-{ 
-    rt_thread_delay(ms/10 + 1);
+{
+    if(ms < (1000/RT_TICK_PER_SECOND))
+    {
+        rt_thread_delay(1);
+    }
+    else
+    {
+        rt_thread_delay(ms/(1000/RT_TICK_PER_SECOND));
+    }
 }
-
-void rtthread_startup(void);
 
 int main(void)
 {
-    
 	/* disable interrupt first */
 	rt_hw_interrupt_disable();
 

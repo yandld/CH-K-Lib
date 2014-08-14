@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>RTT_120_CM4</TargetName>
+      <TargetName>RTT_120</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -44,8 +44,8 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>..\</OutputDirectory>
-          <OutputName>RTT_120_CM4</OutputName>
+          <OutputDirectory>.\</OutputDirectory>
+          <OutputName>..\RTT_120_CM4</OutputName>
           <CreateExecutable>0</CreateExecutable>
           <CreateLib>1</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -72,6 +72,8 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopB1X>0</nStopB1X>
+            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
@@ -128,6 +130,7 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -139,8 +142,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
+            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>1</TargetSelection>
@@ -343,7 +346,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -361,7 +364,7 @@
               <MiscControls>--c99</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\include;..\src;..\..\components\finsh;..\..\components\dfs\include;..\..\components\drivers\include;..\..\components\drivers\include\drivers;..\..\components\drivers\i2c;..\..\components\net\lwip-1.4.1\src;..\..\components\net\lwip-1.4.1\src\include;..\..\components\net\lwip-1.4.1\src\arch\include;..\..\components\net\lwip-1.4.1\src\include\netif;..\..\components\net\lwip-1.4.1\src\include\ipv4</IncludePath>
+              <IncludePath>..\..\include;..\src;..\..\components\finsh;..\..\components\dfs\include;..\..\components\drivers\include;..\..\components\drivers\include\drivers;..\..\components\drivers\i2c;..\..\components\net\lwip-1.4.1\src;..\..\components\net\lwip-1.4.1\src\include;..\..\components\net\lwip-1.4.1\src\arch\include;..\..\components\net\lwip-1.4.1\src\include\netif;..\..\components\net\lwip-1.4.1\src\include\ipv4;..\..\components\utilities\logtrace</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -394,7 +397,7 @@
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
+            <Misc>--keep __fsym_* --keep __vsym_*</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -478,36 +481,6 @@
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\timer.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>rtt-cortex-m4</GroupName>
-          <Files>
-            <File>
-              <FileName>context_rvds.S</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\libcpu\arm\cortex-m4\context_rvds.S</FilePath>
-            </File>
-            <File>
-              <FileName>cpuport.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\libcpu\arm\cortex-m4\cpuport.c</FilePath>
-            </File>
-            <File>
-              <FileName>backtrace.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\libcpu\arm\common\backtrace.c</FilePath>
-            </File>
-            <File>
-              <FileName>div0.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\libcpu\arm\common\div0.c</FilePath>
-            </File>
-            <File>
-              <FileName>showmem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\libcpu\arm\common\showmem.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -624,6 +597,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\components\dfs\filesystems\elmfat\ff.c</FilePath>
             </File>
+            <File>
+              <FileName>ccfile.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\elmfat\option\ccfile.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -648,26 +626,6 @@
               <FileName>rrtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\rtc\rrtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>block_dev.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\drivers\sdio\block_dev.c</FilePath>
-            </File>
-            <File>
-              <FileName>mmcsd_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\drivers\sdio\mmcsd_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\drivers\sdio\sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>sdio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\drivers\sdio\sdio.c</FilePath>
             </File>
             <File>
               <FileName>serial.c</FileName>
@@ -1002,12 +960,67 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>componment_utilities</GroupName>
+          <Files>
+            <File>
+              <FileName>log_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\logtrace\log_file.c</FilePath>
+            </File>
+            <File>
+              <FileName>log_trace.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\logtrace\log_trace.c</FilePath>
+            </File>
+            <File>
+              <FileName>ymodem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\ymodem\ymodem.c</FilePath>
+            </File>
+            <File>
+              <FileName>rz.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\zmodem\rz.c</FilePath>
+            </File>
+            <File>
+              <FileName>sz.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\zmodem\sz.c</FilePath>
+            </File>
+            <File>
+              <FileName>zcore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\zmodem\zcore.c</FilePath>
+            </File>
+            <File>
+              <FileName>zdevice.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\zmodem\zdevice.c</FilePath>
+            </File>
+            <File>
+              <FileName>zstart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\utilities\zmodem\zstart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>config</GroupName>
           <Files>
             <File>
               <FileName>rtconfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\rtconfig.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>porting_src</GroupName>
+          <Files>
+            <File>
+              <FileName>porting.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\porting.c</FilePath>
             </File>
           </Files>
         </Group>

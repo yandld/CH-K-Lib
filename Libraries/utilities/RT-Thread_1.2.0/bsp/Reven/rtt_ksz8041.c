@@ -178,5 +178,6 @@ int rt_hw_ksz8041_init(void)
     device.eth_tx     = rt_ksz8041_tx;
 
     eth_device_init(&device, "e0");
+    return 0;
 }
 

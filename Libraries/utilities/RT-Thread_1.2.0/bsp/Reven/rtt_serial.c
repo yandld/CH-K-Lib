@@ -58,17 +58,13 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
     RT_ASSERT(serial != RT_NULL);
     RT_ASSERT(cfg != RT_NULL);
     UART_InitStruct1.instance = serial->config.reserved;
-    uint32_t baudrate;
     switch(cfg->baud_rate)
     {
         case BAUD_RATE_9600:
-            baudrate = 9600;
             break;
         case BAUD_RATE_115200:
-            baudrate = 115200;
             break;
     }
-    //UART_QuickInit(UART0_RX_PD06_TX_PD07, baudrate);
     
     /* enable Tx hardware FIFO to enhance proformence */
     UART_EnableTxFIFO(UART_InitStruct1.instance, true);

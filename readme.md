@@ -10,7 +10,7 @@
 
 1. [免费入门视频](http://www.moore8.com/courses/87)
 2. [API 参考文档](http://git.oschina.net/yandld/CH-K-Lib/wikis/home)  
-3. [论坛及其他资源]( www.beyondcore.net)
+3. [论坛及其他资源](www.beyondcore.net)
 4. [固件库源代码包下载](http://git.oschina.net/yandld/CH-K-Lib/repository/archive?ref=master)
 
 ## 所支持的IDE

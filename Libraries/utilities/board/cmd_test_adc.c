@@ -13,6 +13,7 @@ static int DoADC(int argc, char * const argv[])
     QuickInit_Type type;
     QuickInitDecode(map, &type);
     printf("ADC%d CH%d:\r\n", type.ip_instance, type.channel);
+    printf("PIN: P%c%d\r\n", type.io_instance+'A', type.io_offset);
     
     
     ADC_QuickInit(BOARD_ADC_MAP, kADC_SingleDiff12or13);

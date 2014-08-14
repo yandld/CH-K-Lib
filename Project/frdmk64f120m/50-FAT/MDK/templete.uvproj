@@ -432,11 +432,6 @@
               <FileType>1</FileType>
               <FilePath>..\src\cmd_enet.c</FilePath>
             </File>
-            <File>
-              <FileName>cmd_clkout.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_clkout.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -516,6 +511,16 @@
               <FileName>enet.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\enet.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpuidy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
+            </File>
+            <File>
+              <FileName>pdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\pdb.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -601,6 +606,16 @@
               <FileName>cmd_test_wdog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_wdog.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_clkout.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_clkout.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_pdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_pdb.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -14,7 +14,6 @@ static int DoDMA(int argc, char * const argv[])
     int i;
     uint8_t sData[64];
     uint8_t dData[64];
-    int result;
     printf("func:%s\r\n", __func__);
     
     for(i=0;i<ARRAY_SIZE(sData);i++)
@@ -59,7 +58,7 @@ static int DoDMA(int argc, char * const argv[])
         printf("0x%02X ", dData[i]);
     }
     printf("\r\n");
-    
+    return 0;
 }
 
 SHELL_EXPORT_CMD(DoDMA, dma , dma test)

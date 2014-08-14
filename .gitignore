@@ -27,6 +27,7 @@
 *.lnp
 *.txt
 *.ini
+*.Scr
 *.lst
 output
 Doc

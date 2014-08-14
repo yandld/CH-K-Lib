@@ -27,6 +27,7 @@ static int DoI2C(int argc, char * const argv[])
     instance = I2C_QuickInit(BOARD_I2C_MAP, 100*1000);
     printf("i2c instance:%d\r\n", instance);
     I2C_Scan(instance);
+    return 0;
 }
 
 SHELL_EXPORT_CMD(DoI2C, i2c , i2c test)

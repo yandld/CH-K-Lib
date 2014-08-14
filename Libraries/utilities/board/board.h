@@ -91,7 +91,8 @@
 #define BOARD_KEY_GPIO_BASES        {HW_GPIOA, HW_GPIOC}
 #define BOARD_KEY_PIN_BASES         {4, 6}
 #define BOARD_ADC_MAP               ADC1_SE18
-
+#define BOARD_CLKOUT_PORT           HW_GPIOC
+#define BOARD_CLKOUT_PIN            3
 
 
 #endif

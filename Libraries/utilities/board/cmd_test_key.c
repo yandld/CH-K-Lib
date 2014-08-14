@@ -26,7 +26,7 @@ static void GPIOE_ISR(uint32_t array)
 
 int DoKEY(int argc, char * const argv[])
 {
-    int i,j,key_num;
+    int i,key_num;
     uint32_t key_port_tab[] = BOARD_KEY_GPIO_BASES;
     uint32_t key_pin_tab[] = BOARD_KEY_PIN_BASES;
     
@@ -42,7 +42,7 @@ int DoKEY(int argc, char * const argv[])
     GPIO_CallbackInstall(HW_GPIOE, GPIOE_ISR);
     
     /* init */
-    for(i=0; i<key_num; i++)
+    for(i = 0; i < key_num; i++)
     {
         GPIO_QuickInit(key_port_tab[i], key_pin_tab[i], kGPIO_Mode_IPU);
         GPIO_ITDMAConfig(key_port_tab[i], key_pin_tab[i], kGPIO_IT_RisingEdge, true);

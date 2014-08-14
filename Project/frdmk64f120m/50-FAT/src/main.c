@@ -13,8 +13,6 @@ int main(void)
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
  //   DoGPIO(NULL, NULL);
     
-
-    
     printf("HelloWorld!\r\n");
     shell_init();
     while(1)

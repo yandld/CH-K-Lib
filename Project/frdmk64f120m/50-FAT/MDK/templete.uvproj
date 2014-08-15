@@ -617,6 +617,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_pdb.c</FilePath>
             </File>
+            <File>
+              <FileName>cmd_test_ftm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_ftm.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

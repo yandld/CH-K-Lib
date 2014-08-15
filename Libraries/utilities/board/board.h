@@ -95,7 +95,7 @@
 #define BOARD_ADC_MAP               ADC1_SE18
 #define BOARD_CLKOUT_PORT           HW_GPIOC
 #define BOARD_CLKOUT_PIN            3
-
+#define BOARD_FTM_MAP               FTM0_CH3_PA06
 
 #endif
 

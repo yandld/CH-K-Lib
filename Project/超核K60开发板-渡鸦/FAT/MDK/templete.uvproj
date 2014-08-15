@@ -807,6 +807,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
             </File>
+            <File>
+              <FileName>pdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\pdb.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -936,6 +941,16 @@
               <FileName>cmd_test_wdog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_wdog.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_clkout.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_clkout.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_pdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_pdb.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1785,6 +1800,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
             </File>
+            <File>
+              <FileName>pdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\pdb.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1914,6 +1934,16 @@
               <FileName>cmd_test_wdog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_wdog.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_clkout.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_clkout.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_pdb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_pdb.c</FilePath>
             </File>
           </Files>
         </Group>

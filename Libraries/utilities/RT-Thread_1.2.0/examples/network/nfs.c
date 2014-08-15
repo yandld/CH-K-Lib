@@ -1,7 +1,7 @@
 #include <rtthread.h>
 #include <lwip/netdb.h> /* 为了解析主机名，需要包含netdb.h头文件 */
 #include <lwip/sockets.h> /* 使用BSD socket，需要包含sockets.h头文件 */
-
+#include <dfs_fs.h>
 
 void net_demo_nfs(const char* url)
 {

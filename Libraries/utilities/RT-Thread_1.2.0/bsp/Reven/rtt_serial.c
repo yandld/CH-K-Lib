@@ -45,7 +45,7 @@ static void UART_ISR(uint16_t byteReceived)
     /* enter interrupt */
     rt_interrupt_enter();
     ch = byteReceived;
-    gRevCh = &byteReceived;
+    gRevCh = &ch;
     rt_hw_serial_isr(&serial);
     
     /* leave interrupt */

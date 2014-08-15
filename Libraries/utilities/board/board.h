@@ -38,6 +38,8 @@
 #define BOARD_NRF2401_CE_PORT       HW_GPIOE
 #define BOARD_NRF2401_CE_PIN        (0)
 
+#define BOARD_CLKOUT_PORT           HW_GPIOA
+#define BOARD_CLKOUT_PIN            (11)
 
 #elif CHK60EVB1
 

@@ -362,7 +362,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK64F12 FRDM DEBUG</Define>
+              <Define>MK64F12 FRDM</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src\gui;..\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs;..\..\..\..\Libraries\utilities\emWin\Include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\init;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\arch\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\ipv4;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\netif</IncludePath>
             </VariousControls>

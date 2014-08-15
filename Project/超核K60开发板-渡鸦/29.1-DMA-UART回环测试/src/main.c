@@ -98,11 +98,11 @@ int main(void)
     printf("DMA UART loop-back test\r\n");
     
     /* 配置DMA 打开UART_Tx_DMA功能 */
-    UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx);
+    UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx, true);
     UART_DMASendInit(HW_UART0, DMA_SEND_CH, UART_Buffer);
     
     /* 配置DMA 打开UART_Rx_DMA功能 */
-    UART_ITDMAConfig(HW_UART0, kUART_DMA_Rx);
+    UART_ITDMAConfig(HW_UART0, kUART_DMA_Rx, true);
     UART_DMARevInit(HW_UART0, DMA_REV_CH, UART_Buffer);
     
     /* Chl-Chl Link: 当接收通道完成后 自动开启发送DMA通道 */

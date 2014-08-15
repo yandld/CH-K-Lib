@@ -1000,7 +1000,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>RTT_120_CM4</GroupName>
+          <GroupName>RTT_120</GroupName>
           <Files>
             <File>
               <FileName>RTT_120_CM4.lib</FileName>

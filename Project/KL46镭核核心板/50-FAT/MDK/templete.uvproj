@@ -430,24 +430,9 @@
               <FilePath>..\src\shell_config.h</FilePath>
             </File>
             <File>
-              <FileName>cmd_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_dma.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_tpm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_tpm.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_lptmr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_lptmr.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -553,6 +538,21 @@
               <FileName>cmd_test_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_key.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_lptmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_lptmr.c</FilePath>
             </File>
           </Files>
         </Group>

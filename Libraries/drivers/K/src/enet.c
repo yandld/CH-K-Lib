@@ -158,7 +158,7 @@ void ENET_MII_Init(void)
 uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
 {
     uint32_t timeout;
-    
+    DisableInterrupts();
     /* clear MII it pending bit */
     ENET->EIR |= ENET_EIR_MII_MASK;
     
@@ -180,6 +180,7 @@ uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
             break;  
         }
     }
+   EnableInterrupts();
     if(timeout == MII_TIMEOUT)
     {
         return timeout;
@@ -200,7 +201,7 @@ uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
 uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
 {
     uint32_t timeout;
-    
+    DisableInterrupts();
     /* clear MII IT(interrupt) pending bit */
     ENET->EIR |= ENET_EIR_MII_MASK;
     
@@ -228,6 +229,7 @@ uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
     /* software clear it */
     ENET->EIR |= ENET_EIR_MII_MASK;
     *data = ENET->MMFR & 0x0000FFFF;
+    EnableInterrupts();
     return 0;
 }
 

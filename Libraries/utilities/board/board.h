@@ -78,8 +78,10 @@
 #define BOARD_LED_GPIO_BASES        { HW_GPIOE, HW_GPIOD }
 #define BOARD_LED_PIN_BASES         { 6, 7 }
 #define BOARD_I2C_MAP               I2C0_SCL_PE19_SDA_PE18
-
-
+#define BOARD_ADC_MAP               ADC0_SE1A_PE16
+#define BOARD_LPTMR_MAP             LPTMR_ALT1_PA19
+#define BOARD_KEY_GPIO_BASES        {0}
+#define BOARD_KEY_PIN_BASES         {0}
 
 #elif defined(FRDM)
 

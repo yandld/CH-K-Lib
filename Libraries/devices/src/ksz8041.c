@@ -81,7 +81,7 @@
 
 #define KSZ8041_PHY_PHYIDR1_VALUE   (0x22)
 
-#define KSZ8041_DEBUG		0
+#define KSZ8041_DEBUG		1
 #if ( KSZ8041_DEBUG == 1 )
 #define KSZ8041_TRACE	printf
 #else
@@ -95,7 +95,6 @@ int ksz8041_init(int chip_addr)
     uint16_t usData;
 	uint16_t timeout = 0;
     gChipAddr = chip_addr;
-    
     /* init MII interface */
     ENET_MII_Init();
     
@@ -147,7 +146,6 @@ int ksz8041_init(int chip_addr)
     ENET_MII_Write(gChipAddr, PHY_BMCR, (PHY_BMCR_AN_RESTART | PHY_BMCR_AN_ENABLE ));
     ENET_MII_Read(gChipAddr, PHY_BMCR, &usData );
     KSZ8041_TRACE("PHY_BMCR=0x%X\r\n",usData);
-    
     /* waitting for auto-negotiation completed */
     do
     {

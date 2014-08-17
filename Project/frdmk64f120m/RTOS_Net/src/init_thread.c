@@ -16,14 +16,14 @@ void init_thread_entry(void* parameter)
     rt_thread_t thread;
     rt_err_t result;
     
-#ifdef RT_USING_LWIP
+
 	/* initialize lwip stack */
     eth_system_device_init();
 	/* register ethernetif device */
     rt_hw_ksz8041_init();
 	/* initialize lwip system */
 	lwip_system_init();
-#endif
+
     
     
 #ifdef RT_USING_DFS
@@ -70,6 +70,9 @@ void init_thread_entry(void* parameter)
     {
         rt_thread_startup(thread);		
     }
+    
+    websrv();
+    
     /* supend me */
     thread = rt_thread_self();
     rt_thread_suspend(thread); 

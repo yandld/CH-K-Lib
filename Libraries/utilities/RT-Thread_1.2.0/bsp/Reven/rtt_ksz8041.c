@@ -43,7 +43,7 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
-    r = ksz8041_init(0x01);
+    r = ksz8041_init(0x00);
     if(r)
     {
         rt_kprintf("ksz8041 init failed! code:%d\r\n", r);
@@ -129,7 +129,7 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
         else
         {
             rt_kprintf("dm9000 rx: no pbuf\r\n");
-            while(1);
+            return NULL;
         }
     }
     return p;

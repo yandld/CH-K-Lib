@@ -30,7 +30,7 @@ void tcpserv(void* parameter)
 
    /* 初始化服务端地址 */
    server_addr.sin_family = AF_INET;
-   server_addr.sin_port = htons(5000); /* 服务端工作的端口 */
+   server_addr.sin_port = htons(80); /* 服务端工作的端口 */
    server_addr.sin_addr.s_addr = INADDR_ANY;
    rt_memset(&(server_addr.sin_zero),8, sizeof(server_addr.sin_zero));
 

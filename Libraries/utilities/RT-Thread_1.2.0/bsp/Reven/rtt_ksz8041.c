@@ -145,28 +145,27 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
     struct pbuf *q;
     
     i = 0;
-    rt_mutex_take(mutex, RT_WAITING_FOREVER);
     for (q = p; q != RT_NULL; q = q->next)
     {
         rt_memcpy((rt_uint8_t*)&gTxBuffer[i], (rt_uint8_t*)q->payload, q->len);
         i += q->len;
     }
-    ENET_MacSendData(gTxBuffer, i);
     
+    if(!ksz8041_is_linked())
+    {
+        eth_device_linkchange(&device, false);
+        return RT_ERROR;
+    }
+    else
+    {
+        eth_device_linkchange(&device, true);
+    }
+    
+    ENET_MacSendData(gTxBuffer, i);
     while(ENET_IsTransmitComplete() == 0);
-    rt_mutex_release(mutex);
     
     /* check if still linked */
-//    if(!ksz8041_is_linked())
-//    {
-//        eth_device_linkchange(&device, false);
-//        return RT_ERROR;
-//    }
-//    else
-//    {
-//        eth_device_linkchange(&device, true);
-//    }
-    
+
     return RT_EOK;
 }
 

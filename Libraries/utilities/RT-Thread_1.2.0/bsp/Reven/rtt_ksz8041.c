@@ -9,7 +9,7 @@
 static struct eth_device device;
 static uint8_t gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
 static uint8_t     gRxBuffer[1500];
-__align(4) static uint8_t     gTxBuffer[1500];
+__align(16) static char gTxBuffer[1500];
 uint32_t    rx_len;
 static  rt_mutex_t mutex;
 
@@ -143,31 +143,29 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
 
     rt_uint32_t i;
     struct pbuf *q;
-    i = 0;
     
+    i = 0;
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
     for (q = p; q != RT_NULL; q = q->next)
     {
         rt_memcpy((rt_uint8_t*)&gTxBuffer[i], (rt_uint8_t*)q->payload, q->len);
         i += q->len;
     }
-    
-
-    
     ENET_MacSendData(gTxBuffer, i);
+    
     while(ENET_IsTransmitComplete() == 0);
     rt_mutex_release(mutex);
     
     /* check if still linked */
-    if(!ksz8041_is_linked())
-    {
-        eth_device_linkchange(&device, false);
-        return RT_ERROR;
-    }
-    else
-    {
-        eth_device_linkchange(&device, true);
-    }
+//    if(!ksz8041_is_linked())
+//    {
+//        eth_device_linkchange(&device, false);
+//        return RT_ERROR;
+//    }
+//    else
+//    {
+//        eth_device_linkchange(&device, true);
+//    }
     
     return RT_EOK;
 }

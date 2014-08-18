@@ -67,7 +67,9 @@ void rtthread_startup(void)
     UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
 
     
-  //  rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE + SRAM_ADDRESS_BASE));
+    //  rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE + SRAM_ADDRESS_BASE));
+    printf("BEIGN:0x%08XU END:0x%08XU SIZE:0x%08XU\r\n", (uint32_t)KINETIS_SRAM_BEGIN, (uint32_t)KINETIS_SRAM_END, (uint32_t)KINETIS_SRAM_END - (uint32_t)KINETIS_SRAM_BEGIN);
+    
     rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
 
     rt_hw_board_init();

@@ -54,9 +54,10 @@
 #define FINSH_USING_DESCRIPTION
 #define FINSH_USING_MSH
 //#define FINSH_USING_MSH_ONLY
+
 /* SECTION: device filesystem */
-#define RT_USING_DFS 
-#define RT_USING_DFS_ELMFAT
+//#define RT_USING_DFS 
+//#define RT_USING_DFS_ELMFAT
 #define RT_DFS_ELM_WORD_ACCESS
 #define DFS_USING_WORKDIR
 /* Reentrancy (thread safe) of the FatFs module.  */
@@ -83,7 +84,7 @@
 /* SECTION: lwip, a lighwight TCP/IP protocol stack */
 #define RT_USING_LWIP
 /* LwIP uses RT-Thread Memory Management */
-#define RT_LWIP_USING_RT_MEM
+//#define RT_LWIP_USING_RT_MEM
 /* Enable ICMP protocol*/
 #define RT_LWIP_ICMP
 /* Enable UDP protocol*/
@@ -94,6 +95,7 @@
 #define RT_LWIP_DNS
 #define RT_LWIP_DEBUG
 #define RT_LWIP_DHCP
+#define MEMP_NUM_TCP_SEG    32
 /* the number of simulatenously active TCP connections*/
 #define RT_LWIP_TCP_PCB_NUM	5
 
@@ -118,12 +120,12 @@
 /* tcp thread options */
 #define RT_LWIP_TCPTHREAD_PRIORITY		5
 #define RT_LWIP_TCPTHREAD_MBOX_SIZE		8
-#define RT_LWIP_TCPTHREAD_STACKSIZE		2048
+#define RT_LWIP_TCPTHREAD_STACKSIZE		1048
 
 /* ethernet if thread options */
 #define RT_LWIP_ETHTHREAD_PRIORITY		6
 #define RT_LWIP_ETHTHREAD_MBOX_SIZE		8
-#define RT_LWIP_ETHTHREAD_STACKSIZE		2048
+#define RT_LWIP_ETHTHREAD_STACKSIZE		1048
 
 /* TCP sender buffer space */
 #define RT_LWIP_TCP_SND_BUF	8192

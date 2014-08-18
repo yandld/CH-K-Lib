@@ -63,7 +63,6 @@ void lw_thread(void* paramter)
 	{
 		/*  接受新的连接请求 */
 		err = netconn_accept(conn, &newconn);
-        rt_kprintf("%d\r\n", err);
         if(newconn != RT_NULL)
         {
             

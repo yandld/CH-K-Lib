@@ -1,10 +1,7 @@
 #include <rtthread.h>
 #include <rthw.h>
-
 #include "components.h"
-
 #include <drivers/spi.h>
-#include "spi_flash_w25qxx.h"
 
 extern void gui_thread_entry(void* parameter);
 extern void led_thread_entry(void* parameter);
@@ -24,52 +21,28 @@ void init_thread_entry(void* parameter)
 	/* initialize lwip system */
 	lwip_system_init();
 
-    
-    
-#ifdef RT_USING_DFS
-    rt_kprintf("init dfs\r\n");
-	dfs_init();
 
-#ifdef RT_USING_DFS_ELMFAT
-	elm_init();
-#endif
-    
-#ifdef RT_USING_DFS_YAFFS2
-	dfs_yaffs2_init();
-#endif
-    
-#ifdef RT_USING_DFS_UFFS
-	dfs_uffs_init();
-#endif 
+//	dfs_init();
+//	elm_init();
 
-#if defined(RT_USING_DFS_NFS) && defined(RT_USING_LWIP)
-	/* initialize NFSv3 client file system */
-	nfs_init();
-#endif
-
-#endif /* RT_USING_DFS */
-
-
-    /* mount spi_flash */
-    dfs_mount("sd0", "/", "elm", 0, 0);
 
 #ifdef RT_USING_FINSH
 	finsh_system_init(); /* init finsh */
 #endif
 
     /* led thread */
-    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*8, 0x21, 20);                                                      
+    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*1, 0x21, 20);                                                      
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);		
     }
     
     /* sd_thread */
-    thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
-    if (thread != RT_NULL)
-    {
-        rt_thread_startup(thread);		
-    }
+//    thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
+//    if (thread != RT_NULL)
+//    {
+//        rt_thread_startup(thread);		
+//    }
     
     websrv();
     

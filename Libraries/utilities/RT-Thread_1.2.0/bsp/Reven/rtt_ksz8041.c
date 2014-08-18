@@ -9,8 +9,9 @@
 static struct eth_device device;
 static uint8_t gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
 static uint8_t     gRxBuffer[1500];
-static uint8_t     gTxBuffer[1500];
+__align(4) static uint8_t     gTxBuffer[1500];
 uint32_t    rx_len;
+static  rt_mutex_t mutex;
 
 void ENET_ISR(void)
 {
@@ -63,6 +64,9 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     ENET_Init(&ENET_InitStruct1);
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);
+    
+    mutex = rt_mutex_create("enet_mutex", RT_IPC_FLAG_FIFO);
+    
     return RT_EOK;
 }
 
@@ -112,7 +116,6 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
     /* init p pointer */
     p = RT_NULL;
     i = 0;
-    
     if(rx_len)
     {
         p = pbuf_alloc(PBUF_LINK, rx_len, PBUF_RAM);
@@ -137,14 +140,23 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
 
 rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
 {
+
     rt_uint32_t i;
     struct pbuf *q;
     i = 0;
+    
+    rt_mutex_take(mutex, RT_WAITING_FOREVER);
     for (q = p; q != RT_NULL; q = q->next)
     {
         rt_memcpy((rt_uint8_t*)&gTxBuffer[i], (rt_uint8_t*)q->payload, q->len);
         i += q->len;
     }
+    
+
+    
+    ENET_MacSendData(gTxBuffer, i);
+    while(ENET_IsTransmitComplete() == 0);
+    rt_mutex_release(mutex);
     
     /* check if still linked */
     if(!ksz8041_is_linked())
@@ -157,8 +169,6 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
         eth_device_linkchange(&device, true);
     }
     
-    ENET_MacSendData(gTxBuffer, i);
-    while(ENET_IsTransmitComplete() == 0);
     return RT_EOK;
 }
 

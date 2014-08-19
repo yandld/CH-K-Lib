@@ -346,7 +346,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -666,51 +666,6 @@
               <FileName>ringbuffer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\src\ringbuffer.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>componment_utilities</GroupName>
-          <Files>
-            <File>
-              <FileName>log_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\utilities\logtrace\log_file.c</FilePath>
-            </File>
-            <File>
-              <FileName>log_trace.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\utilities\logtrace\log_trace.c</FilePath>
-            </File>
-            <File>
-              <FileName>ymodem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\utilities\ymodem\ymodem.c</FilePath>
-            </File>
-            <File>
-              <FileName>rz.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\utilities\zmodem\rz.c</FilePath>
-            </File>
-            <File>
-              <FileName>sz.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\utilities\zmodem\sz.c</FilePath>
-            </File>
-            <File>
-              <FileName>zcore.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\utilities\zmodem\zcore.c</FilePath>
-            </File>
-            <File>
-              <FileName>zdevice.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\utilities\zmodem\zdevice.c</FilePath>
-            </File>
-            <File>
-              <FileName>zstart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\utilities\zmodem\zstart.c</FilePath>
             </File>
           </Files>
         </Group>

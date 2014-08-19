@@ -44,7 +44,6 @@ void init_thread_entry(void* parameter)
 //        rt_thread_startup(thread);		
 //    }
     
-    websrv();
     
     /* supend me */
     thread = rt_thread_self();

@@ -18,8 +18,10 @@
 #include "spi.h"
 
 #ifdef __CC_ARM
-extern int Image$$RW_IRAM1$$ZI$$Limit;
-#define KINETIS_SRAM_BEGIN    (&Image$$RW_IRAM1$$ZI$$Limit)
+extern int Image$$RW_IRAM2$$ZI$$Limit;
+#define KINETIS_SRAM_BEGIN    (&Image$$RW_IRAM2$$ZI$$Limit)
+
+
 #elif __ICCARM__
 #pragma section="HEAP"
 #define KINETIS_SRAM_BEGIN    (__segment_end("HEAP"))
@@ -68,14 +70,13 @@ void rtthread_startup(void)
 
     
     //  rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE + SRAM_ADDRESS_BASE));
-    printf("BEIGN:0x%08XU END:0x%08XU SIZE:0x%08XU\r\n", (uint32_t)KINETIS_SRAM_BEGIN, (uint32_t)KINETIS_SRAM_END, (uint32_t)KINETIS_SRAM_END - (uint32_t)KINETIS_SRAM_BEGIN);
+    printf("BEIGN:0x%08XU END:0x%08XU SIZE:%dKB\r\n", (uint32_t)KINETIS_SRAM_BEGIN, (uint32_t)KINETIS_SRAM_END, ((uint32_t)KINETIS_SRAM_END - (uint32_t)KINETIS_SRAM_BEGIN)/1024);
     
     rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
-
+    
     rt_hw_board_init();
 	rt_show_version(); /* print logo */
 	rt_system_timer_init(); /* init timer */
-    
     
 	rt_system_scheduler_init();
 

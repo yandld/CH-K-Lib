@@ -34,7 +34,11 @@ static int SSIHandler ( int iIndex, char *pcInsert, int iInsertLen );
 static const tCGI ppcURLs[] =
 {
 
-    { "/led_red.cgi",      LED_RED_CGIHandler },  
+    { "/cgi-bin.post",      LED_RED_CGIHandler },  
+    { "/cgi-bin",           LED_RED_CGIHandler },  
+    { "/cgi-bin/post",      LED_RED_CGIHandler },  
+    { "/bin.cgi",           LED_RED_CGIHandler },
+    { "bin.cgi",           LED_RED_CGIHandler },
     { "/led_green.cgi",    LED_GREEN_CGIHandler },    
     { "/orther.cgi",       Orther_CGIHandler },     
 };
@@ -42,68 +46,29 @@ static const tCGI ppcURLs[] =
 static const char *ppcTags[] =
 {
     "onetree",
-	  "filest"
+    "filest"
 };
 
 enum ssi_index_s
 {
     SSI_INDEX_ONETREE_GET = 0, //该表对应ppcTags[]的排序
     SSI_INDEX_FILEST_GET
-
 } ;
 
-
-
-//数字->字符串转换函数
-//将num数字(位数为len)转为字符串,存放在buf里面
-//num:数字,整形
-//buf:字符串缓存
-//len:长度
-void num2str(uint16_t num, uint8_t *buf,uint8_t len)
-{
-	uint8_t i;
-	for(i=0;i<len;i++)
-	{
-//		buf[i]=(num/LCD_Pow(10,len-i-1))%10+'0';
-	}
-}
 //获取STM32内部温度传感器的温度
 //temp:存放温度字符串的首地址.如"28.3";
 //temp,最少得有5个字节的空间!
-void get_temperature(uint8_t*temp)
-{			  
-	uint16_t t;
-	float temperate;		   
-//	temperate=Get_Adc_Average(ADC_CH_TEMP,10);			 
-	temperate=temperate*(3.3/4096);			    											    
-	temperate=(1.43-temperate)/0.0043+25;	//计算出当前温度值
-	t=temperate*10;//得到温度
-	num2str(t/10,temp,2);							   
-	temp[2]='.';temp[3]=t%10+'0';temp[4]=0;	//最后添加结束符
+void get_temperature(uint8_t* temp)
+{
+    sprintf(temp, "23.44");
 }
-//获取RTC时间
-//time:存放时间字符串,形如:"2012-09-27 12:33:00"
-//time,最少得有17个字节的空间!
-void get_time(uint8_t*time)
-{	
-	//RTC_Get();
-	time[4]='-';time[7]='-';time[10]=' ';
-	time[13]=':';time[16]=':';time[19]=0;			//最后添加结束符
-//	num2str(calendar.w_year,time,4);	//年份->字符串
-//	num2str(calendar.w_month,time+5,2); //月份->字符串	 
-//	num2str(calendar.w_date,time+8,2); 	//日期->字符串
-//	num2str(calendar.hour,time+11,2); 	//小时->字符串
-//	num2str(calendar.min,time+14,2); 	//分钟->字符串		
-//  num2str(calendar.sec,time+17,2); 	//秒->字符串		
-}
+
 
 //初始化ssi和cgi
-void init_ssi_cgi(void){
-	
- http_set_cgi_handlers(ppcURLs , NUM_CONFIG_CGI_URIS);	
- http_set_ssi_handler (SSIHandler, ppcTags, NUM_CONFIG_SSI_TAGS );
-
-
+void init_ssi_cgi(void)
+{
+    http_set_cgi_handlers(ppcURLs , NUM_CONFIG_CGI_URIS);	
+    http_set_ssi_handler (SSIHandler, ppcTags, NUM_CONFIG_SSI_TAGS );
 }
 
 //*****************************************************************************
@@ -130,17 +95,16 @@ static int FindCGIParameter(const char *pcToFind, char *pcParam[], int iNumParam
 void  clear_response_bufer(unsigned char *buffer){
   memset(buffer,0,strlen((const char*)buffer));
 }
-int num=100;
 
 //红灯处理函数
 static char *LED_RED_CGIHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] )
 {
     int  index;
+    rt_kprintf("%s\r\n", __func__);
     index = FindCGIParameter ( "red", pcParam, iNumParams );
     if(index != -1)
     {
 			clear_response_bufer(data_response_buf);      //清除缓冲区的内容
-            rt_kprintf("LED0 = !LED0\r\n");
 //			LED0 = !LED0;
 		//	if(!LED0){
 	//				strcat((char *)(data_response_buf),"/img/red.gif");
@@ -157,6 +121,7 @@ static char *LED_RED_CGIHandler( int iIndex, int iNumParams, char *pcParam[], ch
 static char *LED_GREEN_CGIHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] )
 {
     int  index;
+    rt_kprintf("%s\r\n", __func__);
     index = FindCGIParameter ( "green", pcParam, iNumParams );
     if(index != -1)
     {
@@ -166,7 +131,6 @@ static char *LED_GREEN_CGIHandler( int iIndex, int iNumParams, char *pcParam[], 
 			 //printf("green:%s\r\n",pcValue[index]);	
 			
 			 clear_response_bufer(data_response_buf);      //清除缓冲区的内容
-                    rt_kprintf("LED0 = !LED0\r\n");
 //       LED1 = !LED1;
 //			 if(!LED1){
 //					strcat((char *)(data_response_buf),"/img/green.gif");
@@ -184,12 +148,13 @@ static char *Orther_CGIHandler( int iIndex, int iNumParams, char *pcParam[], cha
 {
     uint8_t buf[20];
     clear_response_bufer(data_response_buf);      //清除缓冲区的内容
-
-	  get_temperature(data_response_buf);
-	  strcat((char *)(data_response_buf),";");
-	  get_time(buf);
-	  strcat((char *)(data_response_buf),buf);
+    rt_kprintf("%s\r\n", __func__);
+    sprintf(data_response_buf, "23.4");
+    strcat((char *)(data_response_buf),";");
+    sprintf(data_response_buf, "2013-12-7 12:14");
+    strcat((char *)(data_response_buf), buf);
     return RESPONSE_PAGE_SET_CGI_RSP_URL;
+    
 }
 
 
@@ -203,8 +168,6 @@ static char *Orther_CGIHandler( int iIndex, int iNumParams, char *pcParam[], cha
 //*****************************************************************************
 static int SSIHandler ( int iIndex, char *pcInsert, int iInsertLen )
 {   
-	
-	 
     switch(iIndex)
     {
         case SSI_INDEX_ONETREE_GET:
@@ -235,15 +198,13 @@ static void webserver_thread(void *parameter)
 static void webserver_start(void)
 {
 	rt_thread_t tid;
-
-	rt_kprintf("\n\n\tNow, Initializing The WEB File System...\n");
-
-	tid = rt_thread_create("webserver",
-		webserver_thread, RT_NULL,
-		4096, 30, 5);
+	rt_kprintf("%s\r\n", __func__);
+	tid = rt_thread_create("webserver", webserver_thread, RT_NULL, 4096, 30, 5);
 
 	if (tid != RT_NULL)
-		rt_thread_startup(tid);
+    {
+        rt_thread_startup(tid);
+    }
 }
 
 #ifdef RT_USING_FINSH

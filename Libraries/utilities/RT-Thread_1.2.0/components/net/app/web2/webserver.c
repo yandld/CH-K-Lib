@@ -379,7 +379,7 @@ ERROR_HANDLE:
 	rt_free(buffer);
 }
 
-void webserver_start(void)
+void web2(void)
 {
 	rt_thread_t tid;
 
@@ -399,5 +399,5 @@ void webserver_start(void)
 
 #ifdef RT_USING_FINSH
 #include <finsh.h>
-FINSH_FUNCTION_EXPORT(webserver_start, start web server)
+FINSH_FUNCTION_EXPORT(web2, start web server)
 #endif

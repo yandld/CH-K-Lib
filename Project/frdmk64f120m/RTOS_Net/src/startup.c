@@ -19,6 +19,10 @@
 
 #ifdef __CC_ARM
 extern int Image$$RW_IRAM2$$ZI$$Limit;
+extern int Image$$RW_IRAM1$$ZI$$Limit;
+
+#define KINETIS_IRAM1_LIMIT     (&Image$$RW_IRAM1$$ZI$$Limit)
+#define KINETIS_IRAM2_LIMIT     (&Image$$RW_IRAM2$$ZI$$Limit)
 #define KINETIS_SRAM_BEGIN    (&Image$$RW_IRAM2$$ZI$$Limit)
 
 
@@ -31,7 +35,7 @@ extern int __bss_end;
 #endif
 
 #define KINETIS_SRAM_SIZE_IN_KB         (64)
-#define KINETIS_SRAM_END                (0x20000000 + KINETIS_SRAM_SIZE_IN_KB * 1024)
+#define KINETIS_SRAM_END                (0x1FFF0000 + KINETIS_SRAM_SIZE_IN_KB * 1024)
 
 
 int rt_hw_usart_init(uint32_t instance, const char * name);
@@ -70,6 +74,8 @@ void rtthread_startup(void)
 
     
     //  rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE + SRAM_ADDRESS_BASE));
+    printf("KINETIS_IRAM1_LIMIT:%X\r\n", (uint32_t)KINETIS_IRAM1_LIMIT);
+    printf("KINETIS_IRAM2_LIMIT:%X\r\n", (uint32_t)KINETIS_IRAM2_LIMIT);
     printf("BEIGN:0x%08XU END:0x%08XU SIZE:%dKB\r\n", (uint32_t)KINETIS_SRAM_BEGIN, (uint32_t)KINETIS_SRAM_END, ((uint32_t)KINETIS_SRAM_END - (uint32_t)KINETIS_SRAM_BEGIN)/1024);
     
     rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);

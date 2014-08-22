@@ -13,7 +13,10 @@ void init_thread_entry(void* parameter)
     rt_thread_t thread;
     rt_err_t result;
     
-
+#ifdef RT_USING_FINSH
+	finsh_system_init(); /* init finsh */
+#endif
+    
 	/* initialize lwip stack */
     eth_system_device_init();
 	/* register ethernetif device */
@@ -24,11 +27,6 @@ void init_thread_entry(void* parameter)
 
 //	dfs_init();
 //	elm_init();
-
-
-#ifdef RT_USING_FINSH
-	finsh_system_init(); /* init finsh */
-#endif
 
     /* led thread */
     thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*1, 0x21, 20);                                                      
@@ -43,7 +41,6 @@ void init_thread_entry(void* parameter)
 //    {
 //        rt_thread_startup(thread);		
 //    }
-    
     
     /* supend me */
     thread = rt_thread_self();

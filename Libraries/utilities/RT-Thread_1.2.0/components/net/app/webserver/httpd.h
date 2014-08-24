@@ -42,6 +42,7 @@
 
 #define LWIP_HTTPD_CGI          1
 #define LWIP_HTTPD_SSI          1
+#define LWIP_HTTPD_SUPPORT_POST  1
 #define LWIP_HTTPD_DYNAMIC_HEADERS  1
 
 

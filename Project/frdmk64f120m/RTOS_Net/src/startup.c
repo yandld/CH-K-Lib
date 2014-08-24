@@ -44,9 +44,7 @@ void rt_hw_sd_init(uint32_t instance, const char *name);
 void rt_hw_board_init(void)
 {
     rt_hw_usart_init(HW_UART0, "uart0");
-    
 	rt_console_set_device("uart0");
-    rt_hw_sd_init(0, "sd0");
  
     SYSTICK_Init(1000*1000/RT_TICK_PER_SECOND);
     SYSTICK_ITConfig(ENABLE);
@@ -72,7 +70,6 @@ void rtthread_startup(void)
     DelayInit();
     UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
 
-    
     //  rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE + SRAM_ADDRESS_BASE));
     printf("KINETIS_IRAM1_LIMIT:%X\r\n", (uint32_t)KINETIS_IRAM1_LIMIT);
     printf("KINETIS_IRAM2_LIMIT:%X\r\n", (uint32_t)KINETIS_IRAM2_LIMIT);

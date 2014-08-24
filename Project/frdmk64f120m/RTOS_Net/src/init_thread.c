@@ -3,9 +3,9 @@
 #include "components.h"
 #include <drivers/spi.h>
 
-extern void gui_thread_entry(void* parameter);
 extern void led_thread_entry(void* parameter);
-extern void sd_thread_entry(void* parameter);
+extern void webserver_thread(void* parameter);
+
 
 void init_thread_entry(void* parameter)
 {
@@ -25,8 +25,6 @@ void init_thread_entry(void* parameter)
 	lwip_system_init();
 
 
-//	dfs_init();
-//	elm_init();
 
     /* led thread */
     thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*1, 0x21, 20);                                                      
@@ -35,12 +33,12 @@ void init_thread_entry(void* parameter)
         rt_thread_startup(thread);		
     }
     
-    /* sd_thread */
-//    thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
-//    if (thread != RT_NULL)
-//    {
-//        rt_thread_startup(thread);		
-//    }
+    /* web  */
+    thread = rt_thread_create("webserver", webserver_thread, RT_NULL, 4096, 0x23, 20); 
+    if (thread != RT_NULL)
+    {
+        rt_thread_startup(thread);		
+    }
     
     /* supend me */
     thread = rt_thread_self();

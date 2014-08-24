@@ -340,7 +340,7 @@ struct http_state {
   struct fs_file file_handle;
   struct fs_file *handle;
   char *file;       /* Pointer to first unsent byte in buf. */
-
+    
   struct tcp_pcb *pcb;
 #if LWIP_HTTPD_SUPPORT_REQUESTLIST
   struct pbuf *req;
@@ -373,6 +373,8 @@ struct http_state {
 #endif /* LWIP_HTTPD_TIMING */
 #if LWIP_HTTPD_SUPPORT_POST
   u32_t post_content_len_left;
+  u32_t cgi_handler_index;
+  const char *response_file;
 #if LWIP_HTTPD_POST_MANUAL_WND
   u32_t unrecved_bytes;
   u8_t no_auto_wnd;
@@ -2501,6 +2503,107 @@ http_set_cgi_handlers(const tCGI *cgis, int num_handlers)
   g_pCGIs = cgis;
   g_iNumCGIs = num_handlers;
 }
+
+
+err_t httpd_post_begin(void *connection, const char *uri, const char *http_request,
+                       u16_t http_request_len, int content_len, char *response_uri,
+                       u16_t response_uri_len, u8_t *post_auto_wnd)
+{
+#if LWIP_HTTPD_CGI
+  int i = 0;
+#endif
+struct http_state *hs = (struct http_state *)connection;
+ 
+ 
+ if(!uri || (uri[0] == '\0')) {
+    return ERR_ARG;
+ }
+ 
+ hs->cgi_handler_index = -1;   // ?????????struct http_state ?? ????CGI handler ?? ?-1???CGI handler??
+ hs->response_file = NULL; // ?????????struct http_state ?? ???? CGI handler ?????????uri.
+ 
+#if LWIP_HTTPD_CGI
+ 
+  if (g_iNumCGIs && g_pCGIs) {
+    for (i = 0; i < g_iNumCGIs; i++) {
+      if (strcmp(uri, g_pCGIs[i].pcCGIName) == 0) {
+         
+         hs->cgi_handler_index = i; // ????? CGI handler ?????cgi_handler_index ???httpd_post_receive_data???
+         break;
+       }
+    }
+  }
+ 
+ 
+  if(i == g_iNumCGIs) {
+    return ERR_ARG; // ???CGI handler 
+  }
+#endif
+ 
+  return ERR_OK;
+}
+ 
+#define LWIP_HTTPD_POST_MAX_PAYLOAD_LEN     512
+static char http_post_payload[LWIP_HTTPD_POST_MAX_PAYLOAD_LEN];
+static u16_t http_post_payload_len = 0;
+ 
+err_t httpd_post_receive_data(void *connection, struct pbuf *p)
+{
+    struct http_state *hs = (struct http_state *)connection;
+    struct pbuf *q = p;
+    int count;
+    u32_t http_post_payload_full_flag = 0;
+ 
+    while(q != NULL)  // ????????http_post_payload
+    {
+     
+      if(http_post_payload_len + q->len <= LWIP_HTTPD_POST_MAX_PAYLOAD_LEN) {
+          MEMCPY(http_post_payload+http_post_payload_len, q->payload, q->len);
+          http_post_payload_len += q->len;
+      }
+      else {  // ???? ??????
+        http_post_payload_full_flag = 1;
+        break;
+      }
+      q = q->next;
+    }
+ 
+    pbuf_free(p); // ??pbuf
+ 
+    if(http_post_payload_full_flag) // ???? ?????
+    {
+        http_post_payload_full_flag = 0;
+        http_post_payload_len = 0;
+        hs->cgi_handler_index = -1;
+        hs->response_file = NULL;
+    }
+    else if(hs->post_content_len_left == 0) {  // POST???????? ???
+       
+        if(hs->cgi_handler_index != -1) {
+            count = extract_uri_parameters(hs, http_post_payload);  // ??
+            hs->response_file = g_pCGIs[hs->cgi_handler_index].pfnCGIHandler(hs->cgi_handler_index, count, hs->params,
+                                             hs->param_vals); // ??????
+            http_post_payload_len = 0;
+        }
+       
+        else {
+            hs->response_file = NULL;
+            http_post_payload_len = 0;
+        }
+    }
+ 
+    return ERR_OK;
+}
+
+
+void httpd_post_finished(void *connection, char *response_uri, u16_t response_uri_len)
+{
+    struct http_state *hs = (struct http_state *)connection;
+    if(hs->response_file != NULL) {
+        strncpy(response_uri, hs->response_file,response_uri_len); // ??uri ?????????????
+    }
+}
+
 #endif /* LWIP_HTTPD_CGI */
 
 #endif /* LWIP_TCP */

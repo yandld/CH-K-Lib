@@ -1,0 +1,29 @@
+<head>  
+	<title>CGI Testing www.beyondcore.net</title>  
+</head> 
+
+
+<body>  
+	<tr>
+		<td>  
+			<strong>CGI Testing www.beyondcore.net </strong>
+			<br>
+			<br>
+			<form method="get" action="index.shtml"> 
+			PhoneNum:<br><textarea type="text" clos="100" rows="1" warp="horizon" name="PhoneNum"></textarea><br> 
+			Message:<br><textarea type="text" clos="100" rows="8" warp="virtual" name="Message"></textarea><br> 
+			<input type="submit" value="submit">
+			SubmitCount:<!--#Submit-->
+			</form>  
+		</td>
+	</tr>  
+
+</body>  
+</html>
+
+
+
+
+
+
+  

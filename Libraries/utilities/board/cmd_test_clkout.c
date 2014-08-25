@@ -57,5 +57,3 @@ int DoCLKOUT(int argc, char * const argv[])
 }
 
 SHELL_EXPORT_CMD(DoCLKOUT, clkout , clkout <sel>)
-    
-

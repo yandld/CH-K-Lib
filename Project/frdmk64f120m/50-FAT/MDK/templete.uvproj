@@ -427,11 +427,6 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
-            <File>
-              <FileName>cmd_enet.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_enet.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -521,6 +516,11 @@
               <FileName>pdb.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\pdb.c</FilePath>
+            </File>
+            <File>
+              <FileName>sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -621,6 +621,21 @@
               <FileName>cmd_test_ftm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_ftm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_enet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_enet.c</FilePath>
             </File>
           </Files>
         </Group>

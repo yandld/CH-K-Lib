@@ -33,5 +33,3 @@ static int DoPDB(int argc, char * const argv[])
 }
 
 SHELL_EXPORT_CMD(DoPDB, pdb , pdb test)
-    
-

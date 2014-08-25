@@ -9,9 +9,8 @@
 static struct eth_device device;
 static uint8_t gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
 static uint8_t     gRxBuffer[1500];
-__align(16) static char gTxBuffer[1500];
+__align(16) static uint8_t gTxBuffer[1500];
 uint32_t    rx_len;
-static  rt_mutex_t mutex;
 
 void ENET_ISR(void)
 {
@@ -33,7 +32,6 @@ void ENET_ISR(void)
 static rt_err_t rt_ksz8041_init(rt_device_t dev)
 {
     int r;
-    rt_kprintf("rt_ksz8041_init is called\r\n");
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOB, 1, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 5, kPinAlt4);
@@ -44,7 +42,7 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
-    r = ksz8041_init(0x00);
+    r = ksz8041_init(*(int*)&dev->user_data);
     if(r)
     {
         rt_kprintf("ksz8041 init failed! code:%d\r\n", r);
@@ -64,8 +62,6 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     ENET_Init(&ENET_InitStruct1);
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);
-    
-    mutex = rt_mutex_create("enet_mutex", RT_IPC_FLAG_FIFO);
     
     return RT_EOK;
 }
@@ -169,7 +165,8 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
     return RT_EOK;
 }
 
-int rt_hw_ksz8041_init(void)
+/* enetPhyAddr: enet phy chip hardware addr, normally, it's 0 or 1 */
+int rt_hw_ksz8041_init(uint8_t enetPhyAddr)
 {
 
     device.parent.init       = rt_ksz8041_init;
@@ -179,7 +176,7 @@ int rt_hw_ksz8041_init(void)
     device.parent.read       = rt_ksz8041_read;
     device.parent.write      = rt_ksz8041_write;
     device.parent.control    = rt_ksz8041_control;
-    device.parent.user_data    = RT_NULL;
+    device.parent.user_data    = (void*)&enetPhyAddr;
 
     device.eth_rx     = rt_ksz8041_rx;
     device.eth_tx     = rt_ksz8041_tx;

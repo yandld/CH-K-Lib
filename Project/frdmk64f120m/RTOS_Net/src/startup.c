@@ -21,6 +21,7 @@
 extern int Image$$RW_IRAM2$$ZI$$Limit;
 extern int Image$$RW_IRAM1$$ZI$$Limit;
 
+
 #define KINETIS_IRAM1_LIMIT     (&Image$$RW_IRAM1$$ZI$$Limit)
 #define KINETIS_IRAM2_LIMIT     (&Image$$RW_IRAM2$$ZI$$Limit)
 #define KINETIS_SRAM_BEGIN    (&Image$$RW_IRAM2$$ZI$$Limit)

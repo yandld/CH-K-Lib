@@ -2,6 +2,7 @@
 #include <rthw.h>
 #include "components.h"
 #include <drivers/spi.h>
+#include "rtt_ksz8041.h"
 
 extern void led_thread_entry(void* parameter);
 extern void webserver_thread(void* parameter);
@@ -9,9 +10,7 @@ extern void webserver_thread(void* parameter);
 
 void init_thread_entry(void* parameter)
 {
-    struct rt_spi_device *spi_device;
     rt_thread_t thread;
-    rt_err_t result;
     
 #ifdef RT_USING_FINSH
 	finsh_system_init(); /* init finsh */
@@ -20,7 +19,7 @@ void init_thread_entry(void* parameter)
 	/* initialize lwip stack */
     eth_system_device_init();
 	/* register ethernetif device */
-    rt_hw_ksz8041_init();
+    rt_hw_ksz8041_init(0x00);
 	/* initialize lwip system */
 	lwip_system_init();
 

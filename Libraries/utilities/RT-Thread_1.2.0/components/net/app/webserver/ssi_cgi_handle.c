@@ -12,8 +12,8 @@
 #define NUM_CONFIG_CGI_URIS     (sizeof(ppcURLs ) / sizeof(tCGI))
 #define NUM_CONFIG_SSI_TAGS     (sizeof(ppcTags) / sizeof (char *))
 
-static char *CGI_MessageHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] );
-static int SSIHandler ( int iIndex, char *pcInsert, int iInsertLen );
+static const char *CGI_MessageHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] );
+static u16_t SSIHandler ( int iIndex, char *pcInsert, int iInsertLen );
 
 
 static const tCGI ppcURLs[] =
@@ -66,7 +66,7 @@ void  clear_response_bufer(unsigned char *buffer){
 }
 
 //ºìµÆ´¦Àíº¯Êý
-static char *CGI_MessageHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] )
+static const char *CGI_MessageHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] )
 {
     int  index, i;
     i = iNumParams;
@@ -92,7 +92,7 @@ static char *CGI_MessageHandler( int iIndex, int iNumParams, char *pcParam[], ch
 // into the pcInsert array, writing no more than iInsertLen characters.
 //
 //*****************************************************************************
-static int SSIHandler ( int iIndex, char *pcInsert, int iInsertLen )
+static u16_t SSIHandler ( int iIndex, char *pcInsert, int iInsertLen )
 {
     static uint32_t counter;
     switch(iIndex)

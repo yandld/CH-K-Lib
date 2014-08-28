@@ -6,6 +6,11 @@
 #include "fs.h"
 
 
+#define MSG_MAX_NUM   10
+
+static int gMsgShowIndex, gTotalMsg;
+static char gMsgBuffer[MSG_MAX_NUM][64];
+static char gPhoneBuffer[MSG_MAX_NUM][15];
 
 #define INDEX_PAGE_SET_CGI_RSP_URL        "/index.shtml"
 
@@ -13,23 +18,32 @@
 #define NUM_CONFIG_SSI_TAGS     (sizeof(ppcTags) / sizeof (char *))
 
 static const char *CGI_MessageHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] );
+static const char *CGI_RevHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] );
 static u16_t SSIHandler ( int iIndex, char *pcInsert, int iInsertLen );
 
 
 static const tCGI ppcURLs[] =
 {
     { "/index.shtml",           CGI_MessageHandler },
-    
+    { "/rev.shtml",             CGI_RevHandler },
 };
 
 static const char *ppcTags[] =
 {
     "Submit",
+    "CurIndex",
+    "TotIndex",
+    "MsgNum",
+    "MsgText",
 };
 
 enum ssi_index_s
 {
     SSI_INDEX_SUBMITCOUNT_GET = 0, //该表对应ppcTags[]的排序
+    SSI_INDEX_CUR_INDEX = 1,
+    SSI_INDEX_TOL_INDEX = 2,
+    SSI_INDEX_MSMNUM = 3,  /*服务器存上的 手机号 */
+    SSI_INDEX_MSG = 4,   /* 对应的短信内容 */
 } ;
 
 
@@ -61,29 +75,57 @@ static int FindCGIParameter(const char *pcToFind, char *pcParam[], int iNumParam
 }
 
 //清除缓冲区的内容
-void  clear_response_bufer(unsigned char *buffer){
-  memset(buffer,0,strlen((const char*)buffer));
+void  clear_response_bufer(unsigned char *buffer)
+{
+    memset(buffer,0,strlen((const char*)buffer));
 }
 
 //红灯处理函数
 static const char *CGI_MessageHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] )
 {
-    int  index, i;
-    i = iNumParams;
-    while(i--)
+    int  index;
+    index = FindCGIParameter ("PhoneNum", pcParam, iNumParams );
+    if(index != -1)
     {
-        index = FindCGIParameter ( pcParam[i], pcParam, iNumParams );
-        if(index != -1)
-        {
-            printf("%s:%s\r\n", pcParam[index], pcValue[index]);
-        }
+        gTotalMsg++; gTotalMsg%=10;
+        rt_memcpy(gPhoneBuffer[gTotalMsg], pcValue[0], rt_strlen(pcValue[0]));
+        rt_memcpy(gMsgBuffer[gTotalMsg], pcValue[1], rt_strlen(pcValue[1]));
+        printf("%s:%s\r\n", pcParam[0], pcValue[0]);
+        printf("%s:%s\r\n", pcParam[1], pcValue[1]);
     }
+   
+    
     if(index != -1)
     {
 			clear_response_bufer(data_response_buf);      //清除缓冲区的内容
     }
     return INDEX_PAGE_SET_CGI_RSP_URL;
 }
+
+static const char *CGI_RevHandler( int iIndex, int iNumParams, char *pcParam[], char *pcValue[] )
+{
+    int  index;
+    index = FindCGIParameter ("last", pcParam, iNumParams );
+    if(index != -1)
+    {
+        if(gMsgShowIndex > 0)
+        {
+            gMsgShowIndex--; 
+        }
+    }
+    
+    index = FindCGIParameter ("next", pcParam, iNumParams );
+    if(index != -1)
+    {
+        if(gMsgShowIndex < gTotalMsg)
+        {
+            gMsgShowIndex++;
+        }
+    }
+    return "/rev.shtml";
+}
+
+
 //*****************************************************************************
 //
 // This function is called by the HTTP server whenever it encounters an SSI
@@ -98,9 +140,22 @@ static u16_t SSIHandler ( int iIndex, char *pcInsert, int iInsertLen )
     switch(iIndex)
     {
         case SSI_INDEX_SUBMITCOUNT_GET:
-        sprintf(pcInsert, "%d", counter++);
-        break;
-                
+            sprintf(pcInsert, "%d", counter++);
+            break;
+        case SSI_INDEX_TOL_INDEX:
+            sprintf(pcInsert, "%d", gTotalMsg);
+            break;
+        case SSI_INDEX_CUR_INDEX:
+            sprintf(pcInsert, "%d", gMsgShowIndex);
+            break;
+        case SSI_INDEX_MSMNUM:
+            printf("SSI_INDEX_MSMNUM%s\r\n", &gPhoneBuffer[gMsgShowIndex][0]);
+            strcpy(pcInsert,  &gPhoneBuffer[gMsgShowIndex][0]);  
+            break;
+        case SSI_INDEX_MSG:
+            printf("SSI_INDEX_MSG%s\r\n", &gMsgBuffer[gMsgShowIndex][0]);
+            strcpy(pcInsert,  &gMsgBuffer[gMsgShowIndex][0]);  
+            break;
         default:
             strcpy( pcInsert , "??" );           
     }

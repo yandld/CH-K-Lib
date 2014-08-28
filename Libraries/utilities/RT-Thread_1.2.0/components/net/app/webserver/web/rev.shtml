@@ -1,0 +1,39 @@
+<html>
+<head>  
+	<title>读取服务器中信息</title>  
+</head> 
+
+
+<body>
+<table>
+    <tr>
+        <td height="40" width="150" style="border:1px solid #CCC;">
+			当前 <!--#CurIndex-->  条 共 <!--#TotIndex-->  条
+		</td>
+    </tr>
+	<tr>
+		<td height="40" width="150" style="border:1px solid #CCC;">
+			<div type="text" name="Text1">
+			Phone:<!--#MsgNum--><br>
+			Text:<!--#MsgText-->
+			</div>
+		</td>
+	</tr>
+    <tr>
+		<form method="get" action="rev.shtml"> 
+			<input type="submit" name="last" value="前一条">
+			<input type="submit" name="next" value="下一条">
+		</form>
+    </tr>
+</table>
+	<br><br>
+	<a href="index.shtml">发送信息到服务器</a>
+</body>  
+</html>
+
+
+
+
+
+
+  

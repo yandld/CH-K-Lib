@@ -443,7 +443,6 @@ void SPI2_IRQHandler(void)
 
 
 /*
-
 static const QuickInit_Type SPI_QuickInitTable[] =
 {
     { 0, 2, 2, 5, 3, 0}, //SPI0_SCK_PC05_SOUT_PC06_SIN_PC07 2

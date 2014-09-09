@@ -153,4 +153,10 @@ void NMI_Handler(void)
     
 }
 
+/*
+    for(i=0;i<ARRAY_SIZE(I2C_QuickInitTable);i++)
+    {
+        printf("(0X%08XU)\r\n", QuickInitEncode(&I2C_QuickInitTable[i]));
+    }
+*/
 

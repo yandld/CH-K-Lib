@@ -21,11 +21,19 @@ static void I2C_Scan(uint32_t instance)
 
 static int DoI2C(int argc, char * const argv[])
 {
+    int i;
     uint32_t instance;
+    QuickInit_Type pq;
     printf("board:%s fun:%s\r\n",BOARD_NAME, __func__);
     /* init i2c */
     instance = I2C_QuickInit(BOARD_I2C_MAP, 100*1000);
     printf("i2c instance:%d\r\n", instance);
+    QuickInitDecode(BOARD_I2C_MAP, &pq);
+    for(i = 0; i < pq.io_offset; i++)
+    {
+        printf("P%c%d  ", pq.io_instance+'A', pq.io_base+i);
+    }
+    printf("\r\n");
     I2C_Scan(instance);
     return 0;
 }

@@ -156,6 +156,25 @@ void SPI_Init(SPI_InitTypeDef* SPI_InitStruct)
     SPI_InstanceTable[SPI_InitStruct->instance]->C1 |= SPI_C1_SPE_MASK;
 }
 
+ /**
+ * @brief  快速初始化SPI模块
+ * @param  MAP: SPI快速初始化选择项，详见spi.h文件
+ *         @arg SPI1_SCK_PE02_MOSI_PE01_MISO_PE00
+ *         @arg         ...
+ * @param  baudrate :通信速度
+ * @retval spi模块号
+ */
+uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate)
+{
+    SPI_InitTypeDef SPI_InitStruct1;
+    SPI_InitStruct1.baudrate = baudrate;
+    SPI_InitStruct1.frameFormat = frameFormat;
+    SPI_InitStruct1.dataSize = 8;
+    SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
+    SPI_InitStruct1.mode = kSPI_Master;
+    SPI_Init(&SPI_InitStruct1);
+}
+
 #if 0
 uint16_t SPI_ReadWriteByte(SPI_Type *SPIx, uint16_t Data)
 {

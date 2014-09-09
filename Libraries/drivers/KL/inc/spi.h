@@ -67,7 +67,6 @@ typedef struct
     uint8_t                 bitOrder;               //!< 先发高位还是先发地位
     SPI_FrameFormat_Type    frameFormat;            //!< 四种帧格式选择
     uint32_t                baudrate;               //!< 速率
-    uint32_t                ctar;
 }SPI_InitTypeDef;
 
 //!< 快速初始化结构
@@ -89,8 +88,6 @@ uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint1
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status);
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
 uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate);
-void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate);
-
 
 
 #endif

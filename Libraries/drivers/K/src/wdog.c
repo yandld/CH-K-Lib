@@ -19,8 +19,10 @@ static WDOG_CallBackType WDOG_CallBackTable[1] = {NULL};
  */
 static void WDOG_Unlock(void)
 {
+    __disable_irq();
     WDOG->UNLOCK = 0xC520u;
     WDOG->UNLOCK = 0xD928u;
+    __enable_irq();
 }
 /**
  * @brief  看门狗快速初始化配置

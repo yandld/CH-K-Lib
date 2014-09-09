@@ -14,7 +14,7 @@
 /* 回调函数 指针 */
 static LPTMR_CallBackType LPTMR_CallBackTable[1] = {NULL};
 /* 中断向量入口 */
-static const IRQn_Type PIT_IRQnTable[] = 
+static const IRQn_Type LPTMR_IRQnTable[] = 
 {
     LPTimer_IRQn,
 };
@@ -159,7 +159,7 @@ void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config, bool status)
     /* enable clock gate */
     *(uint32_t*)SIM_LPTMRClockGateTable[0].addr |= SIM_LPTMRClockGateTable[0].mask;
     
-    if(status) NVIC_EnableIRQ(PIT_IRQnTable[0]);
+    if(status) NVIC_EnableIRQ(LPTMR_IRQnTable[0]);
     switch (config)
     {
         case kLPTMR_IT_TOF:

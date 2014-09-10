@@ -3,13 +3,12 @@
 #include "i2c.h"
 #include "systick.h"
 #include "common.h"
-
+#include "board.h"
 #include <rtthread.h>
 #include <rthw.h>
 #include "finsh.h"
 #include "shell.h"
 #include "sram.h"
-#include "sd.h"
 
 #include <drivers/spi.h>
 #include "rtt_spi.h"
@@ -17,19 +16,9 @@
 #include "components.h"
 #include "spi.h"
 
-#ifdef __CC_ARM
-extern int Image$$RW_IRAM1$$ZI$$Limit;
-#define KINETIS_SRAM_BEGIN    (&Image$$RW_IRAM1$$ZI$$Limit)
-#elif __ICCARM__
-#pragma section="HEAP"
-#define KINETIS_SRAM_BEGIN    (__segment_end("HEAP"))
-#else
-extern int __bss_end;
-#define KINETIS_SRAM_BEGIN    (&__bss_end)
-#endif
 
-#define KINETIS_SRAM_SIZE_IN_KB         (64)
-#define KINETIS_SRAM_END                (0x20000000 + KINETIS_SRAM_SIZE_IN_KB * 1024)
+#define RTT_HEAP_START               (0x1FFF0000)
+#define RTT_HEAP_END                 (0x1FFF0000 + 0x10000)
 
 
 int rt_hw_usart_init(uint32_t instance, const char * name);
@@ -44,9 +33,9 @@ void rt_hw_board_init(void)
     PORT_PinMuxConfig(HW_GPIOD, 7, kPinAlt3);
     
 	rt_console_set_device("uart0");
-    rt_hw_sd_init(0, "sd0");
+ //   rt_hw_sd_init(0, "sd0");
    // rt_hw_lcd_init();
-    rt_hw_rtc_init("rtc");
+ //   rt_hw_rtc_init("rtc");
     rt_hw_spi_bus_init(HW_SPI2, "spi2");
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
@@ -91,17 +80,20 @@ void rt_application_init(void)
 
 void rtthread_startup(void)
 {
+    /* BM init */
     DelayInit();
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
+    printf("IRAM: BEIGN:0x%08XU END:0x%08XU SIZE:%dKB\r\n", (uint32_t)RTT_HEAP_START, (uint32_t)RTT_HEAP_END, ((uint32_t)RTT_HEAP_END - (uint32_t)RTT_HEAP_START)/1024);
     SRAM_Init();
     if(SRAM_SelfTest())
     {
-        printf("SRAM SelfTest failed\r\n");
-        while(1);
+        printf("SRAM SelfTest failed will use IRAM\r\n");
+        rt_system_heap_init((void*)RTT_HEAP_START, (void*)RTT_HEAP_END);
     }
-    
-    rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE + SRAM_ADDRESS_BASE));
-  //  rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
+    else
+    {
+        rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE + SRAM_ADDRESS_BASE));
+    }
 
     rt_hw_board_init();
 	rt_show_version(); /* print logo */

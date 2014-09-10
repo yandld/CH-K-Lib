@@ -13,9 +13,9 @@
 3. www.beyondcore.net
 4. [固件库源代码包下载](http://git.oschina.net/yandld/CH-K-Lib/repository/archive?ref=master)
 
-## 所支持的IDE
-* Keil(MDK) V4.53 以上版本
-* IAR 6.5 以上版本
+## 所支持的IDE [下载](http://pan.baidu.com/s/1jGLvuRG)
+* Keil(MDK) V5.00 以上版本 
+* IAR 6.6 以上版本
 
 ## 适用型号
 * MK60DNxxx
@@ -25,27 +25,19 @@
 * MKL46Zxxx
 
 ## 文件说明
-**Libraries:**
+- <tt>[Document]</tt> - 芯片手册原理图以及固件库文档
+- <tt>[Libraries]</tt> - 固件库源代码 启动代码 第三方组件 等等
+ - <tt>[devices]</tt> - 外设芯片支持 比如加速度传感器 2401等等
+ - <tt>[drivers]</tt> - 固件库源码 包含K KL系列
+ - <tt>[startup]</tt> - 芯片启动文件及头文件
+ - <tt>[utilities]</tt> - 其他第三方组件
+- <tt>[Project]</tt> - 工程文件及例程 主要以超核K60开发板-渡鸦 为主
+ - <tt>[超核K60开发板-渡鸦]</tt> -  
+ - <tt>[frdmk64f120m]</tt> -  
+ - <tt>[KL46镭核核心板]</tt> -  
+ - <tt>[超核姿态模块固件(URANUS)]</tt> -  
+ - <tt>[KL46镭核核心板]</tt> -  
 
-* devices 一些外设芯片支持
-* drivers 固件库源码 
-* startup 芯片启动文件及头文件
-* utilities 其他第三方组件
-
-**Project**
-这个目录下面存放所有硬件板子的例程，其中超核K60开发板-渡鸦 的例程最全面
-
-* 超核K60开发板-渡鸦
-* frdmk64f120m
-* KL46镭核核心板
-* 超核姿态模块固件(URANUS)
-* 原子核V2 核心板
-
-**Document**
-
-* 固件库使用说明
-* 芯片手册
-* 评估硬件原理图
 
 
 ## 联系我们及获取最新固件库
@@ -55,4 +47,4 @@
 ## 已经发现的存在问题
 一些版本的IAR 不能打开中文路径以及带有空格的路径下的功能，如果遇到这个问题，请将路径改为全英文且没有空格的路径
 
-2014/4/28 16:31:01
+9/10/2014 11:18:43 AM 

@@ -9,6 +9,7 @@
   ******************************************************************************
   */
 #include "spi.h"
+#include "gpio.h"
 #include "common.h"
 
 SPI_Type * const SPI_InstanceTable[] = SPI_BASES;
@@ -18,7 +19,10 @@ static const struct reg_ops SIM_SPIClockGateTable[] =
     {(void*)&(SIM->SCGC4), SIM_SCGC4_SPI0_MASK},
     {(void*)&(SIM->SCGC4), SIM_SCGC4_SPI1_MASK},
 };
-
+static const IRQn_Type SPI_IRQnTable[] = 
+{
+    SPI0_IRQn,    SPI1_IRQn,
+};
 
 /*FUNCTION**********************************************************************
  *
@@ -86,6 +90,11 @@ static uint32_t SPI_HAL_SetBaud(uint32_t instance, uint32_t bitsPerSec, uint32_t
     return bestBaudrate;
 }
 
+/**
+ * @brief  初始化SPI模块
+ * @param  SPI_InitStruct :spi初始化配置结构体
+ * @retval None
+ */
 void SPI_Init(SPI_InitTypeDef* SPI_InitStruct)
 {
     uint32_t clock;
@@ -148,8 +157,15 @@ void SPI_Init(SPI_InitTypeDef* SPI_InitStruct)
     SPI_InstanceTable[SPI_InitStruct->instance]->C2 |= SPI_C2_MODFEN_MASK;
     SPI_InstanceTable[SPI_InitStruct->instance]->C1 |= SPI_C1_SSOE_MASK;
     
-    /*baudrate */
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    /* baudrate */
+    if(SPI_InitStruct->instance == HW_SPI0)
+    {
+        CLOCK_GetClockFrequency(kBusClock, &clock);
+    }
+    else
+    {
+        CLOCK_GetClockFrequency(kSystemClock, &clock);
+    }
     SPI_HAL_SetBaud(SPI_InitStruct->instance, SPI_InitStruct->baudrate, clock);
     
     /* enable SPI */
@@ -166,71 +182,127 @@ void SPI_Init(SPI_InitTypeDef* SPI_InitStruct)
  */
 uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate)
 {
+    uint8_t i;
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     SPI_InitTypeDef SPI_InitStruct1;
     SPI_InitStruct1.baudrate = baudrate;
     SPI_InitStruct1.frameFormat = frameFormat;
     SPI_InitStruct1.dataSize = 8;
     SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
     SPI_InitStruct1.mode = kSPI_Master;
+    SPI_InitStruct1.instance = pq->ip_instance;
+    
+    /* init pinmux and  open drain and pull up */
+    for(i = 0; i < pq->io_offset; i++)
+    {
+        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type)pq->mux);
+    }
+    /* init moudle */
     SPI_Init(&SPI_InitStruct1);
+    return pq->ip_instance;
 }
+
+uint16_t SPI_ReadWriteByte(uint32_t instance, uint16_t data)
+{
+    uint16_t temp;
+    while(!(SPI_InstanceTable[instance]->S & SPI_S_SPTEF_MASK)); 
+    SPI_InstanceTable[instance]->DL = (data & 0x00FF);
+    SPI_InstanceTable[instance]->DH = (data & 0xFF00)>>8;
+    while(!(SPI_InstanceTable[instance]->S & SPI_S_SPRF_MASK));
+    temp =  SPI_InstanceTable[instance]->DL + (SPI_InstanceTable[instance]->DH<<8);
+    return temp;
+}
+
+/**
+ * @brief  SPI模块 中断和DMA功能配置
+ * @code
+ *     //使用SPI的1模块发送完成中断
+ *     SPI_ITDMAConfig(HW_SPI1, kSPI_IT_Rx, true);
+ * @endcode
+ * @param  instance :SPI通信模块号 HW_SPI0~2
+ * @param  SPI_ITDMAConfig_Type: SPI中断类型
+ *         @arg kSPI_IT_Rx
+ *         @arg kSPI_IT_Tx
+ * @param  baudrate :SPI通信速度设置
+ * @retval None
+ */
+void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status)
+{
+    if(status)
+    {
+        NVIC_EnableIRQ(SPI_IRQnTable[instance]);
+    }
+    
+    switch(config)
+    {
+        case kSPI_IT_Rx:
+            (status)?
+            (SPI_InstanceTable[instance]->C1 |= SPI_C1_SPIE_MASK):
+            (SPI_InstanceTable[instance]->C1 &= ~SPI_C1_SPIE_MASK);
+            break;
+        case kSPI_IT_Tx:
+            (status)?
+            (SPI_InstanceTable[instance]->C1 |= SPI_C1_SPTIE_MASK):
+            (SPI_InstanceTable[instance]->C1 &= ~SPI_C1_SPTIE_MASK);
+            break;
+        default:
+            break;
+    }
+}
+
+/**
+ * @brief  注册中断回调函数
+ * @param  instance :SPI通信模块号 HW_SPI0 HW_SPI1
+ * @param  AppCBFun: 回调函数指针入口
+ * @retval None
+ * @note 对于此函数的具体应用请查阅应用实例
+ */
+void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
+{
+    if(AppCBFun != NULL)
+    {
+        SPI_CallBackTable[instance] = AppCBFun;
+    }
+}
+
+void SPI0_IRQHandler(void)
+{
+    uint8_t dummy;
+    dummy = dummy;
+    if((SPI_InstanceTable[HW_SPI0]->C1 & SPI_C1_SPIE_MASK) && (SPI_InstanceTable[HW_SPI0]->S & SPI_S_SPRF_MASK))
+    {
+        if(SPI_CallBackTable[HW_SPI0])
+        {
+            SPI_CallBackTable[HW_SPI0]();
+        }
+        /* make sure clear SPRF bit */
+        if(SPI_InstanceTable[HW_SPI0]->S & SPI_S_SPRF_MASK)
+        {
+            dummy = SPI_InstanceTable[HW_SPI0]->DL;
+        }
+    }
+}
+
+void SPI1_IRQHandler(void)
+{
+    uint8_t dummy;
+    dummy = dummy;
+    if((SPI_InstanceTable[HW_SPI1]->C1 & SPI_C1_SPIE_MASK) && (SPI_InstanceTable[HW_SPI1]->S & SPI_S_SPRF_MASK))
+    {
+        if(SPI_CallBackTable[HW_SPI1])
+        {
+            SPI_CallBackTable[HW_SPI1]();
+        }
+        /* make sure clear SPRF bit */
+        if(SPI_InstanceTable[HW_SPI1]->S & SPI_S_SPRF_MASK)
+        {
+            dummy = SPI_InstanceTable[HW_SPI1]->DL;
+        }
+    }
+}
+
 
 #if 0
-uint16_t SPI_ReadWriteByte(SPI_Type *SPIx, uint16_t Data)
-{
-  uint8_t temp;
-  while(!(SPIx->S & SPI_S_SPTEF_MASK)); /* write finish? */
-	#ifdef MKL46Z4_H_
-	SPIx->DL = Data;
-	#endif
-	#ifdef MKL25Z4_H_
-	SPIx->D = Data;
-	#endif
- 	while(!(SPIx->S & SPI_S_SPTEF_MASK)){};     //等待发送完成
-  while(!(SPIx->S & SPI_S_SPRF_MASK)); /* read finish? */
-	#ifdef MKL46Z4_H_
-	temp = SPIx->DL;
-	#endif
-	#ifdef MKL25Z4_H_
-	temp = SPIx->D;
-	#endif
-  
-  return temp;
-}
-
-
-void SPI_Cmd(SPI_Type *SPIx, FunctionalState NewState)
-{
-  if(NewState == ENABLE)
-  {
-    SPIx->C1 |= SPI_C1_SPE_MASK; 
-  }
-  else
-  {
-    SPIx->C1 &= ~SPI_C1_SPE_MASK;
-  }
-}
-
-
-void SPI_DMACmd(SPI_Type *SPIx, uint16_t SPI_DMAReq, FunctionalState NewState)
-{
-  switch(SPI_DMAReq)
-  {
-    case SPI_DMAReq_Tx:
-      (ENABLE == NewState)?(SPIx->C2 |= SPI_C2_TXDMAE_MASK):(SPIx->C2 &= ~SPI_C2_RXDMAE_MASK);
-    break;
-    case SPI_DMAReq_Rx:
-      (ENABLE == NewState)?(SPIx->C2 |= SPI_C2_RXDMAE_MASK):(SPIx->C2 &= ~SPI_C2_RXDMAE_MASK);
-    break;
-    default:break;
-  }
-}
-
-
-#endif
-
-
-/*
 static const QuickInit_Type SPI_QuickInitTable[] =
 {
     { 1, 4, 2, 0, 3, 0}, //SPI1_SCK_PE02_MOSI_PE01_MISO_PE00
@@ -240,5 +312,5 @@ static const QuickInit_Type SPI_QuickInitTable[] =
     { 0, 3, 2, 1, 3, 0}, //SPI0_SCK_PD01_MOSI_PD02_MISO_PD03
     { 1, 3, 2, 5, 3, 0}, //SPI1_SCK_PD05_MOSI_PD06_MISO_PD07
 };
-*/
+#endif
 

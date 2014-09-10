@@ -19,13 +19,6 @@
 #define HW_SPI0     (0x00)
 #define HW_SPI1     (0x01)
 #define HW_SPI2     (0x02)
-  
-#define HW_CTAR0    (0x00)  
-#define HW_CTAR1    (0x01)  
-
-#define HW_SPI_CS0  (0x00)
-#define HW_SPI_CS1  (0x01)
-#define HW_SPI_CS2  (0x02)
 
 //!< SPI帧格式选择
 typedef enum
@@ -46,14 +39,10 @@ typedef enum
 //!< interrupt and DMA select
 typedef enum
 {
-    kSPI_IT_TCF,            //!< SPI传输一次完成中断使能
-    kSPI_DMA_TFFF,          //!< transmit FIFO full
-    kSPI_DMA_RFDF,          //!< receive FIFO drain
+    kSPI_IT_Rx,            //!< SPI接收到一帧
+    kSPI_IT_Tx,            //!< SPI发送完一帧
 }SPI_ITDMAConfig_Type;
 
-
-#define kSPI_PCS_ReturnInactive   (0x00)      //!< 传输完成后CS信号保持片选中状态
-#define kSPI_PCS_KeepAsserted     (0x01)      //!< 传输完成后CS信号保持未选中状态
 
 #define kSPI_MSBFirst             (0x00)      //!< 先发送最高位
 #define kSPI_LSBFirst             (0x01)      //!< 先发送最低位
@@ -78,16 +67,16 @@ typedef struct
 #define SPI1_SCK_PD05_MOSI_PD06_MISO_PD07  (0X0000CA99U)
 
 
-
 //!< Callback Type
 typedef void (*SPI_CallBackType)(void);
 
 //!< API functions
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct);
-uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, uint16_t csState);
+uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate);
+uint16_t SPI_ReadWriteByte(uint32_t instance, uint16_t data);
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status);
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
-uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate);
+
 
 
 #endif

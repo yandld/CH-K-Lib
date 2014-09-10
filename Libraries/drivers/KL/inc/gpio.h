@@ -92,30 +92,7 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 #define IS_PORT_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(PORT_InstanceTable))
 #define IS_GPIO_ALL_PIN(PIN)  (PIN < 32)
 
-/* 位带操作 内存偏移计算 详见 Cortex-M4 Generic User Guide 2.25 */
-/* CM4中有2块bitband区域 0x2000_0000-0x200F_FFFF 映射至 0x2200_0000-0x23FF_FFFF
-                         0x4000_0000-0x4000_FFFF 映射至 0x4200_0000-0x43FF_FFFF
-*/
-#define PAout(n)   BITBAND_REG(PTA->PDOR, n)
-#define PAin(n)    BITBAND_REG(PTA->PDIR, n)
-  
-#define PBout(n)   BITBAND_REG(PTB->PDOR, n)
-#define PBin(n)    BITBAND_REG(PTB->PDIR, n)
 
-#define PCout(n)   BITBAND_REG(PTC->PDOR, n)
-#define PCin(n)    BITBAND_REG(PTC->PDIR, n)
-
-#define PDout(n)   BITBAND_REG(PTD->PDOR, n)
-#define PDin(n)    BITBAND_REG(PTD->PDIR, n)
-
-#define PEout(n)   BITBAND_REG(PTE->PDOR, n)
-#define PEin(n)    BITBAND_REG(PTE->PDIR, n)
-
-#define PFout(n)   BITBAND_REG(PTF->PDOR, n)
-#define PFin(n)    BITBAND_REG(PTF->PDIR, n)
-
-#define PGout(n)   BITBAND_REG(PTG->PDOR, n)
-#define PGin(n)    BITBAND_REG(PTG->PDIR, n)
 
 //!< API functions
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);

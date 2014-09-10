@@ -82,6 +82,7 @@
 #define BOARD_LPTMR_MAP             LPTMR_ALT1_PA19
 #define BOARD_KEY_GPIO_BASES        {0}
 #define BOARD_KEY_PIN_BASES         {0}
+#define BOARD_SPI_MAP               SPI1_SCK_PD05_MOSI_PD06_MISO_PD07
 
 #elif defined(FRDM)
 

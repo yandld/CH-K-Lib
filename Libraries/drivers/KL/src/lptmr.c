@@ -14,7 +14,7 @@
 /* 回调函数 指针 */
 static LPTMR_CallBackType LPTMR_CallBackTable[1] = {NULL};
 /* 中断向量入口 */
-static const IRQn_Type PIT_IRQnTable[] = 
+static const IRQn_Type LPTMR_IRQnTable[] = 
 {
     LPTimer_IRQn,
 };
@@ -145,7 +145,7 @@ void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config, bool status)
     
     if(status)
     {
-        NVIC_EnableIRQ(PIT_IRQnTable[0]);
+        NVIC_EnableIRQ(LPTMR_IRQnTable[0]);
     }
 
     switch (config)

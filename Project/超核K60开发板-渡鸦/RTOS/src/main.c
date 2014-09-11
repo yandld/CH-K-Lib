@@ -20,7 +20,6 @@ void rtthread_startup(void);
 
 int main(void)
 {
-    
 	/* disable interrupt first */
 	rt_hw_interrupt_disable();
 

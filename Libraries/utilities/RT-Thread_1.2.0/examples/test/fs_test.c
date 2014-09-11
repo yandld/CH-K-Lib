@@ -22,8 +22,7 @@ static rt_thread_t fsrw1_thread = RT_NULL;
 static rt_thread_t fsrw2_thread = RT_NULL;
 
 #define fsrw1_fn                   "/test1.dat"
-#define fsrw1_data_len             4096               /* Less than 256 */
-#define fsrw1_write_times          40
+#define fsrw1_data_len             120               /* Less than 256 */
 static void fsrw1_thread_entry(void* parameter)
 {
     int fd;
@@ -62,9 +61,9 @@ static void fsrw1_thread_entry(void* parameter)
             write_data1[index] = index;
         }
 
-
+        /* write 8000 times */
         tick_start = rt_tick_get();
-        for(index=0; index<fsrw1_write_times; index++)
+        for(index=0; index<8000; index++)
         {
             length = write(fd, write_data1, fsrw1_data_len);
             if (length != fsrw1_data_len)
@@ -77,7 +76,7 @@ static void fsrw1_thread_entry(void* parameter)
             }
         }
         tick_end = rt_tick_get();
-        write_speed = fsrw1_data_len*fsrw1_write_times*RT_TICK_PER_SECOND/(tick_end-tick_start);
+        write_speed = fsrw1_data_len*8000UL*RT_TICK_PER_SECOND/(tick_end-tick_start);
 
         /* close file */
         close(fd);
@@ -94,7 +93,7 @@ static void fsrw1_thread_entry(void* parameter)
 
         /* verify data */
         tick_start = rt_tick_get();
-        for(index=0; index<fsrw1_write_times; index++)
+        for(index=0; index<8000; index++)
         {
             rt_uint32_t i;
 
@@ -120,7 +119,7 @@ static void fsrw1_thread_entry(void* parameter)
             }
         }
         tick_end = rt_tick_get();
-        read_speed = fsrw1_data_len*fsrw1_write_times*RT_TICK_PER_SECOND/(tick_end-tick_start);
+        read_speed = fsrw1_data_len*8000UL*RT_TICK_PER_SECOND/(tick_end-tick_start);
 
         rt_kprintf("thread fsrw1 round %d ",round++);
         rt_kprintf("rd:%dbyte/s,wr:%dbyte/s\r\n",read_speed,write_speed);
@@ -130,8 +129,8 @@ static void fsrw1_thread_entry(void* parameter)
     }
 }
 
-#define fsrw2_fn                   "/SD/test2.dat"
-#define fsrw2_data_len             256              /* Less than 256 */
+#define fsrw2_fn                   "/test2.dat"
+#define fsrw2_data_len             180              /* Less than 256 */
 static void fsrw2_thread_entry(void* parameter)
 {
     int fd;
@@ -219,7 +218,7 @@ static void fsrw2_thread_entry(void* parameter)
             {
                 if( read_data2[i] != write_data2[i] )
                 {
-                    rt_kprintf("fsrw2 data error! round:%d index%d\r\n", index, i);
+                    rt_kprintf("fsrw2 data error!\r\n");
                     close(fd);
                     stop_flag = 1;
                     fsrw2_thread = RT_NULL;

@@ -1,6 +1,6 @@
 #include <rtthread.h>
 #include <rthw.h>
-
+#include <dfs_romfs.h> 
 #include "components.h"
 #include "rtt_ksz8041.h"
 #include <drivers/spi.h>
@@ -22,29 +22,32 @@ void init_thread_entry(void* parameter)
 	finsh_system_init(); /* init finsh */
 #endif
 #ifdef RT_USING_DFS
+    RT_DEBUG_LOG(RT_TRUE, ("inital initialized..\r\n"));
 	dfs_init();
 #endif
 #ifdef RT_USING_DFS_ELMFAT
+    RT_DEBUG_LOG(RT_TRUE, ("elm initialized..\r\n"));
 	elm_init();
 #endif
     
-   // touch_ads7843_init("ads7843", "spi20");
-    r = w25qxx_init("sf0", "spi21");
-    RT_DEBUG_LOG(RT_TRUE, ("w25qxx init@%d...\r\n", r));
-    r = dfs_mount("sf0", "/", "elm", 0, 0);
-    RT_DEBUG_LOG(RT_TRUE, ("dfs_mount@%d...\r\n", r));
-    
+    dfs_romfs_init(); 
+    RT_DEBUG_LOG(RT_TRUE, ("romfs initialized..\r\n"));
+
 #ifdef RT_USING_LWIP
-    RT_DEBUG_LOG(RT_TRUE, ("Initalizing enet system...\r\n"));
-    eth_system_device_init();
-    rt_hw_ksz8041_init(0x01);
+//    rt_hw_ksz8041_init(0x01);
+	eth_system_device_init();
 	lwip_system_init();
+    RT_DEBUG_LOG(RT_TRUE, ("TCP/IP initialized!..\r\n"));
 #endif
 
+    dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
 
 
-
-    
+   // touch_ads7843_init("ads7843", "spi20");
+//    r = w25qxx_init("sf0", "spi21");
+//    RT_DEBUG_LOG(RT_TRUE, ("w25qxx init@%d...\r\n", r));
+//    r = dfs_mount("sf0", "/", "elm", 0, 0);
+//    RT_DEBUG_LOG(RT_TRUE, ("dfs_mount@%d...\r\n", r));
 
     /* sd_thread */
     thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
@@ -52,19 +55,19 @@ void init_thread_entry(void* parameter)
     {
         rt_thread_startup(thread);		
     }
-    
-   /* gui thread */
-    thread = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*8, 0x23, 20);                                                      
-    if (thread != RT_NULL)
-    {
-        rt_thread_startup(thread);		
-    }
-    /* led thread */
-    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*8, 0x21, 20);                                                      
-    if (thread != RT_NULL)
-    {
-        rt_thread_startup(thread);		
-    }
+//    
+//   /* gui thread */
+//    thread = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*8, 0x23, 20);                                                      
+//    if (thread != RT_NULL)
+//    {
+//        rt_thread_startup(thread);		
+//    }
+//    /* led thread */
+//    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*8, 0x21, 20);                                                      
+//    if (thread != RT_NULL)
+//    {
+//        rt_thread_startup(thread);		
+//    }
     /* supend me */
     thread = rt_thread_self();
     rt_thread_suspend(thread); 

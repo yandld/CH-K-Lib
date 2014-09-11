@@ -43,7 +43,7 @@ static void thread1_entry(void* parameter)
 static void thread2_entry(void* parameter)
 {
     rt_uint8_t count;
-    rt_err_t  result;
+
     count = 0;
     while (1)
     {
@@ -51,22 +51,16 @@ static void thread2_entry(void* parameter)
         if (count & 0x1)
         {
             /* 发送mb_str1地址到邮箱中 */
-            if(rt_mb_send(&mb, (rt_uint32_t)&mb_str1[0]) != RT_EOK)
-            {
-                rt_kprintf("mb send failed\r\n");
-            }
+            rt_mb_send(&mb, (rt_uint32_t)&mb_str1[0]);
         }
         else
         {
             /* 发送mb_str2地址到邮箱中 */
-            if(rt_mb_send(&mb, (rt_uint32_t)&mb_str2[0]) != RT_EOK)
-            {
-                rt_kprintf("mb send failed\r\n");
-            }
+            rt_mb_send(&mb, (rt_uint32_t)&mb_str2[0]);
         }
 
         /* 延时20个OS Tick */
-        rt_thread_delay(5);
+        rt_thread_delay(20);
     }
 }
 
@@ -100,15 +94,45 @@ int mbox_simple_init()
     return 0;
 }
 
+#ifdef RT_USING_TC
+static void _tc_cleanup()
+{
+    /* 调度器上锁，上锁后，将不再切换到其他线程，仅响应中断 */
+    rt_enter_critical();
+
+    /* 删除线程 */
+    if (tid1 != RT_NULL && tid1->stat != RT_THREAD_CLOSE)
+        rt_thread_delete(tid1);
+    if (tid2 != RT_NULL && tid2->stat != RT_THREAD_CLOSE)
+        rt_thread_delete(tid2);
+
+    /* 执行邮箱对象脱离 */
+    rt_mb_detach(&mb);
+
+    /* 调度器解锁 */
+    rt_exit_critical();
+
+    /* 设置TestCase状态 */
+    tc_done(TC_STAT_PASSED);
+}
+
 int _tc_mbox_simple()
 {
     /* 设置TestCase清理回调函数 */
-//    tc_cleanup(_tc_cleanup);
+    tc_cleanup(_tc_cleanup);
     mbox_simple_init();
 
     /* 返回TestCase运行的最长时间 */
     return 100;
 }
 /* 输出函数命令到finsh shell中 */
-FINSH_FUNCTION_EXPORT_ALIAS(_tc_mbox_simple, __cmd_mbox_simple,  a simple mailbox example);
+FINSH_FUNCTION_EXPORT(_tc_mbox_simple, a simple mailbox example);
+#else
+/* 用户应用入口 */
+int rt_application_init()
+{
+    mbox_simple_init();
 
+    return 0;
+}
+#endif

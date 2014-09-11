@@ -34,7 +34,6 @@ static void thread_entry(void* parameter)
     tc_done(TC_STAT_PASSED);
 }
 
-
 rt_err_t thread_delay_init()
 {
     rt_err_t result;
@@ -43,7 +42,7 @@ rt_err_t thread_delay_init()
         "test",
         thread_entry, RT_NULL,
         &thread_stack[0], sizeof(thread_stack),
-        10, 10);
+        THREAD_PRIORITY, 10);
 
     if (result == RT_EOK)
         rt_thread_startup(&thread);
@@ -53,11 +52,19 @@ rt_err_t thread_delay_init()
     return result;
 }
 
-
+#ifdef RT_USING_TC
 int _tc_thread_delay()
 {
     thread_delay_init();
+
     return 30;
 }
+FINSH_FUNCTION_EXPORT(_tc_thread_delay, a thread delay test);
+#else
+int rt_application_init()
+{
+    thread_delay_init();
 
-FINSH_FUNCTION_EXPORT_ALIAS(_tc_thread_delay, __cmd_thread_delay, example delay.);
+    return 0;
+}
+#endif

@@ -54,15 +54,26 @@ ALIGN(RT_ALIGN_SIZE)
 static char finsh_thread_stack[FINSH_THREAD_STACK_SIZE];
 struct finsh_shell* shell;
 
-#if defined(RT_USING_DFS) && defined(DFS_USING_WORKDIR)
+#if defined(FINSH_USING_MSH) || (defined(RT_USING_DFS) && defined(DFS_USING_WORKDIR))
+#if defined(RT_USING_DFS)
 #include <dfs_posix.h>
+#endif
 const char* finsh_get_prompt()
 {
-    #define _PROMPT "finsh "
-    static char finsh_prompt[RT_CONSOLEBUF_SIZE + 1] = {_PROMPT};
-    
+    #define _MSH_PROMPT "msh "
+    #define _PROMPT 	"finsh "
+    static char finsh_prompt[RT_CONSOLEBUF_SIZE + 1] = {0};
+
+#ifdef FINSH_USING_MSH
+    if (msh_is_used()) strcpy(finsh_prompt, _MSH_PROMPT);
+    else
+#endif
+    strcpy(finsh_prompt, _PROMPT);
+
+#ifdef DFS_USING_WORKDIR
     /* get current working directory */
-    getcwd(&finsh_prompt[6], RT_CONSOLEBUF_SIZE - 8);
+    getcwd(&finsh_prompt[rt_strlen(finsh_prompt)], RT_CONSOLEBUF_SIZE - rt_strlen(finsh_prompt));
+#endif
     strcat(finsh_prompt, ">");
 
     return finsh_prompt;
@@ -519,6 +530,12 @@ void finsh_thread_entry(void* parameter)
             ch = 0;
             shell->line_position ++;
             shell->line_curpos++;
+			if (shell->line_position >= 80) 
+			{
+				/* clear command line */
+				shell->line_position = 0;
+				shell->line_curpos = 0;
+			}
         } /* end of device read */
     }
 }

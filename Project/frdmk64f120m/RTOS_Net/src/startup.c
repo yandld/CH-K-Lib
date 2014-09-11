@@ -3,7 +3,7 @@
 #include "i2c.h"
 #include "systick.h"
 #include "common.h"
-
+#include "board.h"
 #include <rtthread.h>
 #include <rthw.h>
 #include "finsh.h"
@@ -35,8 +35,8 @@ extern int __bss_end;
 #define KINETIS_SRAM_BEGIN    (&__bss_end)
 #endif
 
-#define KINETIS_SRAM_SIZE_IN_KB         (64)
-#define KINETIS_SRAM_END                (0x1FFF0000 + KINETIS_SRAM_SIZE_IN_KB * 1024)
+#define RTT_IRAM_HEAP_START               (0x1FFF0000)
+#define RTT_IRAM_HEAP_END                 (0x1FFF0000 + 0x10000)
 
 
 int rt_hw_usart_init(uint32_t instance, const char * name);
@@ -68,19 +68,27 @@ void rt_application_init(void)
 
 void rtthread_startup(void)
 {
+    /* BM init */
     DelayInit();
-    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
+    UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
+    printf("IRAM: BEIGN:0x%08XU END:0x%08XU SIZE:%dKB\r\n", (uint32_t)RTT_IRAM_HEAP_START, (uint32_t)RTT_IRAM_HEAP_END, ((uint32_t)RTT_IRAM_HEAP_END - (uint32_t)RTT_IRAM_HEAP_START)/1024);
+    rt_system_heap_init((void*)RTT_IRAM_HEAP_START, (void*)RTT_IRAM_HEAP_END);
+    /*
+    SRAM_Init();
+    if(SRAM_SelfTest())
+    {
+        printf("SRAM SelfTest failed will use IRAM\r\n");
+        rt_system_heap_init((void*)RTT_IRAM_HEAP_START, (void*)RTT_IRAM_HEAP_END);
+    }
 
-    //  rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE + SRAM_ADDRESS_BASE));
-    printf("KINETIS_IRAM1_LIMIT:%X\r\n", (uint32_t)KINETIS_IRAM1_LIMIT);
-    printf("KINETIS_IRAM2_LIMIT:%X\r\n", (uint32_t)KINETIS_IRAM2_LIMIT);
-    printf("BEIGN:0x%08XU END:0x%08XU SIZE:%dKB\r\n", (uint32_t)KINETIS_SRAM_BEGIN, (uint32_t)KINETIS_SRAM_END, ((uint32_t)KINETIS_SRAM_END - (uint32_t)KINETIS_SRAM_BEGIN)/1024);
-    
-    rt_system_heap_init((void*)KINETIS_SRAM_BEGIN, (void*)KINETIS_SRAM_END);
-    
+        rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE + SRAM_ADDRESS_BASE));
+    }
+    */
+
     rt_hw_board_init();
 	rt_show_version(); /* print logo */
 	rt_system_timer_init(); /* init timer */
+    
     
 	rt_system_scheduler_init();
 

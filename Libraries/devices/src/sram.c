@@ -181,7 +181,6 @@ uint32_t SRAM_SelfTest(void)
         }
         printf("32bit Loopback test pass!!\r\n");
     }
-    
     return  0;
 }
 

@@ -1,6 +1,5 @@
 #include <rtthread.h>
 #include <rthw.h>
-#include "finsh.h"
 
 #define CPU_USAGE_CALC_TICK    10
 #define CPU_USAGE_LOOP        100
@@ -69,23 +68,3 @@ void cpu_usage_init()
     /* set idle thread hook */
     rt_thread_idle_sethook(cpu_usage_idle_hook);
 }
-
-int _cmd_cpu_usage()
-{
-    rt_uint8_t major, minor;
-    cpu_usage_init();
-    cpu_usage_get(&major, &minor);
-    rt_kprintf("CPUUsage: %d.%d%\r\n", major, minor);
-    return 30;
-}
-
-int _cmd_showmem(int argc, char** argv)
-{
-    if(argc == 3)
-    {
-        rt_hw_show_memory(strtoul(argv[1],0,0), strtoul(argv[2],0,0));
-    }
-}
-FINSH_FUNCTION_EXPORT_ALIAS(_cmd_showmem, __cmd_showmem, show mem eg:showmem 0x2000000 200.);
-FINSH_FUNCTION_EXPORT_ALIAS(_cmd_cpu_usage, __cmd_cpuusage, example delay.);
-

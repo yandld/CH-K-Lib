@@ -38,12 +38,12 @@
 #define FINSH_THREAD_PRIORITY 20
 #endif
 #ifndef FINSH_THREAD_STACK_SIZE
-#define FINSH_THREAD_STACK_SIZE 4096
+#define FINSH_THREAD_STACK_SIZE 2048
 #endif
 #define FINSH_CMD_SIZE		80
 
 #define FINSH_OPTION_ECHO	0x01
-#if defined(RT_USING_DFS) && defined(DFS_USING_WORKDIR)
+#if defined(FINSH_USING_MSH) || (defined(RT_USING_DFS) && defined(DFS_USING_WORKDIR))
 #define FINSH_PROMPT		finsh_get_prompt()
 const char* finsh_get_prompt(void);
 #else

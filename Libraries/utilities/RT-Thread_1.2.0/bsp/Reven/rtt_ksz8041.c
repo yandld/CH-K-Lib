@@ -127,7 +127,7 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
         }
         else
         {
-            rt_kprintf("dm9000 rx: no pbuf\r\n");
+            rt_kprintf("rx: no pbuf%s\r\n", __func__);
             return NULL;
         }
     }

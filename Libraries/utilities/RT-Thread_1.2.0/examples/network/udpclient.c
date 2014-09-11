@@ -8,7 +8,7 @@ void udpclient(const char* url, int port, int count)
    int sock;
    struct hostent *host;
    struct sockaddr_in server_addr;
-    rt_kprintf("port:%d count:%d\r\n", port, count);
+
    /* 通过函数入口参数url获得host地址（如果是域名，会做域名解析） */
    host= (struct hostent *) gethostbyname(url);
 

@@ -2,7 +2,6 @@
 #ifndef __RTTHREAD_CFG_H__
 #define __RTTHREAD_CFG_H__
 
-#define RT_USING_TC
 #define RT_NAME_MAX	   8
 #define RT_ALIGN_SIZE	8
 #define RT_THREAD_PRIORITY_MAX	64
@@ -87,11 +86,8 @@
 //#define RT_LWIP_USING_RT_MEM
 /* Enable ICMP protocol*/
 #define RT_LWIP_ICMP
-/* Enable UDP protocol*/
 #define RT_LWIP_UDP
-/* Enable TCP protocol*/
 #define RT_LWIP_TCP
-/* Enable DNS */
 #define RT_LWIP_DNS
 #define RT_LWIP_DEBUG
 #define RT_LWIP_DHCP

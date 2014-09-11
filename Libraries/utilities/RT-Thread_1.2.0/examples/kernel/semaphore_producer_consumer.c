@@ -44,7 +44,7 @@ void producer_thread_entry(void* parameter)
         cnt++;
 
         /* 暂停一段时间 */
-        rt_thread_delay(10);
+        rt_thread_delay(50);
     }
 
     rt_kprintf("the producer exit!\n");
@@ -54,7 +54,7 @@ void producer_thread_entry(void* parameter)
 void consumer_thread_entry(void* parameter)
 {
     rt_uint32_t no;
-    rt_uint32_t sum = 0;
+    rt_uint32_t sum;
 
     /* 第n个线程，由入口参数传进来 */
     no = (rt_uint32_t)parameter;
@@ -78,7 +78,7 @@ void consumer_thread_entry(void* parameter)
         if (get == 100) break;
 
         /* 暂停一小会时间 */
-        rt_thread_delay(2);
+        rt_thread_delay(10);
     }
 
     rt_kprintf("the consumer[%d] sum is %d \n ", no, sum);
@@ -113,17 +113,46 @@ int semaphore_producer_consumer_init()
     return 0;
 }
 
+#ifdef RT_USING_TC
+static void _tc_cleanup()
+{
+    /* 调度器上锁，上锁后，将不再切换到其他线程，仅响应中断 */
+    rt_enter_critical();
 
+    rt_sem_detach(&sem_lock);
+    rt_sem_detach(&sem_empty);
+    rt_sem_detach(&sem_full);
+
+    /* 删除线程 */
+    if (producer_tid != RT_NULL && producer_tid->stat != RT_THREAD_CLOSE)
+        rt_thread_delete(producer_tid);
+    if (consumer_tid != RT_NULL && consumer_tid->stat != RT_THREAD_CLOSE)
+        rt_thread_delete(consumer_tid);
+
+    /* 调度器解锁 */
+    rt_exit_critical();
+
+    /* 设置TestCase状态 */
+    tc_done(TC_STAT_PASSED);
+}
 
 int _tc_semaphore_producer_consumer()
 {
     /* 设置TestCase清理回调函数 */
-//    tc_cleanup(_tc_cleanup);
+    tc_cleanup(_tc_cleanup);
     semaphore_producer_consumer_init();
 
     /* 返回TestCase运行的最长时间 */
     return 100;
 }
 /* 输出函数命令到finsh shell中 */
-FINSH_FUNCTION_EXPORT_ALIAS(_tc_semaphore_producer_consumer, __cmd_sem_producer_consumer, producer and consumer example);
+FINSH_FUNCTION_EXPORT(_tc_semaphore_producer_consumer, producer and consumer example);
+#else
+/* 用户应用入口 */
+int rt_application_init()
+{
+    semaphore_producer_consumer_init();
 
+    return 0;
+}
+#endif

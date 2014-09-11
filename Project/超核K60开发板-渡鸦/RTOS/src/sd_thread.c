@@ -10,7 +10,6 @@
 void sd_thread_entry(void* parameter)
 {
     rt_thread_t thread = rt_thread_self();
-    rt_kprintf("thread-%s start\r\n", thread->name);
     
     int r;
     rt_device_t  dev = rt_device_find("sd0");

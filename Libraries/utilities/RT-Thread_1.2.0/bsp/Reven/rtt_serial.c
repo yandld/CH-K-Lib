@@ -42,22 +42,18 @@ static uint16_t *gRevCh = RT_NULL;
 static void UART_ISR(uint16_t byteReceived)
 {
     static uint16_t ch;
-    /* enter interrupt */
     rt_interrupt_enter();
     ch = byteReceived;
     gRevCh = &ch;
     rt_hw_serial_isr(&serial);
     
-    /* leave interrupt */
     rt_interrupt_leave();
 }
 
 static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial_configure *cfg)
 {
-    UART_InitTypeDef UART_InitStruct1;
     RT_ASSERT(serial != RT_NULL);
     RT_ASSERT(cfg != RT_NULL);
-    UART_InitStruct1.instance = serial->config.reserved;
     switch(cfg->baud_rate)
     {
         case BAUD_RATE_9600:
@@ -65,14 +61,6 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
         case BAUD_RATE_115200:
             break;
     }
-    
-    /* enable Tx hardware FIFO to enhance proformence */
-    UART_EnableTxFIFO(UART_InitStruct1.instance, true);
-    UART_SetTxFIFOWatermark(UART_InitStruct1.instance, UART_GetTxFIFOSize(HW_UART0));
-    
-    /* enable Rx IT */
-    UART_CallbackRxInstall(UART_InitStruct1.instance, UART_ISR);
-    UART_ITDMAConfig(UART_InitStruct1.instance, kUART_IT_Rx, true);
 	return RT_EOK;
 }
 
@@ -87,6 +75,7 @@ static rt_err_t kinetis_control(struct rt_serial_device *serial, int cmd, void *
         UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, false);
         break;
     case RT_DEVICE_CTRL_SET_INT:
+        UART_CallbackRxInstall(serial->config.reserved, UART_ISR);
         UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, true);
         break;
     }
@@ -120,8 +109,6 @@ static const struct rt_uart_ops kinetis_uart_ops =
     kinetis_getc,
 };
 
-
-
 int rt_hw_usart_init(uint32_t instance, const char * name)
 {
     struct serial_configure config;
@@ -141,6 +128,4 @@ int rt_hw_usart_init(uint32_t instance, const char * name)
                           RT_NULL);
      
 }
-
-
 

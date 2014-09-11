@@ -14,8 +14,6 @@
 #define THREAD_PRIORITY        6
 #elif RT_THREAD_PRIORITY_MAX == 32
 #define THREAD_PRIORITY        25
-#elif RT_THREAD_PRIORITY_MAX == 64
-#define THREAD_PRIORITY        50
 #elif RT_THREAD_PRIORITY_MAX == 256
 #define THREAD_PRIORITY        200
 #endif

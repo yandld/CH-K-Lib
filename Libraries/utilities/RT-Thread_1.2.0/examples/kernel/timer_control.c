@@ -42,10 +42,27 @@ void timer_control_init()
         tc_stat(TC_STAT_END | TC_STAT_FAILED);
 }
 
+#ifdef RT_USING_TC
+static void _tc_cleanup()
+{
+    /* 调度器上锁，上锁后，将不再切换到其他线程，仅响应中断 */
+    rt_enter_critical();
+
+    /* 删除定时器对象 */
+    rt_timer_delete(timer1);
+    timer1 = RT_NULL;
+
+    /* 调度器解锁 */
+    rt_exit_critical();
+
+    /* 设置TestCase状态 */
+    tc_done(TC_STAT_PASSED);
+}
+
 int _tc_timer_control()
 {
     /* 设置TestCase清理回调函数 */
-    //tc_cleanup(_tc_cleanup);
+    tc_cleanup(_tc_cleanup);
 
     /* 执行定时器例程 */
     count = 0;
@@ -55,5 +72,13 @@ int _tc_timer_control()
     return 100;
 }
 /* 输出函数命令到finsh shell中 */
-FINSH_FUNCTION_EXPORT_ALIAS(_tc_timer_control, __cmd_timer_simple,  a timer control example);
+FINSH_FUNCTION_EXPORT(_tc_timer_control, a timer control example);
+#else
+/* 用户应用入口 */
+int rt_application_init()
+{
+    timer_control_init();
 
+    return 0;
+}
+#endif

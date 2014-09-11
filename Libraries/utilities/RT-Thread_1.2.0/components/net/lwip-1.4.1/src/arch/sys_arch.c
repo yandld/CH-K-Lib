@@ -108,7 +108,7 @@ static void tcpip_init_done_callback(void *arg)
                 netif_set_up(ethif->netif);
             }
 
-#ifdef LWIP_NETIF_LINK_CALLBACK
+#if LWIP_NETIF_LINK_CALLBACK
             netif_set_link_up(ethif->netif);
 #endif
 
@@ -621,6 +621,14 @@ RTM_EXPORT(lwip_write);
 RTM_EXPORT(lwip_select);
 RTM_EXPORT(lwip_ioctl);
 RTM_EXPORT(lwip_fcntl);
+
+RTM_EXPORT(lwip_htons);
+RTM_EXPORT(lwip_ntohs);
+RTM_EXPORT(lwip_htonl);
+RTM_EXPORT(lwip_ntohl);
+
+RTM_EXPORT(ipaddr_aton);
+RTM_EXPORT(ipaddr_ntoa);
 
 #if LWIP_DNS
 #include <lwip/netdb.h>

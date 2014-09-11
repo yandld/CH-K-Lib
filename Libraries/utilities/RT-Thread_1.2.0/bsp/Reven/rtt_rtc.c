@@ -3,7 +3,7 @@
 #include "rtc.h"
 #include <time.h>
 #include <rtdevice.h>
-#include <drivers/rrtc.h>
+#include <drivers/rtc.h>
 
 
 static struct rt_device rtc;
@@ -52,5 +52,8 @@ int rt_hw_rtc_init(const char* name)
     /* no private */
     rtc.user_data = RT_NULL;
     rt_device_register(&rtc, name, RT_DEVICE_FLAG_RDWR);
+    
+    /* provent ignore linking from lib */
+    list_date();
     return 0;
 }

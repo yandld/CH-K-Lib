@@ -33,7 +33,6 @@ void rt_hw_board_init(void)
 	rt_console_set_device("uart0");
     rt_hw_sd_init(0, "sd0");
     rt_hw_rtc_init("rtc");  
-//   // rt_hw_lcd_init();
 
 //    rt_hw_spi_bus_init(HW_SPI2, "spi2");
 //    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 

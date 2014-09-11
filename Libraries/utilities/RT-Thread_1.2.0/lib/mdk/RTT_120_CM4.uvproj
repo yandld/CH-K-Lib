@@ -623,11 +623,6 @@
               <FilePath>..\..\components\drivers\rtc\alarm.c</FilePath>
             </File>
             <File>
-              <FileName>rrtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\drivers\rtc\rrtc.c</FilePath>
-            </File>
-            <File>
               <FileName>serial.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\serial\serial.c</FilePath>
@@ -666,6 +661,11 @@
               <FileName>ringbuffer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\src\ringbuffer.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\rtc\rtc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -711,11 +711,6 @@
               <FileName>init.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\net\lwip-1.4.1\src\core\init.c</FilePath>
-            </File>
-            <File>
-              <FileName>mem1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\net\lwip-1.4.1\src\core\mem1.c</FilePath>
             </File>
             <File>
               <FileName>memp.c</FileName>

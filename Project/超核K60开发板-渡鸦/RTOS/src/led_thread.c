@@ -8,12 +8,12 @@
 
 void led_thread_entry(void* parameter)
 {
-    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOB, 21, kGPIO_Mode_OPP);
 	while(1)
 	{
         //GUI_Exec();
         //GUI_TOUCH_Exec();
-        GPIO_ToggleBit(HW_GPIOE, 6);
+        GPIO_ToggleBit(HW_GPIOB, 21);
         rt_thread_delay(10);
 	}
 }

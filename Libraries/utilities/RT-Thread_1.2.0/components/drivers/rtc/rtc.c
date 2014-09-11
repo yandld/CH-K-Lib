@@ -151,7 +151,7 @@ rt_err_t set_time(rt_uint32_t hour, rt_uint32_t minute, rt_uint32_t second)
     tm_new.tm_min  = minute;
     tm_new.tm_sec  = second;
 
-    /* converts the local time in time to calendar time. */
+    /* converts the locapl time in time to calendar time. */
     now = mktime(&tm_new);
 
     device = rt_device_find("rtc");
@@ -177,6 +177,9 @@ void list_date(void)
     now = time(RT_NULL);
     rt_kprintf("%s\n", ctime(&now));
 }
+
+
+
 FINSH_FUNCTION_EXPORT(list_date, show date and time.)
 
 FINSH_FUNCTION_EXPORT(set_date, set date. e.g: set_date(2010,2,28))

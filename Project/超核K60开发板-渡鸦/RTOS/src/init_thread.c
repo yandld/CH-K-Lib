@@ -6,7 +6,6 @@
 #include <drivers/spi.h>
 #include "spi_flash_w25qxx.h"
 
-extern void gui_thread_entry(void* parameter);
 extern void led_thread_entry(void* parameter);
 extern void sd_thread_entry(void* parameter);
 
@@ -18,20 +17,11 @@ void init_thread_entry(void* parameter)
     rt_thread_t thread;
     rt_err_t r;
 
-#ifdef RT_USING_FINSH
-	finsh_system_init(); /* init finsh */
-#endif
-#ifdef RT_USING_DFS
-    RT_DEBUG_LOG(RT_TRUE, ("inital initialized..\r\n"));
 	dfs_init();
-#endif
-#ifdef RT_USING_DFS_ELMFAT
-    RT_DEBUG_LOG(RT_TRUE, ("elm initialized..\r\n"));
 	elm_init();
-#endif
-    
     dfs_romfs_init(); 
-    RT_DEBUG_LOG(RT_TRUE, ("romfs initialized..\r\n"));
+    dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
+    RT_DEBUG_LOG(RT_TRUE, ("file system inialized..\r\n"));
 
 #ifdef RT_USING_LWIP
 //    rt_hw_ksz8041_init(0x01);
@@ -39,8 +29,6 @@ void init_thread_entry(void* parameter)
 	lwip_system_init();
     RT_DEBUG_LOG(RT_TRUE, ("TCP/IP initialized!..\r\n"));
 #endif
-
-    dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
 
 
    // touch_ads7843_init("ads7843", "spi20");
@@ -62,12 +50,15 @@ void init_thread_entry(void* parameter)
 //    {
 //        rt_thread_startup(thread);		
 //    }
-//    /* led thread */
-//    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*8, 0x21, 20);                                                      
-//    if (thread != RT_NULL)
-//    {
-//        rt_thread_startup(thread);		
-//    }
+    /* led thread */
+    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*8, 0x21, 20);                                                      
+    if (thread != RT_NULL)
+    {
+        rt_thread_startup(thread);		
+    }
+    
+	finsh_system_init(); /* init finsh */
+    
     /* supend me */
     thread = rt_thread_self();
     rt_thread_suspend(thread); 

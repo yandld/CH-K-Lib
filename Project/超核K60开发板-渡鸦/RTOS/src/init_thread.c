@@ -32,9 +32,9 @@ void init_thread_entry(void* parameter)
 
 
    // touch_ads7843_init("ads7843", "spi20");
-//    r = w25qxx_init("sf0", "spi21");
+    r = w25qxx_init("sf0", "spi21");
 //    RT_DEBUG_LOG(RT_TRUE, ("w25qxx init@%d...\r\n", r));
-//    r = dfs_mount("sf0", "/", "elm", 0, 0);
+    r = dfs_mount("sf0", "/SF", "elm", 0, 0);
 //    RT_DEBUG_LOG(RT_TRUE, ("dfs_mount@%d...\r\n", r));
 
     /* sd_thread */

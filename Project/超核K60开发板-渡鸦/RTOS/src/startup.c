@@ -34,10 +34,10 @@ void rt_hw_board_init(void)
     rt_hw_sd_init(0, "sd0");
     rt_hw_rtc_init("rtc");  
 
-//    rt_hw_spi_bus_init(HW_SPI2, "spi2");
-//    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
-//    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
-//    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
+    rt_hw_spi_bus_init(HW_SPI2, "spi2");
+    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
 //    
 //    /* attacted spi2 - 1*/
 //    {

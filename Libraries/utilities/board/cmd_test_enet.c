@@ -10,7 +10,8 @@ __align(16)uint8_t gBuffer[1500];
 
 void ENET_ISR(void)
 {
-    printf("%s\r\n", __func__);
+    static int cnt;
+    printf("%s %d\r\n", __func__, cnt++);
     
 }
 
@@ -31,8 +32,12 @@ int DoENET(int argc, char * const argv[])
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
-    r = ksz8041_init(0x01);
-
+    r = ksz8041_init(BOARD_ENET_PHY_ADDR);
+    if(r)
+    {
+        printf("enet phy failed\r\n");
+        return 1;
+    }
     ENET_InitTypeDef ENET_InitStrut;
     ENET_InitStrut.is10MSpped = false;
     ENET_InitStrut.isHalfDuplex = false;
@@ -45,7 +50,7 @@ int DoENET(int argc, char * const argv[])
     while(1)
     {
         ENET_MacSendData(gBuffer, 40);
-        DelayMs(50);
+        DelayMs(500);
         printf("Send\r\n");
     }
     return 0;

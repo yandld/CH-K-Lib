@@ -1,6 +1,7 @@
 #include <rtthread.h>
 #include <rthw.h>
 #include <dfs_romfs.h> 
+#include "board.h"
 #include "components.h"
 #include "rtt_ksz8041.h"
 #include <drivers/spi.h>
@@ -24,13 +25,13 @@ void init_thread_entry(void* parameter)
     RT_DEBUG_LOG(RT_TRUE, ("file system inialized..\r\n"));
 
 #ifdef RT_USING_LWIP
-//    rt_hw_ksz8041_init(0x01);
 	eth_system_device_init();
 	lwip_system_init();
     RT_DEBUG_LOG(RT_TRUE, ("TCP/IP initialized!..\r\n"));
 #endif
 
-
+ rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
+    
    // touch_ads7843_init("ads7843", "spi20");
     r = w25qxx_init("sf0", "spi21");
 //    RT_DEBUG_LOG(RT_TRUE, ("w25qxx init@%d...\r\n", r));

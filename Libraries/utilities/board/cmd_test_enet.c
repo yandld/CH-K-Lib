@@ -51,7 +51,7 @@ int DoENET(int argc, char * const argv[])
     {
         ENET_MacSendData(gBuffer, 40);
         DelayMs(500);
-        printf("Send\r\n");
+        printf("Send, link:%d\r\n", ksz8041_is_linked());
     }
     return 0;
 }

@@ -24,14 +24,16 @@
 
 #define LCD_X_MAX   (128)
 #define LCD_Y_MAX   (160)
-#define RST_PORT     HW_GPIOA
-#define RS_PORT      HW_GPIOA
-#define RST_PIN      (13)
-#define RS_PIN       (12)
-#define LCD_RST_LOW()       do {PAout(RST_PIN) = 0;} while(0)
-#define LCD_RST_HIGH()      do {PAout(RST_PIN) = 1;} while(0)
-#define LCD_RS_LOW()        do {PAout(RS_PIN) = 0;} while(0)
-#define LCD_RS_HIGH()       do {PAout(RS_PIN) = 1;} while(0)
+#define RST_PORT     HW_GPIOE
+#define RS_PORT      HW_GPIOE
+#define RST_PIN      (0)
+#define RS_PIN       (5)
+#define LCD_RST_LOW()       do {GPIO_WriteBit(RST_PORT, RST_PIN, 0);} while(0)
+#define LCD_RST_HIGH()      do {GPIO_WriteBit(RST_PORT, RST_PIN, 1);} while(0)
+#define LCD_RS_LOW()        do {GPIO_WriteBit(RS_PORT, RS_PIN, 0);} while(0)
+#define LCD_RS_HIGH()       do {GPIO_WriteBit(RS_PORT, RS_PIN, 1);} while(0)
+
+
 
 static struct spi_device device;
 

@@ -12,7 +12,7 @@
 #include "common.h"
 
 
-#define SRAM_DEBUG		1
+#define SRAM_DEBUG		0
 #if ( SRAM_DEBUG == 1 )
 #include <stdio.h>
 #define SRAM_TRACE	printf
@@ -108,12 +108,12 @@ uint32_t SRAM_SelfTest(void)
         {
             if( *p_uint8_t != (uint8_t)i )
             {
-                printf("8bit test fail @ 0x%08X\r\nsystem halt!!!!!",(uint32_t)p_uint8_t);
-                while(1);
+                SRAM_TRACE("8bit test fail @ 0x%08X\r\nsystem halt!!!!!",(uint32_t)p_uint8_t);
+                return 1;
             }
             p_uint8_t++;
         }
-        printf("8bit test pass!!\r\n");
+        SRAM_TRACE("8bit test pass!!\r\n");
     }
     
     /**< 16bit test */
@@ -129,12 +129,12 @@ uint32_t SRAM_SelfTest(void)
         {
             if( *p_uint16_t != (uint16_t)i )
             {
-                printf("16bit test fail @ 0x%08X\r\nsystem halt!!!!!",(uint32_t)p_uint16_t);
-                while(1);
+                SRAM_TRACE("16bit test fail @ 0x%08X\r\nsystem halt!!!!!",(uint32_t)p_uint16_t);
+                return 2;
             }
             p_uint16_t++;
         }
-        printf("16bit test pass!!\r\n");
+        SRAM_TRACE("16bit test pass!!\r\n");
     }
 
     /**< 32bit test */
@@ -150,12 +150,12 @@ uint32_t SRAM_SelfTest(void)
         {
             if( *p_uint32_t != (uint32_t)i )
             {
-                printf("32bit test fail @ 0x%08X\r\nsystem halt!!!!!",(uint32_t)p_uint32_t);
-                while(1);
+                SRAM_TRACE("32bit test fail @ 0x%08X\r\nsystem halt!!!!!",(uint32_t)p_uint32_t);
+                return 3;
             }
             p_uint32_t++;
         }
-        printf("32bit test pass!!\r\n");
+        SRAM_TRACE("32bit test pass!!\r\n");
     }
 
     /**< 32bit Loopback test */
@@ -172,14 +172,13 @@ uint32_t SRAM_SelfTest(void)
         {
             if( *p_uint32_t != (uint32_t)p_uint32_t )
             {
-                printf("32bit Loopback test fail @ 0x%08X", (uint32_t)p_uint32_t);
-                printf(" data:0x%08X \r\n", (uint32_t)*p_uint32_t);
-                printf("system halt!!!!!");
-                while(1);
+                SRAM_TRACE("32bit Loopback test fail @ 0x%08X", (uint32_t)p_uint32_t);
+                SRAM_TRACE(" data:0x%08X \r\n", (uint32_t)*p_uint32_t);
+                return 4;
             }
             p_uint32_t++;
         }
-        printf("32bit Loopback test pass!!\r\n");
+        SRAM_TRACE("32bit Loopback test pass!!\r\n");
     }
     return  0;
 }

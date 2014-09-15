@@ -3,19 +3,30 @@
 
 #include "gpio.h"
 #include "gui.h"
+#include "board.h"
 
 #include "my_gui.h"
 
 void led_thread_entry(void* parameter)
 {
-    GPIO_QuickInit(HW_GPIOB, 21, kGPIO_Mode_OPP);
-	while(1)
-	{
-        //GUI_Exec();
-        //GUI_TOUCH_Exec();
-        GPIO_ToggleBit(HW_GPIOB, 21);
-        rt_thread_delay(10);
-	}
+    int i,j,led_num;
+    
+    uint32_t led_port_tab[] = BOARD_LED_GPIO_BASES;
+    uint32_t led_pin_tab[] = BOARD_LED_PIN_BASES;
+    led_num = ARRAY_SIZE(led_port_tab);
+    for(i=0; i<led_num; i++)
+    {
+        GPIO_QuickInit(led_port_tab[i], led_pin_tab[i], kGPIO_Mode_OPP);
+    }
+    
+    while(1)
+    {
+        for(i=0;i<led_num;i++)
+        {
+            GPIO_ToggleBit(led_port_tab[i], led_pin_tab[i]);
+        }
+        DelayMs(500);
+    }
 }
 
 

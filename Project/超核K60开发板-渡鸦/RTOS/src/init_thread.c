@@ -28,15 +28,18 @@ void init_thread_entry(void* parameter)
 	eth_system_device_init();
 	lwip_system_init();
     RT_DEBUG_LOG(RT_TRUE, ("TCP/IP initialized!..\r\n"));
+    RT_DEBUG_LOG(RT_TRUE, ("initalizing enet phy...\r\n"));
+    rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
 #endif
-
- rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
+    
+    
     
    // touch_ads7843_init("ads7843", "spi20");
     r = w25qxx_init("sf0", "spi21");
-//    RT_DEBUG_LOG(RT_TRUE, ("w25qxx init@%d...\r\n", r));
+    if(r) RT_DEBUG_LOG(RT_TRUE, ("w25qxx init fail@%d...\r\n", r));
     r = dfs_mount("sf0", "/SF", "elm", 0, 0);
-//    RT_DEBUG_LOG(RT_TRUE, ("dfs_mount@%d...\r\n", r));
+    if(r) RT_DEBUG_LOG(RT_TRUE, ("dfs_mount fail@%d...\r\n", r));
+    
 
     /* sd_thread */
     thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 

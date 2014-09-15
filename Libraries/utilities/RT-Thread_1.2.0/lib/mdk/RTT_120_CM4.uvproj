@@ -364,7 +364,7 @@
               <MiscControls>--c99</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\include;..\src;..\..\components\finsh;..\..\components\dfs\include;..\..\components\drivers\include;..\..\components\drivers\include\drivers;..\..\components\drivers\i2c;..\..\components\net\lwip-1.4.1\src;..\..\components\net\lwip-1.4.1\src\include;..\..\components\net\lwip-1.4.1\src\arch\include;..\..\components\net\lwip-1.4.1\src\include\netif;..\..\components\net\lwip-1.4.1\src\include\ipv4;..\..\components\utilities\logtrace;..\..\components\dfs\filesystems\ramfs;..\..\components\dfs\filesystems\romfs;..\..\..\..\startup\DeviceSupport;..\..\..\..\startup\CoreSupport</IncludePath>
+              <IncludePath>..\..\include;..\src;..\..\components\finsh;..\..\components\dfs\include;..\..\components\drivers\include;..\..\components\drivers\include\drivers;..\..\components\drivers\i2c;..\..\components\net\lwip-1.4.1\src;..\..\components\net\lwip-1.4.1\src\include;..\..\components\net\lwip-1.4.1\src\arch\include;..\..\components\net\lwip-1.4.1\src\include\netif;..\..\components\net\lwip-1.4.1\src\include\ipv4;..\..\components\utilities\logtrace;..\..\components\dfs\filesystems\ramfs;..\..\components\dfs\filesystems\romfs;..\..\..\..\startup\DeviceSupport;..\..\..\..\startup\CoreSupport;..\..\components\dfs\filesystems\nfs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1106,6 +1106,71 @@
               <FileName>showmem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\libcpu\arm\common\showmem.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>rtt_nfs</GroupName>
+          <Files>
+            <File>
+              <FileName>dfs_nfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\dfs_nfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>mount_clnt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\mount_clnt.c</FilePath>
+            </File>
+            <File>
+              <FileName>mount_xdr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\mount_xdr.c</FilePath>
+            </File>
+            <File>
+              <FileName>nfs_clnt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\nfs_clnt.c</FilePath>
+            </File>
+            <File>
+              <FileName>nfs_xdr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\nfs_xdr.c</FilePath>
+            </File>
+            <File>
+              <FileName>auth_none.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\rpc\auth_none.c</FilePath>
+            </File>
+            <File>
+              <FileName>clnt_generic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\rpc\clnt_generic.c</FilePath>
+            </File>
+            <File>
+              <FileName>clnt_udp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\rpc\clnt_udp.c</FilePath>
+            </File>
+            <File>
+              <FileName>pmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\rpc\pmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>rpc_prot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\rpc\rpc_prot.c</FilePath>
+            </File>
+            <File>
+              <FileName>xdr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\rpc\xdr.c</FilePath>
+            </File>
+            <File>
+              <FileName>xdr_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\dfs\filesystems\nfs\rpc\xdr_mem.c</FilePath>
             </File>
           </Files>
         </Group>

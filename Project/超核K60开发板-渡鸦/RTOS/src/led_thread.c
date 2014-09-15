@@ -25,7 +25,7 @@ void led_thread_entry(void* parameter)
         {
             GPIO_ToggleBit(led_port_tab[i], led_pin_tab[i]);
         }
-        DelayMs(500);
+        rt_thread_delay(50);
     }
 }
 

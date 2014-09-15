@@ -31,35 +31,27 @@ void init_thread_entry(void* parameter)
     RT_DEBUG_LOG(RT_TRUE, ("initalizing enet phy...\r\n"));
     rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
 #endif
-    
-    
-    
-   // touch_ads7843_init("ads7843", "spi20");
+
+    // touch_ads7843_init("ads7843", "spi20");
     r = w25qxx_init("sf0", "spi21");
     if(r) RT_DEBUG_LOG(RT_TRUE, ("w25qxx init fail@%d...\r\n", r));
     r = dfs_mount("sf0", "/SF", "elm", 0, 0);
-    if(r) RT_DEBUG_LOG(RT_TRUE, ("dfs_mount fail@%d...\r\n", r));
+    if(r) RT_DEBUG_LOG(RT_TRUE, ("sf0 mount fail@%d...\r\n", r));
     
 
     /* sd_thread */
     thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
-    if (thread != RT_NULL)
-    {
-        rt_thread_startup(thread);		
-    }
-//    
+    if (thread != RT_NULL) rt_thread_startup(thread);
+         
 //   /* gui thread */
-//    thread = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*8, 0x23, 20);                                                      
+//    thread = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*8, 0x23, 20);
 //    if (thread != RT_NULL)
 //    {
-//        rt_thread_startup(thread);		
+//        rt_thread_startup(thread);
 //    }
     /* led thread */
-    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024*8, 0x21, 20);                                                      
-    if (thread != RT_NULL)
-    {
-        rt_thread_startup(thread);		
-    }
+    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024, 0x24, 20);
+    if (thread != RT_NULL) rt_thread_startup(thread);
     
 	finsh_system_init(); /* init finsh */
     

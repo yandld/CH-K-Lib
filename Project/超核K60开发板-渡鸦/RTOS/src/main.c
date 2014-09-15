@@ -16,6 +16,7 @@
 
 
 int rt_hw_usart_init(uint32_t instance, const char * name);
+int rt_hw_beep_init(const char *name);
 int rt_hw_spi_bus_init(uint32_t instance, const char *name);
 int rt_hw_rtc_init(const char* name);
 void rt_hw_sd_init(uint32_t instance, const char *name);
@@ -27,7 +28,7 @@ void rt_hw_board_init(void)
 	rt_console_set_device("uart0");
     rt_hw_sd_init(0, "sd0");
     rt_hw_rtc_init("rtc");  
-
+    rt_hw_beep_init("beep");
     rt_hw_spi_bus_init(HW_SPI2, "spi2");
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
@@ -95,7 +96,7 @@ void bm_init(void)
     printf("total:%d used:%d max_used:%d\r\n", total, used, max_used);
     
     /* init systick */
-    SYSTICK_Init(1000*1000/RT_TICK_PER_SECOND);
+    SYSTICK_Init(1000*(1000/RT_TICK_PER_SECOND));
     SYSTICK_ITConfig(ENABLE);
     SYSTICK_Cmd(ENABLE);
 }
@@ -105,6 +106,12 @@ void SysTick_Handler(void)
     rt_interrupt_enter();
     rt_tick_increase();
     rt_interrupt_leave();
+}
+
+void DelayMs(uint32_t ms)
+{
+    if(ms < (1000/RT_TICK_PER_SECOND)) rt_thread_delay(1);
+    else rt_thread_delay(ms/(1000/RT_TICK_PER_SECOND));  
 }
 
 int main(void)

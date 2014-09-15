@@ -6,12 +6,6 @@
 
 #include <stdint.h>
 
-void SysTick_Handler(void)
-{
-    rt_interrupt_enter();
-    rt_tick_increase();
-    rt_interrupt_leave();
-}
 
 void DelayMs(uint32_t ms)
 {

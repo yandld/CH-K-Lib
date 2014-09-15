@@ -52,7 +52,7 @@
 #define FINSH_USING_SYMTAB
 #define FINSH_USING_DESCRIPTION
 #define FINSH_USING_MSH
-//#define FINSH_USING_MSH_ONLY
+#define FINSH_USING_MSH_DEFAULT
 
 /* SECTION: device filesystem */
 #define RT_USING_DFS 
@@ -68,11 +68,11 @@
 /* Maximum sector size to be handled. */
 #define RT_DFS_ELM_MAX_SECTOR_SIZE  4096
 
-//#define RT_USING_DFS_NFS
-#define RT_NFS_HOST_EXPORT "192.168.1.202:/"
+#define RT_USING_DFS_NFS
+#define RT_NFS_HOST_EXPORT "10.193.32.65:/"
 
 /* the max number of mounted filesystem */
-#define DFS_FILESYSTEMS_MAX			2
+#define DFS_FILESYSTEMS_MAX			3
 /* the max number of opened files 		*/
 #define DFS_FD_MAX					4
 

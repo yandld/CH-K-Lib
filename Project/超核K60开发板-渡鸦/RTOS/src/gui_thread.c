@@ -4,7 +4,7 @@
 #include "DIALOG.h"
 #include <math.h>
 
-/*
+
 static void GUI_SettingInit(void)
 {
 	GUI_SetBkColor(GUI_BLACK); 	
@@ -12,17 +12,15 @@ static void GUI_SettingInit(void)
     ICONVIEW_EnableStreamAuto();
     BUTTON_SetDefaultSkin(BUTTON_SKIN_FLEX);
 }
-*/
+
 
 void gui_thread_entry(void* parameter)
 {
-    rt_thread_t thread = rt_thread_self();
-    rt_kprintf("thread-%s start\r\n", thread->name);
-    //GUI_Init();
-   // GUI_SettingInit();
+  //  GUI_Init();
+  //  GUI_SettingInit();
 	//GUI_DispString("GUI system OK\r\n");//œ‘ æ≤‚ ‘
   //  GUI_DispString(GUI_GetVersionString());
-
+//    MainTask();
   //  WM_HWIN hWin;
   //  GUI_CURSOR_Show();
   //  hWin = MYGUI_DLG_CreateDesktop();

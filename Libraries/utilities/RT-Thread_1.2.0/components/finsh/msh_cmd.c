@@ -217,3 +217,19 @@ FINSH_FUNCTION_EXPORT_ALIAS(cmd_free, __cmd_free, Show the memory usage in the s
 
 #endif
 
+int mountnfs(int argc, char** argv)
+{
+	const char * mountpath = "/NFS";
+	rt_kprintf("mount nfs to %s...", mountpath);
+	if (dfs_mount(RT_NULL, argv[1], "nfs", 0, argv[2]) == 0)
+	{
+		rt_kprintf("[ok]\n");
+		return 0;
+	}
+	else
+	{
+		rt_kprintf("[failed!]\n");
+		return -1;
+	}
+}
+MSH_CMD_EXPORT(mountnfs, mount nfs eg: mountnfs /NFS 192.168.1.100:/)

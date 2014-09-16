@@ -68,8 +68,8 @@ void rt_application_init(void)
 void rtthread_startup(void)
 {
     rt_hw_board_init();
-	rt_show_version(); /* print logo */
-	rt_system_timer_init(); /* init timer */
+	rt_show_version();
+	rt_system_timer_init();
     
     rt_system_scheduler_init();
 
@@ -83,7 +83,6 @@ void rtthread_startup(void)
 /* baremetel init */
 void bm_init(void)
 {
-    int r;
     DelayInit();
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
    // printf("IRAM: BEIGN:0x%08XU END:0x%08XU SIZE:%dKB\r\n", (uint32_t)RTT_IRAM_HEAP_START, (uint32_t)RTT_IRAM_HEAP_END, ((uint32_t)RTT_IRAM_HEAP_END - (uint32_t)RTT_IRAM_HEAP_START)/1024);

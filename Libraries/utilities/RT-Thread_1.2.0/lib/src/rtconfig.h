@@ -41,6 +41,8 @@
 #define RT_USING_DEVICE
 #define RT_USING_SERIAL
 #define RT_USING_SPI
+#define RT_USING_I2C
+#define RT_USING_I2C_BITOPS
 /* SECTION: Console options */
 #define RT_USING_CONSOLE
 /* the buffer size of console*/
@@ -84,14 +86,12 @@
 #define RT_USING_LWIP
 /* LwIP uses RT-Thread Memory Management */
 //#define RT_LWIP_USING_RT_MEM
-/* Enable ICMP protocol*/
 #define RT_LWIP_ICMP
 #define RT_LWIP_UDP
 #define RT_LWIP_TCP
 #define RT_LWIP_DNS
 #define RT_LWIP_DEBUG
 #define RT_LWIP_DHCP
-#define MEMP_NUM_TCP_SEG    32
 /* the number of simulatenously active TCP connections*/
 #define RT_LWIP_TCP_PCB_NUM	5
 
@@ -127,6 +127,7 @@
 #define RT_LWIP_TCP_SND_BUF	8192
 /* TCP receive window. */
 #define RT_LWIP_TCP_WND		8192
+
 
 //#define CHECKSUM_CHECK_TCP              0
 //#define CHECKSUM_CHECK_IP               0

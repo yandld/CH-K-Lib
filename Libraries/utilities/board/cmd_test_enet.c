@@ -12,7 +12,6 @@ void ENET_ISR(void)
 {
     static int cnt;
     printf("%s %d\r\n", __func__, cnt++);
-    
 }
 
 int DoENET(int argc, char * const argv[])

@@ -9,7 +9,7 @@
 #include "rtt_spi.h"
 static struct rt_spi_bus kinetis_spi;
 
-#define  RTT_SPI_DRIVER_DEBUG  1
+#define  RTT_SPI_DRIVER_DEBUG  0
 
 #if (RTT_SPI_DRIVER_DEBUG == 1)
 #define RTT_SPI_DRIVER_TRACE	rt_kprintf

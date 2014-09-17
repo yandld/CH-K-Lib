@@ -10,6 +10,7 @@
 /* SECTION: RT_DEBUG */
 /* Thread Debug */
 #define RT_DEBUG
+#define RT_USING_MODULE
 
 #define RT_USING_OVERFLOW_CHECK
 #define RT_USING_HOOK

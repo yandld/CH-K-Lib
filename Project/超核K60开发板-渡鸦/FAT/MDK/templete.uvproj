@@ -433,16 +433,6 @@
               <FilePath>..\src\cmd_cpuinfo.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_ftm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_ftm.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_sram.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_spi.c</FilePath>
@@ -651,7 +641,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>utilities</GroupName>
+          <GroupName>utilities\shell</GroupName>
           <Files>
             <File>
               <FileName>shell.c</FileName>
@@ -672,11 +662,6 @@
               <FileName>shell_cmdhist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
-            </File>
-            <File>
-              <FileName>mempool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\mempool\mempool.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -736,7 +721,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>hw_test</GroupName>
+          <GroupName>utilites\board</GroupName>
           <Files>
             <File>
               <FileName>cmd_test_adc.c</FileName>
@@ -1249,16 +1234,6 @@
               <FilePath>..\src\cmd_cpuinfo.c</FilePath>
             </File>
             <File>
-              <FileName>cmd_ftm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_ftm.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\cmd_sram.c</FilePath>
-            </File>
-            <File>
               <FileName>cmd_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_spi.c</FilePath>
@@ -1510,7 +1485,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>utilities</GroupName>
+          <GroupName>utilities\shell</GroupName>
           <Files>
             <File>
               <FileName>shell.c</FileName>
@@ -1531,11 +1506,6 @@
               <FileName>shell_cmdhist.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\shell\shell_cmdhist.c</FilePath>
-            </File>
-            <File>
-              <FileName>mempool.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\mempool\mempool.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1595,7 +1565,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>hw_test</GroupName>
+          <GroupName>utilites\board</GroupName>
           <Files>
             <File>
               <FileName>cmd_test_adc.c</FileName>

@@ -43,7 +43,7 @@ static void LCD_COM(uint8_t cmd)
     spi_write(&device, &cmd, 1, true);
 }
 
-static void LCD_DATA(uint8_t data)
+static inline void LCD_DATA(uint8_t data)
 {
     LCD_RS_HIGH();
     spi_write(&device, &data, 1, true);
@@ -202,5 +202,11 @@ int ili9163_init(spi_bus_t bus, uint32_t cs)
     return 0;
 }
 
-
+void GUI_DrawPixel(int color, int x, int y)
+{
+    ili9163_set_window(x,y,1,1);//设置光标位置 
+	LCD_COM(0x2C);
+    LCD_DATA(color>>8);
+    LCD_DATA(color);
+}
 

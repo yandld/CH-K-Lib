@@ -63,7 +63,7 @@ int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance)
 {
     /* init hardware with defalt settings */
     SPI_InitTypeDef SPI_InitStruct1;
-    SPI_InitStruct1.baudrate = 5000*1000;
+    SPI_InitStruct1.baudrate = 10000*1000;
     SPI_InitStruct1.frameFormat = kSPI_CPOL0_CPHA0;
     SPI_InitStruct1.dataSize = 8;
     SPI_InitStruct1.instance = instance;

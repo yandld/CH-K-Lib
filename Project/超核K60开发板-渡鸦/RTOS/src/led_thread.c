@@ -9,7 +9,7 @@
 
 void led_thread_entry(void* parameter)
 {
-    int i,j,led_num;
+    int i,led_num;
     
     uint32_t led_port_tab[] = BOARD_LED_GPIO_BASES;
     uint32_t led_pin_tab[] = BOARD_LED_PIN_BASES;

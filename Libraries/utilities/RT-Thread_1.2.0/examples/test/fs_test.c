@@ -21,7 +21,7 @@ static rt_uint32_t stop_flag = 0;
 static rt_thread_t fsrw1_thread = RT_NULL;
 static rt_thread_t fsrw2_thread = RT_NULL;
 
-#define fsrw1_fn                   "/SF/test1.dat"
+#define fsrw1_fn                   "/test1.dat"
 #define fsrw1_data_len             120               /* Less than 256 */
 static void fsrw1_thread_entry(void* parameter)
 {
@@ -129,7 +129,7 @@ static void fsrw1_thread_entry(void* parameter)
     }
 }
 
-#define fsrw2_fn                   "/SD/test2.dat"
+#define fsrw2_fn                   "/test2.dat"
 #define fsrw2_data_len             180              /* Less than 256 */
 static void fsrw2_thread_entry(void* parameter)
 {

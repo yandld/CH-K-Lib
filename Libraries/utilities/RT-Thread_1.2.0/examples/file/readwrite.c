@@ -7,18 +7,19 @@
 #include <rtthread.h>
 #include <dfs_posix.h> /* 当需要使用文件操作时，需要包含这个头文件 */
 
+#define TEST_FN		"/test.dat"
 
 /* 测试用的数据和缓冲 */
 static char test_data[120], buffer[120];
 
 /* 文件读写测试 */
-void readwrite(int argc, char** argv)
+void readwrite(const char* filename)
 {
 	int fd;
 	int index, length;
 
 	/* 只写 & 创建 打开 */
-	fd = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0);
+	fd = open(TEST_FN, O_WRONLY | O_CREAT | O_TRUNC, 0);
 	if (fd < 0)
 	{
 		rt_kprintf("open file for write failed\n");
@@ -44,7 +45,7 @@ void readwrite(int argc, char** argv)
 	close(fd);
 
 	/* 只写并在末尾添加打开 */
-	fd = open(argv[1], O_WRONLY | O_CREAT | O_APPEND, 0);
+	fd = open(TEST_FN, O_WRONLY | O_CREAT | O_APPEND, 0);
 	if (fd < 0)
 	{
 		rt_kprintf("open file for append write failed\n");
@@ -62,7 +63,7 @@ void readwrite(int argc, char** argv)
 	close(fd);
 
 	/* 只读打开进行数据校验 */
-	fd = open(argv[1], O_RDONLY, 0);
+	fd = open(TEST_FN, O_RDONLY, 0);
 	if (fd < 0)
 	{
 		rt_kprintf("check: open file for read failed\n");
@@ -118,5 +119,5 @@ void readwrite(int argc, char** argv)
 #ifdef RT_USING_FINSH
 #include <finsh.h>
 /* 输出函数到finsh shell命令行中 */
-MSH_CMD_EXPORT(readwrite, perform file read and write test readwrite /test.dat);
+FINSH_FUNCTION_EXPORT(readwrite, perform file read and write test);
 #endif

@@ -5,13 +5,20 @@
 #include "components.h"
 #include "rtt_ksz8041.h"
 #include <drivers/spi.h>
+#include <drivers/i2c.h>
+#include <drivers/i2c_dev.h>
+#include <drivers/i2c-bit-ops.h>
 #include "spi_flash_w25qxx.h"
+#include "rtt_i2c_bit_ops.h"
 
 void led_thread_entry(void* parameter);
 void sd_thread_entry(void* parameter);
 void gui_thread_entry(void* parameter);
 
+
 rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
+
+
 
 void init_thread_entry(void* parameter)
 {
@@ -47,7 +54,18 @@ void init_thread_entry(void* parameter)
 #endif
 #endif
     
+#ifdef RT_USING_I2C
+    rt_i2c_core_init();
+    rt_hw_i2c_bit_ops_bus_init("i2c0");
+#endif
+    
 
+//    rt_i2c_master_send(&i2c_bus,
+//                             0x55,
+//                             1,
+//                             RT_NULL,
+//                             1);
+    
     // touch_ads7843_init("ads7843", "spi20");
     r = w25qxx_init("sf0", "spi21");
     if(r) RT_DEBUG_LOG(RT_TRUE, ("w25qxx init fail@%d...\r\n", r));
@@ -68,6 +86,7 @@ void init_thread_entry(void* parameter)
     
 	finsh_system_init(); /* init finsh */
     
+    at24cxx__test();
     /* supend me */
     thread = rt_thread_self();
     rt_thread_suspend(thread); 

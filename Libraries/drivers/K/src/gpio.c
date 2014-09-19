@@ -317,6 +317,7 @@ void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data)
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
     assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pinIndex));
 }
  /**

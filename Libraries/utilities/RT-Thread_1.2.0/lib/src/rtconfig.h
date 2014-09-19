@@ -43,6 +43,8 @@
 #define RT_USING_SERIAL
 #define RT_USING_SPI
 #define RT_USING_I2C
+#define RT_I2C_BIT_DEBUG
+//#define RT_I2C_DEBUG
 #define RT_USING_I2C_BITOPS
 /* SECTION: Console options */
 #define RT_USING_CONSOLE

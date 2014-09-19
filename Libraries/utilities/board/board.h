@@ -41,6 +41,13 @@
 #define BOARD_CLKOUT_PORT           HW_GPIOA
 #define BOARD_CLKOUT_PIN            (11)
 
+#define BOARD_I2C_SCL_PORT          HW_GPIOB
+#define BOARD_I2C_SDA_PORT          HW_GPIOB
+#define BOARD_I2C_SCL_PIN           2
+#define BOARD_I2C_SDA_PIN           3
+
+
+
 #elif CHK60EVB1
 
 #define BOARD_UART_DEBUG_MAP        UART4_RX_PC14_TX_PC15

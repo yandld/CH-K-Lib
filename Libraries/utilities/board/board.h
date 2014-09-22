@@ -86,12 +86,13 @@
 #define BOARD_LED_PIN_BASES         { 6, 7 }
 #define BOARD_I2C_MAP               I2C0_SCL_PE19_SDA_PE18
 #define BOARD_ADC_MAP               ADC0_SE1A_PE16
-#define BOARD_LPTMR_MAP             LPTMR_ALT1_PA19
+#define BOARD_LPTMR_MAP             LPTMR_ALT2_PC05
 #define BOARD_KEY_GPIO_BASES        {0}
 #define BOARD_KEY_PIN_BASES         {0}
 #define BOARD_SPI_MAP               SPI1_SCK_PE02_MOSI_PE01_MISO_PE00
-#define BOARD_SPI_CS_PORT              HW_GPIOE
-#define BOARD_SPI_CS_PIN               4
+#define BOARD_SPI_CS_PORT           HW_GPIOE
+#define BOARD_SPI_CS_PIN            4
+#define BOARD_FTM_MAP               TPM0_CH3_PC04
 
 #elif defined(FRDM)
 

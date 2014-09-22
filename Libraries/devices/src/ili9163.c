@@ -202,6 +202,7 @@ int ili9163_init(spi_bus_t bus, uint32_t cs)
     return 0;
 }
 
+/* CHGUI函数接口 CHGUI只需要使用打点函数就可以实现基本的GUI操作 */
 void GUI_DrawPixel(int color, int x, int y)
 {
     ili9163_set_window(x,y,1,1);//设置光标位置 

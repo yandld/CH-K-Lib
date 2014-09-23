@@ -46,10 +46,7 @@ static rt_size_t rt_sd_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size
 {
     int r;
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
-    __disable_irq();
-    rt_kprintf("pos:%d size:%d\r\n",pos, size);
     r = SD_ReadMultiBlock(pos, (rt_uint8_t *)buffer, size);
-    __enable_irq();
     rt_mutex_release(mutex);
     if(r)
     {
@@ -64,10 +61,7 @@ static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, const void* buffer,
 {
     int r;
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
-    rt_kprintf("w pos:%d size:%d\r\n",pos, size);
-   // __disable_irq();
     r = SD_WriteMultiBlock(pos, (rt_uint8_t *)buffer, size);
-  //  __enable_irq();
     rt_mutex_release(mutex);
     if(r)
     {

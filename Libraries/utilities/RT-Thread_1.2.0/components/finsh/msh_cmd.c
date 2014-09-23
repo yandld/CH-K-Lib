@@ -217,18 +217,29 @@ FINSH_FUNCTION_EXPORT_ALIAS(cmd_free, __cmd_free, Show the memory usage in the s
 
 #endif
 
+#include "common.h"
+int cmd_reset(int argc, char** argv)
+{
+    NVIC_SystemReset();
+    return 0;
+}
+FINSH_FUNCTION_EXPORT_ALIAS(cmd_reset, __cmd_reset, reset.);
+
+
 #ifdef RT_USING_DFS_NFS
 int mountnfs(const char * host)
 {
+    int r;
 	rt_kprintf("mount nfs to %s...", "/NFS");
-	if (dfs_mount(RT_NULL, "/NFS", "nfs", 0, host) == 0)
+    r = dfs_mount(RT_NULL, "/NFS", "nfs", 0, host);
+	if (!r)
 	{
 		rt_kprintf("[ok]\n");
 		return 0;
 	}
 	else
 	{
-		rt_kprintf("[failed!]\n");
+		rt_kprintf("[failed!]%d\n", r);
 		return -1;
 	}
 }

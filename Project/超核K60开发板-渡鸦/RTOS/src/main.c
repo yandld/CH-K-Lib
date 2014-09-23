@@ -10,7 +10,7 @@
 #include "spi.h"
 #include <drivers/spi.h>
 #include "rtt_spi.h"
-
+#include "sram.h"
 #define RTT_IRAM_HEAP_START               (0x1FFF0000)
 #define RTT_IRAM_HEAP_END                 (0x1FFF0000 + 0x10000)
 
@@ -88,7 +88,9 @@ void bm_init(void)
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
    // printf("IRAM: BEIGN:0x%08XU END:0x%08XU SIZE:%dKB\r\n", (uint32_t)RTT_IRAM_HEAP_START, (uint32_t)RTT_IRAM_HEAP_END, ((uint32_t)RTT_IRAM_HEAP_END - (uint32_t)RTT_IRAM_HEAP_START)/1024);
     printf("loading RAM to OS...\r\n");
+    //SRAM_Init();
     rt_system_heap_init((void*)RTT_IRAM_HEAP_START, (void*)RTT_IRAM_HEAP_END);
+    //rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE+SRAM_ADDRESS_BASE));
     
     /* list RAM use */
     rt_uint32_t total, used, max_used;

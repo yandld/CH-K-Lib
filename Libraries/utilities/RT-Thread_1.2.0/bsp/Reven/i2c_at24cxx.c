@@ -1,6 +1,14 @@
 #include <stdint.h>
 #include "rtt_i2c_bit_ops.h"
-#include <drivers/i2c.h>
+#include "i2c_at24cxx.h"
+
+#ifdef AT24CXX_DEBUG
+#define AT24CXX_TRACE         rt_kprintf
+#else
+#define AT24CXX_TRACE(...)
+#endif /* #ifdef AT24CXX_DEBUG */
+
+static struct at24cxx_device  at24cxx_device;
 
 void at24cxx__test(void)
 {
@@ -22,4 +30,19 @@ void at24cxx__test(void)
         while(1);
     }
 }
+
+rt_err_t at24cxx_init(const char * device_name, const char * i2c_bus_name)
+{
+    /* initialize mutex */
+    if (rt_mutex_init(&at24cxx_device.lock, device_name, RT_IPC_FLAG_FIFO) != RT_EOK)
+    {
+        rt_kprintf("init sd lock mutex failed\n");
+        return -RT_ENOSYS;
+    }
+    
+    return RT_EOK;
+}
+
+
+                            
 

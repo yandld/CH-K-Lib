@@ -77,7 +77,7 @@
 #define RT_NFS_HOST_EXPORT "10.193.32.65:/"
 
 /* the max number of mounted filesystem */
-#define DFS_FILESYSTEMS_MAX			3
+#define DFS_FILESYSTEMS_MAX			4
 /* the max number of opened files 		*/
 #define DFS_FD_MAX					4
 

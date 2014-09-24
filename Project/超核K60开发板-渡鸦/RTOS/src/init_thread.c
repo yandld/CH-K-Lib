@@ -62,12 +62,6 @@ void init_thread_entry(void* parameter)
     /* init eeporm */
     at24cxx_init("at24c02", "i2c0");
     rt_uint8_t buf[32];
-  //  at24cxx_read(RT_NULL, 0, buf, 32);
-//    rt_i2c_master_send(&i2c_bus,
-//                             0x55,
-//                             1,
-//                             RT_NULL,
-//                             1);
     
     // touch_ads7843_init("ads7843", "spi20");
     r = w25qxx_init("sf0", "spi21");
@@ -89,7 +83,7 @@ void init_thread_entry(void* parameter)
     
 	finsh_system_init(); /* init finsh */
     
-    at24cxx__test();
+    at24cxx_test();
     /* supend me */
     thread = rt_thread_self();
     rt_thread_suspend(thread); 

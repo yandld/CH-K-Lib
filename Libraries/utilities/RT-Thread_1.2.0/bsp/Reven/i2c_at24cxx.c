@@ -25,7 +25,7 @@ static const struct at24cxx_attr at24cxx_attr_table[] =
     {"at24c16",   2048, 16,0x50},
 };
 
-void at24cxx__test(void)
+void at24cxx_test(void)
 {
     int i, r;
     rt_uint8_t buf[] ={0x44, 0x43, 0x66};
@@ -94,6 +94,7 @@ static rt_size_t read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t siz
     int i;
     rt_uint8_t *p = buffer;
     AT24CXX_TRACE("at24c02 read pos=%d size=%d\r\n", pos, size);
+    
     lock(&at24cxx_device);
     pos = pos*at24cxx_device.geometry.bytes_per_sector;
     rt_i2c_master_recv(at24cxx_device.rt_i2c_bus_device,

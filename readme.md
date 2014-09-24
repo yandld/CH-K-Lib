@@ -13,7 +13,7 @@
 3. www.beyondcore.net
 4. [固件库源代码包下载](http://git.oschina.net/yandld/CH-K-Lib/repository/archive?ref=master)
 
-## 所支持的IDE [下载](http://pan.baidu.com/s/1jGLvuRG)
+## 所支持的[IDE](http://pan.baidu.com/s/1kTgJLaf)
 * Keil(MDK) V5.00 以上版本 
 * IAR 6.6 以上版本
 

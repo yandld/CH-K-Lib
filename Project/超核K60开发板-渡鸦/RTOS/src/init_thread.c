@@ -59,7 +59,10 @@ void init_thread_entry(void* parameter)
     rt_hw_i2c_bit_ops_bus_init("i2c0");
 #endif
     
-
+    /* init eeporm */
+    at24cxx_init("at24c02", "i2c0");
+    rt_uint8_t buf[32];
+  //  at24cxx_read(RT_NULL, 0, buf, 32);
 //    rt_i2c_master_send(&i2c_bus,
 //                             0x55,
 //                             1,

@@ -6,7 +6,6 @@
 void WDOG_ISR(void)
 {
     shell_printf("%s\r\n", __func__);
-    
 }
 
 int DoWDOG(int argc, char * const argv[])

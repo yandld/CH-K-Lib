@@ -2,7 +2,7 @@
 #include "shell.h"
 #include "lptmr.h"
 #include "gpio.h"
-#include "tpm.h"
+//#include "tpm.h"
 #include "board.h"
 
 static void LPTMR_ISR(void)
@@ -28,7 +28,7 @@ int DoLPTMR(int argc, char * const argv[])
     {
         uint32_t val;
         printf("LPTMR PC test\r\n");
-        TPM_PWM_QuickInit(BOARD_FTM_MAP, kPWM_EdgeAligned, 1000);
+       // TPM_PWM_QuickInit(BOARD_FTM_MAP, kPWM_EdgeAligned, 1000);
         LPTMR_PC_QuickInit(BOARD_LPTMR_MAP);
         while(1)
         {

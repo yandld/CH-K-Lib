@@ -29,5 +29,11 @@ int DoGPIO(int argc, char * const argv[])
 }
 
 SHELL_EXPORT_CMD(DoGPIO, gpio , gpio test)
-    
 
+/* reset */
+int GoRESET(int argc, char * const argv[])
+{
+    SystemSoftReset();
+}
+
+SHELL_EXPORT_CMD(GoRESET, reset , reset test)

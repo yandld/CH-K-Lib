@@ -19,7 +19,7 @@ struct at24cxx_device
 {
     struct rt_device                parent;
     struct rt_device_blk_geometry   geometry;
-    struct rt_i2c_bus_device *      rt_i2c_bus_device;
+    struct rt_i2c_bus_device *      bus;
     struct rt_mutex                 lock;
     struct at24cxx_attr             attr;
 };

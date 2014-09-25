@@ -34,7 +34,7 @@ static void (udelay)(rt_uint32_t us)
     volatile int i,j;
     for(i=0;i<us;i++)
     {
-        __NOP();
+        __NOP(); __NOP();
     }
 }
     
@@ -55,6 +55,7 @@ int rt_hw_i2c_bit_ops_bus_init(const char *name)
 {
     rt_memset((void *)&i2c_bus, 0, sizeof(struct rt_i2c_bus_device));
     i2c_bus.priv = (void *)&bit_ops;
+    
     /* init i2c gpio */
     GPIO_WriteBit(BOARD_I2C_SDA_PORT, BOARD_I2C_SDA_PIN, 1);
     GPIO_WriteBit(BOARD_I2C_SCL_PORT, BOARD_I2C_SCL_PIN, 1);

@@ -396,7 +396,7 @@ static rt_err_t _block_device_test(rt_device_t device)
                 for(i=0; i<10; i++)
                 {
                     rt_size_t n;
-                    n = rt_device_write(device, 50, multiple_buffer, sector);
+                    n = rt_device_write(device, 0, multiple_buffer, sector);
                     if(n == sector)
                     {
                         rt_kprintf("<");
@@ -418,7 +418,7 @@ static rt_err_t _block_device_test(rt_device_t device)
                 for(i=0; i<10; i++)
                 {
                     rt_size_t n;
-                    n = rt_device_read(device, 50, multiple_buffer, sector);
+                    n = rt_device_read(device, 0, multiple_buffer, sector);
                     if(n == sector)
                     {
                         rt_kprintf(">");

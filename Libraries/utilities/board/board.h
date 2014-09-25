@@ -7,6 +7,7 @@
 
 //!< LED ¶Ë¿Ú ¼° Òý½Å
 #define BOARD_NAME                      "RAVEN"
+#define BOARD_UART_BAUDRATE             115200
 #define BOARD_UART_DEBUG_MAP            UART0_RX_PD06_TX_PD07
 #define BOARD_BUZZER_FTM_MAP            FTM0_CH3_PA06
 #define BOARD_BUZZER_GPIO_PORT          (HW_GPIOA)

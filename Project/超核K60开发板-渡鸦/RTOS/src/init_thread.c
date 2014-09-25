@@ -25,7 +25,9 @@ void init_thread_entry(void* parameter)
     struct rt_spi_device *spi_device;
     rt_thread_t thread;
     rt_err_t r;
+    int i;
     rt_uint8_t time_out;
+    cpu_usage_init();
 	dfs_init();
 	elm_init();
     dfs_romfs_init(); 
@@ -78,12 +80,11 @@ void init_thread_entry(void* parameter)
   //  if (thread != RT_NULL) rt_thread_startup(thread);
         
     /* led thread */
-    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 1024, 0x24, 20);
+    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
     if (thread != RT_NULL) rt_thread_startup(thread);
     
 	finsh_system_init(); /* init finsh */
     
-    at24cxx_test();
     /* supend me */
     thread = rt_thread_self();
     rt_thread_suspend(thread); 

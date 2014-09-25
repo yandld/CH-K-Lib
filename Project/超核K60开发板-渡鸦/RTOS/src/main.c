@@ -85,17 +85,12 @@ void rtthread_startup(void)
 void bm_init(void)
 {
     DelayInit();
-    UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
+    UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
    // printf("IRAM: BEIGN:0x%08XU END:0x%08XU SIZE:%dKB\r\n", (uint32_t)RTT_IRAM_HEAP_START, (uint32_t)RTT_IRAM_HEAP_END, ((uint32_t)RTT_IRAM_HEAP_END - (uint32_t)RTT_IRAM_HEAP_START)/1024);
     printf("loading RAM to OS...\r\n");
     //SRAM_Init();
     rt_system_heap_init((void*)RTT_IRAM_HEAP_START, (void*)RTT_IRAM_HEAP_END);
     //rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_SIZE+SRAM_ADDRESS_BASE));
-    
-    /* list RAM use */
-    rt_uint32_t total, used, max_used;
-    rt_memory_info(&total, &used, &max_used);
-    printf("total:%d used:%d max_used:%d\r\n", total, used, max_used);
     
     /* init systick */
     SYSTICK_Init(1000*(1000/RT_TICK_PER_SECOND));

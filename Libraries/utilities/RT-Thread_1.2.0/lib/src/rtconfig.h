@@ -3,14 +3,14 @@
 #define __RTTHREAD_CFG_H__
 
 #define RT_NAME_MAX	   8
-#define RT_ALIGN_SIZE	8
+#define RT_ALIGN_SIZE	4
 #define RT_THREAD_PRIORITY_MAX	64
 #define RT_TICK_PER_SECOND	100
 
 /* SECTION: RT_DEBUG */
 /* Thread Debug */
 #define RT_DEBUG
-#define RT_USING_MODULE
+//#define RT_USING_MODULE
 
 #define RT_USING_OVERFLOW_CHECK
 #define RT_USING_HOOK
@@ -58,6 +58,7 @@
 #define FINSH_USING_DESCRIPTION
 #define FINSH_USING_MSH
 #define FINSH_USING_MSH_DEFAULT
+#define FINSH_THREAD_STACK_SIZE   4096
 
 /* SECTION: device filesystem */
 #define RT_USING_DFS 

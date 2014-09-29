@@ -158,7 +158,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>JL2CM3</Key>
-          <Name>-U20080643 -O74 -S8 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC1000 -FN1 -FF0MK_P512 -FS00 -FL080000 -FP0($$Device:MK60DN512xxx10$Flash\MK_P512.FLM)</Name>
+          <Name>-U58003465 -O74 -S8 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC1000 -FN1 -FF0MK_P512.FLM -FS00 -FL080000 -FP0($$Device:MK60DN512xxx10$Flash\MK_P512.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -172,18 +172,25 @@
           <Type>0</Type>
           <LineNumber>118</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>4304</Address>
+          <Address>2408</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Yandld\Desktop\露脡脩禄驴陋路垄掳氓脳脢脕脧掳眉\3-鲁脤脨貌脭麓脗毛\CH-K-Lib-V2.5\Project\鲁卢潞脣K60驴陋路垄掳氓-露脡脩禄\FAT\src\cmd_spi.c</Filename>
+          <Filename>C:\Users\B51439\Desktop\CH-K-Lib\Project\鲁卢潞脣K60驴陋路垄掳氓-露脡脩禄\FAT\src\cmd_spi.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\templete\../src/cmd_spi.c\118</Expression>
         </Bp>
       </Breakpoint>
+      <WatchWindow1>
+        <Ww>
+          <count>0</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_bdt_elem</ItemText>
+        </Ww>
+      </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -208,7 +215,7 @@
         <aPa1>0</aPa1>
         <AscS4>0</AscS4>
         <aSer4>0</aSer4>
-        <StkLoc>0</StkLoc>
+        <StkLoc>1</StkLoc>
         <TrcWin>0</TrcWin>
         <newCpu>0</newCpu>
         <uProt>0</uProt>
@@ -217,7 +224,7 @@
       <LintConfigFile></LintConfigFile>
       <SystemViewers>
         <Entry>
-          <Name>System Viewer\SPI2</Name>
+          <Name>System Viewer\SIM</Name>
           <WinId>35905</WinId>
         </Entry>
       </SystemViewers>
@@ -1354,8 +1361,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\usb_cdc.c</PathWithFileName>
-      <FilenameWithoutPath>usb_cdc.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\message_manage.c</PathWithFileName>
+      <FilenameWithoutPath>message_manage.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1367,21 +1374,115 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\usb_hid.c</PathWithFileName>
-      <FilenameWithoutPath>usb_hid.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\usb_drv.c</PathWithFileName>
+      <FilenameWithoutPath>usb_drv.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+  </Group>
+
+  <Group>
+    <GroupName>drivers\usb\stack</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>8</GroupNumber>
+      <GroupNumber>9</GroupNumber>
       <FileNumber>67</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\message_manage.c</PathWithFileName>
-      <FilenameWithoutPath>message_manage.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\source\common\usb_framework.c</PathWithFileName>
+      <FilenameWithoutPath>usb_framework.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>68</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\source\driver\usb_driver.c</PathWithFileName>
+      <FilenameWithoutPath>usb_driver.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>69</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\source\driver\usbevent.c</PathWithFileName>
+      <FilenameWithoutPath>usbevent.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>70</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\source\driver\kinetis\usb_dci_kinetis.c</PathWithFileName>
+      <FilenameWithoutPath>usb_dci_kinetis.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>drivers\usb\class</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>71</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\source\class\hid\usb_hid.c</PathWithFileName>
+      <FilenameWithoutPath>usb_hid.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>72</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\source\common\usb_class.c</PathWithFileName>
+      <FilenameWithoutPath>usb_class.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>73</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\source\class\hid\usb_descriptor.c</PathWithFileName>
+      <FilenameWithoutPath>usb_descriptor.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

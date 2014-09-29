@@ -511,17 +511,20 @@ static int USB_SetClockDiv(uint32_t srcClock)
     uint8_t usbfrac_max, usbdiv_max,frac,div;
     usbfrac_max = 1;
     usbdiv_max = 7;
+    
+    /* clear all divivder */
     SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBDIV_MASK;
     SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBFRAC_MASK;
+    
     for(frac=0;frac<usbfrac_max;frac++)
     {
         for(div=0;div<usbdiv_max;div++)
         {
             if((srcClock*(frac+1))/(div+1) == 48000000)
             {
-                LIB_TRACE("USB clock OK src:%d frac:%d div:%d\r\n", srcClock, frac, div);
                 SIM->CLKDIV2 |= SIM_CLKDIV2_USBDIV(div);
                 (frac)?(SIM->CLKDIV2 |= SIM_CLKDIV2_USBFRAC_MASK):(SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBFRAC_MASK);
+                LIB_TRACE("USB clock OK src:%d frac:%d div:%d 0x%08X\r\n", srcClock, frac, div, SIM->CLKDIV2);
                 return 0;
             }
         }
@@ -535,10 +538,10 @@ uint8_t USB_Init(void)
     guint8_tUSB_State=uPOWER;      
 
     /* disable flash protect */
-	FMC->PFAPR|=(FMC_PFAPR_M4AP_MASK);
+	FMC->PFAPR |= (FMC_PFAPR_M4AP_MASK);
     
-    /* enable USB reg */
-	SIM->SOPT1|=(SIM_SOPT1_USBREGEN_MASK);
+    /* enable USB reguator */
+	SIM->SOPT1 |= SIM_SOPT1_USBREGEN_MASK;
     
     /* disable memory protection */
     MPU->CESR=0;
@@ -555,102 +558,96 @@ uint8_t USB_Init(void)
     (SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK):   /* PLL */
     (SIM->SOPT2 &= ~SIM_SOPT2_PLLFLLSEL_MASK);  /* FLL */
 
+    
     /* enable USB clock */
     SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
     
-	/* reset USB moudle */
-	USB0->USBTRC0|=USB_USBTRC0_USBRESET_MASK;
-	while(BIT_CHK(USB_USBTRC0_USBRESET_SHIFT,USB0->USBTRC0)){};
-    
+    USB0->USBTRC0 = 0x40; 
+
 	//设置BDT基址寄存器
 	//( 低9 位是默认512 字节的偏移) 512 = 16 * 4 * 8 。
-	//8 位表示: 4 个字节的控制状态，4 个字节的缓冲区地址 。
+	//8 位表示: 4 个字节的控制状态，4 个字节的缓冲区地址
+        
+#if 0
+    
+    /* reset USB moudle */
+	USB0->USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
+	while(BIT_CHK(USB_USBTRC0_USBRESET_SHIFT,USB0->USBTRC0)){};
+    
+    /* set BDT table address */
 	USB0->BDTPAGE1=(uint8_t)((uint32_t)tBDTtable>>8);
 	USB0->BDTPAGE2=(uint8_t)((uint32_t)tBDTtable>>16);
 	USB0->BDTPAGE3=(uint8_t)((uint32_t)tBDTtable>>24);
-	BIT_SET(USB_ISTAT_USBRST_MASK,USB0->ISTAT);    //清除USB模块复位标志
-	BIT_SET(USB_INTEN_USBRSTEN_SHIFT,USB0->INTEN); //使能USB模块复位中断
-	USB0->USBCTRL=0x40;                             //D-  D+ 下拉
-	USB0->USBTRC0|=0x40;                            //强制设置第6位为1  真是纠结，DS上就这么写的
-	USB0->CTL|=0x01;                                //USB模块使能
-	USB0->CONTROL|=USB_CONTROL_DPPULLUPNONOTG_MASK; //DPP上拉使能
-	//初始化消息队列
-	fn_queue_init(); //初始化队列
+        
+    /* clear all IT bit */
+    USB0->ISTAT |= 0xFF;
+    
+    /* enable USB reset IT */
+    USB0->INTEN |= USB_INTEN_USBRSTEN_MASK;
+
+	USB0->USBCTRL = USB_USBCTRL_PDE_MASK;       //D-  D+ 下拉
+	USB0->USBTRC0 |= 0x40;                      //强制设置第6位为1  真是纠结，DS上就这么写的
+
+    /* enable USB moudle */
+	USB0->CTL |= USB_CTL_USBENSOFEN_MASK;
+    
+    /* enable pull down reisger */
+	USB0->CONTROL |= USB_CONTROL_DPPULLUPNONOTG_MASK;
+#endif
     NVIC_EnableIRQ(USB0_IRQn); //使能USB模块IRQ中断
 	return 0;
 }
-/***********************************************************************************************
- 功能：硬件断开USB连接
- 形参：0          
- 返回：0 
- 详解：
-************************************************************************************************/
+
+
 void USB_DisConnect(void)
 {
-	#if (DEBUG_PRINT == 1)
-	UART_printf("USB断开\r\n");
-	#endif
-	USB0->CONTROL&=~USB_CONTROL_DPPULLUPNONOTG_MASK; //DPP上拉取消
+	USB0->CONTROL &= ~USB_CONTROL_DPPULLUPNONOTG_MASK;
 }
-/***********************************************************************************************
- 功能：硬件开启USB连接
- 形参：0          
- 返回：0 
- 详解：
-************************************************************************************************/
+
 void USB_Connect(void)
 {
-	#if (DEBUG_PRINT == 1)
-	UART_printf("USB连接\r\n");
-	#endif
-	USB0->CONTROL|=USB_CONTROL_DPPULLUPNONOTG_MASK; //DPP上拉使能
+	USB0->CONTROL |= USB_CONTROL_DPPULLUPNONOTG_MASK;
 }
-/***********************************************************************************************
- 功能：USB 复位中断
- 形参：0
- 返回：0
- 详解：禁止所有EP(端点寄存器)，同时将EP0初始为控制端点
-       并对EP0的输入、输出奇偶缓冲进行初始化，
-			 开启USB令牌中断、USB第一帧传输中断、USB错误中断、USB复位中断
-************************************************************************************************/
+
+
 void USB_ResetHandler(void)
 {
-	//清标志
-	guint8_tUSBClearFlags=0xFF;
-	guint8_tUSB_Toogle_flags=0;
-	//禁止所有端点 0端点除外
-	USB0->ENDPOINT[1].ENDPT=0x00;
+    //清标志
+    guint8_tUSBClearFlags=0xFF;
+    guint8_tUSB_Toogle_flags=0;
+    //禁止所有端点 0端点除外
+    USB0->ENDPOINT[1].ENDPT=0x00;
 	USB0->ENDPOINT[2].ENDPT=0x00;
 	USB0->ENDPOINT[3].ENDPT=0x00;
 	USB0->ENDPOINT[4].ENDPT=0x00;
 	USB0->ENDPOINT[5].ENDPT=0x00;
 	USB0->ENDPOINT[6].ENDPT=0x00;
-  /*端点0 BDT 启动端点设置*/
-  tBDTtable[bEP0OUT_ODD].Cnt = EP0_SIZE;   // EP0 OUT BDT 设置
-  tBDTtable[bEP0OUT_ODD].Addr =(uint32_t)guint8_tEP0_OUT_ODD_Buffer;
-  tBDTtable[bEP0OUT_ODD].Stat._byte = kUDATA1;//USB-FS(硬件USB模块) 有专有权访问 BD
+    /*端点0 BDT 启动端点设置*/
+    tBDTtable[bEP0OUT_ODD].Cnt = EP0_SIZE;   // EP0 OUT BDT 设置
+    tBDTtable[bEP0OUT_ODD].Addr =(uint32_t)guint8_tEP0_OUT_ODD_Buffer;
+    tBDTtable[bEP0OUT_ODD].Stat._byte = kUDATA1;//USB-FS(硬件USB模块) 有专有权访问 BD
                                               //使能USB-FS去扮演数据翻转同步
                                               //定义DATA1允许发送或者接收        
    
-  tBDTtable[bEP0OUT_EVEN].Cnt = EP0_SIZE; // EP0 OUT BDT 设置
-  tBDTtable[bEP0OUT_EVEN].Addr =(uint32_t)guint8_tEP0_OUT_EVEN_Buffer;
-  tBDTtable[bEP0OUT_EVEN].Stat._byte = kUDATA1;//USB-FS(硬件USB模块) 有专有权访问 BD
+    tBDTtable[bEP0OUT_EVEN].Cnt = EP0_SIZE; // EP0 OUT BDT 设置
+    tBDTtable[bEP0OUT_EVEN].Addr =(uint32_t)guint8_tEP0_OUT_EVEN_Buffer;
+    tBDTtable[bEP0OUT_EVEN].Stat._byte = kUDATA1;//USB-FS(硬件USB模块) 有专有权访问 BD
                                                //使能USB-FS去扮演数据翻转同步
                                                //定义DATA1允许发送或者接收       
    
-  tBDTtable[bEP0IN_ODD].Cnt = EP0_SIZE;   // EP0 IN BDT 设置     
-  tBDTtable[bEP0IN_ODD].Addr =(uint32_t)guint8_tEP0_IN_ODD_Buffer;      
-  tBDTtable[bEP0IN_ODD].Stat._byte = kUDATA0;//USB-FS(硬件USB模块) 有专有权访问 BD
+    tBDTtable[bEP0IN_ODD].Cnt = EP0_SIZE;   // EP0 IN BDT 设置     
+    tBDTtable[bEP0IN_ODD].Addr =(uint32_t)guint8_tEP0_IN_ODD_Buffer;      
+    tBDTtable[bEP0IN_ODD].Stat._byte = kUDATA0;//USB-FS(硬件USB模块) 有专有权访问 BD
                                              //使能USB-FS去扮演数据翻转同步
                                              //定义DATA0允许发送或者接收 
    
-  tBDTtable[bEP0IN_EVEN].Cnt = EP0_SIZE;  // EP0 IN BDT 设置            
-  tBDTtable[bEP0IN_EVEN].Addr =(uint32_t)guint8_tEP0_IN_EVEN_Buffer;      
-  tBDTtable[bEP0IN_EVEN].Stat._byte = kUDATA0;//USB-FS(硬件USB模块) 有专有权访问 BD
+    tBDTtable[bEP0IN_EVEN].Cnt = EP0_SIZE;  // EP0 IN BDT 设置            
+    tBDTtable[bEP0IN_EVEN].Addr =(uint32_t)guint8_tEP0_IN_EVEN_Buffer;      
+    tBDTtable[bEP0IN_EVEN].Stat._byte = kUDATA0;//USB-FS(硬件USB模块) 有专有权访问 BD
                                               //使能USB-FS去扮演数据翻转同步
                                               //定义DATA0允许发送或者接收          
-	USB0->ENDPOINT[0].ENDPT=0x0D; // 使能 EP0 开启发送 接受时能
-	USB0->ERRSTAT=0xFF;           // 清除所有的错误
+    USB0->ENDPOINT[0].ENDPT=0x0D; // 使能 EP0 开启发送 接受时能
+    USB0->ERRSTAT=0xFF;           // 清除所有的错误
 	USB0->ISTAT=0xFF;             // 清除所有的中断标志
 	USB0->ADDR=0x00;  					  // USB枚举时的默认设备地址0
 	USB0->ERREN=0xFF;             // 使能所有的错误中断
@@ -729,8 +726,8 @@ void USB_EP3_OUT_Handler(void)
 	m_Msg.m_MsgLen = USB_EP_OUT_SizeCheck(EP3);
 	m_Msg.pMessage = BufferPointer[bEP3OUT_ODD];
 	fn_msg_push(m_Msg); //发送一个消息
-	tBDTtable[EP3<<2].Stat._byte= kSIE;
-  tBDTtable[bEP3OUT_ODD].Cnt = EP3_SIZE;
+    tBDTtable[EP3<<2].Stat._byte= kSIE;
+    tBDTtable[bEP3OUT_ODD].Cnt = EP3_SIZE;
 }
 /***********************************************************************************************
  功能：从USB0_IRQHandler 硬件中断散转而来，继续散转
@@ -742,8 +739,8 @@ void USB_Handler(void)
 {
 	uint8_t uint8_tEndPoint;
 	uint8_t uint8_tIN;
-  uint8_tIN = USB0->STAT & 0x08;    //获得当前的传输状态，1发送；0接收
-  uint8_tEndPoint = USB0->STAT >> 4;//获得当前接收令牌的端点地址
+    uint8_tIN = USB0->STAT & 0x08;    //获得当前的传输状态，1发送；0接收
+    uint8_tEndPoint = USB0->STAT >> 4;//获得当前接收令牌的端点地址
 	if(uint8_tEndPoint == 0) //端点0
 	{
 		if(uint8_tIN) //IN
@@ -797,16 +794,76 @@ void USB_Handler(void)
 	}
 }
 
-/***********************************************************************************************
- 功能：硬件USB0 中断
- 形参：0
- 返回：0
- 详解：开始USB散转操作  
-************************************************************************************************/
-void USB0_IRQHandler(void)
+
+void USB0_IRQHandler2(void)
 {
 	uint8_t err = 0;
 	err = err;
+    if(USB0->ISTAT & USB_ISTAT_USBRST_MASK)
+    {
+    	USB0->ISTAT = USB_ISTAT_USBRST_MASK;
+
+        /* Handle RESET Interrupt */
+        //USB_Bus_Reset_Handler();
+
+        /* Notify Device Layer of RESET Event */
+        //(void)USB_Device_Call_Service(USB_SERVICE_BUS_RESET, &event);
+
+        /* Clearing this bit allows the SIE to continue token processing and clear suspend condition */
+        USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
+        LIB_TRACE("bus USBRST\r\n");
+        /* No need to process other interrupts */
+        return;
+    }
+    if(USB0->ISTAT & USB_ISTAT_ERROR_MASK)
+    {
+        LIB_TRACE("bus ERROR\r\n");
+    }
+    if(USB0->ISTAT & USB_ISTAT_SOFTOK_MASK)
+    {
+        LIB_TRACE("bus SOFTOK\r\n");
+    }
+    if(USB0->ISTAT & USB_ISTAT_TOKDNE_MASK)
+    {
+        LIB_TRACE("bus TOKDNE\r\n");
+    }
+    if(USB0->ISTAT & USB_ISTAT_SLEEP_MASK)
+    {
+        /* Clear RESUME Interrupt if Pending */
+    	USB0->ISTAT = USB_ISTAT_RESUME_MASK;
+
+        /* Clear SLEEP Interrupt */
+    	USB0->ISTAT = USB_ISTAT_SLEEP_MASK;
+
+        /* Notify Device Layer of SLEEP Event */
+        //(void)USB_Device_Call_Service(USB_SERVICE_SLEEP, &event);
+
+        /* Set Low Power RESUME enable */
+        USB0->USBTRC0 |= USB_USBTRC0_USBRESMEN_MASK;
+
+        /* Set SUSP Bit in USB_CTRL */
+        USB0->USBCTRL |= USB_USBCTRL_SUSP_MASK;
+
+        /* Enable RESUME Interrupt */
+        USB0->INTEN |= USB_INTEN_RESUMEEN_MASK;
+    }
+    if(USB0->ISTAT & USB_ISTAT_RESUME_MASK)
+    {
+        LIB_TRACE("bus RESUME\r\n");
+    } 
+    if(USB0->ISTAT & USB_ISTAT_ATTACH_MASK)
+    {
+        LIB_TRACE("bus ATTACH\r\n");
+    } 
+    if(USB0->ISTAT & USB_ISTAT_STALL_MASK)
+    {
+        LIB_TRACE("bus STALL\r\n");
+    } 
+    
+    
+    
+    #if 0
+    
 	//检测USB 模块是否解析到有效的复位。
 	if(BIT_CHK(USB_ISTAT_USBRST_SHIFT,USB0->ISTAT)) 
 	{
@@ -859,8 +916,8 @@ void USB0_IRQHandler(void)
 		BIT_SET(USB_ISTAT_ERROR_SHIFT,USB0->ISTAT);
 		USB0->ERRSTAT=0xFF; //清除所有中断错误
 	}
+    #endif
 }
-
 
 
 

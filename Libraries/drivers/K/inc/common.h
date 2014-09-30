@@ -137,8 +137,12 @@ struct reg_ops
 
 
 //!< API functions
-#define EnableInterrupts()   __enable_irq()
-#define DisableInterrupts()  __disable_irq()
+#ifndef EnableInterrupts
+#define EnableInterrupts   __enable_irq
+#endif
+#ifndef DisableInterrupts
+#define DisableInterrupts  __disable_irq
+#endif
 #define SystemSoftReset    NVIC_SystemReset
 uint32_t QuickInitEncode(QuickInit_Type * type);
 void QuickInitDecode(uint32_t map, QuickInit_Type* type);

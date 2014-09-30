@@ -42,7 +42,6 @@
     #ifndef DisableInterrupts
 	#define DisableInterrupts __disable_irq();
     #endif
-
 #elif defined (__GNUC__)
 	#include <stddef.h>
 	#include "types.h"

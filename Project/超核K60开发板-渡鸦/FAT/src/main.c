@@ -11,8 +11,10 @@
 
 #include "ads7843.h"
 #include "spi.h"
-
+#include "types.h"
 struct spi_bus bus; 
+
+
 
 int main(void)
 {

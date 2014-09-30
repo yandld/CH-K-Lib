@@ -244,7 +244,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>1</Im2Chk>
+            <Im2Chk>0</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -361,10 +361,10 @@
             <uC99>0</uC99>
             <useXO>0</useXO>
             <VariousControls>
-              <MiscControls>--c99</MiscControls>
-              <Define>MK60D10 RAVEN LIB_DEBUG _MK_xxx_H_</Define>
+              <MiscControls>--c99 --gnu</MiscControls>
+              <Define>MK60D10 RAVEN</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\shell;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\d4d\common_files;..\..\..\..\Libraries\d4d\graphic_objects;..\..\..\..\Libraries\d4d;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\mempool;..\..\..\..\Libraries\utilities\fatfs;..\..\..\..\Libraries\drivers\K\src\usb;..\..\..\..\Libraries\drivers\K\src\usb\source\common;..\..\..\..\Libraries\drivers\K\src\usb\source\class;..\..\..\..\Libraries\drivers\K\src\usb\source\driver;..\..\..\..\Libraries\drivers\K\src\usb\source\class\hid;..\..\..\..\Libraries\drivers\K\src\usb\source\driver\kinetis</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\shell;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\d4d\common_files;..\..\..\..\Libraries\d4d\graphic_objects;..\..\..\..\Libraries\d4d;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\mempool;..\..\..\..\Libraries\utilities\fatfs;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\drivers\K\src\usb\src\descriptor\hid_mouse</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -526,6 +526,49 @@
               <FileName>cmd_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\cmd_spi.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>2</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>cmd_ov7620.c</FileName>
@@ -921,153 +964,57 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>drivers\usb</GroupName>
-          <Files>
-            <File>
-              <FileName>usb.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\usb.c</FilePath>
-            </File>
-            <File>
-              <FileName>message_manage.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\message_manage.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_drv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\usb_drv.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>drivers\usb\stack</GroupName>
-          <Files>
-            <File>
-              <FileName>usb_framework.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\common\usb_framework.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\driver\usb_driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbevent.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\driver\usbevent.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>usb_dci_kinetis.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\driver\kinetis\usb_dci_kinetis.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>drivers\usb\class</GroupName>
+          <GroupName>drivers\usb\src\class</GroupName>
           <Files>
             <File>
               <FileName>usb_hid.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\class\hid\usb_hid.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_class.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\common\usb_class.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\class\hid\usb_hid.c</FilePath>
             </File>
             <File>
               <FileName>usb_descriptor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\class\hid\usb_descriptor.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\descriptor\hid_mouse\usb_descriptor.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>drivers\usb\src\common</GroupName>
+          <Files>
+            <File>
+              <FileName>usb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\common\usb.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_class.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\common\usb_class.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_framework.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\common\usb_framework.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>drivers\usb\src\driver</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_dci_kinetis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usb_dci_kinetis.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usb_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbevent.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usbevent.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2160,67 +2107,57 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>drivers\usb</GroupName>
-          <Files>
-            <File>
-              <FileName>usb.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\usb.c</FilePath>
-            </File>
-            <File>
-              <FileName>message_manage.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\message_manage.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_drv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\usb_drv.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>drivers\usb\stack</GroupName>
-          <Files>
-            <File>
-              <FileName>usb_framework.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\common\usb_framework.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_driver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\driver\usb_driver.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbevent.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\driver\usbevent.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_dci_kinetis.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\driver\kinetis\usb_dci_kinetis.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>drivers\usb\class</GroupName>
+          <GroupName>drivers\usb\src\class</GroupName>
           <Files>
             <File>
               <FileName>usb_hid.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\class\hid\usb_hid.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_class.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\common\usb_class.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\class\hid\usb_hid.c</FilePath>
             </File>
             <File>
               <FileName>usb_descriptor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\source\class\hid\usb_descriptor.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\descriptor\hid_mouse\usb_descriptor.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>drivers\usb\src\common</GroupName>
+          <Files>
+            <File>
+              <FileName>usb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\common\usb.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_class.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\common\usb_class.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_framework.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\common\usb_framework.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>drivers\usb\src\driver</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_dci_kinetis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usb_dci_kinetis.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usb_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbevent.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usbevent.c</FilePath>
             </File>
           </Files>
         </Group>

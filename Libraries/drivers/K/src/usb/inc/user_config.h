@@ -17,7 +17,6 @@
  * @brief The file contains User Modifiable Macros for Mouse Application
  *
  *****************************************************************************/
-//#include "derivative.h"
 
 #if (defined MCU_MK70F12) || (defined __MCF52277_H__)
 	#define  HIGH_SPEED_DEVICE	(0)

@@ -40,34 +40,8 @@
 #include "usb_devapi.h" /* USB Device API Header File */
 #include "usb_dci_kinetis.h"    /* USB DCI Header File */
 #include "usb_bdt_kinetis.h"    /* USB BDT Structure Header File */
-#include "usb_class.h"
 #include "common.h"
-#define USB0_PERID                               USB0->PERID
-#define USB0_IDCOMP                              USB0->IDCOMP
-#define USB0_REV                                 USB0->REV
-#define USB0_ADDINFO                             USB0->ADDINFO
-#define USB0_OTGISTAT                            USB0->OTGISTAT
-#define USB0_OTGICR                              USB0->OTGICR
-#define USB0_OTGSTAT                             USB0->OTGSTAT
-#define USB0_OTGCTL                              USB0->OTGCTL
-#define USB0_ISTAT                               USB0->ISTAT
-#define USB0_INTEN                               USB0->INTEN
-#define USB0_ERRSTAT                             USB0->ERRSTAT
-#define USB0_ERREN                               USB0->ERREN
-#define USB0_STAT                                USB0->STAT
-#define USB0_CTL                                 USB0->CTL
-#define USB0_ADDR                                USB0->ADDR
-#define USB0_BDTPAGE1                            USB0->BDTPAGE1
-#define USB0_FRMNUML                             USB0->FRMNUML
-#define USB0_FRMNUMH                             USB0->FRMNUMH
-#define USB0_TOKEN                               USB0->TOKEN
-#define USB0_SOFTHLD                             USB0->SOFTHLD
-#define USB0_BDTPAGE2                            USB0->BDTPAGE2
-#define USB0_BDTPAGE3                            USB0->BDTPAGE3
-#define USB0_USBCTRL                             USB0->USBCTRL
-#define USB0_OBSERVE                             USB0->OBSERVE
-#define USB0_CONTROL                             USB0->CONTROL
-#define USB0_USBTRC0                             USB0->USBTRC0
+#include "usb_class.h"
 
 /*****************************************************************************
  * Constant and Macro's - None
@@ -236,11 +210,11 @@ static usb_status_t usbd_send_data_ep0in(uint_8 controller_ID,
 static void USB_Bus_Reset_Handler (void)
 {
 #if !HIGH_SPEED_DEVICE
-	USB0_ERRSTAT = ERR_STAT_CLEAR_ALL;  /* clear USB error flag */
-	USB0_CTL |= USB_CTL_ODDRST_MASK;                /* Reset to Even buffer */
-	USB0_ADDR = 0;                       /* reset to default address */
+	USB0->ERRSTAT = ERR_STAT_CLEAR_ALL;  /* clear USB error flag */
+	USB0->CTL |= USB_CTL_ODDRST_MASK;                /* Reset to Even buffer */
+	USB0->ADDR = 0;                       /* reset to default address */
 	/* Select System Clock and Disable Weak Pull Downs */
-	USB0_USBCTRL = 0x00;
+	USB0->USBCTRL = 0x00;
 
 	/* Clear bdt elem structure */
 	Clear_Mem((uint_8_ptr)(g_bdt_elem),
@@ -255,12 +229,12 @@ static void USB_Bus_Reset_Handler (void)
 
 	g_trf_direction = USB_TRF_UNKNOWN;
 
-	USB0_CTL &= ~USB_CTL_ODDRST_MASK;
-	USB0_USBTRC0 |= 0x40;             /* attach CFv1 core to USB bus */
+	USB0->CTL &= ~USB_CTL_ODDRST_MASK;
+	USB0->USBTRC0 |= 0x40;             /* attach CFv1 core to USB bus */
 
-	USB0_ERREN = ERR_ENB_ENABLE_ALL;   /* Enable All Error Interrupts */
-	USB0_INTEN = INTENB_BUS_RESET_VAL; /* Enable All Interrupts except RESUME */
-	USB0_CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
+	USB0->ERREN = ERR_ENB_ENABLE_ALL;   /* Enable All Error Interrupts */
+	USB0->INTEN = INTENB_BUS_RESET_VAL; /* Enable All Interrupts except RESUME */
+	USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
 
 #else
 	uint_32 reg;
@@ -442,7 +416,7 @@ uint_8 USB_DCI_Init (
 {
 #if !HIGH_SPEED_DEVICE
 	/* Select System Clock and Disable Weak Pull Downs */
-	USB0_USBCTRL = 0x00;
+	USB0->USBCTRL = 0x00;
 	
 	/* save the controller_ID for future use */
     g_dci_controller_Id = controller_ID;
@@ -459,10 +433,10 @@ uint_8 USB_DCI_Init (
     #ifndef OTG_BUILD
 #if 0   /* hardware bug workaround */
     /* Hard Reset to the USB Module */
-    USB0_USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
+    USB0->USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
 
     /* loop till the Reset bit clears  */
-    while((USB0_USBTRC0 & USB_USBTRC0_USBRESET_MASK))
+    while((USB0->USBTRC0 & USB_USBTRC0_USBRESET_MASK))
     {
     };
 #endif
@@ -471,7 +445,7 @@ uint_8 USB_DCI_Init (
     g_trf_direction = USB_TRF_UNKNOWN;
 
     /* Asynchronous Resume Interrupt Enable */
-    USB0_USBTRC0 |= 0x40;
+    USB0->USBTRC0 |= 0x40;
 
     if(bVregEn)
     {
@@ -484,31 +458,31 @@ uint_8 USB_DCI_Init (
 
     /* Set the BDT Table address, Need to be on 512 byte boundary */
     /* D8 Bit is masked in BDT_PAGE_01 */
-    USB0_BDTPAGE1 = (uint_8)(((uint_32)g_bdtmap >> 8)& 0xFE);
-    USB0_BDTPAGE2 = (uint_8)((uint_32)g_bdtmap >> 16);
-    USB0_BDTPAGE3 = (uint_8)((uint_32)g_bdtmap >> 24);
+    USB0->BDTPAGE1 = (uint_8)(((uint_32)g_bdtmap >> 8)& 0xFE);
+    USB0->BDTPAGE2 = (uint_8)((uint_32)g_bdtmap >> 16);
+    USB0->BDTPAGE3 = (uint_8)((uint_32)g_bdtmap >> 24);
 
     /* Initialized BDT buffer address */
     g_bdt_address = ((uint_32)g_bdtmap + BYTES_512);
 
     #ifndef OTG_BUILD
      /* Pull Up configuration */
-    USB0_CONTROL = USB_CONTROL_DPPULLUPNONOTG_MASK;
+    USB0->CONTROL = USB_CONTROL_DPPULLUPNONOTG_MASK;
     #endif
 
-    USB0_CTL = USB_CTL_USBENSOFEN_MASK; 	/* Enable USB module */
-    USB0_ISTAT = INT_STAT_CLEAR_ALL;      	/* Clear USB interrupts*/
+    USB0->CTL = USB_CTL_USBENSOFEN_MASK; 	/* Enable USB module */
+    USB0->ISTAT = INT_STAT_CLEAR_ALL;      	/* Clear USB interrupts*/
 
     /* Remove suspend state */
-    USB0_USBCTRL &= ~USB_USBCTRL_SUSP_MASK;
+    USB0->USBCTRL &= ~USB_USBCTRL_SUSP_MASK;
 
     /* Enable USB RESET Interrupt */
-    USB0_INTEN |= USB_INTEN_USBRSTEN_MASK;
+    USB0->INTEN |= USB_INTEN_USBRSTEN_MASK;
 
     /* Enable USB Sleep Interrupt */
-    USB0_INTEN |= USB_INTEN_SLEEPEN_MASK;
+    USB0->INTEN |= USB_INTEN_SLEEPEN_MASK;
 
-    USB0_OTGCTL = USB_OTGCTL_DPHIGH_MASK | USB_OTGCTL_OTGEN_MASK;
+    USB0->OTGCTL = USB_OTGCTL_DPHIGH_MASK | USB_OTGCTL_OTGEN_MASK;
 #else	// HIGH_SPEED_DEVICE    
     /* save the controller_ID for future use */
     g_dci_controller_Id = controller_ID;
@@ -560,28 +534,28 @@ uint_8 USB_DCI_DeInit(void)
 #ifdef MCU_MK70F12
 #if 0 /* hardware bug workaround */
 	// Reset module
-	USB0_USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
+	USB0->USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
 	
 	// Wait for reset to complete
-	while((USB0_USBTRC0 & USB_USBTRC0_USBRESET_MASK));
+	while((USB0->USBTRC0 & USB_USBTRC0_USBRESET_MASK));
 #endif
 	
 #else
 	/* Detach CFv1 core to USB bus*/
-	USB0_USBTRC0 &= ~0x40;
+	USB0->USBTRC0 &= ~0x40;
 #endif
 
 	
 	/* Clear USB interrupts*/
-	USB0_ISTAT = INT_STAT_CLEAR_ALL;
+	USB0->ISTAT = INT_STAT_CLEAR_ALL;
 	
 	/* Disable USB RESET Interrupt */
-	USB0_INTEN &= ~USB_INTEN_USBRSTEN_MASK;
+	USB0->INTEN &= ~USB_INTEN_USBRSTEN_MASK;
 	
     /* Disable USB module */
-	USB0_CTL &= ~USB_CTL_USBENSOFEN_MASK;
+	USB0->CTL &= ~USB_CTL_USBENSOFEN_MASK;
         
-    USB0_OTGCTL &= ~(USB_OTGCTL_DPHIGH_MASK | USB_OTGCTL_OTGEN_MASK);
+    USB0->OTGCTL &= ~(USB_OTGCTL_DPHIGH_MASK | USB_OTGCTL_OTGEN_MASK);
 #else	// HIGH_SPEED_DEVICE
 	
 #endif
@@ -1383,7 +1357,7 @@ void  USB_DCI_Set_Address (
 	
 	/* set the address */
 #if !HIGH_SPEED_DEVICE
-    USB0_ADDR = address;
+    USB0->ADDR = address;
 #else
     USBHS_DEVICEADDR = USBHS_DEVICEADDR_USBADR(address);
 #endif
@@ -1413,11 +1387,11 @@ void USB_DCI_Shutdown (
 	UNUSED(handle);
 #if !HIGH_SPEED_DEVICE
     /* Reset the Control Register */
-	USB0_CTL = 0;
+	USB0->CTL = 0;
     /* Initiate Reset in the USB Control0 Register */
   #ifndef OTG_BUILD
 
-	USB0_USBTRC0 = _USBRESET;
+	USB0->USBTRC0 = _USBRESET;
   #endif
 
 	_usb_device_set_status(&g_dci_controller_Id, USB_STATUS_DEVICE_STATE,
@@ -1454,16 +1428,16 @@ void USB_DCI_Assert_Resume (
     uint_16 delay_count;
 
     /* Clear SUSP Bit from USB_CTRL */
-    USB0_USBCTRL &= ~USB_USBCTRL_SUSP_MASK;
+    USB0->USBCTRL &= ~USB_USBCTRL_SUSP_MASK;
 
     (void)handle;
 
     /* Reset Low Power RESUME enable */
-    USB0_USBTRC0 &= ~USB_USBTRC0_USBRESMEN_MASK;
+    USB0->USBTRC0 &= ~USB_USBTRC0_USBRESMEN_MASK;
 
     USB_DCI_WAKEUP
 
-    USB0_CTL |= USB_CTL_RESUME_MASK;   /* Start RESUME signaling and make SUSPEND bit 0*/
+    USB0->CTL |= USB_CTL_RESUME_MASK;   /* Start RESUME signaling and make SUSPEND bit 0*/
     
     delay_count = ASSERT_RESUME_DELAY_COUNT;  /* Set RESUME line for 1-15 ms*/
 
@@ -1473,7 +1447,7 @@ void USB_DCI_Assert_Resume (
 //       Watchdog_Reset();    /* Reset the COP */
     }while(delay_count);
 
-    USB0_CTL &= ~USB_CTL_RESUME_MASK;          /* Stop RESUME signalling */
+    USB0->CTL &= ~USB_CTL_RESUME_MASK;          /* Stop RESUME signalling */
 
     return;
 #else
@@ -1816,10 +1790,10 @@ void USBHS_ISR(void){
 void USB0_IRQHandler(void)
 {
     /* Which interrupt occured and also was enabled */
-	uint_8 v1 = USB0_ISTAT;
-	uint_8 v2 = USB0_INTEN;
+	uint_8 v1 = USB0->ISTAT;
+	uint_8 v2 = USB0->INTEN;
     uint_8 intr_stat = (uint_8)(v1 & v2);
-    uint_8 stat = (uint_8)USB0_STAT;
+    uint_8 stat = (uint_8)USB0->STAT;
     USB_DEV_EVENT_STRUCT event;
     uint_8 dev_state = USB_STATUS_UNKNOWN;
 
@@ -1838,13 +1812,13 @@ void USB0_IRQHandler(void)
         &dev_state);
 
     /* if current device state is SUSPEND and Low Power Resume Flag set */
-    if((USB0_USBTRC0 & USB_USBTRC0_USB_RESUME_INT_MASK) && (dev_state == USB_STATE_SUSPEND))
+    if((USB0->USBTRC0 & USB_USBTRC0_USB_RESUME_INT_MASK) && (dev_state == USB_STATE_SUSPEND))
     {
         /* Clear SUSP Bit from USB_CTRL */
-    	USB0_USBCTRL &= ~USB_USBCTRL_SUSP_MASK;
+    	USB0->USBCTRL &= ~USB_USBCTRL_SUSP_MASK;
 
         /* Reset Low Power RESUME enable */
-        USB0_USBTRC0 &= ~USB_USBTRC0_USBRESMEN_MASK;
+        USB0->USBTRC0 &= ~USB_USBTRC0_USBRESMEN_MASK;
     }
 
     /* SOF received */
@@ -1852,11 +1826,11 @@ void USB0_IRQHandler(void)
     {
         uint_16 sof_count;
 		uint_16 tmp1, tmp2, tmp3;
-		tmp1 = USB0_FRMNUMH;
+		tmp1 = USB0->FRMNUMH;
 		tmp2 = FRAME_HIGH_BYTE_SHIFT;
-		tmp3 = USB0_FRMNUML;
+		tmp3 = USB0->FRMNUML;
         /* Clear SOF Interrupt */
-        USB0_ISTAT = USB_ISTAT_SOFTOK_MASK;
+        USB0->ISTAT = USB_ISTAT_SOFTOK_MASK;
         sof_count = (uint_16)((tmp1 << tmp2) | tmp3);
         /*address of Lower byte of Frame number*/
         event.buffer_ptr = (uint_8_ptr)(&sof_count);
@@ -1874,7 +1848,7 @@ void USB0_IRQHandler(void)
     if(BUS_RESET_FLAG(intr_stat))
     {
         /* Clear Reset Flag */
-    	USB0_ISTAT = USB_ISTAT_USBRST_MASK;
+    	USB0->ISTAT = USB_ISTAT_USBRST_MASK;
 
         /* Handle RESET Interrupt */
         USB_Bus_Reset_Handler();
@@ -1884,7 +1858,7 @@ void USB0_IRQHandler(void)
 
         /* Clearing this bit allows the SIE to continue token processing
            and clear suspend condition */
-        USB0_CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
+        USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
 
         /* No need to process other interrupts */
         return;
@@ -1893,7 +1867,7 @@ void USB0_IRQHandler(void)
     if(TOKEN_COMPL_FLAG(intr_stat))
     {
         /* Clear TOKEN Interrupt */
-    	USB0_ISTAT = USB_ISTAT_TOKDNE_MASK;
+    	USB0->ISTAT = USB_ISTAT_TOKDNE_MASK;
 
         event.ep_num = (uint_8)((stat & ENDPOINT_NUMBER_MASK) >>
             ENDPOINT_NUMBER_SHIFT);
@@ -1902,46 +1876,46 @@ void USB0_IRQHandler(void)
 
         /* Clearing this bit allows the SIE to continue token processing
            and clear suspend condition */
-        USB0_CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
+        USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
     }
 
     if(ERROR_FLAG(intr_stat))
     {
         /* Clear ERROR Interrupt */
-    	USB0_ISTAT = USB_ISTAT_ERROR_MASK;
+    	USB0->ISTAT = USB_ISTAT_ERROR_MASK;
 
-		v1 = USB0_ERRSTAT;
-		v2 = USB0_ERREN;
+		v1 = USB0->ERRSTAT;
+		v2 = USB0->ERREN;
         event.errors = (uint_8)(v1 & v2);
 
         /* Notify Device Layer of ERROR Event to error service */
        (void)USB_Device_Call_Service(USB_SERVICE_ERROR, &event);
 
-       USB0_ERRSTAT = ERR_STAT_CLEAR_ALL;  /*clear all errors*/
+       USB0->ERRSTAT = ERR_STAT_CLEAR_ALL;  /*clear all errors*/
         /* Clearing this bit allows the SIE to continue token processing
            and clear suspend condition */
-       USB0_CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
+       USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
     }
 
     if(SLEEP_FLAG(intr_stat))
     {
         /* Clear RESUME Interrupt if Pending */
-    	USB0_ISTAT = USB_ISTAT_RESUME_MASK;
+    	USB0->ISTAT = USB_ISTAT_RESUME_MASK;
 
         /* Clear SLEEP Interrupt */
-    	USB0_ISTAT = USB_ISTAT_SLEEP_MASK;
+    	USB0->ISTAT = USB_ISTAT_SLEEP_MASK;
 
         /* Notify Device Layer of SLEEP Event */
         (void)USB_Device_Call_Service(USB_SERVICE_SLEEP, &event);
 
         /* Set Low Power RESUME enable */
-        USB0_USBTRC0 |= USB_USBTRC0_USBRESMEN_MASK;
+        USB0->USBTRC0 |= USB_USBTRC0_USBRESMEN_MASK;
 
         /* Set SUSP Bit in USB_CTRL */
-        USB0_USBCTRL |= USB_USBCTRL_SUSP_MASK;
+        USB0->USBCTRL |= USB_USBCTRL_SUSP_MASK;
 
         /* Enable RESUME Interrupt */
-        USB0_INTEN |= USB_INTEN_RESUMEEN_MASK;
+        USB0->INTEN |= USB_INTEN_RESUMEEN_MASK;
 #ifdef USB_LOWPOWERMODE
         /* Enter Stop3 Mode*/
         Enter_StopMode(STOP_MODE3);
@@ -1951,13 +1925,13 @@ void USB0_IRQHandler(void)
     if(RESUME_FLAG(intr_stat))
     {
         /* Clear RESUME Interrupt */
-    	USB0_ISTAT = USB_ISTAT_RESUME_MASK;
+    	USB0->ISTAT = USB_ISTAT_RESUME_MASK;
 
         /* Notify Device Layer of RESUME Event */
         (void)USB_Device_Call_Service(USB_SERVICE_RESUME, &event);
 
         /* Disable RESUME Interrupt */
-        USB0_INTEN &= ~USB_INTEN_RESUMEEN_MASK;
+        USB0->INTEN &= ~USB_INTEN_RESUMEEN_MASK;
     }
 
     if(STALL_FLAG(intr_stat))
@@ -1980,14 +1954,14 @@ void USB0_IRQHandler(void)
         }
 
         /* Clear STALL Interrupt */
-        USB0_ISTAT = USB_ISTAT_STALL_MASK;
+        USB0->ISTAT = USB_ISTAT_STALL_MASK;
 
         /* Notify Device Layer of STALL Event */
         (void)USB_Device_Call_Service(USB_SERVICE_STALL, &event);
 
         /* Clearing this bit allows the SIE to continue token processing
            and clear suspend condition */
-        USB0_CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
+        USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
     }
     return;
 }

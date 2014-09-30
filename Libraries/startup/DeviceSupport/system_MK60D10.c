@@ -245,17 +245,23 @@ void SystemInit (void) {
     while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待PLL输出 */
     while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待PLL锁定 */
 #elif (CLOCK_SETUP == 4)
-    SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;               /* 配置系统预分频器 先设置为都为最低分频 */
-    /* 转到 FEI 模式  */
-    MCG->C1 = (uint8_t)0x06u;
-    MCG->C2 = (uint8_t)0x00u;
-    MCG->C4 &= ~MCG_C4_DRST_DRS_MASK;
-    MCG->C4 |= MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS(3);
-    SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(3));
-    MCG->C5 = (uint8_t)0x00u;
-    MCG->C6 = (uint8_t)0x00u;
-    while((MCG->S & MCG_S_IREFST_MASK) == 0u);          /* 检查 FLL参考时钟是内部参考时钟 */
-    while((MCG->S & 0x0Cu) != 0x00u);                   /* 等待FLL被选择 */
+	//SIM->CLKDIV1 = (u32)0x00110000u; //配置系统预分频器
+	SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu; //配置系统预分频器 先设置为都为最低分频
+	// 转到 FEI 模式 
+	MCG->C1 = (uint8_t)0x06u;
+	MCG->C2 = (uint8_t)0x00u;
+	MCG->C4|= (1<<6)|(1<<7)|(1<<5);   //内部参考慢速时钟32.768KHZ  倍频因子 2197 倍频后为96MHZ 参见MCG->C4寄存器
+	//分频策略:  
+	//SIM_CLKDIV1_OUTDIV1(0) CORE     CLOCK  1分频   UP TO 100M  
+	//SIM_CLKDIV1_OUTDIV2(1) BUS      CLOCK  2分频   UP TO 50M 
+	//SIM_CLKDIV1_OUTDIV3(1) FlexBus  ClOCK  2分频   UP TO 50M 
+	//SIM_CLKDIV1_OUTDIV4(3) Flash    ClOCK  3分频   UP TO 25M 
+	SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(3));
+  MCG->C5 = (uint8_t)0x00u;
+  MCG->C6 = (uint8_t)0x00u;
+  while((MCG->S & MCG_S_IREFST_MASK) == 0u);  //检查 FLL参考时钟是内部参考时钟
+  while((MCG->S & 0x0Cu) != 0x00u);           //等待FLL被选择
+	//外部晶振 CLOCK_SETUP=1
 #endif /* (CLOCK_SETUP == 4) */
 }
 

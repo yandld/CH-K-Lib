@@ -7,21 +7,15 @@
 
 void USB_App_Callback(uint8_t controller_ID, uint8_t event_type, void* val)
 {
-    /*
-    #define USB_APP_BUS_RESET                   (0)
-    #define USB_APP_CONFIG_CHANGED              (1)
-    #define USB_APP_ENUM_COMPLETE               (2)
-    #define USB_APP_SEND_COMPLETE               (3)
-    #define USB_APP_DATA_RECEIVED               (4)
-    #define USB_APP_ERROR                       (5)
-    #define USB_APP_GET_DATA_BUFF               (6)
-    #define USB_APP_EP_STALLED                  (7)
-    #define USB_APP_EP_UNSTALLED                (8) 
-    #define USB_APP_GET_TRANSFER_SIZE           (9)
-    #define USB_APP_BUS_SUSPEND                 (0x0A)
-    #define USB_APP_BUS_RESUME                  (0x0B)
-    */
-    printf("%s e:%d\r\n", __func__, event_type);
+    if((event_type == USB_APP_BUS_RESET) || (event_type == USB_APP_CONFIG_CHANGED))
+    {
+        
+    }
+    else if(event_type == USB_APP_ENUM_COMPLETE)
+    {   /* if enumeration is complete set mouse_init
+           so that application can start */
+        printf("USB_APP_ENUM_COMPLETE\r\n");
+    }
     
 }
 uint_8 USB_App_Param_Callback(
@@ -32,20 +26,31 @@ uint_8 USB_App_Param_Callback(
       USB_PACKET_SIZE* size  /* [OUT] size of the transfer */
 )
 {
-    printf("%s\r\n", __func__);
+    
+    printf("request:%d\r\n", request);
     return 0;
 }
 
 
 int DoUSB(int argc, char * const argv[])
 {
+    uint8_t buf[4];
     USB_Init();
 
     NVIC_EnableIRQ(USB0_IRQn);
     USB_Class_HID_Init(0, USB_App_Callback, NULL,
                             USB_App_Param_Callback);
 
-    while(1);
+    while(1)
+    {
+        USB_Class_HID_Periodic_Task();
+        
+        buf[2] = 1;
+        buf[1] = 0x00;
+        buf[0] = 0x00;
+        USB_Class_HID_Send_Data(0,HID_ENDPOINT,buf,4);
+                                        
+    }
 
   //  USB_Init(MAX3353);
     return 0;

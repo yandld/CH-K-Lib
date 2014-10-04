@@ -44,7 +44,7 @@
 #if (defined __MK_xxx_H__) || defined(__MCF52259_H__) || defined(__MCF52221_H__) || defined(__MCF52277_H__)
 
 #if !defined (MCU_MK20D5)
-  #define USE_SDCARD                (0)
+  #define USE_SDCARD                (1)
 #endif
 
 #endif

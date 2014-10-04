@@ -805,6 +805,7 @@ static const QuickInit_Type UART_QuickInitTable[] =
     { 0, 3, 3, 6, 2, 0}, //UART0_RX_PD06_TX_PD07 3
     { 2, 5, 4,13, 2, 0}, //UART2_RX_PF13_TX_PF14 4
     { 5, 3, 3, 8, 2, 0}, //UART5_RX_PD08_TX_PD09 3
+    { 5, 4, 3, 8, 2, 0}, //UART5_RX_PE08_TX_PE09 3
 };
 */
 

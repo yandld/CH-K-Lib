@@ -190,7 +190,7 @@ void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun)
 }
 
 /**
- * @brief  获取脉冲计数器的脉冲数
+ * @brief  获取脉冲计数器的脉冲数e
  * @code
  *     //获取脉冲计数的个数
  *     uint32_t counter;

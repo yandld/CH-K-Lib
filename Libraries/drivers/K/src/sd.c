@@ -499,10 +499,13 @@ uint32_t SD_GetSizeInMB(void)
  */ 
 uint32_t SD_StatusWait (uint32_t  mask)
 {
+    volatile uint32_t tm = 0;
     uint32_t result;
     do
     {
+        tm++;
         result = SDHC->IRQSTAT & mask;
+        if(tm > 500000) break;
     } 
     while (0 == result);
     return result;
@@ -562,12 +565,13 @@ uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
     SDHC->XFERTYP = xfertyp;
 
     /* waitting for respond */
-    r = SD_StatusWait (SDHC_IRQSTAT_CIE_MASK | SDHC_IRQSTAT_CEBE_MASK | SDHC_IRQSTAT_CCE_MASK | SDHC_IRQSTAT_CC_MASK | SDHC_IRQSTAT_CTOE_MASK);
-    if ( r != SDHC_IRQSTAT_CC_MASK)
+    if(SD_StatusWait (SDHC_IRQSTAT_CIE_MASK | SDHC_IRQSTAT_CEBE_MASK | SDHC_IRQSTAT_CCE_MASK | SDHC_IRQSTAT_CC_MASK) != SDHC_IRQSTAT_CC_MASK)
     {
+        SDHC->IRQSTAT |= SDHC_IRQSTAT_CTOE_MASK | SDHC_IRQSTAT_CIE_MASK | SDHC_IRQSTAT_CEBE_MASK | SDHC_IRQSTAT_CCE_MASK | SDHC_IRQSTAT_CC_MASK;
         LIB_TRACE("SD_SendCommand:0x%08X\r\n", r);
         return ESDHC_ERROR_COMMAND_FAILED;
     }
+
 
     /* get respond data */
     if ((xfertyp & SDHC_XFERTYP_RSPTYP_MASK) != SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_NO))

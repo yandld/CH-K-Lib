@@ -79,6 +79,18 @@
 #define BOARD_UART_INSTANCE         (HW_UART1)
 
 
+#elif NET_5000
+#define BOARD_NAME					"NET_5000"
+#define BOARD_UART_BAUDRATE             115200
+#define BOARD_LED_GPIO_BASES        {HW_GPIOC}
+#define BOARD_LED_PIN_BASES         {12,13}
+#define BOARD_I2C_INSTANCE          HW_I2C0
+#define BOARD_I2C_MAP               I2C0_SCL_PE19_SDA_PE18
+#define BOARD_SPI_MAP               SPI0_SCK_PC05_SOUT_PC06_SIN_PC07
+#define BOARD_UART_DEBUG_MAP        UART5_RX_PE08_TX_PE09
+#define BOARD_UART_INSTANCE         (HW_UART5)
+#define BOARD_ENET_PHY_ADDR         0x06
+
 #elif defined(RADIUM)
 
 #define BOARD_NAME                  "RADIUM"

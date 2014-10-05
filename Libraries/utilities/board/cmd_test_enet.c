@@ -16,7 +16,7 @@ void ENET_ISR(void)
 
 int DoENET(int argc, char * const argv[])
 {
-    int r;
+    int r,i;
     printf("%s\r\n", __func__);
     printf("RMII clock is fiexd to OSCERCLK and must be 50Mhz\r\n");
     
@@ -30,7 +30,15 @@ int DoENET(int argc, char * const argv[])
     PORT_PinMuxConfig(HW_GPIOA, 15, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
-    
+	
+	GPIO_QuickInit(HW_GPIOE, 26, kGPIO_Mode_OPP);
+    GPIO_WriteBit(HW_GPIOE, 26, 0);
+    for(i=0; i<2; i++)
+    {
+        DelayMs(100);						//HHH 5-6
+    }
+    GPIO_WriteBit(HW_GPIOE,26, 1);
+    DelayMs(100);						//HHH 5-6
     r = ksz8041_init(BOARD_ENET_PHY_ADDR);
     if(r)
     {

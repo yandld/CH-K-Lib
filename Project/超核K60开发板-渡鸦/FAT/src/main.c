@@ -23,7 +23,6 @@ int main(void)
     UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
     printf("HelloWorld\r\n");
     shell_init();
-    
     /* 设置Flexbus 速度 速度太快ili9320LCD读点有问题 */
     #ifndef MK10D5
     SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);

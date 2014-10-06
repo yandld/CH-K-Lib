@@ -10,7 +10,7 @@
 
 static int gMsgShowIndex, gTotalMsg;
 static char gMsgBuffer[MSG_MAX_NUM][64];
-static char gPhoneBuffer[MSG_MAX_NUM][15];
+static char gPhoneBuffer[MSG_MAX_NUM][64];
 
 #define INDEX_PAGE_SET_CGI_RSP_URL        "/index.shtml"
 

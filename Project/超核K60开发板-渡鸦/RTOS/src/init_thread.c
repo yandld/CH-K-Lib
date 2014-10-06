@@ -14,7 +14,7 @@
 void led_thread_entry(void* parameter);
 void sd_thread_entry(void* parameter);
 void gui_thread_entry(void* parameter);
-
+void usb_thread_entry(void* parameter);
 
 rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 
@@ -81,6 +81,10 @@ void init_thread_entry(void* parameter)
         
     /* led thread */
     thread = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
+    if (thread != RT_NULL) rt_thread_startup(thread);
+  
+    /* usb thread */
+    thread = rt_thread_create("usb_msd", usb_thread_entry, "sf0", 1024, 0x08, 20);
     if (thread != RT_NULL) rt_thread_startup(thread);
     
 	finsh_system_init(); /* init finsh */

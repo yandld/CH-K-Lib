@@ -11,6 +11,12 @@
 #include <drivers/spi.h>
 #include "rtt_spi.h"
 #include "sram.h"
+
+
+#include "usb.h"
+#include "usb_msc.h"
+
+
 #define RTT_IRAM_HEAP_START               (0x1FFF0000)
 #define RTT_IRAM_HEAP_END                 (0x1FFF0000 + 0x10000)
 

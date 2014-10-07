@@ -84,8 +84,8 @@ void init_thread_entry(void* parameter)
     if (thread != RT_NULL) rt_thread_startup(thread);
   
     /* usb thread */
-    thread = rt_thread_create("usb_msd", usb_thread_entry, "sf0", 1024, 0x08, 20);
-    if (thread != RT_NULL) rt_thread_startup(thread);
+    //thread = rt_thread_create("usb_msd", usb_thread_entry, "sf0", 1024, 0x08, 20);
+    //if (thread != RT_NULL) rt_thread_startup(thread);
     
 	finsh_system_init(); /* init finsh */
     

@@ -42,35 +42,14 @@ void MSD_Event_Callback(uint_8 controller_ID,
             device_lba_info_ptr->num_lun_supported = 1;
             break;
         case USB_MSC_DEVICE_READ_REQUEST: 
-<<<<<<< HEAD
                 lba_data_ptr = (PTR_LBA_APP_STRUCT)val;
                 SD_ReadSingleBlock(lba_data_ptr->offset/LENGTH_OF_EACH_LBA, lba_data_ptr->buff_ptr);
-=======
-            /* copy data from storage device before sending it on USB Bus 
-    		   (Called before calling send_data on BULK IN endpoints)*/
-                lba_data_ptr = (PTR_LBA_APP_STRUCT)val;
-              //  printf("rsize:%d size:%d\r\n",lba_data_ptr->offset/512, lba_data_ptr->size);
-                SD_ReadSingleBlock(lba_data_ptr->offset/512, lba_data_ptr->buff_ptr);
-              //  printf("size:%d\r\n",lba_data_ptr->size/512);
-        	//	USB_memcopy(gDiskBuffer + lba_data_ptr->offset,
-			//	lba_data_ptr->buff_ptr, 
-			//	lba_data_ptr->size);
->>>>>>> d881361f9070011c33eb3fb3a6de60d9744300c0
             break;
         case USB_APP_SEND_COMPLETE:
             break;
         case USB_MSC_DEVICE_WRITE_REQUEST: 
             lba_data_ptr = (PTR_LBA_APP_STRUCT)val;
-<<<<<<< HEAD
             SD_WriteSingleBlock(lba_data_ptr->offset/LENGTH_OF_EACH_LBA, lba_data_ptr->buff_ptr);
-=======
-            /* read data from driver buffer to mass storage device */
-           // USB_memcopy(lba_data_ptr->buff_ptr, gDiskBuffer + lba_data_ptr->offset, lba_data_ptr->size);
-            //printf("wsize:%d size:%d\r\n",lba_data_ptr->offset/LENGTH_OF_EACH_LBA, lba_data_ptr->size);
-            DisableInterrupts;
-            SD_WriteSingleBlock(lba_data_ptr->offset/LENGTH_OF_EACH_LBA, lba_data_ptr->buff_ptr);
-            EnableInterrupts;
->>>>>>> d881361f9070011c33eb3fb3a6de60d9744300c0
             break;
         case USB_MSC_DEVICE_REMOVAL_REQUEST:
             
@@ -90,15 +69,14 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     printf("USB MSD test\r\n");
-<<<<<<< HEAD
+
     if(SD_QuickInit(2000*1000))
     {
         printf("SD card init failed\r\n");
         while(1);
     }
-=======
+
     SD_QuickInit(2000*1000);
->>>>>>> d881361f9070011c33eb3fb3a6de60d9744300c0
     USB_Init();
     USB_Class_MSC_Init(0, USB_App_Callback, NULL, MSD_Event_Callback);
 			                    

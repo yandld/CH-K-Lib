@@ -83,6 +83,12 @@ extern void lwip_system_init(void);
 #include <rtgui/rtgui_system.h>
 #endif
 
+#ifdef RT_USING_I2C
+#include <drivers/i2c.h>
+#include <drivers/i2c_dev.h>
+#include <drivers/i2c-bit-ops.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

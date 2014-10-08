@@ -29,16 +29,10 @@ void init_thread_entry(void* parameter)
     rt_uint8_t time_out;
     cpu_usage_init();
     rt_components_init();
-	dfs_init();
-	elm_init();
-    dfs_romfs_init(); 
     dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
     RT_DEBUG_LOG(RT_TRUE, ("root rom file system inialized..\r\n"));
 
 #ifdef RT_USING_LWIP
-	eth_system_device_init();
-	lwip_system_init();
-    RT_DEBUG_LOG(RT_TRUE, ("TCP/IP initialized..\r\n"));
     rt_kprintf(" link beginning \r\n");
     rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
     time_out = 0;
@@ -52,13 +46,9 @@ void init_thread_entry(void* parameter)
         }
 	}
     list_if();
-#ifdef RT_USING_DFS_NFS
-    nfs_init();
-#endif
 #endif
     
 #ifdef RT_USING_I2C
-    rt_i2c_core_init();
     rt_hw_i2c_bit_ops_bus_init("i2c0");
 #endif
     
@@ -87,8 +77,6 @@ void init_thread_entry(void* parameter)
     /* usb thread */
     //thread = rt_thread_create("usb_msd", usb_thread_entry, "sf0", 1024, 0x08, 20);
     //if (thread != RT_NULL) rt_thread_startup(thread);
-    
-	finsh_system_init(); /* init finsh */
     
     /* supend me */
     thread = rt_thread_self();

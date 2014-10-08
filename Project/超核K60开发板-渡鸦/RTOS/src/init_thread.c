@@ -28,6 +28,7 @@ void init_thread_entry(void* parameter)
     int i;
     rt_uint8_t time_out;
     cpu_usage_init();
+    rt_components_init();
 	dfs_init();
 	elm_init();
     dfs_romfs_init(); 

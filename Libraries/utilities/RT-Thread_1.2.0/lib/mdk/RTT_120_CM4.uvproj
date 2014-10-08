@@ -1232,6 +1232,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>rtt_compnents/init</GroupName>
+          <Files>
+            <File>
+              <FileName>components.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\init\components.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

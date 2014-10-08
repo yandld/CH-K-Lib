@@ -10,6 +10,7 @@
 /* SECTION: RT_DEBUG */
 /* Thread Debug */
 #define RT_DEBUG
+#define RT_USING_COMPONENTS_INIT
 //#define RT_USING_MODULE
 
 #define RT_USING_OVERFLOW_CHECK
@@ -62,6 +63,7 @@
 
 /* SECTION: device filesystem */
 #define RT_USING_DFS 
+#define RT_USING_DFS_ROMFS
 #define RT_USING_DFS_ELMFAT
 #define RT_DFS_ELM_WORD_ACCESS
 #define DFS_USING_WORKDIR

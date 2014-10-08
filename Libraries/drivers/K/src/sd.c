@@ -592,7 +592,7 @@ uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
  * @param  count   :连续读取的扇区数量
  * @retval ESDHC_OK:正常  其它:读取错误
  */ 		
-uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t block_cnt)
+uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t blockCnt)
 {
 	uint32_t i,j;
 	uint16_t results;
@@ -604,7 +604,7 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t block_cnt)
 		sector = sector<<9;
 	}
 	SD_CommandStruct1.COMMAND = ESDHC_CMD18;
-	SD_CommandStruct1.BLOCKS = block_cnt;
+	SD_CommandStruct1.BLOCKS = blockCnt;
 	SD_CommandStruct1.BLOCKSIZE = 512;
 	SD_CommandStruct1.ARGUMENT = sector;
 	results = SD_SendCommand(&SD_CommandStruct1);
@@ -614,7 +614,7 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t block_cnt)
     }
         
     /* read data */
-	for(i = 0; i < block_cnt; i++)
+	for(i = 0; i < blockCnt; i++)
 	{
 		if (((uint32_t)buf & 0x03) == 0)
 		{
@@ -648,7 +648,7 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t block_cnt)
             }
 			if (SD_CommandStruct1.RESPONSE[0] & 0xFFD98008)
 			{
-					block_cnt = 0; /* necessary to get real number of written blocks */
+					blockCnt = 0; /* necessary to get real number of written blocks */
 					break;
 			}
 
@@ -663,7 +663,7 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t block_cnt)
  * @param  count   :连续写入的扇区数
  * @retval ESDHC_OK:正常  其它:读取错误
  */ 	
-uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t block_cnt)
+uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t blockCnt)
 {
     uint32_t i,j;
 	uint16_t results;
@@ -677,7 +677,7 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t block_c
     
     /* issue cmd */
 	SD_CommandStruct1.COMMAND = ESDHC_CMD25;
-	SD_CommandStruct1.BLOCKS = block_cnt;
+	SD_CommandStruct1.BLOCKS = blockCnt;
 	SD_CommandStruct1.BLOCKSIZE = 512;
 	SD_CommandStruct1.ARGUMENT = sector;
 	results = SD_SendCommand(&SD_CommandStruct1);
@@ -687,7 +687,7 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t block_c
 	}
     
     /* write data */
-	for(i = 0; i < block_cnt; i++)
+	for(i = 0; i < blockCnt; i++)
 	{
         for (j = (512)>>2; j != 0; j--)
         {
@@ -718,7 +718,7 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t block_c
             }
 			if (SD_CommandStruct1.RESPONSE[0] & 0xFFD98008)
 			{
-					block_cnt = 0; // necessary to get real number of written blocks 
+					blockCnt = 0; // necessary to get real number of written blocks 
 					break;
 			}
 

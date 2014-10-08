@@ -9,7 +9,7 @@
 请按步骤逐步学习本固件库及Kinetis,先看免费入门视频教程.该教材包含了你想要的全部内容，从整体知识介绍到工具软件下载到入门提高。
 
 1. [免费入门视频](http://www.moore8.com/courses/87)
-2. [API 参考文档](http://git.oschina.net/yandld/CH-K-Lib/wikis/home)  
+2. [参考手册](http://git.oschina.net/yandld/CH-K-Lib/wikis/home)  
 3. www.beyondcore.net
 4. [固件库源代码包下载](http://git.oschina.net/yandld/CH-K-Lib/repository/archive?ref=master)
 

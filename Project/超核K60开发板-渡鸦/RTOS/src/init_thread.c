@@ -77,7 +77,7 @@ void init_thread_entry(void* parameter)
     /* usb thread */
     //thread = rt_thread_create("usb_msd", usb_thread_entry, "sf0", 1024, 0x08, 20);
     //if (thread != RT_NULL) rt_thread_startup(thread);
-    
+   // cmd_pwd(0,0);
     /* supend me */
     thread = rt_thread_self();
     rt_thread_suspend(thread); 

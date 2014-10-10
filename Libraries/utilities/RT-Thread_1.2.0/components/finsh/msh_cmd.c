@@ -32,6 +32,7 @@
 
 #include "msh.h"
 
+
 #ifdef FINSH_USING_MSH
 #ifdef RT_USING_DFS
 #include <dfs_posix.h>
@@ -40,7 +41,7 @@
 extern char working_directory[];
 #endif
 
-int cmd_ls(int argc, char** argv)
+USED int cmd_ls(int argc, char** argv)
 {
     extern void ls(const char *pathname);
 
@@ -217,13 +218,6 @@ FINSH_FUNCTION_EXPORT_ALIAS(cmd_free, __cmd_free, Show the memory usage in the s
 
 #endif
 
-#include "common.h"
-int cmd_reset(int argc, char** argv)
-{
-    NVIC_SystemReset();
-    return 0;
-}
-FINSH_FUNCTION_EXPORT_ALIAS(cmd_reset, __cmd_reset, reset.);
 
 
 #ifdef RT_USING_DFS_NFS

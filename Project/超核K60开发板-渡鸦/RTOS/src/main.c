@@ -74,10 +74,10 @@ void rt_application_init(void)
 
 void rtthread_startup(void)
 {
+    
     rt_hw_board_init();
 	rt_show_version();
 	rt_system_timer_init();
-    
     rt_system_scheduler_init();
 
     rt_device_init_all();
@@ -104,25 +104,16 @@ void bm_init(void)
     SYSTICK_Cmd(ENABLE);
 }
 
-void SysTick_Handler(void)
-{
-    rt_interrupt_enter();
-    rt_tick_increase();
-    rt_interrupt_leave();
-}
-
-void DelayMs(uint32_t ms)
-{
-    if(ms < (1000/RT_TICK_PER_SECOND)) rt_thread_delay(1);
-    else rt_thread_delay(ms/(1000/RT_TICK_PER_SECOND));  
-}
-
-int main(void)
+weak int main(void)
 {
 	rt_hw_interrupt_disable();
+    rtt_need_this_file();
     bm_init();
 	rtthread_startup();
+    
 	return 0;
 }
+
+
 
 

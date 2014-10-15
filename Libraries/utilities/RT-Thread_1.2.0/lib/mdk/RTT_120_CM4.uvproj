@@ -364,7 +364,7 @@
               <MiscControls>--c99</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\include;..\src;..\..\components\finsh;..\..\components\dfs\include;..\..\components\drivers\include;..\..\components\drivers\include\drivers;..\..\components\drivers\i2c;..\..\components\net\lwip-1.4.1\src;..\..\components\net\lwip-1.4.1\src\include;..\..\components\net\lwip-1.4.1\src\arch\include;..\..\components\net\lwip-1.4.1\src\include\netif;..\..\components\net\lwip-1.4.1\src\include\ipv4;..\..\components\utilities\logtrace;..\..\components\dfs\filesystems\ramfs;..\..\components\dfs\filesystems\romfs;..\..\..\..\startup\DeviceSupport;..\..\..\..\startup\CoreSupport;..\..\components\dfs\filesystems\nfs;..\..\components\drivers\include\drivers</IncludePath>
+              <IncludePath>..\..\include;..\src;..\..\components\finsh;..\..\components\dfs\include;..\..\components\drivers\include;..\..\components\drivers\include\drivers;..\..\components\drivers\i2c;..\..\components\net\lwip-1.4.1\src;..\..\components\net\lwip-1.4.1\src\include;..\..\components\net\lwip-1.4.1\src\arch\include;..\..\components\net\lwip-1.4.1\src\include\netif;..\..\components\net\lwip-1.4.1\src\include\ipv4;..\..\components\utilities\logtrace;..\..\components\dfs\filesystems\ramfs;..\..\components\dfs\filesystems\romfs;..\..\..\..\startup\DeviceSupport;..\..\..\..\startup\CoreSupport;..\..\components\dfs\filesystems\nfs;..\..\components\drivers\include\drivers;..\..\components\init</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

@@ -57,3 +57,11 @@ int rt_hw_rtc_init(const char* name)
     list_date();
     return 0;
 }
+
+void rt_hw_rtc_init2(void)
+{
+    rt_hw_rtc_init("rtc");
+}
+    
+INIT_DEVICE_EXPORT(rt_hw_rtc_init2);
+

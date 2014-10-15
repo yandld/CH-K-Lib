@@ -68,5 +68,9 @@ int rt_hw_i2c_bit_ops_bus_init(const char *name)
     return rt_i2c_bit_add_bus(&i2c_bus, name);
 }
 
+int rt_hw_i2c_bit_ops_bus_init2(const char *name)
+{
+    rt_hw_i2c_bit_ops_bus_init("i2c0");
+}
 
-
+INIT_APP_EXPORT(rt_hw_i2c_bit_ops_bus_init2);

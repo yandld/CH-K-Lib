@@ -31,7 +31,7 @@
 #include <rtthread.h>
 #include "uart.h"
 #include "gpio.h"
-
+#include "board.h"
 #include "rtt_serial.h"
 #include <rtdevice.h>
 
@@ -123,9 +123,18 @@ int rt_hw_usart_init(uint32_t instance, const char * name)
     serial.int_rx = &uart_int_rx;
     serial.config = config;
     
+    UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+    
     return rt_hw_serial_register(&serial, name,
                           RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_STREAM,
                           RT_NULL);
      
 }
+
+void rt_hw_usart_init2(void)
+{
+    rt_hw_usart_init(0, "uart0");
+}
+    
+INIT_BOARD_EXPORT(rt_hw_usart_init2);
 

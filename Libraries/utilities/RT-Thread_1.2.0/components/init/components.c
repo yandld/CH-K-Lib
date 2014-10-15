@@ -52,7 +52,7 @@ INIT_EXPORT(rti_end,"7");
 void rt_components_board_init(void)
 {
 #ifndef _MSC_VER
-#if RT_DEBUG_INIT
+#ifdef RT_DEBUG_INIT
 	int result;
 	const struct rt_init_desc *desc;
 	for (desc = &__rt_init_desc_rti_start; desc < &__rt_init_desc_rti_board_end; desc ++)
@@ -77,7 +77,27 @@ void rt_components_board_init(void)
  */
 void rt_components_init(void)
 {
+#ifndef _MSC_VER
+#ifdef RT_DEBUG_INIT
+	int result;
+	const struct rt_init_desc *desc;
 
+	rt_kprintf("do components intialization.\n");
+	for (desc = &__rt_init_desc_rti_board_end; desc < &__rt_init_desc_rti_end; desc ++)
+	{
+		rt_kprintf("initialize %s", desc->fn_name);
+		result = desc->fn();
+		rt_kprintf(":%d done\n", result);
+	}
+#else
+    const init_fn_t *fn_ptr;
+    
+    for (fn_ptr = &__rt_init_rti_board_end; fn_ptr < &__rt_init_rti_end; fn_ptr ++)
+    {
+        (*fn_ptr)();
+    }
+#endif
+#else
 #ifdef RT_USING_MODULE
     rt_system_module_init();
 #endif
@@ -85,6 +105,7 @@ void rt_components_init(void)
 #ifdef RT_USING_FINSH
 	/* initialize finsh */
 	finsh_system_init();
+	finsh_set_device(RT_CONSOLE_DEVICE_NAME);
 #endif
 
 #ifdef RT_USING_LWIP
@@ -152,9 +173,5 @@ void rt_components_init(void)
 #ifdef RT_USING_USB_HOST
 	rt_usb_host_init();
 #endif
-
-#ifdef RT_USING_I2C
-    rt_i2c_core_init();
 #endif
-
 }

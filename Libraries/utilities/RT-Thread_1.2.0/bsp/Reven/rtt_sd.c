@@ -115,4 +115,9 @@ void rt_hw_sd_init(uint32_t instance, const char *name)
     rt_device_register(&sd_device, name, RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STANDALONE | RT_DEVICE_FLAG_REMOVABLE);
 }
 
-
+void rt_hw_sd_init2(void)
+{
+    rt_hw_sd_init(0, "sd0");
+}
+    
+INIT_DEVICE_EXPORT(rt_hw_sd_init2);

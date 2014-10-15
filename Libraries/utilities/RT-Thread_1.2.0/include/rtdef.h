@@ -170,7 +170,7 @@ typedef int (*init_fn_t)(void);
 #ifdef _MSC_VER /* we do not support MS VC++ compiler */
     #define INIT_EXPORT(fn, level)
 #else
-	#if RT_DEBUG_INIT
+	#ifdef RT_DEBUG_INIT
 		struct rt_init_desc
 		{
 			const char* fn_name;

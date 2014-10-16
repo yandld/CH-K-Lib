@@ -60,7 +60,7 @@ void GUI_X_Config(void)
     U32 * aMemory = (U32*)rt_malloc(GUI_NUMBYTES);
     if(aMemory == RT_NULL)
     {
-        rt_kprintf("out of memory!\r\n");
+        rt_kprintf("GUI out of memory!\r\n");
     }
     GUI_ALLOC_AssignMemory(aMemory, GUI_NUMBYTES);
     GUI_SetOnErrorFunc(GUI_Log);

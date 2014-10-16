@@ -15,7 +15,7 @@ rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 void init_thread_entry(void* parameter)
 {
     struct rt_spi_device *spi_device;
-    rt_thread_t thread;
+    rt_thread_t tid;
     rt_err_t r;
     int i;
     rt_uint8_t time_out;
@@ -55,14 +55,14 @@ void init_thread_entry(void* parameter)
   //  if (thread != RT_NULL) rt_thread_startup(thread);
         
     /* led thread */
-    thread = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
-    if (thread != RT_NULL) rt_thread_startup(thread);
+    tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
+    if (tid != RT_NULL) rt_thread_startup(tid);
   
     /* usb thread */
     //thread = rt_thread_create("usb_msd", usb_thread_entry, "sf0", 1024, 0x08, 20);
     //if (thread != RT_NULL) rt_thread_startup(thread);
    
-    thread = rt_thread_self();
-    rt_thread_delete(thread); 
+    tid = rt_thread_self();
+    rt_thread_delete(tid); 
 }
 

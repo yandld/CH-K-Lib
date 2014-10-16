@@ -76,5 +76,5 @@ void cpu_usage(void)
 
 #ifdef RT_USING_FINSH
 #include <finsh.h>
-FINSH_FUNCTION_EXPORT(cpu_usage, e.g: device_test());
+FINSH_FUNCTION_EXPORT(cpu_usage, cpu_usage());
 #endif

@@ -24,16 +24,11 @@ void rtthread_startup(void)
 }
 
 
-__weak void bm_init(void)
-{
-    RT_ASSERT(1);
-}
 
 int main(void)
 {
 	rt_hw_interrupt_disable();
     rt_system_heap_init((void*)RTT_IRAM_HEAP_START, (void*)RTT_IRAM_HEAP_END);
-    bm_init();
     
     /* init systick */
     SysTick_Config(SystemCoreClock / RT_TICK_PER_SECOND - 1);
@@ -41,6 +36,7 @@ int main(void)
     NVIC_SetPriority(PendSV_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
     
     rt_components_board_init();
+    rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
 	rtthread_startup();
     
 	return 0;

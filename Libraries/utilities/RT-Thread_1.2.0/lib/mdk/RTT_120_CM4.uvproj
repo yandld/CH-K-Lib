@@ -695,7 +695,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>porting_src</GroupName>
+          <GroupName>app_start</GroupName>
           <Files>
             <File>
               <FileName>board.c</FileName>

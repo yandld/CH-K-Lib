@@ -1,7 +1,6 @@
 #include <rtthread.h>
 #include <rthw.h>
-#include <dfs_romfs.h> 
-#include <dfs.h>
+#include <components.h>
 #include <stdint.h>
 
 void DelayMs(uint32_t ms)
@@ -27,8 +26,6 @@ void _init_entry(void* parameter)
 {
     rt_thread_t tid;
     
-	rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
-    
     /* init components */
     rt_components_init();
     dfs_romfs_init();
@@ -49,6 +46,7 @@ void _init_entry(void* parameter)
 void rt_application_init(void)
 {
     rt_thread_t tid;
+    
     /* internal init thread */
     tid = rt_thread_create("init0", _init_entry, RT_NULL, 512, 5, 20);                       
     if (tid != RT_NULL)

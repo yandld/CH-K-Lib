@@ -1204,6 +1204,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>rtt_example/kernel</GroupName>
+          <Files>
+            <File>
+              <FileName>cpuusage.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\examples\kernel\cpuusage.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

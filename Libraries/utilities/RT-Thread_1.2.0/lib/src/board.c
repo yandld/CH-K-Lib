@@ -29,6 +29,7 @@ void _init_entry(void* parameter)
     /* init components */
     rt_components_init();
     dfs_romfs_init();
+    cpu_usage_init();
     dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
     
     /* init thread */

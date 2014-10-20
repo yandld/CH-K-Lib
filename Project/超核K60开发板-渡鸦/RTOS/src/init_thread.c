@@ -19,7 +19,6 @@ void init_thread_entry(void* parameter)
     rt_err_t r;
     int i;
     rt_uint8_t time_out;
-    cpu_usage_init();
     
 #ifdef RT_USING_LWIP
     rt_kprintf(" link beginning \r\n");

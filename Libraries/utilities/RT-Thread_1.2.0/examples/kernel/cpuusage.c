@@ -74,6 +74,10 @@ void cpu_usage(void)
     rt_kprintf("CPU:%d.%d\%", cpu_usage_major, cpu_usage_minor);
 }
 
+#ifdef RT_USING_COMPONENTS_INIT
+INIT_APP_EXPORT(cpu_usage_init);
+#endif
+
 #ifdef RT_USING_FINSH
 #include <finsh.h>
 FINSH_FUNCTION_EXPORT(cpu_usage, cpu_usage());

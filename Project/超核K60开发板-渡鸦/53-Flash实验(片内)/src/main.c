@@ -13,13 +13,17 @@ static int MKP512FlashInit(void)
 {
     uint32_t clock;
     uint32_t flash_clock = CLOCK_GetClockFrequency(kFlashClock, &clock);
-    /* fnc:  Function Code (1 - Erase, 2 - Program, 3 - Verify) */         
-    return Init(0x00000000, clock, 2);
+    /* fnc:  Function Code (1 - Erase, 2 - Program, 3 - Verify) */
+
+    /* func:Init is SSD API */    
+    return Init(0x00000000, clock, 2); 
 }
 
+/* chip's Flash size and sector size can be found in RM */
 #define FLASH_SIZE      0x80000
 #define SECTER_SIZE     0x000800
-extern int Image$$ER_IROM1$$Limit;
+
+/* get  residue flash size */
 #define TEST_ADDR_BEIGN  (uint32_t)(FLASH_SIZE - SECTER_SIZE)
 
 int main(void)
@@ -54,6 +58,7 @@ int main(void)
     ticks = ticks - PIT_GetCounterValue(HW_PIT_CH0);
     printf("EraseSector takes %d ticks\r\n", ticks);
     
+    /* when program flash, we must erase it first */
     PIT_ResetCounter(HW_PIT_CH0);
     ticks = PIT_GetCounterValue(HW_PIT_CH0);
     r = ProgramPage(TEST_ADDR_BEIGN, sizeof(buf), buf);

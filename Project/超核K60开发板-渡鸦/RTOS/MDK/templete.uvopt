@@ -1416,7 +1416,7 @@
   </Group>
 
   <Group>
-    <GroupName>fs_examples</GroupName>
+    <GroupName>app_gui_cmd</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1429,8 +1429,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\listdir.c</PathWithFileName>
-      <FilenameWithoutPath>listdir.c</FilenameWithoutPath>
+      <PathWithFileName>..\src\gui\gui_cmd_pic.c</PathWithFileName>
+      <FilenameWithoutPath>gui_cmd_pic.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1442,8 +1442,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\readspeed.c</PathWithFileName>
-      <FilenameWithoutPath>readspeed.c</FilenameWithoutPath>
+      <PathWithFileName>..\src\gui\gui_cmd_choosefile.c</PathWithFileName>
+      <FilenameWithoutPath>gui_cmd_choosefile.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1455,87 +1455,14 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\readwrite.c</PathWithFileName>
-      <FilenameWithoutPath>readwrite.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>8</GroupNumber>
-      <FileNumber>75</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\seekdir.c</PathWithFileName>
-      <FilenameWithoutPath>seekdir.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>8</GroupNumber>
-      <FileNumber>76</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\file\writespeed.c</PathWithFileName>
-      <FilenameWithoutPath>writespeed.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-  </Group>
-
-  <Group>
-    <GroupName>app_gui_cmd</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>9</GroupNumber>
-      <FileNumber>77</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\src\gui\gui_cmd_pic.c</PathWithFileName>
-      <FilenameWithoutPath>gui_cmd_pic.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>9</GroupNumber>
-      <FileNumber>78</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\src\gui\gui_cmd_choosefile.c</PathWithFileName>
-      <FilenameWithoutPath>gui_cmd_choosefile.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>9</GroupNumber>
-      <FileNumber>79</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_cmd_screenshot.c</PathWithFileName>
       <FilenameWithoutPath>gui_cmd_screenshot.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>9</GroupNumber>
-      <FileNumber>80</FileNumber>
+      <GroupNumber>8</GroupNumber>
+      <FileNumber>75</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1549,160 +1476,14 @@
   </Group>
 
   <Group>
-    <GroupName>rtt_examples/test</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>10</GroupNumber>
-      <FileNumber>81</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\device_test.c</PathWithFileName>
-      <FilenameWithoutPath>device_test.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>10</GroupNumber>
-      <FileNumber>82</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\dhry_1.c</PathWithFileName>
-      <FilenameWithoutPath>dhry_1.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>10</GroupNumber>
-      <FileNumber>83</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\dhry_2.c</PathWithFileName>
-      <FilenameWithoutPath>dhry_2.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>10</GroupNumber>
-      <FileNumber>84</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\fs_test.c</PathWithFileName>
-      <FilenameWithoutPath>fs_test.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>10</GroupNumber>
-      <FileNumber>85</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\mem_test.c</PathWithFileName>
-      <FilenameWithoutPath>mem_test.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>10</GroupNumber>
-      <FileNumber>86</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\net_test.c</PathWithFileName>
-      <FilenameWithoutPath>net_test.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-  </Group>
-
-  <Group>
-    <GroupName>rtt_examples/kernel</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>11</GroupNumber>
-      <FileNumber>87</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\cpuusage.c</PathWithFileName>
-      <FilenameWithoutPath>cpuusage.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>11</GroupNumber>
-      <FileNumber>88</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\event_simple.c</PathWithFileName>
-      <FilenameWithoutPath>event_simple.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>11</GroupNumber>
-      <FileNumber>89</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\heap_malloc.c</PathWithFileName>
-      <FilenameWithoutPath>heap_malloc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>11</GroupNumber>
-      <FileNumber>90</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\kernel\heap_realloc.c</PathWithFileName>
-      <FilenameWithoutPath>heap_realloc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-  </Group>
-
-  <Group>
     <GroupName>rtt_examples/net</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>12</GroupNumber>
-      <FileNumber>91</FileNumber>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>76</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1714,8 +1495,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>12</GroupNumber>
-      <FileNumber>92</FileNumber>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>77</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1727,8 +1508,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>12</GroupNumber>
-      <FileNumber>93</FileNumber>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>78</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1740,8 +1521,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>12</GroupNumber>
-      <FileNumber>94</FileNumber>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>79</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1753,8 +1534,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>12</GroupNumber>
-      <FileNumber>95</FileNumber>
+      <GroupNumber>9</GroupNumber>
+      <FileNumber>80</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1774,8 +1555,8 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>13</GroupNumber>
-      <FileNumber>96</FileNumber>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>81</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1795,8 +1576,8 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>14</GroupNumber>
-      <FileNumber>97</FileNumber>
+      <GroupNumber>11</GroupNumber>
+      <FileNumber>82</FileNumber>
       <FileType>4</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1816,8 +1597,8 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>15</GroupNumber>
-      <FileNumber>98</FileNumber>
+      <GroupNumber>12</GroupNumber>
+      <FileNumber>83</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1837,8 +1618,8 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>16</GroupNumber>
-      <FileNumber>99</FileNumber>
+      <GroupNumber>13</GroupNumber>
+      <FileNumber>84</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1850,8 +1631,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>16</GroupNumber>
-      <FileNumber>100</FileNumber>
+      <GroupNumber>13</GroupNumber>
+      <FileNumber>85</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1863,8 +1644,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>16</GroupNumber>
-      <FileNumber>101</FileNumber>
+      <GroupNumber>13</GroupNumber>
+      <FileNumber>86</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1879,13 +1660,13 @@
 
   <Group>
     <GroupName>lwip\apps</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>17</GroupNumber>
-      <FileNumber>102</FileNumber>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>87</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1897,8 +1678,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>17</GroupNumber>
-      <FileNumber>103</FileNumber>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>88</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1910,8 +1691,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>17</GroupNumber>
-      <FileNumber>104</FileNumber>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>89</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1923,8 +1704,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>17</GroupNumber>
-      <FileNumber>105</FileNumber>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>90</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1935,144 +1716,68 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
-  </Group>
-
-  <Group>
-    <GroupName>drivers\usb\src\class</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>18</GroupNumber>
-      <FileNumber>106</FileNumber>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>91</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\src\class\msc\usb_msc.c</PathWithFileName>
-      <FilenameWithoutPath>usb_msc.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\chargen.c</PathWithFileName>
+      <FilenameWithoutPath>chargen.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>18</GroupNumber>
-      <FileNumber>107</FileNumber>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>92</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\src\class\msc\usb_msc_scsi.c</PathWithFileName>
-      <FilenameWithoutPath>usb_msc_scsi.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\netio.c</PathWithFileName>
+      <FilenameWithoutPath>netio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>18</GroupNumber>
-      <FileNumber>108</FileNumber>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>93</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\src\descriptor\msd\usb_descriptor.c</PathWithFileName>
-      <FilenameWithoutPath>usb_descriptor.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-  </Group>
-
-  <Group>
-    <GroupName>drivers\usb\src\common</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>19</GroupNumber>
-      <FileNumber>109</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\src\common\usb.c</PathWithFileName>
-      <FilenameWithoutPath>usb.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\sntp.c</PathWithFileName>
+      <FilenameWithoutPath>sntp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>19</GroupNumber>
-      <FileNumber>110</FileNumber>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>94</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\src\common\usb_class.c</PathWithFileName>
-      <FilenameWithoutPath>usb_class.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\tcpecho.c</PathWithFileName>
+      <FilenameWithoutPath>tcpecho.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>19</GroupNumber>
-      <FileNumber>111</FileNumber>
+      <GroupNumber>14</GroupNumber>
+      <FileNumber>95</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\src\common\usb_framework.c</PathWithFileName>
-      <FilenameWithoutPath>usb_framework.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-  </Group>
-
-  <Group>
-    <GroupName>drivers\usb\src\driver</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-    <File>
-      <GroupNumber>20</GroupNumber>
-      <FileNumber>112</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usb_dci_kinetis.c</PathWithFileName>
-      <FilenameWithoutPath>usb_dci_kinetis.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>20</GroupNumber>
-      <FileNumber>113</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usb_driver.c</PathWithFileName>
-      <FilenameWithoutPath>usb_driver.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>20</GroupNumber>
-      <FileNumber>114</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usbevent.c</PathWithFileName>
-      <FilenameWithoutPath>usbevent.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\udpecho.c</PathWithFileName>
+      <FilenameWithoutPath>udpecho.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2085,8 +1790,8 @@
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>21</GroupNumber>
-      <FileNumber>115</FileNumber>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>96</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -2098,8 +1803,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>21</GroupNumber>
-      <FileNumber>116</FileNumber>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>97</FileNumber>
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -2111,8 +1816,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>21</GroupNumber>
-      <FileNumber>117</FileNumber>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>98</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -2124,8 +1829,8 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>21</GroupNumber>
-      <FileNumber>118</FileNumber>
+      <GroupNumber>15</GroupNumber>
+      <FileNumber>99</FileNumber>
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -2133,6 +1838,40 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK64F12.s</PathWithFileName>
       <FilenameWithoutPath>startup_MK64F12.s</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>application\msh_cmd</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>16</GroupNumber>
+      <FileNumber>100</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\src\msh_cmd\kill_thread.c</PathWithFileName>
+      <FilenameWithoutPath>kill_thread.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>16</GroupNumber>
+      <FileNumber>101</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\src\msh_cmd\reset.c</PathWithFileName>
+      <FilenameWithoutPath>reset.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

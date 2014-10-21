@@ -17,10 +17,6 @@
 #include "usb_msc.h"
 
 
-#define RTT_IRAM_HEAP_START               (0x1FFF0000)
-#define RTT_IRAM_HEAP_END                 (0x1FFF0000 + 0x10000)
-
-
 //int rt_hw_spi_bus_init(uint32_t instance, const char *name);
 
 //void rt_hw_board_init(void)

@@ -87,6 +87,37 @@ void QuickInitDecode(uint32_t map, QuickInit_Type * type)
     memcpy(type, pMap, sizeof(QuickInit_Type));  
 }
 
+void DWT_DelayInit(void)
+{
+    /* enable DEM */
+    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    
+    /* enable counter */
+    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+}
+
+void DWT_DelayUs(uint32_t us)
+{
+    uint32_t startts, endts, ts;
+    startts = DWT->CYCCNT;
+    ts =  us * (SystemCoreClock /(1000*1000) ); 
+    endts = startts + ts;      
+    if(endts > startts)  
+    {
+        while(DWT->CYCCNT < endts);       
+    }
+    else
+    {
+        while(DWT->CYCCNT > endts);
+        while(DWT->CYCCNT < endts);
+    }
+}
+
+void DWT_DelayMs(uint32_t ms)
+{
+    DWT_DelayUs(ms*1000);
+}
+
 /**
  * @brief  延时初始化函数
  * @code

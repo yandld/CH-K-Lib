@@ -150,5 +150,9 @@ void DelayMs(uint32_t ms);
 void DelayUs(uint32_t ms);
 void DelayInit(void);
 int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
+/* DWT Delay API */
+void DWT_DelayInit(void);
+void DWT_DelayUs(uint32_t us);
+void DWT_DelayMs(uint32_t ms);
 
 #endif

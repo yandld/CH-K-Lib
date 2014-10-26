@@ -30,6 +30,7 @@ void _init_entry(void* parameter)
     rt_components_init();
     dfs_romfs_init();
     cpu_usage_init();
+    finsh_system_init();
     dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
     
     /* init thread */
@@ -38,6 +39,7 @@ void _init_entry(void* parameter)
     {
         rt_thread_startup(tid);		
     }
+    
     
     tid = rt_thread_self();
     rt_thread_delete(tid);

@@ -4,14 +4,14 @@
 
 void gui_demo_thread_entry(void* parameter)
 {
-    rt_kprintf("gui demo task\r\n");
+    rt_kprintf("\r\ngui demo task\r\n");
 
-    MainTask();
+    
     
 	while(1)
 	{
-      //  GUI_TOUCH_Exec();
-        rt_thread_delay(10);
+        GUI_TOUCH_Exec();
+        rt_thread_delay(1);
 	}
 }
 
@@ -34,6 +34,7 @@ int cmd_gui_demo(int argc, char** argv)
     {
         rt_thread_startup(thread);		
     }
+    MainTask();
     return 0;
 }
 

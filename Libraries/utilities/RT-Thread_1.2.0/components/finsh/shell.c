@@ -659,5 +659,5 @@ int finsh_system_init(void)
         rt_thread_startup(&finsh_thread);
     return 0;
 }
-INIT_COMPONENT_EXPORT(finsh_system_init);
+//INIT_COMPONENT_EXPORT(finsh_system_init);
 

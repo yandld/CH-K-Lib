@@ -16,11 +16,12 @@ static void GUI_SettingInit(void)
 
 void gui_thread_entry(void* parameter)
 {
-  //  GUI_Init();
-  //  GUI_SettingInit();
-	//GUI_DispString("GUI system OK\r\n");//œ‘ æ≤‚ ‘
-  //  GUI_DispString(GUI_GetVersionString());
-//    MainTask();
+    
+    GUI_Init();
+    GUI_SettingInit();
+    GUI_DispString("GUI system OK\r\n");//œ‘ æ≤‚ ‘
+    GUI_DispString(GUI_GetVersionString());
+    MainTask();
   //  WM_HWIN hWin;
   //  GUI_CURSOR_Show();
   //  hWin = MYGUI_DLG_CreateDesktop();
@@ -29,6 +30,6 @@ void gui_thread_entry(void* parameter)
 
 	while(1)
 	{
-        rt_thread_delay(10);
+       // rt_thread_delay(10);
 	}
 }

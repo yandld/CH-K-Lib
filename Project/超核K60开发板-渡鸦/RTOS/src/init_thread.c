@@ -90,7 +90,6 @@ void init_thread_entry(void* parameter)
     //if (thread != RT_NULL) rt_thread_startup(thread);
    
    
-   cmd_gui_demo();
     tid = rt_thread_self();
     rt_thread_delete(tid); 
 }

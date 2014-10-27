@@ -11,6 +11,7 @@ static chgui_font_t _gFontTbl[] =
 
 __weak void GUI_DrawPixel(int color, int x, int y)
 {
+    printf("GUI_DrawPixel is empty!\r\n");
     /* defatult function shell */
 }
 

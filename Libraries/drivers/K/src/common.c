@@ -10,7 +10,6 @@
   */
 #include "common.h"
 #include <string.h>
-#include "systick.h"
 
 
 #define MCGOUT_TO_CORE_DIVIDER           (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
@@ -131,7 +130,7 @@ void DWT_DelayMs(uint32_t ms)
 #pragma weak DelayInit
 void DelayInit(void)
 {
-    SYSTICK_DelayInit();
+    DWT_DelayInit();
 }
 
 /**
@@ -148,7 +147,7 @@ void DelayInit(void)
 #pragma weak DelayMs
 void DelayMs(uint32_t ms)
 {
-    SYSTICK_DelayMs(ms);
+    DWT_DelayMs(ms);
 }
 
 /**
@@ -164,7 +163,7 @@ void DelayMs(uint32_t ms)
 #pragma weak DelayUs
 void DelayUs(uint32_t us)
 {
-    SYSTICK_DelayUs(us);
+    DWT_DelayUs(us);
 }
 
 

@@ -24,7 +24,7 @@
 #include "ssd.h"
 
 int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
-
+int g2401Avalable;
 /* 校准数据 */
 
 struct calibration_data
@@ -40,11 +40,13 @@ struct calibration_data
 
 
 static struct calibration_data cal_data;
-//static uint8_t NRF2401RXBuffer[32] = "HelloWorld~~";//无线接收数据
+
 static imu_float_euler_angle_t angle;
 static imu_raw_data_t raw_data;
 static int32_t temperature;
 static int32_t pressure;
+static uint8_t buf[64];
+
 
 int hmc5883_read_data2(int16_t* x, int16_t* y, int16_t* z)
 {
@@ -59,7 +61,7 @@ int hmc5883_read_data2(int16_t* x, int16_t* y, int16_t* z)
     }
     return r;
 }
- 
+
 //实现姿态解算的回调并连接回调
 static imu_io_install_t IMU_IOInstallStruct1 = 
 {
@@ -74,7 +76,7 @@ static void PIT_CH1_ISR(void)
 {
     uint32_t len;
     static transmit_user_data send_data;
-    static uint8_t buf[64];
+
     send_data.trans_accel[0] = raw_data.ax;
     send_data.trans_accel[1] = raw_data.ay;
     send_data.trans_accel[2] = raw_data.az;
@@ -94,6 +96,7 @@ static void PIT_CH1_ISR(void)
     /* set buffer */
     len = user_data2buffer(&send_data, buf);
     trans_start_send_data(buf, len);
+
     GPIO_ToggleBit(HW_GPIOA, 1);
     WDOG_Refresh();
 }
@@ -120,10 +123,12 @@ int init_2401(void)
     /* init 2401 */
     r = nrf24l01_init(&bus, BOARD_SPI_CS);
     r = nrf24l01_probe();
+    g2401Avalable = true;
     if(r)
     {
-        printf("2401 init failed\r\n");
+        g2401Avalable = false;
     }
+    printf("2401 init:%d\r\n", r);
     return r;
 }
 
@@ -163,7 +168,7 @@ int init_sensor(void)
     return ret;
 }
 
-
+# if 0
 void MagnetometerCalibration(struct calibration_data * cal)
 {
     uint32_t i;
@@ -223,6 +228,7 @@ void MagnetometerCalibration(struct calibration_data * cal)
     cal->flag = 0x5A;
     SSD_Write(cal, sizeof(struct calibration_data));
 }
+#endif
 
 #define BMP_STATUS_T_START          (0x00)
 #define BMP_STATUS_T_COMPLETE       (0x01)
@@ -259,14 +265,14 @@ int main(void)
     }
     
     /* flash operation */
-    SSDInit();
+   // SSDInit();
     
     /* init sensor&2401 */
     init_sensor();
     init_2401();
     /* init transfer */
     trans_init(HW_DMA_CH1, uart_instance);
-    
+    nrf24l01_set_tx_mode();
     /* install imu raw date callback */
     imu_io_install(&IMU_IOInstallStruct1);
     
@@ -278,13 +284,17 @@ int main(void)
     PIT_QuickInit(HW_PIT_CH1, 1000*20);
     PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
- 
+    
     while(1)
     {
         //获取欧拉角 获取原始角度
         DisableInterrupts();
         ret = imu_get_euler_angle(&angle, &raw_data);
         EnableInterrupts();
+        if(g2401Avalable)
+        {
+            nrf24l01_write_packet(buf, 32);
+        }
         if(ret)
         {
             DisableInterrupts();

@@ -61,7 +61,7 @@
 #define RF_CH               0x05  //工作频率设定
 #define RF_SETUP            0x06
 #define STATUS              0x07
-#define OBSERVE_TX          0x08
+#define OBSERVE_TX          0x08 //发送检测寄存器
 #define CD                  0x09
 #define RX_ADDR_P0          0x0A
 #define RX_ADDR_P1          0x0B
@@ -234,9 +234,11 @@ int nrf24l01_write_packet(uint8_t *buf, uint32_t len)
         }
         status = read_reg(OBSERVE_TX);
         plos = (status & OBSERVE_TX_PLOS_CNT_MASK) >> OBSERVE_TX_PLOS_CNT_SHIFT;
+        
+        /* if it reach max re send count */
         if(plos && (status & STATUS_MAX_RT_MASK))
         {
-            status = FLUSH_TX;
+            status = FLUSH_TX; /* clear TX FIFO */
             spi_write(&device, &status, 1, true);
             return 1;
         }

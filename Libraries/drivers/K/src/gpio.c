@@ -66,7 +66,7 @@ static const IRQn_Type GPIO_IRQnTable[] =
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @param  pinMux    :复用功能选项，不同的复用值代表不同的功能
  *         @arg kPinAlt0 :引脚复用成0模式
  *         @arg        . : .
@@ -75,15 +75,15 @@ static const IRQn_Type GPIO_IRQnTable[] =
  *         @arg kPinAlt7 :引脚复用成7模式
  * @retval None
  */
-void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
+void PORT_PinMuxConfig(uint32_t instance, uint8_t pin, PORT_PinMux_Type pinMux)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_GPIO_ALL_PIN(pin));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    PORT_InstanceTable[instance]->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);
-    PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
+    PORT_InstanceTable[instance]->PCR[pin] &= ~(PORT_PCR_MUX_MASK);
+    PORT_InstanceTable[instance]->PCR[pin] |=  PORT_PCR_MUX(pinMux);
 }
  /**
  * @brief  设置一个引脚的上下拉电阻功能 用户一般不必调用
@@ -97,32 +97,32 @@ void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pin
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @param  pull      :引脚电阻模式选择
  *         @arg kPullDisabled :关闭电阻上下拉
  *         @arg kPullUp       :上拉电阻
  *         @arg kPullDown     :下拉电阻
  * @retval None
  */
-void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
+void PORT_PinPullConfig(uint32_t instance, uint8_t pin, PORT_Pull_Type pull)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_GPIO_ALL_PIN(pin));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     switch(pull)
     {
         case kPullDisabled:
-            PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_PE_MASK;
+            PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_PE_MASK;
             break;
         case kPullUp:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_PE_MASK;
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_PS_MASK;
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_PE_MASK;
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_PS_MASK;
             break;
         case kPullDown:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_PE_MASK;
-            PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_PS_MASK;
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_PE_MASK;
+            PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_PS_MASK;
             break;
         default:
             break;
@@ -140,16 +140,16 @@ void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @param  newState  :功能开关控制
  *         @arg ENABLE   :开启功能
  *         @arg DISABLE  :关闭功能
  * @retval None
  */
-void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pinIndex, FunctionalState newState)
+void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pin, FunctionalState newState)
 {
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_ODE_MASK);
+    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_ODE_MASK);
 }
 
 /**
@@ -164,16 +164,16 @@ void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pinIndex, FunctionalStat
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @param  newState  :功能开关控制
  *         @arg ENABLE   :开启功能
  *         @arg DISABLE  :关闭功能
  * @retval None
  */
-void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pinIndex, FunctionalState newState)
+void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pin, FunctionalState newState)
 {
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_PFE_MASK):(PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_PFE_MASK);
+    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_PFE_MASK):(PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_PFE_MASK);
 }
 
  /**
@@ -189,20 +189,20 @@ void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pinIndex, Functional
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @param  mode      :输入或者输出设置
  *         @arg kInpput  :输入功能选择
  *         @arg kOutput  :输出功能选择
  * @retval None
  */
-void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode)
+void GPIO_PinConfig(uint32_t instance, uint8_t pin, GPIO_PinConfig_Type mode)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_GPIO_ALL_PIN(pin));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    (mode == kOutput) ? (GPIO_InstanceTable[instance]->PDDR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PDDR &= ~(1 << pinIndex));
+    (mode == kOutput) ? (GPIO_InstanceTable[instance]->PDDR |= (1 << pin)):(GPIO_InstanceTable[instance]->PDDR &= ~(1 << pin));
 }
 
  /**
@@ -273,7 +273,7 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @param  mode  :引脚工作模式
  *         @arg kGPIO_Mode_IFT :悬空输入
  *         @arg kGPIO_Mode_IPD :下拉输入
@@ -305,21 +305,32 @@ uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @param  data   : 引脚的电平状态  
  *         @arg 0 : 低电平 
  *         @arg 1 : 高电平
  * @retval None
  */
-void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data)
+void GPIO_WriteBit(uint32_t instance, uint8_t pin, uint8_t data)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_GPIO_ALL_PIN(pin));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pinIndex));
+    (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pin)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pin));
 }
+
+void GPIO_SetBit(uint32_t instance, uint32_t pin)
+{
+    GPIO_InstanceTable[instance]->PSOR |= (1 << pin);
+}
+
+void GPIO_ResetBit(uint32_t instance, uint32_t pin)
+{
+    GPIO_InstanceTable[instance]->PCOR |= (1 << pin);
+}
+
  /**
  * @brief  读取一个引脚上的电平状态
  * @code
@@ -333,25 +344,25 @@ void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data)
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @retval 
  *         @arg 0 : 低电平
  *         @arg 1 : 高电平
  */
-uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex)
+uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pin)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_GPIO_ALL_PIN(pin));
     /* input or output */
-    if(((GPIO_InstanceTable[instance]->PDDR) >> pinIndex) & 0x01)
+    if(((GPIO_InstanceTable[instance]->PDDR) >> pin) & 0x01)
     {
-        return ((GPIO_InstanceTable[instance]->PDOR >> pinIndex) & 0x01);
+        return ((GPIO_InstanceTable[instance]->PDOR >> pin) & 0x01);
     }
     else
     {
-        return ((GPIO_InstanceTable[instance]->PDIR >> pinIndex) & 0x01);
+        return ((GPIO_InstanceTable[instance]->PDIR >> pin) & 0x01);
     }
 }
 
@@ -367,16 +378,16 @@ uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex)
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @retval None
  */
-void GPIO_ToggleBit(uint32_t instance, uint8_t pinIndex)
+void GPIO_ToggleBit(uint32_t instance, uint8_t pin)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pinIndex));
-    GPIO_InstanceTable[instance]->PTOR |= (1 << pinIndex);
+    assert_param(IS_GPIO_ALL_PIN(pin));
+    GPIO_InstanceTable[instance]->PTOR |= (1 << pin);
 }
 
 /**
@@ -424,6 +435,7 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
     GPIO_InstanceTable[instance]->PDOR = data;
 }
 
+
 /**
  * @brief  设置GPIO引脚中断类型或者DMA功能
  * @code
@@ -436,7 +448,7 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
  *         @arg HW_GPIOC :芯片的PORTC端口
  *         @arg HW_GPIOD :芯片的PORTD端口
  *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
+ * @param  pin  :端口上的引脚号 0~31
  * @param config: 配置模式
  *         @arg kGPIO_DMA_RisingEdge DMA上升沿触发
  *         @arg kGPIO_DMA_FallingEdge DMA下降沿触发
@@ -448,15 +460,15 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
  *         @arg kGPIO_IT_High 高电平触发中断
  * @retval None
  */
-void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status)
+void GPIO_ITDMAConfig(uint32_t instance, uint8_t pin, GPIO_ITDMAConfig_Type config, bool status)
 {
     /* param check */
     assert_param(IS_GPIO_ALL_INSTANCE(instance));
     assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pinIndex));
+    assert_param(IS_GPIO_ALL_PIN(pin));
     /* init moudle */
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
+    PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_IRQC_MASK;
     
     if(!status)
     {
@@ -467,32 +479,32 @@ void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type
     switch(config)
     {
         case kGPIO_DMA_RisingEdge:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(1);
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_IRQC(1);
             break;
         case kGPIO_DMA_FallingEdge:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(2);
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_IRQC(2);
             break;
         case kGPIO_DMA_RisingFallingEdge:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(3);
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_IRQC(3);
             break;
         case kGPIO_IT_Low:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(8);
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_IRQC(8);
             NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
             break;
         case kGPIO_IT_RisingEdge:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(9);
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_IRQC(9);
             NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
             break;
         case kGPIO_IT_FallingEdge:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(10);
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_IRQC(10);
             NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
             break;
         case kGPIO_IT_RisingFallingEdge:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(11);
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_IRQC(11);
             NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
             break;
         case kGPIO_IT_High:
-            PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(12);
+            PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_IRQC(12);
             NVIC_EnableIRQ(GPIO_IRQnTable[instance]);
             break;
         default:

@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -39,11 +39,21 @@ Purpose     : Interface definition for GUIDRV_TemplateI driver
 
 /*********************************************************************
 *
+*       Defines
+*
+**********************************************************************
+*/
+#define PRIVATE_DEVFUNC_ONINITHOOK 0x1000
+
+/*********************************************************************
+*
 *       Types
 *
 **********************************************************************
 */
 typedef struct DRIVER_CONTEXT DRIVER_CONTEXT;
+
+typedef void (* T_ONINITHOOK)(DRIVER_CONTEXT * pContext);
 
 /*********************************************************************
 *
@@ -66,13 +76,9 @@ struct DRIVER_CONTEXT {
   //
   int xSize, ySize;
   int vxSize, vySize;
-  int UseCache;
-  int MemSize;
   //
   // Driver specific data
   //
-  int FirstSEG;
-  int FirstCOM;
   //
   // Accelerators for calculation
   //
@@ -125,7 +131,8 @@ static void _SetPixelIndex_##EXT(GUI_DEVICE * pDevice, int x, int y, int PixelIn
   DRIVER_CONTEXT * pContext;                                                           \
                                                                                        \
   pContext = (DRIVER_CONTEXT *)pDevice->u.pContext;                                    \
-  _SetPixelIndex(pContext, X_PHYS, Y_PHYS, PixelIndex);                                \
+  pContext->xSize = pContext->xSize; /* Keep compiler happy */                         \
+  _SetPixelIndex(pDevice, X_PHYS, Y_PHYS, PixelIndex);                                 \
 }
 
 /*********************************************************************
@@ -134,11 +141,12 @@ static void _SetPixelIndex_##EXT(GUI_DEVICE * pDevice, int x, int y, int PixelIn
 */
 #define DEFINE_GETPIXELINDEX(EXT, X_PHYS, Y_PHYS)                              \
 static unsigned int _GetPixelIndex_##EXT(GUI_DEVICE * pDevice, int x, int y) { \
-  DRIVER_CONTEXT * pContext;                                                   \
   LCD_PIXELINDEX PixelIndex;                                                   \
+  DRIVER_CONTEXT * pContext;                                                   \
                                                                                \
   pContext = (DRIVER_CONTEXT *)pDevice->u.pContext;                            \
-  PixelIndex = _GetPixelIndex(pContext, X_PHYS, Y_PHYS);                       \
+  pContext->xSize = pContext->xSize; /* Keep compiler happy */                 \
+  PixelIndex = _GetPixelIndex(pDevice, X_PHYS, Y_PHYS);                        \
   return PixelIndex;                                                           \
 }
 

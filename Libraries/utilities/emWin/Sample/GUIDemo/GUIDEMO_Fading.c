@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -27,7 +27,7 @@ Full source code is available at: www.segger.com
 We appreciate your understanding and fairness.
 ----------------------------------------------------------------------
 File        : GUIDEMO_Fading.c
-Purpose     : Demo of fading effect function
+Purpose     : Demo of fading animation function
 ---------------------------END-OF-HEADER------------------------------
 */
 
@@ -931,7 +931,6 @@ static void _FadingDemo(void) {
   }
 }
 
-
 /*********************************************************************
 *
 *       Public code
@@ -943,8 +942,7 @@ static void _FadingDemo(void) {
 *       GUIDEMO_Fading
 */
 void GUIDEMO_Fading(void) {
-  GUIDEMO_ShowIntro("Fading", "Fading between\ntwo screens");
-  GUIDEMO_HideControlWin();
+  GUIDEMO_ConfigureDemo("Fading", "Fading between\ntwo screens", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   _FadingDemo();
 }
 
@@ -953,6 +951,6 @@ void GUIDEMO_Fading(void) {
 void GUIDEMO_Fading_C(void);
 void GUIDEMO_Fading_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_FADING && GUI_SUPPORT_MEMDEV
 
 /*************************** End of file ****************************/

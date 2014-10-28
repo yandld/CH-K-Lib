@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -122,17 +122,21 @@ static U32 _GetPixelsPerSecond(void) {
 *       GUIDEMO_Speed
 */
 void GUIDEMO_Speed(void) {
-  GUI_RECT ClipRect;
-  GUI_RECT Rect;
-  unsigned aColorIndex[8];
-  char     cText[40] = { 0 };
-  U32      PixelsPerSecond;
-  int      TimeStart;
-  int      vySize;
-  int      xSize;
-  int      ySize;
-  int      i;
+  #if GUI_SUPPORT_TOUCH
+    GUI_PID_STATE State;
+  #endif
+  GUI_RECT        ClipRect;
+  GUI_RECT        Rect;
+  char            acText[40] = { 0 };
+  U32             PixelsPerSecond;
+  int             aColorIndex[8];
+  int             TimeStart;
+  int             vySize;
+  int             xSize;
+  int             ySize;
+  int             i;
 
+  GUIDEMO_ConfigureDemo("High speed", "Multi layer clipping\nHighly optimized drivers", 0);
   xSize  = LCD_GetXSize();
   ySize  = LCD_GetYSize();
   vySize = LCD_GetVYSize();
@@ -143,8 +147,6 @@ void GUIDEMO_Speed(void) {
     ClipRect.y1 = ySize;
     GUI_SetClipRect(&ClipRect);
   }
-  GUIDEMO_ShowIntro("High speed", "Multi layer clipping\nHighly optimized drivers");
-  GUIDEMO_HideControlWin();
   for (i = 0; i< 8; i++) {
     aColorIndex[i] = GUI_Color2Index(_aColor[i]);
   }
@@ -174,22 +176,27 @@ void GUIDEMO_Speed(void) {
     if (Rect.y1 < 0) {
       Rect.y1 = 0;
     }
-    GUI_Exec();
     //
-    // Allow short breaks so we do not use all available CPU time ...
+    // There is no control window. A simple click on any position has to skip the demo.
     //
+    #if GUI_SUPPORT_TOUCH
+      GUI_PID_GetState(&State);
+      if (State.Pressed) {
+        break;
+      }
+    #endif
   }
   GUIDEMO_NotifyStartNext();
   PixelsPerSecond = _GetPixelsPerSecond();
   GUI_SetClipRect(NULL);
+  GUIDEMO_AddStringToString(acText, "Pixels/sec: ");
+  GUIDEMO_AddIntToString(acText, PixelsPerSecond);
   GUIDEMO_DrawBk();
   GUI_SetColor(GUI_WHITE);
   GUI_SetTextMode(GUI_TM_TRANS);
   GUI_SetFont(&GUI_FontRounded22);
-  GUI_DrawBitmap(&bmSeggerLogo70x35, 5, 5);
-  GUIDEMO_AddStringToString(cText, "Pixels/sec: ");
-  GUIDEMO_AddIntToString(cText, PixelsPerSecond);
-  GUI_DispStringHCenterAt(cText, xSize / 2, (ySize - GUI_GetFontSizeY()) / 2);
+  GUI_DispStringHCenterAt(acText, xSize / 2, (ySize - GUI_GetFontSizeY()) / 2);
+  GUIDEMO_ConfigureDemo(NULL, NULL, GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   GUIDEMO_Delay(4000);
 }
 
@@ -198,6 +205,6 @@ void GUIDEMO_Speed(void) {
 void GUIDEMO_Speed_C(void);
 void GUIDEMO_Speed_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_SPEED
 
 /*************************** End of file ****************************/

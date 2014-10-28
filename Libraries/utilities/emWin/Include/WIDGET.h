@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -108,6 +108,7 @@ typedef struct {
 #define ICONVIEW_ID  0x49434f4eUL /* ICON */
 #define IMAGE_ID     0x494d4147UL /* IMAG */
 #define SPINBOX_ID   0x5350494eUL /* SPIN */
+#define KNOB_ID      0x4b4e4f42UL /* KNOB */
 
 #define WIDGET_LOCK(hWin)       ((WIDGET*)GUI_LOCK_H(hWin))
 
@@ -308,7 +309,7 @@ void      WIDGET__GetInsideRect      (WIDGET * pWidget, GUI_RECT * pRect);
 void      WIDGET__Init               (WIDGET * pWidget, int Id, U16 State);
 void      WIDGET__RotateRect90       (WIDGET * pWidget, GUI_RECT * pDest, const GUI_RECT * pRect);
 void      WIDGET__SetScrollState     (WM_HWIN hWin, const WM_SCROLL_STATE * pVState, const WM_SCROLL_STATE * pState);
-void      WIDGET__FillStringInRect   (const char GUI_UNI_PTR * pText, const GUI_RECT * pFillRect, const GUI_RECT * pTextRectMax, const GUI_RECT * pTextRectAct);
+void      WIDGET__FillStringInRect   (const char * pText, const GUI_RECT * pFillRect, const GUI_RECT * pTextRectMax, const GUI_RECT * pTextRectAct);
 
 /*********************************************************************
 *

@@ -1,7 +1,6 @@
 #include <rthw.h>
 #include <rtthread.h>
-#include "spi.h"
-#include "gpio.h"
+#include "chlib_k.h"
 
 #include <rtdevice.h>
 #include <drivers/spi.h>

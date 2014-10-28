@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -71,7 +71,7 @@ void     LCD_L0_XorPixel     (int x, int y);
 void     LCD_L0_DrawHLine    (int x0, int y,  int x1);
 void     LCD_L0_DrawVLine    (int x, int y0,  int y1);
 void     LCD_L0_FillRect     (int x0, int y0, int x1, int y1);
-void     LCD_L0_DrawBitmap   (int x0, int y0, int xsize, int ysize, int BitsPerPixel,  int BytesPerLine, const U8 GUI_UNI_PTR * pData, int Diff, const LCD_PIXELINDEX * pTrans);
+void     LCD_L0_DrawBitmap   (int x0, int y0, int xsize, int ysize, int BitsPerPixel,  int BytesPerLine, const U8 * pData, int Diff, const LCD_PIXELINDEX * pTrans);
 void     LCD_L0_SetOrg       (int x, int y);
 void     LCD_L0_On           (void);
 void     LCD_L0_Off          (void);
@@ -167,8 +167,8 @@ static void __DrawBitmap(GUI_DEVICE * pDevice, int x0, int y0,
                        int xSize, int ySize,
                        int BitsPerPixel,
                        int BytesPerLine,
-                       const U8 GUI_UNI_PTR * pData, int Diff,
-                       const LCD_PIXELINDEX* pTrans) {
+                       const U8 * pData, int Diff,
+                       const LCD_PIXELINDEX * pTrans) {
   GUI_USE_PARA(pDevice);
   LCD_L0_DrawBitmap(x0, y0, xSize, ySize, BitsPerPixel, BytesPerLine, pData, Diff, pTrans);
 }

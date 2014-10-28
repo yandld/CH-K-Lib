@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -34,7 +34,7 @@ Purpose     : Declares LCD interface functions
 #ifndef LCD_H
 #define LCD_H
 
-#include "GUI_ConfDefaults.h" /* Used for GUI_UNI_PTR */
+#include "GUI_ConfDefaults.h" /* Used for GUI_CONST_STORAGE */
 #include "Global.h"
 
 #if defined(__cplusplus)
@@ -104,7 +104,7 @@ typedef struct { I16 x0,y0,x1,y1; } LCD_RECT;
 typedef struct {
   int              NumEntries;
   char             HasTrans;
-  const LCD_COLOR GUI_UNI_PTR * pPalEntries;
+  const LCD_COLOR * pPalEntries;
 } LCD_LOGPALETTE;
 
 /* This is used for the simulation only ! */
@@ -156,6 +156,7 @@ extern const LCD_API_COLOR_CONV LCD_API_ColorConv_M2;
 extern const LCD_API_COLOR_CONV LCD_API_ColorConv_4;
 extern const LCD_API_COLOR_CONV LCD_API_ColorConv_M4;
 extern const LCD_API_COLOR_CONV LCD_API_ColorConv_5;
+extern const LCD_API_COLOR_CONV LCD_API_ColorConv_6;
 extern const LCD_API_COLOR_CONV LCD_API_ColorConv_8;
 extern const LCD_API_COLOR_CONV LCD_API_ColorConv_16;
 extern const LCD_API_COLOR_CONV LCD_API_ColorConv_1616I;
@@ -215,6 +216,7 @@ extern const LCD_API_COLOR_CONV LCD_API_ColorConv_M8888I;
 #define GUICC_4         &LCD_API_ColorConv_4
 #define GUICC_M4        &LCD_API_ColorConv_M4
 #define GUICC_5         &LCD_API_ColorConv_5
+#define GUICC_6         &LCD_API_ColorConv_6
 #define GUICC_8         &LCD_API_ColorConv_8
 #define GUICC_16        &LCD_API_ColorConv_16
 #define GUICC_1616I     &LCD_API_ColorConv_1616I
@@ -318,7 +320,7 @@ typedef struct GUI_DEVICE_API GUI_DEVICE_API;
 
 typedef void tLCDDEV_DrawBitmap   (int x0, int y0, int xsize, int ysize,
                        int BitsPerPixel, int BytesPerLine,
-                       const U8 GUI_UNI_PTR * pData, int Diff,
+                       const U8 * pData, int Diff,
                        const void * pTrans);   /* Really LCD_PIXELINDEX, but is void to avoid compiler warnings */
 #define GUI_MEMDEV_APILIST_1  &GUI_MEMDEV_DEVICE_1
 #define GUI_MEMDEV_APILIST_8  &GUI_MEMDEV_DEVICE_8
@@ -444,6 +446,7 @@ void (* LCD_GetDevFunc(int LayerIndex, int Item))(void);
 #define LCD_DEVFUNC_DRAWBMP_8BPP  0x25 /* ...drawing a 8bpp bitmap */
 #define LCD_DEVFUNC_READPIXEL     0x26 /* ...reading a pixel index */
 #define LCD_DEVFUNC_READMPIXELS   0x27 /* ...reading multiple pixel indices */
+#define LCD_DEVFUNC_DRAWBMP_32BPP 0x28 /* ...drawing a 32bpp bitmap */
 
 /*********************************************************************
 *
@@ -634,12 +637,15 @@ void LCD_SetBkColorIndex(unsigned PixelIndex);
 void LCD_FillRect(int x0, int y0, int x1, int y1);
 typedef void tLCD_SetPixelAA(int x, int y, U8 Intens);
 
-void LCD_SetPixelAA        (int x, int y, U8 Intens);
-void LCD_SetPixelAA_NoTrans(int x, int y, U8 Intens);
-void LCD_SetPixelAA_Xor    (int x, int y, U8 Intens);
+void LCD_SetPixelAA4_Trans  (int x, int y, U8 Intens);
+void LCD_SetPixelAA4_NoTrans(int x, int y, U8 Intens);
 
-LCD_COLOR    LCD_AA_MixColors(LCD_COLOR Color, LCD_COLOR BkColor, U8 Intens);
-LCD_COLOR    LCD_MixColors256(LCD_COLOR Color, LCD_COLOR BkColor, unsigned Intens);
+void LCD_SetPixelAA8_Trans  (int x, int y, U8 Intens);
+void LCD_SetPixelAA8_NoTrans(int x, int y, U8 Intens);
+
+LCD_COLOR    LCD_AA_MixColors16 (LCD_COLOR Color, LCD_COLOR BkColor, U8 Intens);
+LCD_COLOR    LCD_AA_MixColors256(LCD_COLOR Color, LCD_COLOR BkColor, U8 Intens);
+LCD_COLOR    LCD_MixColors256   (LCD_COLOR Color, LCD_COLOR BkColor, unsigned Intens);
 LCD_COLOR    LCD_GetPixelColor(int x, int y);     /* Get RGB color of pixel */
 unsigned int LCD_GetPixelIndex(int x, int y);
 int          LCD_GetBkColorIndex (void);
@@ -657,12 +663,13 @@ int LCD_SetMaxNumColors(unsigned MaxNumColors);
 
 typedef void tLCD_DrawBitmap(int x0, int y0, int xsize, int ysize,
                              int xMul, int yMul, int BitsPerPixel, int BytesPerLine,
-                             const U8 GUI_UNI_PTR * pPixel, const void * pTrans);
+                             const U8 * pPixel, const void * pTrans);
 typedef void tRect2TextRect (LCD_RECT * pRect);
 
 struct tLCD_APIList_struct {
   tLCD_DrawBitmap   * pfDrawBitmap;
   tRect2TextRect    * pfRect2TextRect;
+  tRect2TextRect    * pfTransformRect;
 };
 
 typedef struct tLCD_APIList_struct tLCD_APIList;
@@ -676,6 +683,9 @@ extern tLCD_APIList LCD_APIList180;
 #define GUI_ROTATE_CW  &LCD_APIListCW
 #define GUI_ROTATE_180 &LCD_APIList180
 #define GUI_ROTATE_0   0
+
+tLCD_SetPixelAA * LCD__GetPfSetPixel(int BitsPerPixel);
+
 #endif
 
 /*********************************************************************

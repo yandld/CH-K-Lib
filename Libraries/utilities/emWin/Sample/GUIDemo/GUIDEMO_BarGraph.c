@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -449,15 +449,14 @@ static void _DemoBarGraph(void) {
   ySize     = LCD_GetYSize();
   xPosGraph = (xSize - GRAPH_WIDTH)  / 2;
   yPosGraph = (ySize - GRAPH_HEIGHT) / 2;
-  GUIDEMO_DispTitle("Bargraph demo");
   //
   // Create MEMDEV
   //
   hMem = GUI_MEMDEV_Create(xPosGraph, yPosGraph, GRAPH_WIDTH + 7 + 1, GRAPH_HEIGHT + 1);
-  GUI_MEMDEV_CopyFromLCD(hMem);
   if (hMem == 0) {
     return;
   }
+  GUI_MEMDEV_CopyFromLCD(hMem);
   for (i = 0; i < NumItems; i++) {
     aAdd[i] = (i & 1) * 2 - 1;
   }
@@ -476,7 +475,7 @@ static void _DemoBarGraph(void) {
         *(aAdd + i) = -*(aAdd + i);
       }
     }
-    TimeStep  = GUIDEMO_GetTime() - TimeStart;
+    TimeStep = GUIDEMO_GetTime() - TimeStart;
     if ((TimeStep - TimeDiff) < TIME_STEP) {
       GUI_Delay(TIME_STEP - (TimeStep - TimeDiff));
     } else {
@@ -498,8 +497,9 @@ static void _DemoBarGraph(void) {
 *       GUIDEMO_BarGraph
 */
 void GUIDEMO_BarGraph(void) {
-  GUIDEMO_ShowIntro("Bar Graph", "Animated bar graph");
+  GUIDEMO_ConfigureDemo("Bar Graph", "Animated bar graph\nusing Alpha Blending.", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   GUIDEMO_DrawBk();
+  GUIDEMO_DispTitle("Bargraph demo");
   _DemoBarGraph();
 }
 
@@ -508,6 +508,6 @@ void GUIDEMO_BarGraph(void) {
 void GUIDEMO_BarGraph_C(void);
 void GUIDEMO_BarGraph_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_BARGRAPH && GUI_SUPPORT_MEMDEV
 
 /*************************** End of file ****************************/

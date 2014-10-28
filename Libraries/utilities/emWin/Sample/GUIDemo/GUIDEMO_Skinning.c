@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -58,6 +58,8 @@ typedef struct {
 */
 #define FRAMEWIN_RADIUS 5
 
+#define X_OFFSET 160  // Half the xSize of the "Order Vehicle" window + 20 Pixels
+#define Y_OFFSET 117  // Half the ySize of the "Order Vehicle" window + 35 Pixels
 //
 // Segger logo 60x30
 //
@@ -2072,9 +2074,9 @@ static void _cbBkWindow(WM_MESSAGE * pMsg) {
     GUI_SetTextMode(GUI_TM_TRANS);
     GUI_DrawGradientV(0, 0, xSize, ySize, 0xFF8080, 0x8080FF);
     GUI_SetFont(GUI_FONT_16_ASCII);
-    GUI_DispStringHCenterAt("emWin now supports\n", 180, 5);
+    GUI_DispStringHCenterAt("emWin now supports\n", xSize / 2, 5);
     GUI_SetFont(&GUI_Font24_EXT_AA4);
-    GUI_DispStringHCenterAt("S k i n n i n g", 180, GUI_GetDispPosY());
+    GUI_DispStringHCenterAt("S k i n n i n g", xSize / 2, GUI_GetDispPosY());
     GUI_DrawBitmap(&bmSeggerLogo_60x30, 20, 10);
     break;
   default:
@@ -2089,7 +2091,11 @@ static void _cbBkWindow(WM_MESSAGE * pMsg) {
 static void _cbDialogSelect(WM_MESSAGE * pMsg) {
   WM_HWIN  hWin;
   GUI_RECT Rect;
+  int      xOff;
+  int      yOff;
 
+  xOff = LCD_GetXSize() / 2 - X_OFFSET;
+  yOff = LCD_GetYSize() / 2 - Y_OFFSET;
   hWin = pMsg->hWin;
   switch (pMsg->MsgId) {
   case WM_PAINT:
@@ -2115,7 +2121,7 @@ static void _cbDialogSelect(WM_MESSAGE * pMsg) {
         //lint -fallthrough // End dialog in both cases.
       case GUI_ID_CANCEL:
         _ReadyDialogSelect = 1;
-        GUI_MEMDEV_MoveOutWindow(pMsg->hWin, 80, 190, 180, 500);
+        GUI_MEMDEV_MoveOutWindow(pMsg->hWin, 80 + xOff, 190 + yOff, 180, 500);
         GUI_EndDialog(pMsg->hWin, 0);
         break;
       }
@@ -2167,7 +2173,11 @@ static void _cbDialogProgress(WM_MESSAGE * pMsg) {
 */
 static void _cbDialogOrder(WM_MESSAGE * pMsg) {
   WM_HWIN hDlg, hWin, hItem, hClient, hProg;
+  int     xOff;
+  int     yOff;
 
+  xOff = LCD_GetXSize() / 2 - X_OFFSET;
+  yOff = LCD_GetYSize() / 2 - Y_OFFSET;
   hWin = pMsg->hWin;
   switch (pMsg->MsgId) {
   case WM_DELETE:
@@ -2210,10 +2220,10 @@ static void _cbDialogOrder(WM_MESSAGE * pMsg) {
       int Id = WM_GetId(pMsg->hWinSrc);
       switch (Id) {
       case GUI_ID_BUTTON0:
-        hDlg = GUI_CreateDialogBox(_aDialogSelect, GUI_COUNTOF(_aDialogSelect), _cbDialogSelect, WM_HBKWIN, 0, 0);
+        hDlg = GUI_CreateDialogBox(_aDialogSelect, GUI_COUNTOF(_aDialogSelect), _cbDialogSelect, WM_HBKWIN, xOff, yOff);
         FRAMEWIN_SetSkin(hDlg, _DrawSkin);
         WM_ClrHasTrans(hDlg);
-        GUI_MEMDEV_MoveInWindow(hDlg, 80, 190, 180, 500);
+        GUI_MEMDEV_MoveInWindow(hDlg, 80 + xOff, 190 + yOff, 180, 500);
         while ((_ReadyDialogOrder == 0) && (GUIDEMO_CheckCancel() == 0)) {
           GUI_Delay(100);
           if (_ReadyDialogSelect == 1) {
@@ -2232,7 +2242,7 @@ static void _cbDialogOrder(WM_MESSAGE * pMsg) {
         }
         break;
       case GUI_ID_OK:
-        hProg = GUI_CreateDialogBox(_aDialogProgress, GUI_COUNTOF(_aDialogProgress), _cbDialogProgress, WM_HBKWIN, 0, 0);
+        hProg = GUI_CreateDialogBox(_aDialogProgress, GUI_COUNTOF(_aDialogProgress), _cbDialogProgress, WM_HBKWIN, xOff, yOff);
         //
         // Make modal to avoid several creations of the progress window.
         //
@@ -2269,7 +2279,11 @@ static void _cbAnimation(WM_MESSAGE * pMsg) {
   GUI_PID_STATE   State = {0};
   WM_HWIN         hWin;
   ANIM          * pAnim;
-
+  int             xOff;
+  int             yOff;
+  
+  xOff = LCD_GetXSize() / 2 - X_OFFSET;
+  yOff = LCD_GetYSize() / 2 - Y_OFFSET;
   hWin = pMsg->hWin;
   pAnim = &_aAnim[Index];
   switch (pMsg->MsgId) {
@@ -2277,8 +2291,8 @@ static void _cbAnimation(WM_MESSAGE * pMsg) {
     if (GUIDEMO_CheckCancel()) {
       WM_RestartTimer(pMsg->Data.v, 100);
     } else {
-      State.x = pAnim->x;
-      State.y = pAnim->y;
+      State.x = pAnim->x + xOff;
+      State.y = pAnim->y + yOff;
       State.Pressed = pAnim->Pressed;
       GUI_PID_StoreState(&State);
       WM_RestartTimer(pMsg->Data.v, pAnim->Delay);
@@ -2307,7 +2321,11 @@ static void _DemoSkinning(void) {
   const GUI_FONT GUI_UNI_PTR  * pFrameWinFontOld;
   int                           FrameWinTextAlignOld;
   WM_CALLBACK                 * pBkWinCBOld;
-
+  int                           xOff;
+  int                           yOff;
+  
+  xOff = LCD_GetXSize() / 2 - X_OFFSET;
+  yOff = LCD_GetYSize() / 2 - Y_OFFSET;
   //
   // Enable skinning
   //
@@ -2329,7 +2347,7 @@ static void _DemoSkinning(void) {
   //
   // Animation
   //
-  hWin = GUI_CreateDialogBox(_aDialogOrder, GUI_COUNTOF(_aDialogOrder), _cbDialogOrder, WM_HBKWIN, 0, 0);
+  hWin = GUI_CreateDialogBox(_aDialogOrder, GUI_COUNTOF(_aDialogOrder), _cbDialogOrder, WM_HBKWIN, xOff, yOff);
   FRAMEWIN_SetSkin(hWin, _DrawSkin);
   GUI_MEMDEV_MoveInWindow(hWin, 0, 0, -90, 500);
   while ((_ReadyDialogOrder == 0) && (GUIDEMO_CheckCancel() == 0)) {
@@ -2360,16 +2378,8 @@ static void _DemoSkinning(void) {
 *       GUIDEMO_Skinning
 */
 void GUIDEMO_Skinning(void) {
-  GUIDEMO_ShowIntro("Skinning demo",
-                    "Shows some widgets\n"
-                    "displayed with a new skin");
-  #if (GUI_SUPPORT_CURSOR)
-    GUI_CURSOR_Show();
-  #endif
+  GUIDEMO_ConfigureDemo("Skinning", "Shows some widgets\ndisplayed with a new skin.", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   _DemoSkinning();
-  #if (GUI_SUPPORT_CURSOR)
-    GUI_CURSOR_Hide();
-  #endif
 }
 
 #else
@@ -2377,6 +2387,6 @@ void GUIDEMO_Skinning(void) {
 void GUIDEMO_Skinning_C(void);
 void GUIDEMO_Skinning_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_SKINNING && GUI_WINSUPPORT && GUI_SUPPORT_MEMDEV
 
 /*************************** End of file ****************************/

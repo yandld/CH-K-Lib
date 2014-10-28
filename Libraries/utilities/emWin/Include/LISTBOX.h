@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -138,7 +138,7 @@ void         LISTBOX_DeleteItem      (LISTBOX_Handle hObj, unsigned int Index);
 unsigned     LISTBOX_GetItemSpacing  (LISTBOX_Handle hObj);
 unsigned     LISTBOX_GetNumItems     (LISTBOX_Handle hObj);
 int          LISTBOX_GetSel          (LISTBOX_Handle hObj);
-const GUI_FONT GUI_UNI_PTR * LISTBOX_GetFont    (LISTBOX_Handle hObj);
+const GUI_FONT * LISTBOX_GetFont     (LISTBOX_Handle hObj);
 int          LISTBOX_GetItemDisabled (LISTBOX_Handle hObj, unsigned Index);
 int          LISTBOX_GetItemSel      (LISTBOX_Handle hObj, unsigned Index);
 void         LISTBOX_GetItemText     (LISTBOX_Handle hObj, unsigned Index, char * pBuffer, int MaxSize);
@@ -153,7 +153,7 @@ int          LISTBOX_OwnerDraw       (const WIDGET_ITEM_DRAW_INFO * pDrawItemInf
 void         LISTBOX_SetAutoScrollH  (LISTBOX_Handle hObj, int OnOff);
 void         LISTBOX_SetAutoScrollV  (LISTBOX_Handle hObj, int OnOff);
 void         LISTBOX_SetBkColor      (LISTBOX_Handle hObj, unsigned int Index, GUI_COLOR color);
-void         LISTBOX_SetFont         (LISTBOX_Handle hObj, const GUI_FONT GUI_UNI_PTR * pFont);
+void         LISTBOX_SetFont         (LISTBOX_Handle hObj, const GUI_FONT * pFont);
 void         LISTBOX_SetItemDisabled (LISTBOX_Handle hObj, unsigned Index, int OnOff);
 void         LISTBOX_SetItemSel      (LISTBOX_Handle hObj, unsigned Index, int OnOff);
 void         LISTBOX_SetItemSpacing  (LISTBOX_Handle hObj, unsigned Value);
@@ -178,16 +178,16 @@ int          LISTBOX_UpdateScrollers (LISTBOX_Handle hObj);
 **********************************************************************
 */
 
-const GUI_FONT GUI_UNI_PTR* LISTBOX_GetDefaultFont(void);
-int         LISTBOX_GetDefaultScrollStepH (void);
-GUI_COLOR   LISTBOX_GetDefaultBkColor     (unsigned Index);
-int         LISTBOX_GetDefaultTextAlign   (void);
-GUI_COLOR   LISTBOX_GetDefaultTextColor   (unsigned Index);
-void        LISTBOX_SetDefaultFont        (const GUI_FONT GUI_UNI_PTR * pFont);
-void        LISTBOX_SetDefaultScrollStepH (int Value);
-void        LISTBOX_SetDefaultBkColor     (unsigned Index, GUI_COLOR Color);
-void        LISTBOX_SetDefaultTextAlign   (int Align);
-void        LISTBOX_SetDefaultTextColor   (unsigned Index, GUI_COLOR Color);
+const GUI_FONT * LISTBOX_GetDefaultFont(void);
+int              LISTBOX_GetDefaultScrollStepH (void);
+GUI_COLOR        LISTBOX_GetDefaultBkColor     (unsigned Index);
+int              LISTBOX_GetDefaultTextAlign   (void);
+GUI_COLOR        LISTBOX_GetDefaultTextColor   (unsigned Index);
+void             LISTBOX_SetDefaultFont        (const GUI_FONT * pFont);
+void             LISTBOX_SetDefaultScrollStepH (int Value);
+void             LISTBOX_SetDefaultBkColor     (unsigned Index, GUI_COLOR Color);
+void             LISTBOX_SetDefaultTextAlign   (int Align);
+void             LISTBOX_SetDefaultTextColor   (unsigned Index, GUI_COLOR Color);
 
 /*********************************************************************
 *

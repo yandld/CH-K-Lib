@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -33,7 +33,7 @@ Purpose     : Demonstration of the GRAPH widget.
 
 #include "GUIDEMO.h"
 
-#if (SHOW_GUIDEMO_GRAPH && GUI_SUPPORT_MEMDEV)
+#if (SHOW_GUIDEMO_GRAPH && GUI_WINSUPPORT && GUI_SUPPORT_MEMDEV)
 
 /*********************************************************************
 *
@@ -323,7 +323,7 @@ static void _GraphDemo(void) {
   // Show some graphs
   //
   for (i = 0; i < GUI_COUNTOF(_aWave); i++) {
-    GUIDEMO_ShowInfo(_aWave[i].pName);
+    GUIDEMO_SetInfoText(_aWave[i].pName);
     _DataAdjust = GUIDEMO_ShiftRight(Data_ySize * _aWave[i].DataVOff, GRAPH_DIV);
     GRAPH_SetGridOffY (hGraph, GUIDEMO_ShiftRight(Data_ySize * _aWave[i].GridVOff, GRAPH_DIV));
     GRAPH_SCALE_SetOff(_hScaleV, GUIDEMO_ShiftRight((Data_ySize - BORDER_BOTTOM) * _aWave[i].ScaleVOff, GRAPH_DIV));
@@ -350,8 +350,7 @@ static void _GraphDemo(void) {
 **********************************************************************
 */
 void GUIDEMO_Graph(void) {
-  GUIDEMO_ShowIntro("Drawing a graph", "Optimized drawing routine\nfor drawing graph data");
-  GUIDEMO_ShowInfoWin();
+  GUIDEMO_ConfigureDemo("Drawing a graph", "Optimized drawing routine\nfor drawing graph data", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_INFO | GUIDEMO_SHOW_CONTROL);
   _GraphDemo();
   GUIDEMO_NotifyStartNext();
 }
@@ -361,6 +360,6 @@ void GUIDEMO_Graph(void) {
 void GUIDEMO_Graph_C(void);
 void GUIDEMO_Graph_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_GRAPH && GUI_WINSUPPORT && GUI_SUPPORT_MEMDEV
 
 /*************************** End of file ****************************/

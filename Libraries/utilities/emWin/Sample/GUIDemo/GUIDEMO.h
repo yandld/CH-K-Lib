@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -38,6 +38,9 @@ Purpose     : Configuration file of GUIDemo
 extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #endif
 
+#ifdef _RTE_
+#include "RTE_Components.h"
+#endif
 #include "GUI.h"
 
 #if GUI_WINSUPPORT
@@ -78,14 +81,22 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #define GUI_ID_NEXT       (GUI_ID_USER + 1)
 #define BK_COLOR_0        0xFF5555
 #define BK_COLOR_1        0x880000
-#define NUMBYTES_NEEDED   0x200000
+#define NUMBYTES_NEEDED   0x200000UL
 #define CIRCLE_RADIUS     100
 #define LOGO_DIST_BORDER  5
 #define CHAR_READING_TIME 80
 #define XSIZE_MIN         320
 #define YSIZE_MIN         240
 
-#define SHIFT_RIGHT_16(x) ((x) / 65536)
+//
+// Use an or-combination of the following flags to configure the
+// GUIDemo container for the current application.
+//
+#define GUIDEMO_SHOW_CURSOR  (1 << 0)
+#define GUIDEMO_SHOW_INFO    (1 << 1)
+#define GUIDEMO_SHOW_CONTROL (1 << 2)
+
+#define SHIFT_RIGHT_16(x)    ((x) / 65536)
 
 /*********************************************************************
 *
@@ -93,20 +104,50 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 *
 **********************************************************************
 */
+
+
+#define   SHOW_GUIDEMO_AATEXT            (1)
+#define   SHOW_GUIDEMO_AUTOMOTIVE        (1)
+#define   SHOW_GUIDEMO_BARGRAPH          (0)
+#define   SHOW_GUIDEMO_BITMAP            (0)
+#define   SHOW_GUIDEMO_COLORBAR          (1)
+#define   SHOW_GUIDEMO_CURSOR            (1)
+#define   SHOW_GUIDEMO_FADING            (0)
+#define   SHOW_GUIDEMO_GRAPH             (0)
+#define   SHOW_GUIDEMO_ICONVIEW          (0)
+#define   SHOW_GUIDEMO_IMAGEFLOW         (0)
+#define   SHOW_GUIDEMO_LISTVIEW          (0)
+#define   SHOW_GUIDEMO_RADIALMENU        (0)
+#define   SHOW_GUIDEMO_SKINNING          (0)
+#define   SHOW_GUIDEMO_SPEED             (0)
+#define   SHOW_GUIDEMO_SPEEDOMETER       (0)
+#define   SHOW_GUIDEMO_TRANSPARENTDIALOG (0)
+#ifdef    RTE_Graphics_Demo_Treeview
+#define   SHOW_GUIDEMO_TREEVIEW          (0)
+#endif
+#ifdef    RTE_Graphics_Demo_VScreen
+#define   SHOW_GUIDEMO_VSCREEN           (0)
+#endif
+#ifdef    RTE_Graphics_Demo_WashingMachine
+#define   SHOW_GUIDEMO_WASHINGMACHINE    (0)
+#endif
+#ifdef    RTE_Graphics_Demo_ZoomAndRotate
+#define   SHOW_GUIDEMO_ZOOMANDROTATE     (0)
+#endif
 #ifndef   SHOW_GUIDEMO_AATEXT
-  #define SHOW_GUIDEMO_AATEXT            (1)
+  #define SHOW_GUIDEMO_AATEXT            (0)
 #endif
 #ifndef   SHOW_GUIDEMO_AUTOMOTIVE
-  #define SHOW_GUIDEMO_AUTOMOTIVE        (1)
+  #define SHOW_GUIDEMO_AUTOMOTIVE        (0)
 #endif
 #ifndef   SHOW_GUIDEMO_BARGRAPH
-  #define SHOW_GUIDEMO_BARGRAPH          (1)
+  #define SHOW_GUIDEMO_BARGRAPH          (0)
 #endif
 #ifndef   SHOW_GUIDEMO_BITMAP
-  #define SHOW_GUIDEMO_BITMAP            (1)
+  #define SHOW_GUIDEMO_BITMAP            (0)
 #endif
 #ifndef   SHOW_GUIDEMO_COLORBAR
-  #define SHOW_GUIDEMO_COLORBAR          (1)
+  #define SHOW_GUIDEMO_COLORBAR          (0)
 #endif
 #ifndef   SHOW_GUIDEMO_CURSOR
   #define SHOW_GUIDEMO_CURSOR            (1)
@@ -115,7 +156,7 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
   #define SHOW_GUIDEMO_FADING            (0)
 #endif
 #ifndef   SHOW_GUIDEMO_GRAPH
-  #define SHOW_GUIDEMO_GRAPH             (1)
+  #define SHOW_GUIDEMO_GRAPH             (0)
 #endif
 #ifndef   SHOW_GUIDEMO_ICONVIEW
   #define SHOW_GUIDEMO_ICONVIEW          (0)
@@ -138,21 +179,12 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #ifndef   SHOW_GUIDEMO_SPEEDOMETER
   #define SHOW_GUIDEMO_SPEEDOMETER       (0)
 #endif
-#ifndef   SHOW_GUIDEMO_TRANSPARENTDIALOG
+
   #define SHOW_GUIDEMO_TRANSPARENTDIALOG (0)
-#endif
-#ifndef   SHOW_GUIDEMO_TREEVIEW
   #define SHOW_GUIDEMO_TREEVIEW          (0)
-#endif
-#ifndef   SHOW_GUIDEMO_VSCREEN
   #define SHOW_GUIDEMO_VSCREEN           (0)
-#endif
-#ifndef   SHOW_GUIDEMO_WASHINGMACHINE
   #define SHOW_GUIDEMO_WASHINGMACHINE    (0)
-#endif
-#ifndef   SHOW_GUIDEMO_ZOOMANDROTATE
   #define SHOW_GUIDEMO_ZOOMANDROTATE     (0)
-#endif
 
 
 /*********************************************************************
@@ -173,12 +205,22 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 #ifndef   GUIDEMO_SUPPORT_TOUCH
   #define GUIDEMO_SUPPORT_TOUCH   (1)
 #endif
+#ifndef   GUIDEMO_SUPPORT_CURSOR
+  #define GUIDEMO_SUPPORT_CURSOR  (1)
+#endif
 
-
-#define GUIDEMO_CF_SHOW_SPRITES   (GUIDEMO_SHOW_SPRITES                   <<  0)
-#define GUIDEMO_CF_USE_VNC        (GUIDEMO_USE_VNC                        <<  1)
-#define GUIDEMO_CF_USE_AUTO_BK    (GUIDEMO_USE_AUTO_BK                    <<  2)
-#define GUIDEMO_CF_SUPPORT_TOUCH  (GUI_WINSUPPORT ? GUIDEMO_SUPPORT_TOUCH <<  3 : 0)
+#ifndef   GUIDEMO_CF_SHOW_SPRITES
+  #define GUIDEMO_CF_SHOW_SPRITES   (GUIDEMO_SHOW_SPRITES                   <<  0)
+#endif
+#ifndef   GUIDEMO_CF_USE_VNC
+  #define GUIDEMO_CF_USE_VNC        (GUIDEMO_USE_VNC                        <<  1)
+#endif
+#ifndef   GUIDEMO_CF_USE_AUTO_BK
+  #define GUIDEMO_CF_USE_AUTO_BK    (GUIDEMO_USE_AUTO_BK                    <<  2)
+#endif
+#ifndef   GUIDEMO_CF_SUPPORT_TOUCH
+  #define GUIDEMO_CF_SUPPORT_TOUCH  (GUI_WINSUPPORT ? GUIDEMO_SUPPORT_TOUCH <<  3 : 0)
+#endif
 
 /*********************************************************************
 *
@@ -193,37 +235,42 @@ typedef struct GUIDEMO_CONFIG {
   #endif
 } GUIDEMO_CONFIG;
 
+#if (GUI_WINSUPPORT == 0)
+  #define GUIDEMO_NotifyStartNext  GUIDEMO_ClearHalt
+  #define GUIDEMO_Delay            GUI_Delay
+#else
+  void    GUIDEMO_NotifyStartNext  (void);
+  void    GUIDEMO_Delay            (int Time);
+#endif
+
 /*********************************************************************
 *
 *       Internal functions
 *
 **********************************************************************
 */
-void GUIDEMO_AddIntToString   (char * pText, U32 Number);
-void GUIDEMO_AddStringToString(char * pText, const char * pAdd);
-int  GUIDEMO_CheckCancel      (void);
-void GUIDEMO_ClearText        (char * pText);
-void GUIDEMO_Config           (GUIDEMO_CONFIG * pConfig);
-void GUIDEMO_CursorHide       (void);
-void GUIDEMO_CursorShow       (void);
-void GUIDEMO_Delay            (int t);
-void GUIDEMO_DispTitle        (char * pTitle);
-void GUIDEMO_DrawBk           (void);
-U16  GUIDEMO_GetConfFlag      (U16 Flag);
-int  GUIDEMO_GetTime          (void);
-int  GUIDEMO_GetTitleSize     (void);
-void GUIDEMO_HideControlWin   (void);
-void GUIDEMO_HideInfoWin      (void);
-void GUIDEMO_Main             (void);
-void GUIDEMO_NotifyStartNext  (void);
-void GUIDEMO_SetDrawLogo      (U8 OnOff);
-int  GUIDEMO_ShiftRight       (int Value, U8 NumBits);
-void GUIDEMO_ShowControlWin   (void);
-void GUIDEMO_ShowInfo         (const char * pInfo);
-void GUIDEMO_ShowInfoWin      (void);
-void GUIDEMO_ShowIntro        (const char * pText, const char * pDescription);
-void GUIDEMO_UpdateControlText(void);
-void GUIDEMO_Wait             (int TimeWait);
+void      GUIDEMO_AddIntToString   (char * pText, U32 Number);
+void      GUIDEMO_AddStringToString(char * pText, const char * pAdd);
+int       GUIDEMO_CheckCancel      (void);
+int       GUIDEMO_CheckCancelDelay (int Delay);
+void      GUIDEMO_ClearHalt        (void);
+void      GUIDEMO_ClearText        (char * pText);
+void      GUIDEMO_Config           (GUIDEMO_CONFIG * pConfig);
+void      GUIDEMO_ConfigureDemo    (char * pTitle, char * pDescription, unsigned Flags);
+void      GUIDEMO_DispHint         (char * pHint);
+void      GUIDEMO_DispTitle        (char * pTitle);
+void      GUIDEMO_DrawBk           (void);
+U16       GUIDEMO_GetConfFlag      (U16 Flag);
+int       GUIDEMO_GetTime          (void);
+int       GUIDEMO_GetTitleSizeY    (void);
+void      GUIDEMO_HideCursor       (void);
+void      GUIDEMO_Intro            (void);
+void      GUIDEMO_Main             (void);
+GUI_COLOR GUIDEMO_MixColors        (GUI_COLOR Color0, GUI_COLOR Color1, U8 Intens);
+void      GUIDEMO_SetInfoText      (const char * pInfo);
+int       GUIDEMO_ShiftRight       (int Value, U8 NumBits);
+void      GUIDEMO_ShowCursor       (void);
+void      GUIDEMO_Wait             (int TimeWait);
 
 /*********************************************************************
 *
@@ -241,7 +288,6 @@ void GUIDEMO_Fading           (void);
 void GUIDEMO_Graph            (void);
 void GUIDEMO_IconView         (void);
 void GUIDEMO_ImageFlow        (void);
-void GUIDEMO_Intro            (void);
 void GUIDEMO_Listview         (void);
 void GUIDEMO_RadialMenu       (void);
 void GUIDEMO_Skinning         (void);

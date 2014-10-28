@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -200,69 +200,69 @@ static GUI_CONST_STORAGE unsigned char acFontD6x8[16][8] = {
 };
 
 static GUI_CONST_STORAGE GUI_CHARINFO GUI_FontD6x8_CharInfo[16] = {
-   {  6,  6,  1, acFontD6x8[12] } /* code 0020 ' ' */
-  ,{  6,  6,  1, acFontD6x8[15] } /* code 0025 '%' */
-  ,{  6,  6,  1, acFontD6x8[10] } /* code 002B '+' */
-  ,{  6,  6,  1, acFontD6x8[11] } /* code 002D '-' */
-  ,{  6,  6,  1, acFontD6x8[13] } /* code 002E '.' */
-  ,{  6,  6,  1, acFontD6x8[0]  } /* code 0030 '0' */
-  ,{  6,  6,  1, acFontD6x8[1]  } /* code 0031 '1' */
-  ,{  6,  6,  1, acFontD6x8[2]  } /* code 0032 '2' */
-  ,{  6,  6,  1, acFontD6x8[3]  } /* code 0033 '3' */
-  ,{  6,  6,  1, acFontD6x8[4]  } /* code 0034 '4' */
-  ,{  6,  6,  1, acFontD6x8[5]  } /* code 0035 '5' */
-  ,{  6,  6,  1, acFontD6x8[6]  } /* code 0036 '6' */
-  ,{  6,  6,  1, acFontD6x8[7]  } /* code 0037 '7' */
-  ,{  6,  6,  1, acFontD6x8[8]  } /* code 0038 '8' */
-  ,{  6,  6,  1, acFontD6x8[9]  } /* code 0039 '9' */
-  ,{  6,  6,  1, acFontD6x8[14] } /* code 003A ':' */
+  { 6, 6, 1, acFontD6x8[12] },  // Code 0020 ' '
+  { 6, 6, 1, acFontD6x8[15] },  // Code 0025 '%'
+  { 6, 6, 1, acFontD6x8[10] },  // Code 002B '+'
+  { 6, 6, 1, acFontD6x8[11] },  // Code 002D '-'
+  { 6, 6, 1, acFontD6x8[13] },  // Code 002E '.'
+  { 6, 6, 1, acFontD6x8[0]  },  // Code 0030 '0'
+  { 6, 6, 1, acFontD6x8[1]  },  // Code 0031 '1'
+  { 6, 6, 1, acFontD6x8[2]  },  // Code 0032 '2'
+  { 6, 6, 1, acFontD6x8[3]  },  // Code 0033 '3'
+  { 6, 6, 1, acFontD6x8[4]  },  // Code 0034 '4'
+  { 6, 6, 1, acFontD6x8[5]  },  // Code 0035 '5'
+  { 6, 6, 1, acFontD6x8[6]  },  // Code 0036 '6'
+  { 6, 6, 1, acFontD6x8[7]  },  // Code 0037 '7'
+  { 6, 6, 1, acFontD6x8[8]  },  // Code 0038 '8'
+  { 6, 6, 1, acFontD6x8[9]  },  // Code 0039 '9'
+  { 6, 6, 1, acFontD6x8[14] }   // Code 003A ':'
 };
 
 static GUI_CONST_STORAGE GUI_FONT_PROP GUI_FontD6x8_Prop5 = {
-   0x0030 /* first character */
-  ,0x003A /* last character  */
-  ,&GUI_FontD6x8_CharInfo[  5] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP*)0 /* pointer to next GUI_FONT_PROP */
+  0x0030,                              // First character
+  0x003A,                              // Last character
+  &GUI_FontD6x8_CharInfo[5],           // Address of first character
+  (GUI_CONST_STORAGE GUI_FONT_PROP*)0  // Pointer to next GUI_FONT_PROP
 };
 
 static GUI_CONST_STORAGE GUI_FONT_PROP GUI_FontD6x8_Prop4 = {
-   0x002D /* first character */
-  ,0x002E /* last character  */
-  ,&GUI_FontD6x8_CharInfo[  3] /* address of first character */
-  ,&GUI_FontD6x8_Prop5 /* pointer to next GUI_FONT_PROP */
+  0x002D,                     // First character
+  0x002E,                     // Last character
+  &GUI_FontD6x8_CharInfo[3],  // Address of first character
+  &GUI_FontD6x8_Prop5         // Pointer to next GUI_FONT_PROP
 };
 
 static GUI_CONST_STORAGE GUI_FONT_PROP GUI_FontD6x8_Prop3 = {
-   0x002B /* first character */
-  ,0x002B /* last character  */
-  ,&GUI_FontD6x8_CharInfo[  2] /* address of first character */
-  ,&GUI_FontD6x8_Prop4 /* pointer to next GUI_FONT_PROP */
+  0x002B,                     // First character
+  0x002B,                     // Last character
+  &GUI_FontD6x8_CharInfo[2],  // Address of first character
+  &GUI_FontD6x8_Prop4         // Pointer to next GUI_FONT_PROP
 };
 
 static GUI_CONST_STORAGE GUI_FONT_PROP GUI_FontD6x8_Prop2 = {
-   0x0025 /* first character */
-  ,0x0025 /* last character  */
-  ,&GUI_FontD6x8_CharInfo[  1] /* address of first character */
-  ,&GUI_FontD6x8_Prop3 /* pointer to next GUI_FONT_PROP */
+  0x0025,                     // First character
+  0x0025,                     // Last character
+  &GUI_FontD6x8_CharInfo[1],  // Address of first character
+  &GUI_FontD6x8_Prop3         // Pointer to next GUI_FONT_PROP
 };
 
 static GUI_CONST_STORAGE GUI_FONT_PROP GUI_FontD6x8_Prop1 = {
-   0x0020 /* first character */
-  ,0x0020 /* last character  */
-  ,&GUI_FontD6x8_CharInfo[  0] /* address of first character */
-  ,&GUI_FontD6x8_Prop2 /* pointer to next GUI_FONT_PROP */
+  0x0020,                     // First character
+  0x0020,                     // Last character
+  &GUI_FontD6x8_CharInfo[0],  // Address of first character
+  &GUI_FontD6x8_Prop2         // Pointer to next GUI_FONT_PROP
 };
 
 GUI_CONST_STORAGE GUI_FONT GUI_FontD6x8 = {
-   GUI_FONTTYPE_PROP /* type of font    */
-  ,8 /* height of font  */
-  ,8 /* space of font y */
-  ,1 /* magnification x */
-  ,1 /* magnification y */
-  ,{&GUI_FontD6x8_Prop1}
-  ,8 /* Baseline */
-  ,0 /* LHeight */
-  ,8 /* CHeight */
+  GUI_FONTTYPE_PROP,        // Type of font
+  8,                        // Height of font
+  8,                        // Space of font y
+  1,                        // Magnification x
+  1,                        // Magnification y
+  { &GUI_FontD6x8_Prop1 },
+  8,                        // Baseline
+  0,                        // LHeight
+  8                         // CHeight
 };
 
 /*********************************************************************
@@ -270,17 +270,20 @@ GUI_CONST_STORAGE GUI_FONT GUI_FontD6x8 = {
 *       GUI_FontRounded16                                            *
 *                                                                    *
 *  Used in                                                           *
+*  - GUIDEMO.c              (GUIDEMO_DispHint())                     *
 *  - GUIDEMO_Automotive.c                                            *
+*  - GUIDEMO_Bitmap.c                                                *
 *  - GUIDEMO_Cursor.c                                                *
+*  - GUIDEMO_IconView.c                                              *
 *  - GUIDEMO_Speedometer.c                                           *
 *                                                                    *
 **********************************************************************
 */
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0020[  1] = { /* code 0020, SPACE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0020[  1] = { // Code 0020, SPACE
   0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0021[ 22] = { /* code 0021, EXCLAMATION MARK */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0021[ 22] = { // Code 0021, EXCLAMATION MARK
   0x56, 0x00,
   0xFF, 0x10,
   0xFF, 0x20,
@@ -294,7 +297,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0021[ 22] = { /* code 0021, 
   0x01, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0022[ 15] = { /* code 0022, QUOTATION MARK */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0022[ 15] = { // Code 0022, QUOTATION MARK
   0x36, 0x07, 0x30,
   0x9F, 0x3F, 0x90,
   0x9F, 0x4F, 0x90,
@@ -302,7 +305,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0022[ 15] = { /* code 0022, 
   0x24, 0x05, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0023[ 44] = { /* code 0023, NUMBER SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0023[ 44] = { // Code 0023, NUMBER SIGN
   0x00, 0x03, 0x02, 0x10,
   0x00, 0x5E, 0x0D, 0x60,
   0x00, 0x8C, 0x0F, 0x40,
@@ -316,7 +319,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0023[ 44] = { /* code 0023, 
   0x00, 0x10, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0024[ 48] = { /* code 0024, DOLLAR SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0024[ 48] = { // Code 0024, DOLLAR SIGN
   0x00, 0x17, 0x71, 0x00,
   0x08, 0xFF, 0xFF, 0x91,
   0x4F, 0x87, 0x79, 0xF7,
@@ -331,7 +334,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0024[ 48] = { /* code 0024, 
   0x00, 0x02, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0025[ 66] = { /* code 0025, PERCENT SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0025[ 66] = { // Code 0025, PERCENT SIGN
   0x02, 0x30, 0x00, 0x04, 0x30, 0x00,
   0x6F, 0xDC, 0x00, 0x1E, 0x30, 0x00,
   0xD8, 0x2F, 0x50, 0x79, 0x00, 0x00,
@@ -345,7 +348,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0025[ 66] = { /* code 0025, 
   0x00, 0x24, 0x00, 0x00, 0x21, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0026[ 55] = { /* code 0026, AMPERSAND */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0026[ 55] = { // Code 0026, AMPERSAND
   0x00, 0x05, 0x74, 0x00, 0x00,
   0x00, 0xCF, 0xEF, 0x80, 0x00,
   0x03, 0xF8, 0x0B, 0xF0, 0x00,
@@ -359,7 +362,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0026[ 55] = { /* code 0026, 
   0x00, 0x12, 0x10, 0x01, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0027[  5] = { /* code 0027, APOSTROPHE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0027[  5] = { // Code 0027, APOSTROPHE
   0x45,
   0xBD,
   0xBD,
@@ -367,7 +370,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0027[  5] = { /* code 0027, 
   0x33
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0028[ 26] = { /* code 0028, LEFT PARENTHESIS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0028[ 26] = { // Code 0028, LEFT PARENTHESIS
   0x00, 0x37,
   0x00, 0xCB,
   0x04, 0xF7,
@@ -383,7 +386,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0028[ 26] = { /* code 0028, 
   0x00, 0x37
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0029[ 26] = { /* code 0029, RIGHT PARENTHESIS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0029[ 26] = { // Code 0029, RIGHT PARENTHESIS
   0x36, 0x00,
   0x6F, 0x20,
   0x2F, 0x90,
@@ -399,7 +402,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0029[ 26] = { /* code 0029, 
   0x47, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002A[ 18] = { /* code 002A, ASTERISK */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002A[ 18] = { // Code 002A, ASTERISK
   0x00, 0x33, 0x00,
   0x12, 0x79, 0x21,
   0x4F, 0xEE, 0xF5,
@@ -408,7 +411,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002A[ 18] = { /* code 002A, 
   0x01, 0x00, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002B[ 32] = { /* code 002B, PLUS SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002B[ 32] = { // Code 002B, PLUS SIGN
   0x00, 0x03, 0x20, 0x00,
   0x00, 0x0D, 0xA0, 0x00,
   0x00, 0x0D, 0xB0, 0x00,
@@ -419,26 +422,26 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002B[ 32] = { /* code 002B, 
   0x00, 0x0B, 0x80, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002C[  8] = { /* code 002C, COMMA */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002C[  8] = { // Code 002C, COMMA
   0x0D, 0xD0,
   0x0E, 0xF3,
   0x01, 0xD1,
   0x0B, 0x50
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002D[  9] = { /* code 002D, HYPHEN-MINUS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002D[  9] = { // Code 002D, HYPHEN-MINUS
   0x17, 0x77, 0x30,
   0x7F, 0xFF, 0xB0,
   0x04, 0x65, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002E[  6] = { /* code 002E, FULL STOP */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002E[  6] = { // Code 002E, FULL STOP
   0x0D, 0xD0,
   0x0D, 0xD0,
   0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002F[ 33] = { /* code 002F, SOLIDUS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002F[ 33] = { // Code 002F, SOLIDUS
   0x00, 0x04, 0x50,
   0x00, 0x0D, 0x90,
   0x00, 0x4F, 0x30,
@@ -452,7 +455,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_002F[ 33] = { /* code 002F, 
   0x20, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0030[ 44] = { /* code 0030, DIGIT ZERO */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0030[ 44] = { // Code 0030, DIGIT ZERO
   0x00, 0x03, 0x30, 0x00,
   0x03, 0xDF, 0xFD, 0x30,
   0x0D, 0xF7, 0x7F, 0xD0,
@@ -466,7 +469,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0030[ 44] = { /* code 0030, 
   0x00, 0x02, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0031[ 33] = { /* code 0031, DIGIT ONE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0031[ 33] = { // Code 0031, DIGIT ONE
   0x00, 0x00, 0x30,
   0x00, 0x07, 0xF3,
   0x04, 0x8F, 0xF4,
@@ -480,7 +483,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0031[ 33] = { /* code 0031, 
   0x00, 0x00, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0032[ 40] = { /* code 0032, DIGIT TWO */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0032[ 40] = { // Code 0032, DIGIT TWO
   0x00, 0x13, 0x30, 0x00,
   0x06, 0xEF, 0xFE, 0x50,
   0x4F, 0xD6, 0x7F, 0xF1,
@@ -493,7 +496,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0032[ 40] = { /* code 0032, 
   0x6F, 0xFF, 0xFF, 0xF3
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0033[ 44] = { /* code 0033, DIGIT THREE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0033[ 44] = { // Code 0033, DIGIT THREE
   0x00, 0x13, 0x30, 0x00,
   0x08, 0xFF, 0xFD, 0x20,
   0x4F, 0xC6, 0x8F, 0xB0,
@@ -507,7 +510,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0033[ 44] = { /* code 0033, 
   0x00, 0x12, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0034[ 44] = { /* code 0034, DIGIT FOUR */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0034[ 44] = { // Code 0034, DIGIT FOUR
   0x00, 0x00, 0x13, 0x00,
   0x00, 0x01, 0xCF, 0x30,
   0x00, 0x0A, 0xFF, 0x40,
@@ -521,7 +524,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0034[ 44] = { /* code 0034, 
   0x00, 0x00, 0x02, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0035[ 44] = { /* code 0035, DIGIT FIVE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0035[ 44] = { // Code 0035, DIGIT FIVE
   0x00, 0x22, 0x22, 0x00,
   0x0C, 0xFF, 0xFF, 0x90,
   0x1F, 0xC9, 0x99, 0x40,
@@ -535,7 +538,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0035[ 44] = { /* code 0035, 
   0x00, 0x12, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0036[ 44] = { /* code 0036, DIGIT SIX */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0036[ 44] = { // Code 0036, DIGIT SIX
   0x00, 0x03, 0x41, 0x00,
   0x02, 0xCF, 0xFF, 0x80,
   0x0C, 0xF5, 0x3D, 0xF0,
@@ -549,7 +552,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0036[ 44] = { /* code 0036, 
   0x00, 0x02, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0037[ 44] = { /* code 0037, DIGIT SEVEN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0037[ 44] = { // Code 0037, DIGIT SEVEN
   0x02, 0x22, 0x22, 0x10,
   0xCF, 0xFF, 0xFF, 0xF1,
   0x59, 0x99, 0xAF, 0xD0,
@@ -563,7 +566,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0037[ 44] = { /* code 0037, 
   0x00, 0x20, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0038[ 44] = { /* code 0038, DIGIT EIGHT */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0038[ 44] = { // Code 0038, DIGIT EIGHT
   0x00, 0x13, 0x31, 0x00,
   0x06, 0xFF, 0xFE, 0x60,
   0x2F, 0xD3, 0x4D, 0xF1,
@@ -577,7 +580,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0038[ 44] = { /* code 0038, 
   0x00, 0x02, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0039[ 44] = { /* code 0039, DIGIT NINE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0039[ 44] = { // Code 0039, DIGIT NINE
   0x00, 0x13, 0x30, 0x00,
   0x06, 0xFF, 0xFD, 0x30,
   0x3F, 0xD5, 0x5E, 0xD0,
@@ -591,7 +594,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0039[ 44] = { /* code 0039, 
   0x00, 0x12, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003A[ 16] = { /* code 003A, COLON */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003A[ 16] = { // Code 003A, COLON
   0x09, 0x90,
   0x1F, 0xF0,
   0x03, 0x30,
@@ -602,7 +605,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003A[ 16] = { /* code 003A, 
   0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003B[ 18] = { /* code 003B, SEMICOLON */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003B[ 18] = { // Code 003B, SEMICOLON
   0x09, 0x90,
   0x1F, 0xF0,
   0x03, 0x30,
@@ -614,7 +617,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003B[ 18] = { /* code 003B, 
   0x0B, 0x50
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003C[ 28] = { /* code 003C, LESS-THAN SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003C[ 28] = { // Code 003C, LESS-THAN SIGN
   0x00, 0x00, 0x28, 0xF6,
   0x00, 0x3A, 0xFF, 0xA2,
   0x3B, 0xFE, 0x82, 0x00,
@@ -624,7 +627,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003C[ 28] = { /* code 003C, 
   0x00, 0x00, 0x03, 0x94
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003D[ 20] = { /* code 003D, EQUALS SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003D[ 20] = { // Code 003D, EQUALS SIGN
   0xAF, 0xFF, 0xFF, 0xF7,
   0x49, 0x99, 0x99, 0x93,
   0x00, 0x00, 0x00, 0x00,
@@ -632,7 +635,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003D[ 20] = { /* code 003D, 
   0x59, 0x99, 0x99, 0x93
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003E[ 28] = { /* code 003E, GREATER-THAN SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003E[ 28] = { // Code 003E, GREATER-THAN SIGN
   0x9E, 0x71, 0x00, 0x00,
   0x3B, 0xFF, 0x82, 0x00,
   0x00, 0x39, 0xFF, 0xA2,
@@ -642,7 +645,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003E[ 28] = { /* code 003E, 
   0x58, 0x20, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003F[ 44] = { /* code 003F, QUESTION MARK */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003F[ 44] = { // Code 003F, QUESTION MARK
   0x00, 0x57, 0x72, 0x00,
   0x0B, 0xFF, 0xFF, 0x50,
   0x5F, 0x90, 0x4F, 0xC0,
@@ -656,7 +659,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_003F[ 44] = { /* code 003F, 
   0x00, 0x01, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0040[ 55] = { /* code 0040, COMMERCIAL AT */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0040[ 55] = { // Code 0040, COMMERCIAL AT
   0x00, 0x03, 0x79, 0x73, 0x00,
   0x01, 0xBF, 0xB9, 0xBF, 0x90,
   0x0B, 0xE3, 0x13, 0x03, 0xE7,
@@ -670,7 +673,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0040[ 55] = { /* code 0040, 
   0x00, 0x00, 0x24, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0041[ 55] = { /* code 0041, LATIN CAPITAL LETTER A */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0041[ 55] = { // Code 0041, LATIN CAPITAL LETTER A
   0x00, 0x05, 0x73, 0x00, 0x00,
   0x00, 0x1F, 0xFD, 0x00, 0x00,
   0x00, 0x7F, 0xFF, 0x30, 0x00,
@@ -684,7 +687,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0041[ 55] = { /* code 0041, 
   0x11, 0x00, 0x00, 0x02, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0042[ 40] = { /* code 0042, LATIN CAPITAL LETTER B */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0042[ 40] = { // Code 0042, LATIN CAPITAL LETTER B
   0x36, 0x66, 0x63, 0x00,
   0xFF, 0xFF, 0xFF, 0xC1,
   0xFF, 0x54, 0x5E, 0xF6,
@@ -697,7 +700,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0042[ 40] = { /* code 0042, 
   0xCF, 0xFF, 0xFD, 0x80
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0043[ 55] = { /* code 0043, LATIN CAPITAL LETTER C */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0043[ 55] = { // Code 0043, LATIN CAPITAL LETTER C
   0x00, 0x04, 0x89, 0x61, 0x00,
   0x01, 0xBF, 0xFF, 0xFE, 0x50,
   0x09, 0xFD, 0x42, 0x8F, 0xE0,
@@ -711,7 +714,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0043[ 55] = { /* code 0043, 
   0x00, 0x00, 0x33, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0044[ 50] = { /* code 0044, LATIN CAPITAL LETTER D */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0044[ 50] = { // Code 0044, LATIN CAPITAL LETTER D
   0x36, 0x66, 0x52, 0x00, 0x00,
   0xFF, 0xFF, 0xFF, 0xB1, 0x00,
   0xFF, 0x76, 0x7D, 0xFA, 0x00,
@@ -724,7 +727,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0044[ 50] = { /* code 0044, 
   0xCF, 0xFF, 0xFB, 0x40, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0045[ 40] = { /* code 0045, LATIN CAPITAL LETTER E */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0045[ 40] = { // Code 0045, LATIN CAPITAL LETTER E
   0x26, 0x66, 0x66, 0x51,
   0xEF, 0xFF, 0xFF, 0xF5,
   0xFF, 0x76, 0x66, 0x50,
@@ -737,7 +740,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0045[ 40] = { /* code 0045, 
   0xBF, 0xFF, 0xFF, 0xF5
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0046[ 44] = { /* code 0046, LATIN CAPITAL LETTER F */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0046[ 44] = { // Code 0046, LATIN CAPITAL LETTER F
   0x26, 0x66, 0x66, 0x40,
   0xEF, 0xFF, 0xFF, 0xF0,
   0xFF, 0x76, 0x66, 0x40,
@@ -751,7 +754,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0046[ 44] = { /* code 0046, 
   0x11, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0047[ 55] = { /* code 0047, LATIN CAPITAL LETTER G */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0047[ 55] = { // Code 0047, LATIN CAPITAL LETTER G
   0x00, 0x03, 0x79, 0x73, 0x00,
   0x01, 0xBF, 0xFF, 0xFF, 0x80,
   0x09, 0xFD, 0x52, 0x5E, 0xF2,
@@ -765,7 +768,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0047[ 55] = { /* code 0047, 
   0x00, 0x00, 0x33, 0x10, 0x11
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0048[ 55] = { /* code 0048, LATIN CAPITAL LETTER H */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0048[ 55] = { // Code 0048, LATIN CAPITAL LETTER H
   0x56, 0x00, 0x00, 0x56, 0x00,
   0xFF, 0x20, 0x00, 0xFF, 0x20,
   0xFF, 0x20, 0x00, 0xFF, 0x20,
@@ -779,7 +782,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0048[ 55] = { /* code 0048, 
   0x11, 0x00, 0x00, 0x11, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0049[ 22] = { /* code 0049, LATIN CAPITAL LETTER I */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0049[ 22] = { // Code 0049, LATIN CAPITAL LETTER I
   0x56, 0x00,
   0xFF, 0x20,
   0xFF, 0x20,
@@ -793,7 +796,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0049[ 22] = { /* code 0049, 
   0x11, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004A[ 44] = { /* code 004A, LATIN CAPITAL LETTER J */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004A[ 44] = { // Code 004A, LATIN CAPITAL LETTER J
   0x00, 0x00, 0x27, 0x10,
   0x00, 0x00, 0x9F, 0x70,
   0x00, 0x00, 0x9F, 0x70,
@@ -807,7 +810,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004A[ 44] = { /* code 004A, 
   0x00, 0x33, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004B[ 44] = { /* code 004B, LATIN CAPITAL LETTER K */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004B[ 44] = { // Code 004B, LATIN CAPITAL LETTER K
   0x56, 0x00, 0x02, 0x71,
   0xFF, 0x20, 0x2E, 0xF4,
   0xFF, 0x21, 0xDF, 0x80,
@@ -821,7 +824,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004B[ 44] = { /* code 004B, 
   0x11, 0x00, 0x00, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004C[ 40] = { /* code 004C, LATIN CAPITAL LETTER L */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004C[ 40] = { // Code 004C, LATIN CAPITAL LETTER L
   0x56, 0x00, 0x00, 0x00,
   0xFF, 0x20, 0x00, 0x00,
   0xFF, 0x20, 0x00, 0x00,
@@ -834,7 +837,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004C[ 40] = { /* code 004C, 
   0xCF, 0xFF, 0xFF, 0x90
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004D[ 55] = { /* code 004D, LATIN CAPITAL LETTER M */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004D[ 55] = { // Code 004D, LATIN CAPITAL LETTER M
   0x67, 0x40, 0x00, 0x07, 0x72,
   0xFF, 0xE0, 0x00, 0x5F, 0xF9,
   0xFF, 0xF4, 0x00, 0xAF, 0xF9,
@@ -848,7 +851,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004D[ 55] = { /* code 004D, 
   0x11, 0x00, 0x10, 0x00, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004E[ 55] = { /* code 004E, LATIN CAPITAL LETTER N */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004E[ 55] = { // Code 004E, LATIN CAPITAL LETTER N
   0x57, 0x10, 0x00, 0x57, 0x00,
   0xFF, 0xA0, 0x00, 0xDF, 0x20,
   0xFF, 0xF4, 0x00, 0xDF, 0x20,
@@ -862,7 +865,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004E[ 55] = { /* code 004E, 
   0x11, 0x00, 0x00, 0x11, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004F[ 55] = { /* code 004F, LATIN CAPITAL LETTER O */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004F[ 55] = { // Code 004F, LATIN CAPITAL LETTER O
   0x00, 0x04, 0x89, 0x72, 0x00,
   0x01, 0xCF, 0xFF, 0xFF, 0x80,
   0x0B, 0xFC, 0x42, 0x6E, 0xF5,
@@ -876,7 +879,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_004F[ 55] = { /* code 004F, 
   0x00, 0x00, 0x33, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0050[ 44] = { /* code 0050, LATIN CAPITAL LETTER P */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0050[ 44] = { // Code 0050, LATIN CAPITAL LETTER P
   0x36, 0x66, 0x63, 0x00,
   0xFF, 0xFF, 0xFF, 0xC1,
   0xFF, 0x54, 0x5D, 0xF8,
@@ -890,7 +893,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0050[ 44] = { /* code 0050, 
   0x11, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0051[ 55] = { /* code 0051, LATIN CAPITAL LETTER Q */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0051[ 55] = { // Code 0051, LATIN CAPITAL LETTER Q
   0x00, 0x04, 0x89, 0x72, 0x00,
   0x01, 0xCF, 0xFF, 0xFF, 0x80,
   0x0B, 0xFC, 0x42, 0x6E, 0xF5,
@@ -904,7 +907,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0051[ 55] = { /* code 0051, 
   0x00, 0x00, 0x33, 0x10, 0x76
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0052[ 44] = { /* code 0052, LATIN CAPITAL LETTER R */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0052[ 44] = { // Code 0052, LATIN CAPITAL LETTER R
   0x36, 0x66, 0x65, 0x10,
   0xFF, 0xFF, 0xFF, 0xF5,
   0xFF, 0x54, 0x4A, 0xFD,
@@ -918,7 +921,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0052[ 44] = { /* code 0052, 
   0x11, 0x00, 0x00, 0x11
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0053[ 55] = { /* code 0053, LATIN CAPITAL LETTER S */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0053[ 55] = { // Code 0053, LATIN CAPITAL LETTER S
   0x00, 0x48, 0x97, 0x10, 0x00,
   0x0A, 0xFF, 0xFF, 0xF6, 0x00,
   0x4F, 0xD3, 0x26, 0xFE, 0x00,
@@ -932,7 +935,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0053[ 55] = { /* code 0053, 
   0x00, 0x02, 0x42, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0054[ 55] = { /* code 0054, LATIN CAPITAL LETTER T */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0054[ 55] = { // Code 0054, LATIN CAPITAL LETTER T
   0x26, 0x66, 0x66, 0x65, 0x10,
   0xCF, 0xFF, 0xFF, 0xFF, 0x70,
   0x37, 0x7D, 0xFA, 0x76, 0x10,
@@ -946,7 +949,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0054[ 55] = { /* code 0054, 
   0x00, 0x00, 0x20, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0055[ 55] = { /* code 0055, LATIN CAPITAL LETTER U */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0055[ 55] = { // Code 0055, LATIN CAPITAL LETTER U
   0x56, 0x00, 0x00, 0x56, 0x00,
   0xFF, 0x20, 0x00, 0xFF, 0x20,
   0xFF, 0x20, 0x00, 0xFF, 0x20,
@@ -960,7 +963,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0055[ 55] = { /* code 0055, 
   0x00, 0x13, 0x31, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0056[ 55] = { /* code 0056, LATIN CAPITAL LETTER V */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0056[ 55] = { // Code 0056, LATIN CAPITAL LETTER V
   0x57, 0x00, 0x00, 0x37, 0x10,
   0xDF, 0x50, 0x00, 0xCF, 0x40,
   0x9F, 0x90, 0x02, 0xFE, 0x10,
@@ -974,7 +977,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0056[ 55] = { /* code 0056, 
   0x00, 0x01, 0x20, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0057[ 66] = { /* code 0057, LATIN CAPITAL LETTER W */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0057[ 66] = { // Code 0057, LATIN CAPITAL LETTER W
   0x46, 0x00, 0x06, 0x70, 0x00, 0x64,
   0xDF, 0x20, 0x2F, 0xF3, 0x01, 0xFD,
   0xAF, 0x60, 0x6F, 0xF7, 0x05, 0xFA,
@@ -988,7 +991,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0057[ 66] = { /* code 0057, 
   0x00, 0x12, 0x00, 0x00, 0x21, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0058[ 44] = { /* code 0058, LATIN CAPITAL LETTER X */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0058[ 44] = { // Code 0058, LATIN CAPITAL LETTER X
   0x27, 0x10, 0x02, 0x71,
   0x8F, 0xA0, 0x0B, 0xF6,
   0x2F, 0xF3, 0x6F, 0xD1,
@@ -1002,7 +1005,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0058[ 44] = { /* code 0058, 
   0x11, 0x00, 0x00, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0059[ 44] = { /* code 0059, LATIN CAPITAL LETTER Y */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0059[ 44] = { // Code 0059, LATIN CAPITAL LETTER Y
   0x47, 0x00, 0x00, 0x74,
   0xDF, 0x60, 0x06, 0xFC,
   0x6F, 0xD0, 0x0D, 0xF5,
@@ -1016,7 +1019,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0059[ 44] = { /* code 0059, 
   0x00, 0x01, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005A[ 50] = { /* code 005A, LATIN CAPITAL LETTER Z */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005A[ 50] = { // Code 005A, LATIN CAPITAL LETTER Z
   0x04, 0x66, 0x66, 0x65, 0x10,
   0x3F, 0xFF, 0xFF, 0xFF, 0x60,
   0x05, 0x77, 0x7D, 0xFE, 0x20,
@@ -1029,7 +1032,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005A[ 50] = { /* code 005A, 
   0x7F, 0xFF, 0xFF, 0xFF, 0x50
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005B[ 26] = { /* code 005B, LEFT SQUARE BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005B[ 26] = { // Code 005B, LEFT SQUARE BRACKET
   0x36, 0x62,
   0xDF, 0xF7,
   0xDD, 0x00,
@@ -1045,7 +1048,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005B[ 26] = { /* code 005B, 
   0x36, 0x62
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005C[ 33] = { /* code 005C, REVERSE SOLIDUS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005C[ 33] = { // Code 005C, REVERSE SOLIDUS
   0x73, 0x00, 0x00,
   0xCB, 0x00, 0x00,
   0x6F, 0x20, 0x00,
@@ -1059,7 +1062,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005C[ 33] = { /* code 005C, 
   0x00, 0x01, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005D[ 26] = { /* code 005D, RIGHT SQUARE BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005D[ 26] = { // Code 005D, RIGHT SQUARE BRACKET
   0x46, 0x51,
   0xEF, 0xF6,
   0x04, 0xF7,
@@ -1075,7 +1078,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005D[ 26] = { /* code 005D, 
   0x46, 0x51
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005E[ 28] = { /* code 005E, CIRCUMFLEX ACCENT */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005E[ 28] = { // Code 005E, CIRCUMFLEX ACCENT
   0x00, 0x00, 0x00, 0x00,
   0x00, 0x1D, 0xB0, 0x00,
   0x00, 0x7F, 0xF5, 0x00,
@@ -1085,17 +1088,17 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005E[ 28] = { /* code 005E, 
   0x02, 0x00, 0x00, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005F[  4] = { /* code 005F, LOW LINE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_005F[  4] = { // Code 005F, LOW LINE
   0x39, 0x99, 0x99, 0x98
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0060[  6] = { /* code 0060, GRAVE ACCENT */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0060[  6] = { // Code 0060, GRAVE ACCENT
   0xC7, 0x00,
   0x8F, 0xA0,
   0x03, 0x60
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0061[ 32] = { /* code 0061, LATIN SMALL LETTER A */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0061[ 32] = { // Code 0061, LATIN SMALL LETTER A
   0x03, 0xBE, 0xEC, 0x40,
   0x0E, 0xE8, 0x8F, 0xE0,
   0x06, 0x20, 0x2E, 0xF2,
@@ -1106,7 +1109,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0061[ 32] = { /* code 0061, 
   0x00, 0x21, 0x00, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0062[ 44] = { /* code 0062, LATIN SMALL LETTER B */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0062[ 44] = { // Code 0062, LATIN SMALL LETTER B
   0x07, 0x30, 0x00, 0x00,
   0x4F, 0x90, 0x00, 0x00,
   0x4F, 0x90, 0x00, 0x00,
@@ -1120,7 +1123,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0062[ 44] = { /* code 0062, 
   0x02, 0x00, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0063[ 32] = { /* code 0063, LATIN SMALL LETTER C */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0063[ 32] = { // Code 0063, LATIN SMALL LETTER C
   0x03, 0xBE, 0xE9, 0x10,
   0x1E, 0xF9, 0xAF, 0xA0,
   0x7F, 0x80, 0x07, 0x50,
@@ -1131,7 +1134,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0063[ 32] = { /* code 0063, 
   0x00, 0x02, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0064[ 44] = { /* code 0064, LATIN SMALL LETTER D */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0064[ 44] = { // Code 0064, LATIN SMALL LETTER D
   0x00, 0x00, 0x03, 0x70,
   0x00, 0x00, 0x0B, 0xF3,
   0x00, 0x00, 0x0B, 0xF4,
@@ -1145,7 +1148,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0064[ 44] = { /* code 0064, 
   0x00, 0x12, 0x00, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0065[ 32] = { /* code 0065, LATIN SMALL LETTER E */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0065[ 32] = { // Code 0065, LATIN SMALL LETTER E
   0x02, 0xAE, 0xEB, 0x20,
   0x0D, 0xE7, 0x7E, 0xE1,
   0x6F, 0x82, 0x28, 0xF6,
@@ -1156,7 +1159,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0065[ 32] = { /* code 0065, 
   0x00, 0x02, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0066[ 33] = { /* code 0066, LATIN SMALL LETTER F */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0066[ 33] = { // Code 0066, LATIN SMALL LETTER F
   0x00, 0x69, 0x30,
   0x07, 0xFF, 0x90,
   0x09, 0xF4, 0x00,
@@ -1170,7 +1173,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0066[ 33] = { /* code 0066, 
   0x00, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0067[ 40] = { /* code 0067, LATIN SMALL LETTER G */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0067[ 40] = { // Code 0067, LATIN SMALL LETTER G
   0x03, 0xCF, 0xB7, 0xE1,
   0x1E, 0xF9, 0xAF, 0xF4,
   0x6F, 0x80, 0x0C, 0xF4,
@@ -1183,7 +1186,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0067[ 40] = { /* code 0067, 
   0x02, 0x9B, 0xB7, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0068[ 44] = { /* code 0068, LATIN SMALL LETTER H */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0068[ 44] = { // Code 0068, LATIN SMALL LETTER H
   0x07, 0x30, 0x00, 0x00,
   0x4F, 0x90, 0x00, 0x00,
   0x4F, 0x90, 0x00, 0x00,
@@ -1197,7 +1200,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0068[ 44] = { /* code 0068, 
   0x02, 0x00, 0x00, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0069[ 22] = { /* code 0069, LATIN SMALL LETTER I */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0069[ 22] = { // Code 0069, LATIN SMALL LETTER I
   0x07, 0x40,
   0x2F, 0xB0,
   0x04, 0x20,
@@ -1211,7 +1214,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0069[ 22] = { /* code 0069, 
   0x01, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006A[ 26] = { /* code 006A, LATIN SMALL LETTER J */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006A[ 26] = { // Code 006A, LATIN SMALL LETTER J
   0x00, 0x74,
   0x02, 0xFB,
   0x00, 0x42,
@@ -1227,7 +1230,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006A[ 26] = { /* code 006A, 
   0x19, 0x92
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006B[ 44] = { /* code 006B, LATIN SMALL LETTER K */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006B[ 44] = { // Code 006B, LATIN SMALL LETTER K
   0x07, 0x30, 0x00, 0x00,
   0x4F, 0x90, 0x00, 0x00,
   0x4F, 0x90, 0x00, 0x00,
@@ -1241,7 +1244,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006B[ 44] = { /* code 006B, 
   0x01, 0x00, 0x01, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006C[ 22] = { /* code 006C, LATIN SMALL LETTER L */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006C[ 22] = { // Code 006C, LATIN SMALL LETTER L
   0x07, 0x40,
   0x2F, 0xB0,
   0x2F, 0xB0,
@@ -1255,7 +1258,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006C[ 22] = { /* code 006C, 
   0x01, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006D[ 48] = { /* code 006D, LATIN SMALL LETTER M */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006D[ 48] = { // Code 006D, LATIN SMALL LETTER M
   0x2E, 0x69, 0xED, 0x38, 0xEE, 0x70,
   0x4F, 0xEB, 0xBF, 0xED, 0xAF, 0xF3,
   0x4F, 0xC0, 0x0F, 0xF2, 0x0A, 0xF4,
@@ -1266,7 +1269,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006D[ 48] = { /* code 006D, 
   0x02, 0x00, 0x01, 0x10, 0x00, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006E[ 32] = { /* code 006E, LATIN SMALL LETTER N */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006E[ 32] = { // Code 006E, LATIN SMALL LETTER N
   0x2E, 0x6A, 0xED, 0x50,
   0x4F, 0xFB, 0xAF, 0xF1,
   0x4F, 0xC0, 0x0C, 0xF3,
@@ -1277,7 +1280,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006E[ 32] = { /* code 006E, 
   0x02, 0x00, 0x00, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006F[ 32] = { /* code 006F, LATIN SMALL LETTER O */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006F[ 32] = { // Code 006F, LATIN SMALL LETTER O
   0x02, 0xBE, 0xEA, 0x20,
   0x1D, 0xF8, 0x8F, 0xD0,
   0x6F, 0x80, 0x09, 0xF5,
@@ -1288,7 +1291,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_006F[ 32] = { /* code 006F, 
   0x00, 0x02, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0070[ 40] = { /* code 0070, LATIN SMALL LETTER P */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0070[ 40] = { // Code 0070, LATIN SMALL LETTER P
   0x2E, 0x7B, 0xFC, 0x30,
   0x4F, 0xFA, 0x9F, 0xE1,
   0x4F, 0xB0, 0x0A, 0xF5,
@@ -1301,7 +1304,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0070[ 40] = { /* code 0070, 
   0x19, 0x40, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0071[ 40] = { /* code 0071, LATIN SMALL LETTER Q */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0071[ 40] = { // Code 0071, LATIN SMALL LETTER Q
   0x03, 0xCF, 0xB7, 0xE1,
   0x1E, 0xF9, 0xAF, 0xF4,
   0x6F, 0x90, 0x0C, 0xF4,
@@ -1314,7 +1317,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0071[ 40] = { /* code 0071, 
   0x00, 0x00, 0x05, 0x90
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0072[ 24] = { /* code 0072, LATIN SMALL LETTER R */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0072[ 24] = { // Code 0072, LATIN SMALL LETTER R
   0x1E, 0x7B, 0xE1,
   0x2F, 0xEE, 0xC1,
   0x2F, 0xE1, 0x00,
@@ -1325,7 +1328,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0072[ 24] = { /* code 0072, 
   0x01, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0073[ 32] = { /* code 0073, LATIN SMALL LETTER S */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0073[ 32] = { // Code 0073, LATIN SMALL LETTER S
   0x08, 0xDF, 0xC7, 0x00,
   0x6F, 0xB7, 0xCF, 0x20,
   0x7F, 0xB4, 0x13, 0x00,
@@ -1336,7 +1339,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0073[ 32] = { /* code 0073, 
   0x00, 0x12, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0074[ 30] = { /* code 0074, LATIN SMALL LETTER T */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0074[ 30] = { // Code 0074, LATIN SMALL LETTER T
   0x08, 0xC1, 0x00,
   0x0B, 0xF2, 0x00,
   0x9E, 0xFC, 0x60,
@@ -1349,7 +1352,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0074[ 30] = { /* code 0074, 
   0x00, 0x12, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0075[ 32] = { /* code 0075, LATIN SMALL LETTER U */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0075[ 32] = { // Code 0075, LATIN SMALL LETTER U
   0x2E, 0x70, 0x08, 0xE1,
   0x4F, 0x90, 0x0B, 0xF4,
   0x4F, 0x90, 0x0B, 0xF4,
@@ -1360,7 +1363,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0075[ 32] = { /* code 0075, 
   0x00, 0x12, 0x00, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0076[ 32] = { /* code 0076, LATIN SMALL LETTER V */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0076[ 32] = { // Code 0076, LATIN SMALL LETTER V
   0xBB, 0x00, 0x4E, 0x30,
   0xCF, 0x20, 0xAF, 0x40,
   0x7F, 0x70, 0xEE, 0x00,
@@ -1371,7 +1374,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0076[ 32] = { /* code 0076, 
   0x00, 0x12, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0077[ 40] = { /* code 0077, LATIN SMALL LETTER W */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0077[ 40] = { // Code 0077, LATIN SMALL LETTER W
   0x9C, 0x00, 0xCD, 0x10, 0xBB,
   0xBF, 0x23, 0xFF, 0x51, 0xFC,
   0x7F, 0x66, 0xFE, 0x84, 0xF8,
@@ -1382,7 +1385,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0077[ 40] = { /* code 0077, 
   0x00, 0x11, 0x00, 0x12, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0078[ 24] = { /* code 0078, LATIN SMALL LETTER X */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0078[ 24] = { // Code 0078, LATIN SMALL LETTER X
   0x6E, 0x20, 0xAC,
   0x6F, 0xB5, 0xFB,
   0x0B, 0xFE, 0xE2,
@@ -1393,7 +1396,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0078[ 24] = { /* code 0078, 
   0x01, 0x00, 0x11
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0079[ 40] = { /* code 0079, LATIN SMALL LETTER Y */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0079[ 40] = { // Code 0079, LATIN SMALL LETTER Y
   0xAC, 0x00, 0x5E, 0x30,
   0xBF, 0x40, 0xBF, 0x30,
   0x6F, 0x80, 0xED, 0x00,
@@ -1406,7 +1409,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_0079[ 40] = { /* code 0079, 
   0x19, 0x81, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007A[ 28] = { /* code 007A, LATIN SMALL LETTER Z */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007A[ 28] = { // Code 007A, LATIN SMALL LETTER Z
   0x2B, 0xBB, 0xBB, 0x70,
   0x2A, 0xBB, 0xFF, 0x90,
   0x00, 0x08, 0xFA, 0x00,
@@ -1416,7 +1419,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007A[ 28] = { /* code 007A, 
   0x7F, 0xFF, 0xFF, 0xB0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007B[ 39] = { /* code 007B, LEFT CURLY BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007B[ 39] = { // Code 007B, LEFT CURLY BRACKET
   0x00, 0x46, 0x20,
   0x08, 0xFE, 0x50,
   0x0B, 0xF0, 0x00,
@@ -1432,7 +1435,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007B[ 39] = { /* code 007B, 
   0x00, 0x56, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007C[ 22] = { /* code 007C, VERTICAL LINE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007C[ 22] = { // Code 007C, VERTICAL LINE
   0x18, 0x00,
   0x6F, 0x40,
   0x6F, 0x40,
@@ -1446,7 +1449,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007C[ 22] = { /* code 007C, 
   0x03, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007D[ 39] = { /* code 007D, RIGHT CURLY BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007D[ 39] = { // Code 007D, RIGHT CURLY BRACKET
   0x46, 0x30, 0x00,
   0xBE, 0xF2, 0x00,
   0x08, 0xF4, 0x00,
@@ -1462,127 +1465,127 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007D[ 39] = { /* code 007D, 
   0x56, 0x30, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007E[ 12] = { /* code 007E, TILDE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded16_007E[ 12] = { // Code 007E, TILDE
   0x0A, 0xDA, 0x41, 0xA2,
   0x6F, 0xAE, 0xFF, 0xE2,
   0x23, 0x00, 0x67, 0x30
 };
 
 GUI_CONST_STORAGE GUI_CHARINFO_EXT GUI_FontRounded16_CharInfo[95] = {
-   {   1,   1,   0,  13,   4, acGUI_FontRounded16_0020 } /* code 0020, SPACE */
-  ,{   3,  11,   1,   3,   4, acGUI_FontRounded16_0021 } /* code 0021, EXCLAMATION MARK */
-  ,{   5,   5,   1,   3,   7, acGUI_FontRounded16_0022 } /* code 0022, QUOTATION MARK */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0023 } /* code 0023, NUMBER SIGN */
-  ,{   8,  12,   0,   3,   8, acGUI_FontRounded16_0024 } /* code 0024, DOLLAR SIGN */
-  ,{  11,  11,   1,   3,  13, acGUI_FontRounded16_0025 } /* code 0025, PERCENT SIGN */
-  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0026 } /* code 0026, AMPERSAND */
-  ,{   2,   5,   1,   3,   4, acGUI_FontRounded16_0027 } /* code 0027, APOSTROPHE */
-  ,{   4,  13,   0,   3,   4, acGUI_FontRounded16_0028 } /* code 0028, LEFT PARENTHESIS */
-  ,{   4,  13,   0,   3,   4, acGUI_FontRounded16_0029 } /* code 0029, RIGHT PARENTHESIS */
-  ,{   6,   6,   0,   3,   6, acGUI_FontRounded16_002A } /* code 002A, ASTERISK */
-  ,{   8,   8,   0,   5,   8, acGUI_FontRounded16_002B } /* code 002B, PLUS SIGN */
-  ,{   4,   4,   0,  11,   4, acGUI_FontRounded16_002C } /* code 002C, COMMA */
-  ,{   5,   3,   0,   8,   5, acGUI_FontRounded16_002D } /* code 002D, HYPHEN-MINUS */
-  ,{   4,   3,   0,  11,   4, acGUI_FontRounded16_002E } /* code 002E, FULL STOP */
-  ,{   5,  11,   0,   3,   5, acGUI_FontRounded16_002F } /* code 002F, SOLIDUS */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0030 } /* code 0030, DIGIT ZERO */
-  ,{   6,  11,  -1,   3,   5, acGUI_FontRounded16_0031 } /* code 0031, DIGIT ONE */
-  ,{   8,  10,   0,   3,   8, acGUI_FontRounded16_0032 } /* code 0032, DIGIT TWO */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0033 } /* code 0033, DIGIT THREE */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0034 } /* code 0034, DIGIT FOUR */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0035 } /* code 0035, DIGIT FIVE */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0036 } /* code 0036, DIGIT SIX */
-  ,{   8,  11,   0,   3,   7, acGUI_FontRounded16_0037 } /* code 0037, DIGIT SEVEN */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0038 } /* code 0038, DIGIT EIGHT */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0039 } /* code 0039, DIGIT NINE */
-  ,{   4,   8,   0,   6,   4, acGUI_FontRounded16_003A } /* code 003A, COLON */
-  ,{   4,   9,   0,   6,   4, acGUI_FontRounded16_003B } /* code 003B, SEMICOLON */
-  ,{   8,   7,   0,   6,   8, acGUI_FontRounded16_003C } /* code 003C, LESS-THAN SIGN */
-  ,{   8,   5,   0,   7,   8, acGUI_FontRounded16_003D } /* code 003D, EQUALS SIGN */
-  ,{   8,   7,   0,   6,   8, acGUI_FontRounded16_003E } /* code 003E, GREATER-THAN SIGN */
-  ,{   7,  11,   0,   3,   7, acGUI_FontRounded16_003F } /* code 003F, QUESTION MARK */
-  ,{  10,  11,   0,   3,  10, acGUI_FontRounded16_0040 } /* code 0040, COMMERCIAL AT */
-  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0041 } /* code 0041, LATIN CAPITAL LETTER A */
-  ,{   8,  10,   1,   3,   9, acGUI_FontRounded16_0042 } /* code 0042, LATIN CAPITAL LETTER B */
-  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0043 } /* code 0043, LATIN CAPITAL LETTER C */
-  ,{   9,  10,   1,   3,  10, acGUI_FontRounded16_0044 } /* code 0044, LATIN CAPITAL LETTER D */
-  ,{   8,  10,   1,   3,   9, acGUI_FontRounded16_0045 } /* code 0045, LATIN CAPITAL LETTER E */
-  ,{   8,  11,   1,   3,   8, acGUI_FontRounded16_0046 } /* code 0046, LATIN CAPITAL LETTER F */
-  ,{  10,  11,   0,   3,  11, acGUI_FontRounded16_0047 } /* code 0047, LATIN CAPITAL LETTER G */
-  ,{   9,  11,   1,   3,  10, acGUI_FontRounded16_0048 } /* code 0048, LATIN CAPITAL LETTER H */
-  ,{   3,  11,   1,   3,   4, acGUI_FontRounded16_0049 } /* code 0049, LATIN CAPITAL LETTER I */
-  ,{   7,  11,   0,   3,   7, acGUI_FontRounded16_004A } /* code 004A, LATIN CAPITAL LETTER J */
-  ,{   8,  11,   1,   3,   9, acGUI_FontRounded16_004B } /* code 004B, LATIN CAPITAL LETTER K */
-  ,{   7,  10,   1,   3,   8, acGUI_FontRounded16_004C } /* code 004C, LATIN CAPITAL LETTER L */
-  ,{  10,  11,   1,   3,  12, acGUI_FontRounded16_004D } /* code 004D, LATIN CAPITAL LETTER M */
-  ,{   9,  11,   1,   3,  10, acGUI_FontRounded16_004E } /* code 004E, LATIN CAPITAL LETTER N */
-  ,{  10,  11,   0,   3,  11, acGUI_FontRounded16_004F } /* code 004F, LATIN CAPITAL LETTER O */
-  ,{   8,  11,   1,   3,   9, acGUI_FontRounded16_0050 } /* code 0050, LATIN CAPITAL LETTER P */
-  ,{  10,  11,   0,   3,  11, acGUI_FontRounded16_0051 } /* code 0051, LATIN CAPITAL LETTER Q */
-  ,{   8,  11,   1,   3,  10, acGUI_FontRounded16_0052 } /* code 0052, LATIN CAPITAL LETTER R */
-  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0053 } /* code 0053, LATIN CAPITAL LETTER S */
-  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0054 } /* code 0054, LATIN CAPITAL LETTER T */
-  ,{   9,  11,   1,   3,  10, acGUI_FontRounded16_0055 } /* code 0055, LATIN CAPITAL LETTER U */
-  ,{   9,  11,   0,   3,   8, acGUI_FontRounded16_0056 } /* code 0056, LATIN CAPITAL LETTER V */
-  ,{  12,  11,   0,   3,  12, acGUI_FontRounded16_0057 } /* code 0057, LATIN CAPITAL LETTER W */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0058 } /* code 0058, LATIN CAPITAL LETTER X */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0059 } /* code 0059, LATIN CAPITAL LETTER Y */
-  ,{   9,  10,   0,   3,   9, acGUI_FontRounded16_005A } /* code 005A, LATIN CAPITAL LETTER Z */
-  ,{   4,  13,   1,   3,   5, acGUI_FontRounded16_005B } /* code 005B, LEFT SQUARE BRACKET */
-  ,{   5,  11,   0,   3,   5, acGUI_FontRounded16_005C } /* code 005C, REVERSE SOLIDUS */
-  ,{   4,  13,   0,   3,   5, acGUI_FontRounded16_005D } /* code 005D, RIGHT SQUARE BRACKET */
-  ,{   7,   7,   0,   3,   8, acGUI_FontRounded16_005E } /* code 005E, CIRCUMFLEX ACCENT */
-  ,{   8,   1,  -1,  14,   7, acGUI_FontRounded16_005F } /* code 005F, LOW LINE */
-  ,{   3,   3,   0,   3,   4, acGUI_FontRounded16_0060 } /* code 0060, GRAVE ACCENT */
-  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_0061 } /* code 0061, LATIN SMALL LETTER A */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0062 } /* code 0062, LATIN SMALL LETTER B */
-  ,{   7,   8,   0,   6,   7, acGUI_FontRounded16_0063 } /* code 0063, LATIN SMALL LETTER C */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0064 } /* code 0064, LATIN SMALL LETTER D */
-  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_0065 } /* code 0065, LATIN SMALL LETTER E */
-  ,{   5,  11,   0,   3,   5, acGUI_FontRounded16_0066 } /* code 0066, LATIN SMALL LETTER F */
-  ,{   8,  10,   0,   6,   8, acGUI_FontRounded16_0067 } /* code 0067, LATIN SMALL LETTER G */
-  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0068 } /* code 0068, LATIN SMALL LETTER H */
-  ,{   3,  11,   0,   3,   4, acGUI_FontRounded16_0069 } /* code 0069, LATIN SMALL LETTER I */
-  ,{   4,  13,  -1,   3,   4, acGUI_FontRounded16_006A } /* code 006A, LATIN SMALL LETTER J */
-  ,{   7,  11,   0,   3,   7, acGUI_FontRounded16_006B } /* code 006B, LATIN SMALL LETTER K */
-  ,{   3,  11,   0,   3,   4, acGUI_FontRounded16_006C } /* code 006C, LATIN SMALL LETTER L */
-  ,{  12,   8,   0,   6,  12, acGUI_FontRounded16_006D } /* code 006D, LATIN SMALL LETTER M */
-  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_006E } /* code 006E, LATIN SMALL LETTER N */
-  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_006F } /* code 006F, LATIN SMALL LETTER O */
-  ,{   8,  10,   0,   6,   8, acGUI_FontRounded16_0070 } /* code 0070, LATIN SMALL LETTER P */
-  ,{   8,  10,   0,   6,   8, acGUI_FontRounded16_0071 } /* code 0071, LATIN SMALL LETTER Q */
-  ,{   6,   8,   0,   6,   5, acGUI_FontRounded16_0072 } /* code 0072, LATIN SMALL LETTER R */
-  ,{   7,   8,   0,   6,   7, acGUI_FontRounded16_0073 } /* code 0073, LATIN SMALL LETTER S */
-  ,{   5,  10,   0,   4,   5, acGUI_FontRounded16_0074 } /* code 0074, LATIN SMALL LETTER T */
-  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_0075 } /* code 0075, LATIN SMALL LETTER U */
-  ,{   7,   8,   0,   6,   7, acGUI_FontRounded16_0076 } /* code 0076, LATIN SMALL LETTER V */
-  ,{  10,   8,   0,   6,  10, acGUI_FontRounded16_0077 } /* code 0077, LATIN SMALL LETTER W */
-  ,{   6,   8,   0,   6,   6, acGUI_FontRounded16_0078 } /* code 0078, LATIN SMALL LETTER X */
-  ,{   7,  10,   0,   6,   7, acGUI_FontRounded16_0079 } /* code 0079, LATIN SMALL LETTER Y */
-  ,{   7,   7,   0,   6,   7, acGUI_FontRounded16_007A } /* code 007A, LATIN SMALL LETTER Z */
-  ,{   5,  13,   0,   3,   5, acGUI_FontRounded16_007B } /* code 007B, LEFT CURLY BRACKET */
-  ,{   3,  11,   0,   3,   3, acGUI_FontRounded16_007C } /* code 007C, VERTICAL LINE */
-  ,{   5,  13,   0,   3,   5, acGUI_FontRounded16_007D } /* code 007D, RIGHT CURLY BRACKET */
-  ,{   8,   3,   0,   8,   8, acGUI_FontRounded16_007E } /* code 007E, TILDE */
+   {   1,   1,   0,  13,   4, acGUI_FontRounded16_0020 } // Code 0020, SPACE
+  ,{   3,  11,   1,   3,   4, acGUI_FontRounded16_0021 } // Code 0021, EXCLAMATION MARK
+  ,{   5,   5,   1,   3,   7, acGUI_FontRounded16_0022 } // Code 0022, QUOTATION MARK
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0023 } // Code 0023, NUMBER SIGN
+  ,{   8,  12,   0,   3,   8, acGUI_FontRounded16_0024 } // Code 0024, DOLLAR SIGN
+  ,{  11,  11,   1,   3,  13, acGUI_FontRounded16_0025 } // Code 0025, PERCENT SIGN
+  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0026 } // Code 0026, AMPERSAND
+  ,{   2,   5,   1,   3,   4, acGUI_FontRounded16_0027 } // Code 0027, APOSTROPHE
+  ,{   4,  13,   0,   3,   4, acGUI_FontRounded16_0028 } // Code 0028, LEFT PARENTHESIS
+  ,{   4,  13,   0,   3,   4, acGUI_FontRounded16_0029 } // Code 0029, RIGHT PARENTHESIS
+  ,{   6,   6,   0,   3,   6, acGUI_FontRounded16_002A } // Code 002A, ASTERISK
+  ,{   8,   8,   0,   5,   8, acGUI_FontRounded16_002B } // Code 002B, PLUS SIGN
+  ,{   4,   4,   0,  11,   4, acGUI_FontRounded16_002C } // Code 002C, COMMA
+  ,{   5,   3,   0,   8,   5, acGUI_FontRounded16_002D } // Code 002D, HYPHEN-MINUS
+  ,{   4,   3,   0,  11,   4, acGUI_FontRounded16_002E } // Code 002E, FULL STOP
+  ,{   5,  11,   0,   3,   5, acGUI_FontRounded16_002F } // Code 002F, SOLIDUS
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0030 } // Code 0030, DIGIT ZERO
+  ,{   6,  11,  -1,   3,   5, acGUI_FontRounded16_0031 } // Code 0031, DIGIT ONE
+  ,{   8,  10,   0,   3,   8, acGUI_FontRounded16_0032 } // Code 0032, DIGIT TWO
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0033 } // Code 0033, DIGIT THREE
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0034 } // Code 0034, DIGIT FOUR
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0035 } // Code 0035, DIGIT FIVE
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0036 } // Code 0036, DIGIT SIX
+  ,{   8,  11,   0,   3,   7, acGUI_FontRounded16_0037 } // Code 0037, DIGIT SEVEN
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0038 } // Code 0038, DIGIT EIGHT
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0039 } // Code 0039, DIGIT NINE
+  ,{   4,   8,   0,   6,   4, acGUI_FontRounded16_003A } // Code 003A, COLON
+  ,{   4,   9,   0,   6,   4, acGUI_FontRounded16_003B } // Code 003B, SEMICOLON
+  ,{   8,   7,   0,   6,   8, acGUI_FontRounded16_003C } // Code 003C, LESS-THAN SIGN
+  ,{   8,   5,   0,   7,   8, acGUI_FontRounded16_003D } // Code 003D, EQUALS SIGN
+  ,{   8,   7,   0,   6,   8, acGUI_FontRounded16_003E } // Code 003E, GREATER-THAN SIGN
+  ,{   7,  11,   0,   3,   7, acGUI_FontRounded16_003F } // Code 003F, QUESTION MARK
+  ,{  10,  11,   0,   3,  10, acGUI_FontRounded16_0040 } // Code 0040, COMMERCIAL AT
+  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0041 } // Code 0041, LATIN CAPITAL LETTER A
+  ,{   8,  10,   1,   3,   9, acGUI_FontRounded16_0042 } // Code 0042, LATIN CAPITAL LETTER B
+  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0043 } // Code 0043, LATIN CAPITAL LETTER C
+  ,{   9,  10,   1,   3,  10, acGUI_FontRounded16_0044 } // Code 0044, LATIN CAPITAL LETTER D
+  ,{   8,  10,   1,   3,   9, acGUI_FontRounded16_0045 } // Code 0045, LATIN CAPITAL LETTER E
+  ,{   8,  11,   1,   3,   8, acGUI_FontRounded16_0046 } // Code 0046, LATIN CAPITAL LETTER F
+  ,{  10,  11,   0,   3,  11, acGUI_FontRounded16_0047 } // Code 0047, LATIN CAPITAL LETTER G
+  ,{   9,  11,   1,   3,  10, acGUI_FontRounded16_0048 } // Code 0048, LATIN CAPITAL LETTER H
+  ,{   3,  11,   1,   3,   4, acGUI_FontRounded16_0049 } // Code 0049, LATIN CAPITAL LETTER I
+  ,{   7,  11,   0,   3,   7, acGUI_FontRounded16_004A } // Code 004A, LATIN CAPITAL LETTER J
+  ,{   8,  11,   1,   3,   9, acGUI_FontRounded16_004B } // Code 004B, LATIN CAPITAL LETTER K
+  ,{   7,  10,   1,   3,   8, acGUI_FontRounded16_004C } // Code 004C, LATIN CAPITAL LETTER L
+  ,{  10,  11,   1,   3,  12, acGUI_FontRounded16_004D } // Code 004D, LATIN CAPITAL LETTER M
+  ,{   9,  11,   1,   3,  10, acGUI_FontRounded16_004E } // Code 004E, LATIN CAPITAL LETTER N
+  ,{  10,  11,   0,   3,  11, acGUI_FontRounded16_004F } // Code 004F, LATIN CAPITAL LETTER O
+  ,{   8,  11,   1,   3,   9, acGUI_FontRounded16_0050 } // Code 0050, LATIN CAPITAL LETTER P
+  ,{  10,  11,   0,   3,  11, acGUI_FontRounded16_0051 } // Code 0051, LATIN CAPITAL LETTER Q
+  ,{   8,  11,   1,   3,  10, acGUI_FontRounded16_0052 } // Code 0052, LATIN CAPITAL LETTER R
+  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0053 } // Code 0053, LATIN CAPITAL LETTER S
+  ,{   9,  11,   0,   3,   9, acGUI_FontRounded16_0054 } // Code 0054, LATIN CAPITAL LETTER T
+  ,{   9,  11,   1,   3,  10, acGUI_FontRounded16_0055 } // Code 0055, LATIN CAPITAL LETTER U
+  ,{   9,  11,   0,   3,   8, acGUI_FontRounded16_0056 } // Code 0056, LATIN CAPITAL LETTER V
+  ,{  12,  11,   0,   3,  12, acGUI_FontRounded16_0057 } // Code 0057, LATIN CAPITAL LETTER W
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0058 } // Code 0058, LATIN CAPITAL LETTER X
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0059 } // Code 0059, LATIN CAPITAL LETTER Y
+  ,{   9,  10,   0,   3,   9, acGUI_FontRounded16_005A } // Code 005A, LATIN CAPITAL LETTER Z
+  ,{   4,  13,   1,   3,   5, acGUI_FontRounded16_005B } // Code 005B, LEFT SQUARE BRACKET
+  ,{   5,  11,   0,   3,   5, acGUI_FontRounded16_005C } // Code 005C, REVERSE SOLIDUS
+  ,{   4,  13,   0,   3,   5, acGUI_FontRounded16_005D } // Code 005D, RIGHT SQUARE BRACKET
+  ,{   7,   7,   0,   3,   8, acGUI_FontRounded16_005E } // Code 005E, CIRCUMFLEX ACCENT
+  ,{   8,   1,  -1,  14,   7, acGUI_FontRounded16_005F } // Code 005F, LOW LINE
+  ,{   3,   3,   0,   3,   4, acGUI_FontRounded16_0060 } // Code 0060, GRAVE ACCENT
+  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_0061 } // Code 0061, LATIN SMALL LETTER A
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0062 } // Code 0062, LATIN SMALL LETTER B
+  ,{   7,   8,   0,   6,   7, acGUI_FontRounded16_0063 } // Code 0063, LATIN SMALL LETTER C
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0064 } // Code 0064, LATIN SMALL LETTER D
+  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_0065 } // Code 0065, LATIN SMALL LETTER E
+  ,{   5,  11,   0,   3,   5, acGUI_FontRounded16_0066 } // Code 0066, LATIN SMALL LETTER F
+  ,{   8,  10,   0,   6,   8, acGUI_FontRounded16_0067 } // Code 0067, LATIN SMALL LETTER G
+  ,{   8,  11,   0,   3,   8, acGUI_FontRounded16_0068 } // Code 0068, LATIN SMALL LETTER H
+  ,{   3,  11,   0,   3,   4, acGUI_FontRounded16_0069 } // Code 0069, LATIN SMALL LETTER I
+  ,{   4,  13,  -1,   3,   4, acGUI_FontRounded16_006A } // Code 006A, LATIN SMALL LETTER J
+  ,{   7,  11,   0,   3,   7, acGUI_FontRounded16_006B } // Code 006B, LATIN SMALL LETTER K
+  ,{   3,  11,   0,   3,   4, acGUI_FontRounded16_006C } // Code 006C, LATIN SMALL LETTER L
+  ,{  12,   8,   0,   6,  12, acGUI_FontRounded16_006D } // Code 006D, LATIN SMALL LETTER M
+  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_006E } // Code 006E, LATIN SMALL LETTER N
+  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_006F } // Code 006F, LATIN SMALL LETTER O
+  ,{   8,  10,   0,   6,   8, acGUI_FontRounded16_0070 } // Code 0070, LATIN SMALL LETTER P
+  ,{   8,  10,   0,   6,   8, acGUI_FontRounded16_0071 } // Code 0071, LATIN SMALL LETTER Q
+  ,{   6,   8,   0,   6,   5, acGUI_FontRounded16_0072 } // Code 0072, LATIN SMALL LETTER R
+  ,{   7,   8,   0,   6,   7, acGUI_FontRounded16_0073 } // Code 0073, LATIN SMALL LETTER S
+  ,{   5,  10,   0,   4,   5, acGUI_FontRounded16_0074 } // Code 0074, LATIN SMALL LETTER T
+  ,{   8,   8,   0,   6,   8, acGUI_FontRounded16_0075 } // Code 0075, LATIN SMALL LETTER U
+  ,{   7,   8,   0,   6,   7, acGUI_FontRounded16_0076 } // Code 0076, LATIN SMALL LETTER V
+  ,{  10,   8,   0,   6,  10, acGUI_FontRounded16_0077 } // Code 0077, LATIN SMALL LETTER W
+  ,{   6,   8,   0,   6,   6, acGUI_FontRounded16_0078 } // Code 0078, LATIN SMALL LETTER X
+  ,{   7,  10,   0,   6,   7, acGUI_FontRounded16_0079 } // Code 0079, LATIN SMALL LETTER Y
+  ,{   7,   7,   0,   6,   7, acGUI_FontRounded16_007A } // Code 007A, LATIN SMALL LETTER Z
+  ,{   5,  13,   0,   3,   5, acGUI_FontRounded16_007B } // Code 007B, LEFT CURLY BRACKET
+  ,{   3,  11,   0,   3,   3, acGUI_FontRounded16_007C } // Code 007C, VERTICAL LINE
+  ,{   5,  13,   0,   3,   5, acGUI_FontRounded16_007D } // Code 007D, RIGHT CURLY BRACKET
+  ,{   8,   3,   0,   8,   8, acGUI_FontRounded16_007E } // Code 007E, TILDE
 };
 
 GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontRounded16_Prop1 = {
-   0x0020 /* first character */
-  ,0x007E /* last character  */
-  ,&GUI_FontRounded16_CharInfo[  0] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0 /* pointer to next GUI_FONT_PROP_EXT */
+  0x0020,                                   // First character
+  0x007E,                                   // Last character
+  &GUI_FontRounded16_CharInfo[0],           // Address of first character
+  (GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0  // Pointer to next GUI_FONT_PROP_EXT
 };
 
 GUI_CONST_STORAGE GUI_FONT GUI_FontRounded16 = {
-   GUI_FONTTYPE_PROP_AA4_EXT /* type of font    */
-  ,16 /* height of font  */
-  ,16 /* space of font y */
-  ,1 /* magnification x */
-  ,1 /* magnification y */
-  ,{&GUI_FontRounded16_Prop1}
-  ,16 /* Baseline */
-  ,8 /* Height of lowercase characters */
-  ,11 /* Height of capital characters */
+  GUI_FONTTYPE_PROP_AA4_EXT,     // Type of font
+  16,                            // Height of font
+  16,                            // Space of font y
+  1,                             // Magnification x
+  1,                             // Magnification y
+  { &GUI_FontRounded16_Prop1 },
+  16,                            // Baseline
+  8,                             // Height of lowercase characters
+  11,                            // Height of capital characters
 };
 
 /*********************************************************************
@@ -1591,21 +1594,20 @@ GUI_CONST_STORAGE GUI_FONT GUI_FontRounded16 = {
 *                                                                    *
 *  Used in                                                           *
 *  - GUIDEMO.c                                                       *
-*  - GUIDEMO_AntiAliasedText.c                                       *
 *  - GUIDEMO_Automotive.c                                            *
-*  - GUIDEMO_Bargraph.c                                              *
 *  - GUIDEMO_ColorBar.c                                              *
-*  - GUIDEMO_IconView.c                                              *
+*  - GUIDEMO_Cursor.c                                                *
 *  - GUIDEMO_ImageFlow.c                                             *
 *  - GUIDEMO_Intro.c                                                 *
+*  - GUIDEMO_ZoomAndRotate.c                                         *
 *                                                                    *
 **********************************************************************
 */
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0020[  1] = { /* code 0020, SPACE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0020[  1] = { // Code 0020, SPACE
   0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0021[ 30] = { /* code 0021, EXCLAMATION MARK */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0021[ 30] = { // Code 0021, EXCLAMATION MARK
   0x02, 0x10,
   0x6F, 0xE2,
   0x9F, 0xF4,
@@ -1623,7 +1625,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0021[ 30] = { /* code 0021, 
   0x01, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0022[ 28] = { /* code 0022, QUOTATION MARK */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0022[ 28] = { // Code 0022, QUOTATION MARK
   0x01, 0x10, 0x02, 0x00,
   0x0E, 0xF2, 0x7F, 0x90,
   0x2F, 0xF4, 0x9F, 0xB0,
@@ -1633,7 +1635,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0022[ 28] = { /* code 0022, 
   0x02, 0x20, 0x03, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0023[ 84] = { /* code 0023, NUMBER SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0023[ 84] = { // Code 0023, NUMBER SIGN
   0x00, 0x02, 0xB4, 0x08, 0x90, 0x00,
   0x00, 0x06, 0xF7, 0x0F, 0xD0, 0x00,
   0x00, 0x08, 0xF5, 0x2F, 0xB0, 0x00,
@@ -1650,7 +1652,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0023[ 84] = { /* code 0023, 
   0x00, 0x22, 0x00, 0x30, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0024[ 96] = { /* code 0024, DOLLAR SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0024[ 96] = { // Code 0024, DOLLAR SIGN
   0x00, 0x00, 0x0B, 0x10, 0x00, 0x00,
   0x00, 0x28, 0xBF, 0xC8, 0x30, 0x00,
   0x05, 0xFF, 0xFF, 0xFF, 0xF9, 0x00,
@@ -1669,7 +1671,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0024[ 96] = { /* code 0024, 
   0x00, 0x00, 0x0D, 0x10, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0025[120] = { /* code 0025, PERCENT SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0025[120] = { // Code 0025, PERCENT SIGN
   0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00,
   0x03, 0xAB, 0xA2, 0x00, 0x00, 0x7F, 0x00, 0x00,
   0x2E, 0xEA, 0xFE, 0x10, 0x01, 0xE8, 0x00, 0x00,
@@ -1687,7 +1689,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0025[120] = { /* code 0025, 
   0x00, 0x00, 0x93, 0x00, 0x00, 0x01, 0x42, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0026[105] = { /* code 0026, AMPERSAND */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0026[105] = { // Code 0026, AMPERSAND
   0x00, 0x00, 0x01, 0x10, 0x00, 0x00, 0x00,
   0x00, 0x04, 0xDF, 0xFD, 0x50, 0x00, 0x00,
   0x00, 0x3F, 0xFD, 0xCF, 0xF4, 0x00, 0x00,
@@ -1705,7 +1707,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0026[105] = { /* code 0026, 
   0x00, 0x01, 0x43, 0x10, 0x00, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0027[ 14] = { /* code 0027, APOSTROPHE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0027[ 14] = { // Code 0027, APOSTROPHE
   0x01, 0x10,
   0x3F, 0xD0,
   0x6F, 0xF0,
@@ -1715,7 +1717,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0027[ 14] = { /* code 0027, 
   0x03, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0028[ 54] = { /* code 0028, LEFT PARENTHESIS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0028[ 54] = { // Code 0028, LEFT PARENTHESIS
   0x00, 0x03, 0x00,
   0x00, 0x9F, 0x40,
   0x02, 0xFF, 0x20,
@@ -1736,7 +1738,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0028[ 54] = { /* code 0028, 
   0x00, 0x29, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0029[ 54] = { /* code 0029, RIGHT PARENTHESIS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0029[ 54] = { // Code 0029, RIGHT PARENTHESIS
   0x03, 0x00, 0x00,
   0x5F, 0x90, 0x00,
   0x2F, 0xF2, 0x00,
@@ -1757,7 +1759,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0029[ 54] = { /* code 0029, 
   0x19, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002A[ 32] = { /* code 002A, ASTERISK */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002A[ 32] = { // Code 002A, ASTERISK
   0x00, 0x00, 0x10, 0x00,
   0x00, 0x08, 0xE0, 0x00,
   0x05, 0x29, 0xF0, 0x51,
@@ -1768,7 +1770,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002A[ 32] = { /* code 002A, 
   0x00, 0x30, 0x03, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002B[ 66] = { /* code 002B, PLUS SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002B[ 66] = { // Code 002B, PLUS SIGN
   0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x8F, 0x50, 0x00, 0x00,
   0x00, 0x00, 0xBF, 0x70, 0x00, 0x00,
@@ -1782,7 +1784,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002B[ 66] = { /* code 002B, 
   0x00, 0x00, 0x7F, 0x40, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002C[ 12] = { /* code 002C, COMMA */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002C[ 12] = { // Code 002C, COMMA
   0x3C, 0x90,
   0xBF, 0xF5,
   0x6F, 0xF7,
@@ -1791,21 +1793,21 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002C[ 12] = { /* code 002C, 
   0x67, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002D[ 16] = { /* code 002D, HYPHEN-MINUS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002D[ 16] = { // Code 002D, HYPHEN-MINUS
   0x01, 0x44, 0x42, 0x00,
   0x2F, 0xFF, 0xFF, 0x70,
   0x3F, 0xFF, 0xFF, 0x80,
   0x02, 0x44, 0x43, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002E[  8] = { /* code 002E, FULL STOP */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002E[  8] = { // Code 002E, FULL STOP
   0x3C, 0x90,
   0xBF, 0xF3,
   0x6F, 0xD1,
   0x01, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002F[ 60] = { /* code 002F, SOLIDUS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002F[ 60] = { // Code 002F, SOLIDUS
   0x00, 0x00, 0x03, 0x00,
   0x00, 0x00, 0x6F, 0x70,
   0x00, 0x00, 0xCF, 0x40,
@@ -1823,7 +1825,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_002F[ 60] = { /* code 002F, 
   0x23, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0030[ 84] = { /* code 0030, DIGIT ZERO */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0030[ 84] = { // Code 0030, DIGIT ZERO
   0x00, 0x05, 0xBB, 0xB6, 0x00, 0x00,
   0x00, 0xAF, 0xFF, 0xFF, 0xA0, 0x00,
   0x06, 0xFF, 0xA6, 0xAF, 0xF7, 0x00,
@@ -1840,7 +1842,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0030[ 84] = { /* code 0030, 
   0x00, 0x00, 0x24, 0x20, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0031[ 56] = { /* code 0031, DIGIT ONE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0031[ 56] = { // Code 0031, DIGIT ONE
   0x00, 0x00, 0x2B, 0x70,
   0x00, 0x00, 0xAF, 0xC0,
   0x01, 0x49, 0xFF, 0xD0,
@@ -1857,7 +1859,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0031[ 56] = { /* code 0031, 
   0x00, 0x00, 0x13, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0032[ 78] = { /* code 0032, DIGIT TWO */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0032[ 78] = { // Code 0032, DIGIT TWO
   0x00, 0x17, 0xBB, 0xB6, 0x00, 0x00,
   0x03, 0xEF, 0xFF, 0xFF, 0xD1, 0x00,
   0x0D, 0xFE, 0x86, 0xAF, 0xFB, 0x00,
@@ -1873,7 +1875,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0032[ 78] = { /* code 0032, 
   0x3E, 0xFF, 0xFF, 0xFF, 0xFD, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0033[ 70] = { /* code 0033, DIGIT THREE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0033[ 70] = { // Code 0033, DIGIT THREE
   0x00, 0x28, 0xBB, 0xA5, 0x00,
   0x05, 0xFF, 0xFF, 0xFF, 0xA0,
   0x1F, 0xFE, 0x76, 0xCF, 0xF4,
@@ -1890,7 +1892,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0033[ 70] = { /* code 0033, 
   0x00, 0x01, 0x33, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0034[ 84] = { /* code 0034, DIGIT FOUR */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0034[ 84] = { // Code 0034, DIGIT FOUR
   0x00, 0x00, 0x00, 0x9B, 0x40, 0x00,
   0x00, 0x00, 0x07, 0xFF, 0x90, 0x00,
   0x00, 0x00, 0x4F, 0xFF, 0x90, 0x00,
@@ -1907,7 +1909,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0034[ 84] = { /* code 0034, 
   0x00, 0x00, 0x00, 0x13, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0035[ 70] = { /* code 0035, DIGIT FIVE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0035[ 70] = { // Code 0035, DIGIT FIVE
   0x01, 0x89, 0x99, 0x99, 0x70,
   0x07, 0xFF, 0xFF, 0xFF, 0xF3,
   0x0A, 0xFD, 0xBB, 0xBB, 0x90,
@@ -1924,7 +1926,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0035[ 70] = { /* code 0035, 
   0x00, 0x02, 0x43, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0036[ 84] = { /* code 0036, DIGIT SIX */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0036[ 84] = { // Code 0036, DIGIT SIX
   0x00, 0x04, 0x9B, 0xB9, 0x30, 0x00,
   0x00, 0x8F, 0xFF, 0xFF, 0xF4, 0x00,
   0x04, 0xFF, 0x93, 0x4E, 0xFB, 0x00,
@@ -1941,7 +1943,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0036[ 84] = { /* code 0036, 
   0x00, 0x00, 0x24, 0x30, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0037[ 70] = { /* code 0037, DIGIT SEVEN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0037[ 70] = { // Code 0037, DIGIT SEVEN
   0x49, 0x99, 0x99, 0x99, 0x94,
   0xBF, 0xFF, 0xFF, 0xFF, 0xFD,
   0x5B, 0xBB, 0xBB, 0xBF, 0xF9,
@@ -1958,7 +1960,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0037[ 70] = { /* code 0037, 
   0x00, 0x03, 0x10, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0038[ 84] = { /* code 0038, DIGIT EIGHT */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0038[ 84] = { // Code 0038, DIGIT EIGHT
   0x00, 0x17, 0xBB, 0xB8, 0x10, 0x00,
   0x02, 0xEF, 0xFF, 0xFF, 0xE3, 0x00,
   0x0B, 0xFE, 0x62, 0x6E, 0xFB, 0x00,
@@ -1975,7 +1977,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0038[ 84] = { /* code 0038, 
   0x00, 0x00, 0x24, 0x30, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0039[ 84] = { /* code 0039, DIGIT NINE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0039[ 84] = { // Code 0039, DIGIT NINE
   0x00, 0x17, 0xBB, 0xB6, 0x00, 0x00,
   0x03, 0xEF, 0xFF, 0xFF, 0xB0, 0x00,
   0x0C, 0xFE, 0x74, 0x8F, 0xF8, 0x00,
@@ -1992,7 +1994,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0039[ 84] = { /* code 0039, 
   0x00, 0x01, 0x33, 0x10, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003A[ 22] = { /* code 003A, COLON */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003A[ 22] = { // Code 003A, COLON
   0x05, 0x30,
   0x9F, 0xF2,
   0x9F, 0xF2,
@@ -2006,7 +2008,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003A[ 22] = { /* code 003A, 
   0x01, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003B[ 26] = { /* code 003B, SEMICOLON */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003B[ 26] = { // Code 003B, SEMICOLON
   0x05, 0x30,
   0x9F, 0xF2,
   0x9F, 0xF2,
@@ -2022,7 +2024,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003B[ 26] = { /* code 003B, 
   0x67, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003C[ 60] = { /* code 003C, LESS-THAN SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003C[ 60] = { // Code 003C, LESS-THAN SIGN
   0x00, 0x00, 0x00, 0x01, 0x8B, 0x20,
   0x00, 0x00, 0x02, 0x9F, 0xFF, 0x50,
   0x00, 0x03, 0xAF, 0xFF, 0xC6, 0x00,
@@ -2035,7 +2037,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003C[ 60] = { /* code 003C, 
   0x00, 0x00, 0x00, 0x00, 0x57, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003D[ 48] = { /* code 003D, EQUALS SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003D[ 48] = { // Code 003D, EQUALS SIGN
   0x04, 0x44, 0x44, 0x44, 0x43, 0x00,
   0x9F, 0xFF, 0xFF, 0xFF, 0xFF, 0x70,
   0x5D, 0xDD, 0xDD, 0xDD, 0xDC, 0x30,
@@ -2046,7 +2048,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003D[ 48] = { /* code 003D, 
   0x02, 0x22, 0x22, 0x22, 0x21, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003E[ 60] = { /* code 003E, GREATER-THAN SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003E[ 60] = { // Code 003E, GREATER-THAN SIGN
   0x4B, 0x70, 0x00, 0x00, 0x00, 0x00,
   0x8F, 0xFE, 0x81, 0x00, 0x00, 0x00,
   0x17, 0xEF, 0xFF, 0x92, 0x00, 0x00,
@@ -2059,7 +2061,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003E[ 60] = { /* code 003E, 
   0x27, 0x30, 0x00, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003F[ 75] = { /* code 003F, QUESTION MARK */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003F[ 75] = { // Code 003F, QUESTION MARK
   0x00, 0x00, 0x22, 0x00, 0x00,
   0x00, 0x7E, 0xFF, 0xFA, 0x20,
   0x09, 0xFF, 0xEE, 0xFF, 0xE1,
@@ -2077,7 +2079,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_003F[ 75] = { /* code 003F, 
   0x00, 0x00, 0x11, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0040[105] = { /* code 0040, COMMERCIAL AT */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0040[105] = { // Code 0040, COMMERCIAL AT
   0x00, 0x00, 0x00, 0x34, 0x31, 0x00, 0x00,
   0x00, 0x02, 0x9E, 0xFF, 0xFF, 0xA2, 0x00,
   0x00, 0x3E, 0xFB, 0x76, 0x7A, 0xFE, 0x50,
@@ -2095,7 +2097,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0040[105] = { /* code 0040, 
   0x00, 0x00, 0x01, 0x34, 0x31, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0041[ 90] = { /* code 0041, LATIN CAPITAL LETTER A */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0041[ 90] = { // Code 0041, LATIN CAPITAL LETTER A
   0x00, 0x00, 0x02, 0x30, 0x00, 0x00,
   0x00, 0x00, 0x9F, 0xFB, 0x00, 0x00,
   0x00, 0x01, 0xFF, 0xFF, 0x30, 0x00,
@@ -2113,7 +2115,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0041[ 90] = { /* code 0041, 
   0x03, 0x10, 0x00, 0x00, 0x01, 0x30
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0042[ 78] = { /* code 0042, LATIN CAPITAL LETTER B */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0042[ 78] = { // Code 0042, LATIN CAPITAL LETTER B
   0x3D, 0xFF, 0xFF, 0xED, 0xA3, 0x00,
   0x9F, 0xFF, 0xFF, 0xFF, 0xFF, 0x30,
   0x9F, 0xF8, 0x44, 0x4C, 0xFF, 0xA0,
@@ -2129,7 +2131,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0042[ 78] = { /* code 0042, 
   0x4E, 0xFF, 0xFF, 0xFE, 0xB4, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0043[ 90] = { /* code 0043, LATIN CAPITAL LETTER C */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0043[ 90] = { // Code 0043, LATIN CAPITAL LETTER C
   0x00, 0x00, 0x13, 0x43, 0x00, 0x00,
   0x00, 0x2A, 0xFF, 0xFF, 0xE7, 0x00,
   0x03, 0xEF, 0xFF, 0xFF, 0xFF, 0xB0,
@@ -2147,7 +2149,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0043[ 90] = { /* code 0043, 
   0x00, 0x00, 0x24, 0x43, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0044[ 78] = { /* code 0044, LATIN CAPITAL LETTER D */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0044[ 78] = { // Code 0044, LATIN CAPITAL LETTER D
   0x3D, 0xFF, 0xFF, 0xEC, 0x71, 0x00,
   0x9F, 0xFF, 0xFF, 0xFF, 0xFE, 0x30,
   0x9F, 0xF9, 0x66, 0x7D, 0xFF, 0xD0,
@@ -2163,7 +2165,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0044[ 78] = { /* code 0044, 
   0x4E, 0xFF, 0xFF, 0xFC, 0x71, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0045[ 78] = { /* code 0045, LATIN CAPITAL LETTER E */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0045[ 78] = { // Code 0045, LATIN CAPITAL LETTER E
   0x3D, 0xFF, 0xFF, 0xFF, 0xFE, 0x50,
   0x8F, 0xFF, 0xFF, 0xFF, 0xFF, 0x80,
   0x9F, 0xF9, 0x66, 0x66, 0x65, 0x10,
@@ -2179,7 +2181,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0045[ 78] = { /* code 0045, 
   0x3D, 0xFF, 0xFF, 0xFF, 0xFF, 0x70
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0046[ 84] = { /* code 0046, LATIN CAPITAL LETTER F */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0046[ 84] = { // Code 0046, LATIN CAPITAL LETTER F
   0x3D, 0xFF, 0xFF, 0xFF, 0xFB, 0x10,
   0x8F, 0xFF, 0xFF, 0xFF, 0xFF, 0x10,
   0x9F, 0xF9, 0x66, 0x66, 0x64, 0x00,
@@ -2196,7 +2198,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0046[ 84] = { /* code 0046, 
   0x03, 0x20, 0x00, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0047[105] = { /* code 0047, LATIN CAPITAL LETTER G */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0047[105] = { // Code 0047, LATIN CAPITAL LETTER G
   0x00, 0x00, 0x03, 0x43, 0x10, 0x00, 0x00,
   0x00, 0x2A, 0xFF, 0xFF, 0xFA, 0x20, 0x00,
   0x03, 0xEF, 0xFF, 0xFF, 0xFF, 0xE2, 0x00,
@@ -2214,7 +2216,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0047[105] = { /* code 0047, 
   0x00, 0x00, 0x24, 0x43, 0x00, 0x03, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0048[ 90] = { /* code 0048, LATIN CAPITAL LETTER H */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0048[ 90] = { // Code 0048, LATIN CAPITAL LETTER H
   0x02, 0x10, 0x00, 0x00, 0x01, 0x20,
   0x6F, 0xE2, 0x00, 0x00, 0x2E, 0xF6,
   0x9F, 0xF5, 0x00, 0x00, 0x5F, 0xF9,
@@ -2232,7 +2234,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0048[ 90] = { /* code 0048, 
   0x03, 0x20, 0x00, 0x00, 0x02, 0x30
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0049[ 30] = { /* code 0049, LATIN CAPITAL LETTER I */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0049[ 30] = { // Code 0049, LATIN CAPITAL LETTER I
   0x02, 0x10,
   0x6F, 0xE2,
   0x9F, 0xF5,
@@ -2250,7 +2252,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0049[ 30] = { /* code 0049, 
   0x03, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004A[ 75] = { /* code 004A, LATIN CAPITAL LETTER J */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004A[ 75] = { // Code 004A, LATIN CAPITAL LETTER J
   0x00, 0x00, 0x00, 0x02, 0x00,
   0x00, 0x00, 0x00, 0xBF, 0xB0,
   0x00, 0x00, 0x00, 0xFF, 0xF0,
@@ -2268,7 +2270,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004A[ 75] = { /* code 004A, 
   0x00, 0x03, 0x43, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004B[ 90] = { /* code 004B, LATIN CAPITAL LETTER K */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004B[ 90] = { // Code 004B, LATIN CAPITAL LETTER K
   0x02, 0x10, 0x00, 0x00, 0x11, 0x00,
   0x6F, 0xE2, 0x00, 0x02, 0xEF, 0x50,
   0x9F, 0xF5, 0x00, 0x1D, 0xFF, 0x60,
@@ -2286,7 +2288,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004B[ 90] = { /* code 004B, 
   0x03, 0x20, 0x00, 0x00, 0x03, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004C[ 70] = { /* code 004C, LATIN CAPITAL LETTER L */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004C[ 70] = { // Code 004C, LATIN CAPITAL LETTER L
   0x02, 0x10, 0x00, 0x00, 0x00,
   0x6F, 0xE2, 0x00, 0x00, 0x00,
   0x9F, 0xF5, 0x00, 0x00, 0x00,
@@ -2303,7 +2305,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004C[ 70] = { /* code 004C, 
   0x4E, 0xFF, 0xFF, 0xFF, 0xF7
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004D[105] = { /* code 004D, LATIN CAPITAL LETTER M */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004D[105] = { // Code 004D, LATIN CAPITAL LETTER M
   0x02, 0x31, 0x00, 0x00, 0x00, 0x13, 0x20,
   0x7F, 0xFE, 0x30, 0x00, 0x02, 0xEF, 0xF7,
   0xBF, 0xFF, 0x80, 0x00, 0x08, 0xFF, 0xF9,
@@ -2321,7 +2323,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004D[105] = { /* code 004D, 
   0x03, 0x10, 0x00, 0x22, 0x00, 0x01, 0x30
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004E[ 90] = { /* code 004E, LATIN CAPITAL LETTER N */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004E[ 90] = { // Code 004E, LATIN CAPITAL LETTER N
   0x01, 0x20, 0x00, 0x00, 0x01, 0x20,
   0x6F, 0xF8, 0x00, 0x00, 0x1E, 0xF8,
   0xAF, 0xFF, 0x30, 0x00, 0x2F, 0xFB,
@@ -2339,7 +2341,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004E[ 90] = { /* code 004E, 
   0x03, 0x10, 0x00, 0x00, 0x03, 0x30
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004F[105] = { /* code 004F, LATIN CAPITAL LETTER O */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004F[105] = { // Code 004F, LATIN CAPITAL LETTER O
   0x00, 0x00, 0x01, 0x34, 0x30, 0x00, 0x00,
   0x00, 0x03, 0xBF, 0xFF, 0xFE, 0x91, 0x00,
   0x00, 0x6F, 0xFF, 0xFF, 0xFF, 0xFE, 0x20,
@@ -2357,7 +2359,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_004F[105] = { /* code 004F, 
   0x00, 0x00, 0x02, 0x44, 0x31, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0050[ 84] = { /* code 0050, LATIN CAPITAL LETTER P */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0050[ 84] = { // Code 0050, LATIN CAPITAL LETTER P
   0x3D, 0xFF, 0xFF, 0xFD, 0xA3, 0x00,
   0x9F, 0xFF, 0xFF, 0xFF, 0xFF, 0x40,
   0x9F, 0xF9, 0x66, 0x6B, 0xFF, 0xC0,
@@ -2374,7 +2376,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0050[ 84] = { /* code 0050, 
   0x03, 0x20, 0x00, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0051[105] = { /* code 0051, LATIN CAPITAL LETTER Q */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0051[105] = { // Code 0051, LATIN CAPITAL LETTER Q
   0x00, 0x00, 0x01, 0x34, 0x30, 0x00, 0x00,
   0x00, 0x03, 0xBF, 0xFF, 0xFE, 0x91, 0x00,
   0x00, 0x6F, 0xFF, 0xFF, 0xFF, 0xFE, 0x20,
@@ -2392,7 +2394,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0051[105] = { /* code 0051, 
   0x00, 0x00, 0x02, 0x44, 0x30, 0x08, 0xF4
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0052[ 84] = { /* code 0052, LATIN CAPITAL LETTER R */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0052[ 84] = { // Code 0052, LATIN CAPITAL LETTER R
   0x3D, 0xFF, 0xFF, 0xFE, 0xC7, 0x10,
   0x9F, 0xFF, 0xFF, 0xFF, 0xFF, 0xB0,
   0x9F, 0xF9, 0x66, 0x67, 0xEF, 0xF4,
@@ -2409,7 +2411,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0052[ 84] = { /* code 0052, 
   0x03, 0x20, 0x00, 0x00, 0x03, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0053[ 90] = { /* code 0053, LATIN CAPITAL LETTER S */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0053[ 90] = { // Code 0053, LATIN CAPITAL LETTER S
   0x00, 0x00, 0x24, 0x41, 0x00, 0x00,
   0x00, 0x5D, 0xFF, 0xFF, 0xC4, 0x00,
   0x07, 0xFF, 0xFF, 0xFF, 0xFF, 0x70,
@@ -2427,7 +2429,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0053[ 90] = { /* code 0053, 
   0x00, 0x00, 0x34, 0x43, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0054[ 84] = { /* code 0054, LATIN CAPITAL LETTER T */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0054[ 84] = { // Code 0054, LATIN CAPITAL LETTER T
   0x6E, 0xFF, 0xFF, 0xFF, 0xFF, 0xE7,
   0xBF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFB,
   0x27, 0x77, 0xBF, 0xFB, 0x77, 0x72,
@@ -2444,7 +2446,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0054[ 84] = { /* code 0054, 
   0x00, 0x00, 0x02, 0x20, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0055[ 90] = { /* code 0055, LATIN CAPITAL LETTER U */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0055[ 90] = { // Code 0055, LATIN CAPITAL LETTER U
   0x02, 0x10, 0x00, 0x00, 0x01, 0x20,
   0x6F, 0xE2, 0x00, 0x00, 0x2E, 0xF6,
   0x9F, 0xF5, 0x00, 0x00, 0x5F, 0xF9,
@@ -2462,7 +2464,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0055[ 90] = { /* code 0055, 
   0x00, 0x00, 0x34, 0x43, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0056[ 90] = { /* code 0056, LATIN CAPITAL LETTER V */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0056[ 90] = { // Code 0056, LATIN CAPITAL LETTER V
   0x02, 0x00, 0x00, 0x00, 0x01, 0x10,
   0xAF, 0xC0, 0x00, 0x00, 0x2E, 0xF5,
   0xCF, 0xF4, 0x00, 0x00, 0x7F, 0xF7,
@@ -2480,7 +2482,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0056[ 90] = { /* code 0056, 
   0x00, 0x00, 0x03, 0x20, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0057[135] = { /* code 0057, LATIN CAPITAL LETTER W */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0057[135] = { // Code 0057, LATIN CAPITAL LETTER W
   0x02, 0x00, 0x00, 0x01, 0x20, 0x00, 0x00, 0x11, 0x00,
   0xAF, 0xC0, 0x00, 0x2E, 0xFB, 0x00, 0x01, 0xEF, 0x50,
   0xCF, 0xF1, 0x00, 0x6F, 0xFF, 0x10, 0x05, 0xFF, 0x70,
@@ -2498,7 +2500,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0057[135] = { /* code 0057, 
   0x00, 0x01, 0x41, 0x00, 0x00, 0x03, 0x30, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0058[ 90] = { /* code 0058, LATIN CAPITAL LETTER X */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0058[ 90] = { // Code 0058, LATIN CAPITAL LETTER X
   0x01, 0x10, 0x00, 0x00, 0x11, 0x00,
   0x3F, 0xF3, 0x00, 0x04, 0xFF, 0x20,
   0x5F, 0xFC, 0x00, 0x0D, 0xFF, 0x30,
@@ -2516,7 +2518,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0058[ 90] = { /* code 0058, 
   0x03, 0x10, 0x00, 0x00, 0x32, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0059[ 90] = { /* code 0059, LATIN CAPITAL LETTER Y */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0059[ 90] = { // Code 0059, LATIN CAPITAL LETTER Y
   0x02, 0x10, 0x00, 0x00, 0x02, 0x00,
   0x9F, 0xC0, 0x00, 0x00, 0xBF, 0x90,
   0xBF, 0xF7, 0x00, 0x05, 0xFF, 0xC0,
@@ -2534,7 +2536,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0059[ 90] = { /* code 0059, 
   0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005A[ 78] = { /* code 005A, LATIN CAPITAL LETTER Z */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005A[ 78] = { // Code 005A, LATIN CAPITAL LETTER Z
   0x09, 0xFF, 0xFF, 0xFF, 0xFF, 0xE6,
   0x0E, 0xFF, 0xFF, 0xFF, 0xFF, 0xFA,
   0x03, 0x77, 0x77, 0x7B, 0xFF, 0xF4,
@@ -2550,7 +2552,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005A[ 78] = { /* code 005A, 
   0x3D, 0xFF, 0xFF, 0xFF, 0xFF, 0xF7
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005B[ 51] = { /* code 005B, LEFT SQUARE BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005B[ 51] = { // Code 005B, LEFT SQUARE BRACKET
   0x3D, 0xFF, 0xE2,
   0x7F, 0xFF, 0xE2,
   0x7F, 0xF0, 0x00,
@@ -2570,7 +2572,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005B[ 51] = { /* code 005B, 
   0x03, 0x66, 0x40
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005C[ 60] = { /* code 005C, REVERSE SOLIDUS */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005C[ 60] = { // Code 005C, REVERSE SOLIDUS
   0x12, 0x00, 0x00, 0x00,
   0xCF, 0x10, 0x00, 0x00,
   0x9F, 0x70, 0x00, 0x00,
@@ -2588,7 +2590,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005C[ 60] = { /* code 005C, 
   0x00, 0x00, 0x04, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005D[ 51] = { /* code 005D, RIGHT SQUARE BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005D[ 51] = { // Code 005D, RIGHT SQUARE BRACKET
   0xBF, 0xFE, 0x60,
   0xCF, 0xFF, 0xB0,
   0x00, 0x9F, 0xB0,
@@ -2608,7 +2610,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005D[ 51] = { /* code 005D, 
   0x25, 0x64, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005E[ 40] = { /* code 005E, CIRCUMFLEX ACCENT */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005E[ 40] = { // Code 005E, CIRCUMFLEX ACCENT
   0x00, 0x03, 0x72, 0x00, 0x00,
   0x00, 0x0E, 0xFB, 0x00, 0x00,
   0x00, 0x7F, 0xFF, 0x50, 0x00,
@@ -2619,19 +2621,19 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005E[ 40] = { /* code 005E, 
   0x69, 0x10, 0x00, 0x39, 0x50
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005F[ 12] = { /* code 005F, LOW LINE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_005F[ 12] = { // Code 005F, LOW LINE
   0x49, 0x99, 0x99, 0x99, 0x99, 0x40,
   0x14, 0x44, 0x44, 0x44, 0x44, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0060[  8] = { /* code 0060, GRAVE ACCENT */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0060[  8] = { // Code 0060, GRAVE ACCENT
   0x78, 0x00,
   0xEF, 0xC2,
   0x3C, 0xFE,
   0x00, 0x78
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0061[ 55] = { /* code 0061, LATIN SMALL LETTER A */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0061[ 55] = { // Code 0061, LATIN SMALL LETTER A
   0x00, 0x05, 0x99, 0x96, 0x10,
   0x02, 0xDF, 0xFF, 0xFF, 0xE3,
   0x09, 0xFE, 0x74, 0x8F, 0xFB,
@@ -2645,7 +2647,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0061[ 55] = { /* code 0061, 
   0x00, 0x13, 0x30, 0x00, 0x31
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0062[ 75] = { /* code 0062, LATIN SMALL LETTER B */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0062[ 75] = { // Code 0062, LATIN SMALL LETTER B
   0x02, 0x00, 0x00, 0x00, 0x00,
   0xCF, 0x80, 0x00, 0x00, 0x00,
   0xFF, 0x90, 0x00, 0x00, 0x00,
@@ -2663,7 +2665,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0062[ 75] = { /* code 0062, 
   0x13, 0x00, 0x33, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0063[ 55] = { /* code 0063, LATIN SMALL LETTER C */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0063[ 55] = { // Code 0063, LATIN SMALL LETTER C
   0x00, 0x05, 0x99, 0x83, 0x00,
   0x01, 0xCF, 0xFF, 0xFF, 0xA0,
   0x0B, 0xFF, 0xA6, 0xBF, 0xF3,
@@ -2677,7 +2679,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0063[ 55] = { /* code 0063, 
   0x00, 0x00, 0x34, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0064[ 75] = { /* code 0064, LATIN SMALL LETTER D */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0064[ 75] = { // Code 0064, LATIN SMALL LETTER D
   0x00, 0x00, 0x00, 0x00, 0x20,
   0x00, 0x00, 0x00, 0x08, 0xFC,
   0x00, 0x00, 0x00, 0x09, 0xFF,
@@ -2695,7 +2697,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0064[ 75] = { /* code 0064, 
   0x00, 0x01, 0x32, 0x00, 0x31
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0065[ 66] = { /* code 0065, LATIN SMALL LETTER E */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0065[ 66] = { // Code 0065, LATIN SMALL LETTER E
   0x00, 0x03, 0x89, 0x95, 0x00, 0x00,
   0x00, 0xAF, 0xFF, 0xFF, 0xC1, 0x00,
   0x09, 0xFF, 0x74, 0x6E, 0xFB, 0x00,
@@ -2709,7 +2711,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0065[ 66] = { /* code 0065, 
   0x00, 0x00, 0x24, 0x30, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0066[ 60] = { /* code 0066, LATIN SMALL LETTER F */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0066[ 60] = { // Code 0066, LATIN SMALL LETTER F
   0x00, 0x01, 0x42, 0x00,
   0x00, 0x6F, 0xFF, 0x50,
   0x01, 0xFF, 0xFD, 0x40,
@@ -2727,7 +2729,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0066[ 60] = { /* code 0066, 
   0x00, 0x13, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0067[ 70] = { /* code 0067, LATIN SMALL LETTER G */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0067[ 70] = { // Code 0067, LATIN SMALL LETTER G
   0x00, 0x16, 0x98, 0x31, 0x96,
   0x02, 0xDF, 0xFF, 0xFA, 0xFE,
   0x0B, 0xFF, 0xA6, 0xBF, 0xFF,
@@ -2744,7 +2746,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0067[ 70] = { /* code 0067, 
   0x00, 0x39, 0xCD, 0xB7, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0068[ 75] = { /* code 0068, LATIN SMALL LETTER H */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0068[ 75] = { // Code 0068, LATIN SMALL LETTER H
   0x02, 0x00, 0x00, 0x00, 0x00,
   0xCF, 0x80, 0x00, 0x00, 0x00,
   0xFF, 0x90, 0x00, 0x00, 0x00,
@@ -2762,7 +2764,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0068[ 75] = { /* code 0068, 
   0x13, 0x00, 0x00, 0x03, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0069[ 30] = { /* code 0069, LATIN SMALL LETTER I */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0069[ 30] = { // Code 0069, LATIN SMALL LETTER I
   0x04, 0x00,
   0xAF, 0xB0,
   0xCF, 0xC0,
@@ -2780,7 +2782,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0069[ 30] = { /* code 0069, 
   0x04, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006A[ 54] = { /* code 006A, LATIN SMALL LETTER J */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006A[ 54] = { // Code 006A, LATIN SMALL LETTER J
   0x00, 0x04, 0x00,
   0x00, 0xAF, 0xB0,
   0x00, 0xCF, 0xC0,
@@ -2801,7 +2803,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006A[ 54] = { /* code 006A, 
   0x1A, 0xB7, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006B[ 75] = { /* code 006B, LATIN SMALL LETTER K */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006B[ 75] = { // Code 006B, LATIN SMALL LETTER K
   0x02, 0x00, 0x00, 0x00, 0x00,
   0xCF, 0x80, 0x00, 0x00, 0x00,
   0xFF, 0x90, 0x00, 0x00, 0x00,
@@ -2819,7 +2821,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006B[ 75] = { /* code 006B, 
   0x13, 0x00, 0x00, 0x13, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006C[ 30] = { /* code 006C, LATIN SMALL LETTER L */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006C[ 30] = { // Code 006C, LATIN SMALL LETTER L
   0x02, 0x00,
   0xAF, 0xA0,
   0xDF, 0xD0,
@@ -2837,7 +2839,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006C[ 30] = { /* code 006C, 
   0x03, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006D[ 88] = { /* code 006D, LATIN SMALL LETTER M */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006D[ 88] = { // Code 006D, LATIN SMALL LETTER M
   0x59, 0x11, 0x79, 0x82, 0x03, 0x89, 0x72, 0x00,
   0xEF, 0x9D, 0xFF, 0xFE, 0x6F, 0xFF, 0xFE, 0x20,
   0xFF, 0xFC, 0x8C, 0xFF, 0xFC, 0x8C, 0xFF, 0x70,
@@ -2851,7 +2853,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006D[ 88] = { /* code 006D, 
   0x13, 0x00, 0x00, 0x13, 0x00, 0x00, 0x13, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006E[ 55] = { /* code 006E, LATIN SMALL LETTER N */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006E[ 55] = { // Code 006E, LATIN SMALL LETTER N
   0x59, 0x11, 0x79, 0x83, 0x00,
   0xEF, 0x8E, 0xFF, 0xFF, 0x40,
   0xFF, 0xFD, 0x8B, 0xFF, 0xB0,
@@ -2865,7 +2867,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006E[ 55] = { /* code 006E, 
   0x13, 0x00, 0x00, 0x03, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006F[ 66] = { /* code 006F, LATIN SMALL LETTER O */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006F[ 66] = { // Code 006F, LATIN SMALL LETTER O
   0x00, 0x04, 0x89, 0x84, 0x00, 0x00,
   0x01, 0xBF, 0xFF, 0xFF, 0xB1, 0x00,
   0x0A, 0xFF, 0x95, 0x8F, 0xFA, 0x00,
@@ -2879,7 +2881,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_006F[ 66] = { /* code 006F, 
   0x00, 0x00, 0x34, 0x30, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0070[ 70] = { /* code 0070, LATIN SMALL LETTER P */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0070[ 70] = { // Code 0070, LATIN SMALL LETTER P
   0x69, 0x13, 0x99, 0x61, 0x00,
   0xEF, 0xAF, 0xFF, 0xFD, 0x20,
   0xFF, 0xFB, 0x6A, 0xFF, 0xB0,
@@ -2896,7 +2898,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0070[ 70] = { /* code 0070, 
   0x6B, 0x30, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0071[ 70] = { /* code 0071, LATIN SMALL LETTER Q */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0071[ 70] = { // Code 0071, LATIN SMALL LETTER Q
   0x00, 0x16, 0x99, 0x31, 0x96,
   0x02, 0xDF, 0xFF, 0xFA, 0xFE,
   0x0B, 0xFF, 0xA6, 0xBF, 0xFF,
@@ -2913,7 +2915,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0071[ 70] = { /* code 0071, 
   0x00, 0x00, 0x00, 0x03, 0xB6
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0072[ 44] = { /* code 0072, LATIN SMALL LETTER R */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0072[ 44] = { // Code 0072, LATIN SMALL LETTER R
   0x49, 0x22, 0x97, 0x00,
   0xCF, 0x9E, 0xFF, 0x30,
   0xDF, 0xFF, 0xFB, 0x10,
@@ -2927,7 +2929,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0072[ 44] = { /* code 0072, 
   0x04, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0073[ 55] = { /* code 0073, LATIN SMALL LETTER S */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0073[ 55] = { // Code 0073, LATIN SMALL LETTER S
   0x00, 0x48, 0x99, 0x61, 0x00,
   0x0A, 0xFF, 0xFF, 0xFE, 0x30,
   0x4F, 0xFA, 0x46, 0xEF, 0x80,
@@ -2941,7 +2943,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0073[ 55] = { /* code 0073, 
   0x00, 0x01, 0x33, 0x10, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0074[ 56] = { /* code 0074, LATIN SMALL LETTER T */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0074[ 56] = { // Code 0074, LATIN SMALL LETTER T
   0x00, 0x33, 0x00, 0x00,
   0x02, 0xFF, 0x40, 0x00,
   0x04, 0xFF, 0x60, 0x00,
@@ -2958,7 +2960,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0074[ 56] = { /* code 0074, 
   0x00, 0x02, 0x41, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0075[ 55] = { /* code 0075, LATIN SMALL LETTER U */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0075[ 55] = { // Code 0075, LATIN SMALL LETTER U
   0x59, 0x30, 0x00, 0x39, 0x50,
   0xEF, 0x90, 0x00, 0x9F, 0xE0,
   0xFF, 0x90, 0x00, 0x9F, 0xF0,
@@ -2972,7 +2974,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0075[ 55] = { /* code 0075, 
   0x00, 0x24, 0x10, 0x03, 0x10
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0076[ 55] = { /* code 0076, LATIN SMALL LETTER V */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0076[ 55] = { // Code 0076, LATIN SMALL LETTER V
   0x49, 0x20, 0x00, 0x29, 0x40,
   0xDF, 0xB0, 0x00, 0xBF, 0xD0,
   0xAF, 0xF1, 0x01, 0xFF, 0xA0,
@@ -2986,7 +2988,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0076[ 55] = { /* code 0076, 
   0x00, 0x02, 0x42, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0077[ 77] = { /* code 0077, LATIN SMALL LETTER W */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0077[ 77] = { // Code 0077, LATIN SMALL LETTER W
   0x39, 0x40, 0x01, 0x89, 0x10, 0x04, 0x93,
   0xBF, 0xB0, 0x07, 0xFF, 0x80, 0x0B, 0xFB,
   0x9F, 0xF1, 0x0B, 0xFF, 0xC0, 0x0F, 0xF9,
@@ -3000,7 +3002,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0077[ 77] = { /* code 0077, 
   0x00, 0x03, 0x30, 0x00, 0x03, 0x30, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0078[ 55] = { /* code 0078, LATIN SMALL LETTER X */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0078[ 55] = { // Code 0078, LATIN SMALL LETTER X
   0x18, 0x70, 0x00, 0x78, 0x00,
   0x7F, 0xF4, 0x05, 0xFF, 0x30,
   0x2F, 0xFD, 0x1E, 0xFD, 0x00,
@@ -3014,7 +3016,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0078[ 55] = { /* code 0078, 
   0x03, 0x00, 0x00, 0x22, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0079[ 70] = { /* code 0079, LATIN SMALL LETTER Y */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0079[ 70] = { // Code 0079, LATIN SMALL LETTER Y
   0x39, 0x40, 0x00, 0x39, 0x30,
   0xBF, 0xD0, 0x00, 0xCF, 0xB0,
   0x8F, 0xF2, 0x01, 0xFF, 0x80,
@@ -3031,7 +3033,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_0079[ 70] = { /* code 0079, 
   0x07, 0xB8, 0x10, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007A[ 50] = { /* code 007A, LATIN SMALL LETTER Z */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007A[ 50] = { // Code 007A, LATIN SMALL LETTER Z
   0x03, 0x66, 0x66, 0x66, 0x50,
   0x0F, 0xFF, 0xFF, 0xFF, 0xF5,
   0x07, 0x99, 0x9B, 0xFF, 0xE1,
@@ -3044,7 +3046,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007A[ 50] = { /* code 007A, 
   0x4F, 0xFF, 0xFF, 0xFF, 0xF4
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007B[ 68] = { /* code 007B, LEFT CURLY BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007B[ 68] = { // Code 007B, LEFT CURLY BRACKET
   0x00, 0x6D, 0xFE, 0x30,
   0x01, 0xFF, 0xC9, 0x20,
   0x03, 0xFF, 0x40, 0x00,
@@ -3064,7 +3066,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007B[ 68] = { /* code 007B, 
   0x00, 0x03, 0x55, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007C[ 30] = { /* code 007C, VERTICAL LINE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007C[ 30] = { // Code 007C, VERTICAL LINE
   0x02, 0x20,
   0x1E, 0xE1,
   0x2F, 0xF2,
@@ -3082,7 +3084,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007C[ 30] = { /* code 007C, 
   0x02, 0x20
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007D[ 68] = { /* code 007D, RIGHT CURLY BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007D[ 68] = { // Code 007D, RIGHT CURLY BRACKET
   0xCF, 0xEA, 0x00, 0x00,
   0x8B, 0xFF, 0x60, 0x00,
   0x00, 0xDF, 0x70, 0x00,
@@ -3102,7 +3104,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007D[ 68] = { /* code 007D, 
   0x36, 0x41, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007E[ 24] = { /* code 007E, TILDE */
+GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007E[ 24] = { // Code 007E, TILDE
   0x02, 0xAB, 0x83, 0x00, 0x38, 0x00,
   0x0D, 0xFF, 0xFF, 0xBA, 0xFF, 0x00,
   0x4F, 0xC6, 0xAF, 0xFF, 0xF9, 0x00,
@@ -3110,120 +3112,120 @@ GUI_CONST_STORAGE unsigned char acGUI_FontRounded22_007E[ 24] = { /* code 007E, 
 };
 
 GUI_CONST_STORAGE GUI_CHARINFO_EXT GUI_FontRounded22_CharInfo[95] = {
-   {   1,   1,   0,  18,   6, acGUI_FontRounded22_0020 } /* code 0020, SPACE */
-  ,{   4,  15,   1,   4,   6, acGUI_FontRounded22_0021 } /* code 0021, EXCLAMATION MARK */
-  ,{   7,   7,   1,   4,  10, acGUI_FontRounded22_0022 } /* code 0022, QUOTATION MARK */
-  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0023 } /* code 0023, NUMBER SIGN */
-  ,{  11,  16,   0,   4,  11, acGUI_FontRounded22_0024 } /* code 0024, DOLLAR SIGN */
-  ,{  16,  15,   1,   4,  18, acGUI_FontRounded22_0025 } /* code 0025, PERCENT SIGN */
-  ,{  13,  15,   0,   4,  13, acGUI_FontRounded22_0026 } /* code 0026, AMPERSAND */
-  ,{   3,   7,   1,   4,   6, acGUI_FontRounded22_0027 } /* code 0027, APOSTROPHE */
-  ,{   5,  18,   1,   4,   6, acGUI_FontRounded22_0028 } /* code 0028, LEFT PARENTHESIS */
-  ,{   5,  18,   0,   4,   6, acGUI_FontRounded22_0029 } /* code 0029, RIGHT PARENTHESIS */
-  ,{   8,   8,   0,   4,   8, acGUI_FontRounded22_002A } /* code 002A, ASTERISK */
-  ,{  11,  11,   0,   7,  11, acGUI_FontRounded22_002B } /* code 002B, PLUS SIGN */
-  ,{   4,   6,   1,  15,   6, acGUI_FontRounded22_002C } /* code 002C, COMMA */
-  ,{   7,   4,   0,  11,   7, acGUI_FontRounded22_002D } /* code 002D, HYPHEN-MINUS */
-  ,{   4,   4,   1,  15,   6, acGUI_FontRounded22_002E } /* code 002E, FULL STOP */
-  ,{   7,  15,   0,   4,   7, acGUI_FontRounded22_002F } /* code 002F, SOLIDUS */
-  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0030 } /* code 0030, DIGIT ZERO */
-  ,{   7,  14,  -1,   5,   7, acGUI_FontRounded22_0031 } /* code 0031, DIGIT ONE */
-  ,{  11,  13,   0,   5,  11, acGUI_FontRounded22_0032 } /* code 0032, DIGIT TWO */
-  ,{  10,  14,   0,   5,  11, acGUI_FontRounded22_0033 } /* code 0033, DIGIT THREE */
-  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0034 } /* code 0034, DIGIT FOUR */
-  ,{  10,  14,   0,   5,  11, acGUI_FontRounded22_0035 } /* code 0035, DIGIT FIVE */
-  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0036 } /* code 0036, DIGIT SIX */
-  ,{  10,  14,   0,   5,  10, acGUI_FontRounded22_0037 } /* code 0037, DIGIT SEVEN */
-  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0038 } /* code 0038, DIGIT EIGHT */
-  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0039 } /* code 0039, DIGIT NINE */
-  ,{   4,  11,   1,   8,   6, acGUI_FontRounded22_003A } /* code 003A, COLON */
-  ,{   4,  13,   1,   8,   6, acGUI_FontRounded22_003B } /* code 003B, SEMICOLON */
-  ,{  11,  10,   0,   8,  11, acGUI_FontRounded22_003C } /* code 003C, LESS-THAN SIGN */
-  ,{  11,   8,   0,   9,  11, acGUI_FontRounded22_003D } /* code 003D, EQUALS SIGN */
-  ,{  11,  10,   0,   8,  11, acGUI_FontRounded22_003E } /* code 003E, GREATER-THAN SIGN */
-  ,{  10,  15,   0,   4,  10, acGUI_FontRounded22_003F } /* code 003F, QUESTION MARK */
-  ,{  14,  15,   0,   4,  14, acGUI_FontRounded22_0040 } /* code 0040, COMMERCIAL AT */
-  ,{  12,  15,   0,   4,  12, acGUI_FontRounded22_0041 } /* code 0041, LATIN CAPITAL LETTER A */
-  ,{  12,  13,   1,   5,  13, acGUI_FontRounded22_0042 } /* code 0042, LATIN CAPITAL LETTER B */
-  ,{  12,  15,   1,   4,  13, acGUI_FontRounded22_0043 } /* code 0043, LATIN CAPITAL LETTER C */
-  ,{  12,  13,   1,   5,  14, acGUI_FontRounded22_0044 } /* code 0044, LATIN CAPITAL LETTER D */
-  ,{  11,  13,   1,   5,  12, acGUI_FontRounded22_0045 } /* code 0045, LATIN CAPITAL LETTER E */
-  ,{  11,  14,   1,   5,  11, acGUI_FontRounded22_0046 } /* code 0046, LATIN CAPITAL LETTER F */
-  ,{  13,  15,   1,   4,  15, acGUI_FontRounded22_0047 } /* code 0047, LATIN CAPITAL LETTER G */
-  ,{  12,  15,   1,   4,  14, acGUI_FontRounded22_0048 } /* code 0048, LATIN CAPITAL LETTER H */
-  ,{   4,  15,   1,   4,   6, acGUI_FontRounded22_0049 } /* code 0049, LATIN CAPITAL LETTER I */
-  ,{   9,  15,   0,   4,  10, acGUI_FontRounded22_004A } /* code 004A, LATIN CAPITAL LETTER J */
-  ,{  12,  15,   1,   4,  12, acGUI_FontRounded22_004B } /* code 004B, LATIN CAPITAL LETTER K */
-  ,{  10,  14,   1,   4,  11, acGUI_FontRounded22_004C } /* code 004C, LATIN CAPITAL LETTER L */
-  ,{  14,  15,   1,   4,  16, acGUI_FontRounded22_004D } /* code 004D, LATIN CAPITAL LETTER M */
-  ,{  12,  15,   1,   4,  14, acGUI_FontRounded22_004E } /* code 004E, LATIN CAPITAL LETTER N */
-  ,{  14,  15,   0,   4,  15, acGUI_FontRounded22_004F } /* code 004F, LATIN CAPITAL LETTER O */
-  ,{  12,  14,   1,   5,  13, acGUI_FontRounded22_0050 } /* code 0050, LATIN CAPITAL LETTER P */
-  ,{  14,  15,   0,   4,  15, acGUI_FontRounded22_0051 } /* code 0051, LATIN CAPITAL LETTER Q */
-  ,{  12,  14,   1,   5,  13, acGUI_FontRounded22_0052 } /* code 0052, LATIN CAPITAL LETTER R */
-  ,{  12,  15,   0,   4,  12, acGUI_FontRounded22_0053 } /* code 0053, LATIN CAPITAL LETTER S */
-  ,{  12,  14,   0,   5,  12, acGUI_FontRounded22_0054 } /* code 0054, LATIN CAPITAL LETTER T */
-  ,{  12,  15,   1,   4,  14, acGUI_FontRounded22_0055 } /* code 0055, LATIN CAPITAL LETTER U */
-  ,{  12,  15,   0,   4,  12, acGUI_FontRounded22_0056 } /* code 0056, LATIN CAPITAL LETTER V */
-  ,{  17,  15,   0,   4,  17, acGUI_FontRounded22_0057 } /* code 0057, LATIN CAPITAL LETTER W */
-  ,{  11,  15,   0,   4,  11, acGUI_FontRounded22_0058 } /* code 0058, LATIN CAPITAL LETTER X */
-  ,{  11,  15,   0,   4,  11, acGUI_FontRounded22_0059 } /* code 0059, LATIN CAPITAL LETTER Y */
-  ,{  12,  13,   0,   5,  12, acGUI_FontRounded22_005A } /* code 005A, LATIN CAPITAL LETTER Z */
-  ,{   6,  17,   1,   5,   6, acGUI_FontRounded22_005B } /* code 005B, LEFT SQUARE BRACKET */
-  ,{   7,  15,   0,   4,   7, acGUI_FontRounded22_005C } /* code 005C, REVERSE SOLIDUS */
-  ,{   5,  17,   0,   5,   6, acGUI_FontRounded22_005D } /* code 005D, RIGHT SQUARE BRACKET */
-  ,{   9,   8,   1,   5,  11, acGUI_FontRounded22_005E } /* code 005E, CIRCUMFLEX ACCENT */
-  ,{  11,   2,  -1,  19,   9, acGUI_FontRounded22_005F } /* code 005F, LOW LINE */
-  ,{   4,   4,   0,   4,   5, acGUI_FontRounded22_0060 } /* code 0060, GRAVE ACCENT */
-  ,{  10,  11,   0,   8,  11, acGUI_FontRounded22_0061 } /* code 0061, LATIN SMALL LETTER A */
-  ,{  10,  15,   1,   4,  11, acGUI_FontRounded22_0062 } /* code 0062, LATIN SMALL LETTER B */
-  ,{  10,  11,   0,   8,  10, acGUI_FontRounded22_0063 } /* code 0063, LATIN SMALL LETTER C */
-  ,{  10,  15,   0,   4,  11, acGUI_FontRounded22_0064 } /* code 0064, LATIN SMALL LETTER D */
-  ,{  11,  11,   0,   8,  11, acGUI_FontRounded22_0065 } /* code 0065, LATIN SMALL LETTER E */
-  ,{   7,  15,   0,   4,   7, acGUI_FontRounded22_0066 } /* code 0066, LATIN SMALL LETTER F */
-  ,{  10,  14,   0,   8,  11, acGUI_FontRounded22_0067 } /* code 0067, LATIN SMALL LETTER G */
-  ,{   9,  15,   1,   4,  11, acGUI_FontRounded22_0068 } /* code 0068, LATIN SMALL LETTER H */
-  ,{   3,  15,   1,   4,   5, acGUI_FontRounded22_0069 } /* code 0069, LATIN SMALL LETTER I */
-  ,{   5,  18,  -1,   4,   5, acGUI_FontRounded22_006A } /* code 006A, LATIN SMALL LETTER J */
-  ,{   9,  15,   1,   4,  10, acGUI_FontRounded22_006B } /* code 006B, LATIN SMALL LETTER K */
-  ,{   3,  15,   1,   4,   5, acGUI_FontRounded22_006C } /* code 006C, LATIN SMALL LETTER L */
-  ,{  15,  11,   1,   8,  17, acGUI_FontRounded22_006D } /* code 006D, LATIN SMALL LETTER M */
-  ,{   9,  11,   1,   8,  11, acGUI_FontRounded22_006E } /* code 006E, LATIN SMALL LETTER N */
-  ,{  11,  11,   0,   8,  11, acGUI_FontRounded22_006F } /* code 006F, LATIN SMALL LETTER O */
-  ,{  10,  14,   1,   8,  11, acGUI_FontRounded22_0070 } /* code 0070, LATIN SMALL LETTER P */
-  ,{  10,  14,   0,   8,  11, acGUI_FontRounded22_0071 } /* code 0071, LATIN SMALL LETTER Q */
-  ,{   7,  11,   1,   8,   7, acGUI_FontRounded22_0072 } /* code 0072, LATIN SMALL LETTER R */
-  ,{   9,  11,   0,   8,  10, acGUI_FontRounded22_0073 } /* code 0073, LATIN SMALL LETTER S */
-  ,{   7,  14,   0,   5,   7, acGUI_FontRounded22_0074 } /* code 0074, LATIN SMALL LETTER T */
-  ,{   9,  11,   1,   8,  11, acGUI_FontRounded22_0075 } /* code 0075, LATIN SMALL LETTER U */
-  ,{   9,  11,   0,   8,   9, acGUI_FontRounded22_0076 } /* code 0076, LATIN SMALL LETTER V */
-  ,{  14,  11,   0,   8,  14, acGUI_FontRounded22_0077 } /* code 0077, LATIN SMALL LETTER W */
-  ,{   9,  11,   0,   8,   9, acGUI_FontRounded22_0078 } /* code 0078, LATIN SMALL LETTER X */
-  ,{   9,  14,   0,   8,   9, acGUI_FontRounded22_0079 } /* code 0079, LATIN SMALL LETTER Y */
-  ,{  10,  10,   0,   8,  10, acGUI_FontRounded22_007A } /* code 007A, LATIN SMALL LETTER Z */
-  ,{   7,  17,   0,   5,   6, acGUI_FontRounded22_007B } /* code 007B, LEFT CURLY BRACKET */
-  ,{   4,  15,   0,   4,   4, acGUI_FontRounded22_007C } /* code 007C, VERTICAL LINE */
-  ,{   7,  17,   0,   5,   6, acGUI_FontRounded22_007D } /* code 007D, RIGHT CURLY BRACKET */
-  ,{  11,   4,   0,  11,  11, acGUI_FontRounded22_007E } /* code 007E, TILDE */
+   {   1,   1,   0,  18,   6, acGUI_FontRounded22_0020 } // Code 0020, SPACE
+  ,{   4,  15,   1,   4,   6, acGUI_FontRounded22_0021 } // Code 0021, EXCLAMATION MARK
+  ,{   7,   7,   1,   4,  10, acGUI_FontRounded22_0022 } // Code 0022, QUOTATION MARK
+  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0023 } // Code 0023, NUMBER SIGN
+  ,{  11,  16,   0,   4,  11, acGUI_FontRounded22_0024 } // Code 0024, DOLLAR SIGN
+  ,{  16,  15,   1,   4,  18, acGUI_FontRounded22_0025 } // Code 0025, PERCENT SIGN
+  ,{  13,  15,   0,   4,  13, acGUI_FontRounded22_0026 } // Code 0026, AMPERSAND
+  ,{   3,   7,   1,   4,   6, acGUI_FontRounded22_0027 } // Code 0027, APOSTROPHE
+  ,{   5,  18,   1,   4,   6, acGUI_FontRounded22_0028 } // Code 0028, LEFT PARENTHESIS
+  ,{   5,  18,   0,   4,   6, acGUI_FontRounded22_0029 } // Code 0029, RIGHT PARENTHESIS
+  ,{   8,   8,   0,   4,   8, acGUI_FontRounded22_002A } // Code 002A, ASTERISK
+  ,{  11,  11,   0,   7,  11, acGUI_FontRounded22_002B } // Code 002B, PLUS SIGN
+  ,{   4,   6,   1,  15,   6, acGUI_FontRounded22_002C } // Code 002C, COMMA
+  ,{   7,   4,   0,  11,   7, acGUI_FontRounded22_002D } // Code 002D, HYPHEN-MINUS
+  ,{   4,   4,   1,  15,   6, acGUI_FontRounded22_002E } // Code 002E, FULL STOP
+  ,{   7,  15,   0,   4,   7, acGUI_FontRounded22_002F } // Code 002F, SOLIDUS
+  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0030 } // Code 0030, DIGIT ZERO
+  ,{   7,  14,  -1,   5,   7, acGUI_FontRounded22_0031 } // Code 0031, DIGIT ONE
+  ,{  11,  13,   0,   5,  11, acGUI_FontRounded22_0032 } // Code 0032, DIGIT TWO
+  ,{  10,  14,   0,   5,  11, acGUI_FontRounded22_0033 } // Code 0033, DIGIT THREE
+  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0034 } // Code 0034, DIGIT FOUR
+  ,{  10,  14,   0,   5,  11, acGUI_FontRounded22_0035 } // Code 0035, DIGIT FIVE
+  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0036 } // Code 0036, DIGIT SIX
+  ,{  10,  14,   0,   5,  10, acGUI_FontRounded22_0037 } // Code 0037, DIGIT SEVEN
+  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0038 } // Code 0038, DIGIT EIGHT
+  ,{  11,  14,   0,   5,  11, acGUI_FontRounded22_0039 } // Code 0039, DIGIT NINE
+  ,{   4,  11,   1,   8,   6, acGUI_FontRounded22_003A } // Code 003A, COLON
+  ,{   4,  13,   1,   8,   6, acGUI_FontRounded22_003B } // Code 003B, SEMICOLON
+  ,{  11,  10,   0,   8,  11, acGUI_FontRounded22_003C } // Code 003C, LESS-THAN SIGN
+  ,{  11,   8,   0,   9,  11, acGUI_FontRounded22_003D } // Code 003D, EQUALS SIGN
+  ,{  11,  10,   0,   8,  11, acGUI_FontRounded22_003E } // Code 003E, GREATER-THAN SIGN
+  ,{  10,  15,   0,   4,  10, acGUI_FontRounded22_003F } // Code 003F, QUESTION MARK
+  ,{  14,  15,   0,   4,  14, acGUI_FontRounded22_0040 } // Code 0040, COMMERCIAL AT
+  ,{  12,  15,   0,   4,  12, acGUI_FontRounded22_0041 } // Code 0041, LATIN CAPITAL LETTER A
+  ,{  12,  13,   1,   5,  13, acGUI_FontRounded22_0042 } // Code 0042, LATIN CAPITAL LETTER B
+  ,{  12,  15,   1,   4,  13, acGUI_FontRounded22_0043 } // Code 0043, LATIN CAPITAL LETTER C
+  ,{  12,  13,   1,   5,  14, acGUI_FontRounded22_0044 } // Code 0044, LATIN CAPITAL LETTER D
+  ,{  11,  13,   1,   5,  12, acGUI_FontRounded22_0045 } // Code 0045, LATIN CAPITAL LETTER E
+  ,{  11,  14,   1,   5,  11, acGUI_FontRounded22_0046 } // Code 0046, LATIN CAPITAL LETTER F
+  ,{  13,  15,   1,   4,  15, acGUI_FontRounded22_0047 } // Code 0047, LATIN CAPITAL LETTER G
+  ,{  12,  15,   1,   4,  14, acGUI_FontRounded22_0048 } // Code 0048, LATIN CAPITAL LETTER H
+  ,{   4,  15,   1,   4,   6, acGUI_FontRounded22_0049 } // Code 0049, LATIN CAPITAL LETTER I
+  ,{   9,  15,   0,   4,  10, acGUI_FontRounded22_004A } // Code 004A, LATIN CAPITAL LETTER J
+  ,{  12,  15,   1,   4,  12, acGUI_FontRounded22_004B } // Code 004B, LATIN CAPITAL LETTER K
+  ,{  10,  14,   1,   4,  11, acGUI_FontRounded22_004C } // Code 004C, LATIN CAPITAL LETTER L
+  ,{  14,  15,   1,   4,  16, acGUI_FontRounded22_004D } // Code 004D, LATIN CAPITAL LETTER M
+  ,{  12,  15,   1,   4,  14, acGUI_FontRounded22_004E } // Code 004E, LATIN CAPITAL LETTER N
+  ,{  14,  15,   0,   4,  15, acGUI_FontRounded22_004F } // Code 004F, LATIN CAPITAL LETTER O
+  ,{  12,  14,   1,   5,  13, acGUI_FontRounded22_0050 } // Code 0050, LATIN CAPITAL LETTER P
+  ,{  14,  15,   0,   4,  15, acGUI_FontRounded22_0051 } // Code 0051, LATIN CAPITAL LETTER Q
+  ,{  12,  14,   1,   5,  13, acGUI_FontRounded22_0052 } // Code 0052, LATIN CAPITAL LETTER R
+  ,{  12,  15,   0,   4,  12, acGUI_FontRounded22_0053 } // Code 0053, LATIN CAPITAL LETTER S
+  ,{  12,  14,   0,   5,  12, acGUI_FontRounded22_0054 } // Code 0054, LATIN CAPITAL LETTER T
+  ,{  12,  15,   1,   4,  14, acGUI_FontRounded22_0055 } // Code 0055, LATIN CAPITAL LETTER U
+  ,{  12,  15,   0,   4,  12, acGUI_FontRounded22_0056 } // Code 0056, LATIN CAPITAL LETTER V
+  ,{  17,  15,   0,   4,  17, acGUI_FontRounded22_0057 } // Code 0057, LATIN CAPITAL LETTER W
+  ,{  11,  15,   0,   4,  11, acGUI_FontRounded22_0058 } // Code 0058, LATIN CAPITAL LETTER X
+  ,{  11,  15,   0,   4,  11, acGUI_FontRounded22_0059 } // Code 0059, LATIN CAPITAL LETTER Y
+  ,{  12,  13,   0,   5,  12, acGUI_FontRounded22_005A } // Code 005A, LATIN CAPITAL LETTER Z
+  ,{   6,  17,   1,   5,   6, acGUI_FontRounded22_005B } // Code 005B, LEFT SQUARE BRACKET
+  ,{   7,  15,   0,   4,   7, acGUI_FontRounded22_005C } // Code 005C, REVERSE SOLIDUS
+  ,{   5,  17,   0,   5,   6, acGUI_FontRounded22_005D } // Code 005D, RIGHT SQUARE BRACKET
+  ,{   9,   8,   1,   5,  11, acGUI_FontRounded22_005E } // Code 005E, CIRCUMFLEX ACCENT
+  ,{  11,   2,  -1,  19,   9, acGUI_FontRounded22_005F } // Code 005F, LOW LINE
+  ,{   4,   4,   0,   4,   5, acGUI_FontRounded22_0060 } // Code 0060, GRAVE ACCENT
+  ,{  10,  11,   0,   8,  11, acGUI_FontRounded22_0061 } // Code 0061, LATIN SMALL LETTER A
+  ,{  10,  15,   1,   4,  11, acGUI_FontRounded22_0062 } // Code 0062, LATIN SMALL LETTER B
+  ,{  10,  11,   0,   8,  10, acGUI_FontRounded22_0063 } // Code 0063, LATIN SMALL LETTER C
+  ,{  10,  15,   0,   4,  11, acGUI_FontRounded22_0064 } // Code 0064, LATIN SMALL LETTER D
+  ,{  11,  11,   0,   8,  11, acGUI_FontRounded22_0065 } // Code 0065, LATIN SMALL LETTER E
+  ,{   7,  15,   0,   4,   7, acGUI_FontRounded22_0066 } // Code 0066, LATIN SMALL LETTER F
+  ,{  10,  14,   0,   8,  11, acGUI_FontRounded22_0067 } // Code 0067, LATIN SMALL LETTER G
+  ,{   9,  15,   1,   4,  11, acGUI_FontRounded22_0068 } // Code 0068, LATIN SMALL LETTER H
+  ,{   3,  15,   1,   4,   5, acGUI_FontRounded22_0069 } // Code 0069, LATIN SMALL LETTER I
+  ,{   5,  18,  -1,   4,   5, acGUI_FontRounded22_006A } // Code 006A, LATIN SMALL LETTER J
+  ,{   9,  15,   1,   4,  10, acGUI_FontRounded22_006B } // Code 006B, LATIN SMALL LETTER K
+  ,{   3,  15,   1,   4,   5, acGUI_FontRounded22_006C } // Code 006C, LATIN SMALL LETTER L
+  ,{  15,  11,   1,   8,  17, acGUI_FontRounded22_006D } // Code 006D, LATIN SMALL LETTER M
+  ,{   9,  11,   1,   8,  11, acGUI_FontRounded22_006E } // Code 006E, LATIN SMALL LETTER N
+  ,{  11,  11,   0,   8,  11, acGUI_FontRounded22_006F } // Code 006F, LATIN SMALL LETTER O
+  ,{  10,  14,   1,   8,  11, acGUI_FontRounded22_0070 } // Code 0070, LATIN SMALL LETTER P
+  ,{  10,  14,   0,   8,  11, acGUI_FontRounded22_0071 } // Code 0071, LATIN SMALL LETTER Q
+  ,{   7,  11,   1,   8,   7, acGUI_FontRounded22_0072 } // Code 0072, LATIN SMALL LETTER R
+  ,{   9,  11,   0,   8,  10, acGUI_FontRounded22_0073 } // Code 0073, LATIN SMALL LETTER S
+  ,{   7,  14,   0,   5,   7, acGUI_FontRounded22_0074 } // Code 0074, LATIN SMALL LETTER T
+  ,{   9,  11,   1,   8,  11, acGUI_FontRounded22_0075 } // Code 0075, LATIN SMALL LETTER U
+  ,{   9,  11,   0,   8,   9, acGUI_FontRounded22_0076 } // Code 0076, LATIN SMALL LETTER V
+  ,{  14,  11,   0,   8,  14, acGUI_FontRounded22_0077 } // Code 0077, LATIN SMALL LETTER W
+  ,{   9,  11,   0,   8,   9, acGUI_FontRounded22_0078 } // Code 0078, LATIN SMALL LETTER X
+  ,{   9,  14,   0,   8,   9, acGUI_FontRounded22_0079 } // Code 0079, LATIN SMALL LETTER Y
+  ,{  10,  10,   0,   8,  10, acGUI_FontRounded22_007A } // Code 007A, LATIN SMALL LETTER Z
+  ,{   7,  17,   0,   5,   6, acGUI_FontRounded22_007B } // Code 007B, LEFT CURLY BRACKET
+  ,{   4,  15,   0,   4,   4, acGUI_FontRounded22_007C } // Code 007C, VERTICAL LINE
+  ,{   7,  17,   0,   5,   6, acGUI_FontRounded22_007D } // Code 007D, RIGHT CURLY BRACKET
+  ,{  11,   4,   0,  11,  11, acGUI_FontRounded22_007E } // Code 007E, TILDE
 };
 
 GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontRounded22_Prop1 = {
-   0x0020 /* first character */
-  ,0x007E /* last character  */
-  ,&GUI_FontRounded22_CharInfo[  0] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0 /* pointer to next GUI_FONT_PROP_EXT */
+  0x0020,                                   // First character
+  0x007E,                                   // Last character
+  &GUI_FontRounded22_CharInfo[0],           // Address of first character
+  (GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0  // Pointer to next GUI_FONT_PROP_EXT
 };
 
 GUI_CONST_STORAGE GUI_FONT GUI_FontRounded22 = {
-   GUI_FONTTYPE_PROP_AA4_EXT /* type of font    */
-  ,22 /* height of font  */
-  ,22 /* space of font y */
-  ,1 /* magnification x */
-  ,1 /* magnification y */
-  ,{&GUI_FontRounded22_Prop1}
-  ,22 /* Baseline */
-  ,11 /* Height of lowercase characters */
-  ,15 /* Height of capital characters */
+  GUI_FONTTYPE_PROP_AA4_EXT,     // Type of font
+  22,                            // Height of font
+  22,                            // Space of font y
+  1,                             // Magnification x
+  1,                             // Magnification y
+  { &GUI_FontRounded22_Prop1 },
+  22,                            // Baseline
+  11,                            // Height of lowercase characters
+  15                             // Height of capital characters
 };
 
 /*********************************************************************
@@ -3237,11 +3239,11 @@ GUI_CONST_STORAGE GUI_FONT GUI_FontRounded22 = {
 *                                                                    *
 **********************************************************************
 */
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0020[  1] = { /* code 0020, SPACE */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0020[  1] = { // Code 0020, SPACE
   0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0021[ 11] = { /* code 0021, EXCLAMATION MARK */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0021[ 11] = { // Code 0021, EXCLAMATION MARK
   0xCB,
   0xED,
   0xDC,
@@ -3255,14 +3257,14 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0021[ 11] = { /* code 0021,
   0xCC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0022[  8] = { /* code 0022, QUOTATION MARK */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0022[  8] = { // Code 0022, QUOTATION MARK
   0xE0, 0xE0,
   0xC0, 0xC0,
   0x80, 0x80,
   0x50, 0x50
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0023[ 55] = { /* code 0023, NUMBER SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0023[ 55] = { // Code 0023, NUMBER SIGN
   0x00, 0x00, 0x3B, 0x02, 0xC0,
   0x00, 0x00, 0x87, 0x07, 0x80,
   0x00, 0x00, 0xC2, 0x0B, 0x30,
@@ -3276,7 +3278,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0023[ 55] = { /* code 0023,
   0x0A, 0x50, 0x96, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0024[ 60] = { /* code 0024, DOLLAR SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0024[ 60] = { // Code 0024, DOLLAR SIGN
   0x00, 0x01, 0x00, 0x00,
   0x00, 0x0F, 0x00, 0x00,
   0x03, 0xDF, 0xE7, 0x00,
@@ -3294,7 +3296,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0024[ 60] = { /* code 0024,
   0x00, 0x09, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0025[ 78] = { /* code 0025, PERCENT SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0025[ 78] = { // Code 0025, PERCENT SIGN
   0x00, 0x00, 0x00, 0x00, 0x10, 0x00,
   0x2C, 0xFC, 0x61, 0x06, 0xC0, 0x00,
   0xC6, 0x06, 0xEE, 0xED, 0x40, 0x00,
@@ -3310,7 +3312,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0025[ 78] = { /* code 0025,
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0026[ 66] = { /* code 0026, AMPERSAND */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0026[ 66] = { // Code 0026, AMPERSAND
   0x01, 0xBF, 0xD3, 0x00, 0x00, 0x00,
   0x0B, 0x70, 0x6D, 0x00, 0x00, 0x00,
   0x0F, 0x00, 0x0F, 0x00, 0x00, 0x00,
@@ -3324,14 +3326,14 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0026[ 66] = { /* code 0026,
   0x1B, 0xFE, 0x80, 0x4A, 0xDC, 0x80
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0027[  4] = { /* code 0027, APOSTROPHE */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0027[  4] = { // Code 0027, APOSTROPHE
   0xE0,
   0xC0,
   0x80,
   0x50
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0028[ 26] = { /* code 0028, LEFT PARENTHESIS */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0028[ 26] = { // Code 0028, LEFT PARENTHESIS
   0x02, 0xC0,
   0x0A, 0x40,
   0x3C, 0x00,
@@ -3347,7 +3349,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0028[ 26] = { /* code 0028,
   0x02, 0xB0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0029[ 26] = { /* code 0029, RIGHT PARENTHESIS */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0029[ 26] = { // Code 0029, RIGHT PARENTHESIS
   0xC2, 0x00,
   0x5A, 0x00,
   0x0C, 0x30,
@@ -3363,7 +3365,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0029[ 26] = { /* code 0029,
   0xB2, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002A[ 18] = { /* code 002A, ASTERISK */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002A[ 18] = { // Code 002A, ASTERISK
   0x00, 0xE0, 0x00,
   0xB3, 0x93, 0xB0,
   0x68, 0x77, 0x60,
@@ -3372,7 +3374,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002A[ 18] = { /* code 002A,
   0x00, 0xE0, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002B[ 45] = { /* code 002B, PLUS SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002B[ 45] = { // Code 002B, PLUS SIGN
   0x00, 0x00, 0xF0, 0x00, 0x00,
   0x00, 0x00, 0xF0, 0x00, 0x00,
   0x00, 0x00, 0xF0, 0x00, 0x00,
@@ -3384,23 +3386,23 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002B[ 45] = { /* code 002B,
   0x00, 0x00, 0xF0, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002C[  4] = { /* code 002C, COMMA */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002C[  4] = { // Code 002C, COMMA
   0xCB,
   0xDF,
   0x07,
   0x52
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002D[  2] = { /* code 002D, HYPHEN-MINUS */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002D[  2] = { // Code 002D, HYPHEN-MINUS
   0xFF, 0xFF
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002E[  2] = { /* code 002E, FULL STOP */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002E[  2] = { // Code 002E, FULL STOP
   0xCC,
   0xCC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002F[ 24] = { /* code 002F, SOLIDUS */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002F[ 24] = { // Code 002F, SOLIDUS
   0x00, 0x09,
   0x00, 0x09,
   0x00, 0x45,
@@ -3415,7 +3417,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_002F[ 24] = { /* code 002F,
   0x90, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0030[ 44] = { /* code 0030, DIGIT ZERO */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0030[ 44] = { // Code 0030, DIGIT ZERO
   0x04, 0xCF, 0xC4, 0x00,
   0x2D, 0x30, 0x3D, 0x20,
   0x95, 0x00, 0x05, 0x90,
@@ -3429,7 +3431,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0030[ 44] = { /* code 0030,
   0x04, 0xCF, 0xC4, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0031[ 33] = { /* code 0031, DIGIT ONE */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0031[ 33] = { // Code 0031, DIGIT ONE
   0x14, 0xC0, 0x00,
   0xEE, 0xF0, 0x00,
   0x01, 0xF0, 0x00,
@@ -3443,7 +3445,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0031[ 33] = { /* code 0031,
   0xAF, 0xFF, 0xD0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0032[ 44] = { /* code 0032, DIGIT TWO */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0032[ 44] = { // Code 0032, DIGIT TWO
   0x00, 0x6D, 0xFE, 0x91,
   0x09, 0xA2, 0x02, 0x9A,
   0x0F, 0x10, 0x00, 0x0F,
@@ -3457,7 +3459,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0032[ 44] = { /* code 0032,
   0x5F, 0xFF, 0xFF, 0xFB
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0033[ 44] = { /* code 0033, DIGIT THREE */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0033[ 44] = { // Code 0033, DIGIT THREE
   0x02, 0xAF, 0xFA, 0x10,
   0x0C, 0x60, 0x19, 0xA0,
   0x0E, 0x10, 0x01, 0xF0,
@@ -3471,7 +3473,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0033[ 44] = { /* code 0033,
   0x2B, 0xFF, 0xC7, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0034[ 44] = { /* code 0034, DIGIT FOUR */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0034[ 44] = { // Code 0034, DIGIT FOUR
   0x00, 0x00, 0x8E, 0x00,
   0x00, 0x08, 0xBF, 0x00,
   0x00, 0x6C, 0x1F, 0x00,
@@ -3485,7 +3487,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0034[ 44] = { /* code 0034,
   0x00, 0x00, 0xCF, 0xE0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0035[ 44] = { /* code 0035, DIGIT FIVE */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0035[ 44] = { // Code 0035, DIGIT FIVE
   0x0F, 0xFF, 0xD9, 0x00,
   0x0E, 0x00, 0x00, 0x00,
   0x0D, 0x00, 0x00, 0x00,
@@ -3499,7 +3501,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0035[ 44] = { /* code 0035,
   0x2B, 0xFF, 0xC5, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0036[ 44] = { /* code 0036, DIGIT SIX */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0036[ 44] = { // Code 0036, DIGIT SIX
   0x00, 0x06, 0xBF, 0x50,
   0x01, 0xCB, 0x41, 0x00,
   0x0C, 0x70, 0x00, 0x00,
@@ -3513,7 +3515,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0036[ 44] = { /* code 0036,
   0x05, 0xDF, 0xD6, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0037[ 44] = { /* code 0037, DIGIT SEVEN */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0037[ 44] = { // Code 0037, DIGIT SEVEN
   0xEF, 0xFF, 0xFF, 0xE0,
   0xE1, 0x00, 0x07, 0x80,
   0x30, 0x00, 0x0D, 0x20,
@@ -3527,7 +3529,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0037[ 44] = { /* code 0037,
   0x03, 0xF3, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0038[ 44] = { /* code 0038, DIGIT EIGHT */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0038[ 44] = { // Code 0038, DIGIT EIGHT
   0x19, 0xDF, 0xEB, 0x20,
   0xB8, 0x20, 0x18, 0xD0,
   0xF1, 0x00, 0x01, 0xE0,
@@ -3541,7 +3543,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0038[ 44] = { /* code 0038,
   0x08, 0xEF, 0xC6, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0039[ 44] = { /* code 0039, DIGIT NINE */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0039[ 44] = { // Code 0039, DIGIT NINE
   0x06, 0xDF, 0xD5, 0x00,
   0x6B, 0x20, 0x4E, 0x40,
   0xD3, 0x00, 0x05, 0xB0,
@@ -3555,7 +3557,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0039[ 44] = { /* code 0039,
   0x5F, 0xB6, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003A[  7] = { /* code 003A, COLON */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003A[  7] = { // Code 003A, COLON
   0xCC,
   0xCC,
   0x00,
@@ -3565,7 +3567,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003A[  7] = { /* code 003A,
   0xCC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003B[  9] = { /* code 003B, SEMICOLON */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003B[  9] = { // Code 003B, SEMICOLON
   0xCC,
   0xCC,
   0x00,
@@ -3577,7 +3579,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003B[  9] = { /* code 003B,
   0x42
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003C[ 40] = { /* code 003C, LESS-THAN SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003C[ 40] = { // Code 003C, LESS-THAN SIGN
   0x00, 0x00, 0x00, 0x16, 0xC0,
   0x00, 0x00, 0x39, 0xD8, 0x20,
   0x01, 0x6C, 0xB5, 0x00, 0x00,
@@ -3588,14 +3590,14 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003C[ 40] = { /* code 003C,
   0x00, 0x00, 0x00, 0x16, 0xC0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003D[ 20] = { /* code 003D, EQUALS SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003D[ 20] = { // Code 003D, EQUALS SIGN
   0xFF, 0xFF, 0xFF, 0xFF, 0xF0,
   0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0x00, 0x00,
   0xFF, 0xFF, 0xFF, 0xFF, 0xF0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003E[ 40] = { /* code 003E, GREATER-THAN SIGN */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003E[ 40] = { // Code 003E, GREATER-THAN SIGN
   0xC6, 0x10, 0x00, 0x00, 0x00,
   0x28, 0xD9, 0x30, 0x00, 0x00,
   0x00, 0x05, 0xBC, 0x61, 0x00,
@@ -3606,7 +3608,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003E[ 40] = { /* code 003E,
   0xC6, 0x10, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003F[ 33] = { /* code 003F, QUESTION MARK */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003F[ 33] = { // Code 003F, QUESTION MARK
   0x2A, 0xFF, 0xA1,
   0xCE, 0x21, 0x9B,
   0xDD, 0x00, 0x1F,
@@ -3620,7 +3622,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_003F[ 33] = { /* code 003F,
   0x00, 0xCC, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0040[ 91] = { /* code 0040, COMMERCIAL AT */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0040[ 91] = { // Code 0040, COMMERCIAL AT
   0x00, 0x01, 0x8C, 0xFF, 0xEA, 0x40, 0x00,
   0x00, 0x5D, 0x83, 0x00, 0x27, 0xE8, 0x00,
   0x05, 0xC2, 0x00, 0x00, 0x00, 0x2D, 0x50,
@@ -3636,7 +3638,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0040[ 91] = { /* code 0040,
   0x00, 0x06, 0xBE, 0xFE, 0xA4, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0041[ 55] = { /* code 0041, LATIN CAPITAL LETTER A */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0041[ 55] = { // Code 0041, LATIN CAPITAL LETTER A
   0x00, 0x00, 0x87, 0x00, 0x00,
   0x00, 0x02, 0xEF, 0x10, 0x00,
   0x00, 0x09, 0x4C, 0x80, 0x00,
@@ -3650,7 +3652,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0041[ 55] = { /* code 0041,
   0xDF, 0x50, 0x00, 0x0B, 0xFC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0042[ 55] = { /* code 0042, LATIN CAPITAL LETTER B */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0042[ 55] = { // Code 0042, LATIN CAPITAL LETTER B
   0xBF, 0xFF, 0xFF, 0xC3, 0x00,
   0x0F, 0x20, 0x02, 0x8D, 0x00,
   0x0F, 0x00, 0x00, 0x0F, 0x00,
@@ -3664,7 +3666,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0042[ 55] = { /* code 0042,
   0xCF, 0xFF, 0xFF, 0xD8, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0043[ 55] = { /* code 0043, LATIN CAPITAL LETTER C */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0043[ 55] = { // Code 0043, LATIN CAPITAL LETTER C
   0x00, 0x3A, 0xEF, 0xEB, 0x40,
   0x07, 0xC4, 0x00, 0x4C, 0xE0,
   0x3D, 0x10, 0x00, 0x01, 0xC0,
@@ -3678,7 +3680,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0043[ 55] = { /* code 0043,
   0x00, 0x6C, 0xFF, 0xC7, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0044[ 55] = { /* code 0044, LATIN CAPITAL LETTER D */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0044[ 55] = { // Code 0044, LATIN CAPITAL LETTER D
   0xCF, 0xFF, 0xFD, 0x93, 0x00,
   0x1F, 0x30, 0x03, 0x7E, 0x60,
   0x0F, 0x00, 0x00, 0x02, 0xD3,
@@ -3692,7 +3694,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0044[ 55] = { /* code 0044,
   0xCF, 0xFF, 0xFD, 0x93, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0045[ 55] = { /* code 0045, LATIN CAPITAL LETTER E */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0045[ 55] = { // Code 0045, LATIN CAPITAL LETTER E
   0xBF, 0xFF, 0xFF, 0xFF, 0x40,
   0x0F, 0x20, 0x00, 0x39, 0x50,
   0x0F, 0x00, 0x00, 0x00, 0x00,
@@ -3706,7 +3708,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0045[ 55] = { /* code 0045,
   0xBF, 0xFF, 0xFF, 0xFF, 0xB0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0046[ 44] = { /* code 0046, LATIN CAPITAL LETTER F */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0046[ 44] = { // Code 0046, LATIN CAPITAL LETTER F
   0xBF, 0xFF, 0xFF, 0xFC,
   0x0F, 0x20, 0x02, 0x5D,
   0x0F, 0x00, 0x00, 0x00,
@@ -3720,7 +3722,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0046[ 44] = { /* code 0046,
   0xCF, 0xB0, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0047[ 66] = { /* code 0047, LATIN CAPITAL LETTER G */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0047[ 66] = { // Code 0047, LATIN CAPITAL LETTER G
   0x00, 0x28, 0xDF, 0xFC, 0x81, 0x00,
   0x03, 0xE7, 0x20, 0x14, 0xC8, 0x00,
   0x2E, 0x30, 0x00, 0x00, 0x19, 0x00,
@@ -3734,7 +3736,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0047[ 66] = { /* code 0047,
   0x00, 0x4B, 0xEF, 0xEB, 0x60, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0048[ 66] = { /* code 0048, LATIN CAPITAL LETTER H */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0048[ 66] = { // Code 0048, LATIN CAPITAL LETTER H
   0xCF, 0xC0, 0x00, 0x00, 0xCF, 0xC0,
   0x1F, 0x10, 0x00, 0x00, 0x0F, 0x10,
   0x0F, 0x00, 0x00, 0x00, 0x0F, 0x00,
@@ -3748,7 +3750,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0048[ 66] = { /* code 0048,
   0xCF, 0xB0, 0x00, 0x00, 0xCF, 0xB0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0049[ 22] = { /* code 0049, LATIN CAPITAL LETTER I */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0049[ 22] = { // Code 0049, LATIN CAPITAL LETTER I
   0xBF, 0xC0,
   0x0F, 0x10,
   0x0F, 0x00,
@@ -3762,7 +3764,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0049[ 22] = { /* code 0049,
   0xCF, 0xB0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004A[ 44] = { /* code 004A, LATIN CAPITAL LETTER J */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004A[ 44] = { // Code 004A, LATIN CAPITAL LETTER J
   0x00, 0x00, 0xEF, 0xC0,
   0x00, 0x00, 0x2F, 0x00,
   0x00, 0x00, 0x0F, 0x00,
@@ -3776,7 +3778,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004A[ 44] = { /* code 004A,
   0x3B, 0xFF, 0xB1, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004B[ 55] = { /* code 004B, LATIN CAPITAL LETTER K */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004B[ 55] = { // Code 004B, LATIN CAPITAL LETTER K
   0xBF, 0xC0, 0x05, 0xFF, 0x40,
   0x0F, 0x10, 0x01, 0xE4, 0x00,
   0x0F, 0x00, 0x0B, 0x70, 0x00,
@@ -3790,7 +3792,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004B[ 55] = { /* code 004B,
   0xCF, 0xB0, 0x00, 0xAF, 0xC0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004C[ 44] = { /* code 004C, LATIN CAPITAL LETTER L */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004C[ 44] = { // Code 004C, LATIN CAPITAL LETTER L
   0xBF, 0xC0, 0x00, 0x00,
   0x0F, 0x10, 0x00, 0x00,
   0x0F, 0x00, 0x00, 0x00,
@@ -3804,7 +3806,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004C[ 44] = { /* code 004C,
   0xBF, 0xFF, 0xFF, 0xFC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004D[ 66] = { /* code 004D, LATIN CAPITAL LETTER M */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004D[ 66] = { // Code 004D, LATIN CAPITAL LETTER M
   0xAF, 0xE1, 0x00, 0x00, 0x09, 0xFC,
   0x0C, 0xF7, 0x00, 0x00, 0x1F, 0xE0,
   0x0C, 0xAD, 0x00, 0x00, 0x7C, 0xD0,
@@ -3818,7 +3820,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004D[ 66] = { /* code 004D,
   0xCF, 0xC0, 0x00, 0x00, 0x0B, 0xFB
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004E[ 60] = { /* code 004E, LATIN CAPITAL LETTER N */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004E[ 60] = { // Code 004E, LATIN CAPITAL LETTER N
   0xEF, 0xB0, 0x00, 0x0B, 0xFB,
   0x1F, 0xF8, 0x00, 0x00, 0xF0,
   0x0F, 0x5F, 0x40, 0x00, 0xF0,
@@ -3833,7 +3835,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004E[ 60] = { /* code 004E,
   0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004F[ 55] = { /* code 004F, LATIN CAPITAL LETTER O */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004F[ 55] = { // Code 004F, LATIN CAPITAL LETTER O
   0x00, 0x5B, 0xFF, 0xB5, 0x00,
   0x08, 0xC3, 0x00, 0x3C, 0x80,
   0x4C, 0x10, 0x00, 0x01, 0xC4,
@@ -3847,7 +3849,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_004F[ 55] = { /* code 004F,
   0x00, 0x5B, 0xFF, 0xB5, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0050[ 55] = { /* code 0050, LATIN CAPITAL LETTER P */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0050[ 55] = { // Code 0050, LATIN CAPITAL LETTER P
   0xCF, 0xFF, 0xFE, 0xB6, 0x00,
   0x1F, 0x50, 0x02, 0x5D, 0x80,
   0x0F, 0x00, 0x00, 0x02, 0xE0,
@@ -3861,7 +3863,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0050[ 55] = { /* code 0050,
   0xBF, 0xE0, 0x00, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0051[ 65] = { /* code 0051, LATIN CAPITAL LETTER Q */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0051[ 65] = { // Code 0051, LATIN CAPITAL LETTER Q
   0x00, 0x5B, 0xFF, 0xB5, 0x00,
   0x08, 0xC3, 0x00, 0x3C, 0x80,
   0x4C, 0x10, 0x00, 0x01, 0xC4,
@@ -3877,7 +3879,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0051[ 65] = { /* code 0051,
   0x00, 0x00, 0x00, 0x19, 0xFC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0052[ 55] = { /* code 0052, LATIN CAPITAL LETTER R */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0052[ 55] = { // Code 0052, LATIN CAPITAL LETTER R
   0xBF, 0xFF, 0xFF, 0xDA, 0x20,
   0x0F, 0x20, 0x01, 0x3A, 0xD0,
   0x0F, 0x00, 0x00, 0x00, 0xF0,
@@ -3891,7 +3893,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0052[ 55] = { /* code 0052,
   0xCF, 0xE0, 0x00, 0x2D, 0xFC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0053[ 55] = { /* code 0053, LATIN CAPITAL LETTER S */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0053[ 55] = { // Code 0053, LATIN CAPITAL LETTER S
   0x00, 0x5B, 0xFF, 0xDA, 0x30,
   0x07, 0xA2, 0x03, 0xAF, 0xE0,
   0x0E, 0x10, 0x00, 0x05, 0xE0,
@@ -3905,7 +3907,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0053[ 55] = { /* code 0053,
   0x04, 0xBE, 0xFE, 0xB4, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0054[ 55] = { /* code 0054, LATIN CAPITAL LETTER T */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0054[ 55] = { // Code 0054, LATIN CAPITAL LETTER T
   0xCF, 0xFF, 0xFF, 0xFF, 0xC0,
   0xF7, 0x11, 0xF1, 0x17, 0xF0,
   0x20, 0x00, 0xF0, 0x00, 0x20,
@@ -3919,7 +3921,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0054[ 55] = { /* code 0054,
   0x00, 0x0D, 0xFB, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0055[ 66] = { /* code 0055, LATIN CAPITAL LETTER U */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0055[ 66] = { // Code 0055, LATIN CAPITAL LETTER U
   0xCF, 0xD0, 0x00, 0x00, 0xCF, 0xA0,
   0x0D, 0x40, 0x00, 0x00, 0x3C, 0x00,
   0x0D, 0x20, 0x00, 0x00, 0x2D, 0x00,
@@ -3933,7 +3935,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0055[ 66] = { /* code 0055,
   0x00, 0x3B, 0xEF, 0xEA, 0x20, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0056[ 55] = { /* code 0056, LATIN CAPITAL LETTER V */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0056[ 55] = { // Code 0056, LATIN CAPITAL LETTER V
   0xDF, 0xC0, 0x00, 0x07, 0xFD,
   0x6F, 0x30, 0x00, 0x00, 0xD5,
   0x2F, 0x30, 0x00, 0x01, 0xF1,
@@ -3947,7 +3949,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0056[ 55] = { /* code 0056,
   0x00, 0x00, 0xA8, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0057[ 77] = { /* code 0057, LATIN CAPITAL LETTER W */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0057[ 77] = { // Code 0057, LATIN CAPITAL LETTER W
   0xCF, 0xB0, 0x02, 0xEF, 0x70, 0x07, 0xFC,
   0x5F, 0x10, 0x00, 0x7C, 0x00, 0x00, 0xB4,
   0x1F, 0x30, 0x00, 0xAC, 0x00, 0x00, 0xC1,
@@ -3961,7 +3963,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0057[ 77] = { /* code 0057,
   0x00, 0x0B, 0x60, 0x00, 0x07, 0x90, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0058[ 55] = { /* code 0058, LATIN CAPITAL LETTER X */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0058[ 55] = { // Code 0058, LATIN CAPITAL LETTER X
   0xBF, 0xD1, 0x00, 0x6F, 0xF3,
   0x1D, 0xA0, 0x00, 0x0E, 0x60,
   0x04, 0xF4, 0x00, 0x79, 0x00,
@@ -3975,7 +3977,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0058[ 55] = { /* code 0058,
   0xBF, 0xB0, 0x00, 0x1F, 0xFB
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0059[ 55] = { /* code 0059, LATIN CAPITAL LETTER Y */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0059[ 55] = { // Code 0059, LATIN CAPITAL LETTER Y
   0xDF, 0xE3, 0x00, 0x05, 0xFC,
   0x1D, 0xD0, 0x00, 0x00, 0xC2,
   0x04, 0xF6, 0x00, 0x02, 0x80,
@@ -3989,7 +3991,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0059[ 55] = { /* code 0059,
   0x00, 0x00, 0xCF, 0xB0, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005A[ 44] = { /* code 005A, LATIN CAPITAL LETTER Z */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005A[ 44] = { // Code 005A, LATIN CAPITAL LETTER Z
   0x3F, 0xFF, 0xFF, 0xFB,
   0x6B, 0x30, 0x00, 0xD7,
   0x10, 0x00, 0x08, 0xD1,
@@ -4003,7 +4005,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005A[ 44] = { /* code 005A,
   0xEF, 0xFF, 0xFF, 0xFC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005B[ 26] = { /* code 005B, LEFT SQUARE BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005B[ 26] = { // Code 005B, LEFT SQUARE BRACKET
   0xFF, 0xF0,
   0xF0, 0x00,
   0xF0, 0x00,
@@ -4019,7 +4021,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005B[ 26] = { /* code 005B,
   0xFF, 0xF0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005C[ 24] = { /* code 005C, REVERSE SOLIDUS */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005C[ 24] = { // Code 005C, REVERSE SOLIDUS
   0x90, 0x00,
   0x90, 0x00,
   0x63, 0x00,
@@ -4034,7 +4036,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005C[ 24] = { /* code 005C,
   0x00, 0x09
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005D[ 26] = { /* code 005D, RIGHT SQUARE BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005D[ 26] = { // Code 005D, RIGHT SQUARE BRACKET
   0xFF, 0xF0,
   0x00, 0xF0,
   0x00, 0xF0,
@@ -4050,24 +4052,24 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005D[ 26] = { /* code 005D,
   0xFF, 0xF0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005E[ 20] = { /* code 005E, CIRCUMFLEX ACCENT */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005E[ 20] = { // Code 005E, CIRCUMFLEX ACCENT
   0x00, 0x0A, 0xFA, 0x00, 0x00,
   0x00, 0x8B, 0x1B, 0x80, 0x00,
   0x08, 0x80, 0x00, 0x88, 0x00,
   0x85, 0x00, 0x00, 0x05, 0x80
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005F[  4] = { /* code 005F, LOW LINE */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_005F[  4] = { // Code 005F, LOW LINE
   0xFF, 0xFF, 0xFF, 0xFF
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0060[  6] = { /* code 0060, GRAVE ACCENT */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0060[  6] = { // Code 0060, GRAVE ACCENT
   0xD2, 0x00,
   0x5C, 0x10,
   0x03, 0x70
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0061[ 28] = { /* code 0061, LATIN SMALL LETTER A */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0061[ 28] = { // Code 0061, LATIN SMALL LETTER A
   0xBE, 0xFE, 0x80, 0x00,
   0x00, 0x03, 0xD7, 0x00,
   0x00, 0x00, 0x4C, 0x00,
@@ -4077,7 +4079,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0061[ 28] = { /* code 0061,
   0x6E, 0xFC, 0x4B, 0x90
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0062[ 44] = { /* code 0062, LATIN SMALL LETTER B */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0062[ 44] = { // Code 0062, LATIN SMALL LETTER B
   0x8E, 0x00, 0x00, 0x00,
   0x0F, 0x00, 0x00, 0x00,
   0x0F, 0x00, 0x00, 0x00,
@@ -4091,7 +4093,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0062[ 44] = { /* code 0062,
   0x02, 0xBF, 0xFC, 0x50
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0063[ 28] = { /* code 0063, LATIN SMALL LETTER C */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0063[ 28] = { // Code 0063, LATIN SMALL LETTER C
   0x05, 0xCF, 0xD6, 0x00,
   0x5C, 0x20, 0x8D, 0x00,
   0xC3, 0x00, 0x00, 0x00,
@@ -4101,7 +4103,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0063[ 28] = { /* code 0063,
   0x08, 0xEF, 0xC4, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0064[ 44] = { /* code 0064, LATIN SMALL LETTER D */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0064[ 44] = { // Code 0064, LATIN SMALL LETTER D
   0x00, 0x00, 0x09, 0xE0,
   0x00, 0x00, 0x01, 0xF0,
   0x00, 0x00, 0x00, 0xF0,
@@ -4115,7 +4117,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0064[ 44] = { /* code 0064,
   0x07, 0xDF, 0xD7, 0xBB
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0065[ 28] = { /* code 0065, LATIN SMALL LETTER E */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0065[ 28] = { // Code 0065, LATIN SMALL LETTER E
   0x04, 0xCF, 0xD5, 0x00,
   0x4E, 0x30, 0x4E, 0x00,
   0xC4, 0x00, 0x2E, 0x00,
@@ -4125,7 +4127,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0065[ 28] = { /* code 0065,
   0x08, 0xEF, 0xB3, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0066[ 33] = { /* code 0066, LATIN SMALL LETTER F */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0066[ 33] = { // Code 0066, LATIN SMALL LETTER F
   0x00, 0x3E, 0xC0,
   0x00, 0xB6, 0xD0,
   0x00, 0xE1, 0x00,
@@ -4139,7 +4141,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0066[ 33] = { /* code 0066,
   0x0D, 0xFB, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0067[ 40] = { /* code 0067, LATIN SMALL LETTER G */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0067[ 40] = { // Code 0067, LATIN SMALL LETTER G
   0x09, 0xFF, 0xFF, 0x20,
   0x8A, 0x11, 0xA6, 0x00,
   0xE2, 0x00, 0x2D, 0x00,
@@ -4152,7 +4154,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0067[ 40] = { /* code 0067,
   0x8E, 0xFE, 0xB2, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0068[ 44] = { /* code 0068, LATIN SMALL LETTER H */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0068[ 44] = { // Code 0068, LATIN SMALL LETTER H
   0x5E, 0x00, 0x00, 0x00,
   0x0F, 0x00, 0x00, 0x00,
   0x0F, 0x00, 0x00, 0x00,
@@ -4166,7 +4168,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0068[ 44] = { /* code 0068,
   0xAF, 0xC0, 0x0A, 0xFC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0069[ 20] = { /* code 0069, LATIN SMALL LETTER I */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0069[ 20] = { // Code 0069, LATIN SMALL LETTER I
   0x0C, 0x00,
   0x0C, 0x00,
   0x00, 0x00,
@@ -4179,7 +4181,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0069[ 20] = { /* code 0069,
   0xBF, 0xC0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006A[ 26] = { /* code 006A, LATIN SMALL LETTER J */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006A[ 26] = { // Code 006A, LATIN SMALL LETTER J
   0x00, 0xC0,
   0x00, 0xC0,
   0x00, 0x00,
@@ -4195,7 +4197,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006A[ 26] = { /* code 006A,
   0xDE, 0x30
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006B[ 44] = { /* code 006B, LATIN SMALL LETTER K */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006B[ 44] = { // Code 006B, LATIN SMALL LETTER K
   0x8E, 0x00, 0x00, 0x00,
   0x0F, 0x00, 0x00, 0x00,
   0x0F, 0x00, 0x00, 0x00,
@@ -4209,7 +4211,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006B[ 44] = { /* code 006B,
   0x9F, 0xC0, 0x0C, 0xD0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006C[ 22] = { /* code 006C, LATIN SMALL LETTER L */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006C[ 22] = { // Code 006C, LATIN SMALL LETTER L
   0x9E, 0x00,
   0x1F, 0x00,
   0x0F, 0x00,
@@ -4223,7 +4225,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006C[ 22] = { /* code 006C,
   0xBF, 0xC0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006D[ 42] = { /* code 006D, LATIN SMALL LETTER M */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006D[ 42] = { // Code 006D, LATIN SMALL LETTER M
   0x9B, 0x9E, 0xE6, 0x8E, 0xE5, 0x00,
   0x0F, 0x60, 0x4F, 0x60, 0x4E, 0x00,
   0x0F, 0x00, 0x0F, 0x00, 0x0F, 0x00,
@@ -4233,7 +4235,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006D[ 42] = { /* code 006D,
   0xBF, 0xC0, 0xBF, 0xC0, 0xBF, 0xC0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006E[ 28] = { /* code 006E, LATIN SMALL LETTER N */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006E[ 28] = { // Code 006E, LATIN SMALL LETTER N
   0xAA, 0x7D, 0xFC, 0x30,
   0x1F, 0x71, 0x07, 0xC0,
   0x0F, 0x00, 0x00, 0xF0,
@@ -4243,7 +4245,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006E[ 28] = { /* code 006E,
   0xBF, 0xC0, 0x0B, 0xFC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006F[ 28] = { /* code 006F, LATIN SMALL LETTER O */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006F[ 28] = { // Code 006F, LATIN SMALL LETTER O
   0x06, 0xDF, 0xD7, 0x00,
   0x6D, 0x30, 0x3D, 0x70,
   0xD3, 0x00, 0x03, 0xD0,
@@ -4253,7 +4255,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_006F[ 28] = { /* code 006F,
   0x07, 0xDF, 0xD7, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0070[ 40] = { /* code 0070, LATIN SMALL LETTER P */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0070[ 40] = { // Code 0070, LATIN SMALL LETTER P
   0xBB, 0x6D, 0xFD, 0x70,
   0x1F, 0x71, 0x03, 0xC7,
   0x0F, 0x00, 0x00, 0x2D,
@@ -4266,7 +4268,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0070[ 40] = { /* code 0070,
   0xDF, 0xC0, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0071[ 40] = { /* code 0071, LATIN SMALL LETTER Q */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0071[ 40] = { // Code 0071, LATIN SMALL LETTER Q
   0x05, 0xCF, 0xE7, 0xB0,
   0x5D, 0x30, 0x2A, 0xF0,
   0xC3, 0x00, 0x01, 0xF0,
@@ -4279,7 +4281,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0071[ 40] = { /* code 0071,
   0x00, 0x00, 0x0D, 0xFC
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0072[ 21] = { /* code 0072, LATIN SMALL LETTER R */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0072[ 21] = { // Code 0072, LATIN SMALL LETTER R
   0xB8, 0x5D, 0xD0,
   0x2E, 0xA0, 0x00,
   0x0F, 0x20, 0x00,
@@ -4289,7 +4291,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0072[ 21] = { /* code 0072,
   0xCF, 0xB0, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0073[ 21] = { /* code 0073, LATIN SMALL LETTER S */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0073[ 21] = { // Code 0073, LATIN SMALL LETTER S
   0x3C, 0xFE, 0x80,
   0xE4, 0x04, 0xD0,
   0xE6, 0x10, 0x00,
@@ -4299,7 +4301,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0073[ 21] = { /* code 0073,
   0x4C, 0xFC, 0x30
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0074[ 20] = { /* code 0074, LATIN SMALL LETTER T */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0074[ 20] = { // Code 0074, LATIN SMALL LETTER T
   0x09, 0x00,
   0x0B, 0x00,
   0x0E, 0x00,
@@ -4312,7 +4314,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0074[ 20] = { /* code 0074,
   0x0E, 0xEB
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0075[ 28] = { /* code 0075, LATIN SMALL LETTER U */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0075[ 28] = { // Code 0075, LATIN SMALL LETTER U
   0xBE, 0x00, 0x0B, 0xE0,
   0x1F, 0x00, 0x01, 0xF0,
   0x0F, 0x00, 0x00, 0xF0,
@@ -4322,7 +4324,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0075[ 28] = { /* code 0075,
   0x03, 0xCF, 0xD5, 0xBB
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0076[ 28] = { /* code 0076, LATIN SMALL LETTER V */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0076[ 28] = { // Code 0076, LATIN SMALL LETTER V
   0xCF, 0x30, 0x0F, 0xD0,
   0x4C, 0x00, 0x08, 0x60,
   0x1E, 0x10, 0x0A, 0x20,
@@ -4332,7 +4334,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0076[ 28] = { /* code 0076,
   0x00, 0x2E, 0x30, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0077[ 42] = { /* code 0077, LATIN SMALL LETTER W */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0077[ 42] = { // Code 0077, LATIN SMALL LETTER W
   0xCF, 0x40, 0x4F, 0x80, 0x0B, 0xD0,
   0x6B, 0x00, 0x0D, 0x40, 0x04, 0x80,
   0x3D, 0x00, 0x1F, 0x70, 0x07, 0x40,
@@ -4342,7 +4344,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0077[ 42] = { /* code 0077,
   0x00, 0x7B, 0x00, 0x0C, 0x70, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0078[ 28] = { /* code 0078, LATIN SMALL LETTER X */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0078[ 28] = { // Code 0078, LATIN SMALL LETTER X
   0xBF, 0x40, 0x7F, 0x30,
   0x0C, 0x60, 0x86, 0x00,
   0x02, 0xE7, 0xA0, 0x00,
@@ -4352,7 +4354,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0078[ 28] = { /* code 0078,
   0xBF, 0x30, 0x6F, 0xC0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0079[ 40] = { /* code 0079, LATIN SMALL LETTER Y */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0079[ 40] = { // Code 0079, LATIN SMALL LETTER Y
   0xCF, 0x40, 0x0C, 0xD0,
   0x6C, 0x00, 0x06, 0x80,
   0x4B, 0x00, 0x06, 0x60,
@@ -4365,7 +4367,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_0079[ 40] = { /* code 0079,
   0x9E, 0x80, 0x00, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007A[ 21] = { /* code 007A, LATIN SMALL LETTER Z */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007A[ 21] = { // Code 007A, LATIN SMALL LETTER Z
   0x7F, 0xFF, 0xD0,
   0x82, 0x08, 0x80,
   0x00, 0x4C, 0x00,
@@ -4375,7 +4377,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007A[ 21] = { /* code 007A,
   0xEF, 0xFF, 0xC0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007B[ 39] = { /* code 007B, LEFT CURLY BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007B[ 39] = { // Code 007B, LEFT CURLY BRACKET
   0x00, 0x4C, 0xF0,
   0x00, 0xD6, 0x00,
   0x00, 0xF0, 0x00,
@@ -4391,7 +4393,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007B[ 39] = { /* code 007B,
   0x00, 0x4C, 0xF0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007C[ 15] = { /* code 007C, VERTICAL LINE */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007C[ 15] = { // Code 007C, VERTICAL LINE
   0xF0,
   0xF0,
   0xF0,
@@ -4409,7 +4411,7 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007C[ 15] = { /* code 007C,
   0xF0
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007D[ 39] = { /* code 007D, RIGHT CURLY BRACKET */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007D[ 39] = { // Code 007D, RIGHT CURLY BRACKET
   0xFC, 0x40, 0x00,
   0x06, 0xD0, 0x00,
   0x00, 0xF0, 0x00,
@@ -4425,127 +4427,127 @@ GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007D[ 39] = { /* code 007D,
   0xFC, 0x40, 0x00
 };
 
-GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007E[ 15] = { /* code 007E, TILDE */
+GUI_CONST_STORAGE unsigned char acGUI_FontSouvenir18_007E[ 15] = { // Code 007E, TILDE
   0x00, 0x00, 0x00, 0x00, 0x00,
   0x4C, 0xFD, 0x83, 0x03, 0xC0,
   0xA3, 0x02, 0x7D, 0xFC, 0x40
 };
 
 GUI_CONST_STORAGE GUI_CHARINFO_EXT GUI_FontSouvenir18_CharInfo[95] = {
-   {   1,   1,   0,  14,   4, acGUI_FontSouvenir18_0020 } /* code 0020, SPACE */
-  ,{   2,  11,   1,   3,   4, acGUI_FontSouvenir18_0021 } /* code 0021, EXCLAMATION MARK */
-  ,{   3,   4,   1,   3,   5, acGUI_FontSouvenir18_0022 } /* code 0022, QUOTATION MARK */
-  ,{  10,  11,   1,   3,  11, acGUI_FontSouvenir18_0023 } /* code 0023, NUMBER SIGN */
-  ,{   7,  15,   0,   1,   8, acGUI_FontSouvenir18_0024 } /* code 0024, DOLLAR SIGN */
-  ,{  11,  13,   1,   2,  13, acGUI_FontSouvenir18_0025 } /* code 0025, PERCENT SIGN */
-  ,{  11,  11,   1,   3,  11, acGUI_FontSouvenir18_0026 } /* code 0026, AMPERSAND */
-  ,{   1,   4,   1,   3,   3, acGUI_FontSouvenir18_0027 } /* code 0027, APOSTROPHE */
-  ,{   3,  13,   1,   3,   5, acGUI_FontSouvenir18_0028 } /* code 0028, LEFT PARENTHESIS */
-  ,{   3,  13,   1,   3,   5, acGUI_FontSouvenir18_0029 } /* code 0029, RIGHT PARENTHESIS */
-  ,{   5,   6,   1,   3,   7, acGUI_FontSouvenir18_002A } /* code 002A, ASTERISK */
-  ,{   9,   9,   2,   5,  12, acGUI_FontSouvenir18_002B } /* code 002B, PLUS SIGN */
-  ,{   2,   4,   1,  12,   4, acGUI_FontSouvenir18_002C } /* code 002C, COMMA */
-  ,{   4,   1,   1,  10,   5, acGUI_FontSouvenir18_002D } /* code 002D, HYPHEN-MINUS */
-  ,{   2,   2,   1,  12,   4, acGUI_FontSouvenir18_002E } /* code 002E, FULL STOP */
-  ,{   4,  12,   0,   3,   4, acGUI_FontSouvenir18_002F } /* code 002F, SOLIDUS */
-  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0030 } /* code 0030, DIGIT ZERO */
-  ,{   5,  11,   2,   3,   8, acGUI_FontSouvenir18_0031 } /* code 0031, DIGIT ONE */
-  ,{   8,  11,  -1,   3,   8, acGUI_FontSouvenir18_0032 } /* code 0032, DIGIT TWO */
-  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0033 } /* code 0033, DIGIT THREE */
-  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0034 } /* code 0034, DIGIT FOUR */
-  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0035 } /* code 0035, DIGIT FIVE */
-  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0036 } /* code 0036, DIGIT SIX */
-  ,{   7,  11,   1,   3,   8, acGUI_FontSouvenir18_0037 } /* code 0037, DIGIT SEVEN */
-  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0038 } /* code 0038, DIGIT EIGHT */
-  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0039 } /* code 0039, DIGIT NINE */
-  ,{   2,   7,   1,   7,   4, acGUI_FontSouvenir18_003A } /* code 003A, COLON */
-  ,{   2,   9,   1,   7,   4, acGUI_FontSouvenir18_003B } /* code 003B, SEMICOLON */
-  ,{   9,   8,   2,   5,  12, acGUI_FontSouvenir18_003C } /* code 003C, LESS-THAN SIGN */
-  ,{   9,   4,   2,   7,  12, acGUI_FontSouvenir18_003D } /* code 003D, EQUALS SIGN */
-  ,{   9,   8,   2,   5,  12, acGUI_FontSouvenir18_003E } /* code 003E, GREATER-THAN SIGN */
-  ,{   6,  11,   1,   3,   7, acGUI_FontSouvenir18_003F } /* code 003F, QUESTION MARK */
-  ,{  13,  13,   1,   3,  15, acGUI_FontSouvenir18_0040 } /* code 0040, COMMERCIAL AT */
-  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0041 } /* code 0041, LATIN CAPITAL LETTER A */
-  ,{   9,  11,   0,   3,  10, acGUI_FontSouvenir18_0042 } /* code 0042, LATIN CAPITAL LETTER B */
-  ,{  10,  11,   1,   3,  10, acGUI_FontSouvenir18_0043 } /* code 0043, LATIN CAPITAL LETTER C */
-  ,{  10,  11,   0,   3,  11, acGUI_FontSouvenir18_0044 } /* code 0044, LATIN CAPITAL LETTER D */
-  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_0045 } /* code 0045, LATIN CAPITAL LETTER E */
-  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0046 } /* code 0046, LATIN CAPITAL LETTER F */
-  ,{  11,  11,   1,   3,  12, acGUI_FontSouvenir18_0047 } /* code 0047, LATIN CAPITAL LETTER G */
-  ,{  11,  11,   0,   3,  12, acGUI_FontSouvenir18_0048 } /* code 0048, LATIN CAPITAL LETTER H */
-  ,{   3,  11,   0,   3,   4, acGUI_FontSouvenir18_0049 } /* code 0049, LATIN CAPITAL LETTER I */
-  ,{   7,  11,   0,   3,   7, acGUI_FontSouvenir18_004A } /* code 004A, LATIN CAPITAL LETTER J */
-  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_004B } /* code 004B, LATIN CAPITAL LETTER K */
-  ,{   8,  11,   0,   3,   9, acGUI_FontSouvenir18_004C } /* code 004C, LATIN CAPITAL LETTER L */
-  ,{  12,  11,   0,   3,  12, acGUI_FontSouvenir18_004D } /* code 004D, LATIN CAPITAL LETTER M */
-  ,{  10,  12,   0,   3,  11, acGUI_FontSouvenir18_004E } /* code 004E, LATIN CAPITAL LETTER N */
-  ,{  10,  11,   1,   3,  11, acGUI_FontSouvenir18_004F } /* code 004F, LATIN CAPITAL LETTER O */
-  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_0050 } /* code 0050, LATIN CAPITAL LETTER P */
-  ,{  10,  13,   1,   3,  11, acGUI_FontSouvenir18_0051 } /* code 0051, LATIN CAPITAL LETTER Q */
-  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0052 } /* code 0052, LATIN CAPITAL LETTER R */
-  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_0053 } /* code 0053, LATIN CAPITAL LETTER S */
-  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_0054 } /* code 0054, LATIN CAPITAL LETTER T */
-  ,{  11,  11,   0,   3,  11, acGUI_FontSouvenir18_0055 } /* code 0055, LATIN CAPITAL LETTER U */
-  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0056 } /* code 0056, LATIN CAPITAL LETTER V */
-  ,{  14,  11,   0,   3,  14, acGUI_FontSouvenir18_0057 } /* code 0057, LATIN CAPITAL LETTER W */
-  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0058 } /* code 0058, LATIN CAPITAL LETTER X */
-  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0059 } /* code 0059, LATIN CAPITAL LETTER Y */
-  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_005A } /* code 005A, LATIN CAPITAL LETTER Z */
-  ,{   3,  13,   1,   3,   5, acGUI_FontSouvenir18_005B } /* code 005B, LEFT SQUARE BRACKET */
-  ,{   4,  12,   0,   3,   4, acGUI_FontSouvenir18_005C } /* code 005C, REVERSE SOLIDUS */
-  ,{   3,  13,   0,   3,   5, acGUI_FontSouvenir18_005D } /* code 005D, RIGHT SQUARE BRACKET */
-  ,{   9,   4,   3,   3,  15, acGUI_FontSouvenir18_005E } /* code 005E, CIRCUMFLEX ACCENT */
-  ,{   8,   1,   0,  17,   7, acGUI_FontSouvenir18_005F } /* code 005F, LOW LINE */
-  ,{   3,   3,   2,   3,   7, acGUI_FontSouvenir18_0060 } /* code 0060, GRAVE ACCENT */
-  ,{   7,   7,   0,   7,   8, acGUI_FontSouvenir18_0061 } /* code 0061, LATIN SMALL LETTER A */
-  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0062 } /* code 0062, LATIN SMALL LETTER B */
-  ,{   7,   7,   0,   7,   7, acGUI_FontSouvenir18_0063 } /* code 0063, LATIN SMALL LETTER C */
-  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0064 } /* code 0064, LATIN SMALL LETTER D */
-  ,{   7,   7,   0,   7,   7, acGUI_FontSouvenir18_0065 } /* code 0065, LATIN SMALL LETTER E */
-  ,{   5,  11,  -1,   3,   4, acGUI_FontSouvenir18_0066 } /* code 0066, LATIN SMALL LETTER F */
-  ,{   7,  10,   0,   7,   7, acGUI_FontSouvenir18_0067 } /* code 0067, LATIN SMALL LETTER G */
-  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0068 } /* code 0068, LATIN SMALL LETTER H */
-  ,{   3,  10,   0,   4,   4, acGUI_FontSouvenir18_0069 } /* code 0069, LATIN SMALL LETTER I */
-  ,{   3,  13,  -1,   4,   4, acGUI_FontSouvenir18_006A } /* code 006A, LATIN SMALL LETTER J */
-  ,{   7,  11,   0,   3,   7, acGUI_FontSouvenir18_006B } /* code 006B, LATIN SMALL LETTER K */
-  ,{   3,  11,   0,   3,   3, acGUI_FontSouvenir18_006C } /* code 006C, LATIN SMALL LETTER L */
-  ,{  11,   7,   0,   7,  12, acGUI_FontSouvenir18_006D } /* code 006D, LATIN SMALL LETTER M */
-  ,{   8,   7,   0,   7,   8, acGUI_FontSouvenir18_006E } /* code 006E, LATIN SMALL LETTER N */
-  ,{   7,   7,   0,   7,   8, acGUI_FontSouvenir18_006F } /* code 006F, LATIN SMALL LETTER O */
-  ,{   8,  10,   0,   7,   8, acGUI_FontSouvenir18_0070 } /* code 0070, LATIN SMALL LETTER P */
-  ,{   8,  10,   0,   7,   8, acGUI_FontSouvenir18_0071 } /* code 0071, LATIN SMALL LETTER Q */
-  ,{   5,   7,   0,   7,   5, acGUI_FontSouvenir18_0072 } /* code 0072, LATIN SMALL LETTER R */
-  ,{   5,   7,   0,   7,   6, acGUI_FontSouvenir18_0073 } /* code 0073, LATIN SMALL LETTER S */
-  ,{   4,  10,   0,   4,   4, acGUI_FontSouvenir18_0074 } /* code 0074, LATIN SMALL LETTER T */
-  ,{   8,   7,   0,   7,   8, acGUI_FontSouvenir18_0075 } /* code 0075, LATIN SMALL LETTER U */
-  ,{   7,   7,   0,   7,   7, acGUI_FontSouvenir18_0076 } /* code 0076, LATIN SMALL LETTER V */
-  ,{  11,   7,   0,   7,  11, acGUI_FontSouvenir18_0077 } /* code 0077, LATIN SMALL LETTER W */
-  ,{   7,   7,   0,   7,   7, acGUI_FontSouvenir18_0078 } /* code 0078, LATIN SMALL LETTER X */
-  ,{   7,  10,   0,   7,   7, acGUI_FontSouvenir18_0079 } /* code 0079, LATIN SMALL LETTER Y */
-  ,{   5,   7,   0,   7,   6, acGUI_FontSouvenir18_007A } /* code 007A, LATIN SMALL LETTER Z */
-  ,{   5,  13,   1,   3,   7, acGUI_FontSouvenir18_007B } /* code 007B, LEFT CURLY BRACKET */
-  ,{   1,  15,   3,   3,   7, acGUI_FontSouvenir18_007C } /* code 007C, VERTICAL LINE */
-  ,{   5,  13,   1,   3,   7, acGUI_FontSouvenir18_007D } /* code 007D, RIGHT CURLY BRACKET */
-  ,{   9,   3,   1,   7,  12, acGUI_FontSouvenir18_007E } /* code 007E, TILDE */
+   {   1,   1,   0,  14,   4, acGUI_FontSouvenir18_0020 } // Code 0020, SPACE
+  ,{   2,  11,   1,   3,   4, acGUI_FontSouvenir18_0021 } // Code 0021, EXCLAMATION MARK
+  ,{   3,   4,   1,   3,   5, acGUI_FontSouvenir18_0022 } // Code 0022, QUOTATION MARK
+  ,{  10,  11,   1,   3,  11, acGUI_FontSouvenir18_0023 } // Code 0023, NUMBER SIGN
+  ,{   7,  15,   0,   1,   8, acGUI_FontSouvenir18_0024 } // Code 0024, DOLLAR SIGN
+  ,{  11,  13,   1,   2,  13, acGUI_FontSouvenir18_0025 } // Code 0025, PERCENT SIGN
+  ,{  11,  11,   1,   3,  11, acGUI_FontSouvenir18_0026 } // Code 0026, AMPERSAND
+  ,{   1,   4,   1,   3,   3, acGUI_FontSouvenir18_0027 } // Code 0027, APOSTROPHE
+  ,{   3,  13,   1,   3,   5, acGUI_FontSouvenir18_0028 } // Code 0028, LEFT PARENTHESIS
+  ,{   3,  13,   1,   3,   5, acGUI_FontSouvenir18_0029 } // Code 0029, RIGHT PARENTHESIS
+  ,{   5,   6,   1,   3,   7, acGUI_FontSouvenir18_002A } // Code 002A, ASTERISK
+  ,{   9,   9,   2,   5,  12, acGUI_FontSouvenir18_002B } // Code 002B, PLUS SIGN
+  ,{   2,   4,   1,  12,   4, acGUI_FontSouvenir18_002C } // Code 002C, COMMA
+  ,{   4,   1,   1,  10,   5, acGUI_FontSouvenir18_002D } // Code 002D, HYPHEN-MINUS
+  ,{   2,   2,   1,  12,   4, acGUI_FontSouvenir18_002E } // Code 002E, FULL STOP
+  ,{   4,  12,   0,   3,   4, acGUI_FontSouvenir18_002F } // Code 002F, SOLIDUS
+  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0030 } // Code 0030, DIGIT ZERO
+  ,{   5,  11,   2,   3,   8, acGUI_FontSouvenir18_0031 } // Code 0031, DIGIT ONE
+  ,{   8,  11,  -1,   3,   8, acGUI_FontSouvenir18_0032 } // Code 0032, DIGIT TWO
+  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0033 } // Code 0033, DIGIT THREE
+  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0034 } // Code 0034, DIGIT FOUR
+  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0035 } // Code 0035, DIGIT FIVE
+  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0036 } // Code 0036, DIGIT SIX
+  ,{   7,  11,   1,   3,   8, acGUI_FontSouvenir18_0037 } // Code 0037, DIGIT SEVEN
+  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0038 } // Code 0038, DIGIT EIGHT
+  ,{   7,  11,   0,   3,   8, acGUI_FontSouvenir18_0039 } // Code 0039, DIGIT NINE
+  ,{   2,   7,   1,   7,   4, acGUI_FontSouvenir18_003A } // Code 003A, COLON
+  ,{   2,   9,   1,   7,   4, acGUI_FontSouvenir18_003B } // Code 003B, SEMICOLON
+  ,{   9,   8,   2,   5,  12, acGUI_FontSouvenir18_003C } // Code 003C, LESS-THAN SIGN
+  ,{   9,   4,   2,   7,  12, acGUI_FontSouvenir18_003D } // Code 003D, EQUALS SIGN
+  ,{   9,   8,   2,   5,  12, acGUI_FontSouvenir18_003E } // Code 003E, GREATER-THAN SIGN
+  ,{   6,  11,   1,   3,   7, acGUI_FontSouvenir18_003F } // Code 003F, QUESTION MARK
+  ,{  13,  13,   1,   3,  15, acGUI_FontSouvenir18_0040 } // Code 0040, COMMERCIAL AT
+  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0041 } // Code 0041, LATIN CAPITAL LETTER A
+  ,{   9,  11,   0,   3,  10, acGUI_FontSouvenir18_0042 } // Code 0042, LATIN CAPITAL LETTER B
+  ,{  10,  11,   1,   3,  10, acGUI_FontSouvenir18_0043 } // Code 0043, LATIN CAPITAL LETTER C
+  ,{  10,  11,   0,   3,  11, acGUI_FontSouvenir18_0044 } // Code 0044, LATIN CAPITAL LETTER D
+  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_0045 } // Code 0045, LATIN CAPITAL LETTER E
+  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0046 } // Code 0046, LATIN CAPITAL LETTER F
+  ,{  11,  11,   1,   3,  12, acGUI_FontSouvenir18_0047 } // Code 0047, LATIN CAPITAL LETTER G
+  ,{  11,  11,   0,   3,  12, acGUI_FontSouvenir18_0048 } // Code 0048, LATIN CAPITAL LETTER H
+  ,{   3,  11,   0,   3,   4, acGUI_FontSouvenir18_0049 } // Code 0049, LATIN CAPITAL LETTER I
+  ,{   7,  11,   0,   3,   7, acGUI_FontSouvenir18_004A } // Code 004A, LATIN CAPITAL LETTER J
+  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_004B } // Code 004B, LATIN CAPITAL LETTER K
+  ,{   8,  11,   0,   3,   9, acGUI_FontSouvenir18_004C } // Code 004C, LATIN CAPITAL LETTER L
+  ,{  12,  11,   0,   3,  12, acGUI_FontSouvenir18_004D } // Code 004D, LATIN CAPITAL LETTER M
+  ,{  10,  12,   0,   3,  11, acGUI_FontSouvenir18_004E } // Code 004E, LATIN CAPITAL LETTER N
+  ,{  10,  11,   1,   3,  11, acGUI_FontSouvenir18_004F } // Code 004F, LATIN CAPITAL LETTER O
+  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_0050 } // Code 0050, LATIN CAPITAL LETTER P
+  ,{  10,  13,   1,   3,  11, acGUI_FontSouvenir18_0051 } // Code 0051, LATIN CAPITAL LETTER Q
+  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0052 } // Code 0052, LATIN CAPITAL LETTER R
+  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_0053 } // Code 0053, LATIN CAPITAL LETTER S
+  ,{   9,  11,   0,   3,   9, acGUI_FontSouvenir18_0054 } // Code 0054, LATIN CAPITAL LETTER T
+  ,{  11,  11,   0,   3,  11, acGUI_FontSouvenir18_0055 } // Code 0055, LATIN CAPITAL LETTER U
+  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0056 } // Code 0056, LATIN CAPITAL LETTER V
+  ,{  14,  11,   0,   3,  14, acGUI_FontSouvenir18_0057 } // Code 0057, LATIN CAPITAL LETTER W
+  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0058 } // Code 0058, LATIN CAPITAL LETTER X
+  ,{  10,  11,   0,   3,  10, acGUI_FontSouvenir18_0059 } // Code 0059, LATIN CAPITAL LETTER Y
+  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_005A } // Code 005A, LATIN CAPITAL LETTER Z
+  ,{   3,  13,   1,   3,   5, acGUI_FontSouvenir18_005B } // Code 005B, LEFT SQUARE BRACKET
+  ,{   4,  12,   0,   3,   4, acGUI_FontSouvenir18_005C } // Code 005C, REVERSE SOLIDUS
+  ,{   3,  13,   0,   3,   5, acGUI_FontSouvenir18_005D } // Code 005D, RIGHT SQUARE BRACKET
+  ,{   9,   4,   3,   3,  15, acGUI_FontSouvenir18_005E } // Code 005E, CIRCUMFLEX ACCENT
+  ,{   8,   1,   0,  17,   7, acGUI_FontSouvenir18_005F } // Code 005F, LOW LINE
+  ,{   3,   3,   2,   3,   7, acGUI_FontSouvenir18_0060 } // Code 0060, GRAVE ACCENT
+  ,{   7,   7,   0,   7,   8, acGUI_FontSouvenir18_0061 } // Code 0061, LATIN SMALL LETTER A
+  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0062 } // Code 0062, LATIN SMALL LETTER B
+  ,{   7,   7,   0,   7,   7, acGUI_FontSouvenir18_0063 } // Code 0063, LATIN SMALL LETTER C
+  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0064 } // Code 0064, LATIN SMALL LETTER D
+  ,{   7,   7,   0,   7,   7, acGUI_FontSouvenir18_0065 } // Code 0065, LATIN SMALL LETTER E
+  ,{   5,  11,  -1,   3,   4, acGUI_FontSouvenir18_0066 } // Code 0066, LATIN SMALL LETTER F
+  ,{   7,  10,   0,   7,   7, acGUI_FontSouvenir18_0067 } // Code 0067, LATIN SMALL LETTER G
+  ,{   8,  11,   0,   3,   8, acGUI_FontSouvenir18_0068 } // Code 0068, LATIN SMALL LETTER H
+  ,{   3,  10,   0,   4,   4, acGUI_FontSouvenir18_0069 } // Code 0069, LATIN SMALL LETTER I
+  ,{   3,  13,  -1,   4,   4, acGUI_FontSouvenir18_006A } // Code 006A, LATIN SMALL LETTER J
+  ,{   7,  11,   0,   3,   7, acGUI_FontSouvenir18_006B } // Code 006B, LATIN SMALL LETTER K
+  ,{   3,  11,   0,   3,   3, acGUI_FontSouvenir18_006C } // Code 006C, LATIN SMALL LETTER L
+  ,{  11,   7,   0,   7,  12, acGUI_FontSouvenir18_006D } // Code 006D, LATIN SMALL LETTER M
+  ,{   8,   7,   0,   7,   8, acGUI_FontSouvenir18_006E } // Code 006E, LATIN SMALL LETTER N
+  ,{   7,   7,   0,   7,   8, acGUI_FontSouvenir18_006F } // Code 006F, LATIN SMALL LETTER O
+  ,{   8,  10,   0,   7,   8, acGUI_FontSouvenir18_0070 } // Code 0070, LATIN SMALL LETTER P
+  ,{   8,  10,   0,   7,   8, acGUI_FontSouvenir18_0071 } // Code 0071, LATIN SMALL LETTER Q
+  ,{   5,   7,   0,   7,   5, acGUI_FontSouvenir18_0072 } // Code 0072, LATIN SMALL LETTER R
+  ,{   5,   7,   0,   7,   6, acGUI_FontSouvenir18_0073 } // Code 0073, LATIN SMALL LETTER S
+  ,{   4,  10,   0,   4,   4, acGUI_FontSouvenir18_0074 } // Code 0074, LATIN SMALL LETTER T
+  ,{   8,   7,   0,   7,   8, acGUI_FontSouvenir18_0075 } // Code 0075, LATIN SMALL LETTER U
+  ,{   7,   7,   0,   7,   7, acGUI_FontSouvenir18_0076 } // Code 0076, LATIN SMALL LETTER V
+  ,{  11,   7,   0,   7,  11, acGUI_FontSouvenir18_0077 } // Code 0077, LATIN SMALL LETTER W
+  ,{   7,   7,   0,   7,   7, acGUI_FontSouvenir18_0078 } // Code 0078, LATIN SMALL LETTER X
+  ,{   7,  10,   0,   7,   7, acGUI_FontSouvenir18_0079 } // Code 0079, LATIN SMALL LETTER Y
+  ,{   5,   7,   0,   7,   6, acGUI_FontSouvenir18_007A } // Code 007A, LATIN SMALL LETTER Z
+  ,{   5,  13,   1,   3,   7, acGUI_FontSouvenir18_007B } // Code 007B, LEFT CURLY BRACKET
+  ,{   1,  15,   3,   3,   7, acGUI_FontSouvenir18_007C } // Code 007C, VERTICAL LINE
+  ,{   5,  13,   1,   3,   7, acGUI_FontSouvenir18_007D } // Code 007D, RIGHT CURLY BRACKET
+  ,{   9,   3,   1,   7,  12, acGUI_FontSouvenir18_007E } // Code 007E, TILDE
 };
 
 GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontSouvenir18_Prop1 = {
-   0x0020 /* first character */
-  ,0x007E /* last character  */
-  ,&GUI_FontSouvenir18_CharInfo[  0] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0 /* pointer to next GUI_FONT_PROP_EXT */
+  0x0020,                                   // First character
+  0x007E,                                   // Last character
+  &GUI_FontSouvenir18_CharInfo[0],          // Address of first character
+  (GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0  // Pointer to next GUI_FONT_PROP_EXT
 };
 
 GUI_CONST_STORAGE GUI_FONT GUI_FontSouvenir18 = {
-   GUI_FONTTYPE_PROP_AA4_EXT /* type of font    */
-  ,18 /* height of font  */
-  ,18 /* space of font y */
-  ,1 /* magnification x */
-  ,1 /* magnification y */
-  ,{&GUI_FontSouvenir18_Prop1}
-  ,18 /* Baseline */
-  ,7 /* Height of lowercase characters */
-  ,11 /* Height of capital characters */
+  GUI_FONTTYPE_PROP_AA4_EXT,      // Type of font
+  18,                             // Height of font
+  18,                             // Space of font y
+  1,                              // Magnification x
+  1,                              // Magnification y
+  { &GUI_FontSouvenir18_Prop1 },
+  18,                             // Baseline
+  7,                              // Height of lowercase characters
+  11                              // Height of capital characters
 };
 
 /*********************************************************************
@@ -4557,7 +4559,7 @@ GUI_CONST_STORAGE GUI_FONT GUI_FontSouvenir18 = {
 *                                                                    *
 **********************************************************************
 */
-static GUI_CONST_STORAGE unsigned char acGUI_FontAA4_32_0041[180] = { /* code 0041, LATIN CAPITAL LETTER A */
+static GUI_CONST_STORAGE unsigned char acGUI_FontAA4_32_0041[180] = { // Code 0041, LATIN CAPITAL LETTER A
   0x00, 0x00, 0x00, 0x3F, 0xFF, 0x20, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0x8F, 0xFF, 0x70, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x00, 0xEF, 0xFF, 0xD0, 0x00, 0x00, 0x00,
@@ -4580,7 +4582,7 @@ static GUI_CONST_STORAGE unsigned char acGUI_FontAA4_32_0041[180] = { /* code 00
   0xCF, 0xF5, 0x00, 0x00, 0x00, 0x00, 0x04, 0xFF, 0xC0
 };
 
-static GUI_CONST_STORAGE unsigned char acGUI_FontAA4_32_0042[140] = { /* code 0042, LATIN CAPITAL LETTER B */
+static GUI_CONST_STORAGE unsigned char acGUI_FontAA4_32_0042[140] = { // Code 0042, LATIN CAPITAL LETTER B
   0xFF, 0xFF, 0xFF, 0xFF, 0xFD, 0xB6, 0x00,
   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x90,
   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xF5,
@@ -4603,7 +4605,7 @@ static GUI_CONST_STORAGE unsigned char acGUI_FontAA4_32_0042[140] = { /* code 00
   0xFF, 0xFF, 0xFF, 0xFF, 0xFD, 0xB4, 0x00
 };
 
-static GUI_CONST_STORAGE unsigned char acGUI_FontAA4_32_0043[140] = { /* code 0043, LATIN CAPITAL LETTER C */
+static GUI_CONST_STORAGE unsigned char acGUI_FontAA4_32_0043[140] = { // Code 0043, LATIN CAPITAL LETTER C
   0x00, 0x00, 0x5B, 0xEF, 0xEB, 0x60, 0x00,
   0x00, 0x1B, 0xFF, 0xFF, 0xFF, 0xFC, 0x10,
   0x00, 0xBF, 0xFF, 0xFF, 0xFF, 0xFF, 0xC0,
@@ -4627,28 +4629,28 @@ static GUI_CONST_STORAGE unsigned char acGUI_FontAA4_32_0043[140] = { /* code 00
 };
 
 static GUI_CONST_STORAGE GUI_CHARINFO_EXT GUI_FontAA4_32_CharInfo[3] = {
-   {  17,  20,   0,   6,  17, acGUI_FontAA4_32_0041 } /* code 0041, LATIN CAPITAL LETTER A */
-  ,{  14,  20,   2,   6,  17, acGUI_FontAA4_32_0042 } /* code 0042, LATIN CAPITAL LETTER B */
-  ,{  14,  20,   1,   6,  17, acGUI_FontAA4_32_0043 } /* code 0043, LATIN CAPITAL LETTER C */
+  { 17, 20, 0, 6, 17, acGUI_FontAA4_32_0041 }, // Code 0041, LATIN CAPITAL LETTER A
+  { 14, 20, 2, 6, 17, acGUI_FontAA4_32_0042 }, // Code 0042, LATIN CAPITAL LETTER B
+  { 14, 20, 1, 6, 17, acGUI_FontAA4_32_0043 }  // Code 0043, LATIN CAPITAL LETTER C
 };
 
 static GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontAA4_32_Prop1 = {
-   0x0041 /* first character */
-  ,0x0043 /* last character  */
-  ,&GUI_FontAA4_32_CharInfo[  0] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0 /* pointer to next GUI_FONT_PROP_EXT */
+  0x0041,                                   // First character
+  0x0043,                                   // Last character
+  &GUI_FontAA4_32_CharInfo[0],              // Address of first character
+  (GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0  // Pointer to next GUI_FONT_PROP_EXT
 };
 
 GUI_CONST_STORAGE GUI_FONT GUI_FontAA4_32 = {
-   GUI_FONTTYPE_PROP_AA4_EXT /* type of font    */
-  ,33 /* height of font  */
-  ,33 /* space of font y */
-  ,1 /* magnification x */
-  ,1 /* magnification y */
-  ,{&GUI_FontAA4_32_Prop1}
-  ,33 /* Baseline */
-  ,15 /* Height of lowercase characters */
-  ,20 /* Height of capital characters */
+  GUI_FONTTYPE_PROP_AA4_EXT,  // Type of font
+  33,                         // Height of font
+  33,                         // Space of font y
+  1,                          // Magnification x
+  1,                          // Magnification y
+  { &GUI_FontAA4_32_Prop1 },
+  33,                         // Baseline
+  15,                         // Height of lowercase characters
+  20                          // Height of capital characters
 };
 
 /*********************************************************************
@@ -4660,7 +4662,7 @@ GUI_CONST_STORAGE GUI_FONT GUI_FontAA4_32 = {
 *                                                                    *
 **********************************************************************
 */
-static GUI_CONST_STORAGE unsigned char acGUI_FontAA2_32_0041[100] = { /* code 0041, LATIN CAPITAL LETTER A */
+static GUI_CONST_STORAGE unsigned char acGUI_FontAA2_32_0041[100] = { // Code 0041, LATIN CAPITAL LETTER A
   0x00, 0x03, 0xF0, 0x00, 0x00,
   0x00, 0x0B, 0xF4, 0x00, 0x00,
   0x00, 0x0F, 0xFC, 0x00, 0x00,
@@ -4683,7 +4685,7 @@ static GUI_CONST_STORAGE unsigned char acGUI_FontAA2_32_0041[100] = { /* code 00
   0xFD, 0x00, 0x00, 0x1F, 0xC0
 };
 
-static GUI_CONST_STORAGE unsigned char acGUI_FontAA2_32_0042[ 80] = { /* code 0042, LATIN CAPITAL LETTER B */
+static GUI_CONST_STORAGE unsigned char acGUI_FontAA2_32_0042[ 80] = { // Code 0042, LATIN CAPITAL LETTER B
   0xFF, 0xFF, 0xF9, 0x00,
   0xFF, 0xFF, 0xFF, 0x80,
   0xFF, 0xFF, 0xFF, 0xD0,
@@ -4706,7 +4708,7 @@ static GUI_CONST_STORAGE unsigned char acGUI_FontAA2_32_0042[ 80] = { /* code 00
   0xFF, 0xFF, 0xF9, 0x00
 };
 
-static GUI_CONST_STORAGE unsigned char acGUI_FontAA2_32_0043[ 80] = { /* code 0043, LATIN CAPITAL LETTER C */
+static GUI_CONST_STORAGE unsigned char acGUI_FontAA2_32_0043[ 80] = { // Code 0043, LATIN CAPITAL LETTER C
   0x00, 0x6F, 0xE4, 0x00,
   0x02, 0xFF, 0xFF, 0x00,
   0x0F, 0xFF, 0xFF, 0xC0,
@@ -4730,28 +4732,28 @@ static GUI_CONST_STORAGE unsigned char acGUI_FontAA2_32_0043[ 80] = { /* code 00
 };
 
 static GUI_CONST_STORAGE GUI_CHARINFO_EXT GUI_FontAA2_32_CharInfo[3] = {
-   {  17,  20,   0,   6,  17, acGUI_FontAA2_32_0041 } /* code 0041, LATIN CAPITAL LETTER A */
-  ,{  14,  20,   2,   6,  17, acGUI_FontAA2_32_0042 } /* code 0042, LATIN CAPITAL LETTER B */
-  ,{  14,  20,   1,   6,  17, acGUI_FontAA2_32_0043 } /* code 0043, LATIN CAPITAL LETTER C */
+   {  17,  20,   0,   6,  17, acGUI_FontAA2_32_0041 } // Code 0041, LATIN CAPITAL LETTER A
+  ,{  14,  20,   2,   6,  17, acGUI_FontAA2_32_0042 } // Code 0042, LATIN CAPITAL LETTER B
+  ,{  14,  20,   1,   6,  17, acGUI_FontAA2_32_0043 } // Code 0043, LATIN CAPITAL LETTER C
 };
 
 static GUI_CONST_STORAGE GUI_FONT_PROP_EXT GUI_FontAA2_32_Prop1 = {
-   0x0041 /* first character */
-  ,0x0043 /* last character  */
-  ,&GUI_FontAA2_32_CharInfo[  0] /* address of first character */
-  ,(GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0 /* pointer to next GUI_FONT_PROP_EXT */
+  0x0041,                                   // First character
+  0x0043,                                   // Last character
+  &GUI_FontAA2_32_CharInfo[0],              // Address of first character
+  (GUI_CONST_STORAGE GUI_FONT_PROP_EXT *)0  // Pointer to next GUI_FONT_PROP_EXT
 };
 
 GUI_CONST_STORAGE GUI_FONT GUI_FontAA2_32 = {
-   GUI_FONTTYPE_PROP_AA2_EXT /* type of font    */
-  ,33 /* height of font  */
-  ,33 /* space of font y */
-  ,1 /* magnification x */
-  ,1 /* magnification y */
-  ,{&GUI_FontAA2_32_Prop1}
-  ,33 /* Baseline */
-  ,15 /* Height of lowercase characters */
-  ,20 /* Height of capital characters */
+  GUI_FONTTYPE_PROP_AA2_EXT,  // Type of font
+  33,                         // Height of font
+  33,                         // Space of font y
+  1,                          // Magnification x
+  1,                          // Magnification y
+  { &GUI_FontAA2_32_Prop1 },
+  33,                         // Baseline
+  15,                         // Height of lowercase characters
+  20                          // Height of capital characters
 };
 
 /*********************************************************************
@@ -4770,75 +4772,75 @@ GUI_CONST_STORAGE GUI_FONT GUI_FontAA2_32 = {
 **********************************************************************
 */
 static GUI_CONST_STORAGE GUI_COLOR ColorsSeggerLogo[] = {
-     0x00FF00,0xFEFEFE,0x201F23,0xA02020
-    ,0xE6E6E6,0xBB6060,0xE2BCBC,0xDEDEDE
-    ,0x000000,0xFAFAFA,0x212024,0xD3D3D4
-    ,0xD5D4D5,0xF1DEDE,0xE0E0E1,0xFCFCFC
-    ,0xF1F1F1,0xFCF8F8,0xFEFCFC,0x424145
-    ,0xC3C3C4,0xA12222,0xC1C1C2,0x808082
-    ,0x444346,0x606062,0xA22626,0xEDEDED
-    ,0xA73030,0x000000,0x252528,0x363539
-    ,0xB1B0B2,0xE4E4E4,0xF8EEEE,0xB24A4A
-    ,0xB34C4C,0x88888A,0xCF8E8E,0xEAEAEA
-    ,0xF6F6F6,0x18171A,0x18181B,0x2A292D
-    ,0x39383C,0x6C6C6E,0xA22424,0xAA3636
-    ,0xCDCDCE,0xF2E0E0,0xF7ECEC,0xFDFAFA
-    ,0x28272A,0x2E2D31,0x454448,0xA62E2E
-    ,0xB95B5B,0xC47676,0x8E8E90,0xD09090
-    ,0xC7C7C8,0xCACACB,0xD9D9DA,0xE5C2C2
-    ,0xE6C4C4,0xF3E2E2,0x0D0C0E,0x1E1E21
-    ,0x1F1E22,0x222222,0x3C3B3E,0x404043
-    ,0x48474A,0x49484C,0xA52B2B,0xAC3B3B
-    ,0xAC3D3D,0xBB5E5E,0xC67A7A,0x848385
-    ,0xA5A5A6,0xA7A6A8,0xE3BEBE,0xC5C4C5
-    ,0xDCDCDC,0xE4C0C0,0xEBD1D1,0xECD3D3
-    ,0xF0DCDC,0xF4E4E4,0xF6E9E9,0xF4F4F4
-    ,0xFBF6F6,0x242327,0x2C2B2E,0x2D2C2F
-    ,0x323135,0x353436,0x555558,0x666568
-    ,0x6A6A6C,0x727174,0x7C7B7E,0x7D7C7F
-    ,0xA83232,0xA83434,0xB14848,0xB44E4E
-    ,0xBC6161,0xBE6767,0x8A8A8C,0x8D8C8F
-    ,0x909092,0x949496,0xADACAE,0xAEAEAE
-    ,0xB5B5B6,0xB7B7B8,0xBABABB,0xCD8A8A
-    ,0xDEB2B2,0xE2BBBB,0xD2D1D2,0xD7D7D8
-    ,0xEACECE,0xF3E4E4,0x020202,0x191919
-    ,0x343336,0x38373A,0x4F4E51,0x525255
-    ,0x59585B,0x59585C,0x5E5D60,0x605F62
-    ,0x646467,0x7A7A7C,0xA32828,0xA42929
-    ,0xAB3939,0xAB3A3A,0xAF4444,0xB45050
-    ,0xB75656,0xB85858,0xBA5D5D,0xBF6868
-    ,0xC16E6E,0xC26F6F,0xC27070,0xC47373
-    ,0xC57878,0xC77C7C,0xC87E7E,0x7E7E80
-    ,0x848486,0x878688,0x8C8B8D,0x908F91
-    ,0x9A9A9C,0x9D9C9E,0x9F9EA0,0xA1A1A2
-    ,0xA4A3A5,0xA9A9AA,0xB4B3B5,0xBAB9BB
-    ,0xC98080,0xCA8383,0xCE8C8C,0xD7A2A2
-    ,0xD9A5A5,0xD9A6A6,0xDAA9A9,0xDBABAB
-    ,0xDCACAC,0xDDAFAF,0xE0B6B6,0xE1B9B9
-    ,0xE4BFBF,0xCFCFD0,0xE7C6C6,0xE8C8C8
-    ,0xEDD5D5,0xEED6D6,0xEFD9D9,0xEFDADA
-    ,0xF4E6E6,0xF5E8E8,0xF7EBEB,0xF9F1F1
-    ,0xFAF3F3,0xFBF5F5,0xFCF7F7,0x0B0B0D
-    ,0x0C0B0D,0x171717,0x252427,0x302F33
-    ,0x313033,0x4C4B4E,0x4D4C4F,0x545356
-    ,0x58575A,0x5C5C5F,0x636265,0x646366
-    ,0x6C6B6E,0x706F71,0x78787A,0xA52D2D
-    ,0xA62D2D,0xB14747,0xB55252,0xB65353
-    ,0xB65454,0xB95C5C,0xBE6565,0xC47575
-    ,0x838284,0x888789,0x929294,0x949395
-    ,0x989799,0x98989A,0x9C9C9D,0x9E9D9F
-    ,0xA3A2A4,0xABABAC,0xAFAEB0,0xB3B3B4
-    ,0xB8B7B9,0xB9B8BA,0xBBBBBC,0xBCBBBC
-    ,0xBDBDBE,0xCB8686,0xCC8686,0xCD8989
-    ,0xD29595,0xD29696,0xD49B9B,0xD59C9C
-    ,0xDEB0B0,0xC8C7C8,0xC9C8C9,0xCBCBCC
-    ,0xD4D3D4,0xDBDBDC,0xEACDCD,0xE3E3E4
-    ,0xEBEBEC,0xEFEFF0,0xF3F3F4,0xFBFBFC
+  0x00FF00, 0xFEFEFE, 0x201F23, 0xA02020,
+  0xE6E6E6, 0xBB6060, 0xE2BCBC, 0xDEDEDE,
+  0x000000, 0xFAFAFA, 0x212024, 0xD3D3D4,
+  0xD5D4D5, 0xF1DEDE, 0xE0E0E1, 0xFCFCFC,
+  0xF1F1F1, 0xFCF8F8, 0xFEFCFC, 0x424145,
+  0xC3C3C4, 0xA12222, 0xC1C1C2, 0x808082,
+  0x444346, 0x606062, 0xA22626, 0xEDEDED,
+  0xA73030, 0x000000, 0x252528, 0x363539,
+  0xB1B0B2, 0xE4E4E4, 0xF8EEEE, 0xB24A4A,
+  0xB34C4C, 0x88888A, 0xCF8E8E, 0xEAEAEA,
+  0xF6F6F6, 0x18171A, 0x18181B, 0x2A292D,
+  0x39383C, 0x6C6C6E, 0xA22424, 0xAA3636,
+  0xCDCDCE, 0xF2E0E0, 0xF7ECEC, 0xFDFAFA,
+  0x28272A, 0x2E2D31, 0x454448, 0xA62E2E,
+  0xB95B5B, 0xC47676, 0x8E8E90, 0xD09090,
+  0xC7C7C8, 0xCACACB, 0xD9D9DA, 0xE5C2C2,
+  0xE6C4C4, 0xF3E2E2, 0x0D0C0E, 0x1E1E21,
+  0x1F1E22, 0x222222, 0x3C3B3E, 0x404043,
+  0x48474A, 0x49484C, 0xA52B2B, 0xAC3B3B,
+  0xAC3D3D, 0xBB5E5E, 0xC67A7A, 0x848385,
+  0xA5A5A6, 0xA7A6A8, 0xE3BEBE, 0xC5C4C5,
+  0xDCDCDC, 0xE4C0C0, 0xEBD1D1, 0xECD3D3,
+  0xF0DCDC, 0xF4E4E4, 0xF6E9E9, 0xF4F4F4,
+  0xFBF6F6, 0x242327, 0x2C2B2E, 0x2D2C2F,
+  0x323135, 0x353436, 0x555558, 0x666568,
+  0x6A6A6C, 0x727174, 0x7C7B7E, 0x7D7C7F,
+  0xA83232, 0xA83434, 0xB14848, 0xB44E4E,
+  0xBC6161, 0xBE6767, 0x8A8A8C, 0x8D8C8F,
+  0x909092, 0x949496, 0xADACAE, 0xAEAEAE,
+  0xB5B5B6, 0xB7B7B8, 0xBABABB, 0xCD8A8A,
+  0xDEB2B2, 0xE2BBBB, 0xD2D1D2, 0xD7D7D8,
+  0xEACECE, 0xF3E4E4, 0x020202, 0x191919,
+  0x343336, 0x38373A, 0x4F4E51, 0x525255,
+  0x59585B, 0x59585C, 0x5E5D60, 0x605F62,
+  0x646467, 0x7A7A7C, 0xA32828, 0xA42929,
+  0xAB3939, 0xAB3A3A, 0xAF4444, 0xB45050,
+  0xB75656, 0xB85858, 0xBA5D5D, 0xBF6868,
+  0xC16E6E, 0xC26F6F, 0xC27070, 0xC47373,
+  0xC57878, 0xC77C7C, 0xC87E7E, 0x7E7E80,
+  0x848486, 0x878688, 0x8C8B8D, 0x908F91,
+  0x9A9A9C, 0x9D9C9E, 0x9F9EA0, 0xA1A1A2,
+  0xA4A3A5, 0xA9A9AA, 0xB4B3B5, 0xBAB9BB,
+  0xC98080, 0xCA8383, 0xCE8C8C, 0xD7A2A2,
+  0xD9A5A5, 0xD9A6A6, 0xDAA9A9, 0xDBABAB,
+  0xDCACAC, 0xDDAFAF, 0xE0B6B6, 0xE1B9B9,
+  0xE4BFBF, 0xCFCFD0, 0xE7C6C6, 0xE8C8C8,
+  0xEDD5D5, 0xEED6D6, 0xEFD9D9, 0xEFDADA,
+  0xF4E6E6, 0xF5E8E8, 0xF7EBEB, 0xF9F1F1,
+  0xFAF3F3, 0xFBF5F5, 0xFCF7F7, 0x0B0B0D,
+  0x0C0B0D, 0x171717, 0x252427, 0x302F33,
+  0x313033, 0x4C4B4E, 0x4D4C4F, 0x545356,
+  0x58575A, 0x5C5C5F, 0x636265, 0x646366,
+  0x6C6B6E, 0x706F71, 0x78787A, 0xA52D2D,
+  0xA62D2D, 0xB14747, 0xB55252, 0xB65353,
+  0xB65454, 0xB95C5C, 0xBE6565, 0xC47575,
+  0x838284, 0x888789, 0x929294, 0x949395,
+  0x989799, 0x98989A, 0x9C9C9D, 0x9E9D9F,
+  0xA3A2A4, 0xABABAC, 0xAFAEB0, 0xB3B3B4,
+  0xB8B7B9, 0xB9B8BA, 0xBBBBBC, 0xBCBBBC,
+  0xBDBDBE, 0xCB8686, 0xCC8686, 0xCD8989,
+  0xD29595, 0xD29696, 0xD49B9B, 0xD59C9C,
+  0xDEB0B0, 0xC8C7C8, 0xC9C8C9, 0xCBCBCC,
+  0xD4D3D4, 0xDBDBDC, 0xEACDCD, 0xE3E3E4,
+  0xEBEBEC, 0xEFEFF0, 0xF3F3F4, 0xFBFBFC
 };
 
 static GUI_CONST_STORAGE GUI_LOGPALETTE PalSeggerLogo = {
-  256,	/* number of entries */
-  1, 	/* Has transparency */
+  256,	// Number of entries
+  1, 	// Has transparency
   &ColorsSeggerLogo[0]
 };
 
@@ -4846,7 +4848,7 @@ static GUI_CONST_STORAGE unsigned char acSeggerLogo[] = {
   0x00, 0x00, 0x08, 0x42, 0x2A, 0x44, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
         0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
         0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
-        0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x44, 0x2A, 0x42, /**/0x42, 0x00, 0x00,
+        0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x44, 0x2A, 0x42, 0x42, 0x00, 0x00,
   0x00, 0x7E, 0x2A, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
         0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
         0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
@@ -5122,16 +5124,16 @@ static GUI_CONST_STORAGE unsigned char acSeggerLogo[] = {
   0x00, 0x00, 0x08, 0x42, 0x2A, 0x44, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
         0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
         0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
-        0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x44, 0x2A, 0x42, /**/0x42, 0x00, 0x00
+        0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x44, 0x2A, 0x42, 0x42, 0x00, 0x00
 };
 
 GUI_CONST_STORAGE GUI_BITMAP bmSeggerLogo = {
-  140, /* XSize */
-  70, /* YSize */
-  140, /* BytesPerLine */
-  8, /* BitsPerPixel */
-  acSeggerLogo,  /* Pointer to picture data (indices) */
-  &PalSeggerLogo  /* Pointer to palette */
+  140,            // XSize
+   70,            // YSize
+  140,            // BytesPerLine
+    8,            // BitsPerPixel
+  acSeggerLogo,   // Pointer to picture data (indices)
+  &PalSeggerLogo  // Pointer to palette
 };
 
 /*********************************************************************
@@ -5141,81 +5143,79 @@ GUI_CONST_STORAGE GUI_BITMAP bmSeggerLogo = {
 *  Used in                                                           *
 *  - GUIDEMO.c                                                       *
 *  - GUIDEMO_Automotive.c                                            *
-*  - GUIDEMO_BarGraph.c                                              *
-*  - GUIDEMO_Speed.c                                                 *
 *                                                                    *
 **********************************************************************
 */
 static GUI_CONST_STORAGE GUI_COLOR ColorsSeggerLogo70x35[] = {
-     0x00FF00,0xFFFFFF,0x201F23,0xA02020
-    ,0xF3F3F3,0xC16E6E,0xDDAFAF,0xEFEFEF
-    ,0xE0E0E0,0xF8EEEE,0xFDFDFD,0x7A797B
-    ,0xEAEAEA,0xA22424,0xFAFAFA,0x212024
-    ,0xFDFAFA,0x262528,0x504F52,0x808082
-    ,0x88888A,0xA0A0A2,0xF6EAEA,0xF8F8F8
-    ,0xFEFEFE,0xFFFEFE,0x1E1D21,0x2A292D
-    ,0xA42A2A,0xAFAFB0,0xD59D9D,0xDEB1B1
-    ,0xFDFBFB,0xFCFCFC,0xFEFCFC,0x222124
-    ,0x28272B,0x6A6A6D,0xAF4343,0xC57777
-    ,0xC87D7D,0x828183,0x9A999B,0xEFDADA
-    ,0xF0DBDB,0xF6F6F6,0x111013,0x111113
-    ,0x1E1D20,0x29282C,0x2B2A2E,0x2C2B2E
-    ,0x313034,0x3F3E42,0x403F43,0x414042
-    ,0x474649,0x48474A,0x57565A,0x69686B
-    ,0x747476,0x7C7B7D,0xA02121,0xA12323
-    ,0xA22525,0xA52B2B,0xA52C2C,0xA62E2E
-    ,0xA83434,0xA93535,0xAA3636,0xAA3838
-    ,0xAB3B3B,0xAD3E3E,0xAE4141,0xAF4444
-    ,0xB34C4C,0xB34D4D,0xB65353,0xB65555
-    ,0xB85959,0xBA5D5D,0xBC6262,0xBD6363
-    ,0xBF6A6A,0xC06B6B,0xC27070,0xC77C7C
-    ,0x7F7F81,0x828284,0x8A8A8C,0x8D8D8F
-    ,0x969597,0xA2A1A3,0xBABABB,0xCA8282
-    ,0xCA8383,0xCF8D8D,0xD19393,0xD39797
-    ,0xD59B9B,0xD8A3A3,0xDEB2B2,0xDFB3B3
-    ,0xDFB4B4,0xC4C4C5,0xC5C5C6,0xC8C8C9
-    ,0xD5D5D6,0xD7D7D8,0xE7C7C7,0xE8C9C9
-    ,0xE8CACA,0xE9CACA,0xEACECE,0xEACFCF
-    ,0xECD3D3,0xF1DEDE,0xE1E1E2,0xE2E1E2
-    ,0xE8E8E8,0xEBEBEC,0xECECED,0xF5E8E8
-    ,0xF8EFEF,0xF4F4F4,0xF8F0F0,0xF9F0F0
-    ,0xF9F1F1,0xFAF3F3,0xFAF4F4,0xFCF7F7
-    ,0xFCF9F9,0xFEFDFD,0x010101,0x121212
-    ,0x232226,0x242327,0x252428,0x2E2D31
-    ,0x2F2E31,0x302F33,0x313033,0x323134
-    ,0x363539,0x373639,0x38373B,0x3B3A3E
-    ,0x3C3B3F,0x3D3C3F,0x3F3E41,0x414043
-    ,0x434246,0x464548,0x47464A,0x4C4B4E
-    ,0x4F4E52,0x515054,0x525154,0x525155
-    ,0x535256,0x545356,0x555457,0x565558
-    ,0x575659,0x58575A,0x5A595C,0x5D5C5F
-    ,0x5E5D60,0x605F62,0x616163,0x646366
-    ,0x6D6D6F,0x6F6F71,0x727274,0x737375
-    ,0x767578,0x79787B,0x7A797C,0x7B7A7D
-    ,0x7D7C7F,0xA32626,0xA32727,0xB14949
-    ,0xB24949,0xBE6767,0xBE6868,0xC57878
-    ,0x7E7E80,0x878789,0x8C8C8C,0x919092
-    ,0x929193,0x939393,0x969697,0x979698
-    ,0x989799,0x99989A,0x9B9A9C,0x9B9B9D
-    ,0x9C9C9D,0x9C9C9E,0x9E9D9F,0x9E9EA0
-    ,0x9F9EA0,0x9F9FA1,0xA2A2A3,0xA3A2A4
-    ,0xA4A3A5,0xA5A4A6,0xA9A9AA,0xACACAD
-    ,0xB0B0B1,0xB2B2B3,0xB3B3B4,0xB4B4B5
-    ,0xB9B9BA,0xBCBBBD,0xBDBDBE,0xC98080
-    ,0xC98181,0xDCAEAE,0xDDAEAE,0xE1B8B8
-    ,0xE1B9B9,0xC0C0C1,0xC4C3C5,0xC6C6C7
-    ,0xC7C6C7,0xC9C9CA,0xCAC9CA,0xCACACB
-    ,0xCBCBCC,0xCCCCCD,0xCDCDCE,0xD1D1D1
-    ,0xD1D1D2,0xD4D3D4,0xD5D4D5,0xDADADB
-    ,0xDBDBDB,0xDDDCDD,0xDEDEDF,0xDFDFE0
-    ,0xE3E3E4,0xE4E4E4,0xE4E4E5,0xE6E6E7
-    ,0xECECEC,0xEDEDED,0xF2E1E1,0xF2E2E2
-    ,0xEFEFF0,0xF1F1F1,0xF3F2F3,0xF8F7F8
+  0x00FF00, 0xFFFFFF, 0x201F23, 0xA02020,
+  0xF3F3F3, 0xC16E6E, 0xDDAFAF, 0xEFEFEF,
+  0xE0E0E0, 0xF8EEEE, 0xFDFDFD, 0x7A797B,
+  0xEAEAEA, 0xA22424, 0xFAFAFA, 0x212024,
+  0xFDFAFA, 0x262528, 0x504F52, 0x808082,
+  0x88888A, 0xA0A0A2, 0xF6EAEA, 0xF8F8F8,
+  0xFEFEFE, 0xFFFEFE, 0x1E1D21, 0x2A292D,
+  0xA42A2A, 0xAFAFB0, 0xD59D9D, 0xDEB1B1,
+  0xFDFBFB, 0xFCFCFC, 0xFEFCFC, 0x222124,
+  0x28272B, 0x6A6A6D, 0xAF4343, 0xC57777,
+  0xC87D7D, 0x828183, 0x9A999B, 0xEFDADA,
+  0xF0DBDB, 0xF6F6F6, 0x111013, 0x111113,
+  0x1E1D20, 0x29282C, 0x2B2A2E, 0x2C2B2E,
+  0x313034, 0x3F3E42, 0x403F43, 0x414042,
+  0x474649, 0x48474A, 0x57565A, 0x69686B,
+  0x747476, 0x7C7B7D, 0xA02121, 0xA12323,
+  0xA22525, 0xA52B2B, 0xA52C2C, 0xA62E2E,
+  0xA83434, 0xA93535, 0xAA3636, 0xAA3838,
+  0xAB3B3B, 0xAD3E3E, 0xAE4141, 0xAF4444,
+  0xB34C4C, 0xB34D4D, 0xB65353, 0xB65555,
+  0xB85959, 0xBA5D5D, 0xBC6262, 0xBD6363,
+  0xBF6A6A, 0xC06B6B, 0xC27070, 0xC77C7C,
+  0x7F7F81, 0x828284, 0x8A8A8C, 0x8D8D8F,
+  0x969597, 0xA2A1A3, 0xBABABB, 0xCA8282,
+  0xCA8383, 0xCF8D8D, 0xD19393, 0xD39797,
+  0xD59B9B, 0xD8A3A3, 0xDEB2B2, 0xDFB3B3,
+  0xDFB4B4, 0xC4C4C5, 0xC5C5C6, 0xC8C8C9,
+  0xD5D5D6, 0xD7D7D8, 0xE7C7C7, 0xE8C9C9,
+  0xE8CACA, 0xE9CACA, 0xEACECE, 0xEACFCF,
+  0xECD3D3, 0xF1DEDE, 0xE1E1E2, 0xE2E1E2,
+  0xE8E8E8, 0xEBEBEC, 0xECECED, 0xF5E8E8,
+  0xF8EFEF, 0xF4F4F4, 0xF8F0F0, 0xF9F0F0,
+  0xF9F1F1, 0xFAF3F3, 0xFAF4F4, 0xFCF7F7,
+  0xFCF9F9, 0xFEFDFD, 0x010101, 0x121212,
+  0x232226, 0x242327, 0x252428, 0x2E2D31,
+  0x2F2E31, 0x302F33, 0x313033, 0x323134,
+  0x363539, 0x373639, 0x38373B, 0x3B3A3E,
+  0x3C3B3F, 0x3D3C3F, 0x3F3E41, 0x414043,
+  0x434246, 0x464548, 0x47464A, 0x4C4B4E,
+  0x4F4E52, 0x515054, 0x525154, 0x525155,
+  0x535256, 0x545356, 0x555457, 0x565558,
+  0x575659, 0x58575A, 0x5A595C, 0x5D5C5F,
+  0x5E5D60, 0x605F62, 0x616163, 0x646366,
+  0x6D6D6F, 0x6F6F71, 0x727274, 0x737375,
+  0x767578, 0x79787B, 0x7A797C, 0x7B7A7D,
+  0x7D7C7F, 0xA32626, 0xA32727, 0xB14949,
+  0xB24949, 0xBE6767, 0xBE6868, 0xC57878,
+  0x7E7E80, 0x878789, 0x8C8C8C, 0x919092,
+  0x929193, 0x939393, 0x969697, 0x979698,
+  0x989799, 0x99989A, 0x9B9A9C, 0x9B9B9D,
+  0x9C9C9D, 0x9C9C9E, 0x9E9D9F, 0x9E9EA0,
+  0x9F9EA0, 0x9F9FA1, 0xA2A2A3, 0xA3A2A4,
+  0xA4A3A5, 0xA5A4A6, 0xA9A9AA, 0xACACAD,
+  0xB0B0B1, 0xB2B2B3, 0xB3B3B4, 0xB4B4B5,
+  0xB9B9BA, 0xBCBBBD, 0xBDBDBE, 0xC98080,
+  0xC98181, 0xDCAEAE, 0xDDAEAE, 0xE1B8B8,
+  0xE1B9B9, 0xC0C0C1, 0xC4C3C5, 0xC6C6C7,
+  0xC7C6C7, 0xC9C9CA, 0xCAC9CA, 0xCACACB,
+  0xCBCBCC, 0xCCCCCD, 0xCDCDCE, 0xD1D1D1,
+  0xD1D1D2, 0xD4D3D4, 0xD5D4D5, 0xDADADB,
+  0xDBDBDB, 0xDDDCDD, 0xDEDEDF, 0xDFDFE0,
+  0xE3E3E4, 0xE4E4E4, 0xE4E4E5, 0xE6E6E7,
+  0xECECEC, 0xEDEDED, 0xF2E1E1, 0xF2E2E2,
+  0xEFEFF0, 0xF1F1F1, 0xF3F2F3, 0xF8F7F8
 };
 
 static GUI_CONST_STORAGE GUI_LOGPALETTE PalSeggerLogo70x35 = {
-  256,	/* number of entries */
-  1, 	/* Has transparency */
+  256,	// Number of entries
+  1, 	// Has transparency
   &ColorsSeggerLogo70x35[0]
 };
 
@@ -5293,12 +5293,12 @@ static GUI_CONST_STORAGE unsigned char acSeggerLogo70x35[] = {
 };
 
 GUI_CONST_STORAGE GUI_BITMAP bmSeggerLogo70x35 = {
-  70, /* XSize */
-  35, /* YSize */
-  70, /* BytesPerLine */
-  8, /* BitsPerPixel */
-  acSeggerLogo70x35,  /* Pointer to picture data (indices) */
-  &PalSeggerLogo70x35  /* Pointer to palette */
+  70,                  // XSize
+  35,                  // YSize
+  70,                  // BytesPerLine
+   8,                  // BitsPerPixel
+  acSeggerLogo70x35,   // Pointer to picture data (indices)
+  &PalSeggerLogo70x35  // Pointer to palette
 };
 
 /*************************** End of file ****************************/

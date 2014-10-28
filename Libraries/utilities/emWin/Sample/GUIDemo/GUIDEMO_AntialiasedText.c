@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -41,9 +41,7 @@ Purpose     : Shows text with different antialiasing qualities
 *
 **********************************************************************
 */
-#define XSIZE_MAX 320
-#define YSIZE_MAX 240
-#define BORDER    3
+#define BORDER 3
 
 /*********************************************************************
 *
@@ -116,7 +114,6 @@ static void _DrawSample(GUI_RECT Rect, const GUI_FONT * pFont, const char * pTex
   CurrentRect.y0 = Rect.y0;
   CurrentRect.x1 = Rect.x0 + 59;
   CurrentRect.y1 = Rect.y0 + 3 * yDistDiv3;
-  GUI_SetClipRect(&CurrentRect);
   //
   // Display info text
   //
@@ -127,9 +124,11 @@ static void _DrawSample(GUI_RECT Rect, const GUI_FONT * pFont, const char * pTex
   // Alpha circles
   //
   GUI_MoveRect(&CurrentRect, 63, 0);
-  GUI_SetBkColor(GUI_BLACK);
-  GUI_Clear();
+  GUI_SetColor(GUI_BLACK);
+  GUI_FillRectEx(&CurrentRect);
+  GUI_SetClipRect(&CurrentRect);
   _DrawAlphaCircles((CurrentRect.x0 + CurrentRect.x1) / 2, (CurrentRect.y0 + CurrentRect.y1) / 2, 35, 0, 4);
+  GUI_SetClipRect(NULL);
   GUI_SetColor(GUI_WHITE);
   GUI_SetFont(pFont);
   CurrentRect.y1 = CurrentRect.y0 + yDistDiv3;
@@ -160,14 +159,14 @@ static void _DrawSample(GUI_RECT Rect, const GUI_FONT * pFont, const char * pTex
   CurrentRect.y0 = Rect.y0;
   CurrentRect.y1 = CurrentRect.y0 + yDistDiv3;
   GUI_MoveRect(&CurrentRect, 63, 0);
-  GUI_SetBkColor(GUI_RED);
-  GUI_Clear();
+  GUI_SetColor(GUI_RED);
+  GUI_FillRectEx(&CurrentRect);
   GUI_MoveRect(&CurrentRect, 0, yDistDiv3);
-  GUI_SetBkColor(GUI_GREEN);
-  GUI_Clear();
+  GUI_SetColor(GUI_GREEN);
+  GUI_FillRectEx(&CurrentRect);
   GUI_MoveRect(&CurrentRect, 0, yDistDiv3);
-  GUI_SetBkColor(GUI_BLUE);
-  GUI_Clear();
+  GUI_SetColor(GUI_BLUE);
+  GUI_FillRectEx(&CurrentRect);
   GUI_SetColor(GUI_WHITE);
   CurrentRect.y0 = Rect.y0;
   CurrentRect.y1 = CurrentRect.y0 + yDistDiv3;
@@ -213,36 +212,33 @@ static void _DrawScreen(void) {
   int      xOff;
   int      yOff;
 
-
-  TitleSize = GUIDEMO_GetTitleSize();
-  xSize     = LCD_GetXSize();
-  ySize     = LCD_GetYSize();
-  if ((xSize < XSIZE_MAX) || (ySize < YSIZE_MAX)) {
-    //
-    // Do not show this demo on displays of too small dimensions.
-    //
+  xSize = LCD_GetXSize();
+  ySize = LCD_GetYSize();
+  if ((xSize < XSIZE_MIN) || (ySize < YSIZE_MIN)) {
+    GUIDEMO_ConfigureDemo("Antialiased text", "This demo requires a screen\r\nresolution of QVGA at least.\r\n\r\nThe next demo will start in a moment...", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
     return;
   }
-  xOff      = (xSize - XSIZE_MAX) / 2;
-  yOff      = ((ySize - TitleSize) - (YSIZE_MAX - TitleSize)) / 2;
+  GUIDEMO_ConfigureDemo("Antialiased text", "Output antialiased text\non different backgrounds.", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
+  GUIDEMO_DrawBk();
+  GUIDEMO_DispTitle("Antialiased text");
+  TitleSize = GUIDEMO_GetTitleSizeY();
+  xOff      = (xSize - XSIZE_MIN) / 2;
+  yOff      = ((ySize - TitleSize) - (YSIZE_MIN - TitleSize)) / 2;
   //
   // 4 bit anti-aliasing sample
   //
-  Rect.x0   = xOff;
-  Rect.y0   = TitleSize + yOff;
-  Rect.x1   = xSize - xOff;
-  Rect.y1   = TitleSize + (ySize - TitleSize) / 2 - 1;
-  //_DrawText("Antialiased text\n(4 bpp)", &Rect);
-  //GUI_SetFont(&GUI_FontAA4_32);
+  Rect.x0 = xOff;
+  Rect.y0 = TitleSize + yOff;
+  Rect.x1 = xSize - xOff;
+  Rect.y1 = TitleSize + (ySize - TitleSize) / 2 - 1;
   _DrawSample(Rect, &GUI_FontAA4_32, "Antialiased text\n(4 bpp)");
   //
   // 2 bit anti-aliasing sample
   //
-  Rect.y0   = Rect.y1 + 1;
-  Rect.y1   = ySize - yOff;
-  //_DrawText("Antialiased text\n(2 bpp)", &Rect);
-  //GUI_SetFont(&GUI_FontAA2_32);
+  Rect.y0 = Rect.y1 + 1;
+  Rect.y1 = ySize - yOff;
   _DrawSample(Rect, &GUI_FontAA2_32, "Antialiased text\n(2 bpp)");
+  GUIDEMO_Wait(4000);
 }
 
 /*********************************************************************
@@ -253,17 +249,13 @@ static void _DrawScreen(void) {
 */
 /*********************************************************************
 *
-*       MainTask
+*       GUIDEMO_AntialiasedText
 */
 void GUIDEMO_AntialiasedText(void) {
   unsigned OldAlphaState;
 
-  GUIDEMO_ShowIntro("Antialiased Text", "Output antialiased text\non different backgrounds.");
-  GUIDEMO_DrawBk();
-  GUIDEMO_DispTitle("Antialiased text sample");
   OldAlphaState = GUI_EnableAlpha(1);
   _DrawScreen();
-  GUIDEMO_Wait(4000);
   GUI_EnableAlpha(OldAlphaState);
 }
 
@@ -272,6 +264,6 @@ void GUIDEMO_AntialiasedText(void) {
 void GUIDEMO_AntialiasedText_C(void);
 void GUIDEMO_AntialiasedText_C(void) {}
 
-#endif /* SHOW_GUIDEMO_AATEXT */
+#endif  // SHOW_GUIDEMO_AATEXT
 
 /*************************** End of file ****************************/

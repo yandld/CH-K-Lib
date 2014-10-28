@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -30,8 +30,6 @@ File        : GUIDEMO_Treeview.c
 Purpose     : Treeview demo
 ----------------------------------------------------------------------
 */
-
-#include <stdlib.h>
 
 #include "GUIDEMO.h"
 
@@ -2464,57 +2462,35 @@ static void _InitTreeview(WM_HWIN hTree) {
   TREEVIEW_ITEM_Handle hItem, hNode;
   hNode = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_NODE, 0,     0,                           "Local disk");
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_NODE, hNode, TREEVIEW_INSERT_FIRST_CHILD, "Pictures");
-  hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_NODE, hItem, TREEVIEW_INSERT_BELOW,       "Movies");
+          TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_NODE, hItem, TREEVIEW_INSERT_BELOW,       "Movies");
   hNode = TREEVIEW_GetItem(hTree, 0,     TREEVIEW_GET_FIRST);
   hNode = TREEVIEW_GetItem(hTree, hNode, TREEVIEW_GET_FIRST_CHILD);
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_NODE, hNode, TREEVIEW_INSERT_FIRST_CHILD, "BMP");
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_NODE, hItem, TREEVIEW_INSERT_BELOW,       "GIF");
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_NODE, hItem, TREEVIEW_INSERT_BELOW,       "JPEG");
-  hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_NODE, hItem, TREEVIEW_INSERT_BELOW,       "PNG");
+          TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_NODE, hItem, TREEVIEW_INSERT_BELOW,       "PNG");
   hNode = TREEVIEW_GetItem(hTree, hNode, TREEVIEW_GET_FIRST_CHILD);
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hNode, TREEVIEW_INSERT_FIRST_CHILD, "Cat.bmp");
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Dog.bmp");
-  hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Frog.bmp");
+          TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Frog.bmp");
   hNode = TREEVIEW_GetItem(hTree, hNode, TREEVIEW_GET_NEXT_SIBLING);
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hNode, TREEVIEW_INSERT_FIRST_CHILD, "Flowchart.gif");
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Projects.gif");
-  hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Interlaced.gif");
+          TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Interlaced.gif");
   hNode = TREEVIEW_GetItem(hTree, hNode, TREEVIEW_GET_NEXT_SIBLING);
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hNode, TREEVIEW_INSERT_FIRST_CHILD, "Tree.jpeg");
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Joerg.jpeg");
-  hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Paul.jpeg");
+          TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Paul.jpeg");
   hNode = TREEVIEW_GetItem(hTree, hNode, TREEVIEW_GET_NEXT_SIBLING);
-  hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hNode, TREEVIEW_INSERT_FIRST_CHILD, "Parrot.png");
+          TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hNode, TREEVIEW_INSERT_FIRST_CHILD, "Parrot.png");
   hNode = TREEVIEW_GetItem(hTree, hNode, TREEVIEW_GET_PARENT);
   hNode = TREEVIEW_GetItem(hTree, hNode, TREEVIEW_GET_NEXT_SIBLING);
   hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hNode, TREEVIEW_INSERT_FIRST_CHILD, "Smilie.gif");
-  hItem = TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Cats.gif");
+          TREEVIEW_InsertItem(hTree, TREEVIEW_ITEM_TYPE_LEAF, hItem, TREEVIEW_INSERT_BELOW,       "Cats.gif");
   TREEVIEW_SetAutoScrollH(hTree, 1);
   TREEVIEW_SetAutoScrollV(hTree, 1);
   TREEVIEW_ITEM_Expand(TREEVIEW_GetItem(hTree, 0, TREEVIEW_GET_FIRST));
   WM_SetFocus(hTree);
-}
-
-/*********************************************************************
-*
-*       _cbDialog
-*
-*  Function description
-*    Callback of dialog
-*/
-static void _cbDialog(WM_MESSAGE * pMsg) {
-  WM_HWIN hItem;
-  WM_HWIN hDlg;
-
-  hDlg = pMsg->hWin;
-  switch (pMsg->MsgId) {
-  case WM_INIT_DIALOG:
-    hItem = WM_GetDialogItem(hDlg, GUI_ID_TREEVIEW0);
-    _InitTreeview(hItem);
-    break;
-  case WM_PAINT:
-    break;
-  }
 }
 
 /*********************************************************************
@@ -2535,7 +2511,7 @@ static void _Action(WM_HWIN hTree, int xSize, int ySize) {
   do {
     TimeNext = GUIDEMO_GetTime() + _aAction[Index].Delay;
     if (_aAction[Index].pDescription) {
-      GUIDEMO_ShowInfo(_aAction[Index].pDescription);
+      GUIDEMO_SetInfoText(_aAction[Index].pDescription);
     }
     do {
       if (GUIDEMO_CheckCancel()) {
@@ -2587,6 +2563,28 @@ static void _Action(WM_HWIN hTree, int xSize, int ySize) {
       break;
     }
   } while (++Index < GUI_COUNTOF(_aAction));
+}
+
+/*********************************************************************
+*
+*       _cbDialog
+*
+*  Function description
+*    Callback of dialog
+*/
+static void _cbDialog(WM_MESSAGE * pMsg) {
+  WM_HWIN hItem;
+  WM_HWIN hDlg;
+
+  hDlg = pMsg->hWin;
+  switch (pMsg->MsgId) {
+  case WM_INIT_DIALOG:
+    hItem = WM_GetDialogItem(hDlg, GUI_ID_TREEVIEW0);
+    _InitTreeview(hItem);
+    break;
+  case WM_PAINT:
+    break;
+  }
 }
 
 /*********************************************************************
@@ -2657,10 +2655,8 @@ static void _DemoTreeview(void) {
 *       GUIDEMO_Treeview
 */
 void GUIDEMO_Treeview(void) {
-  GUIDEMO_ShowIntro("Treeview demo", "Shows a hierarchial view of\nthe files in a directory and\nsome moving sprites");
-  GUIDEMO_ShowInfoWin();
+  GUIDEMO_ConfigureDemo("Treeview widget", "Shows a hierarchical view of\nthe files in a directory and\nsome moving sprites", GUIDEMO_SHOW_INFO | GUIDEMO_SHOW_CONTROL);
   GUIDEMO_DrawBk();
-  GUIDEMO_CursorHide();
   _DemoTreeview();
   GUIDEMO_NotifyStartNext();
 }
@@ -2670,6 +2666,6 @@ void GUIDEMO_Treeview(void) {
 void GUIDEMO_Treeview_C(void);
 void GUIDEMO_Treeview_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_TREEVIEW && GUI_WINSUPPORT
 
 /*************************** End of file ****************************/

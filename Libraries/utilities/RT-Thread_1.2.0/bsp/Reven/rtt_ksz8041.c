@@ -1,9 +1,8 @@
 #include <rtthread.h>
+#include "chlib_k.h"
 #include "rtt_ksz8041.h"
 #include <rtdevice.h>
 #include <netif/ethernetif.h>
-#include "gpio.h"
-#include "enet.h"
 #include "ksz8041.h"
 
 static struct eth_device device;

@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -11144,8 +11144,8 @@ static U32       _Selection    = 2;
 *
 *       _DrawGradientRoundBar
 *
-*  Function description
-*    Draws a vertical gradient in form of a rounded bar
+* Function description
+*   Draws a vertical gradient in form of a rounded bar
 */
 static void _DrawGradientRoundBar(int x0, int y0_, int x1, int y1_, GUI_COLOR Color0, GUI_COLOR Color1) {
   GUI_COLOR Color;
@@ -11210,7 +11210,7 @@ static void _DrawGradientRoundBar(int x0, int y0_, int x1, int y1_, GUI_COLOR Co
 *
 *       _OnPaintSub
 *
-* Purpose:
+* Function description
 *   Draws the vertical menu
 */
 static void _OnPaintSub(WM_HWIN hWin) {
@@ -11240,7 +11240,7 @@ static void _OnPaintSub(WM_HWIN hWin) {
 *
 *       _OnKeySub
 *
-* Purpose:
+* Function description
 *   Handles the keyboard input of the vertical menu
 */
 static int _OnKeySub(WM_HWIN hWin, int Key) {
@@ -11279,7 +11279,7 @@ static int _OnKeySub(WM_HWIN hWin, int Key) {
 *
 *       _OnPIDStateChangeSub
 *
-* Purpose:
+* Function description
 *   Handles the PID input of the vertical menu
 */
 static void _OnPIDStateChangeSub(WM_HWIN hWin, const WM_PID_STATE_CHANGED_INFO * pInfo) {
@@ -11302,7 +11302,7 @@ static void _OnPIDStateChangeSub(WM_HWIN hWin, const WM_PID_STATE_CHANGED_INFO *
 *
 *       _cbSubMenu
 *
-* Purpose:
+* Function description
 *   Callback routine of the vertical menu
 */
 static void _cbSubMenu(WM_MESSAGE * pMsg) {
@@ -11334,7 +11334,7 @@ static void _cbSubMenu(WM_MESSAGE * pMsg) {
 *
 *       _OpenSubMenu
 *
-* Purpose:
+* Function description
 *   Opens a vertical menu
 */
 static void _OpenSubMenu(WM_HWIN hParent) {
@@ -11371,22 +11371,30 @@ static void _OpenSubMenu(WM_HWIN hParent) {
 *
 *       _CreateBitmap
 *
-* Purpose:
+* Function description
 *   Creates the background image in form of a rounded horizontal bar
 *   with a surrounding frame and a grey gradient within the bar
 */
 static GUI_MEMDEV_Handle _CreateBitmap(WM_HWIN hWin, int x0, int y0_, int x1, int y1_) {
-  GUI_MEMDEV_Handle hMem, hOld;
-  int               xPos, yPos, r;
+  GUI_MEMDEV_Handle hMem;
+  GUI_MEMDEV_Handle hOld;
+  int               xSizeLCD;
+  int               ySizeLCD;
+  int               xPos;
+  int               yPos;
+  int               r;
 
   r = (y1_ - y0_ + 1) / 2;
   xPos  = WM_GetWindowOrgX(hWin);
   yPos  = WM_GetWindowOrgY(hWin);
+  xSizeLCD = LCD_GetXSize();
+  ySizeLCD = LCD_GetYSize();
   hMem = GUI_MEMDEV_Create(xPos + x0, yPos + y0_, x1 - x0 + 1, y1_ - y0_ + 1);
+  GUI_DrawGradientV(5, 80, xSizeLCD - 6, ySizeLCD - 1, 0xffffff, 0xffa0a0);     // Draws the background of the bar
   if (hMem) {
     WM_SelectWindow(hWin);
     hOld = GUI_MEMDEV_Select(hMem);
-    GUI_DrawGradientV(5, 40, 314, 76, 0xffffff, 0xffebeb);
+    GUI_MEMDEV_CopyFromLCD(hMem);
     _DrawGradientRoundBar(x0 + 2, y0_ + 2, x1 - 2, y1_ - 2, 0xEEEEEE, 0x737373);
     GUI_SetColor(0xff0000);
     GUI_SetPenSize(3);
@@ -11405,7 +11413,7 @@ static GUI_MEMDEV_Handle _CreateBitmap(WM_HWIN hWin, int x0, int y0_, int x1, in
 *
 *       _OnPaintMain
 *
-* Purpose:
+* Function description
 *   Paints the main window
 */
 static void _OnPaintMain(WM_HWIN hWin, GUI_MEMDEV_Handle * phBitmap) {
@@ -11478,7 +11486,7 @@ static void _OnPaintMain(WM_HWIN hWin, GUI_MEMDEV_Handle * phBitmap) {
 *
 *       _OnKeyMain
 *
-* Purpose:
+* Function description
 *   Key managing of the horizontal menu bar
 */
 static void _OnKeyMain(WM_HWIN hWin, int Key) {
@@ -11509,13 +11517,15 @@ static void _OnKeyMain(WM_HWIN hWin, int Key) {
 *       _cbStatus
 */
 static void _cbStatus(WM_MESSAGE * pMsg) {
-  static GUI_MEMDEV_Handle hBitmap;
-  static int xSize, ySize;
-  int xPos, yPos;
-  U32 i;
-  const GUI_PID_STATE * pState;
-  GUI_MEMDEV_Handle hOld;
-  WM_HWIN hWin;
+  static GUI_MEMDEV_Handle   hBitmap;
+  static int                 xSize;
+  static int                 ySize;
+  const GUI_PID_STATE      * pState;
+  GUI_MEMDEV_Handle          hOld;
+  WM_HWIN                    hWin;
+  int                        xPos;
+  int                        yPos;
+  U32                        i;
 
   hWin = pMsg->hWin;
   switch (pMsg->MsgId) {
@@ -11546,8 +11556,8 @@ static void _cbStatus(WM_MESSAGE * pMsg) {
     WM_SelectWindow(hWin);
     xSize = WM_GetWindowSizeX(hWin);
     ySize = WM_GetWindowSizeY(hWin);
-    xPos = WM_GetWindowOrgX(hWin);
-    yPos = WM_GetWindowOrgY(hWin);
+    xPos  = WM_GetWindowOrgX(hWin);
+    yPos  = WM_GetWindowOrgY(hWin);
     hBitmap = GUI_MEMDEV_CreateEx(xPos, yPos, xSize, ySize, GUI_MEMDEV_NOTRANS);
     if (hBitmap) {
       hOld = GUI_MEMDEV_Select(hBitmap);
@@ -11584,14 +11594,16 @@ static void _cbStatus(WM_MESSAGE * pMsg) {
 *
 *       _cbMain
 *
-* Purpose:
+* Function description
 *   Callback function of main window
 */
 static void _cbMain(WM_MESSAGE * pMsg) {
   static GUI_MEMDEV_Handle hBitmap;
-  WM_HWIN hWin, hSub;
-  int NCode, xSizeStatus;
-  U32 i;
+  WM_HWIN                  hWin;
+  WM_HWIN                  hSub;
+  int                      xSizeStatus;
+  int                      NCode;
+  U32                      i;
 
   hWin = pMsg->hWin;
   switch (pMsg->MsgId) {
@@ -11663,24 +11675,24 @@ static void _DrawBackground(void) {
     GUI_SetColor(GUI_WHITE);
     GUI_FillRect(320, 0, xSize, ySize);
   }
-  GUI_DrawGradientV(  0,  0, 319,  39, 0xff0000, 0xff3131);
-  GUI_DrawGradientV(  0, 40,   4, 199, 0xff3131, 0xffffff);
-  GUI_DrawGradientV(315, 40, 319, 199, 0xff3131, 0xffffff);
+  GUI_DrawGradientV(        0,  0, xSize - 1,  39, 0xff0000, 0xff3131);
+  GUI_DrawGradientV(        0, 40,         4, 199, 0xff3131, 0xffffff);
+  GUI_DrawGradientV(xSize - 5, 40, xSize - 1, 199, 0xff3131, 0xffffff);
   GUI_SetColor(GUI_WHITE);
-  GUI_FillRect(  0, 200,   4, 239);
-  GUI_FillRect(315, 200, 319, 239);
-  GUI_FillRect(  5,  40, 314,  79);
-  GUI_DrawGradientV(5, 80, 314, 239, 0xffffff, 0xffa0a0);
+  GUI_FillRect(        0, 200,         4, ySize - 1);
+  GUI_FillRect(xSize - 5, 200, xSize - 1, ySize - 1);
+  GUI_FillRect(        5,  40, xSize - 6,        79);
+  GUI_DrawGradientV(5, 80, xSize - 6, ySize - 1, 0xffffff, 0xffa0a0);
   GUI_SetFont(&_GUI_Font24);
   GUI_SetTextMode(GUI_TM_TRANS);
   GUI_SetColor(GUI_WHITE);
-  GUI_DispStringHCenterAt("emWin Washing Machine Demo", 160, 10);
+  GUI_DispStringHCenterAt("emWin Washing Machine Demo", xSize / 2, 10);
   if (ySize > 240) {
     GUI_SetColor(GUI_WHITE);
-    GUI_FillRect(  0, 240,   4, ySize);
-    GUI_FillRect(315, 240, 319, ySize);
+    GUI_FillRect(        0, ySize,         4, ySize);
+    GUI_FillRect(xSize - 5, ySize, xSize - 1, ySize);
     GUI_SetColor(0xffa0a0);
-    GUI_FillRect(  5, 240, 314, ySize);
+    GUI_FillRect(        5, ySize, xSize - 6, ySize);
   }
 }
 
@@ -11688,7 +11700,7 @@ static void _DrawBackground(void) {
 *
 *       _cbBkWin
 *
-* Purpose:
+* Function description
 *   Callback function of desktop window
 */
 static void _cbBkWin(WM_MESSAGE * pMsg) {
@@ -11705,17 +11717,21 @@ static void _cbBkWin(WM_MESSAGE * pMsg) {
 *
 *       _ExecSpriteAnimation
 *
-* Purpose:
+* Function description
 *   Does the swimming dolphin animation
 */
 static void _ExecSpriteAnimation(GUI_HSPRITE hSprite, int * pTimeNext) {
-  int TimeCurrent;
-  static int xPos, yPos, yAdd = 4, Index, ySize;
+  static int yAdd = 4;
+  static int Index;
+  static int ySize;
+  static int xPos;
+  static int yPos;
+  int        TimeCurrent;
 
   TimeCurrent = GUIDEMO_GetTime();
   if (*pTimeNext == 0) {
     Index = 0;
-    xPos = 300;
+    xPos = LCD_GetXSize() - 20;
     *pTimeNext = TimeCurrent;
     ySize = LCD_GetYSize();
   }
@@ -11727,7 +11743,7 @@ static void _ExecSpriteAnimation(GUI_HSPRITE hSprite, int * pTimeNext) {
     }
     xPos -= 12;
     if (xPos < -80) {
-      xPos = 300;
+      xPos = LCD_GetXSize() - 20;
     }
     yPos += yAdd;
     if ((yPos == 0) || (yPos >= (ySize - 60))) {
@@ -11742,17 +11758,26 @@ static void _ExecSpriteAnimation(GUI_HSPRITE hSprite, int * pTimeNext) {
 *
 *       _CreateButton
 */
-static GUI_MEMDEV_Handle _CreateButton(WM_HWIN hWin, int x0, int y0_, int xSize, int ySize, GUI_COLOR Color0, GUI_COLOR Color1, GUI_COLOR Gradient0, GUI_COLOR Gradient1) {
-  int xPos, yPos, r;
-  GUI_MEMDEV_Handle hMem, hOld;
+static GUI_MEMDEV_Handle _CreateButton(WM_HWIN hWin, int x0, int y0_, int xSize, int ySize, GUI_COLOR Color0, GUI_COLOR Color1) {
+  GUI_MEMDEV_Handle hMem;
+  GUI_MEMDEV_Handle hOld;
+  int               xSizeLCD;
+  int               ySizeLCD;
+  int               xPos;
+  int               yPos;
+  int               r;
+
+  xSizeLCD = LCD_GetXSize();
+  ySizeLCD = LCD_GetYSize();
   r = xSize / 2;
   WM_SelectWindow(hWin);
   xPos  = WM_GetWindowOrgX(hWin);
   yPos  = WM_GetWindowOrgY(hWin);
   hMem = GUI_MEMDEV_Create(xPos + x0, yPos + y0_, xSize, ySize);
+  GUI_DrawGradientV(5, 80, xSizeLCD - 6, ySizeLCD - 1, 0xffffff, 0xffa0a0);  // Draws the background of the button
   if (hMem) {
     hOld = GUI_MEMDEV_Select(hMem);
-    GUI_DrawGradientV(x0, y0_, x0 + xSize, y0_ + ySize, Gradient0, Gradient1);
+    GUI_MEMDEV_CopyFromLCD(hMem);
     _DrawGradientRoundBar(x0 + 2, y0_ + 2, x0 + xSize - 2, y0_ + ySize - 2, Color0, Color1);
     GUI_SetColor(0xff0000);
     GUI_SetPenSize(3);
@@ -11769,11 +11794,15 @@ static GUI_MEMDEV_Handle _CreateButton(WM_HWIN hWin, int x0, int y0_, int xSize,
 *       _cbButton
 */
 static void _cbButton(WM_MESSAGE * pMsg) {
-  static GUI_MEMDEV_Handle hButton00, hButton01, hButton10, hButton11;
-  GUI_MEMDEV_Handle hShow;
-  int IsPressed;
-  char * s;
-  WM_HWIN hWin;
+  static GUI_MEMDEV_Handle   hButton00;
+  static GUI_MEMDEV_Handle   hButton01;
+  static GUI_MEMDEV_Handle   hButton10;
+  static GUI_MEMDEV_Handle   hButton11;
+  GUI_MEMDEV_Handle          hShow;
+  WM_HWIN                    hWin;
+  char                     * s;
+  int                        IsPressed;
+
   hWin = pMsg->hWin;
   switch (pMsg->MsgId) {
   case WM_PAINT:
@@ -11787,10 +11816,10 @@ static void _cbButton(WM_MESSAGE * pMsg) {
     GUI_DispStringHCenterAt(s, 30, 21);
     return;
   case INIT_BUTTON:
-    hButton00 = _CreateButton(hWin, 0, 0, 60, 60, 0x00aa00, 0xEEEEEE, 0xffe0e0, 0xffc0c0);
-    hButton01 = _CreateButton(hWin, 0, 0, 60, 60, 0xEEEEEE, 0x00aa00, 0xffe0e0, 0xffc0c0);
-    hButton10 = _CreateButton(hWin, 0, 0, 60, 60, 0x4040ff, 0xEEEEEE, 0xffe0e0, 0xffc0c0);
-    hButton11 = _CreateButton(hWin, 0, 0, 60, 60, 0xEEEEEE, 0x4040ff, 0xffe0e0, 0xffc0c0);
+    hButton00 = _CreateButton(hWin, 0, 0, 60, 60, 0x00aa00, 0xEEEEEE);
+    hButton01 = _CreateButton(hWin, 0, 0, 60, 60, 0xEEEEEE, 0x00aa00);
+    hButton10 = _CreateButton(hWin, 0, 0, 60, 60, 0x4040ff, 0xEEEEEE);
+    hButton11 = _CreateButton(hWin, 0, 0, 60, 60, 0xEEEEEE, 0x4040ff);
     return;
   case WM_DELETE:
     GUI_MEMDEV_Delete(hButton00);
@@ -11812,6 +11841,7 @@ static void _cbButton(WM_MESSAGE * pMsg) {
 */
 static int _ExecMachine(WM_HWIN hButton, int * pTimeNext, EXEC_MACHINE_CONTEXT * pContext) {
   int TimeCurrent;
+
   TimeCurrent = GUIDEMO_GetTime();
   if (*pTimeNext == 0) {
     pContext->Index = 0;
@@ -11863,7 +11893,11 @@ static void _DemoWashingMachine(void) {
   WM_CALLBACK          * pcbPrev;
   int                    TimeNextSprite;
   int                    TimeNextAction;
+  int                    xSize;
+  int                    ySize;
 
+  xSize = LCD_GetXSize();
+  ySize = (LCD_GetYSize() > 300) ? 40 + LCD_GetYSize() / 2 - 100 : 40;
   _NoMemory      = 0;
   TimeNextSprite = 0;
   TimeNextAction = 0;
@@ -11871,7 +11905,7 @@ static void _DemoWashingMachine(void) {
   // Set callback of desktop and create main window
   //
   pcbPrev = WM_SetCallback(WM_HBKWIN, _cbBkWin);
-  hWin    = WM_CreateWindowAsChild(5, 40, 310, 200, WM_HBKWIN, WM_CF_SHOW | WM_CF_HASTRANS, _cbMain, sizeof(WM_HWIN));
+  hWin    = WM_CreateWindowAsChild(5 + xSize / 2 - 155, ySize, 310, 200, WM_HBKWIN, WM_CF_SHOW | WM_CF_HASTRANS, _cbMain, sizeof(WM_HWIN));
   WM_SetFocus(hWin);
   //
   // Create start button
@@ -11963,10 +11997,7 @@ static void _DemoWashingMachine(void) {
 *       GUIDEMO_WashingMachine
 */
 void GUIDEMO_WashingMachine(void) {
-  GUIDEMO_ShowIntro("Washing machine",
-                    "Washing machine sample with\n"
-                    "some sprites moving above");
-  GUIDEMO_HideControlWin();
+  GUIDEMO_ConfigureDemo("Washing machine", "Washing machine sample with\nsome sprites moving above.", 0);
   _DemoWashingMachine();
 }
 
@@ -11975,6 +12006,6 @@ void GUIDEMO_WashingMachine(void) {
 void GUIDEMO_WashingMachine_C(void);
 void GUIDEMO_WashingMachine_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_WASHINGMACHINE && GUI_WINSUPPORT && GUI_SUPPORT_MEMDEV
 
 /*************************** End of file ****************************/

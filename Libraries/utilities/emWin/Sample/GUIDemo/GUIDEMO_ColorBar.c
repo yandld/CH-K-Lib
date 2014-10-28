@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -53,6 +53,8 @@ Purpose     : Draws color bars
 void GUIDEMO_ColorBar(void) {
   GUI_COLOR ColorStartBlack;
   GUI_COLOR ColorStartWhite;
+  char      acTitle[]        = "Color bar";
+  char      acDesc[]         = "emWin features an integrated\ncolor management which automatically finds\nthe best available color for any logical color";
   char      acText[80]       = { 0 };
   int       BitsPerPixel;
   int       NumColors;
@@ -75,7 +77,7 @@ void GUIDEMO_ColorBar(void) {
   if (yStep < 10) {
     yStep = 10;
   }
-  GUIDEMO_ShowIntro("Color bar", "emWin features an integrated\ncolor management which automatically finds\nthe best available color for any logical color");
+  GUIDEMO_ConfigureDemo(acTitle, acDesc, GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   GUIDEMO_DrawBk();
   //
   // Heading
@@ -126,6 +128,7 @@ void GUIDEMO_ColorBar(void) {
     Time  = (GUIDEMO_GetTime() - TimeStart) % ((TIME_PAUSE + TIME_STEP) << 1);
     Dir   = Time / (TIME_PAUSE + TIME_STEP);
     Time -= Dir * (TIME_PAUSE + TIME_STEP);
+    GUI_Exec();
     if (Time > TIME_PAUSE) {
       continue;
     }
@@ -146,7 +149,6 @@ void GUIDEMO_ColorBar(void) {
     GUI_DrawGradientH(ScreenX0, ScreenY0 + yStep * 11, xSize - ScreenX0, (ScreenY0 + yStep * 12) - 1, GUI_CYAN,    ColorStartWhite);
     GUI_DrawGradientH(ScreenX0, ScreenY0 + yStep * 12, xSize - ScreenX0, (ScreenY0 + yStep * 13) - 1, GUI_MAGENTA, ColorStartBlack);
     GUI_DrawGradientH(ScreenX0, ScreenY0 + yStep * 13, xSize - ScreenX0, (ScreenY0 + yStep * 14) - 1, GUI_MAGENTA, ColorStartWhite);
-    GUI_Exec();
   }
 }
 
@@ -155,6 +157,6 @@ void GUIDEMO_ColorBar(void) {
 void GUIDEMO_ColorBar_C(void);
 void GUIDEMO_ColorBar_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_COLORBAR
 
 /*************************** End of file ****************************/

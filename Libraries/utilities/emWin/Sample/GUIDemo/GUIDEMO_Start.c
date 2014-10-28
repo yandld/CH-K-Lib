@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -37,11 +37,14 @@ Purpose     : GUIDEMO initialization
 *
 *       MainTask
 */
-void MainTask(void);
 void MainTask(void) {
-  WM_SetCreateFlags(WM_CF_MEMDEV);
+  #if GUI_WINSUPPORT
+    WM_SetCreateFlags(WM_CF_MEMDEV);
+  #endif
   GUI_Init();
-  WM_MULTIBUF_Enable(1);
+  #if GUI_WINSUPPORT
+    WM_MULTIBUF_Enable(1);
+  #endif
   GUIDEMO_Main();
 }
 

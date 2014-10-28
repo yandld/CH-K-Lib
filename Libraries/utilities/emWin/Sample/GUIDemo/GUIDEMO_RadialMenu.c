@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -1917,26 +1917,6 @@ static void _cbMotion(WM_MESSAGE * pMsg) {
 
 /*********************************************************************
 *
-*       _Delay
-*
-*  Function description:
-*    Delay function which returns 1 immediately if automatic animation is off
-*/
-static int _Delay(int ms) {
-  int TimeNow;
-  int TimeEnd;
-
-  TimeNow = GUI_GetTime();
-  TimeEnd = TimeNow + ms;
-  do {
-    GUI_Delay(10);
-    TimeNow = GUI_GetTime();
-  } while (TimeNow < TimeEnd);
-  return GUIDEMO_CheckCancel();
-}
-
-/*********************************************************************
-*
 *       _RadialMenu
 *
 *  Function description:
@@ -1958,6 +1938,10 @@ static void _RadialMenu(void) {
 
   GUIDEMO_DrawBk();
   GUIDEMO_DispTitle("Radial Menu");
+  #if (GUI_SUPPORT_MEMDEV == 0)
+    GUI_SetColor(GUI_YELLOW);
+    GUIDEMO_DispHint("Use Memory Devices\nto avoid flickering.");
+  #endif
   //
   // Initialize parameter structure for items to be shown
   //
@@ -1995,19 +1979,19 @@ static void _RadialMenu(void) {
   // Turn left (motion)
   //
   WM_MOTION_SetMotion(hMotion, GUI_COORD_X, 200, 200);
-  if (_Delay(2000)) {
+  if (GUIDEMO_CheckCancelDelay(2000)) {
     WM_DeleteWindow(hMotion);
     WM_DeleteWindow(hDraw);
     return;
   }
   WM_MOTION_SetMotion(hMotion, GUI_COORD_X, 800, 800);
-  if (_Delay(2000)) {
+  if (GUIDEMO_CheckCancelDelay(2000)) {
     WM_DeleteWindow(hMotion);
     WM_DeleteWindow(hDraw);
     return;
   }
   WM_MOTION_SetMotion(hMotion, GUI_COORD_X, 2000, 2000);
-  if (_Delay(2000)) {
+  if (GUIDEMO_CheckCancelDelay(2000)) {
     WM_DeleteWindow(hMotion);
     WM_DeleteWindow(hDraw);
     return;
@@ -2016,19 +2000,19 @@ static void _RadialMenu(void) {
   // Turn right (motion)
   //
   WM_MOTION_SetMotion(hMotion, GUI_COORD_X, -200, 200);
-  if (_Delay(2000)) {
+  if (GUIDEMO_CheckCancelDelay(2000)) {
     WM_DeleteWindow(hMotion);
     WM_DeleteWindow(hDraw);
     return;
   }
   WM_MOTION_SetMotion(hMotion, GUI_COORD_X, -800, 800);
-  if (_Delay(2000)) {
+  if (GUIDEMO_CheckCancelDelay(2000)) {
     WM_DeleteWindow(hMotion);
     WM_DeleteWindow(hDraw);
     return;
   }
   WM_MOTION_SetMotion(hMotion, GUI_COORD_X, -2000, 2000);
-  if (_Delay(2000)) {
+  if (GUIDEMO_CheckCancelDelay(2000)) {
     WM_DeleteWindow(hMotion);
     WM_DeleteWindow(hDraw);
     return;
@@ -2038,7 +2022,7 @@ static void _RadialMenu(void) {
   //
   for (i = 0; i < 5; i++) {
     WM_MOTION_SetMovement(hMotion, GUI_COORD_X, 500, 100);
-    if (_Delay(500)) {
+    if (GUIDEMO_CheckCancelDelay(500)) {
       WM_DeleteWindow(hMotion);
       WM_DeleteWindow(hDraw);
       return;
@@ -2059,7 +2043,7 @@ static void _RadialMenu(void) {
 *       MainTask
 */
 void GUIDEMO_RadialMenu(void) {
-  GUIDEMO_ShowIntro("Radial Menu", "Selecting an icon from a radial menu.\nChanging the selection is done\nusing emWin motion support.");
+  GUIDEMO_ConfigureDemo("Radial Menu", "Selecting an icon from a radial menu.\nChanging the selection is done\nusing emWin motion support.", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   WM_MOTION_Enable(1);
   _RadialMenu();
   WM_MOTION_Enable(0);
@@ -2070,6 +2054,6 @@ void GUIDEMO_RadialMenu(void) {
 void GUIDEMO_RadialMenu_C(void);
 void GUIDEMO_RadialMenu_C(void) {}
 
-#endif  // (SHOW_GUIDEMO_RADIALMENU)
+#endif  // SHOW_GUIDEMO_RADIALMENU && GUI_WINSUPPORT
 
 /*************************** End of file ****************************/

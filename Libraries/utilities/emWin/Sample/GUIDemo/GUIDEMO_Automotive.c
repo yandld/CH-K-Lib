@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -37,28 +37,24 @@ Purpose     : Automotive samples
 
 /*********************************************************************
 *
-*       defines
+*       Defines
 *
 **********************************************************************
 */
-
 #define MAG              3
 #define NUM_SCALES       2
 #define LOGO_DIST        5
 #define YSIZE_SCALE      98
-
 #define FONT_GEAR        &GUI_FontRounded22
 #define STR_MSEC         "msec/picture:\n"
 #define STR_GEAR         "Gear    1"
-
 #define MSP_DIST_BOTTOM  40
 #define NEEDLE_OFF_Y     40
-
 #define DEG2RAD          (3.1415926f / 180)
 
 /*********************************************************************
 *
-*       static data, scale bitmap (large)
+*       Static data, scale bitmap (large)
 *
 **********************************************************************
 */
@@ -674,7 +670,7 @@ static GUI_CONST_STORAGE GUI_BITMAP _bmScaleR140 = {
 
 /*********************************************************************
 *
-*       static data, shape of polygons
+*       Static data, shape of polygons
 *
 **********************************************************************
 */
@@ -774,7 +770,8 @@ static void _DrawBk(int Logo) {
 *
 *       _WriteGear
 *
-*   Description: Show current gear
+* Function description
+*   Show current gear
 */
 static void _WriteGear(int Gear) {
   int xSize;
@@ -924,8 +921,8 @@ void (* _pfDraw[NUM_SCALES])(void * p) = {
 *       _AutomotiveDemo
 */
 static void _AutomotiveDemo(void) {
-  GUI_AUTODEV aAutoDev [NUM_SCALES];               // Object for banding memory device
-  PARAM       aParam   [NUM_SCALES] = {0};           // Parameters for drawing routine
+  GUI_AUTODEV aAutoDev [NUM_SCALES];          // Object for banding memory device
+  PARAM       aParam   [NUM_SCALES] = { 0 };  // Parameters for drawing routine
   int         atDiff   [NUM_SCALES];
   int         tDiff;
   int         ySize;
@@ -1007,18 +1004,17 @@ void GUIDEMO_Automotive(void) {
   int              xSize;
   int              ySize;
 
+  GUIDEMO_ConfigureDemo("Automotive", "Sample for the automotive industry", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   DrawLogo = 0;
-  GUIDEMO_ShowIntro("Automotive samples", "Examples for the\nautomotive industry");
-  xSize   = LCD_GetXSize();
-  ySize   = LCD_GetYSize();
-  _ySpace = (ySize - (NUM_SCALES * YSIZE_SCALE)) / (NUM_SCALES + 1); // Space between scales
+  xSize    = LCD_GetXSize();
+  ySize    = LCD_GetYSize();
+  _ySpace  = (ySize - (NUM_SCALES * YSIZE_SCALE)) / (NUM_SCALES + 1); // Space between scales
   //
   // Determine if additional information can be shown (depending on display size)
   //
   if (((bmSeggerLogo70x35.XSize + LOGO_DIST) < ((xSize - _bmScaleR140.XSize) / 2)) || ((bmSeggerLogo70x35.YSize + LOGO_DIST) < _ySpace)) {
     DrawLogo = 1;
   }
-
   if ((GUI_GetStringDistX(STR_MSEC) < ((xSize - _bmScaleR140.XSize) / 2)) || ((2 * (_ySpace + YSIZE_SCALE)) < (ySize - MSP_DIST_BOTTOM))) {
     _ShowMSec = 1;
   }
@@ -1042,6 +1038,6 @@ void GUIDEMO_Automotive(void) {
 void GUIDEMO_Automotive_C(void);
 void GUIDEMO_Automotive_C(void) {}
 
-#endif // GUI_SUPPORT_MEMDEV | GUI_SUPPORT_AA
+#endif  // SHOW_GUIDEMO_AUTOMOTIVE && GUI_SUPPORT_MEMDEV
 
 /*************************** End of file ****************************/

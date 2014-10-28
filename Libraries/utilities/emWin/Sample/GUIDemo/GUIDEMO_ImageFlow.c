@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -1894,16 +1894,15 @@ void GUIDEMO_ImageFlow(void) {
   xSize = LCD_GetXSize();
   ySize = LCD_GetYSize();
   if ((xSize != QVGA_WIDTH) && (ySize != QVGA_HEIGHT)) {
-    GUIDEMO_ShowIntro("Image Flow", "Works only with a QVGA screen resolution.\nDemo will be skipped...");
+    GUIDEMO_ConfigureDemo("Image Flow", "Works only with a QVGA screen resolution.\nDemo will be skipped...", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
     return;
   }
   if ((LCD_GetVYSize() < QVGA_HEIGHT * 2) || (GUI_MULTIBUF_GetNumBuffers() > 1)) {
-    GUIDEMO_ShowIntro("Image Flow", "Requires a virtual screen\nwith at least twice the screen height.\nDemo will be skipped...");
+    GUIDEMO_ConfigureDemo("Image Flow", "Requires a virtual screen\nwith at least twice the screen height.\nDemo will be skipped...", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
     return;
   }
-  GUIDEMO_ShowIntro("Image Flow", "Shows some floating images\nsimilar to the 'CoverFlow' look");
-  GUIDEMO_HideControlWin();
-  GUIDEMO_CursorHide();
+  GUIDEMO_ConfigureDemo("Image Flow", "Shows some floating images\nsimilar to the 'CoverFlow' look", 0);
+  GUI_Exec();
   if (_GetImages(ahMem, ahMemNarrow, GUI_COUNTOF(ahMem)) == 0) {
     GUI_SetColor(0xFFFFFF);
     GUI_SetTextMode(GUI_TM_TRANS);
@@ -1945,6 +1944,6 @@ void GUIDEMO_ImageFlow(void) {
 void GUIDEMO_ImageFlow_C(void);
 void GUIDEMO_ImageFlow_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_IMAGEFLOW && GUI_WINSUPPORT && GUI_SUPPORT_MEMDEV
 
 /*************************** End of file ****************************/

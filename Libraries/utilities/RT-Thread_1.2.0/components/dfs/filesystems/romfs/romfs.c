@@ -31,7 +31,7 @@ const struct romfs_dirent _root_dirent[] =
     {ROMFS_DIRENT_DIR, "SD", RT_NULL, RT_NULL},
     {ROMFS_DIRENT_DIR, "SF", RT_NULL, RT_NULL},
     {ROMFS_DIRENT_DIR, "NFS", RT_NULL, RT_NULL},
-    {ROMFS_DIRENT_DIR, "NAND", RT_NULL, RT_NULL},
+    {ROMFS_DIRENT_DIR, "MNT", RT_NULL, RT_NULL},
     {ROMFS_DIRENT_FILE, "dummy.txt", _dummy_txt, sizeof(_dummy_txt)},
 };
 

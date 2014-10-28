@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -207,7 +207,7 @@ static const GUI_COLOR _aColor[] = {
 */
 static int _AddRow(WM_HWIN hItem, int Insert) {
   const char * pText[3];
-  char   acText[3][20] = { 0 };
+  char   acText[3][20] = {{ 0 }};
   int    i;
   int    r;
 
@@ -286,7 +286,7 @@ static void _Action(WM_HWIN hList) {
   Index = 0;
   do {
     if (_aAction[Index].pDescription) {
-      GUIDEMO_ShowInfo(_aAction[Index].pDescription);
+      GUIDEMO_SetInfoText(_aAction[Index].pDescription);
     }
     switch (_aAction[Index].Job) {
     case JOB_COLOR:
@@ -372,9 +372,8 @@ static void _DemoListview(void) {
 *       GUIDEMO_Listview
 */
 void GUIDEMO_Listview(void) {
-  GUIDEMO_ShowIntro("Listview demo", "Shows some features of\nthe LISTVEW widget");
+  GUIDEMO_ConfigureDemo("Listview widget", "Shows some features of\nthe LISTVEW widget", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_INFO | GUIDEMO_SHOW_CONTROL);
   GUIDEMO_DrawBk();
-  GUIDEMO_ShowInfoWin();
   _DemoListview();
 }
 
@@ -383,6 +382,6 @@ void GUIDEMO_Listview(void) {
 void GUIDEMO_Listview_C(void);
 void GUIDEMO_Listview_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_LISTVIEW && GUI_WINSUPPORT
 
 /*************************** End of file ****************************/

@@ -67,19 +67,19 @@ void init_thread_entry(void* parameter)
     
     
     /* init eeporm */
-//    at24cxx_init("at24c02", "i2c0");
+    at24cxx_init("at24c02", "i2c0");
 //    rt_uint8_t buf[32];
     
     // touch_ads7843_init("ads7843", "spi20");
-//    r = w25qxx_init("sf0", "spi21");
-//    r = dfs_mount("sf0", "/SF", "elm", 0, 0);
-    
+    w25qxx_init("sf0", "spi21");
+    r = dfs_mount("sf0", "/SF", "elm", 0, 0);
+    rt_kprintf("dfs mount:%d\r\n", r);
     /* sd_thread */
  //   thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
   //  if (thread != RT_NULL) rt_thread_startup(thread);
    /* gui thread */
-    //tid = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*8, 4, 20);
-   // if (tid != RT_NULL) rt_thread_startup(tid);
+    tid = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*2, 4, 20);
+    if (tid != RT_NULL) rt_thread_startup(tid);
         
     /* led thread */
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);

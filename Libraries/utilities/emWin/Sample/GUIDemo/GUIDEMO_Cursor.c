@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -33,7 +33,7 @@ Purpose     : shows Cursor-API
 
 #include "GUIDEMO.h"
 
-#if (SHOW_GUIDEMO_CURSOR && GUI_SUPPORT_CURSOR && GUI_SUPPORT_TOUCH)
+#if (SHOW_GUIDEMO_CURSOR && GUI_SUPPORT_CURSOR)
 
 /*********************************************************************
 *
@@ -56,7 +56,7 @@ typedef struct {
 } CURSOR_INFO;
 
 typedef struct {
-  const CURSOR_INFO   aCursor[NUM_CURSORS];
+  CURSOR_INFO   aCursor[NUM_CURSORS];
   const char        * pType;
 } CURSORTYPE_INFO;
 
@@ -181,8 +181,8 @@ static void _DispCursor(void) {
   int xSize;
   int ySize;
 
-  xSize = LCD_GetXSize();
-  ySize = LCD_GetYSize();
+  xSize     = LCD_GetXSize();
+  ySize     = LCD_GetYSize();
   _ScreenX0 = (xSize - XSIZE_MIN) / 2;
   _ScreenY0 = (ySize - YSIZE_MIN) / 2;
   GUIDEMO_DrawBk();
@@ -194,8 +194,11 @@ static void _DispCursor(void) {
   //
   _ShowCursorType(&_CursorArrow,  _ScreenX0 + 20,  _ScreenY0 + 50);
   _ShowCursorType(&_CursorCross,  _ScreenX0 + 20,  _ScreenY0 + 120);
-  _ShowCursorType(&_CursorArrowI, _ScreenX0 + 140, _ScreenY0 + 50); 
+  _ShowCursorType(&_CursorArrowI, _ScreenX0 + 140, _ScreenY0 + 50);
   _ShowCursorType(&_CursorCrossI, _ScreenX0 + 140, _ScreenY0 + 120);
+  GUIDEMO_Wait(4000);
+  GUI_CURSOR_Select(&GUI_CursorArrowM);
+  GUI_CURSOR_Hide();
 }
 
 /*********************************************************************
@@ -209,16 +212,8 @@ static void _DispCursor(void) {
 *       GUIDEMO_Cursor
 */
 void GUIDEMO_Cursor(void) {
-  GUIDEMO_ShowIntro("Cursor", "emWin supports\nsoftware cursors");
+  GUIDEMO_ConfigureDemo("Cursor", "emWin supports\nsoftware cursors", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   _DispCursor();
-  GUIDEMO_Wait(4000);
-  GUIDEMO_CursorShow();
-  #if (GUI_SUPPORT_CURSOR && GUI_SUPPORT_TOUCH)
-    if (GUIDEMO_GetConfFlag(GUIDEMO_CF_SUPPORT_TOUCH)) {
-      GUI_CURSOR_SetPosition(0,0);
-      GUI_CURSOR_Select(&GUI_CursorArrowM);
-    }
-  #endif
 }
 
 #else
@@ -226,6 +221,6 @@ void GUIDEMO_Cursor(void) {
 void GUIDEMO_Cursor_C(void);
 void GUIDEMO_Cursor_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_CURSOR && GUI_SUPPORT_CURSOR
 
 /*************************** End of file ****************************/

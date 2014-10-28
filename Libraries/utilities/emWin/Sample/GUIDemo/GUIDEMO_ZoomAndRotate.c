@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -117,8 +117,8 @@ static GUI_CONST_STORAGE GUI_COLOR _ColorsSeggerLogo50[] = {
 };
 
 static GUI_CONST_STORAGE GUI_LOGPALETTE _PalSeggerLogo50 = {
-  219,	/* number of entries */
-  1, 	/* Has transparency */
+  219,	// Number of entries
+  1, 	// Has transparency
   &_ColorsSeggerLogo50[0]
 };
 
@@ -176,12 +176,12 @@ static GUI_CONST_STORAGE unsigned char _acSeggerLogo50[] = {
 };
 
 static GUI_CONST_STORAGE GUI_BITMAP _bmSeggerLogo50 = {
-  50, /* XSize */
-  25, /* YSize */
-  50, /* BytesPerLine */
-  8, /* BitsPerPixel */
-  _acSeggerLogo50,  /* Pointer to picture data (indices) */
-  &_PalSeggerLogo50  /* Pointer to palette */
+  50,                // XSize
+  25,                // YSize
+  50,                // BytesPerLine
+  8,                 // BitsPerPixel
+  _acSeggerLogo50,   // Pointer to picture data (indices)
+  &_PalSeggerLogo50  // Pointer to palette
 };
 
 /*********************************************************************
@@ -2792,13 +2792,13 @@ static GUI_CONST_STORAGE unsigned long _acPlatine_250x200[] = {
 };
 
 static GUI_CONST_STORAGE GUI_BITMAP _bmPlatine_250x200 = {
-  250, /* XSize */
-  200, /* YSize */
-  1000, /* BytesPerLine */
-  32, /* BitsPerPixel */
-  (unsigned char *)_acPlatine_250x200,  /* Pointer to picture data */
-  NULL  /* Pointer to palette */
- ,GUI_DRAW_BMP8888
+  250,                                  // XSize
+  200,                                  // YSize
+  1000,                                 // BytesPerLine
+  32,                                   // BitsPerPixel
+  (unsigned char *)_acPlatine_250x200,  // Pointer to picture data
+  NULL,                                 // Pointer to palette
+  GUI_DRAW_BMP8888
 };
 
 /*********************************************************************
@@ -4789,13 +4789,13 @@ static GUI_CONST_STORAGE unsigned long _acJLink_300x132[] = {
 };
 
 static GUI_CONST_STORAGE GUI_BITMAP _bmJLink_300x132 = {
-  300, /* XSize */
-  132, /* YSize */
-  1200, /* BytesPerLine */
-  32, /* BitsPerPixel */
-  (unsigned char *)_acJLink_300x132,  /* Pointer to picture data */
-  NULL  /* Pointer to palette */
- ,GUI_DRAW_BMP8888
+  300,                                // XSize
+  132,                                // YSize
+  1200,                               // BytesPerLine
+  32,                                 // BitsPerPixel
+  (unsigned char *)_acJLink_300x132,  // Pointer to picture data
+  NULL,                               // Pointer to palette
+  GUI_DRAW_BMP8888
 };
 
 static GUI_CONST_STORAGE unsigned long _acJTrace_300x164[] = {
@@ -7262,13 +7262,13 @@ static GUI_CONST_STORAGE unsigned long _acJTrace_300x164[] = {
 };
 
 static GUI_CONST_STORAGE GUI_BITMAP _bmJTrace_300x164 = {
-  300, /* XSize */
-  164, /* YSize */
-  1200, /* BytesPerLine */
-  32, /* BitsPerPixel */
-  (unsigned char *)_acJTrace_300x164,  /* Pointer to picture data */
-  NULL  /* Pointer to palette */
- ,GUI_DRAW_BMP8888
+  300,                                 // XSize
+  164,                                 // YSize
+  1200,                                // BytesPerLine
+  32,                                  // BitsPerPixel
+  (unsigned char *)_acJTrace_300x164,  // Pointer to picture data
+  NULL,                                // Pointer to palette
+  GUI_DRAW_BMP8888
 };
 
 static GUI_CONST_STORAGE unsigned long _acSeggerLogo_300x181[] = {
@@ -9990,13 +9990,13 @@ static GUI_CONST_STORAGE unsigned long _acSeggerLogo_300x181[] = {
 };
 
 static GUI_CONST_STORAGE GUI_BITMAP _bmSeggerLogo_300x181 = {
-  300, /* XSize */
-  181, /* YSize */
-  1200, /* BytesPerLine */
-  32, /* BitsPerPixel */
-  (unsigned char *)_acSeggerLogo_300x181,  /* Pointer to picture data */
-  NULL  /* Pointer to palette */
- ,GUI_DRAW_BMP8888
+  300,                                     // XSize
+  181,                                     // YSize
+  1200,                                    // BytesPerLine
+  32,                                      // BitsPerPixel
+  (unsigned char *)_acSeggerLogo_300x181,  // Pointer to picture data
+  NULL,                                    // Pointer to palette
+  GUI_DRAW_BMP8888
 };
 
 /*********************************************************************
@@ -10057,9 +10057,13 @@ static int _GetImage(IMAGE * pImage) {
 *       _CopyFromLCD
 */
 static void _CopyFromLCD(GUI_MEMDEV_Handle hMem) {
-  GUIDEMO_CursorHide();
+#if GUIDEMO_SUPPORT_CURSOR
+  GUIDEMO_HideCursor();
+#endif
   GUI_MEMDEV_CopyFromLCD(hMem);
-  GUIDEMO_CursorShow();
+#if GUIDEMO_SUPPORT_CURSOR
+  GUIDEMO_ShowCursor();
+#endif
 }
 
 /*********************************************************************
@@ -10107,7 +10111,9 @@ static int _RotateAndZoomImage(void) {
     GUI_MEMDEV_Write(hLCD);
     pfRotate(pImage->hMem, hDst, (xSize - pImage->xSize) / 2 - (xSize * (100 - i)) / 250, TITLE_SIZE + (ySize - pImage->ySize) / 2, (i - 100) * 450, i * 10);
     GUI_MEMDEV_Select(0);
+    GUI_MULTIBUF_Begin();
     GUI_MEMDEV_CopyToLCD(hDst);
+    GUI_MULTIBUF_End();
     //
     // Delay
     //
@@ -10120,7 +10126,6 @@ static int _RotateAndZoomImage(void) {
     if (GUIDEMO_CheckCancel()) {
       GUI_MEMDEV_Delete(hLCD);
       GUI_MEMDEV_Delete(hDst);
-      hLCD = hDst = 0;
       return 1;
     }
   }
@@ -10145,7 +10150,9 @@ static int _RotateAndZoomImage(void) {
     GUI_MEMDEV_Write(hLCD);
     pfRotate(pImage->hMem, hDst, (xSize - pImage->xSize) / 2, TITLE_SIZE + (ySize - pImage->ySize) / 2, a * 1000, Mag);
     GUI_MEMDEV_Select(0);
+    GUI_MULTIBUF_Begin();
     GUI_MEMDEV_CopyToLCD(hDst);
+    GUI_MULTIBUF_End();
     //
     // Delay
     //
@@ -10158,11 +10165,47 @@ static int _RotateAndZoomImage(void) {
     if (GUIDEMO_CheckCancel()) {
       GUI_MEMDEV_Delete(hLCD);
       GUI_MEMDEV_Delete(hDst);
-      hLCD = 0;
-      hDst = 0;
       return 1;
     }
   }
+  //
+  // Rotate complete screen
+  //
+  GUI_MEMDEV_CopyFromLCD(hLCD);
+  GUIDEMO_ConfigureDemo(NULL, NULL, GUIDEMO_SHOW_CURSOR);
+  for (a = 5; a <= 360; a += 5) {
+    TimeContinue = GUI_GetTime() + 30;
+    //
+    // Calculate magnification
+    //
+    Mag = (a < 180)
+        ? ((180 - a) * 800) / 180 + 200
+        : ((a - 180) * 800) / 180 + 200;
+    //
+    // Do animation
+    //
+    GUI_MEMDEV_Select(hDst);
+    GUI_SetBkColor(0xa56e3a);
+    GUI_Clear();
+    GUI_MEMDEV_Select(0);
+    pfRotate(hLCD, hDst, 0, 0, a * 1000, Mag);
+    GUI_MULTIBUF_Begin();
+    GUI_MEMDEV_CopyToLCD(hDst);
+    GUI_MULTIBUF_End();
+    //
+    // Delay
+    //
+    TimeNow = GUI_GetTime();
+    if (TimeContinue > TimeNow) {
+      GUI_Delay(TimeContinue - TimeNow);
+    }
+  }
+  GUIDEMO_ConfigureDemo(NULL, NULL, GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
+  //
+  // Clean up LCD context
+  //
+  GUI_MEMDEV_Select(hLCD);
+  GUI_DrawGradientV(0, 40, xSize - 1, ySize + TITLE_SIZE - 1, GUI_WHITE, GUI_LIGHTBLUE);
   //
   // Rotate and enlarge while moving out.
   //
@@ -10172,7 +10215,9 @@ static int _RotateAndZoomImage(void) {
     GUI_MEMDEV_Write(hLCD);
     pfRotate(pImage->hMem, hDst, (xSize - pImage->xSize) / 2 + (xSize * i) / 250, TITLE_SIZE + (ySize - pImage->ySize) / 2, i * 450, (100 - i) * 10);
     GUI_MEMDEV_Select(0);
+    GUI_MULTIBUF_Begin();
     GUI_MEMDEV_CopyToLCD(hDst);
+    GUI_MULTIBUF_End();
     //
     // Delay
     //
@@ -10185,19 +10230,18 @@ static int _RotateAndZoomImage(void) {
     if (GUIDEMO_CheckCancel()) {
       GUI_MEMDEV_Delete(hLCD);
       GUI_MEMDEV_Delete(hDst);
-      hLCD = 0;
-      hDst = 0;
       return 1;
     }
   }
+  GUI_MULTIBUF_Begin();
   GUI_MEMDEV_CopyToLCD(hLCD);
+  GUI_MULTIBUF_End();
   Index = (Index + 1) % _NumImages;
   //
   // Remove memory devices
   //
   GUI_MEMDEV_Delete(hLCD);
   GUI_MEMDEV_Delete(hDst);
-  hLCD = hDst = 0;
   return 0;
 }
 
@@ -10232,10 +10276,10 @@ static int _ShiftImage(int CleanUp) {
   int                         a;
   int                         i;
 
-  xSize       = LCD_GetXSize();
-  ySize       = LCD_GetYSize() - TITLE_SIZE;
-  DispSpaceX  = xSize / 3;
-  DispSpaceY  = (ySize * 3) / 5;
+  xSize      = LCD_GetXSize();
+  ySize      = LCD_GetYSize() - TITLE_SIZE;
+  DispSpaceX = xSize / 3;
+  DispSpaceY = (ySize * 3) / 5;
   //
   // Create memory devices if not existing
   //
@@ -10304,7 +10348,6 @@ static int _ShiftImage(int CleanUp) {
     //
     GUI_MEMDEV_Select(hDstShift);
     GUI_MEMDEV_Write(hLCD);
-    GUI_MEMDEV_Select(0);
     if (Step == DispSpaceX) {
       pImage        = &_aImage[Index0];
       ySizeImageMag = pImage->ySize * MAG / 1000;
@@ -10320,19 +10363,17 @@ static int _ShiftImage(int CleanUp) {
       GUI_MEMDEV_WriteAt(hMemHQ[Index2], (DispSpaceX - xSizeImageMag) / 2 + Step * 2 - BORDER_SIZE, TITLE_SIZE + ySize / 5 + (DispSpaceY - ySizeImageMag) / 2 - BORDER_SIZE);
     } else {
       pImage        = &_aImage[Index0];
-      ySizeImageMag = pImage->ySize * MAG / 1000;
       pfRotate(pImage->hMem, hDstShift, ((xSize - pImage->xSize) / 2) - (DispSpaceX * 2) + Step, (DispSpaceY - pImage->ySize) / 2, a, MAG);
       pImage        = &_aImage[Index1];
-      ySizeImageMag = pImage->ySize * MAG / 1000;
       pfRotate(pImage->hMem, hDstShift, ((xSize - pImage->xSize) / 2) -  DispSpaceX      + Step, (DispSpaceY - pImage->ySize) / 2, a, MAG);
       pImage        = &_aImage[Index2];
-      ySizeImageMag = pImage->ySize * MAG / 1000;
       pfRotate(pImage->hMem, hDstShift, ((xSize - pImage->xSize) / 2)                    + Step, (DispSpaceY - pImage->ySize) / 2, a, MAG);
       pImage        = &_aImage[Index3];
-      ySizeImageMag = pImage->ySize * MAG / 1000;
       pfRotate(pImage->hMem, hDstShift, ((xSize - pImage->xSize) / 2) +  DispSpaceX      + Step, (DispSpaceY - pImage->ySize) / 2, a, MAG);
-      GUI_MEMDEV_CopyToLCD(hDstShift);
     }
+    GUI_MULTIBUF_Begin();
+    GUI_MEMDEV_CopyToLCD(hDstShift);
+    GUI_MULTIBUF_End();
     //
     // Delay
     //
@@ -10391,7 +10432,9 @@ static int _ShiftImage(int CleanUp) {
     //
     GUI_MEMDEV_Write(hLCDEnlarge);
     pfRotate(pImage->hMem, hDstEnlarge, (((xSize * 2) / 3) - pImage->xSize) / 2, (ySize - pImage->ySize) / 2, 0, Mag);
+    GUI_MULTIBUF_Begin();
     GUI_MEMDEV_CopyToLCD(hDstEnlarge);
+    GUI_MULTIBUF_End();
     i += Add;
     if (i == 20) {
       Add = -Add;
@@ -10495,7 +10538,7 @@ static void _DemoZoomAndRotate(void) {
 *       GUIDEMO_ZoomAndRotate
 */
 void GUIDEMO_ZoomAndRotate(void) {
-  GUIDEMO_ShowIntro("Zoom and rotate","Zooming and rotating any\nkind of images with emWin");
+  GUIDEMO_ConfigureDemo("Zoom and rotate", "Zooming and rotating any\nkind of images with emWin.", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   _DemoZoomAndRotate();
 }
 
@@ -10504,6 +10547,6 @@ void GUIDEMO_ZoomAndRotate(void) {
 void GUIDEMO_ZoomAndRotate_C(void);
 void GUIDEMO_ZoomAndRotate_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_ZOOMANDROTATE && GUI_WINSUPPORT && GUI_SUPPORT_MEMDEV
 
 /*************************** End of file ****************************/

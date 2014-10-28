@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -70,7 +70,7 @@ extern const struct tLCDDEV_APIList_struct * /* const */ LCD_aAPI[GUI_NUM_LAYERS
   void     LCD_##DISTX##_DrawHLine    (int x0, int y,  int x1); \
   void     LCD_##DISTX##_DrawVLine    (int x, int y0,  int y1); \
   void     LCD_##DISTX##_FillRect     (int x0, int y0, int x1, int y1); \
-  void     LCD_##DISTX##_DrawBitmap   (int x0, int y0, int xsize, int ysize, int BitsPerPixel, int BytesPerLine,  const U8 GUI_UNI_PTR * pData, int Diff, const LCD_PIXELINDEX * pTrans); \
+  void     LCD_##DISTX##_DrawBitmap   (int x0, int y0, int xsize, int ysize, int BitsPerPixel, int BytesPerLine,  const U8 * pData, int Diff, const LCD_PIXELINDEX * pTrans); \
   void     LCD_##DISTX##_SetOrg       (int x, int y); \
   void     LCD_##DISTX##_On           (void); \
   void     LCD_##DISTX##_Off          (void); \

@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.26 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -3289,12 +3289,6 @@ static GUI_MEMDEV_Handle _CreateScale(
   //
   for (i = 0; i <= MAX_SPEED; i+= 20) {
     //
-    // Calculate angle
-    //
-    a = (210 - i) * 1000;
-    SinHQ = GUI__SinHQ(a);
-    CosHQ = GUI__CosHQ(a);
-    //
     // Rotate polygon
     //
     af = ((210 - i) * 3.1415926f) / 180;
@@ -3320,12 +3314,6 @@ static GUI_MEMDEV_Handle _CreateScale(
   //
   GUI_SetColor(ColorCheckmarks);
   for (i = 10; i <= 230; i+= 20) {
-    //
-    // Calculate angle
-    //
-    a = (210 - i) * 1000;
-    SinHQ = GUI__SinHQ(a);
-    CosHQ = GUI__CosHQ(a);
     //
     // Rotate polygon
     //
@@ -3479,6 +3467,7 @@ static void _DrawNeedleAndSpeed(PARAM * pParam, int mx, int my) {
   //
   // Draw needle
   //
+  GUI_MULTIBUF_Begin();
   GUI_SetColor(COLOR_NEEDLE);
   GUI_AA_FillPolygon(pParam->aPoints, GUI_COUNTOF(pParam->aPoints), mx * MAG, my * MAG);
   //
@@ -3490,6 +3479,7 @@ static void _DrawNeedleAndSpeed(PARAM * pParam, int mx, int my) {
   GUI_SetTextAlign(GUI_TA_RIGHT);
   GUI_GotoXY(mx + 23, my + 49);
   GUI_DispDecMin((int)pParam->Speed);
+  GUI_MULTIBUF_End();
 }
 
 /*********************************************************************
@@ -3581,7 +3571,9 @@ static int _Roll(PARAM * pParam, int tMax, void (* pfCalcX)(int, int, int, int *
       pfCalcX(tDiff, tMax, Size_DevRotate, &ix, &iSpin);
       GUI_MEMDEV_Rotate(pParam->hScaleRot, hDst, ix , (pParam->ySize - Size_DevRotate) / 2, iSpin, 1000);
       GUI_MEMDEV_Select(0);
+      GUI_MULTIBUF_Begin();
       GUI_MEMDEV_Write(hDst);
+      GUI_MULTIBUF_End();
     }
     tUsed = GUIDEMO_GetTime() - tNow;
     tNow += tUsed;
@@ -3836,9 +3828,7 @@ static void _SpeedometerDemo(void) {
 *       GUIDEMO_Speedometer
 */
 void GUIDEMO_Speedometer(void) {
-  GUIDEMO_ShowIntro("Speedometer",
-                    "Shows acceleration and\n"
-                    "deceleration on a speedometer");
+  GUIDEMO_ConfigureDemo("Speedometer", "Shows acceleration and\ndeceleration on a speedometer.", GUIDEMO_SHOW_CURSOR | GUIDEMO_SHOW_CONTROL);
   _SpeedometerDemo();
 }
 
@@ -3847,6 +3837,6 @@ void GUIDEMO_Speedometer(void) {
 void GUIDEMO_Speedometer_C(void);
 void GUIDEMO_Speedometer_C(void) {}
 
-#endif
+#endif  // SHOW_GUIDEMO_SPEEDOMETER && GUI_SUPPORT_MEMDEV
 
 /*************************** End of file ****************************/

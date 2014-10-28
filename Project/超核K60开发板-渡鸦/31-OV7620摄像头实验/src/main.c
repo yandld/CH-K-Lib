@@ -1,12 +1,4 @@
-#include "gpio.h"
-#include "common.h"
-#include "uart.h"
-#include "dma.h"
-#include "sram.h"
-#include "ili9320.h"
-#include "dma.h"
-#include "i2c.h"
-
+#include "chlib_k.h"
 
 
 #define OV7620_W    (320) /* 每行有多少像素 */

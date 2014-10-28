@@ -1,10 +1,4 @@
-#include "gpio.h"
-#include "uart.h"
-#include "i2c.h"
-#include "systick.h"
-#include "cpuidy.h"
-#include "stdio.h" 
-#include "common.h"
+#include "chlib_k.h"
 
 #include "shell.h"
 #include "board.h"

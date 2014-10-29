@@ -15,6 +15,7 @@ namespace serial
         {
             InitializeComponent();
             LoadPanelForm(panel1, new frm_consult());
+            LoadPanelForm(panel2, new frm_download());
         }
 
         private void system_log(string log)
@@ -33,7 +34,6 @@ namespace serial
 
 
             DialogResult r = frm_conDialog1.ShowDialog();
-            MessageBox.Show(r.ToString());
             if (r == DialogResult.OK)
             {
                 conDialog.ConnResult cr1 = new conDialog.ConnResult();
@@ -56,10 +56,6 @@ namespace serial
             toolStripStatusLabel1.Text = System.DateTime.Now.ToString();
         }
 
-        private void btn_Test_Click(object sender, EventArgs e)
-        {
-
-        }
 
     }
 }

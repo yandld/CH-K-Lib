@@ -5,10 +5,12 @@
 
 #include "ads7843.h"
 #include "spi.h"
-#include "types.h"
+//#include "types.h"
 struct spi_bus bus; 
 
-
+extern int Image$$RW_IRAM1$$ZI$$Limit;
+extern int Image$$RW_IRAM1$$RW$$Limit;
+extern int Image$$ER_IROM1$$RO$$Limit;
 
 int main(void)
 {
@@ -21,6 +23,15 @@ int main(void)
     #ifndef MK10D5
     SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(4);
     #endif
+    
+    /* ZI Section end address */
+    printf("IRAM1_ZI:0x%08X KB\r\n", ((uint32_t)&Image$$RW_IRAM1$$ZI$$Limit));
+    
+    /* RW Section end address */
+    printf("IRAM1_RW:0x%08X KB\r\n", ((uint32_t)&Image$$RW_IRAM1$$RW$$Limit));
+    
+    /* RO Section end address */
+    printf("IROM1_RO:0x%08X KB\r\n", ((uint32_t)&Image$$ER_IROM1$$RO$$Limit));
     
     while(1)
     {

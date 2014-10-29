@@ -52,6 +52,12 @@
     <Compile Include="conDialog.Designer.cs">
       <DependentUpon>conDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="frm_consult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_consult.Designer.cs">
+      <DependentUpon>frm_consult.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,6 +68,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="conDialog.resx">
       <DependentUpon>conDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_consult.resx">
+      <DependentUpon>frm_consult.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

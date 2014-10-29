@@ -37,7 +37,7 @@ namespace serial
         private void btn_open_Click(object sender, EventArgs e)
         {
 
-       //     this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.DialogResult = System.Windows.Forms.DialogResult.OK;
             
         }
 
@@ -68,7 +68,16 @@ namespace serial
             if (PortNames.Capacity != 0) txt_Port.Text = (string)PortNames[0];
             
         }
-
+        /* window cannot move */
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x00A1 && m.WParam.ToInt32() == 2)
+            {
+                m.Msg = 0x0201;
+                m.LParam = IntPtr.Zero;
+            }
+            base.WndProc(ref m);
+        }
 
     }
 }

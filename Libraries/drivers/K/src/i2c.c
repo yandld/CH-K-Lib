@@ -200,6 +200,7 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
     QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
     I2C_InitStruct1.baudrate = baudrate;
     I2C_InitStruct1.instance = pq->ip_instance;
+    
     /* init pinmux and  open drain and pull up */
     for(i = 0; i < pq->io_offset; i++)
     {
@@ -207,6 +208,7 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
         PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullUp); 
         PORT_PinOpenDrainConfig(pq->io_instance, pq->io_base + i, ENABLE);
     }
+    
     /* init moudle */
     I2C_Init(&I2C_InitStruct1);
     return pq->ip_instance;
@@ -231,11 +233,14 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
     assert_param(IS_I2C_ALL_INSTANCE(I2C_InitStruct->instance));
     uint32_t freq;
     SIM->SCGC4 |= SIM_I2CClockGateTable[I2C_InitStruct->instance];
+    
     /* disable first */
     I2C_InstanceTable[I2C_InitStruct->instance]->C1 &= ~I2C_C1_IICEN_MASK;
+    
     /* set baudrate */
     CLOCK_GetClockFrequency(kBusClock, &freq);
     I2C_SetBaudrate(I2C_InitStruct->instance, freq, I2C_InitStruct->baudrate);
+    
     /* enable i2c */
     I2C_InstanceTable[I2C_InitStruct->instance]->C1 |= I2C_C1_IICEN_MASK;
 }

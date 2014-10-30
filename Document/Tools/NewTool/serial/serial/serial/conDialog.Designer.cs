@@ -133,7 +133,7 @@
             this.btn_Refresh.Name = "btn_Refresh";
             this.btn_Refresh.Size = new System.Drawing.Size(55, 23);
             this.btn_Refresh.TabIndex = 5;
-            this.btn_Refresh.Text = "Reflash";
+            this.btn_Refresh.Text = "Find";
             this.btn_Refresh.UseVisualStyleBackColor = true;
             this.btn_Refresh.Click += new System.EventHandler(this.btn_Refresh_Click);
             // 

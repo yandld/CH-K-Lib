@@ -16,6 +16,7 @@ namespace serial
             InitializeComponent();
             LoadPanelForm(panel1, new frm_consult());
             LoadPanelForm(panel2, new frm_download());
+            LoadPanelForm(panel3, new frm_IMU());
         }
 
         private void system_log(string log)
@@ -31,16 +32,8 @@ namespace serial
         private void 端口ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             conDialog frm_conDialog1 = new conDialog();
-
-
             DialogResult r = frm_conDialog1.ShowDialog();
-            if (r == DialogResult.OK)
-            {
-                conDialog.ConnResult cr1 = new conDialog.ConnResult();
-                cr1 = frm_conDialog1.GetResult(sender, e);
-                system_log("Connection:" + cr1.name.ToString());
-            }
-            frm_conDialog1.Close();
+            this.Text = "CHBox - " + CHConn.linkInfoString;
         }
 
         private void LoadPanelForm(Panel Panel, Form  form)
@@ -54,6 +47,20 @@ namespace serial
         private void timer1_Tick(object sender, EventArgs e)
         {
             toolStripStatusLabel1.Text = System.DateTime.Now.ToString();
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+        //    this.Text = "ASD";
+            Button btn = (Button)e.Argument;
+            btn.Text = "ASDD";
+        //    serialPort1.Write("asdasd");
+           System.Threading.Thread.Sleep(100);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            backgroundWorker1.RunWorkerAsync(sender);
         }
 
 

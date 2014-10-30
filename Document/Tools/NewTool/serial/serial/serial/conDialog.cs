@@ -8,37 +8,61 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Net;
+using System.Net.Sockets;
 
 namespace serial
 {
 
+
+
     public partial class conDialog : Form
     {
 
-        public class ConnResult
-        {
-            public string name;
-            public int a;
-        };
 
-        private ConnResult cr1 = new ConnResult();
+     //   private Conn cr1 = new Conn();
 
         public conDialog()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterParent;
         }
-        public ConnResult GetResult(object sender, EventArgs e)
-        {
 
-            cr1.name = "Yandld";
-            return cr1;
-        }
         private void btn_open_Click(object sender, EventArgs e)
         {
-
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            //System.Net.NetworkInformation.NetworkInterface[] interfaces = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
+ 
+ 
+            //foreach (System.Net.NetworkInformation.NetworkInterface ni in interfaces)
+            //{
+            //    if (ni.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up)
+            //    {
+            //        Console.WriteLine("当前正在连接的IP是：" + ni.Name + "Speed:" + ni.Speed);
+            //    }
+            //    else
+            //    {
+            //    //    Console.WriteLine("当前IP" + ni.Name + "处于静止或者中断状态。");
+            //    }
+            //}
+            SerialPort sp1 = new SerialPort(txt_Port.Text, Convert.ToInt32(txt_Speed.Text), Parity.None, 8, StopBits.One);
             
+            // Try to open Port 
+            try
+            {
+                sp1.Open();
+            }
+            catch
+            {
+                MessageBox.Show(sp1.PortName + "Open Port ERROR", "Warning");
+            }
+
+            if (sp1.IsOpen)
+            {
+                CHConn.isConnected = true;
+                CHConn.ConnObject = sp1;
+                CHConn.linkInfoString = sp1.PortName.ToString() + " " + sp1.BaudRate.ToString();
+                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            }
         }
 
         private void btn_cancel_Click(object sender, EventArgs e)
@@ -50,8 +74,6 @@ namespace serial
         private void conDialog_Load(object sender, EventArgs e)
         {
             btn_Refresh_Click(null, null);
-
-
         }
 
         private void btn_Refresh_Click(object sender, EventArgs e)
@@ -68,6 +90,7 @@ namespace serial
             if (PortNames.Capacity != 0) txt_Port.Text = (string)PortNames[0];
             
         }
+
         /* window cannot move */
         protected override void WndProc(ref Message m)
         {
@@ -80,4 +103,13 @@ namespace serial
         }
 
     }
+
+
+    static public class CHConn
+    {
+        static public bool isConnected;
+        static public object ConnObject;
+        static public string linkInfoString;
+    }
+
 }

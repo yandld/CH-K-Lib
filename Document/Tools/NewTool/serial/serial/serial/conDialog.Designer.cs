@@ -73,9 +73,9 @@
             this.radioButton3.Enabled = false;
             this.radioButton3.Location = new System.Drawing.Point(122, 19);
             this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(47, 17);
+            this.radioButton3.Size = new System.Drawing.Size(44, 17);
             this.radioButton3.TabIndex = 4;
-            this.radioButton3.Text = "SSH";
+            this.radioButton3.Text = "HID";
             this.radioButton3.UseVisualStyleBackColor = true;
             // 
             // radioButton2

@@ -30,20 +30,6 @@ namespace serial
 
         private void btn_open_Click(object sender, EventArgs e)
         {
-            //System.Net.NetworkInformation.NetworkInterface[] interfaces = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
- 
- 
-            //foreach (System.Net.NetworkInformation.NetworkInterface ni in interfaces)
-            //{
-            //    if (ni.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up)
-            //    {
-            //        Console.WriteLine("当前正在连接的IP是：" + ni.Name + "Speed:" + ni.Speed);
-            //    }
-            //    else
-            //    {
-            //    //    Console.WriteLine("当前IP" + ni.Name + "处于静止或者中断状态。");
-            //    }
-            //}
             SerialPort sp1 = new SerialPort(txt_Port.Text, Convert.ToInt32(txt_Speed.Text), Parity.None, 8, StopBits.One);
             
             // Try to open Port 
@@ -86,9 +72,14 @@ namespace serial
                 PortNames.Add(Port);
                 lbl_AvailPorts.Text += "  " + Port;
             }
-
-            if (PortNames.Capacity != 0) txt_Port.Text = (string)PortNames[0];
             
+            if (PortNames.Count != 0) txt_Port.Text = (string)PortNames[0];
+
+            // there has a port and only have a port, then ok it!
+            if (PortNames.Count == 1)
+            {
+                btn_open_Click(sender, e);
+            }
         }
 
         /* window cannot move */

@@ -1,0 +1,11 @@
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\bin\Debug\serial.exe
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\bin\Debug\serial.pdb
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.Main.resources
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.Properties.Resources.resources
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.csproj.GenerateResource.Cache
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.exe
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.pdb
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.frm_consult.resources
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.frm_download.resources
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\bin\Debug\serial.exe.config
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.conDialog.resources

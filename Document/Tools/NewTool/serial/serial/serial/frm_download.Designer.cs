@@ -30,14 +30,15 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btn_OpenFile = new System.Windows.Forms.Button();
             this.btn_ping = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.btn_ClearLog = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,6 +55,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.label1);
@@ -61,7 +63,7 @@
             this.groupBox1.Controls.Add(this.btn_OpenFile);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.btn_ping);
-            this.groupBox1.Font = new System.Drawing.Font("Andale WT", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox1.Location = new System.Drawing.Point(3, 13);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(184, 161);
@@ -69,14 +71,33 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Operation";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(104, 21);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(74, 20);
+            this.button3.TabIndex = 4;
+            this.button3.Text = "Select Port";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(6, 137);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(60, 24);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "Unsecure";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Andale WT", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.Red;
             this.label1.Location = new System.Drawing.Point(6, 109);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(81, 15);
+            this.label1.Size = new System.Drawing.Size(81, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "StartAddr: 0x";
             // 
@@ -84,7 +105,7 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(85, 106);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(57, 22);
+            this.textBox1.Size = new System.Drawing.Size(57, 20);
             this.textBox1.TabIndex = 3;
             this.textBox1.Text = "00000000";
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -118,6 +139,8 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.HorizontalScrollbar = true;
             this.listBox1.ItemHeight = 14;
+            this.listBox1.Items.AddRange(new object[] {
+            "Reset Target board"});
             this.listBox1.Location = new System.Drawing.Point(193, 14);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(204, 186);
@@ -133,24 +156,15 @@
             this.btn_ClearLog.UseVisualStyleBackColor = true;
             this.btn_ClearLog.Click += new System.EventHandler(this.btn_ClearLog_Click);
             // 
-            // button2
+            // button4
             // 
-            this.button2.Location = new System.Drawing.Point(6, 137);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(60, 24);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Unsecure";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(104, 21);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(74, 20);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Select Port";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button4.Location = new System.Drawing.Point(85, 132);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(65, 27);
+            this.button4.TabIndex = 4;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // frm_download
             // 
@@ -182,5 +196,6 @@
         private System.Windows.Forms.Button btn_ClearLog;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }

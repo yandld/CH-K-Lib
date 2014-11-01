@@ -91,36 +91,82 @@ namespace serial
         }
         #endregion
 
-        #region FlashEraseAllUnsecure
-        public bool FlashEraseAllUnsecure()
+        public bool FlashEraseAll()
         {
-            
-            byte[] PingData = new byte[64];
-            PingData[0] = 0x5A;
-            PingData[1] = 0xA4;
-            PingData[2] = 0x04;
-            PingData[3] = 0x00;
-            PingData[4] = 0xF6;
-            PingData[5] = 0x61;
-            PingData[6] = 0x0D;
-            PingData[7] = 0x00;
-            PingData[8] = 0xCC;
-            PingData[9] = 0x00;
-
-
-            // write data
-            sp.DiscardOutBuffer();
-            sp.Write(PingData, 0, 10);
+            List<byte> List = new List<byte>();
+            List.Add(0x5A);
+            List.Add(0xA4);
+            List.Add(0x04);
+            List.Add(0x00);
+            List.Add(0x01);
+            List.Add(0x00);
+            List.Add(0x00);
+            List.Add(0x00);
+            // Insert CRC
+            byte[] crc = BitConverter.GetBytes(crc16(List.ToArray(), 0, List.Count, 0x1021));
+            List.Insert(4, crc[0]);
+            List.Insert(5, crc[1]);
 
             // read in data 
             sp.DiscardInBuffer();
-            System.Threading.Thread.Sleep(60);
+            System.Threading.Thread.Sleep(100);
             int len = sp.BytesToRead;
-            sp.Read(PingData, 0, len);
+            byte[] rev = new byte[len];
+            sp.Read(rev, 0, len);
 
             //return 
-            if (len == 2)
+            if (len == 20)
             {
+                //ack
+                byte[] crc3 = new byte[2];
+                sp.DiscardOutBuffer();
+                crc3[0] = 0x5A;
+                crc3[1] = 0xA1;
+                sp.Write(crc, 0, 2);
+                Thread.Sleep(10);
+                return true;
+            }
+            return false;
+        }
+
+        #region FlashEraseAllUnsecure
+        public bool FlashEraseAllUnsecure()
+        {
+            List<byte> List = new List<byte>();
+            List.Add(0x5A);
+            List.Add(0xA4);
+            List.Add(0x04);
+            List.Add(0x00);
+            List.Add(0x0D);
+            List.Add(0x00);
+            List.Add(0xCC);
+            List.Add(0x00);
+            // Insert CRC
+            byte[] crc = BitConverter.GetBytes(crc16(List.ToArray(), 0, List.Count, 0x1021));
+            List.Insert(4, crc[0]);
+            List.Insert(5, crc[1]);
+
+            // write data
+            sp.DiscardOutBuffer();
+            sp.Write(List.ToArray(), 0, List.Count);
+
+            // read in data 
+            sp.DiscardInBuffer();
+            System.Threading.Thread.Sleep(100);
+            int len = sp.BytesToRead;
+            byte[] rev = new byte[len];
+            sp.Read(rev, 0, len);
+
+            //return 
+            if (len == 20)
+            {
+                //ack
+                byte[] crc3 = new byte[2];
+                sp.DiscardOutBuffer();
+                crc3[0] = 0x5A;
+                crc3[1] = 0xA1;
+                sp.Write(crc, 0, 2);
+                Thread.Sleep(10);
                 return true;
             }
             return false;
@@ -192,7 +238,6 @@ namespace serial
 
         private bool WaitForAck(int timeOut)
         {
-            sp.DiscardInBuffer();
             while (timeOut != 0)
             {
                 Thread.Sleep(1);
@@ -204,7 +249,7 @@ namespace serial
                     {
                         return true;
                     }
-                    Console.WriteLine("r1:" + r[1].ToString());
+                    Console.WriteLine("Wrong Return:" + Convert.ToString(r[1], 16));
                 }
                 timeOut--;
             }
@@ -252,11 +297,17 @@ namespace serial
                 return false;
             }
 
+            sp.DiscardInBuffer();
+            sp.DiscardOutBuffer();
+
             //ack
-            crc[0] = 0x5A;
+           crc[0] = 0x5A;
             crc[1] = 0xA1;
             sp.Write(crc, 0, 2);
+
             Thread.Sleep(10);
+            sp.DiscardInBuffer();
+            sp.DiscardOutBuffer();
 
             UInt32 LoopCounter = (UInt32)byteCount;
             UInt32 PacketDataSize;
@@ -264,6 +315,7 @@ namespace serial
             while (LoopCounter != 0)
             {
                 List.Clear();
+
                 if (LoopCounter > 32) PacketDataSize = 32; else PacketDataSize = LoopCounter;
                 List.Add(0x5A); List.Add(0xA5);
                 List.AddRange(BitConverter.GetBytes((UInt16)PacketDataSize));
@@ -281,18 +333,16 @@ namespace serial
                 sp.Write(List.ToArray(), 0, List.Count);
                 if (List.Count != 38)
                 {
-                    Console.WriteLine("Last Frame!!!");
+                    Console.WriteLine("Last Frame !!!");
                 }
-            //    while (sp.BytesToWrite != 0) ;
 
                 //Wait ack
-                if (WaitForAck(1000) == false)
+                if (WaitForAck(500) == false)
                 {
                     return false;
                 }
 
             //    Console.WriteLine(" Len:" + List.ToArray().Length.ToString());
-
                 Console.WriteLine("Loop" +(p).ToString());
                 #endregion
                 p += PacketDataSize;
@@ -302,17 +352,6 @@ namespace serial
         }
 
 
-        void kBootMain()
-        {
-            //sp = (SerialPort)ConnObject;
-            while (true)
-            {
-                sp.Write("ASDsad");
-                Thread.Sleep(500);
-                Console.WriteLine("!!!!");
-                Thread.CurrentThread.Abort();
-            }
-        }
 
         ushort crc16(byte[] data, int start, int length, ushort poly)
         {

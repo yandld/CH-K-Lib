@@ -9,3 +9,16 @@ C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj
 C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.frm_download.resources
 C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\bin\Debug\serial.exe.config
 C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.conDialog.resources
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\bin\Debug\serial.exe.config
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.exe
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.pdb
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\bin\Debug\serial.exe
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\bin\Debug\serial.pdb
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.conDialog.resources
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.frm_consult.resources
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.frm_download.resources
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.Main.resources
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.Properties.Resources.resources
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\GenerateResource.write.1.tlog

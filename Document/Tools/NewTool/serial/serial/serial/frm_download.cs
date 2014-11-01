@@ -140,14 +140,27 @@ namespace serial
                 }
                 fs.Read(FileData, 0, (int)fs.Length);
 
-                kb.Ping();
-                sys_log(kb.WriteMemory(FileData, 0x20000800, (int)fs.Length).ToString());
+               // kb.Ping();
+                sys_log(kb.WriteMemory(FileData, 0x20000700, (int)fs.Length).ToString());
 
                 fs.Close();
             }
 
             
 
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            kboot kb = new kboot(CHConn.ConnObject);
+            if (kb.FlashEraseAllUnsecure())
+            {
+                sys_log("FlashEraseAll OK");
+            }
+            else
+            {
+                sys_log("FlashEraseAll ERROR");
+            }
         }
     }
 }

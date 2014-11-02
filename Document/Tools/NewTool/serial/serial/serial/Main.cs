@@ -14,7 +14,7 @@ namespace serial
         public Main()
         {
             InitializeComponent();
-            LoadPanelForm(panel1, new frm_consult());
+            //LoadPanelForm(panel1, new frm_consult());
             LoadPanelForm(panel2, new frm_download());
   
 

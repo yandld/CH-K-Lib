@@ -121,7 +121,6 @@ namespace serial
         private void button1_Click(object sender, EventArgs e)
         {
             kboot kb = new kboot(CHConn.ConnObject);
-
             OpenFileDialog opd = new OpenFileDialog();
 
             if (opd.ShowDialog() == DialogResult.OK)
@@ -139,15 +138,17 @@ namespace serial
                     return;
                 }
                 fs.Read(FileData, 0, (int)fs.Length);
-
-               // kb.Ping();
-                sys_log(kb.WriteMemory(FileData, 0x20000700, (int)fs.Length).ToString());
-
                 fs.Close();
+
+                if(kb.WriteMemory(FileData, 0x00000700, (int)FileData.Length))
+                {
+                    sys_log("All OK!");
+                }
+                else
+                {
+                    sys_log("Dowload ERROR");
+                }
             }
-
-            
-
         }
 
         private void button4_Click(object sender, EventArgs e)

@@ -238,6 +238,7 @@ namespace serial
 
         private bool WaitForAck(int timeOut)
         {
+
             while (timeOut != 0)
             {
                 Thread.Sleep(1);
@@ -294,6 +295,7 @@ namespace serial
 
             if (len != 20)
             {
+                Console.WriteLine("Ack Error");
                 return false;
             }
 
@@ -329,29 +331,35 @@ namespace serial
 
                 #region SendData
                 // Send data
+                sp.DiscardInBuffer();
                 sp.DiscardOutBuffer();
                 sp.Write(List.ToArray(), 0, List.Count);
                 if (List.Count != 38)
                 {
                     Console.WriteLine("Last Frame !!!");
+                    sp.DiscardInBuffer();
+                    Thread.Sleep(20);
+                    if (sp.BytesToRead == 20)
+                    {
+                        Console.WriteLine("Download OK");
+                        return true;
+                    }
+                    return false;
                 }
 
                 //Wait ack
-                if (WaitForAck(500) == false)
+                if (WaitForAck(200) == false)
                 {
                     return false;
                 }
 
-            //    Console.WriteLine(" Len:" + List.ToArray().Length.ToString());
-                Console.WriteLine("Loop" +(p).ToString());
+                Console.WriteLine((p).ToString() + "Transfered");
                 #endregion
                 p += PacketDataSize;
                 LoopCounter -= PacketDataSize;
             }
             return true;
         }
-
-
 
         ushort crc16(byte[] data, int start, int length, ushort poly)
         {

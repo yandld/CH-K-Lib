@@ -22,3 +22,4 @@ C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Do
 C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.Properties.Resources.resources
 C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\Users\Yandld\Desktop\渡鸦开发板资料包\3-程序源码\CH-K-Lib-V2.5\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\B51439\Desktop\CH-K-Lib\Document\Tools\NewTool\serial\serial\serial\obj\x86\Debug\serial.csprojResolveAssemblyReference.cache

@@ -36,24 +36,6 @@ namespace serial
             FlashEraseAllUnsecure = 0x0D,
         };
 
-
-        public struct Properties
-        {
-            UInt32 AvailablePeripherals;
-            UInt32 FlashStartAddress;
-            UInt32 FlashSizeInBytes;
-            UInt32 FlashSectorSize;
-            UInt32 FlashBlockCount;
-            UInt32 AvailableCommands;
-            UInt32 VerifyWrites;
-            UInt32 MaxPacketSize;
-            UInt32 RAMStartAddress;
-            UInt32 RAMSizeInBytes;
-            UInt32 SystemDeviceId;
-            UInt32 FlashSecurityState;
-        }
-
-
         public kboot(object ConnObject)
         {
           //  Thread kBootThread = new Thread(new ThreadStart(kBootMain));
@@ -72,7 +54,7 @@ namespace serial
             sp.DiscardOutBuffer();
             sp.DiscardInBuffer();
             sp.Write(PingData, 0, 2);
-            System.Threading.Thread.Sleep(60);
+            System.Threading.Thread.Sleep(20);
             int len = sp.BytesToRead;
             if (len > 10)
             {
@@ -85,7 +67,6 @@ namespace serial
                 {
                     return true;
                 }
-                // sys_log("PING OK! Version:" + PingData[4].ToString() + "." + PingData[3].ToString());
             }
             return false;
         }
@@ -93,6 +74,9 @@ namespace serial
 
         public bool FlashEraseAll()
         {
+            Ping();
+
+            bool r = false;
             List<byte> List = new List<byte>();
             List.Add(0x5A);
             List.Add(0xA4);
@@ -107,32 +91,31 @@ namespace serial
             List.Insert(4, crc[0]);
             List.Insert(5, crc[1]);
 
-            // read in data 
+            //send
             sp.DiscardInBuffer();
-            System.Threading.Thread.Sleep(100);
-            int len = sp.BytesToRead;
-            byte[] rev = new byte[len];
-            sp.Read(rev, 0, len);
+            sp.Write(List.ToArray(), 0, List.Count);
 
-            //return 
-            if (len == 20)
+            // read in data 
+            if(WaitForAck(200, 20))
             {
-                //ack
-                byte[] crc3 = new byte[2];
-                sp.DiscardOutBuffer();
-                crc3[0] = 0x5A;
-                crc3[1] = 0xA1;
-                sp.Write(crc, 0, 2);
-                Thread.Sleep(10);
-                return true;
+                r = true;
             }
-            return false;
+
+            //ack
+            byte[] crc3 = new byte[2];
+            crc3[0] = 0x5A;
+            crc3[1] = 0xA1;
+            sp.Write(crc, 0, 2);
+
+            return r;
         }
 
-        #region FlashEraseAllUnsecure
         public bool FlashEraseAllUnsecure()
         {
+            Ping();
+            bool r = false;
             List<byte> List = new List<byte>();
+            List.Clear();
             List.Add(0x5A);
             List.Add(0xA4);
             List.Add(0x04);
@@ -141,37 +124,31 @@ namespace serial
             List.Add(0x00);
             List.Add(0xCC);
             List.Add(0x00);
+
             // Insert CRC
             byte[] crc = BitConverter.GetBytes(crc16(List.ToArray(), 0, List.Count, 0x1021));
             List.Insert(4, crc[0]);
             List.Insert(5, crc[1]);
 
             // write data
-            sp.DiscardOutBuffer();
-            sp.Write(List.ToArray(), 0, List.Count);
-
-            // read in data 
+           // sp.DiscardOutBuffer();
             sp.DiscardInBuffer();
-            System.Threading.Thread.Sleep(100);
-            int len = sp.BytesToRead;
-            byte[] rev = new byte[len];
-            sp.Read(rev, 0, len);
-
-            //return 
-            if (len == 20)
+            sp.Write(List.ToArray(), 0, List.Count);
+            Console.WriteLine("Inject Command: len:" + List.Count.ToString());
+            // read in data 
+            if (WaitForAck(200, 20))
             {
                 //ack
                 byte[] crc3 = new byte[2];
-                sp.DiscardOutBuffer();
                 crc3[0] = 0x5A;
                 crc3[1] = 0xA1;
-                sp.Write(crc, 0, 2);
-                Thread.Sleep(10);
-                return true;
+                sp.Write(crc, 0, crc3.Length);
+                r = true;
             }
-            return false;
+
+
+            return r;
         }
-        #endregion
 
         #region GetProperty
         private UInt32 GetProperty(int tag)
@@ -196,11 +173,11 @@ namespace serial
             List.Insert(5, crc[1]);
             // Send data
             sp.DiscardOutBuffer();
+            sp.DiscardInBuffer();
             sp.Write(List.ToArray(), 0, List.ToArray().Length);
 
             //Receive
-            sp.DiscardInBuffer();
-            System.Threading.Thread.Sleep(20);
+            System.Threading.Thread.Sleep(10);
             int len = sp.BytesToRead;
             byte[] RevData = new byte[len];
             sp.Read(RevData, 0, len);
@@ -236,30 +213,27 @@ namespace serial
         }
 
 
-        private bool WaitForAck(int timeOut)
+        private bool WaitForAck(int timeOut, UInt32 len)
         {
 
             while (timeOut != 0)
             {
                 Thread.Sleep(1);
-                if (sp.BytesToRead == 2)
+                if (sp.BytesToRead >= len)
                 {
-                    byte[] r = new byte[sp.BytesToRead]; 
-                    sp.Read(r, 0 , sp.BytesToRead );
-                    if (r[1] == 0xA1)
-                    {
-                        return true;
-                    }
-                    Console.WriteLine("Wrong Return:" + Convert.ToString(r[1], 16));
+                    return true;
                 }
                 timeOut--;
             }
-            Console.WriteLine("Time out ");
+            Console.WriteLine("Time out " + sp.BytesToRead.ToString());
             return false;
         }
 
         public bool WriteMemory(byte[] data, int startAddr, int byteCount)
         {
+
+            Ping();
+
             List<byte> List = new List<byte>();
             List.Add(0x5A);
             List.Add((byte)PacketType.kFramingPacketType_Command);
@@ -284,18 +258,13 @@ namespace serial
 
             // Send data
             sp.DiscardOutBuffer();
+            sp.DiscardInBuffer();
             sp.Write(List.ToArray(), 0, List.ToArray().Length);
 
             //Receive
-            sp.DiscardInBuffer();
-            System.Threading.Thread.Sleep(30);
-            int len = sp.BytesToRead;
-            byte[] RevData = new byte[len];
-            sp.Read(RevData, 0, len);
-
-            if (len != 20)
+            if (!WaitForAck(400, 20))
             {
-                Console.WriteLine("Ack Error");
+                Console.WriteLine("Ack Error:");
                 return false;
             }
 
@@ -341,14 +310,20 @@ namespace serial
                     Thread.Sleep(20);
                     if (sp.BytesToRead == 20)
                     {
-                        Console.WriteLine("Download OK");
+                        Console.WriteLine("Download OK, Sending ACK");
+
+                        crc[0] = 0x5A;
+                        crc[1] = 0xA1;
+                        sp.Write(crc, 0, 2);
+
+
                         return true;
                     }
                     return false;
                 }
 
                 //Wait ack
-                if (WaitForAck(200) == false)
+                if (WaitForAck(1000, 2) == false)
                 {
                     return false;
                 }

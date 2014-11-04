@@ -32,10 +32,6 @@ namespace serial
             form.Show();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            toolStripStatusLabel1.Text = System.DateTime.Now.ToString();
-        }
 
 
 

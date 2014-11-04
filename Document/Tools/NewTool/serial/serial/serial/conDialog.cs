@@ -14,14 +14,8 @@ using System.Net.Sockets;
 namespace serial
 {
 
-
-
     public partial class conDialog : Form
     {
-
-
-     //   private Conn cr1 = new Conn();
-
         public conDialog()
         {
             InitializeComponent();
@@ -30,36 +24,40 @@ namespace serial
 
         private void btn_open_Click(object sender, EventArgs e)
         {
-            SerialPort sp1 = new SerialPort(txt_Port.Text, Convert.ToInt32(txt_Speed.Text), Parity.None, 8, StopBits.One);
-            
-            // Try to open Port 
-            try
+            if (txt_Port.Text != "")
             {
-                sp1.Open();
-            }
-            catch
-            {
-                MessageBox.Show(sp1.PortName + "Open Port ERROR", "Warning");
-            }
+                SerialPort sp1 = new SerialPort(txt_Port.Text, Convert.ToInt32(txt_Speed.Text), Parity.None, 8, StopBits.One);
 
-            if (sp1.IsOpen)
-            {
-                CHConn.isConnected = true;
-                CHConn.ConnObject = sp1;
-                CHConn.linkInfoString = sp1.PortName.ToString() + " " + sp1.BaudRate.ToString();
-                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                // Try to open Port 
+                try
+                {
+                    sp1.Open();
+                }
+                catch
+                {
+                    MessageBox.Show(sp1.PortName + "Open Port ERROR", "Warning");
+                    Application.Exit();
+                }
+
+                if (sp1.IsOpen)
+                {
+                    CHConn.isConnected = true;
+                    CHConn.ConnObject = sp1;
+                    CHConn.linkInfoString = sp1.PortName.ToString() + " " + sp1.BaudRate.ToString();
+                    this.DialogResult = System.Windows.Forms.DialogResult.OK;
+                }
             }
         }
 
         private void btn_cancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-
+            Application.Exit();
         }
 
         private void conDialog_Load(object sender, EventArgs e)
         {
-            btn_Refresh_Click(null, null);
+            btn_Refresh_Click(sender, e);
         }
 
         private void btn_Refresh_Click(object sender, EventArgs e)
@@ -74,15 +72,9 @@ namespace serial
             }
             
             if (PortNames.Count != 0) txt_Port.Text = (string)PortNames[0];
-
-            // there has a port and only have a port, then ok it!
-            if (PortNames.Count == 1)
-            {
-                btn_open_Click(sender, e);
-            }
         }
 
-        /* window cannot move */
+        //  window cannot move
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == 0x00A1 && m.WParam.ToInt32() == 2)
@@ -94,7 +86,6 @@ namespace serial
         }
 
     }
-
 
     static public class CHConn
     {

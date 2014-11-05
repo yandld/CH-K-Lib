@@ -21,14 +21,20 @@ namespace serial
             InitializeComponent();
         }
 
-        public void sys_log(string log)
+        private void sys_log(string log)
         {
             listBox1.Items.Add(log);
+            this.listBox1.SelectedIndex = this.listBox1.Items.Count - 1;
         }
 
         private void btn_ping_Click(object sender, EventArgs e)
         {
-            kb = new kboot(CHConn.ConnObject);
+            if (kb == null)
+            {
+                kb = new kboot(CHConn.ConnObject);
+                kb.log += new kboot.OnSystemlog(sys_log);
+            }
+
             if (CHConn.isConnected == true)
             {
                 if (kb.Ping())
@@ -47,20 +53,8 @@ namespace serial
             {
                 sys_log("Select a connection first!");
             }
-
         }
 
-        private void btn_OpenFile_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog opd = new OpenFileDialog();
-
-            if (opd.ShowDialog() == DialogResult.OK)
-            {
-               fileInfo = new FileInfo(opd.FileName);
-               sys_log("File:  " + fileInfo.Name);
-               sys_log("Size:  " + fileInfo.Length);
-            }
-        }
 
         private void btn_ClearLog_Click(object sender, EventArgs e)
         {
@@ -102,7 +96,7 @@ namespace serial
 
         private void frm_download_Load(object sender, EventArgs e)
         {
-
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void btn_Download_Click(object sender, EventArgs e)
@@ -110,8 +104,15 @@ namespace serial
             if (fileInfo == null)
             {
                 sys_log("Please select file!");
-                return;
+                OpenFileDialog opd = new OpenFileDialog();
+                if (opd.ShowDialog() == DialogResult.OK)
+                {
+                    fileInfo = new FileInfo(opd.FileName);
+                    sys_log("File:  " + fileInfo.Name);
+                    sys_log("Size:  " + fileInfo.Length);
+                }
             }
+
             FileStream fs = new FileStream(fileInfo.FullName, FileMode.Open);
             byte[] data = new byte[fileInfo.Length];
             if (data.Length > 1024 * 1024 * 2)
@@ -123,11 +124,22 @@ namespace serial
             fs.Read (data, 0, data.Length);
             fs.Close();
 
+            if (kb == null)
+            {
+                kb = new kboot(CHConn.ConnObject);
+                kb.log += new kboot.OnSystemlog(sys_log);
+            }
+
+            if (kb.Ping() == false)
+            {
+                sys_log("Ping ERROR");
+                return;
+            }
             kb.FlashEraseAllUnsecure();
+            kb.Ping();
             kb.FlashEraseAll();
             kb.WriteMemory(data, (int)Convert.ToUInt32(txt_StartAddr.Text), data.Length);
-            
+            kb.Execute((UInt32)BitConverter.ToUInt32(data.Skip(4).Take(4).ToArray(), 0), 0, (UInt32)BitConverter.ToUInt32(data.Skip(0).Take(4).ToArray(), 0));
         }
-
     }
 }

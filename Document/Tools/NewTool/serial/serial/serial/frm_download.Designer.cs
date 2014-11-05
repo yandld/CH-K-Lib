@@ -34,7 +34,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txt_StartAddr = new System.Windows.Forms.TextBox();
-            this.btn_OpenFile = new System.Windows.Forms.Button();
             this.btn_ping = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.btn_ClearLog = new System.Windows.Forms.Button();
@@ -43,11 +42,11 @@
             // 
             // btn_Download
             // 
-            this.btn_Download.Location = new System.Drawing.Point(6, 76);
+            this.btn_Download.Location = new System.Drawing.Point(6, 54);
             this.btn_Download.Name = "btn_Download";
             this.btn_Download.Size = new System.Drawing.Size(81, 27);
             this.btn_Download.TabIndex = 0;
-            this.btn_Download.Text = "3. Download";
+            this.btn_Download.Text = "2. Download";
             this.btn_Download.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.btn_Download.UseVisualStyleBackColor = true;
             this.btn_Download.Click += new System.EventHandler(this.btn_Download_Click);
@@ -58,22 +57,21 @@
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.txt_StartAddr);
-            this.groupBox1.Controls.Add(this.btn_OpenFile);
             this.groupBox1.Controls.Add(this.btn_Download);
             this.groupBox1.Controls.Add(this.btn_ping);
-            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(3, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(184, 161);
+            this.groupBox1.Size = new System.Drawing.Size(184, 138);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Operation";
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(85, 125);
+            this.button4.Location = new System.Drawing.Point(80, 108);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(76, 24);
+            this.button4.Size = new System.Drawing.Size(62, 24);
             this.button4.TabIndex = 4;
             this.button4.Text = "EraseAll";
             this.button4.UseVisualStyleBackColor = true;
@@ -81,9 +79,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(6, 125);
+            this.button2.Location = new System.Drawing.Point(9, 108);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(73, 24);
+            this.button2.Size = new System.Drawing.Size(65, 24);
             this.button2.TabIndex = 4;
             this.button2.Text = "Unsecure";
             this.button2.UseVisualStyleBackColor = true;
@@ -94,7 +92,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(6, 109);
+            this.label1.Location = new System.Drawing.Point(9, 84);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(81, 13);
             this.label1.TabIndex = 3;
@@ -102,23 +100,12 @@
             // 
             // txt_StartAddr
             // 
-            this.txt_StartAddr.Location = new System.Drawing.Point(85, 106);
+            this.txt_StartAddr.Location = new System.Drawing.Point(93, 81);
             this.txt_StartAddr.Name = "txt_StartAddr";
-            this.txt_StartAddr.Size = new System.Drawing.Size(76, 20);
+            this.txt_StartAddr.Size = new System.Drawing.Size(76, 21);
             this.txt_StartAddr.TabIndex = 3;
             this.txt_StartAddr.Text = "00000000";
             this.txt_StartAddr.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_StartAddr_KeyPress);
-            // 
-            // btn_OpenFile
-            // 
-            this.btn_OpenFile.Location = new System.Drawing.Point(6, 50);
-            this.btn_OpenFile.Name = "btn_OpenFile";
-            this.btn_OpenFile.Size = new System.Drawing.Size(81, 27);
-            this.btn_OpenFile.TabIndex = 0;
-            this.btn_OpenFile.Text = "2. OpenFile";
-            this.btn_OpenFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_OpenFile.UseVisualStyleBackColor = true;
-            this.btn_OpenFile.Click += new System.EventHandler(this.btn_OpenFile_Click);
             // 
             // btn_ping
             // 
@@ -179,7 +166,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btn_ping;
         private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Button btn_OpenFile;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txt_StartAddr;
         private System.Windows.Forms.Button btn_ClearLog;

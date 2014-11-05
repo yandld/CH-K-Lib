@@ -11,6 +11,11 @@ namespace serial
     public class kboot
     {
         SerialPort sp;
+        //callback typedef
+        public delegate void OnSystemlog(string log);
+        //callback pointer
+        public event OnSystemlog log;
+
         private enum PacketType
         {
             kFramingPacketType_Ack = 0xA1,
@@ -41,40 +46,46 @@ namespace serial
           //  Thread kBootThread = new Thread(new ThreadStart(kBootMain));
             sp = (SerialPort)ConnObject;
           //  kBootThread.Start();
-
         }
 
+        private void _WriteData(byte[] buffer, int count)
+        {
+            sp.DiscardOutBuffer();
+            sp.Write(buffer, 0, count);
+        }
 
-        #region Ping
         public bool Ping()
         {
-            byte[] PingData = new byte[64];
-            PingData[0] = 0x5A;
-            PingData[1] = (byte)PacketType.kFramingPacketType_Ping;
-            sp.DiscardOutBuffer();
+            bool r = false;
+            byte[] outBuffer = new byte[2];
+            byte[] inBuffer;
+            outBuffer[0] = 0x5A;
+            outBuffer[1] = (byte)PacketType.kFramingPacketType_Ping;
+
             sp.DiscardInBuffer();
-            sp.Write(PingData, 0, 2);
-            System.Threading.Thread.Sleep(20);
-            int len = sp.BytesToRead;
-            if (len > 10)
+            _WriteData(outBuffer, 2);
+
+            r = WaitForAck(20, 10);
+
+            if (r == false)
             {
-                return false;
+                Console.WriteLine("Ping ERROR");
             }
-            sp.Read(PingData, 0, len);
-            if (len == 10)
-            {
-                if (PingData[1] == (byte)PacketType.kFramingPacketType_PingResponse)
-                {
-                    return true;
-                }
-            }
-            return false;
+           //inBuffer = GetData(10, 20);
+
+           //if (inBuffer.Length == 10)
+           //{
+           //    if ((inBuffer[0] == 0x5A) && (inBuffer[1] == 0xA7))
+           //    {
+           //        Console.WriteLine("Cmd-Ping Receive Succ!");
+           //        r = true;
+           //    }
+           //}
+            return r;
         }
-        #endregion
 
         public bool FlashEraseAll()
         {
-            Ping();
 
             bool r = false;
             List<byte> List = new List<byte>();
@@ -107,12 +118,48 @@ namespace serial
             crc3[1] = 0xA1;
             sp.Write(crc, 0, 2);
 
+            log("Inject Command:FlashEraseAll " + r.ToString());
+
             return r;
+        }
+
+        private bool WaitForAck(int timeOut, UInt32 len)
+        {
+            while (timeOut != 0)
+            {
+                Thread.Sleep(1);
+                System.Windows.Forms.Application.DoEvents();
+                if (sp.BytesToRead == len)
+                {
+                    byte[] dat = new byte[sp.BytesToRead];
+                    sp.Read(dat, 0, dat.Length);
+                    return true;
+                }
+                timeOut--;
+            }
+            Console.WriteLine("Time out " + sp.BytesToRead.ToString());
+            return false;
+        }
+
+        private byte[] GetData(UInt32 len, UInt32 timeOut)
+        {
+            byte[] data = null;
+            while (timeOut != 0)
+            {
+                Thread.Sleep(1);
+                if (sp.BytesToRead == len)
+                {
+                    data = new byte[sp.BytesToRead];
+                    sp.Read(data, 0, data.Length);
+                    return data;
+                }
+                timeOut--;
+            }
+            return data;
         }
 
         public bool FlashEraseAllUnsecure()
         {
-            Ping();
             bool r = false;
             List<byte> List = new List<byte>();
             List.Clear();
@@ -131,12 +178,12 @@ namespace serial
             List.Insert(5, crc[1]);
 
             // write data
-           // sp.DiscardOutBuffer();
+            sp.DiscardOutBuffer();
             sp.DiscardInBuffer();
             sp.Write(List.ToArray(), 0, List.Count);
-            Console.WriteLine("Inject Command: len:" + List.Count.ToString());
+
             // read in data 
-            if (WaitForAck(200, 20))
+            if (WaitForAck(200, 20) == true)
             {
                 //ack
                 byte[] crc3 = new byte[2];
@@ -145,8 +192,7 @@ namespace serial
                 sp.Write(crc, 0, crc3.Length);
                 r = true;
             }
-
-
+            log("Inject Command:FlashEraseAllUnsecure " + r.ToString());
             return r;
         }
 
@@ -213,25 +259,110 @@ namespace serial
         }
 
 
-        private bool WaitForAck(int timeOut, UInt32 len)
-        {
 
-            while (timeOut != 0)
+
+        public bool Reset()
+        {
+            List<byte> List = new List<byte>();
+            List.Add(0x5A);
+            List.Add((byte)PacketType.kFramingPacketType_Command);
+            //frame len
+            List.Add(0x04);
+            List.Add(0x00);
+            //tag flag reseved
+            List.Add((byte)CommandTag.Reset);
+            List.Add(0x00);
+            List.Add(0x00);
+            //param count
+            List.Add(0x00);
+            // Insert CRC
+            byte[] crc = BitConverter.GetBytes(crc16(List.ToArray(), 0, List.Count, 0x1021));
+            List.Insert(4, crc[0]);
+            List.Insert(5, crc[1]);
+
+            // Send data
+            sp.DiscardOutBuffer();
+            sp.DiscardInBuffer();
+            sp.Write(List.ToArray(), 0, List.Count);
+            Console.WriteLine("List.Count:" + List.Count.ToString());
+
+            //Receive
+            if (WaitForAck(30, 20) == false)
             {
-                Thread.Sleep(1);
-                if (sp.BytesToRead >= len)
-                {
-                    return true;
-                }
-                timeOut--;
+                log("Inject Command Reset Error:");
+                return false;
             }
-            Console.WriteLine("Time out " + sp.BytesToRead.ToString());
-            return false;
+            //ack
+            sp.DiscardOutBuffer();
+            sp.DiscardInBuffer();
+            crc[0] = 0x5A;
+            crc[1] = 0xA1;
+            sp.Write(crc, 0, 2);
+
+            log("Inject Command Reset OK");
+            return true;
+        }
+
+        public bool Execute(UInt32 JumpAddr, UInt32 ArgumentWord, UInt32 StackPointerAddr)
+        {
+            // some time, StackPointer cannot excess Limit
+            StackPointerAddr -= 1;
+            log(Convert.ToString( JumpAddr, 16));
+            log(Convert.ToString(StackPointerAddr, 16));
+            log(JumpAddr.ToString());
+            log(StackPointerAddr.ToString());
+
+            List<byte> List = new List<byte>();
+            List.Add(0x5A);
+            List.Add((byte)PacketType.kFramingPacketType_Command);
+            //frame len
+            List.Add(0x10);
+            List.Add(0x00);
+            //tag flag reseved
+            List.Add((byte)CommandTag.Execute);
+            List.Add(0x00);
+            List.Add(0x00);
+            //param count
+            List.Add(0x03);
+            // JumpAddr
+            List.AddRange(BitConverter.GetBytes(JumpAddr));
+            //ArgumentWord
+            List.AddRange(BitConverter.GetBytes(ArgumentWord));
+            //StackPointerAddr
+            List.AddRange(BitConverter.GetBytes(StackPointerAddr));
+            // Insert CRC
+            byte[] crc = BitConverter.GetBytes(crc16(List.ToArray(), 0, List.Count, 0x1021));
+            List.Insert(4, crc[0]);
+            List.Insert(5, crc[1]);
+
+            // Send data
+            sp.DiscardOutBuffer();
+            sp.DiscardInBuffer();
+            sp.Write(List.ToArray(), 0, List.Count);
+            Console.WriteLine("List.Count:" + List.Count.ToString());
+
+            //Receive
+            if (WaitForAck(30, 20) == false)
+            {
+                log("Inject Command Execute Error:");
+                return false;
+            }
+
+            //ack
+            sp.DiscardOutBuffer();
+            sp.DiscardInBuffer();
+            crc[0] = 0x5A;
+            crc[1] = 0xA1;
+            sp.Write(crc, 0, 2);
+
+            log("Inject Command Execute OK");
+
+            return true;
         }
 
         public bool WriteMemory(byte[] data, int startAddr, int byteCount)
         {
-
+            // must ping first
             Ping();
 
             List<byte> List = new List<byte>();
@@ -264,7 +395,7 @@ namespace serial
             //Receive
             if (!WaitForAck(400, 20))
             {
-                Console.WriteLine("Ack Error:");
+                log("Inject Command WriteMemory Ack Error:");
                 return false;
             }
 
@@ -305,18 +436,14 @@ namespace serial
                 sp.Write(List.ToArray(), 0, List.Count);
                 if (List.Count != 38)
                 {
-                    Console.WriteLine("Last Frame !!!");
-                    sp.DiscardInBuffer();
+                    log("kboot: Last packet");
                     Thread.Sleep(20);
                     if (sp.BytesToRead == 20)
                     {
-                        Console.WriteLine("Download OK, Sending ACK");
-
                         crc[0] = 0x5A;
                         crc[1] = 0xA1;
                         sp.Write(crc, 0, 2);
-
-
+                        log("Kboot: Download OK");
                         return true;
                     }
                     return false;
@@ -325,10 +452,15 @@ namespace serial
                 //Wait ack
                 if (WaitForAck(1000, 2) == false)
                 {
+                    log("Kboot Write Memory No Respond");
                     return false;
                 }
 
-                Console.WriteLine((p).ToString() + "Transfered");
+                if ((p % 1024) == 0)
+                {
+                    log((p).ToString() + "Byte Transfered");
+                }
+                
                 #endregion
                 p += PacketDataSize;
                 LoopCounter -= PacketDataSize;

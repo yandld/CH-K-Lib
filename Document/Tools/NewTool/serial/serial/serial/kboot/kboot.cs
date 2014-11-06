@@ -65,7 +65,7 @@ namespace serial
             sp.DiscardInBuffer();
             _WriteData(outBuffer, 2);
 
-            r = WaitForAck(20, 10);
+            r = WaitForAck(10, 10);
 
             if (r == false)
             {
@@ -104,7 +104,7 @@ namespace serial
 
             //send
             sp.DiscardInBuffer();
-            sp.Write(List.ToArray(), 0, List.Count);
+            _WriteData(List.ToArray(), List.Count);
 
             // read in data 
             if(WaitForAck(200, 20))
@@ -117,8 +117,6 @@ namespace serial
             crc3[0] = 0x5A;
             crc3[1] = 0xA1;
             sp.Write(crc, 0, 2);
-
-            log("Inject Command:FlashEraseAll " + r.ToString());
 
             return r;
         }
@@ -183,7 +181,7 @@ namespace serial
             sp.Write(List.ToArray(), 0, List.Count);
 
             // read in data 
-            if (WaitForAck(200, 20) == true)
+            if (WaitForAck(100, 20) == true)
             {
                 //ack
                 byte[] crc3 = new byte[2];
@@ -218,9 +216,8 @@ namespace serial
             List.Insert(4, crc[0]);
             List.Insert(5, crc[1]);
             // Send data
-            sp.DiscardOutBuffer();
             sp.DiscardInBuffer();
-            sp.Write(List.ToArray(), 0, List.ToArray().Length);
+            _WriteData(List.ToArray(), List.Count);
 
             //Receive
             System.Threading.Thread.Sleep(10);
@@ -281,10 +278,8 @@ namespace serial
             List.Insert(5, crc[1]);
 
             // Send data
-            sp.DiscardOutBuffer();
             sp.DiscardInBuffer();
-            sp.Write(List.ToArray(), 0, List.Count);
-            Console.WriteLine("List.Count:" + List.Count.ToString());
+            _WriteData(List.ToArray(), List.Count);
 
             //Receive
             if (WaitForAck(30, 20) == false)
@@ -293,11 +288,7 @@ namespace serial
                 return false;
             }
             //ack
-            sp.DiscardOutBuffer();
-            sp.DiscardInBuffer();
-            crc[0] = 0x5A;
-            crc[1] = 0xA1;
-            sp.Write(crc, 0, 2);
+            _WriteData(crc, 2);
 
             log("Inject Command Reset OK");
             return true;
@@ -307,10 +298,6 @@ namespace serial
         {
             // some time, StackPointer cannot excess Limit
             StackPointerAddr -= 1;
-            log(Convert.ToString( JumpAddr, 16));
-            log(Convert.ToString(StackPointerAddr, 16));
-            log(JumpAddr.ToString());
-            log(StackPointerAddr.ToString());
 
             List<byte> List = new List<byte>();
             List.Add(0x5A);
@@ -336,10 +323,8 @@ namespace serial
             List.Insert(5, crc[1]);
 
             // Send data
-            sp.DiscardOutBuffer();
             sp.DiscardInBuffer();
-            sp.Write(List.ToArray(), 0, List.Count);
-            Console.WriteLine("List.Count:" + List.Count.ToString());
+            _WriteData(List.ToArray(), List.Count);
 
             //Receive
             if (WaitForAck(30, 20) == false)
@@ -362,8 +347,6 @@ namespace serial
 
         public bool WriteMemory(byte[] data, int startAddr, int byteCount)
         {
-            // must ping first
-            Ping();
 
             List<byte> List = new List<byte>();
             List.Add(0x5A);
@@ -388,9 +371,8 @@ namespace serial
             List.Insert(5, crc[1]);
 
             // Send data
-            sp.DiscardOutBuffer();
             sp.DiscardInBuffer();
-            sp.Write(List.ToArray(), 0, List.ToArray().Length);
+            _WriteData(List.ToArray(), List.Count);
 
             //Receive
             if (!WaitForAck(400, 20))

@@ -43,7 +43,7 @@ namespace serial
                 {
                     CHConn.isConnected = true;
                     CHConn.ConnObject = sp1;
-                    CHConn.linkInfoString = sp1.PortName.ToString() + " " + sp1.BaudRate.ToString();
+                    CHConn.linkInfoString = sp1.PortName.ToString() + "," + sp1.BaudRate.ToString();
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 }
             }

@@ -61,7 +61,7 @@ namespace serial
             listBox1.Items.Clear();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btn_Unsecure_Click(object sender, EventArgs e)
         {
                 if (kb.FlashEraseAllUnsecure())
                 {
@@ -73,7 +73,7 @@ namespace serial
                 }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void btn_EraseAll_Click(object sender, EventArgs e)
         {
             if (kb.FlashEraseAll())
             {
@@ -97,6 +97,7 @@ namespace serial
         private void frm_download_Load(object sender, EventArgs e)
         {
             this.StartPosition = FormStartPosition.CenterScreen;
+            sys_log(CHConn.linkInfoString);
         }
 
         private void btn_Download_Click(object sender, EventArgs e)
@@ -111,6 +112,11 @@ namespace serial
                     sys_log("File:  " + fileInfo.Name);
                     sys_log("Size:  " + fileInfo.Length);
                 }
+            }
+
+            if (fileInfo == null)
+            {
+                return;
             }
 
             FileStream fs = new FileStream(fileInfo.FullName, FileMode.Open);
@@ -133,13 +139,25 @@ namespace serial
             if (kb.Ping() == false)
             {
                 sys_log("Ping ERROR");
+                sys_log("Please check connection");
                 return;
             }
+
             kb.FlashEraseAllUnsecure();
             kb.Ping();
             kb.FlashEraseAll();
+
+            UInt32 JumpAddr, StackPointer;
+            JumpAddr = (UInt32)BitConverter.ToUInt32(data.Skip(4).Take(4).ToArray(), 0);
+            StackPointer = (UInt32)BitConverter.ToUInt32(data.Skip(0).Take(4).ToArray(), 0);
+            sys_log("JumpAddr: 0x" + Convert.ToString(JumpAddr, 16));
+            sys_log("StackPointer: 0x" + Convert.ToString(StackPointer, 16));
+
+            kb.Ping();
             kb.WriteMemory(data, (int)Convert.ToUInt32(txt_StartAddr.Text), data.Length);
-            kb.Execute((UInt32)BitConverter.ToUInt32(data.Skip(4).Take(4).ToArray(), 0), 0, (UInt32)BitConverter.ToUInt32(data.Skip(0).Take(4).ToArray(), 0));
+            kb.Execute(JumpAddr, 0, StackPointer);
         }
+
+
     }
 }

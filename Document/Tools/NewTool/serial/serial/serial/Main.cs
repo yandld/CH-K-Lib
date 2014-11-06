@@ -14,13 +14,11 @@ namespace serial
         public Main()
         {
             InitializeComponent();
-            //LoadPanelForm(panel1, new frm_consult());
+            LoadPanelForm(panel1, new frm_help());
             LoadPanelForm(panel2, new frm_download());
   
-
             conDialog frm_conDialog = new conDialog();
             frm_conDialog.ShowDialog();
-            this.Text = "CHBox - " + CHConn.linkInfoString;
         }
 
 
@@ -31,9 +29,6 @@ namespace serial
             Panel.Controls.Add(form);
             form.Show();
         }
-
-
-
 
     }
 }

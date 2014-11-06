@@ -137,18 +137,23 @@ void DMA_DisableRequest(uint8_t chl)
 
 
 /**
+ * @brief  每次一个触发信号, 只触发一次传输
+ */
+void DMA_EnableCycleSteal(uint8_t chl, bool flag)
+{
+    (flag)?
+    (DMA0->DMA[chl].DCR |= DMA_DCR_CS_MASK):
+    (DMA0->DMA[chl].DCR &= ~DMA_DCR_CS_MASK);
+}
+
+/**
  * @brief  在Majloop 结束后  是否自动关闭Request
  */
 void DMA_EnableAutoDisableRequest(uint8_t chl , bool flag)
 {
-    if(flag)
-    {
-        DMA0->DMA[chl].DCR |= DMA_DCR_D_REQ_MASK;
-    }
-    else
-    {
-        DMA0->DMA[chl].DCR &= ~DMA_DCR_D_REQ_MASK;  
-    }
+    (flag)?
+    (DMA0->DMA[chl].DCR |= DMA_DCR_D_REQ_MASK):
+    (DMA0->DMA[chl].DCR &= ~DMA_DCR_D_REQ_MASK);
 }
 
 

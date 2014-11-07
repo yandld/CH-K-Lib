@@ -49,7 +49,7 @@
 #define UART0_RX_PD06_TX_PD07   (0x8CD8U)
 #define UART2_RX_PF13_TX_PF14   (0x9B2AU) 
 #define UART5_RX_PD08_TX_PD09   (0x90DDU) //芯片的UART5端口，使用PTD8引脚为接收引脚，使用PTD9引脚为发送引脚
-#define UART5_RX_PE08_TX_PE09   (0X000090E5U)
+#define UART5_RX_PE08_TX_PE09   (0X90E5U)
 /*!< parity 选择 */
 typedef enum
 {

@@ -39,23 +39,27 @@ void AppLED0Task(void *pdata)
 
 int main(void)
 {
-
     DelayInit();
+    SYSTICK_Init((1000*1000)/OS_TICKS_PER_SEC);
     SYSTICK_ITConfig(true);
     
-    UART_QuickInit(UART5_RX_PE09_TX_PE08, 115200);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     
     printf("uCOSII test\r\n");
 
     OSInit();  //OS初始化
     OSTaskCreate(AppLED1Task,(void *)0,
                 &APP_LED1_STK[TASK_STK_SIZE-1],
-                APP_LED1_TASK_PRIO); //建立LED1任务
+                APP_LED1_TASK_PRIO); //建立LED1 任务
     OSTaskCreate(AppLED0Task,(void *)0,
                 &APP_LED0_STK[TASK_STK_SIZE-1],
-                APP_LED0_TASK_PRIO); //建立LED0任务
-    OSStart(); //控制权交给操作系统
-	//程序永远不会运行到这
+                APP_LED0_TASK_PRIO); //建立LED0 任务
+    
+    SYSTICK_Cmd(true);
+    
+    /* 控制权交给操作系统 */
+    OSStart();
+	/* 程序永远不会运行到这 */
     while(1);
 }
 

@@ -23,6 +23,7 @@ namespace serial
 
         private void sys_log(string log)
         {
+            if (log == null) return;
             listBox1.Items.Add(log);
             this.listBox1.SelectedIndex = this.listBox1.Items.Count - 1;
         }

@@ -8,9 +8,9 @@
     <ProjectGuid>{64AC5435-5801-4086-975E-6F9A210C639C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>serial</RootNamespace>
-    <AssemblyName>serial</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>CHBox</RootNamespace>
+    <AssemblyName>CHBox</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,11 +56,11 @@
     <Compile Include="conDialog.Designer.cs">
       <DependentUpon>conDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="frm_consult.cs">
+    <Compile Include="frm_terminal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frm_consult.Designer.cs">
-      <DependentUpon>frm_consult.cs</DependentUpon>
+    <Compile Include="frm_terminal.Designer.cs">
+      <DependentUpon>frm_terminal.cs</DependentUpon>
     </Compile>
     <Compile Include="frm_download.cs">
       <SubType>Form</SubType>
@@ -83,8 +86,8 @@
     <EmbeddedResource Include="conDialog.resx">
       <DependentUpon>conDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frm_consult.resx">
-      <DependentUpon>frm_consult.cs</DependentUpon>
+    <EmbeddedResource Include="frm_terminal.resx">
+      <DependentUpon>frm_terminal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm_download.resx">
       <DependentUpon>frm_download.cs</DependentUpon>
@@ -115,6 +118,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

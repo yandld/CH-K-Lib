@@ -13,9 +13,15 @@ namespace serial
         [STAThread]
         static void Main()
         {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            System.Threading.Mutex mutex = new System.Threading.Mutex(false, "ThisShouldOnlyRunOnce");
+            bool Running = !mutex.WaitOne(0, false);
+            if (!Running)
+                Application.Run(new Main());
+            else
+                MessageBox.Show("程序已启动！", "错误");
         }
     }
 }

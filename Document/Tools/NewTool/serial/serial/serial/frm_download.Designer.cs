@@ -37,6 +37,7 @@
             this.btn_ping = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.btn_ClearLog = new System.Windows.Forms.Button();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +70,7 @@
             // 
             // btn_EraseAll
             // 
+            this.btn_EraseAll.Enabled = false;
             this.btn_EraseAll.Location = new System.Drawing.Point(80, 108);
             this.btn_EraseAll.Name = "btn_EraseAll";
             this.btn_EraseAll.Size = new System.Drawing.Size(62, 24);
@@ -94,15 +96,16 @@
             this.label1.ForeColor = System.Drawing.Color.Red;
             this.label1.Location = new System.Drawing.Point(9, 84);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.Size = new System.Drawing.Size(106, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "StartAddr: 0x";
+            this.label1.Text = "下载起始地址: 0x";
             // 
             // txt_StartAddr
             // 
-            this.txt_StartAddr.Location = new System.Drawing.Point(93, 81);
+            this.txt_StartAddr.Font = new System.Drawing.Font("Trebuchet MS", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_StartAddr.Location = new System.Drawing.Point(113, 80);
             this.txt_StartAddr.Name = "txt_StartAddr";
-            this.txt_StartAddr.Size = new System.Drawing.Size(76, 21);
+            this.txt_StartAddr.Size = new System.Drawing.Size(62, 21);
             this.txt_StartAddr.TabIndex = 3;
             this.txt_StartAddr.Text = "00000000";
             this.txt_StartAddr.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_StartAddr_KeyPress);
@@ -141,11 +144,24 @@
             this.btn_ClearLog.UseVisualStyleBackColor = true;
             this.btn_ClearLog.Click += new System.EventHandler(this.btn_ClearLog_Click);
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel1.Location = new System.Drawing.Point(8, 190);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(170, 15);
+            this.linkLabel1.TabIndex = 5;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "飞思卡尔Kinetis_Bootloader";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // frm_download
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(421, 216);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.btn_ClearLog);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.groupBox1);
@@ -157,6 +173,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -171,5 +188,6 @@
         private System.Windows.Forms.Button btn_ClearLog;
         private System.Windows.Forms.Button btn_Unsecure;
         private System.Windows.Forms.Button btn_EraseAll;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }

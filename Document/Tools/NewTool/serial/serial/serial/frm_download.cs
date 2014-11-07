@@ -40,8 +40,11 @@ namespace serial
                 if (kb.Ping())
                 {
                     sys_log("Ping OK");
+                    kb.Ping();
                     sys_log("FlashSize:" + (kb.GetFlashSizeInBytes() / 1024).ToString() + "KB");
+                    kb.Ping();
                     sys_log("RAMSize:" + (kb.GetRAMSizeInBytes() / 1024).ToString() + "KB");
+                    kb.Ping();
                     sys_log("Device: 0x" + System.Convert.ToString(kb.GetSystemDeviceId(), 16));
                 }
                 else
@@ -63,14 +66,11 @@ namespace serial
 
         private void btn_Unsecure_Click(object sender, EventArgs e)
         {
-                if (kb.FlashEraseAllUnsecure())
-                {
-                    sys_log("FlashEraseAllUnsecure OK");
-                }
-                else
-                {
-                    sys_log("FlashEraseAllUnsecure ERROR");
-                }
+            if (kb != null)
+            {
+                kb.FlashEraseAllUnsecure();
+            }
+            else sys_log("Ping First");
         }
 
         private void btn_EraseAll_Click(object sender, EventArgs e)
@@ -87,6 +87,7 @@ namespace serial
 
         private void txt_StartAddr_KeyPress(object sender, KeyPressEventArgs e)
         {
+            TextBox me = (TextBox)sender;
             //如果输入的不是数字键，也不是回车键、Backspace键，则取消该输入
             if (!(Char.IsNumber(e.KeyChar)) && e.KeyChar != (char)13 && e.KeyChar != (char)8)
             {
@@ -111,6 +112,10 @@ namespace serial
                     fileInfo = new FileInfo(opd.FileName);
                     sys_log("File:  " + fileInfo.Name);
                     sys_log("Size:  " + fileInfo.Length);
+                    if (fileInfo.Length > kb.GetFlashSizeInBytes())
+                    {
+                        sys_log("WARNING: FileSize too large!");
+                    }
                 }
             }
 
@@ -147,16 +152,25 @@ namespace serial
             kb.Ping();
             kb.FlashEraseAll();
 
-            UInt32 JumpAddr, StackPointer;
+            UInt32 JumpAddr, StackPointer, StartAddr;
             JumpAddr = (UInt32)BitConverter.ToUInt32(data.Skip(4).Take(4).ToArray(), 0);
             StackPointer = (UInt32)BitConverter.ToUInt32(data.Skip(0).Take(4).ToArray(), 0);
+            StartAddr = (UInt32)Convert.ToUInt32(txt_StartAddr.Text);
+            sys_log("StartAddr: 0x" + Convert.ToString(StartAddr, 16));
             sys_log("JumpAddr: 0x" + Convert.ToString(JumpAddr, 16));
             sys_log("StackPointer: 0x" + Convert.ToString(StackPointer, 16));
 
             kb.Ping();
-            kb.WriteMemory(data, (int)Convert.ToUInt32(txt_StartAddr.Text), data.Length);
+            kb.WriteMemory(data, (int)StartAddr, data.Length);
             kb.Execute(JumpAddr, 0, StackPointer);
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=KBOOT&tid=vanKBOOT/");
+            
+        }
+
 
 
     }

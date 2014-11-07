@@ -65,7 +65,7 @@ namespace serial
             sp.DiscardInBuffer();
             _WriteData(outBuffer, 2);
 
-            r = WaitForAck(10, 10);
+            r = WaitForAck(15, 10);
 
             if (r == false)
             {
@@ -113,10 +113,7 @@ namespace serial
             }
 
             //ack
-            byte[] crc3 = new byte[2];
-            crc3[0] = 0x5A;
-            crc3[1] = 0xA1;
-            sp.Write(crc, 0, 2);
+            _WriteData(new byte[] { 0x5A, 0xA1 }, 2);
 
             return r;
         }
@@ -176,25 +173,20 @@ namespace serial
             List.Insert(5, crc[1]);
 
             // write data
-            sp.DiscardOutBuffer();
             sp.DiscardInBuffer();
-            sp.Write(List.ToArray(), 0, List.Count);
+            _WriteData(List.ToArray(), List.Count);
 
             // read in data 
             if (WaitForAck(100, 20) == true)
             {
                 //ack
-                byte[] crc3 = new byte[2];
-                crc3[0] = 0x5A;
-                crc3[1] = 0xA1;
-                sp.Write(crc, 0, crc3.Length);
+                _WriteData(new byte[] { 0x5A, 0xA1 }, 2);
                 r = true;
             }
             log("Inject Command:FlashEraseAllUnsecure " + r.ToString());
             return r;
         }
 
-        #region GetProperty
         private UInt32 GetProperty(int tag)
         {
             List<byte> List = new List<byte>();
@@ -215,6 +207,7 @@ namespace serial
             byte[] crc = BitConverter.GetBytes(crc16(List.ToArray(), 0, List.Count, 0x1021));
             List.Insert(4, crc[0]);
             List.Insert(5, crc[1]);
+
             // Send data
             sp.DiscardInBuffer();
             _WriteData(List.ToArray(), List.Count);
@@ -226,9 +219,7 @@ namespace serial
             sp.Read(RevData, 0, len);
            
             //ack
-            crc[0] = 0x5A;
-            crc[1] = 0xA1;
-            sp.Write(crc, 0, 2);
+            _WriteData(new byte[] { 0x5A, 0xA1 }, 2);
 
             if (RevData.Length == 20)
             {
@@ -236,7 +227,7 @@ namespace serial
             }
             return 0;
         }
-        #endregion
+
 
         public UInt32 GetCurrentVersion()
         {
@@ -334,11 +325,7 @@ namespace serial
             }
 
             //ack
-            sp.DiscardOutBuffer();
-            sp.DiscardInBuffer();
-            crc[0] = 0x5A;
-            crc[1] = 0xA1;
-            sp.Write(crc, 0, 2);
+            _WriteData(new byte[] { 0x5A, 0xA1 }, 2);
 
             log("Inject Command Execute OK");
 
@@ -372,7 +359,7 @@ namespace serial
 
             // Send data
             sp.DiscardInBuffer();
-            _WriteData(List.ToArray(), List.Count);
+             _WriteData(List.ToArray(), List.Count);
 
             //Receive
             if (!WaitForAck(400, 20))
@@ -381,13 +368,8 @@ namespace serial
                 return false;
             }
 
-            sp.DiscardInBuffer();
-            sp.DiscardOutBuffer();
-
             //ack
-           crc[0] = 0x5A;
-            crc[1] = 0xA1;
-            sp.Write(crc, 0, 2);
+            _WriteData(new byte[] { 0x5A, 0xA1 }, 2);
 
             Thread.Sleep(10);
             sp.DiscardInBuffer();
@@ -414,17 +396,14 @@ namespace serial
                 #region SendData
                 // Send data
                 sp.DiscardInBuffer();
-                sp.DiscardOutBuffer();
-                sp.Write(List.ToArray(), 0, List.Count);
+                _WriteData(List.ToArray(), List.Count);
                 if (List.Count != 38)
                 {
                     log("kboot: Last packet");
                     Thread.Sleep(20);
                     if (sp.BytesToRead == 20)
                     {
-                        crc[0] = 0x5A;
-                        crc[1] = 0xA1;
-                        sp.Write(crc, 0, 2);
+                        _WriteData(new byte[] { 0x5A, 0xA1 }, 2);
                         log("Kboot: Download OK");
                         return true;
                     }

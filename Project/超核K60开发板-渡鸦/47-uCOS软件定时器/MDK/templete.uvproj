@@ -167,10 +167,10 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4096</DriverSelection>
+            <DriverSelection>4099</DriverSelection>
           </Flash1>
-          <bUseTDR>1</bUseTDR>
-          <Flash2>BIN\UL2CM3.DLL</Flash2>
+          <bUseTDR>0</bUseTDR>
+          <Flash2>Segger\JL2CM3.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10 RAVEN DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\uCOSII\config;..\..\..\..\Libraries\utilities\uCOSII\core;..\..\..\..\Libraries\utilities\uCOSII\port</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -522,12 +522,92 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>DSP_Lib</GroupName>
+          <GroupName>uCOSII_Core</GroupName>
           <Files>
             <File>
-              <FileName>arm_cortexM4l_math.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\dsp\lib\arm_cortexM4l_math.lib</FilePath>
+              <FileName>os_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_flag.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_flag.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_mbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_q.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_q.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_tmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\core\os_tmr.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uCOSII_Config</GroupName>
+          <Files>
+            <File>
+              <FileName>includes.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\config\includes.h</FilePath>
+            </File>
+            <File>
+              <FileName>os_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\config\os_cfg.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uCOSII_Port</GroupName>
+          <Files>
+            <File>
+              <FileName>os_cpu_a_keil.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\port\os_cpu_a_keil.asm</FilePath>
+            </File>
+            <File>
+              <FileName>os_cpu_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\port\os_cpu_c.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_dbg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\uCOSII\port\os_dbg.c</FilePath>
             </File>
           </Files>
         </Group>

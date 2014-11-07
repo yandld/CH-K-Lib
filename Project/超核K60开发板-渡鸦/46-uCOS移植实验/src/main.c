@@ -18,20 +18,20 @@ OS_STK  APP_LED0_STK[TASK_STK_SIZE];
 //LED小灯任务
 void AppLED1Task(void *pdata)
 {
-  pdata = pdata; //防止编译器出错 无实际意义
+    pdata = pdata; //防止编译器出错 无实际意义
 	while(1)
 	{
-		printf("AppLED 1 Task:Process\r\n");
+		printf("LED1 Task!\r\n");
 		OSTimeDlyHMSM(0, 0, 0, 500);
 	}
 }
 
 void AppLED0Task(void *pdata)
 {
-  pdata = pdata; //防止编译器出错 无实际意义
+    pdata = pdata; //防止编译器出错 无实际意义
 	while(1)
 	{
-		printf("AppLED 2 Task:Process\r\n");
+		printf("LED2 Task!\r\n");
 		OSTimeDlyHMSM(0, 0, 0, 500);
 	}
 }
@@ -43,7 +43,7 @@ int main(void)
     SYSTICK_Init((1000*1000)/OS_TICKS_PER_SEC);
     SYSTICK_ITConfig(true);
     
-    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("uCOSII test\r\n");
 

@@ -134,10 +134,10 @@
 
 
                                        /* --------------------- TIMER MANAGEMENT --------------------- */
-#define OS_TMR_EN                 0   /* Enable (1) or Disable (0) code generation for TIMERS         */
-#define OS_TMR_CFG_MAX           16u   /*     Maximum number of timers                                 */
+#define OS_TMR_EN                 1   /* Enable (1) or Disable (0) code generation for TIMERS         */
+#define OS_TMR_CFG_MAX            16u   /*     Maximum number of timers                                 */
 #define OS_TMR_CFG_NAME_EN        1u   /*     Determine timer names                                    */
 #define OS_TMR_CFG_WHEEL_SIZE     8u   /*     Size of timer wheel (#Spokes)                            */
-#define OS_TMR_CFG_TICKS_PER_SEC 10u   /*     Rate at which timer management task runs (Hz)            */
-
+#define OS_TMR_CFG_TICKS_PER_SEC  OS_TICKS_PER_SEC   /*     Rate at which timer management task runs (Hz)            */
+#define OS_TASK_TMR_PRIO          0u   //软件定时器的优先级,设置为最高
 #endif

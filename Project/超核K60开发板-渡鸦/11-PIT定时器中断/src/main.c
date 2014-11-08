@@ -42,7 +42,7 @@ int main(void)
     /* 注册PIT 中断回调函数 */
     PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR); //0号定时器的中断处理
     /* 开启PIT0定时器中断 */
-    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
+    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
     
     while(1)
     {

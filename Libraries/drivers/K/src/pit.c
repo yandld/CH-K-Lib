@@ -112,22 +112,22 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
  * @param  NewState ENABLE »òDISABLE
  * @retval None
  */
-void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
+void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config, bool flag)
 {
     SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
-    switch (config)
+    if(flag)
     {
-        case kPIT_IT_Disable:
-            //NVIC_DisableIRQ(PIT_IRQnTable[chl]);
-            PIT->CHANNEL[chl].TCTRL &= ~PIT_TCTRL_TIE_MASK;
-            break;
-        case kPIT_IT_TOF:
-            NVIC_EnableIRQ(PIT_IRQnTable[chl]);
-            PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
-            PIT->CHANNEL[chl].TCTRL |= PIT_TCTRL_TIE_MASK;
-            break;
-        default:
-            break;
+        NVIC_EnableIRQ(PIT_IRQnTable[chl]);
+    }
+
+    (flag)?
+    (PIT->CHANNEL[chl].TCTRL |= PIT_TCTRL_TIE_MASK):
+    (PIT->CHANNEL[chl].TCTRL &= ~PIT_TCTRL_TIE_MASK);
+    
+    /* clear IT bit */
+    if(!flag)
+    {
+        PIT->CHANNEL[chl].TFLG |= PIT_TFLG_TIF_MASK;
     }
 }
 

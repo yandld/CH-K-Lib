@@ -19,8 +19,8 @@ static int DoPIT(int argc, char * const argv[])
     PIT_QuickInit(HW_PIT_CH0, 1000*1000);
     PIT_CallbackInstall(HW_PIT_CH0, PIT0_ISR);
     PIT_CallbackInstall(HW_PIT_CH1, PIT1_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
-    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
+    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
+    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF, true);
     return 0;
 }
 

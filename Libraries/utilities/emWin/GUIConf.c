@@ -43,7 +43,7 @@ Purpose     : Display controller initialization
 //
 // Define the available number of bytes available for the GUI
 //
-#define GUI_NUMBYTES  (1024*50)
+#define GUI_NUMBYTES  (1024*16)
 //
 // Define the average block size
 //

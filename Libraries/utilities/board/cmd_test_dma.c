@@ -42,7 +42,7 @@ static int DoDMA(int argc, char * const argv[])
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.dMod = kDMA_ModuloDisable;
     
-#endif
+#elif
     
     DMA_InitTypeDef DMA_InitStruct1 = {0};
     
@@ -59,7 +59,7 @@ static int DoDMA(int argc, char * const argv[])
     DMA_InitStruct1.dAddrIsInc = true;
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.dAddr = (uint32_t)dData;
-    
+ #endif   
     DMA_Init(&DMA_InitStruct1);
     
     DMA_EnableAutoDisableRequest(HW_DMA_CH0, true);

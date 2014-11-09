@@ -219,24 +219,23 @@ void DMA_EnableMajorLink(uint8_t chl , uint8_t linkChl, bool flag)
  *         @arg kDMA_IT_Major 开启DMA传世完成中断触发
  * @retval None
  */
-void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config)
+void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config, bool status)
 {
+    if(status)
+    {
+        NVIC_EnableIRQ(DMA_IRQnTable[chl]);
+    }
     switch(config)
     {
-        case kDMA_IT_Half_Disable:
-            DMA0->TCD[chl].CSR &= ~DMA_CSR_INTHALF_MASK;
-            break;
-        case kDMA_IT_Major_Disable:
-            DMA0->TCD[chl].CSR &= ~DMA_CSR_INTMAJOR_MASK;
-            break;
         case kDMA_IT_Half:
-            NVIC_EnableIRQ(DMA_IRQnTable[chl]);
-            DMA0->TCD[chl].CSR |= DMA_CSR_INTHALF_MASK;
+            (status)?
+            (DMA0->TCD[chl].CSR |= DMA_CSR_INTHALF_MASK):
+            (DMA0->TCD[chl].CSR &= ~DMA_CSR_INTHALF_MASK);
             break;
         case kDMA_IT_Major:
-            NVIC_EnableIRQ(DMA_IRQnTable[chl]);
-            DMA0->TCD[chl].CSR &= ~DMA_CSR_INTHALF_MASK;
-            DMA0->TCD[chl].CSR |= DMA_CSR_INTMAJOR_MASK;
+            (status)?
+            (DMA0->TCD[chl].CSR |= DMA_CSR_INTMAJOR_MASK):
+            (DMA0->TCD[chl].CSR &= ~DMA_CSR_INTMAJOR_MASK);
             break; 
         default:
             break;

@@ -161,8 +161,6 @@ typedef struct
 //!< interrupt select
 typedef enum
 {
-    kDMA_IT_Half_Disable,       //传输一半中断关闭
-    kDMA_IT_Major_Disable,      //传输完成中断关闭
     kDMA_IT_Half,               //传输一半中断开启
     kDMA_IT_Major,              //传输完成中断开启
 }DMA_ITConfig_Type;  
@@ -186,7 +184,7 @@ void DMA_EnableRequest(uint8_t chl);
 void DMA_DisableRequest(uint8_t chl);
 void DMA_EnableAutoDisableRequest(uint8_t chl , bool flag);
 /* IT funtions */
-void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config);
+void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config, bool status);
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun);
 /* chl link */
 void DMA_EnableMajorLink(uint8_t chl , uint8_t linkChl, bool flag);

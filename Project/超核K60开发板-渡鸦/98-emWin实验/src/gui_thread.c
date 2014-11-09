@@ -21,6 +21,7 @@ void gui_thread_entry(void* parameter)
     GUI_SettingInit();
     GUI_DispString("GUI system OK\r\n");//œ‘ æ≤‚ ‘
     GUI_DispString(GUI_GetVersionString());
+    
     MainTask();
   //  WM_HWIN hWin;
   //  GUI_CURSOR_Show();

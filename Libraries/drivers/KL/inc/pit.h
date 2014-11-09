@@ -44,7 +44,7 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs);
 void PIT_ResetCounter(uint8_t chl);
 uint32_t PIT_GetCounterValue(uint8_t chl);
 void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun);
-void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config);
+void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config, bool flag);
 
 #ifdef __cplusplus
 }

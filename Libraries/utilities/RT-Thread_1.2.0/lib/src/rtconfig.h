@@ -16,7 +16,7 @@
 
 #define RT_USING_OVERFLOW_CHECK
 #define RT_USING_HOOK
-#define IDLE_THREAD_STACK_SIZE      1024
+#define IDLE_THREAD_STACK_SIZE      512
 
 /* Using Software Timer */
 #define RT_USING_TIMER_SOFT 
@@ -61,7 +61,7 @@
 #define FINSH_USING_DESCRIPTION
 #define FINSH_USING_MSH
 #define FINSH_USING_MSH_DEFAULT
-#define FINSH_THREAD_STACK_SIZE   4096
+#define FINSH_THREAD_STACK_SIZE   2048
 
 /* SECTION: device filesystem */
 #define RT_USING_DFS 

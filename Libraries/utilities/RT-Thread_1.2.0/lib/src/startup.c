@@ -3,7 +3,7 @@
 #include <rthw.h>
 #include "components.h"
 
-#define RTT_INITAL_HEAP_SIZE   (1024*4)
+#define RTT_INITAL_HEAP_SIZE   (1024*6)
 
 extern int Image$$RW_IRAM1$$ZI$$Limit;
 extern int Image$$RW_IRAM1$$RW$$Limit;

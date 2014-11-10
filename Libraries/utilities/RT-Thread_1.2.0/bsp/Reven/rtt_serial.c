@@ -135,6 +135,6 @@ void rt_hw_usart_init2(void)
 {
     rt_hw_usart_init(0, "uart0");
 }
-    
+
 INIT_BOARD_EXPORT(rt_hw_usart_init2);
 

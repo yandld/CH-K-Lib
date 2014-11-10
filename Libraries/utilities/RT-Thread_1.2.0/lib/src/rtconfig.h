@@ -2,10 +2,10 @@
 #ifndef __RTTHREAD_CFG_H__
 #define __RTTHREAD_CFG_H__
 
-#define RT_NAME_MAX	   8
-#define RT_ALIGN_SIZE	4
-#define RT_THREAD_PRIORITY_MAX	64
-#define RT_TICK_PER_SECOND	100
+#define RT_NAME_MAX                 8
+#define RT_ALIGN_SIZE               4
+#define RT_THREAD_PRIORITY_MAX      64
+#define RT_TICK_PER_SECOND          100
 
 /* SECTION: RT_DEBUG */
 /* Thread Debug */
@@ -16,7 +16,7 @@
 
 #define RT_USING_OVERFLOW_CHECK
 #define RT_USING_HOOK
-#define IDLE_THREAD_STACK_SIZE     1024
+#define IDLE_THREAD_STACK_SIZE      1024
 
 /* Using Software Timer */
 #define RT_USING_TIMER_SOFT 

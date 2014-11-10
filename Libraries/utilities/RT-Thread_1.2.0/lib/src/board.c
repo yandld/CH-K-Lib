@@ -33,15 +33,14 @@ void _init_entry(void* parameter)
     cpu_usage_init();
     finsh_system_init();
     dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
-    
+    cmd_free(RT_NULL, RT_NULL);
     /* init thread */
     tid = rt_thread_create("init", init_thread_entry, RT_NULL, 2048, 0x20, 20);                       
     if (tid != RT_NULL)
     {
         rt_thread_startup(tid);		
     }
-    
-    
+
     tid = rt_thread_self();
     rt_thread_delete(tid);
 }

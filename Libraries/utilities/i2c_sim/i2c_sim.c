@@ -324,17 +324,20 @@ uint8_t i2c_gpio_write(uint8_t chip, uint32_t addr, int32_t alen, uint8_t *buffe
 
 int I2C_SIM_BurstRead(uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len)
 {
+    deviceAddress<<=1;
     return !i2c_gpio_read(deviceAddress, subAddress, subAddressLen, buf, len);
 }
 
 
 int I2C_SIM_BurstWrite(uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len)
 {
+    deviceAddress<<=1;
     return !i2c_gpio_write(deviceAddress, subAddress, subAddressLen, buf, len);
 }
 
 uint8_t I2C_SIM_Probe(uint8_t addr)
 {
+    addr<<=1;
     return i2c_gpio_probe(addr);
 }
 

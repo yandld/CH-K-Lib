@@ -13,7 +13,7 @@ static void I2C_Scan(uint32_t instance)
     for(i = 1; i < 127; i++)
     {
         // ret = I2C_BurstWrite(instance , i, 0, 0, NULL, 0);
-        ret = I2C_SIM_Probe(i*2);
+        ret = I2C_SIM_Probe(i);
         if(!ret)
         {
             printf("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);

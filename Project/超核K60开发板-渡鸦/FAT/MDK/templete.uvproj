@@ -1018,6 +1018,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>utilities\i2c_sim</GroupName>
+          <Files>
+            <File>
+              <FileName>i2c_sim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\i2c_sim\i2c_sim.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1378,7 +1388,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK64F12 FRDM LIB_DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\shell;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\d4d\common_files;..\..\..\..\Libraries\d4d\graphic_objects;..\..\..\..\Libraries\d4d;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\mempool;..\..\..\..\Libraries\utilities\fatfs</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\shell;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\d4d\common_files;..\..\..\..\Libraries\d4d\graphic_objects;..\..\..\..\Libraries\d4d;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\mempool;..\..\..\..\Libraries\utilities\fatfs;..\..\..\..\Libraries\utilities\i2c_sim</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -2381,6 +2391,16 @@
               <FileName>usbevent.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usbevent.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>utilities\i2c_sim</GroupName>
+          <Files>
+            <File>
+              <FileName>i2c_sim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\i2c_sim\i2c_sim.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3997,6 +4017,16 @@
               <FileName>usbevent.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\driver\usbevent.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>utilities\i2c_sim</GroupName>
+          <Files>
+            <File>
+              <FileName>i2c_sim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\i2c_sim\i2c_sim.c</FilePath>
             </File>
           </Files>
         </Group>

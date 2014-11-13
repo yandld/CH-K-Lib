@@ -68,6 +68,8 @@
 #define ADC1_SE18           (0x00900001U)
 #define ADC0_SE23           (0x00B80000U)
 #define ADC1_SE23           (0x00B80001U)
+#define ADC1_SE10_PB04      (0X00504809U)
+#define ADC1_SE11_PB05      (0X00584A09U)
 
 //!< ADC 转换时钟分频因子,控制转换速度
 typedef enum

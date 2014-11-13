@@ -30,6 +30,7 @@
 #include "sd.h"
 #include "tsi.h"
 #include "vref.h"
+#include "crc.h"
 #include "wdog.h"
 
 /* T90FS Flash */

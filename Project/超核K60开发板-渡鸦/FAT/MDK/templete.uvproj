@@ -771,6 +771,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\pdb.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -945,6 +950,11 @@
               <FileName>cmd_test_usb.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_usb.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmd_test_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1838,6 +1848,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\pdb.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2141,6 +2156,11 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>cmd_test_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_crc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3171,6 +3191,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\pdb.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3947,6 +3972,11 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>cmd_test_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\board\cmd_test_crc.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -225,7 +225,7 @@ int mountnfs(const char * host)
 {
     int r;
 	rt_kprintf("mount nfs to %s...", "/NFS");
-    r = dfs_mount(RT_NULL, "/NFS", "nfs", 0, host);
+    r = dfs_mount("e0", "/NFS", "nfs", 0, host);
 	if (!r)
 	{
 		rt_kprintf("[ok]\n");

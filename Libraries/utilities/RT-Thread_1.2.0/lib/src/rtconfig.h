@@ -11,7 +11,7 @@
 /* Thread Debug */
 #define RT_DEBUG
 #define RT_USING_COMPONENTS_INIT
-#define RT_DEBUG_INIT
+#define RT_DEBUG_INIT   1
 //#define RT_USING_MODULE
 
 #define RT_USING_OVERFLOW_CHECK
@@ -61,7 +61,7 @@
 #define FINSH_USING_DESCRIPTION
 #define FINSH_USING_MSH
 #define FINSH_USING_MSH_DEFAULT
-#define FINSH_THREAD_STACK_SIZE   2048
+#define FINSH_THREAD_STACK_SIZE   4096
 
 /* SECTION: device filesystem */
 #define RT_USING_DFS 

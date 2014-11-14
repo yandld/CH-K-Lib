@@ -11,11 +11,10 @@
 #include "usb_msc.h"
 
 
-
 void led_thread_entry(void* parameter)
 {
     int i,led_num;
-    
+    rt_kprintf("led_thread_entry\r\n");
     uint32_t led_port_tab[] = BOARD_LED_GPIO_BASES;
     uint32_t led_pin_tab[] = BOARD_LED_PIN_BASES;
     led_num = ARRAY_SIZE(led_port_tab);

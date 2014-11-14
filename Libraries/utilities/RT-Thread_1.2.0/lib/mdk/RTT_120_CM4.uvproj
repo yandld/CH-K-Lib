@@ -221,7 +221,7 @@
             <hadIRAM>0</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>2</RvdsVP>
+            <RvdsVP>1</RvdsVP>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>0</StupSel>
@@ -349,7 +349,7 @@
           <Cads>
             <interw>1</interw>
             <Optim>4</Optim>
-            <oTime>1</oTime>
+            <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
             <Strict>0</Strict>
@@ -683,6 +683,31 @@
               <FileName>i2c-bit-ops.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\drivers\i2c\i2c-bit-ops.c</FilePath>
+            </File>
+            <File>
+              <FileName>enc28j60.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\enc28j60.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_flash_at45dbxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\spi_flash_at45dbxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_flash_sst25vfxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\spi_flash_sst25vfxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_flash_w25qxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\spi_flash_w25qxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_wifi_rw009.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\drivers\spi\spi_wifi_rw009.c</FilePath>
             </File>
           </Files>
         </Group>

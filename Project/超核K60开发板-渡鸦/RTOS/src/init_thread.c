@@ -1,6 +1,5 @@
 #include <rtthread.h>
 #include <rthw.h>
-
 #include "board.h"
 #include "components.h"
 #include "rtt_ksz8041.h"
@@ -12,6 +11,8 @@
 void led_thread_entry(void* parameter);
 void gui_thread_entry(void* parameter);
 void usb_thread_entry(void* parameter);
+void sd_thread_entry(void* parameter);
+
 
 rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 
@@ -22,9 +23,14 @@ void init_thread_entry(void* parameter)
     rt_err_t r;
     int i;
     rt_uint8_t time_out;
-   
+    
+    rt_device_t dev = rt_device_find("uart0");
+    
+    finsh_system_init();
+    rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
+    
     rt_hw_spi_bus_init(HW_SPI2, "spi2");
-
+    
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
@@ -50,19 +56,19 @@ void init_thread_entry(void* parameter)
     
     
 #ifdef RT_USING_LWIP
-//    rt_kprintf(" link beginning \r\n");
-//    rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
-//    time_out = 0;
-//	while(!(netif_list->flags & NETIF_FLAG_UP)) 
-//	{
-//		rt_thread_delay(RT_TICK_PER_SECOND);
-//        if((time_out++) > 3)
-//        {
-//            rt_kprintf("link failed\r\n");
-//            break;
-//        }
-//	}
-//    list_if();
+    rt_kprintf(" link beginning \r\n");
+    rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
+    time_out = 0;
+	while(!(netif_list->flags & NETIF_FLAG_UP)) 
+	{
+		rt_thread_delay(RT_TICK_PER_SECOND);
+        if((time_out++) > 3)
+        {
+            rt_kprintf("link failed\r\n");
+            break;
+        }
+	}
+    list_if();
 #endif
     
     
@@ -75,11 +81,11 @@ void init_thread_entry(void* parameter)
     r = dfs_mount("sf0", "/SF", "elm", 0, 0);
     rt_kprintf("dfs mount:%d\r\n", r);
     /* sd_thread */
- //   thread = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
-  //  if (thread != RT_NULL) rt_thread_startup(thread);
-   /* gui thread */
-    tid = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*2, 4, 20);
+    tid = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
     if (tid != RT_NULL) rt_thread_startup(tid);
+   /* gui thread */
+  //tid = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*2, 4, 20);
+   // if (tid != RT_NULL) rt_thread_startup(tid);
         
     /* led thread */
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);

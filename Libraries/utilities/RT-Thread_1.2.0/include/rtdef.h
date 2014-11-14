@@ -48,9 +48,9 @@ extern "C" {
 /*@{*/
 
 /* RT-Thread version information */
-#define RT_VERSION                      1L              /**< major version number */
-#define RT_SUBVERSION                   2L              /**< minor version number */
-#define RT_REVISION                     2L              /**< revise version number */
+#define RT_VERSION                      2L              /**< major version number */
+#define RT_SUBVERSION                   0L              /**< minor version number */
+#define RT_REVISION                     0L              /**< revise version number */
 
 /* RT-Thread version */
 #define RTTHREAD_VERSION                ((RT_VERSION * 10000) + \
@@ -96,6 +96,7 @@ typedef rt_base_t                       rt_off_t;       /**< Type for offset */
     #define UNUSED                      __attribute__((unused))
     #define USED                        __attribute__((used))
     #define ALIGN(n)                    __attribute__((aligned(n)))
+    #define WEAK						__weak
     #define rt_inline                   static __inline
     /* module compiling */
     #ifdef RT_USING_MODULE
@@ -111,6 +112,7 @@ typedef rt_base_t                       rt_off_t;       /**< Type for offset */
     #define USED
     #define PRAGMA(x)                   _Pragma(#x)
     #define ALIGN(n)                    PRAGMA(data_alignment=n)
+    #define WEAK                        __weak
     #define rt_inline                   static inline
     #define RTT_API
 
@@ -130,6 +132,7 @@ typedef rt_base_t                       rt_off_t;       /**< Type for offset */
     #define UNUSED                      __attribute__((unused))
     #define USED                        __attribute__((used))
     #define ALIGN(n)                    __attribute__((aligned(n)))
+    #define WEAK						__attribute__((weak))
     #define rt_inline                   static __inline
     #define RTT_API
 #elif defined (__ADSPBLACKFIN__)        /* for VisualDSP++ Compiler */
@@ -138,6 +141,7 @@ typedef rt_base_t                       rt_off_t;       /**< Type for offset */
     #define UNUSED                      __attribute__((unused))
     #define USED                        __attribute__((used))
     #define ALIGN(n)                    __attribute__((aligned(n)))
+	#define WEAK                        __attribute__((weak))
     #define rt_inline                   static inline
     #define RTT_API
 #elif defined (_MSC_VER)
@@ -146,6 +150,7 @@ typedef rt_base_t                       rt_off_t;       /**< Type for offset */
     #define UNUSED
     #define USED
     #define ALIGN(n)                    __declspec(align(n))
+	#define WEAK
     #define rt_inline                   static __inline
     #define RTT_API
 #elif defined (__TI_COMPILER_VERSION__)
@@ -158,6 +163,7 @@ typedef rt_base_t                       rt_off_t;       /**< Type for offset */
     #define USED
 	#define PRAGMA(x)					_Pragma(#x)
     #define ALIGN(n)
+	#define WEAK
     #define rt_inline                   static inline
     #define RTT_API
 #else
@@ -170,7 +176,7 @@ typedef int (*init_fn_t)(void);
 #ifdef _MSC_VER /* we do not support MS VC++ compiler */
     #define INIT_EXPORT(fn, level)
 #else
-	#ifdef RT_DEBUG_INIT
+	#if RT_DEBUG_INIT
 		struct rt_init_desc
 		{
 			const char* fn_name;
@@ -793,6 +799,7 @@ enum rt_device_class_type
 #define RT_DEVICE_CTRL_BLK_GETGEOME     0x10            /**< get geometry information   */
 #define RT_DEVICE_CTRL_BLK_SYNC         0x11            /**< flush data to block device */
 #define RT_DEVICE_CTRL_BLK_ERASE        0x12            /**< erase block on block device */
+#define RT_DEVICE_CTRL_BLK_AUTOREFRESH  0x13            /**< block device : enter/exit auto refresh mode */
 #define RT_DEVICE_CTRL_NETIF_GETMAC     0x10            /**< get mac address */
 #define RT_DEVICE_CTRL_MTD_FORMAT       0x10            /**< format a MTD device */
 #define RT_DEVICE_CTRL_RTC_GET_TIME     0x10            /**< get time */

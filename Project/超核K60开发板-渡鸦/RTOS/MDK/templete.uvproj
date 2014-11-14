@@ -793,11 +793,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_spi.c</FilePath>
             </File>
             <File>
-              <FileName>spi_flash_w25qxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\spi_flash_w25qxx.c</FilePath>
-            </File>
-            <File>
               <FileName>touch_ads7843.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\touch_ads7843.c</FilePath>
@@ -1530,6 +1525,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\msh_cmd\reset.c</FilePath>
             </File>
+            <File>
+              <FileName>nfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\msh_cmd\nfs.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1554,6 +1554,71 @@
               <FileName>dfs_posix.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\src\dfs_posix.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\serial\serial.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfs_nfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\dfs_nfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>mount_clnt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\mount_clnt.c</FilePath>
+            </File>
+            <File>
+              <FileName>mount_xdr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\mount_xdr.c</FilePath>
+            </File>
+            <File>
+              <FileName>nfs_clnt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\nfs_clnt.c</FilePath>
+            </File>
+            <File>
+              <FileName>nfs_xdr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\nfs_xdr.c</FilePath>
+            </File>
+            <File>
+              <FileName>auth_none.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\auth_none.c</FilePath>
+            </File>
+            <File>
+              <FileName>clnt_generic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\clnt_generic.c</FilePath>
+            </File>
+            <File>
+              <FileName>clnt_udp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\clnt_udp.c</FilePath>
+            </File>
+            <File>
+              <FileName>pmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\pmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>rpc_prot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\rpc_prot.c</FilePath>
+            </File>
+            <File>
+              <FileName>xdr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\xdr.c</FilePath>
+            </File>
+            <File>
+              <FileName>xdr_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\xdr_mem.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1902,7 +1967,7 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>2</RvdsVP>
+            <RvdsVP>1</RvdsVP>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -2030,7 +2095,7 @@
           <Cads>
             <interw>1</interw>
             <Optim>4</Optim>
-            <oTime>1</oTime>
+            <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
             <Strict>0</Strict>
@@ -2248,49 +2313,6 @@
               <FileName>sd_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\sd_thread.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>usb_thread.c</FileName>
@@ -2517,11 +2539,6 @@
               <FileName>rtt_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi_flash_w25qxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\spi_flash_w25qxx.c</FilePath>
             </File>
             <File>
               <FileName>touch_ads7843.c</FileName>
@@ -3084,6 +3101,49 @@
               <FileName>telnet.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\telnet.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>2</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>chargen.c</FileName>
@@ -3316,6 +3376,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\msh_cmd\reset.c</FilePath>
             </File>
+            <File>
+              <FileName>nfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\msh_cmd\nfs.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3341,10 +3406,135 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\src\dfs_posix.c</FilePath>
             </File>
+            <File>
+              <FileName>serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\serial\serial.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfs_nfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\dfs_nfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>mount_clnt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\mount_clnt.c</FilePath>
+            </File>
+            <File>
+              <FileName>mount_xdr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\mount_xdr.c</FilePath>
+            </File>
+            <File>
+              <FileName>nfs_clnt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\nfs_clnt.c</FilePath>
+            </File>
+            <File>
+              <FileName>nfs_xdr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\nfs_xdr.c</FilePath>
+            </File>
+            <File>
+              <FileName>auth_none.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\auth_none.c</FilePath>
+            </File>
+            <File>
+              <FileName>clnt_generic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\clnt_generic.c</FilePath>
+            </File>
+            <File>
+              <FileName>clnt_udp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\clnt_udp.c</FilePath>
+            </File>
+            <File>
+              <FileName>pmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\pmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>rpc_prot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\rpc_prot.c</FilePath>
+            </File>
+            <File>
+              <FileName>xdr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\xdr.c</FilePath>
+            </File>
+            <File>
+              <FileName>xdr_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\rpc\xdr_mem.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>emwin/demos</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>0</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>2</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <useXO>2</useXO>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
           <Files>
             <File>
               <FileName>GUIDEMO.c</FileName>

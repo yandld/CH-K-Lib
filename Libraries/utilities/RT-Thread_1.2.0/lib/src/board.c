@@ -31,7 +31,6 @@ void _init_entry(void* parameter)
     dfs_romfs_init();
     elm_init();
     cpu_usage_init();
-    finsh_system_init();
     dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
     cmd_free(RT_NULL, RT_NULL);
     /* init thread */

@@ -69,7 +69,6 @@ int main(void)
     uint32_t begin_addr = ((uint32_t)&Image$$RW_IRAM1$$ZI$$Limit);
     uint32_t end_addr = begin_addr + RTT_INITAL_HEAP_SIZE;
     rt_system_heap_init((void*)begin_addr, (void*)end_addr);
-    
     /* init systick */
     SysTick_Config(SystemCoreClock / RT_TICK_PER_SECOND - 1);
     

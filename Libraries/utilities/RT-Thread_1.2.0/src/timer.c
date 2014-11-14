@@ -28,6 +28,8 @@
  * 2010-05-12     Bernard      fix the timer check bug.
  * 2010-11-02     Charlie      re-implement tick overflow issue
  * 2012-12-15     Bernard      fix the next timeout issue in soft timer
+ * 2014-07-12     Bernard      does not lock scheduler when invoking soft-timer 
+ *                             timeout function.
  */
 
 #include <rtthread.h>
@@ -291,7 +293,7 @@ RTM_EXPORT(rt_timer_delete);
  */
 rt_err_t rt_timer_start(rt_timer_t timer)
 {
-    int row_lvl;
+    unsigned int row_lvl;
     rt_list_t *timer_list;
     register rt_base_t level;
     rt_list_t *row_head[RT_TIMER_SKIP_LIST_LEVEL];
@@ -568,6 +570,9 @@ void rt_soft_timer_check(void)
 
     current_tick = rt_tick_get();
 
+	/* lock scheduler */
+	rt_enter_critical();
+
     for (n = rt_soft_timer_list[RT_TIMER_SKIP_LIST_LEVEL-1].next;
          n != &(rt_soft_timer_list[RT_TIMER_SKIP_LIST_LEVEL-1]);)
     {
@@ -587,6 +592,8 @@ void rt_soft_timer_check(void)
             /* remove timer from timer list firstly */
             _rt_timer_remove(t);
 
+			/* not lock scheduler when performing timeout function */
+			rt_exit_critical();
             /* call timeout function */
             t->timeout_func(t->parameter);
 
@@ -594,6 +601,9 @@ void rt_soft_timer_check(void)
             current_tick = rt_tick_get();
 
             RT_DEBUG_LOG(RT_DEBUG_TIMER, ("current tick: %d\n", current_tick));
+
+			/* lock scheduler */
+			rt_enter_critical();
 
             if ((t->parent.flag & RT_TIMER_FLAG_PERIODIC) &&
                 (t->parent.flag & RT_TIMER_FLAG_ACTIVATED))
@@ -610,6 +620,9 @@ void rt_soft_timer_check(void)
         }
         else break; /* not check anymore */
     }
+
+	/* unlock scheduler */
+	rt_exit_critical();
 
     RT_DEBUG_LOG(RT_DEBUG_TIMER, ("software timer check leave\n"));
 }
@@ -644,12 +657,8 @@ static void rt_thread_timer_entry(void *parameter)
             }
         }
 
-        /* lock scheduler */
-        rt_enter_critical();
         /* check software timer */
         rt_soft_timer_check();
-        /* unlock scheduler */
-        rt_exit_critical();
     }
 }
 #endif

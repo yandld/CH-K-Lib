@@ -35,18 +35,20 @@
 #include "rtt_serial.h"
 #include <rtdevice.h>
 
-static struct rt_serial_device serial;
+static volatile struct rt_serial_device serial;
 static struct serial_ringbuffer uart_int_rx;
-static uint16_t *gRevCh = RT_NULL;
 
+static uint16_t *gRevCh = RT_NULL;
+static uint8_t test =11;
 static void UART_ISR(uint16_t byteReceived)
 {
     static uint16_t ch;
     rt_interrupt_enter();
     ch = byteReceived;
     gRevCh = &ch;
+   // printf("%s %x %d %d %X\r\n", __func__, serial.serial_rx, test, serial.parent.open_flag);
+   // rt_hw_serial_isr(&serial, RT_SERIAL_EVENT_RX_IND);
     rt_hw_serial_isr(&serial);
-    
     rt_interrupt_leave();
 }
 
@@ -124,11 +126,13 @@ int rt_hw_usart_init(uint32_t instance, const char * name)
     serial.config = config;
     
     UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
-    
+    UART_CallbackRxInstall(instance, UART_ISR);
+    UART_ITDMAConfig(instance, kUART_IT_Rx, true);
+    //printf("%s %x %d\r\n", __func__, serial.serial_rx, serial.parent.open_flag);
     return rt_hw_serial_register(&serial, name,
                           RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_STREAM,
                           RT_NULL);
-     
+
 }
 
 void rt_hw_usart_init2(void)

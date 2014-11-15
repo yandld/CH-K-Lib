@@ -1,35 +1,50 @@
 #include <rtthread.h>
-#include <rthw.h>
-#include <stdint.h>
-#include "DIALOG.h"
-#include <math.h>
+#include <finsh.h>
+#include "GUI.H"
 
-
-static void GUI_SettingInit(void)
+void gui_demo_thread_entry(void* parameter)
 {
-	GUI_SetBkColor(GUI_BLACK); 	
-	GUI_SetColor(GUI_WHITE);
-    ICONVIEW_EnableStreamAuto();
-    BUTTON_SetDefaultSkin(BUTTON_SKIN_FLEX);
-}
-
-
-void gui_thread_entry(void* parameter)
-{
+    rt_kprintf("\r\ngui demo task\r\n");
     
-    GUI_Init();
-    GUI_SettingInit();
-    GUI_DispString("GUI system OK\r\n");//œ‘ æ≤‚ ‘
-    GUI_DispString(GUI_GetVersionString());
-    MainTask();
-  //  WM_HWIN hWin;
-  //  GUI_CURSOR_Show();
-  //  hWin = MYGUI_DLG_CreateDesktop();
-
-   // MainMenu_Init();
-
 	while(1)
 	{
-       // rt_thread_delay(10);
+        GUI_TOUCH_Exec();
+        rt_thread_delay(1);
 	}
 }
+
+void gui_demo_main_thread_entry(void* parameter)
+{
+    MainTask();
+}
+
+
+int cmd_gui_demo(int argc, char** argv)
+{
+    rt_thread_t thread;
+    
+    /* this task can not be single */
+    thread = rt_thread_find("gui_demo");
+    if(thread != RT_NULL)
+    {
+        rt_kprintf("task:gui_demo already existed\r\n");
+        return 1;
+    }
+    
+    /* create gui thread and run */
+    thread = rt_thread_create("gui_demo", gui_demo_thread_entry, RT_NULL, 1024*1, 0x25, 20);                                                      
+    if (thread != RT_NULL)
+    {
+        rt_thread_startup(thread);		
+    }
+    thread = rt_thread_create("gui_demo", gui_demo_main_thread_entry, RT_NULL, 1024*4, 0x24, 20);                                                      
+    if (thread != RT_NULL)
+    {
+        rt_thread_startup(thread);		
+    }
+    //TOUCH_MainTask();
+    return 0;
+}
+
+FINSH_FUNCTION_EXPORT_ALIAS(cmd_gui_demo, __cmd_gui_demo, run emwin demo.);
+

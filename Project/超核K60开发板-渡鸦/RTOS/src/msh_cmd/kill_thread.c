@@ -31,7 +31,7 @@ int kill(int argc, char ** argv)
     return 0;
 }
 
-MSH_CMD_EXPORT(kill, kill a thread)
+MSH_CMD_EXPORT(kill, kill a thread);
 
 
 

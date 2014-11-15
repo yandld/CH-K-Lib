@@ -68,7 +68,6 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
 
 static rt_err_t kinetis_control(struct rt_serial_device *serial, int cmd, void *arg)
 {
-
     RT_ASSERT(serial != RT_NULL);
 
     switch (cmd)
@@ -126,6 +125,7 @@ int rt_hw_usart_init(uint32_t instance, const char * name)
     serial.config = config;
     
     UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+    printf("UART_QuickInit\r\n");
     UART_CallbackRxInstall(instance, UART_ISR);
     UART_ITDMAConfig(instance, kUART_IT_Rx, true);
     //printf("%s %x %d\r\n", __func__, serial.serial_rx, serial.parent.open_flag);

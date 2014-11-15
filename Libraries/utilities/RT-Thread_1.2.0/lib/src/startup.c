@@ -4,7 +4,8 @@
 #include "components.h"
 
 #define RTT_INITAL_HEAP_SIZE   (1024*6)
-
+static uint8_t InitalMemPoll[RTT_INITAL_HEAP_SIZE];
+    
 extern int Image$$RW_IRAM1$$ZI$$Limit;
 extern int Image$$RW_IRAM1$$RW$$Limit;
 extern int Image$$ER_IROM1$$RO$$Limit;
@@ -61,12 +62,12 @@ uint32_t SysTick_Config(uint32_t ticks)
 
 extern uint32_t SystemCoreClock;
 
-int main(void)
+__weak int main(void)
 {
 	rt_hw_interrupt_disable();
     
     /* set system heap */
-    uint32_t begin_addr = ((uint32_t)&Image$$RW_IRAM1$$ZI$$Limit);
+    uint32_t begin_addr = ((uint32_t)InitalMemPoll);
     uint32_t end_addr = begin_addr + RTT_INITAL_HEAP_SIZE;
     rt_system_heap_init((void*)begin_addr, (void*)end_addr);
     /* init systick */
@@ -75,6 +76,7 @@ int main(void)
     rt_components_board_init();
     
     rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
+    rt_kprintf("rt_components_board_init complete, do startup\r\n");
     
 	rtthread_startup();
     

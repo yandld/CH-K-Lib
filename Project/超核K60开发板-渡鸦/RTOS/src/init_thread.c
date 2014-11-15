@@ -1,17 +1,18 @@
 #include <rtthread.h>
-#include <rthw.h>
 #include "board.h"
 #include "components.h"
 #include "rtt_ksz8041.h"
 #include "spi_flash_w25qxx.h"
-#include "gpio.h"
-#include "spi.h"
+#include "chlib_k.h"
+#include "sram.h"
 #include "rtt_spi.h"
 
 void led_thread_entry(void* parameter);
 void gui_thread_entry(void* parameter);
 void usb_thread_entry(void* parameter);
 void sd_thread_entry(void* parameter);
+
+
 
 
 rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
@@ -28,7 +29,9 @@ void init_thread_entry(void* parameter)
     
     finsh_system_init();
     rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
-    
+    SRAM_Init();
+    rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
+
     rt_hw_spi_bus_init(HW_SPI2, "spi2");
     
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
@@ -59,16 +62,16 @@ void init_thread_entry(void* parameter)
     rt_kprintf(" link beginning \r\n");
     rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
     time_out = 0;
-	while(!(netif_list->flags & NETIF_FLAG_UP)) 
-	{
-		rt_thread_delay(RT_TICK_PER_SECOND);
-        if((time_out++) > 3)
-        {
-            rt_kprintf("link failed\r\n");
-            break;
-        }
-	}
-    list_if();
+//	while(!(netif_list->flags & NETIF_FLAG_UP)) 
+//	{
+//		rt_thread_delay(RT_TICK_PER_SECOND);
+//        if((time_out++) > 3)
+//        {
+//            rt_kprintf("link failed\r\n");
+//            break;
+//        }
+//	}
+//    list_if();
 #endif
     
     

@@ -8,14 +8,17 @@ void gui_demo_thread_entry(void* parameter)
     
 	while(1)
 	{
-        GUI_TOUCH_Exec();
+      //  GUI_TOUCH_Exec();
+        GUI_Exec();
         rt_thread_delay(1);
 	}
 }
 
 void gui_demo_main_thread_entry(void* parameter)
 {
-    MainTask();
+    // MainTask();
+    GUI_Init();
+    // MYGUI_DLG_CreateDesktop();
 }
 
 
@@ -32,12 +35,12 @@ int cmd_gui_demo(int argc, char** argv)
     }
     
     /* create gui thread and run */
-    thread = rt_thread_create("gui_demo", gui_demo_thread_entry, RT_NULL, 1024*1, 0x25, 20);                                                      
+    thread = rt_thread_create("gui", gui_demo_thread_entry, RT_NULL, (1024*50), 0x27, 20);                                                      
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);		
     }
-    thread = rt_thread_create("gui_demo", gui_demo_main_thread_entry, RT_NULL, 1024*4, 0x24, 20);                                                      
+    thread = rt_thread_create("gui2", gui_demo_main_thread_entry, RT_NULL, (1024*2), 0x24, 20);                                                      
     if (thread != RT_NULL)
     {
         rt_thread_startup(thread);		

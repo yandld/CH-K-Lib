@@ -62,16 +62,16 @@ void init_thread_entry(void* parameter)
     rt_kprintf(" link beginning \r\n");
     rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
     time_out = 0;
-//	while(!(netif_list->flags & NETIF_FLAG_UP)) 
-//	{
-//		rt_thread_delay(RT_TICK_PER_SECOND);
-//        if((time_out++) > 3)
-//        {
-//            rt_kprintf("link failed\r\n");
-//            break;
-//        }
-//	}
-//    list_if();
+	while(!(netif_list->flags & NETIF_FLAG_UP)) 
+	{
+		rt_thread_delay(RT_TICK_PER_SECOND);
+        if((time_out++) > 3)
+        {
+            rt_kprintf("link failed\r\n");
+            break;
+        }
+	}
+    list_if();
 #endif
     
     

@@ -19,14 +19,14 @@ int show_pic(const char *path)
         dfs_lock();
         rt_kprintf("%s\n", working_directory);
         dfs_unlock();
-
+        
         return 0;
     }
 
     if (rt_strlen(path) > DFS_PATH_MAX)
     {
         rt_set_errno(-DFS_STATUS_ENOTDIR);
-
+        
         return -1;
     }
 
@@ -45,7 +45,7 @@ int show_pic(const char *path)
         struct stat f_stat;
         rt_uint8_t *ptr;
         stat(fullpath, &f_stat);
-        rt_kprintf("file size:%d\r\n", f_stat.st_size);
+        rt_kprintf("pic file size:%d\r\n", f_stat.st_size);
         ptr = rt_malloc(f_stat.st_size);
         if(ptr == NULL)
         {
@@ -56,11 +56,12 @@ int show_pic(const char *path)
             
             read(fd, ptr, f_stat.st_size);
             char * ex_name_pos = (char*)((rt_uint32_t)path + rt_strlen(path) - 3);
-            if(!rt_strncmp(ex_name_pos, "BMP", 3))
+            rt_kprintf("type:%s\r\n", ex_name_pos);
+            if(!rt_strncmp(ex_name_pos, "BMP", 3) || !rt_strncmp(ex_name_pos, "bmp", 3))
             {
                 GUI_IMAGE_DisplayImage(ptr, f_stat.st_size, GUI_IMAGE_BMP);
             }
-            if(!rt_strncmp(ex_name_pos, "JPG", 3))
+            if(!rt_strncmp(ex_name_pos, "JPG", 3) || !rt_strncmp(ex_name_pos, "jpg", 3))
             {
                 GUI_IMAGE_DisplayImage(ptr, f_stat.st_size, GUI_IMAGE_JPG);
             }
@@ -82,11 +83,7 @@ int show_pic(const char *path)
 
 int cmd_pic(int argc, char** argv)
 {
-    if (argc == 1)
-    {
-        rt_kprintf("%s\n", working_directory);
-    }
-    else if (argc == 2)
+    if (argc == 2)
     {
         show_pic(argv[1]);
     }

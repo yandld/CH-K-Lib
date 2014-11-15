@@ -20,9 +20,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     int     NCode;
     int     Id;
     static int _x;
-    //rt_kprintf("pMsg->MsgId:%d\r\n",pMsg->MsgId);
-   
-   // rt_kprintf("X:%d Y:%d\r\n", WM_GetWindowSizeX(hImage), WM_GetWindowSizeY(hImage));
+    GUI_DispString("_cbDialog");
+  
   switch (pMsg->MsgId) {
   case WM_INIT_DIALOG:
     hItem = pMsg->hWin;
@@ -48,7 +47,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     switch(Id)
     {
         case ID_IMAGE_0:
-
             switch(NCode)
             {
                 case WM_NOTIFICATION_CHILD_DELETED:
@@ -84,7 +82,7 @@ WM_HWIN GUI_IMAGE_CreateWidget(WM_HWIN hWin)
     hParent = hWin;
     hWinImage = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
     return hWinImage;
-}
+}   
 
 void GUI_IMAGE_DisplayImage(void* pData, U32 Size, U32 type)
 {
@@ -93,8 +91,7 @@ void GUI_IMAGE_DisplayImage(void* pData, U32 Size, U32 type)
     /* no image widget, create one */
     if(hImage == NULL)
     {
-        //GUI_IMAGE_CreateWidget();
-        return;
+        GUI_IMAGE_CreateWidget(WM_HBKWIN);
     }
     switch(type)
     {
@@ -107,9 +104,10 @@ void GUI_IMAGE_DisplayImage(void* pData, U32 Size, U32 type)
         case GUI_IMAGE_JPEG:
         {
             GUI_JPEG_INFO Info;
-            GUI_JPEG_GetInfo(pData, Size,&Info);
+            GUI_JPEG_GetInfo(pData, Size ,&Info);
             ImageSizeX = Info.XSize;
             ImageSizeY = Info.YSize;
+            GUI_DispString("begin display:\r\n");
             IMAGE_SetJPEG(hImage, pData, Size);
             break;
         }

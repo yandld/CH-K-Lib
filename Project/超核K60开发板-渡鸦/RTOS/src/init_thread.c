@@ -28,10 +28,9 @@ void init_thread_entry(void* parameter)
     rt_device_t dev = rt_device_find("uart0");
     
     finsh_system_init();
-    rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
     SRAM_Init();
     rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-
+   
     rt_hw_spi_bus_init(HW_SPI2, "spi2");
     
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 

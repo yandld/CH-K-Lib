@@ -2,52 +2,53 @@
 #include <finsh.h>
 #include "GUI.H"
 
-void gui_demo_thread_entry(void* parameter)
+void gui_thread_entry(void* parameter)
 {
-    rt_kprintf("\r\ngui demo task\r\n");
-    
 	while(1)
 	{
-      //  GUI_TOUCH_Exec();
         GUI_Exec();
+	}
+}
+
+void guit_thread_entry(void* parameter)
+{
+	while(1)
+	{
+        GUI_TOUCH_Exec();
         rt_thread_delay(1);
 	}
 }
 
-void gui_demo_main_thread_entry(void* parameter)
-{
-    // MainTask();
-    GUI_Init();
-    // MYGUI_DLG_CreateDesktop();
-}
 
-
-int cmd_gui_demo(int argc, char** argv)
+int cmd_gui_start(int argc, char** argv)
 {
-    rt_thread_t thread;
+    rt_thread_t tid;
     
     /* this task can not be single */
-    thread = rt_thread_find("gui_demo");
-    if(thread != RT_NULL)
-    {
-        rt_kprintf("task:gui_demo already existed\r\n");
-        return 1;
-    }
+    tid = rt_thread_find("gui_exe");
+    if(tid != RT_NULL) return -1;
+    
+    /* init GUI system */
+    GUI_Init();
     
     /* create gui thread and run */
-    thread = rt_thread_create("gui", gui_demo_thread_entry, RT_NULL, (1024*50), 0x27, 20);                                                      
-    if (thread != RT_NULL)
+    tid = rt_thread_create("gui_exe", gui_thread_entry, RT_NULL, (1024*50), 0x27, 20);                                                      
+    if (tid != RT_NULL)
     {
-        rt_thread_startup(thread);		
+        rt_thread_startup(tid);		
     }
-    thread = rt_thread_create("gui2", gui_demo_main_thread_entry, RT_NULL, (1024*2), 0x24, 20);                                                      
-    if (thread != RT_NULL)
+    
+    tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (1024*1), 0x23, 20);                                                      
+    if (tid != RT_NULL)
     {
-        rt_thread_startup(thread);		
+        rt_thread_startup(tid);		
     }
+    
+    GUI_DispString("gui system actived!\r\n");
+    GUI_CURSOR_Show();
     //TOUCH_MainTask();
     return 0;
 }
 
-FINSH_FUNCTION_EXPORT_ALIAS(cmd_gui_demo, __cmd_gui_demo, run emwin demo.);
+FINSH_FUNCTION_EXPORT_ALIAS(cmd_gui_start, __cmd_gui_start, start gui system.);
 

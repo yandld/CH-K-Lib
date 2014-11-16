@@ -50,6 +50,7 @@ void GUI_X_Config(void)
     if(aMemory == RT_NULL)
     {
         rt_kprintf("not enough mem for GUI!\r\n");
+        return;
     }
     GUI_ALLOC_AssignMemory(aMemory, GUI_NUMBYTES);
     GUI_SetOnErrorFunc(GUI_Log);

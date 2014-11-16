@@ -27,7 +27,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = pMsg->hWin;
     hWin = pMsg->hWin;
     FRAMEWIN_SetFont(hItem, GUI_FONT_13B_1);
-    //FRAMEWIN_SetMoveable(hItem, 1);
+    FRAMEWIN_SetMoveable(hItem, 1);
     FRAMEWIN_AddCloseButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
     FRAMEWIN_AddMaxButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
     WM_ShowWindow(hItem);
@@ -84,7 +84,7 @@ WM_HWIN GUI_IMAGE_CreateWidget(WM_HWIN hWin)
     return hWinImage;
 }   
 
-void GUI_IMAGE_DisplayImage(void* pData, U32 Size, U32 type)
+void GUI_IMAGE_DisplayImage(void* pData, U32 Size)
 {
     U32 ImageSizeX;
     U32 ImageSizeY;
@@ -93,28 +93,27 @@ void GUI_IMAGE_DisplayImage(void* pData, U32 Size, U32 type)
     {
         GUI_IMAGE_CreateWidget(WM_HBKWIN);
     }
-    switch(type)
+    
+    if(!rt_strncmp(pData, "BM", 2))
     {
-        case GUI_IMAGE_BMP:
-            ImageSizeX = GUI_BMP_GetXSize(pData);
-            ImageSizeY = GUI_BMP_GetYSize(pData);
-            IMAGE_SetBMP(hImage, pData, Size);
-            break;
-        case GUI_IMAGE_JPG:
-        case GUI_IMAGE_JPEG:
+        ImageSizeX = GUI_BMP_GetXSize(pData);
+        ImageSizeY = GUI_BMP_GetYSize(pData);
+        IMAGE_SetBMP(hImage, pData, Size);
+    }
+    else
+    {
+        GUI_JPEG_INFO Info;
+        if(!GUI_JPEG_GetInfo(pData, Size ,&Info))
         {
-            GUI_JPEG_INFO Info;
-            GUI_JPEG_GetInfo(pData, Size ,&Info);
             ImageSizeX = Info.XSize;
             ImageSizeY = Info.YSize;
-            GUI_DispString("begin display:\r\n");
             IMAGE_SetJPEG(hImage, pData, Size);
-            break;
         }
     }
+
     /* resize window*/
-    if(ImageSizeX > 240) ImageSizeX = 240;
-    if(ImageSizeY > 320) ImageSizeY = 320;
+    if(ImageSizeX > LCD_GetXSize()) ImageSizeX = LCD_GetXSize();
+    if(ImageSizeY > LCD_GetYSize()) ImageSizeY = LCD_GetYSize();
     WM_SetSize(hWin, ImageSizeX, ImageSizeY);
 }
 

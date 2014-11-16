@@ -12,29 +12,20 @@ extern char working_directory[];
 
 int show_pic(const char *path)
 {
-    char *fullpath;
-    int fd;
-    if (path == RT_NULL)
+    rt_thread_t tid = rt_thread_find("gui_exe");
+    if(!tid)
     {
-        dfs_lock();
-        rt_kprintf("%s\n", working_directory);
-        dfs_unlock();
-        
-        return 0;
-    }
-
-    if (rt_strlen(path) > DFS_PATH_MAX)
-    {
-        rt_set_errno(-DFS_STATUS_ENOTDIR);
-        
+        rt_kprintf("ERROR! no GUI\r\n");
         return -1;
     }
+    
+    char *fullpath;
+    int fd;
 
     fullpath = dfs_normalize_path(NULL, path);
     if (fullpath == RT_NULL)
     {
         rt_set_errno(-DFS_STATUS_ENOTDIR);
-
         return -1; /* build path failed */
     }
     
@@ -53,18 +44,8 @@ int show_pic(const char *path)
         }
         else
         {
-            
             read(fd, ptr, f_stat.st_size);
-            char * ex_name_pos = (char*)((rt_uint32_t)path + rt_strlen(path) - 3);
-            rt_kprintf("type:%s\r\n", ex_name_pos);
-            if(!rt_strncmp(ex_name_pos, "BMP", 3) || !rt_strncmp(ex_name_pos, "bmp", 3))
-            {
-                GUI_IMAGE_DisplayImage(ptr, f_stat.st_size, GUI_IMAGE_BMP);
-            }
-            if(!rt_strncmp(ex_name_pos, "JPG", 3) || !rt_strncmp(ex_name_pos, "jpg", 3))
-            {
-                GUI_IMAGE_DisplayImage(ptr, f_stat.st_size, GUI_IMAGE_JPG);
-            }
+            GUI_IMAGE_DisplayImage(ptr, f_stat.st_size);
             rt_free(ptr);
             close(fd);
         }
@@ -73,9 +54,8 @@ int show_pic(const char *path)
     {
         rt_kprintf("open file failed\r\n");
     }
-    /* close directory stream */
-    rt_free(fullpath);
     
+    rt_free(fullpath);
     dfs_unlock();
     return 0;
 }

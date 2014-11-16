@@ -9,7 +9,7 @@
 
 
 //!< API functions 
-void GUI_IMAGE_DisplayImage(void* pData, U32 Size, U32 type);
+void GUI_IMAGE_DisplayImage(void* pData, U32 Size);
 WM_HWIN GUI_IMAGE_CreateWidget(WM_HWIN hWin);
 
 #endif

@@ -71,7 +71,7 @@ void cpu_usage_init(void)
 
 void cpu_usage(void)
 {
-    rt_kprintf("CPU:%d.%d\%", cpu_usage_major, cpu_usage_minor);
+    rt_kprintf("CPU:%d.%d\r\n", cpu_usage_major, cpu_usage_minor);
 }
 
 #ifdef RT_USING_COMPONENTS_INIT

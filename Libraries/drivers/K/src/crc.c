@@ -1,6 +1,23 @@
 #include "crc.h"
 #include "common.h"
 
+
+static CRC_InitTypeDef CRCProtocolAttrTable[] = 
+{
+    {16, 0x0000U, 0x8005, kCRCTransposeBits, kCRCTransposeBoth, false},
+    {16, 0x0000U, 0x8005, kCRCTransposeBits, kCRCTransposeBoth, true},
+    {16, 0xFFFFU, 0x8005, kCRCTransposeBits, kCRCTransposeBoth, true},
+    {16, 0xFFFFU, 0x8005, kCRCTransposeBits, kCRCTransposeBoth, false},
+    {16, 0x0000U, 0x1021, kCRCTransposeBits, kCRCTransposeBoth, false}, //CCITT
+    {16, 0xFFFFU, 0x1021, kCRCNoTranspose, kCRCNoTranspose, false}, //CCITT False
+    {16, 0xFFFFU, 0x1021, kCRCTransposeBits, kCRCTransposeBoth, true}, //X25
+    {16, 0x0000U, 0x1021, kCRCNoTranspose, kCRCNoTranspose, false}, //XMODEM
+    {16, 0x0000U, 0x3D65, kCRCTransposeBits, kCRCTransposeBoth, true}, //DNP
+    {32, 0xFFFFFFFFU, 0x04C11DB7, kCRCTransposeBits, kCRCTransposeBoth, true}, //CRC32
+    {32, 0xFFFFFFFFU, 0x04C11DB7, kCRCNoTranspose, kCRCNoTranspose, false}, //CRC32-MPEG2
+};
+
+#if 0
 uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len)
 {
     uint32_t crc = 0;
@@ -22,7 +39,7 @@ uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len)
     }
     return crc;
 }
-
+#endif
 
 void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
 {
@@ -49,7 +66,7 @@ void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
     CRC0->GPOLY = CRC_InitStruct->polynomial;
     
     /* 4. Set seed value */
-    CRC0->CTRL = CRC_CTRL_WAS_MASK;
+    CRC0->CTRL |= CRC_CTRL_WAS_MASK;
 #ifdef CRC_DATAL_DATAL_MASK
     CRC0->DATA = CRC_InitStruct->seed;
 #else
@@ -59,16 +76,9 @@ void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
     CRC0->CTRL &= ~CRC_CTRL_WAS_MASK;
 }
 
-void CRC_QuickInit(void)
+void CRC_QuickInit(CRC_ProtocolType type)
 {
-    CRC_InitTypeDef CRC_InitStruct;
-    CRC_InitStruct.crcWidth = 16;
-    CRC_InitStruct.seed = 0x0000U;
-    CRC_InitStruct.polynomial = 0x1021U;
-    CRC_InitStruct.writeTranspose = kCRCNoTranspose;
-    CRC_InitStruct.readTranspose = kCRCNoTranspose;
-    CRC_InitStruct.complementRead = false;
-    CRC_Init(&CRC_InitStruct);
+    CRC_Init(&CRCProtocolAttrTable[type]);
 }
 
 static uint32_t CRC_HAL_GetCrcResult(void)
@@ -190,5 +200,19 @@ uint32_t CRC_Generate(uint8_t* data, uint32_t len)
 
     return result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

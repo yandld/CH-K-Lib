@@ -43,6 +43,7 @@ const struct romfs_dirent WEAK _root_dirent[] =
 {
     {ROMFS_DIRENT_DIR, "dummy", (rt_uint8_t *)_dummy, sizeof(_dummy)/sizeof(_dummy[0])},
     {ROMFS_DIRENT_DIR, "SD", (rt_uint8_t *)RT_NULL, RT_NULL},
+    {ROMFS_DIRENT_DIR, "SF", (rt_uint8_t *)RT_NULL, RT_NULL},
     {ROMFS_DIRENT_DIR, "NFS", (rt_uint8_t *)RT_NULL, RT_NULL},
     {ROMFS_DIRENT_FILE, "dummy.txt", _dummy_txt, sizeof(_dummy_txt)},
 };

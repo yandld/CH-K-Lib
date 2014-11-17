@@ -146,29 +146,29 @@ void GUI_TOUCH_X_ActivateX(void)  {}
 void GUI_TOUCH_X_ActivateY(void)  {}
 
 
-int  GUI_TOUCH_X_MeasureX(void) 
+int GUI_TOUCH_X_MeasureX(void) 
 {
     ads_filter(buf);
     return buf[0];
 }
 
 
-int  GUI_TOUCH_X_MeasureY(void) 
+int GUI_TOUCH_X_MeasureY(void) 
 {
     return buf[1];
 }
 
 void GUI_X_ErrorOut(const char * s)
 {
-    rt_kprintf("%s\r\n", s);
+    GUI_DispString(s);
 }
 void GUI_X_Warn(const char * s)
 {
-    rt_kprintf("%s\r\n", s);
+    GUI_DispString(s);
 }
 void GUI_X_Log(const char * s)
 {
-    rt_kprintf("%s\r\n", s);
+    GUI_DispString(s);
 }
 
 /*

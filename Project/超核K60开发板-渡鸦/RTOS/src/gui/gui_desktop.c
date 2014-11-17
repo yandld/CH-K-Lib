@@ -85,10 +85,10 @@ WM_HWIN MYGUI_DLG_CreateDesktop(void)
 {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    while(1)
-    {
-        rt_thread_delay(10);
-    }
+//    while(1)
+//    {
+//        rt_thread_delay(10);
+//    }
     return hWin;
 }
 

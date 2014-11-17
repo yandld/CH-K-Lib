@@ -1,13 +1,5 @@
 #include <rtthread.h>
-#include <rthw.h>
-#include <stdint.h>
-#include <stdio.h>
-
-#include "uart.h"
-#include "systick.h"
-#include "board.h"
-#include "gpio.h"
-#include "spi.h"
+#include "chlib_k.h"
 #include <drivers/spi.h>
 #include "rtt_spi.h"
 #include "sram.h"

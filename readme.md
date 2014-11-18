@@ -20,6 +20,7 @@
 ## 适用型号
 * MK60DNxxx
 * MK60DNZxxx
+* MK64F12xxx
 * MK10DN32xxx
 * MKL25Zxxx
 * MKL46Zxxx

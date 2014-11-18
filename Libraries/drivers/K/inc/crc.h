@@ -37,7 +37,7 @@ typedef enum
     kCRC16_DNP,
     kCRC32,
     kCRC32_MPEG2,
-    kCRC_ProtocolMax,
+    kCRC_ProtocolNameMax,
 }CRC_ProtocolType;
 
 typedef struct

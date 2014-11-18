@@ -1,7 +1,6 @@
 #include "chlib_k.h"
 #include "arm_math.h"
-#define PA  (3.1415926f)//
-/*Refine DSP Demo**/
+#define PA  (3.1415926f)/
 int main(void)
 {
     uint32_t clock;

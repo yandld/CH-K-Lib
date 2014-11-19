@@ -22,7 +22,7 @@ static int DoCRC(int argc, char * const argv[])
     uint32_t result;
     uint8_t buffer[10] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x30};
     printf("CRC 16 test\r\n");
-    for(int i=0; i < kCRC_ProtocolMax; i++)
+    for(int i=0; i < kCRC_ProtocolNameMax; i++)
     {
         CRC_QuickInit(i);
         result = CRC_Generate(buffer, 10);

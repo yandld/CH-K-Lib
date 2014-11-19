@@ -63,8 +63,8 @@ void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
  *      static void PIT0_CallBack(void);
  *      //初始化PIT模块的0通道，产生100ms中断
  *      PIT_QuickInit(HW_PIT_CH0, 100000);
- *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //注册回调函数
- *      PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);            //开启中断
+ *      PIT_CallbackInstall(HW_PIT_CH0, PIT0_CallBack); //注册回调函数
+ *      PIT_ITDMAConfig(HW_PIT_CH0, ENABLE);            //开启中断
  *      //中断回调函数
  *      static void PIT0_CallBack(void)
  *      {

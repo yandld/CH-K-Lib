@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬PITÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡PITæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #include "pit.h"
@@ -32,15 +32,15 @@ static const IRQn_Type PIT_IRQnTable[] =
 //! @{
 
  /**
- * @brief  ÏêÏ¸³õÊ¼»¯PITÄ£¿é ÍÆ¼öÊ¹ÓÃPIT_QuickInitº¯Êı
+ * @brief  è¯¦ç»†åˆå§‹åŒ–PITæ¨¡å— æ¨èä½¿ç”¨PIT_QuickInitå‡½æ•°
  * @code
- *      // ÅäÖÃPIT0Ä£¿éµÄ0Í¨µÀ£¬Ê±¼äÖÜÆÚÎª1ms
- *      PIT_InitTypeDef PIT_InitStruct1; //ÉêÇëÒ»¸ö½á¹¹±äÁ¿
- *      PIT_InitStruct1.chl = 0;         //Ñ¡Ôñ0Í¨µÀ
+ *      // é…ç½®PIT0æ¨¡å—çš„0é€šé“ï¼Œæ—¶é—´å‘¨æœŸä¸º1ms
+ *      PIT_InitTypeDef PIT_InitStruct1; //ç”³è¯·ä¸€ä¸ªç»“æ„å˜é‡
+ *      PIT_InitStruct1.chl = 0;         //é€‰æ‹©0é€šé“
  *      PIT_InitStruct1.timeInUs = 1000  //1ms
  *      PIT_Init(&PIT_InitStruct1);
  * @endcode
- * @param  PIT_InitStruct: pitÄ£¿é¹¤×÷ÅäÖÃÊı¾İ
+ * @param  PIT_InitStruct: pitæ¨¡å—å·¥ä½œé…ç½®æ•°æ®
  * @retval None
  */
 void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
@@ -56,27 +56,27 @@ void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
 }
 
  /**
- * @brief  PITÄ£¿é¿ìËÙ³õÊ¼»¯ÅäÖÃ
+ * @brief  PITæ¨¡å—å¿«é€Ÿåˆå§‹åŒ–é…ç½®
  * @code
- *      // ³õÊ¼»¯PITÄ£¿é 0 Í¨µÀ ²úÉú100MSÖĞ¶Ï ²¢¿ªÆôÖĞ¶Ï ×¢²á»Øµ÷º¯Êı ÔÚ»Øµ÷º¯ÊıÖĞ´òÓ¡µ÷ÊÔĞÅÏ¢
- *      //ÉùÃ÷ÖĞ¶Ï»Øµ÷º¯Êı
+ *      // åˆå§‹åŒ–PITæ¨¡å— 0 é€šé“ äº§ç”Ÿ100MSä¸­æ–­ å¹¶å¼€å¯ä¸­æ–­ æ³¨å†Œå›è°ƒå‡½æ•° åœ¨å›è°ƒå‡½æ•°ä¸­æ‰“å°è°ƒè¯•ä¿¡æ¯
+ *      //å£°æ˜ä¸­æ–­å›è°ƒå‡½æ•°
  *      static void PIT0_CallBack(void);
- *      //³õÊ¼»¯PITÄ£¿éµÄ0Í¨µÀ£¬²úÉú100msÖĞ¶Ï
+ *      //åˆå§‹åŒ–PITæ¨¡å—çš„0é€šé“ï¼Œäº§ç”Ÿ100msä¸­æ–­
  *      PIT_QuickInit(HW_PIT_CH0, 100000);
- *      PIT_CallbackInstall(HW_PIT_CH0, PIT0_CallBack); //×¢²á»Øµ÷º¯Êı
- *      PIT_ITDMAConfig(HW_PIT_CH0, ENABLE);            //¿ªÆôÖĞ¶Ï
- *      //ÖĞ¶Ï»Øµ÷º¯Êı
+ *      PIT_CallbackInstall(HW_PIT_CH0, PIT0_CallBack); //æ³¨å†Œå›è°ƒå‡½æ•°
+ *      PIT_ITDMAConfig(HW_PIT_CH0, ENABLE);            //å¼€å¯ä¸­æ–­
+ *      //ä¸­æ–­å›è°ƒå‡½æ•°
  *      static void PIT0_CallBack(void)
  *      {
  *          printf("Enter PIT0 INt\r\n");    
  *      }
  * @endcode
- * @param  chl Í¨µÀºÅ
+ * @param  chl é€šé“å·
  *         @arg HW_PIT_CH0 
  *         @arg HW_PIT_CH1
  *         @arg HW_PIT_CH2 
  *         @arg HW_PIT_CH3 
- * @param  timeInUs ²úÉúÖĞ¶ÏµÄÖÜÆÚ \µ¥Î»US
+ * @param  timeInUs äº§ç”Ÿä¸­æ–­çš„å‘¨æœŸ \å•ä½US
  * @retval None
  */
 void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
@@ -88,31 +88,33 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
 }
 
  /**
- * @brief  ÉèÖÃPITÄ£¿éÊÇ·ñ¿ªÆôÖĞ¶Ï¹¦ÄÜ
+ * @brief  è®¾ç½®PITæ¨¡å—æ˜¯å¦å¼€å¯ä¸­æ–­åŠŸèƒ½
  * 
  * @code
- *      // ³õÊ¼»¯PITÄ£¿é 0 Í¨µÀ ²úÉú100MSÖĞ¶Ï ²¢¿ªÆôÖĞ¶Ï ×¢²á»Øµ÷º¯Êı ÔÚ»Øµ÷º¯ÊıÖĞ´òÓ¡µ÷ÊÔĞÅÏ¢
- *      //ÉùÃ÷ÖĞ¶Ï»Øµ÷º¯Êı
+ *      // åˆå§‹åŒ–PITæ¨¡å— 0 é€šé“ äº§ç”Ÿ100MSä¸­æ–­ å¹¶å¼€å¯ä¸­æ–­ æ³¨å†Œå›è°ƒå‡½æ•° åœ¨å›è°ƒå‡½æ•°ä¸­æ‰“å°è°ƒè¯•ä¿¡æ¯
+ *      //å£°æ˜ä¸­æ–­å›è°ƒå‡½æ•°
  *      static void PIT0_CallBack(void);
- *      //³õÊ¼»¯PIT
+ *      //åˆå§‹åŒ–PIT
  *      PIT_QuickInit(HW_PIT_CH0, 100000);
- *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //×¢²á»Øµ÷º¯Êı
- *      PIT_ITDMAConfig(HW_PIT0_CH0, ENABLE);            //¿ªÆô0Í¨µÀÖĞ¶Ï
- *      //ÖĞ¶Ï»Øµ÷º¯Êı±àĞ´
+ *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //æ³¨å†Œå›è°ƒå‡½æ•°
+ *      PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF); //å¼€å¯æ¨¡å—0é€šé“ä¸­æ–­
+ *      //ä¸­æ–­å›è°ƒå‡½æ•°ç¼–å†™
  *      static void PIT0_CallBack(void)
  *      {
  *          printf("Enter PIT0 INt\r\n");    
  *      }
  * @endcode
- * @param  chl  :Í¨µÀºÅ
- *         @arg HW_PIT0_CH0   :0Í¨µÀ
- *         @arg HW_PIT0_CH1   :1Í¨µÀ
- *         @arg HW_PIT0_CH2   :2Í¨µÀ
- *         @arg HW_PIT0_CH3   :3Í¨µÀ
- * @param  NewState ENABLE »òDISABLE
+ * @param  chl  :é€šé“å·
+ *         @arg HW_PIT0_CH0   :0é€šé“
+ *         @arg HW_PIT0_CH1   :1é€šé“
+ *         @arg HW_PIT0_CH2   :2é€šé“
+ *         @arg HW_PIT0_CH3   :3é€šé“
+ * @param  config:æ˜¯å¦æ‰“å¼€ä¸­æ–­
+ *         @arg kPIT_IT_Disable :å…³é—­ä¸­æ–­
+ *         @arg kPIT_IT_TOF     :æ‰“å¼€ä¸­æ–­
  * @retval None
  */
-void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config, bool flag)
+void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
 {
     SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
     if(flag)
@@ -132,12 +134,12 @@ void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config, bool flag)
 }
 
  /**
- * @brief  PIT¶¨Ê±Æ÷CounterÇåµ½LOADÖµ (ÖØĞÂ¿ªÊ¼ĞÂÒ»´ÎCountDown¼ÆÊ±)
- * @param  chl  :Í¨µÀºÅ
- *         @arg HW_PIT0_CH0   :0Í¨µÀ
- *         @arg HW_PIT0_CH1   :1Í¨µÀ
- *         @arg HW_PIT0_CH2   :2Í¨µÀ
- *         @arg HW_PIT0_CH3   :3Í¨µÀ
+ * @brief  PITå®šæ—¶å™¨Counteræ¸…åˆ°LOADå€¼ (é‡æ–°å¼€å§‹æ–°ä¸€æ¬¡CountDownè®¡æ—¶)
+ * @param  chl  :é€šé“å·
+ *         @arg HW_PIT0_CH0   :0é€šé“
+ *         @arg HW_PIT0_CH1   :1é€šé“
+ *         @arg HW_PIT0_CH2   :2é€šé“
+ *         @arg HW_PIT0_CH3   :3é€šé“
  * @retval None
  */
 void PIT_ResetCounter(uint8_t chl)
@@ -146,13 +148,13 @@ void PIT_ResetCounter(uint8_t chl)
     PIT->CHANNEL[chl].TCTRL |= (PIT_TCTRL_TEN_MASK);
 }
  /**
- * @brief  ¶ÁÈ¡CounterÖµ
- * @param  chl  :Í¨µÀºÅ
- *         @arg HW_PIT0_CH0   :0Í¨µÀ
- *         @arg HW_PIT0_CH1   :1Í¨µÀ
- *         @arg HW_PIT0_CH2   :2Í¨µÀ
- *         @arg HW_PIT0_CH3   :3Í¨µÀ
- * @retval CounterÖµ
+ * @brief  è¯»å–Counterå€¼
+ * @param  chl  :é€šé“å·
+ *         @arg HW_PIT0_CH0   :0é€šé“
+ *         @arg HW_PIT0_CH1   :1é€šé“
+ *         @arg HW_PIT0_CH2   :2é€šé“
+ *         @arg HW_PIT0_CH3   :3é€šé“
+ * @retval Counterå€¼
  */
 uint32_t PIT_GetCounterValue(uint8_t chl)
 {
@@ -161,15 +163,15 @@ uint32_t PIT_GetCounterValue(uint8_t chl)
 
 
 /**
- * @brief  ×¢²áÖĞ¶Ï»Øµ÷º¯Êı
- * @param  chl  :Í¨µÀºÅ
- *         @arg HW_PIT0_CH0   :0Í¨µÀÈë¿Ú
- *         @arg HW_PIT0_CH1   :1Í¨µÀÈë¿Ú
- *         @arg HW_PIT0_CH2   :2Í¨µÀÈë¿Ú
- *         @arg HW_PIT0_CH3   :3Í¨µÀÈë¿Ú
- * @param AppCBFun: »Øµ÷º¯ÊıÖ¸ÕëÈë¿Ú
+ * @brief  æ³¨å†Œä¸­æ–­å›è°ƒå‡½æ•°
+ * @param  chl  :é€šé“å·
+ *         @arg HW_PIT0_CH0   :0é€šé“å…¥å£
+ *         @arg HW_PIT0_CH1   :1é€šé“å…¥å£
+ *         @arg HW_PIT0_CH2   :2é€šé“å…¥å£
+ *         @arg HW_PIT0_CH3   :3é€šé“å…¥å£
+ * @param AppCBFun: å›è°ƒå‡½æ•°æŒ‡é’ˆå…¥å£
  * @retval None
- * @note ¶ÔÓÚ´Ëº¯ÊıµÄ¾ßÌåÓ¦ÓÃÇë²éÔÄÓ¦ÓÃÊµÀı
+ * @note å¯¹äºæ­¤å‡½æ•°çš„å…·ä½“åº”ç”¨è¯·æŸ¥é˜…åº”ç”¨å®ä¾‹
  */
 void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun)
 {
@@ -219,4 +221,3 @@ void PIT3_IRQHandler(void)
         PIT_CallBackTable[3]();
     }
 }
-

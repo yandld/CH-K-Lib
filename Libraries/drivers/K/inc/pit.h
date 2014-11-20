@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬PITÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡PITæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #ifndef __CH_LIB_PIT_H__
@@ -19,25 +19,25 @@
 
 
 //!< hardware instances
-#define HW_PIT_CH0   (0x00U) //¶¨ÒåPITÄ£¿éµÄ0Í¨µÀ
-#define HW_PIT_CH1   (0x01U) //¶¨ÒåPITÄ£¿éµÄ1Í¨µÀ
-#define HW_PIT_CH2   (0x02U) //¶¨ÒåPITÄ£¿éµÄ2Í¨µÀ
-#define HW_PIT_CH3   (0x03U) //¶¨ÒåPITÄ£¿éµÄ3Í¨µÀ
+#define HW_PIT_CH0   (0x00U) //å®šä¹‰PITæ¨¡å—çš„0é€šé“
+#define HW_PIT_CH1   (0x01U) //å®šä¹‰PITæ¨¡å—çš„1é€šé“
+#define HW_PIT_CH2   (0x02U) //å®šä¹‰PITæ¨¡å—çš„2é€šé“
+#define HW_PIT_CH3   (0x03U) //å®šä¹‰PITæ¨¡å—çš„3é€šé“
 
 //!< PIT CallBack Type
 typedef void (*PIT_CallBackType)(void);
 
-//PIT ³õÊ¼»¯½á¹¹
+//PIT åˆå§‹åŒ–ç»“æ„
 typedef struct
 {
-    uint8_t   chl;            //PITÄ£¿éÍ¨µÀÑ¡Ôñ
-    uint32_t  timeInUs;       //¶¨Ê±Ê±¼äµ¥Î»Îªus
+    uint8_t   chl;            //PITæ¨¡å—é€šé“é€‰æ‹©
+    uint32_t  timeInUs;       //å®šæ—¶æ—¶é—´å•ä½ä¸ºus
 }PIT_InitTypeDef;
 
-//!< PIT ÖĞ¶ÏDMAÅäÖÃ
+//!< PIT ä¸­æ–­DMAé…ç½®
 typedef enum
 {
-    kPIT_IT_TOF,            //¶¨Ê±Æ÷¶¨Ê±ÖĞ¶Ï
+    kPIT_IT_TOF,            //å®šæ—¶å™¨å®šæ—¶ä¸­æ–­
 }PIT_ITDMAConfig_Type;
 
 //!< API functions
@@ -46,11 +46,10 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs);
 void PIT_ResetCounter(uint8_t chl);
 uint32_t PIT_GetCounterValue(uint8_t chl);
 void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun);
-void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config, bool flag);
+void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

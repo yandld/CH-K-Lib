@@ -97,7 +97,7 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
  *      //初始化PIT
  *      PIT_QuickInit(HW_PIT_CH0, 100000);
  *      PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //注册回调函数
- *      PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF); //开启模块0通道中断
+ *      PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF,ENABLE); //开启模块0通道中断
  *      //中断回调函数编写
  *      static void PIT0_CallBack(void)
  *      {
@@ -112,9 +112,10 @@ void PIT_QuickInit(uint8_t chl, uint32_t timeInUs)
  * @param  config:是否打开中断
  *         @arg kPIT_IT_Disable :关闭中断
  *         @arg kPIT_IT_TOF     :打开中断
+ * @param Newstate ENABLE or DISABLE
  * @retval None
  */
-void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config)
+void PIT_ITDMAConfig(uint8_t chl, PIT_ITDMAConfig_Type config,bool flag)
 {
     SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
     if(flag)

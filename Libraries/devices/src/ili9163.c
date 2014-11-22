@@ -203,11 +203,11 @@ int ili9163_init(spi_bus_t bus, uint32_t cs)
 }
 
 /* CHGUI函数接口 CHGUI只需要使用打点函数就可以实现基本的GUI操作 */
-void GUI_DrawPixel(int color, int x, int y)
+void GUI_DrawPixel(int x, int y)
 {
     ili9163_set_window(x,y,1,1);//设置光标位置 
 	LCD_COM(0x2C);
-    LCD_DATA(color>>8);
-    LCD_DATA(color);
+    LCD_DATA(0x5555>>8);
+    LCD_DATA(0x5555);
 }
 

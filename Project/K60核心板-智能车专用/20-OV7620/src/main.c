@@ -64,16 +64,16 @@ void OV7620_ISR(uint32_t index)
         switch(status)
         {
             case TRANSFER_IN_PROCESS:
-                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_Disable);
-                GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_Disable);
+                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge, false);
+                GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_RisingEdge, false);
                 UserApp();
                 printf("dma cnt:%d %d\r\n", dma_cnt, href_counter);
                 status = START_TRANS;
-                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);
+                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge, true);
                 break;
             case START_TRANS:
                 status =  TRANSFER_IN_PROCESS;
-                GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_RisingEdge);
+                GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_RisingEdge, true);
                 href_counter = 0;
                 break;
             default:
@@ -84,7 +84,7 @@ void OV7620_ISR(uint32_t index)
     {
         DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)DMABuffer);
         dma_cnt = sizeof(DMABuffer) - DMA_GetMajorLoopCount(HW_DMA_CH2);
-        DMA_SetMajorLoopCount(HW_DMA_CH2, OV7620_W*2);
+        DMA_SetMajorLoopCounter(HW_DMA_CH2, OV7620_W*2);
         /* copy data */
         for(i=0;i<IMAGE_W;i++)
         {
@@ -111,8 +111,8 @@ static void OV7620_Init(void)
         GPIO_QuickInit(HW_GPIOD, BOARD_OV7620_DATA_OFFSET+i, kGPIO_Mode_IPD); /* 数据端口！*/
     }
     GPIO_CallbackInstall(BOARD_OV7620_VSYNC_PORT, OV7620_ISR);
-    GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_RisingEdge);
-    GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge);
+    GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_RisingEdge, true);
+    GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_RisingEdge, true);
   //  GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge); //实际并没有用到
     DMA_InitStruct1.chl = HW_DMA_CH2;
     DMA_InitStruct1.chlTriggerSource = MUX2_DMAREQ;

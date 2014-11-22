@@ -23,7 +23,7 @@
 int ili9163_init(spi_bus_t bus, uint32_t cs);
 void ili9163_clear(uint16_t c);
 void ili9163_write_pixel(int x, int y, int c);
-void GUI_DrawPixel(int color, int x, int y);
+void GUI_DrawPixel(int x, int y);
 
 #endif
 

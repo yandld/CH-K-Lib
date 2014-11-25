@@ -1,6 +1,11 @@
 #include "crc.h"
 #include "common.h"
 
+ /* 
+ * FIXME
+ * CRC只能在MK64上验证通过, K60上结果不对
+ */
+ 
 /* common CRC protrool define */
 static CRC_InitTypeDef CRCProtocolAttrTable[] = 
 {
@@ -16,6 +21,7 @@ static CRC_InitTypeDef CRCProtocolAttrTable[] =
     {32, 0xFFFFFFFFU, 0x04C11DB7, kCRCTransposeBits, kCRCTransposeBoth, true},  //CRC32
     {32, 0xFFFFFFFFU, 0x04C11DB7, kCRCNoTranspose, kCRCNoTranspose, false},     //CRC32-MPEG2
 };
+
 
 #if 0
 uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len)
@@ -107,7 +113,7 @@ static uint32_t CRC_HAL_GetCrcResult(void)
     {
         /* 16 */
         transpose = (CRC_Transpose_Type)((CRC0->CTRL & CRC_CTRL_TOTR_MASK) >> CRC_CTRL_TOTR_SHIFT);    
-        if( (transpose == kCRCTransposeBoth) || (transpose == kCRCTransposeBytes) )
+        if((transpose == kCRCTransposeBoth) || (transpose == kCRCTransposeBytes))
         {
             /* Return upper 16bits of CRC because of transposition in 16bit mode */
 #ifdef CRC_DATAL_DATAL_MASK
@@ -122,7 +128,7 @@ static uint32_t CRC_HAL_GetCrcResult(void)
             result = CRC0->ACCESS16BIT.DATAL;
 #else
             result = CRC0->ACCESS16BIT.CRCL;
-#endif            
+#endif
         }
     }
     return result;

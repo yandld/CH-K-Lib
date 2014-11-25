@@ -36,56 +36,40 @@ static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] 
 /* special use for printf */
 static uint8_t UART_DebugInstance;
 /* instance clock gate table */
-#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15) || defined(MK64F12))
+
 static const struct reg_ops SIM_UARTClockGateTable[] =
 {
+    
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
+#ifdef UART3
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART3_MASK},
-    {(void*)&(SIM->SCGC1), SIM_SCGC1_UART4_MASK},
-    {(void*)&(SIM->SCGC1), SIM_SCGC1_UART5_MASK},
-};
-/* interrupt handler table */
-static const IRQn_Type UART_IRQnTable[] = 
-{
-    UART0_RX_TX_IRQn,
-    UART1_RX_TX_IRQn,
-    UART2_RX_TX_IRQn,
-    UART3_RX_TX_IRQn,
-    UART4_RX_TX_IRQn,
-    UART5_RX_TX_IRQn,
-};
-#elif (defined(MK21D5))
-static const struct reg_ops SIM_UARTClockGateTable[] =
-{
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART3_MASK},
-};
-/* interrupt handler table */
-static const IRQn_Type UART_IRQnTable[] = 
-{
-    UART0_RX_TX_IRQn,
-    UART1_RX_TX_IRQn,
-    UART2_RX_TX_IRQn,
-    UART3_RX_TX_IRQn,
-};
-#elif (defined(MK10D5))
-static const struct reg_ops SIM_UARTClockGateTable[] =
-{
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
-};
-static const IRQn_Type UART_IRQnTable[] = 
-{
-    UART0_RX_TX_IRQn,
-    UART1_RX_TX_IRQn,
-    UART2_RX_TX_IRQn,
-};
 #endif
+#ifdef UART4
+    {(void*)&(SIM->SCGC1), SIM_SCGC1_UART4_MASK}, 
+#endif
+#ifdef UART5
+    {(void*)&(SIM->SCGC1), SIM_SCGC1_UART5_MASK},
+#endif
+};
+/* interrupt handler table */
+static const IRQn_Type UART_IRQnTable[] = 
+{
+    UART0_RX_TX_IRQn,
+    UART1_RX_TX_IRQn,
+    UART2_RX_TX_IRQn,
+#ifdef UART3
+    UART3_RX_TX_IRQn,
+#endif
+#ifdef UART4
+    UART4_RX_TX_IRQn,
+#endif
+#ifdef UART5
+    UART5_RX_TX_IRQn,
+#endif
+};
+
 
 static const uint32_t UART_TIFOSizeTable[] = {1, 4, 8, 16, 32, 64, 128};
 
@@ -686,7 +670,7 @@ void UART1_RX_TX_IRQHandler(void)
     }
 }
 
-#if (!defined(MK10D5))
+#ifdef UART2
 void UART2_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
@@ -709,7 +693,9 @@ void UART2_RX_TX_IRQHandler(void)
         }    
     }
 }
+#endif
 
+#ifdef UART3
 void UART3_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
@@ -732,7 +718,9 @@ void UART3_RX_TX_IRQHandler(void)
         }    
     }
 }
+#endif
 
+#ifdef UART4
 void UART4_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
@@ -755,8 +743,9 @@ void UART4_RX_TX_IRQHandler(void)
         }    
     }
 }
+#endif
 
-#if (defined(MK70F12)|| defined(MK70F15) || defined(MK60D10))
+#ifdef UART5
 void UART5_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
@@ -779,10 +768,7 @@ void UART5_RX_TX_IRQHandler(void)
         }    
     }
 }
-#endif /* (defined(MK70F12)|| defined(MK70F15)) */
-
-#endif /* (!defined(MK10D5)) */
-
+#endif
 
 /*
 static const QuickInit_Type UART_QuickInitTable[] =

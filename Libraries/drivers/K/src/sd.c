@@ -528,6 +528,7 @@ static void SDHC_WaitCommandLineIdle(void)
 uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
 {
     uint32_t xfertyp;
+    uint32_t r;
     uint32_t blkattr;
     xfertyp = Command->COMMAND;
     

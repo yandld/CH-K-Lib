@@ -28,15 +28,15 @@
 ## 文件说明
 - <tt>[Document]</tt> - 芯片手册原理图以及固件库文档
 - <tt>[Libraries]</tt> - 固件库源代码 启动代码 第三方组件 等等
- - <tt>[devices]</tt> - 外设芯片支持 比如加速度传感器 2401等等
- - <tt>[drivers]</tt> - 固件库源码 包含K KL系列
- - <tt>[startup]</tt> - 芯片启动文件及头文件
- - <tt>[utilities]</tt> - 其他第三方组件
+- <tt>[devices]</tt> - 外设芯片支持 比如加速度传感器 2401等等
+- <tt>[drivers]</tt> - 固件库源码 包含K KL系列
+- <tt>[startup]</tt> - 芯片启动文件及头文件
+- <tt>[utilities]</tt> - 其他第三方组件
 - <tt>[Project]</tt> - 工程文件及例程 主要以超核K60开发板-渡鸦 为主
- - <tt>[超核K60开发板-渡鸦]</tt> -  
- - <tt>[frdmk64f120m]</tt> -  
- - <tt>[KL46镭核核心板]</tt> -  
- - <tt>[超核姿态模块固件(URANUS)]</tt> -  
+- <tt>[超核K60开发板-渡鸦]</tt> -  
+- <tt>[frdmk64f120m]</tt> -  
+- <tt>[KL46镭核核心板]</tt> -  
+- <tt>[超核姿态模块固件(URANUS)]</tt> -  
 
 ## 联系我们及获取最新固件库
  - 论坛 [www.beyondcore.net](www.beyondcore.net)

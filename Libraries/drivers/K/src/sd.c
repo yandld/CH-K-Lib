@@ -529,7 +529,6 @@ uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
 {
     uint32_t xfertyp;
     uint32_t blkattr;
-    uint32_t r;
     xfertyp = Command->COMMAND;
     
     /* resume cmd must set DPSEL */

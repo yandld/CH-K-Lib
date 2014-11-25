@@ -72,7 +72,6 @@ void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
 #else
     CRC0->CRC = CRC_InitStruct->seed;
 #endif
-    
     CRC0->CTRL &= ~CRC_CTRL_WAS_MASK;
 }
 

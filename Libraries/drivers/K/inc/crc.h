@@ -55,7 +55,7 @@ typedef struct
 //!< API functions
 void CRC_QuickInit(CRC_ProtocolType type);
 void CRC_Init(CRC_InitTypeDef * CRC_InitStruct);
-uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len);
+//uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len);
 uint32_t CRC_Generate(uint8_t* data, uint32_t len);
 
 #endif

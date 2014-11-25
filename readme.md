@@ -8,9 +8,9 @@
 
 请按步骤逐步学习本固件库及Kinetis,先看免费入门视频教程.该教材包含了你想要的全部内容，从整体知识介绍到工具软件下载到入门提高。
 
-1. [免费入门视频](http://www.moore8.com/courses/87)
+1. [中文入门视频](http://www.moore8.com/courses/87)
 2. [参考手册](http://git.oschina.net/yandld/CH-K-Lib/wikis/home)  
-3. www.beyondcore.net
+3. [答疑论坛](www.beyondcore.net)
 4. [固件库源代码包下载](http://git.oschina.net/yandld/CH-K-Lib/repository/archive?ref=master)
 
 ## 所支持的IDE[下载](http://pan.baidu.com/s/1kTgJLaf)
@@ -37,9 +37,6 @@
  - <tt>[frdmk64f120m]</tt> -  
  - <tt>[KL46镭核核心板]</tt> -  
  - <tt>[超核姿态模块固件(URANUS)]</tt> -  
- - <tt>[KL46镭核核心板]</tt> -  
-
-
 
 ## 联系我们及获取最新固件库
  - 论坛 [www.beyondcore.net](www.beyondcore.net)

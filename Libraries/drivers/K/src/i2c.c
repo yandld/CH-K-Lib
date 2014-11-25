@@ -13,50 +13,32 @@
 
 /* leagacy support for Kineis Z Version(Inital Version) */
 #if (!defined(I2C_BASES))
-
-    #if (defined(MK60DZ10))
-        #define I2C_BASES {I2C0, I2C1}
-    #endif
-    #if (defined(MK10D5))
-        #define I2C_BASES {I2C0}
-    #endif 
+#ifdef I2C1
+    #define I2C_BASES {I2C0, I2C1}
+#else
+    #define I2C_BASES {I2C0}
+#endif
+    
 #endif
 
 /* gloabl const table defination */
 static I2C_Type * const I2C_InstanceTable[] = I2C_BASES;
 static I2C_CallBackType I2C_CallBackTable[ARRAY_SIZE(I2C_InstanceTable)] = {NULL};
-#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK64F12))
+
 static const uint32_t SIM_I2CClockGateTable[] =
 {
     SIM_SCGC4_I2C0_MASK,
+#ifdef I2C1
     SIM_SCGC4_I2C1_MASK,
-};
-static const IRQn_Type I2C_IRQnTable[] = 
-{
-    I2C0_IRQn,
-    I2C1_IRQn,
-};
-#elif (defined(MK10D5))
-static const uint32_t SIM_I2CClockGateTable[] =
-{
-    SIM_SCGC4_I2C0_MASK,
-};
-static const IRQn_Type I2C_IRQnTable[] = 
-{
-    I2C0_IRQn,
-};
-#elif (defined(MK70F12) || defined(MK70F15))
-static const uint32_t SIM_I2CClockGateTable[] =
-{
-    SIM_SCGC4_IIC0_MASK,
-    SIM_SCGC4_IIC1_MASK,
-};
-static const IRQn_Type I2C_IRQnTable[] = 
-{
-    I2C0_IRQn,
-    I2C1_IRQn,
-};
 #endif
+};
+static const IRQn_Type I2C_IRQnTable[] = 
+{
+    I2C0_IRQn,
+#ifdef I2C1
+    I2C1_IRQn,
+#endif
+};
 
 //!< clock deiver struct (internal)
 typedef struct 

@@ -283,7 +283,7 @@ int main(void)
     
     PIT_QuickInit(HW_PIT_CH1, 1000*20);
     PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF);
+    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF, true);
     
     while(1)
     {

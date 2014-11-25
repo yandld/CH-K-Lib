@@ -13,6 +13,8 @@
  #include "common.h"
  #include "gpio.h"
  
+#ifdef TSI0
+
 static TSI_CallBackType TSI_CallBackTable[1] = {NULL};
  
 static const uint16_t * TSI_ChlCNTRTable[] =
@@ -217,6 +219,7 @@ void TSI0_IRQHandler(void)
     }  
 }
 
+#endif
 
 /*
  static  QuickInit_Type TSI_QuickInitTable[] =

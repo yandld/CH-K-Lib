@@ -1,20 +1,20 @@
 #include "crc.h"
 #include "common.h"
 
-
+/* common CRC protrool define */
 static CRC_InitTypeDef CRCProtocolAttrTable[] = 
 {
     {16, 0x0000U, 0x8005, kCRCTransposeBits, kCRCTransposeBoth, false},
     {16, 0x0000U, 0x8005, kCRCTransposeBits, kCRCTransposeBoth, true},
     {16, 0xFFFFU, 0x8005, kCRCTransposeBits, kCRCTransposeBoth, true},
     {16, 0xFFFFU, 0x8005, kCRCTransposeBits, kCRCTransposeBoth, false},
-    {16, 0x0000U, 0x1021, kCRCTransposeBits, kCRCTransposeBoth, false}, //CCITT
-    {16, 0xFFFFU, 0x1021, kCRCNoTranspose, kCRCNoTranspose, false}, //CCITT False
-    {16, 0xFFFFU, 0x1021, kCRCTransposeBits, kCRCTransposeBoth, true}, //X25
-    {16, 0x0000U, 0x1021, kCRCNoTranspose, kCRCNoTranspose, false}, //XMODEM
-    {16, 0x0000U, 0x3D65, kCRCTransposeBits, kCRCTransposeBoth, true}, //DNP
-    {32, 0xFFFFFFFFU, 0x04C11DB7, kCRCTransposeBits, kCRCTransposeBoth, true}, //CRC32
-    {32, 0xFFFFFFFFU, 0x04C11DB7, kCRCNoTranspose, kCRCNoTranspose, false}, //CRC32-MPEG2
+    {16, 0x0000U, 0x1021, kCRCTransposeBits, kCRCTransposeBoth, false},         //CCITT
+    {16, 0xFFFFU, 0x1021, kCRCNoTranspose, kCRCNoTranspose, false},             //CCITT False
+    {16, 0xFFFFU, 0x1021, kCRCTransposeBits, kCRCTransposeBoth, true},          //X25
+    {16, 0x0000U, 0x1021, kCRCNoTranspose, kCRCNoTranspose, false},             //XMODEM
+    {16, 0x0000U, 0x3D65, kCRCTransposeBits, kCRCTransposeBoth, true},          //DNP
+    {32, 0xFFFFFFFFU, 0x04C11DB7, kCRCTransposeBits, kCRCTransposeBoth, true},  //CRC32
+    {32, 0xFFFFFFFFU, 0x04C11DB7, kCRCNoTranspose, kCRCNoTranspose, false},     //CRC32-MPEG2
 };
 
 #if 0
@@ -41,6 +41,11 @@ uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len)
 }
 #endif
 
+/**
+ * @brief  初始化CRC硬件模块  
+ * @param  CRC_InitStruct  : CRC初始化结构
+ * @retval None
+ */
 void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
 {
     /* enable clock */
@@ -75,6 +80,11 @@ void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
     CRC0->CTRL &= ~CRC_CTRL_WAS_MASK;
 }
 
+/**
+ * @brief  快速初始化CRC硬件模块  
+ * @param  type  : CRC协议类型
+ * @retval None
+ */
 void CRC_QuickInit(CRC_ProtocolType type)
 {
     CRC_Init(&CRCProtocolAttrTable[type]);
@@ -92,7 +102,6 @@ static uint32_t CRC_HAL_GetCrcResult(void)
 #else
         result = CRC0->CRC;
 #endif
-        
     }
     else
     {
@@ -119,7 +128,12 @@ static uint32_t CRC_HAL_GetCrcResult(void)
     return result;
 }
 
-
+/**
+ * @brief  计算并产生CRC运算结果 
+ * @param  data  : 数据指针
+ * @param  len   : 数据长度
+ * @retval CRC计算结果
+ */
 uint32_t CRC_Generate(uint8_t* data, uint32_t len)
 {
     CRC_Transpose_Type oldInputTranspose;
@@ -199,19 +213,6 @@ uint32_t CRC_Generate(uint8_t* data, uint32_t len)
 
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -29,28 +29,25 @@
 FTM_Type * const FTM_InstanceTable[] = FTM_BASES;
 static FTM_CallBackType FTM_CallBackTable[ARRAY_SIZE(FTM_InstanceTable)] = {NULL};
 
-#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15) || defined(MK64F12))
+
 static const uint32_t FTM_ChlMaxTable[] = {8,2,2}; /* reference to chip configuration->flextimer configuration */
 static const struct reg_ops SIM_FTMClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM0_MASK},
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM1_MASK},
+#ifdef FTM2
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM2_MASK},
+#endif
 };
 static const IRQn_Type FTM_IRQnTable[] = 
 {
     FTM0_IRQn,
     FTM1_IRQn,
+#ifdef FTM2
     FTM2_IRQn,
-};
-#elif (defined(MK10D5))
-static const struct reg_ops SIM_FTMClockGateTable[] =
-{
-    {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM0_MASK},
-    {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM1_MASK},
+#endif
 };
 
-#endif
 
 /* FTM dual pin mode select */
 typedef enum

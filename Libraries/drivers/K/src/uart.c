@@ -20,12 +20,15 @@
 
 #if (!defined(UART_BASES))
 
-    #if     (defined(MK60DZ10))
+#ifdef UART3
+    #define UART_BASES {UART0, UART1, UART2, UART3}
+#elif UART4
+    #define UART_BASES {UART0, UART1, UART2, UART3, UART4}
+#elif UART5 
     #define UART_BASES {UART0, UART1, UART2, UART3, UART4, UART5}
-    #elif   (defined(MK10D5))
+#else
     #define UART_BASES {UART0, UART1, UART2}
-    #endif
-
+#endif
 #endif
 
 /* gloabl const table defination */

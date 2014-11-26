@@ -42,7 +42,7 @@
 
 #define DISABLE_WDOG    1
 
-#define CLOCK_SETUP     0
+#define CLOCK_SETUP     4
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
@@ -59,6 +59,9 @@
    4 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
          Core clock = 96MHz, BusClock = 48MHz
+   5 ... Multipurpose Clock Generator (MCG) in PLL Engaged External (PEE) mode
+         Reference clock source for MCG module is IRC48M
+         Core clock = 200MHz, BusClock = 100MHz
 */
 
 /*----------------------------------------------------------------------------
@@ -94,7 +97,13 @@
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
     #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
     #define DEFAULT_SYSTEM_CLOCK            96000000u /* Default System clock value */
-#endif /* (CLOCK_SETUP == 3) */
+#elif (CLOCK_SETUP == 5)
+    #define CPU_XTAL_CLK_HZ                 48000000u /* Value of the external crystal or oscillator clock frequency in Hz */
+    #define CPU_XTAL32k_CLK_HZ              32768u   /* Value of the external 32k crystal or oscillator clock frequency in Hz */
+    #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
+    #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
+    #define DEFAULT_SYSTEM_CLOCK            200000000u /* Default System clock value */
+#endif
 
 
 /* ----------------------------------------------------------------------------
@@ -219,7 +228,7 @@ void SystemInit (void) {
   /* MCG->C2: ??=0,??=0,RANGE0=2,HGO=0,EREFS=1,LP=0,IRCS=0 */
   MCG->C2 = (uint8_t)0x24u;
 #elif (CLOCK_SETUP == 4)
-    SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;               /* ???????? ?????????? */
+    SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;
     /* ?? FEI ??  */
     MCG->C1 = (uint8_t)0x06u;
     MCG->C2 = (uint8_t)0x00u;
@@ -228,9 +237,28 @@ void SystemInit (void) {
     SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(3));
     MCG->C5 = (uint8_t)0x00u;
     MCG->C6 = (uint8_t)0x00u;
-    while((MCG->S & MCG_S_IREFST_MASK) == 0u);          /* ?? FLL??????????? */
-    while((MCG->S & 0x0Cu) != 0x00u);                   /* ??FLL??? */
+    while((MCG->S & MCG_S_IREFST_MASK) == 0u);
+    while((MCG->S & 0x0Cu) != 0x00u);
+
+#elif (CLOCK_SETUP == 5)
+    SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;
+    /* Switch to FBE Mode */
+    MCG->C2 = (uint8_t)0x24u; /* MCG->C2: ??=0,??=0,RANGE0=2,HGO=0,EREFS=1,LP=0,IRCS=0 */
+    OSC->CR = (uint8_t)0x00u; /* OSC->CR: ERCLKEN=0,??=0,EREFSTEN=0,??=0,SC2P=0,SC4P=0,SC8P=0,SC16P=0 */
+    MCG->C7 = MCG_C7_OSCSEL(2); /* use IRC48M */
+    MCG->C1 = (uint8_t)0x9Au; /* MCG->C1: CLKS=2,FRDIV=3,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
+    MCG->C4 &= (uint8_t)~(uint8_t)0xE0u; /* MCG->C4: DMX32=0,DRST_DRS=0 */
+    MCG->C5 = (uint8_t)MCG_C5_PRDIV(23);               /* 48/24 = 2M */
+    MCG->C6 = (uint8_t)(0x40u|MCG_C6_VDIV(26));
+    SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(3));	
+    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待PLLS 时钟源转到 PLL */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待锁定 */
+    /* 启动PLL */
+    MCG->C1 = (uint8_t)0x1Au;
+    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待PLL输出 */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待PLL锁定 */
 #endif
+  
 }
 
 /* ----------------------------------------------------------------------------

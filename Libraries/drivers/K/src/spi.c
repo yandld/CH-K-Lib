@@ -26,29 +26,28 @@
 SPI_Type * const SPI_InstanceTable[] = SPI_BASES;
 static SPI_CallBackType SPI_CallBackTable[ARRAY_SIZE(SPI_InstanceTable)] = {NULL};
     
-#if (defined(MK60DZ10) || defined(MK40D10) || defined(MK60D10)|| defined(MK10D10) || defined(MK70F12) || defined(MK70F15) || defined(MK64F12))
-static const struct reg_ops SIM_SPIClockGateTable[] =
-{
-    {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI0_MASK},
-    {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI1_MASK},
-    {(void*)&(SIM->SCGC3), SIM_SCGC3_SPI2_MASK},
-};
-static const IRQn_Type SPI_IRQnTable[] = 
-{
-    SPI0_IRQn,    SPI1_IRQn,
-    SPI2_IRQn,
-};
 
-#elif (defined(MK10D5))
 static const struct reg_ops SIM_SPIClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI0_MASK},
+#ifdef SPI1
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI1_MASK},
+#endif
+#ifdef SPI2
+    {(void*)&(SIM->SCGC3), SIM_SCGC3_SPI2_MASK},
+#endif
 };
 static const IRQn_Type SPI_IRQnTable[] = 
 {
     SPI0_IRQn,
-};
+#ifdef SPI1
+    SPI1_IRQn,
 #endif
+#ifdef SPI2
+    SPI2_IRQn,
+#endif
+};
+
 
 
 /* Defines constant value arrays for the baud rate pre-scalar and scalar divider values.*/

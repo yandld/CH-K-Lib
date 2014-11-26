@@ -26,40 +26,28 @@
 ADC_Type * const ADC_InstanceTable[] = ADC_BASES;
 static ADC_CallBackType ADC_CallBackTable[ARRAY_SIZE(ADC_InstanceTable)] = {NULL};
 
-#if (defined(MK60DZ10) || defined(MK60D10) || defined(MK64F12))
 static const struct reg_ops SIM_ADCClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC0_MASK},
+#ifdef ADC1
     {(void*)&(SIM->SCGC3), SIM_SCGC3_ADC1_MASK},
-};
-static const IRQn_Type ADC_IRQnTable[] = 
-{
-    ADC0_IRQn,
-    ADC1_IRQn,
-};
-#elif (defined(MK70F12) || defined(MK70F15))
-static const struct reg_ops SIM_ADCClockGateTable[] =
-{
-    {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC0_MASK},
-    {(void*)&(SIM->SCGC3), SIM_SCGC3_ADC1_MASK},
-    {(void*)&(SIM->SCGC3), SIM_SCGC6_ADC2_MASK},
-};
-static const IRQn_Type ADC_IRQnTable[] = 
-{
-    ADC0_IRQn,
-    ADC1_IRQn,
-    ADC2_IRQn,
-};
-#elif (defined(MK10D5))
-static const struct reg_ops SIM_ADCClockGateTable[] =
-{
-    {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC0_MASK},
-};
-static const IRQn_Type ADC_IRQnTable[] = 
-{
-    ADC0_IRQn,
-};
 #endif
+#ifdef ADC2
+    {(void*)&(SIM->SCGC3), SIM_SCGC6_ADC2_MASK},
+#endif
+};
+static const IRQn_Type ADC_IRQnTable[] = 
+{
+    ADC0_IRQn,
+#ifdef ADC1
+    ADC1_IRQn,
+#endif
+#ifdef ADC2
+    ADC2_IRQn,
+#endif
+};
+
+
 
 //! @defgroup CHKinetis
 //! @{

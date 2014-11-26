@@ -34,7 +34,7 @@ static const IRQn_Type DMA_IRQnTable[] =
     DMA14_IRQn,
     DMA15_IRQn,
 };
-#elif   (defined(MK10D5))
+#else
 static const IRQn_Type DMA_IRQnTable[] = 
 {
     DMA0_IRQn,

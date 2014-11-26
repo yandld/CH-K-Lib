@@ -14,14 +14,15 @@
 /* leagacy support for Kineis Z version(inital version) */
 #if (!defined(GPIO_BASES))
 
-    #if (defined(MK60DZ10))
-        #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
-        #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
-    #endif
-    #if (defined(MK10D5))
-        #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
-        #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
-    #endif
+#ifdef PTF
+#define GPIO_BASES {PTA, PTB, PTC, PTD, PTE, PTF}
+#define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE, PORTF}
+#else
+#define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
+#define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
+#endif
+
+
 #endif
 
 /* gloabl vars */

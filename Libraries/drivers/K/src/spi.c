@@ -15,11 +15,13 @@
 
 #if (!defined(SPI_BASES))
 
-    #if     (defined(MK60DZ10))
-    #define SPI_BASES {SPI0, SPI1, SPI2}
-    #elif   (defined(MK10D5))
-    #define SPI_BASES {SPI0}
-    #endif
+#ifdef SPI1
+#define SPI_BASES {SPI0, SPI1}
+#elif SPI2
+#define SPI_BASES {SPI0, SPI1, SPI2}
+#else
+#define SPI_BASES {SPI0}
+#endif
 
 #endif
 

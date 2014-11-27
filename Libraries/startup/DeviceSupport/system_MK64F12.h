@@ -4,17 +4,18 @@
 **     Compilers:           ARM Compiler
 **                          Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
+**                          GNU C Compiler - CodeSourcery Sourcery G++
 **                          IAR ANSI C/C++ Compiler for ARM
 **
-**     Reference manual:    K64P144M120SF5RM, Rev.1, July 2013
-**     Version:             rev. 1.0, 2013-08-12
+**     Reference manual:    K64P144M120SF5RM, Rev.2, January 2014
+**     Version:             rev. 2.3, 2014-01-24
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
 **         contains the system frequency. It configures the device and initializes
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
-**     Copyright: 2013 Freescale, Inc. All Rights Reserved.
+**     Copyright: 2014 Freescale, Inc. All Rights Reserved.
 **
 **     http:                 www.freescale.com
 **     mail:                 support@freescale.com
@@ -22,14 +23,29 @@
 **     Revisions:
 **     - rev. 1.0 (2013-08-12)
 **         Initial version.
+**     - rev. 2.0 (2013-10-29)
+**         Register accessor macros added to the memory map.
+**         Symbols for Processor Expert memory map compatibility added to the memory map.
+**         Startup file for gcc has been updated according to CMSIS 3.2.
+**         System initialization updated.
+**         MCG - registers updated.
+**         PORTA, PORTB, PORTC, PORTE - registers for digital filter removed.
+**     - rev. 2.1 (2013-10-29)
+**         Definition of BITBAND macros updated to support peripherals with 32-bit acces disabled.
+**     - rev. 2.2 (2013-12-09)
+**         DMA - EARS register removed.
+**         AIPS0, AIPS1 - MPRA register updated.
+**     - rev. 2.3 (2014-01-24)
+**         Update according to reference manual rev. 2
+**         ENET, MCG, MCM, SIM, USB - registers updated
 **
 ** ###################################################################
 */
 
 /*!
  * @file MK64F12
- * @version 1.0
- * @date 2013-08-12
+ * @version 2.3
+ * @date 2014-01-24
  * @brief Device specific configuration file for MK64F12 (header file)
  *
  * Provides a system configuration function and a global variable that contains

@@ -528,7 +528,6 @@ static void SDHC_WaitCommandLineIdle(void)
 uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
 {
     uint32_t xfertyp;
-    uint32_t r;
     uint32_t blkattr;
     xfertyp = Command->COMMAND;
     
@@ -568,11 +567,9 @@ uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
     if(SD_StatusWait (SDHC_IRQSTAT_CIE_MASK | SDHC_IRQSTAT_CEBE_MASK | SDHC_IRQSTAT_CCE_MASK | SDHC_IRQSTAT_CC_MASK) != SDHC_IRQSTAT_CC_MASK)
     {
         SDHC->IRQSTAT |= SDHC_IRQSTAT_CTOE_MASK | SDHC_IRQSTAT_CIE_MASK | SDHC_IRQSTAT_CEBE_MASK | SDHC_IRQSTAT_CCE_MASK | SDHC_IRQSTAT_CC_MASK;
-        LIB_TRACE("SD_SendCommand:0x%08X\r\n", r);
         return ESDHC_ERROR_COMMAND_FAILED;
     }
-
-
+    
     /* get respond data */
     if ((xfertyp & SDHC_XFERTYP_RSPTYP_MASK) != SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_NO))
     {

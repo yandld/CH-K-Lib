@@ -40,6 +40,7 @@ void init_thread_entry(void* parameter)
     tid = rt_thread_create("t2", t2_thread_entry, RT_NULL, 256, 5, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
    
+    finsh_system_init();
     /* 删除这个进程 */
     tid = rt_thread_self();
     rt_thread_delete(tid);

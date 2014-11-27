@@ -6,6 +6,8 @@
 #include <dfs_posix.h>
 #include <stdbool.h>
 
+#include <finsh.h>
+
 #define _MAX_PATH 256
 static char fullpath[_MAX_PATH];
 
@@ -97,19 +99,19 @@ static void _cbBk(WM_MESSAGE * pMsg)
 }
 
 
-const char *MYGUI_ExecDialog_ChFile(WM_HWIN hParent, const char *pMask)
+const char *chfile(WM_HWIN hParent, const char *pMask)
 {
     int r;
     WM_HWIN hWin;
     static CHOOSEFILE_INFO Info = { 0 };
     static char const      * apDrives[1]         = {"/"};
     Info.pfGetData = _GetData;
-    Info.pMask     = pMask;
+    Info.pMask     = "*.*";
     CHOOSEFILE_SetDelim('/');
-    hWin = CHOOSEFILE_Create(hParent, 10,10,LCD_GetXSize()*3/4,LCD_GetYSize()*2/3, apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
-    WM_ShowWindow(hWin);
+    hWin = CHOOSEFILE_Create(hParent, 0,0,LCD_GetXSize(),LCD_GetYSize(), apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
+   // WM_ShowWindow(hWin);
     //rt_kprintf("exit MYGUI_ExecDialog_ChFile\r\n");
-    r = GUI_ExecCreatedDialog(hWin);
+  //  r = GUI_ExecCreatedDialog(hWin);
     //rt_kprintf("ChFile Diolag end\r\n");
     if(r == 1)
     {
@@ -118,3 +120,5 @@ const char *MYGUI_ExecDialog_ChFile(WM_HWIN hParent, const char *pMask)
     return Info.pRoot;
 }
 
+
+FINSH_FUNCTION_EXPORT(chfile, create a directory);

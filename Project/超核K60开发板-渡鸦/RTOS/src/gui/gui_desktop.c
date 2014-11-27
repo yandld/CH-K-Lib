@@ -1,7 +1,7 @@
 
 #include "DIALOG.h"
 #include "gui_image.h"
-
+#include <finsh.h>
 
 #define ID_FRAMEWIN_0 (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0 (GUI_ID_USER + 0x01)
@@ -18,11 +18,8 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { BUTTON_CreateIndirect, "Time", ID_BUTTON_2, 137, 8, 60, 35, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "NetWork", ID_BUTTON_3, 6, 49, 60, 35, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Reader", ID_BUTTON_4, 71, 49, 60, 35, 0, 0x0, 0 },
-  // USER START (Optionally insert additional widgets)
-  // USER END
 };
 
-char * MYGUI_DLG_ChFileGetPath(WM_HWIN hItem);
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
   WM_HWIN hItem;
@@ -81,7 +78,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
 
 
-WM_HWIN MYGUI_DLG_CreateDesktop(void)
+WM_HWIN gcd(void)
 {
     WM_HWIN hWin;
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
@@ -91,5 +88,8 @@ WM_HWIN MYGUI_DLG_CreateDesktop(void)
 //    }
     return hWin;
 }
+
+
+FINSH_FUNCTION_EXPORT(gcd, create a directory);
 
 

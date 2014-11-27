@@ -46,6 +46,7 @@ int cmd_gui_start(int argc, char** argv)
     
     GUI_DispString("gui system actived!\r\n");
     GUI_CURSOR_Show();
+    gcd();
     //TOUCH_MainTask();
     return 0;
 }

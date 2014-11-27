@@ -141,7 +141,7 @@ static void thread_entry(void* parameter)
     {
         __OpenNew:
         rt_sem_take(sem, RT_WAITING_FOREVER);
-        p = MYGUI_ExecDialog_ChFile(hDialog, "*.*");
+      //  p = MYGUI_ExecDialog_ChFile(hDialog, "*.*");
         rt_sem_release(sem);
         if(p != NULL)
         {

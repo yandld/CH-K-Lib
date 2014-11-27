@@ -8,12 +8,9 @@
 #include "rtt_spi.h"
 
 void led_thread_entry(void* parameter);
-void gui_thread_entry(void* parameter);
 void usb_thread_entry(void* parameter);
 void sd_thread_entry(void* parameter);
-
-
-
+int cmd_gui_start(int argc, char** argv);
 
 rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 
@@ -25,12 +22,14 @@ void init_thread_entry(void* parameter)
     int i;
     rt_uint8_t time_out;
     
-    rt_device_t dev = rt_device_find("uart0");
-    
-    finsh_system_init();
+    /* install SRAM */
     SRAM_Init();
     rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-   
+    
+    /* init finsh */
+    rt_device_t dev = rt_device_find("uart0");
+    finsh_system_init();
+
     rt_hw_spi_bus_init(HW_SPI2, "spi2");
     
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
@@ -73,7 +72,6 @@ void init_thread_entry(void* parameter)
     list_if();
 #endif
     
-    
     /* init eeporm */
     at24cxx_init("at24c02", "i2c0");
 //    rt_uint8_t buf[32];
@@ -81,23 +79,16 @@ void init_thread_entry(void* parameter)
     // touch_ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
     r = dfs_mount("sf0", "/SF", "elm", 0, 0);
-    rt_kprintf("dfs mount:%d\r\n", r);
-    /* sd_thread */
+    rt_kprintf("dfs mount:%d if err, please mkfs\r\n", r);
+
     tid = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
     if (tid != RT_NULL) rt_thread_startup(tid);
-   /* gui thread */
-  //tid = rt_thread_create("gui", gui_thread_entry, RT_NULL, 1024*2, 4, 20);
-   // if (tid != RT_NULL) rt_thread_startup(tid);
-        
-    /* led thread */
+  
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
   
-    /* usb thread */
-    //thread = rt_thread_create("usb_msd", usb_thread_entry, "sf0", 1024, 0x08, 20);
-    //if (thread != RT_NULL) rt_thread_startup(thread);
-   
-   
+    cmd_gui_start(RT_NULL, RT_NULL);
+    
     tid = rt_thread_self();
     rt_thread_delete(tid); 
 }

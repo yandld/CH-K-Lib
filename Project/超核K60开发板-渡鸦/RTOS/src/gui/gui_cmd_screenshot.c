@@ -14,30 +14,34 @@
 #include <rtthread.h>
 #include <dfs_posix.h>
 #include "GUI.H"
+#include <finsh.h>
 
+    
 static void _WriteByte2File(U8 Data, void *p)
 {
+    static rt_uint32_t cnt;
+    cnt++;
+    if(!(cnt%1000)) rt_kprintf(">");
+    
     write(*(int*)p, &Data, 1);
 }
 
-
-void screen_shot(const char* filename)
+void cmd_screen_shot(int argc, char** argv)
 {
     int fd, index, length;
     char *buff_ptr;
 
-    fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0);
+    fd = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0);
     if (fd < 0)
     {
-        rt_kprintf("open file:%s failed\n", filename);
+        rt_kprintf("open file:%s failed\n", argv[1]);
         return;
     }
     GUI_BMP_Serialize(_WriteByte2File, &fd);
-    rt_kprintf("scrren cut completed @ file:%s\r\n", filename);
     close(fd);
+    rt_kprintf("\r\n");
 }
 
-#ifdef RT_USING_FINSH
-#include <finsh.h>
-FINSH_FUNCTION_EXPORT(screen_shot, screen shot);
-#endif
+
+FINSH_FUNCTION_EXPORT_ALIAS(cmd_screen_shot, __cmd_screen_shot, show a picture file.);
+

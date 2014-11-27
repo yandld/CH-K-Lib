@@ -18,12 +18,7 @@
 * IAR 6.6 以上版本
 
 ## 适用型号
-* MK60DNxxx
-* MK60DNZxxx
-* MK64F12xxx
-* MK10DN32xxx
-* MKL25Zxxx
-* MKL46Zxxx
+`MK60DNxxx` `MK64F12xxx` `MK10DN32xxx` `MKL25Zxxx` `MKL46Zxxx`
 
 ## 文件说明
 - <tt>[Document]</tt> - 芯片手册原理图以及固件库文档

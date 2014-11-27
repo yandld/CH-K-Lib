@@ -1,5 +1,5 @@
-#ifndef DSP__BASIC_DEMO
-#define DSP__BASIC_DEMO
+#ifndef DSP_BASIC_DEMO
+#define DSP_BASIC_DEMO
 #include "chlib_k.h"
 #include "arm_math.h"
 

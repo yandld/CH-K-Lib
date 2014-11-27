@@ -209,5 +209,11 @@ sntp_thread(void *arg)
 
 void sntp_init(void)
 {
-	sys_thread_new("sntp_thread", sntp_thread, NULL, DEFAULT_THREAD_STACKSIZE, DEFAULT_THREAD_PRIO);
+    rt_thread_t tid;
+    tid = rt_thread_create("sntp_thread", sntp_thread, RT_NULL, 1024, 0x1B, 20);
+    if (tid != RT_NULL) rt_thread_startup(tid);
 }
+
+#include <finsh.h>
+FINSH_FUNCTION_EXPORT(sntp_init, sntp_init.);
+

@@ -16,12 +16,16 @@
 /* leagacy support for Kineis Z Version(inital version) */
 #if (!defined(FTM_BASES))
 
-    #if (defined(MK60DZ10))
-        #define FTM_BASES {FTM0, FTM1, FTM2}
-    #endif
-    #if (defined(MK10D5))
-        #define FTM_BASES {FTM0, FTM1}
-    #endif
+#ifdef FTM1
+    #define FTM_BASES {FTM0, FTM1}
+#elif  FTM2
+    #define FTM_BASES {FTM0, FTM1, FTM2}
+#elif FTM3
+    #define FTM_BASES {FTM0, FTM1, FTM2, FTM3}
+#else
+    #define FTM_BASES {FTM0}     
+#endif
+
 #endif
 
 

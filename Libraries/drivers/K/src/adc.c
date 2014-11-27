@@ -14,13 +14,15 @@
 
 /* leagacy support for Kineis Z Version(inital version) */
 #if (!defined(ADC_BASES))
+#ifdef ADC1
+    #define ADC_BASES {ADC0, ADC1}
+#elif ADC2
+    #define ADC_BASES {ADC0, ADC1,ADC2}
+#else
+    #define ADC_BASES {ADC0}
+#endif
 
-    #if (defined(MK60DZ10))
-        #define ADC_BASES {ADC0, ADC1}
-    #endif
-    #if (defined(MK10D5))
-        #define ADC_BASES {ADC0}
-    #endif
+
 #endif
 /* global vars */
 ADC_Type * const ADC_InstanceTable[] = ADC_BASES;

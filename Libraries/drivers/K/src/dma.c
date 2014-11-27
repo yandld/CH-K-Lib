@@ -13,36 +13,28 @@
 #include "common.h"
 
 static DMA_CallBackType DMA_CallBackTable[16] = {NULL};
-#if     (defined(MK60DZ10) || defined(MK60D10) || defined(MK64F12))
+
 /* DMA中断向量入口 */
 static const IRQn_Type DMA_IRQnTable[] = 
 {
-    DMA0_IRQn,
-    DMA1_IRQn,
-    DMA2_IRQn,
-    DMA3_IRQn,
-    DMA4_IRQn,
-    DMA5_IRQn,
-    DMA6_IRQn,
-    DMA7_IRQn,
-    DMA8_IRQn,
-    DMA9_IRQn,
-    DMA10_IRQn,
-    DMA11_IRQn,
-    DMA12_IRQn,
-    DMA13_IRQn,
-    DMA14_IRQn,
-    DMA15_IRQn,
+    (IRQn_Type)(DMA0_IRQn + 0),
+    (IRQn_Type)(DMA0_IRQn + 1),
+    (IRQn_Type)(DMA0_IRQn + 2),
+    (IRQn_Type)(DMA0_IRQn + 3),
+    (IRQn_Type)(DMA0_IRQn + 4),
+    (IRQn_Type)(DMA0_IRQn + 5),
+    (IRQn_Type)(DMA0_IRQn + 6),
+    (IRQn_Type)(DMA0_IRQn + 7),
+    (IRQn_Type)(DMA0_IRQn + 8),
+    (IRQn_Type)(DMA0_IRQn + 9),
+    (IRQn_Type)(DMA0_IRQn + 10),
+    (IRQn_Type)(DMA0_IRQn + 11),
+    (IRQn_Type)(DMA0_IRQn + 12),
+    (IRQn_Type)(DMA0_IRQn + 13),
+    (IRQn_Type)(DMA0_IRQn + 14),
+    (IRQn_Type)(DMA0_IRQn + 15),
 };
-#else
-static const IRQn_Type DMA_IRQnTable[] = 
-{
-    DMA0_IRQn,
-    DMA1_IRQn,
-    DMA2_IRQn,
-    DMA3_IRQn,
-};
-#endif
+
 
 /**
  * @brief  初始化DMA模块

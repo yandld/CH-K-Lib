@@ -16,12 +16,12 @@
 int main(void)
 {
     DelayInit();
-    GPIO_QuickInit(HW_GPIOD, 1, kGPIO_Mode_OPP);
-    GPIO_WriteBit(HW_GPIOD, 1, 0);
+    GPIO_QuickInit(HW_GPIOD, 10, kGPIO_Mode_OPP);
+    GPIO_WriteBit(HW_GPIOD, 10, 0);
     
     while(1)
     {
-        PDout(1) = !PDout(1);
+        PDout(10) = !PDout(10);
         DelayMs(500);
     }
 }

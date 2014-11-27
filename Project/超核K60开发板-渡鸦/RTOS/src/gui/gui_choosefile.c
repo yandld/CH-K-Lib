@@ -73,7 +73,7 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     return r;
 }
 
-
+static bool endFlag = false;
 static void _cbBk(WM_MESSAGE * pMsg)
 {
     WM_HWIN hItem;
@@ -89,7 +89,7 @@ static void _cbBk(WM_MESSAGE * pMsg)
             NCode = pMsg->Data.v;
             if(WM_NOTIFICATION_CHILD_DELETED == NCode)
             {
-              //  rt_kprintf("Disalbe CLOSED:%d\r\n", Id);
+                endFlag = true;
             }
             break;
         default:
@@ -108,11 +108,14 @@ const char *chfile(WM_HWIN hParent, const char *pMask)
     Info.pfGetData = _GetData;
     Info.pMask     = "*.*";
     CHOOSEFILE_SetDelim('/');
-    hWin = CHOOSEFILE_Create(hParent, 0,0,LCD_GetXSize(),LCD_GetYSize(), apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
-   // WM_ShowWindow(hWin);
-    //rt_kprintf("exit MYGUI_ExecDialog_ChFile\r\n");
-  //  r = GUI_ExecCreatedDialog(hWin);
-    //rt_kprintf("ChFile Diolag end\r\n");
+    endFlag = false;
+    hWin = CHOOSEFILE_Create(hParent, 0, 0, LCD_GetXSize(), LCD_GetYSize(), apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
+    WM_SetCallback(hWin, _cbBk);
+
+    while(endFlag == false)
+    {
+        rt_thread_delay(1); 
+    }
     if(r == 1)
     {
         return NULL;

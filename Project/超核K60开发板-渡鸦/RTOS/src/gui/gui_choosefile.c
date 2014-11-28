@@ -11,6 +11,7 @@
 #define _MAX_PATH 256
 static char fullpath[_MAX_PATH];
 
+
 static int _GetData(CHOOSEFILE_INFO * pInfo)
 {
     int         r;
@@ -22,11 +23,7 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     {
         case CHOOSEFILE_FINDFIRST:
                 dir = opendir(pInfo->pRoot); 
-                
-                if(dir == RT_NULL)
-                {
-                    return 1;
-                }
+                if(dir == RT_NULL) return 1;
         case CHOOSEFILE_FINDNEXT:
                 dirent = readdir(dir);
                 if(dirent == RT_NULL)
@@ -53,15 +50,14 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     
     if(r == 0)
     {
-        pInfo->pAttrib = "RW";
-        pInfo->pName   = dirent->d_name;
+        pInfo->pName = dirent->d_name;
         if(s.st_mode & DFS_S_IFDIR)
         {
-            //pInfo->pExt = "<DIR>";
+            pInfo->pAttrib = "DIR";
         }
         else
         {
-            //pInfo->pExt = dirent->d_name + dirent->d_namlen - 3;
+            pInfo->pAttrib = "RW";
         }
         pInfo->SizeL   = s.st_size%0xFFFF;
         pInfo->SizeH   = s.st_size/0xFFFF;
@@ -73,32 +69,6 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     return r;
 }
 
-static bool endFlag = false;
-static void _cbBk(WM_MESSAGE * pMsg)
-{
-    WM_HWIN hItem;
-    int     NCode;
-    int     Id;
-    switch (pMsg->MsgId)
-    {
-        case WM_INIT_DIALOG:
-            hItem = pMsg->hWin;
-            break;
-        case WM_NOTIFY_PARENT:
-            Id    = WM_GetId(pMsg->hWinSrc);
-            NCode = pMsg->Data.v;
-            if(WM_NOTIFICATION_CHILD_DELETED == NCode)
-            {
-                endFlag = true;
-            }
-            break;
-        default:
-            WM_DefaultProc(pMsg);
-            break;
-    }
-}
-
-
 const char *chfile(WM_HWIN hParent, const char *pMask)
 {
     int r;
@@ -108,17 +78,15 @@ const char *chfile(WM_HWIN hParent, const char *pMask)
     Info.pfGetData = _GetData;
     Info.pMask     = "*.*";
     CHOOSEFILE_SetDelim('/');
-    endFlag = false;
-    hWin = CHOOSEFILE_Create(hParent, 0, 0, LCD_GetXSize(), LCD_GetYSize(), apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
-    WM_SetCallback(hWin, _cbBk);
-
-    while(endFlag == false)
+    
+    hWin = CHOOSEFILE_Create(WM_HBKWIN, 0, 0, LCD_GetXSize()*3/4, LCD_GetYSize()*3/4, apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
+    WM_MakeModal(hWin);
+    FRAMEWIN_SetMoveable(hWin, 1);
+    r = GUI_ExecCreatedDialog(hWin);
+    if(!r)
     {
-        rt_thread_delay(1); 
-    }
-    if(r == 1)
-    {
-        return NULL;
+        GUI_MessageBox(Info.pRoot, "File", GUI_MESSAGEBOX_CF_MODAL);
+        show_pic(Info.pRoot);
     }
     return Info.pRoot;
 }

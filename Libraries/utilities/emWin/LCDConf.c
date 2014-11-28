@@ -110,7 +110,6 @@ static void LcdWriteData(U16 Data)
 
 static void LcdWriteDataMultiple(U16 * pData, int NumItems) {
   while (NumItems--) {
-    // ... TBD by user
 		GUI_LCD_DATA_ADDRESS = *pData++;
   }
 }
@@ -118,7 +117,6 @@ static void LcdWriteDataMultiple(U16 * pData, int NumItems) {
 static void LcdReadDataMultiple(U16 * pData, int NumItems) {
   *pData = GUI_LCD_DATA_ADDRESS;
 	while (NumItems--) {
-    // ... TBD by user
 		*pData++=GUI_LCD_DATA_ADDRESS;
   }
 }

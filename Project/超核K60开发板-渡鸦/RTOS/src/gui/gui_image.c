@@ -2,6 +2,8 @@
 
 #include "DIALOG.h"
 #include "gui_image.h"
+#include <rtthread.h>
+#include <dfs_fs.h>
 
 #define ID_FRAMEWIN_0       (GUI_ID_USER + 0x00)
 #define ID_IMAGE_0          (GUI_ID_USER + 0x04)
@@ -84,7 +86,26 @@ WM_HWIN GUI_IMAGE_CreateWidget(WM_HWIN hWin)
     return hWinImage;
 }   
 
-void GUI_IMAGE_DisplayImage(void* pData, U32 Size)
+static int gcd;
+unsigned char *_acBuffer = NULL;
+
+static int _GetData(void * p, const U8 ** ppData, unsigned NumBytes, U32 Off)
+{
+    
+    
+    rt_uint32_t NumBytesRead;
+    
+    if (NumBytes >512) NumBytes = 512;
+    lseek(gcd, Off, SEEK_SET);
+
+    NumBytesRead = read(gcd, _acBuffer, NumBytes);
+    rt_kprintf("Off:%d NumBytes:%d %d\r\n", Off, NumBytes, NumBytesRead);
+    *ppData = _acBuffer;
+    return NumBytesRead;
+}
+
+
+void GUI_IMAGE_DisplayImage(int fd, U32 size)
 {
     U32 ImageSizeX;
     U32 ImageSizeY;
@@ -93,27 +114,32 @@ void GUI_IMAGE_DisplayImage(void* pData, U32 Size)
     {
         GUI_IMAGE_CreateWidget(WM_HBKWIN);
     }
-    
-    if(!rt_strncmp(pData, "BM", 2))
-    {
-        ImageSizeX = GUI_BMP_GetXSize(pData);
-        ImageSizeY = GUI_BMP_GetYSize(pData);
-        IMAGE_SetBMP(hImage, pData, Size);
-    }
-    else
-    {
-        GUI_JPEG_INFO Info;
-        if(!GUI_JPEG_GetInfo(pData, Size ,&Info))
-        {
-            ImageSizeX = Info.XSize;
-            ImageSizeY = Info.YSize;
-            IMAGE_SetJPEG(hImage, pData, Size);
-        }
-    }
+   
+    gcd = fd;
+    _acBuffer=rt_malloc(512);
+    IMAGE_SetBMPEx(hImage, _GetData, (void*)fd);
 
-    /* resize window*/
-    if(ImageSizeX > LCD_GetXSize()) ImageSizeX = LCD_GetXSize();
-    if(ImageSizeY > LCD_GetYSize()) ImageSizeY = LCD_GetYSize();
-    WM_SetSize(hWin, ImageSizeX, ImageSizeY);
+//    //if(!rt_strncmp(pData, "BM", 2))
+//    {
+//        ImageSizeX = GUI_BMP_GetXSize(pData);
+//        ImageSizeY = GUI_BMP_GetYSize(pData);
+//        IMAGE_SetBMP(hImage, pData, Size);
+//      
+//    }
+//    else
+//    {
+//        GUI_JPEG_INFO Info;
+//        if(!GUI_JPEG_GetInfo(pData, Size ,&Info))
+//        {
+//            ImageSizeX = Info.XSize;
+//            ImageSizeY = Info.YSize;
+//            IMAGE_SetJPEG(hImage, pData, Size);
+//        }
+//    }
+
+//    /* resize window*/
+//    if(ImageSizeX > LCD_GetXSize()) ImageSizeX = LCD_GetXSize();
+//    if(ImageSizeY > LCD_GetYSize()) ImageSizeY = LCD_GetYSize();
+//    WM_SetSize(hWin, ImageSizeX, ImageSizeY);
 }
 

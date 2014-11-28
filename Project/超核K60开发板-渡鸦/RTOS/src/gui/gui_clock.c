@@ -11,19 +11,17 @@
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-  { FRAMEWIN_CreateIndirect, "RTC Clock", ID_FRAMEWIN_0, 0, 1, 189, 69, 0, 0x0, 0 },
+  { FRAMEWIN_CreateIndirect, "RTC Clock", ID_FRAMEWIN_0, 0, 1, 189, 75, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Sun", ID_TEXT_0, 5, 4, 165, 23, 0, 0x64, 0 },
   { BUTTON_CreateIndirect, "OK", ID_BUTTON_0, 0, 27, 60, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Cancel", ID_BUTTON_1, 119, 27, 60, 20, 0, 0x0, 0 },
 };
-
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
   WM_HWIN hItem;
   int     NCode;
   int     Id;
   time_t now;
- // rt_kprintf("ID%d\r\n", pMsg->MsgId);
     switch (pMsg->MsgId)
     {
         case WM_TIMER:
@@ -38,8 +36,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             FRAMEWIN_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
             FRAMEWIN_SetFont(hItem, GUI_FONT_13B_1);
             FRAMEWIN_SetMoveable(hItem, 1);
-            /* init a timer */
+            WM_MakeModal(hItem);
             WM_CreateTimer(WM_GetClientWindow(pMsg->hWin), 0, 1000, 0);
+        
             /* init text */
             now = time(0);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
@@ -50,11 +49,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case WM_NOTIFY_PARENT:
             Id    = WM_GetId(pMsg->hWinSrc);
             NCode = pMsg->Data.v;
-            //rt_kprintf("Id:%d NCode:%d\r\n", Id, NCode);
             switch(Id)
             {
                 case ID_BUTTON_0: // Notifications sent by 'OK'
-                //rt_kprintf("NCode:%d\r\n", NCode);
+
                 switch(NCode)
                 {
                     case WM_NOTIFICATION_LOST_FOCUS:
@@ -79,10 +77,8 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     }
 }
 
-WM_HWIN MYGUI_DLG_Time(WM_HWIN hParent)
+void MYGUI_DLG_Time(void)
 {
-    WM_HWIN hWin;
-    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, hParent, 0, 0);
-    return hWin;
+    GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 

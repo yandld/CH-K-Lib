@@ -35,8 +35,8 @@ Purpose     : Display controller initialization
 #include <rtthread.h>
 
 
-#define GUI_NUMBYTES  (1024*128)
-#define GUI_BLOCKSIZE 64
+#define GUI_NUMBYTES  (1024*32)
+#define GUI_BLOCKSIZE 4
 
 static void GUI_Log(const char *s)
 {
@@ -45,7 +45,7 @@ static void GUI_Log(const char *s)
 
 void GUI_X_Config(void)
 {
-     //static U32 aMemory[GUI_NUMBYTES / 4];
+    //static U32 aMemory[GUI_NUMBYTES / 4];
     U32 * aMemory = (U32*)rt_malloc(GUI_NUMBYTES);
     if(aMemory == RT_NULL)
     {

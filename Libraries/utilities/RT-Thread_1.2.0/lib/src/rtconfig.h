@@ -61,7 +61,7 @@
 #define FINSH_USING_DESCRIPTION
 #define FINSH_USING_MSH
 #define FINSH_USING_MSH_DEFAULT
-#define FINSH_THREAD_STACK_SIZE   (4096*2)
+#define FINSH_THREAD_STACK_SIZE   (2048)
 
 /* SECTION: device filesystem */
 #define RT_USING_DFS 

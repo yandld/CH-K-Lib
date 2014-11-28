@@ -37,18 +37,17 @@ int show_pic(const char *path)
         rt_uint8_t *ptr;
         stat(fullpath, &f_stat);
         rt_kprintf("pic file size:%d\r\n", f_stat.st_size);
-        ptr = rt_malloc(f_stat.st_size);
-        if(ptr == NULL)
-        {
-            rt_kprintf("no memory\r\n");
-        }
-        else
-        {
-            read(fd, ptr, f_stat.st_size);
-            GUI_IMAGE_DisplayImage(ptr, f_stat.st_size);
-            rt_free(ptr);
+      //  ptr = rt_malloc(f_stat.st_size);
+     //   if(ptr == NULL)
+      //  {
+      //      rt_kprintf("no memory\r\n");
+     //   }
+       // else
+      //  {
+            GUI_IMAGE_DisplayImage(fd, f_stat.st_size);
+           // rt_free(ptr);
             close(fd);
-        }
+      //  }
     }
     else
     {

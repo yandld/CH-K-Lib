@@ -2,8 +2,7 @@
 
 #include "DIALOG.h"
 #include "gui_image.h"
-#include <rtthread.h>
-#include <dfs_fs.h>
+#include <dfs_posix.h>
 
 #define ID_FRAMEWIN_0       (GUI_ID_USER + 0x00)
 #define ID_IMAGE_0          (GUI_ID_USER + 0x04)
@@ -86,45 +85,41 @@ WM_HWIN GUI_IMAGE_CreateWidget(WM_HWIN hWin)
     return hWinImage;
 }   
 
-static int gcd;
-unsigned char *_acBuffer = NULL;
-
-static int _GetData(void * p, const U8 ** ppData, unsigned NumBytes, U32 Off)
+void GUI_IMAGE_DisplayImage(const char * path)
 {
+    int fd;
+    U8 *pData;
+    U32 fileSize;
+    struct stat f_stat;
+    U32 xSize;
+    U32 ySize;
     
-    
-    rt_uint32_t NumBytesRead;
-    
-    if (NumBytes >512) NumBytes = 512;
-    lseek(gcd, Off, SEEK_SET);
-
-    NumBytesRead = read(gcd, _acBuffer, NumBytes);
-    rt_kprintf("Off:%d NumBytes:%d %d\r\n", Off, NumBytes, NumBytesRead);
-    *ppData = _acBuffer;
-    return NumBytesRead;
-}
-
-
-void GUI_IMAGE_DisplayImage(int fd, U32 size)
-{
-    U32 ImageSizeX;
-    U32 ImageSizeY;
-    /* no image widget, create one */
-    if(hImage == NULL)
+    fd = open(path, O_RDONLY , 0);
+    if(fd <0)
     {
-        GUI_IMAGE_CreateWidget(WM_HBKWIN);
+        rt_kprintf("open file failed\r\n");
+        return;
     }
-   
-    gcd = fd;
-    _acBuffer=rt_malloc(512);
-    IMAGE_SetBMPEx(hImage, _GetData, (void*)fd);
+    
+    if(hImage == NULL) GUI_IMAGE_CreateWidget(WM_HBKWIN);
+    dfs_lock();
+    stat(path, &f_stat);
+    fileSize = f_stat.st_size;
+    pData = rt_malloc(fileSize);
+    
+    read(fd, pData, fileSize);
+    dfs_unlock();
+    
+    IMAGE_SetBMP(hImage, pData, fileSize);
 
-//    //if(!rt_strncmp(pData, "BM", 2))
+    return;
+//    if(!rt_strncmp(pData, "BM", 2))
 //    {
 //        ImageSizeX = GUI_BMP_GetXSize(pData);
 //        ImageSizeY = GUI_BMP_GetYSize(pData);
+//        ptr = rt_malloc(Size);
+//        read(fd, ptr, Size);
 //        IMAGE_SetBMP(hImage, pData, Size);
-//      
 //    }
 //    else
 //    {

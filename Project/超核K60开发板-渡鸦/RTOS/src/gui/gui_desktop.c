@@ -36,10 +36,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case ID_BUTTON_0:
       switch(NCode) {
       case WM_NOTIFICATION_RELEASED:
-          void MYGUI_DLG_Calender(void);
         gui_msg_t msg;
         msg.cmd = 2;
-        msg.exec = MYGUI_DLG_Calender;
+        msg.exec = GUI_AppDispCalender;
         rt_mq_send(guimq, &msg, sizeof(msg));
         break;
       }
@@ -47,7 +46,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case ID_BUTTON_1:
       switch(NCode) {
       case WM_NOTIFICATION_RELEASED:
-      //    MYGUI_DLG_ChFile(WM_HBKWIN);
+        gui_msg_t msg;
+        msg.cmd = 2;
+        msg.exec = GUI_AppDispSysInfo;
+        rt_mq_send(guimq, &msg, sizeof(msg));
+      
         break;
       }
       break;
@@ -55,10 +58,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
       switch(NCode) {
 
       case WM_NOTIFICATION_RELEASED:
-          void MYGUI_DLG_Time(void);
+
         gui_msg_t msg;
         msg.cmd = 2;
-        msg.exec = MYGUI_DLG_Time;
+        msg.exec = GUI_AppDispTime;
         rt_mq_send(guimq, &msg, sizeof(msg));
         break;
       }
@@ -66,10 +69,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     case ID_BUTTON_4: // Notifications sent by 'Button'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
-        const char *chfile(WM_HWIN hParent, const char *pMask);
         gui_msg_t msg;
         msg.cmd = 1;
-        msg.exec = chfile;
+        msg.exec = GUI_AooDispChooseFile;
       
         rt_mq_send(guimq, &msg, sizeof(msg));
         break;

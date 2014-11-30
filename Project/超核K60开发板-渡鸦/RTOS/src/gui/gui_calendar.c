@@ -82,7 +82,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 }
 
 
-void MYGUI_DLG_Calender(void)
+void GUI_AppDispCalender(void)
 {
     GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }

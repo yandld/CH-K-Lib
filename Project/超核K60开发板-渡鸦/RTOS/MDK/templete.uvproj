@@ -929,6 +929,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\gui\gui_notepad.c</FilePath>
             </File>
+            <File>
+              <FileName>gui_sysinfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\gui_sysinfo.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2820,6 +2825,11 @@
               <FileName>gui_notepad.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\gui\gui_notepad.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui_sysinfo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\gui_sysinfo.c</FilePath>
             </File>
           </Files>
         </Group>

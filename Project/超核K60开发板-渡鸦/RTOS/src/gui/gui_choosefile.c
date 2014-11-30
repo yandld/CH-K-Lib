@@ -24,24 +24,23 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     {
         case CHOOSEFILE_FINDFIRST:
                 dir = opendir(pInfo->pRoot);
-                pInfo->pName = "";
-                pInfo->pAttrib = "";
+                pInfo->pName = RT_NULL;
+                pInfo->pAttrib = RT_NULL;
                 pInfo->SizeH = 0;
                 pInfo->SizeL = 0;
                 return 0;
         case CHOOSEFILE_FINDNEXT:
                 if(dir == RT_NULL)
                 {
-                    rt_kprintf("opendir error\r\n");
+                    //rt_kprintf("opendir error\r\n");
                     r = 1;
                     break;
                 }
                 dirent = readdir(dir);
                 if(dirent == RT_NULL)
                 {
-                    rt_kprintf("readdir error\r\n");
+                    //rt_kprintf("readdir error\r\n");
                     closedir(dir);
-                    dir = 0;
                     r = 1;
                     break;
                 }
@@ -80,7 +79,8 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     return r;
 }
 
-const char *chfile(WM_HWIN hParent, const char *pMask)
+
+const char *GUI_AooDispChooseFile(void)
 {
     int r;
     WM_HWIN hWin;
@@ -108,4 +108,3 @@ const char *chfile(WM_HWIN hParent, const char *pMask)
 }
 
 
-FINSH_FUNCTION_EXPORT(chfile, create a directory);

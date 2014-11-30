@@ -1,4 +1,3 @@
-#include "gui_clock.h"
 #include "DIALOG.h"
 #include <stdint.h>
 #include <time.h>
@@ -77,7 +76,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     }
 }
 
-void MYGUI_DLG_Time(void)
+void GUI_AppDispTime(void)
 {
     GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }

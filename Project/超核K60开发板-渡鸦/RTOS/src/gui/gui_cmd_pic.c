@@ -3,7 +3,6 @@
 #include <dfs_posix.h>
 
 #include "gui_appdef.h"
-#include "gui_image.h"
 
 #ifdef DFS_USING_WORKDIR
 extern char working_directory[];

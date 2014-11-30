@@ -50,7 +50,6 @@ static void _cbDialog(WM_MESSAGE * pMsg)
   case WM_NOTIFY_PARENT:
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;
-    rt_kprintf("Id%d NCode:%d\r\n", Id, NCode);
     switch(Id)
     {
         case ID_BUTTON_0:

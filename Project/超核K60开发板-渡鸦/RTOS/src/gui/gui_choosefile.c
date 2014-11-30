@@ -5,7 +5,7 @@
 #include <dfs_file.h>
 #include <dfs_posix.h>
 #include <stdbool.h>
-
+#include "gui_appdef.h"
 #include <finsh.h>
 
 #define _MAX_PATH 256
@@ -15,34 +15,48 @@ static char fullpath[_MAX_PATH];
 static int _GetData(CHOOSEFILE_INFO * pInfo)
 {
     int         r;
-    static      DIR *dir;
+    static DIR *dir;
     r = 1;
     struct dirent* dirent;
     struct stat s;
+    
     switch (pInfo->Cmd)
     {
         case CHOOSEFILE_FINDFIRST:
-                dir = opendir(pInfo->pRoot); 
-                if(dir == RT_NULL) return 1;
+                dir = opendir(pInfo->pRoot);
+                pInfo->pName = "";
+                pInfo->pAttrib = "";
+                pInfo->SizeH = 0;
+                pInfo->SizeL = 0;
+                return 0;
         case CHOOSEFILE_FINDNEXT:
-                dirent = readdir(dir);
-                if(dirent == RT_NULL)
+                if(dir == RT_NULL)
                 {
+                    rt_kprintf("opendir error\r\n");
                     r = 1;
                     break;
                 }
+                dirent = readdir(dir);
+                if(dirent == RT_NULL)
+                {
+                    rt_kprintf("readdir error\r\n");
+                    closedir(dir);
+                    dir = 0;
+                    r = 1;
+                    break;
+                }
+                
                 /* build full path for each file */
                 rt_sprintf(fullpath, "%s/%s", pInfo->pRoot, dirent->d_name);
+                rt_memset(&s, 0, sizeof(struct stat));
                 stat(fullpath, &s);
                 if (s.st_mode & DFS_S_IFDIR)
                 {
-                    //rt_kprintf("%s\t\t<DIR>\n", dirent->d_name);
                     pInfo->Flags = CHOOSEFILE_FLAG_DIRECTORY;
                 }
                 else
                 {
                     pInfo->Flags = 0;
-                    //rt_kprintf("%s\t\t%lu\n", dirent->d_name, s.st_size);
                 }
                 r = 0;
             break;
@@ -61,10 +75,7 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
         }
         pInfo->SizeL   = s.st_size%0xFFFF;
         pInfo->SizeH   = s.st_size/0xFFFF;
-    }
-    if(r == 1)
-    {
-        closedir(dir);
+        
     }
     return r;
 }
@@ -83,10 +94,15 @@ const char *chfile(WM_HWIN hParent, const char *pMask)
     WM_MakeModal(hWin);
     FRAMEWIN_SetMoveable(hWin, 1);
     r = GUI_ExecCreatedDialog(hWin);
+    int show_pic(const char *path);
     if(!r)
     {
         GUI_MessageBox(Info.pRoot, "File", GUI_MESSAGEBOX_CF_MODAL);
-        show_pic(Info.pRoot);
+        gui_msg_t msg;
+        msg.cmd = 2;
+        msg.exec = GUI_AppDispImage;
+        msg.parameter = Info.pRoot;
+        rt_mq_send(guimq, &msg, sizeof(msg));
     }
     return Info.pRoot;
 }

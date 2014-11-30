@@ -2,12 +2,14 @@
 #include <finsh.h>
 #include "gui_appdef.h"
 #include "GUI.H"
+#include "WM.H"
 
 rt_mq_t guimq;
 
 void gui_thread_entry(void* parameter)
 {
-    guimq = rt_mq_create("gui_mq",16,10,RT_IPC_FLAG_FIFO);
+    U32 i;
+    guimq = rt_mq_create("gui_mq", sizeof(gui_msg_t), 6, RT_IPC_FLAG_FIFO);
     gui_msg_t msg;
     GUI_Init();
     GUI_DispString("gui system actived!\r\n");
@@ -17,7 +19,8 @@ void gui_thread_entry(void* parameter)
 	{
         if(rt_mq_recv(guimq, &msg, sizeof(gui_msg_t), 1) == RT_EOK)
         {
-            msg.exec();
+            rt_kprintf("%s", msg.parameter);
+            msg.exec(msg.parameter);
         }
         GUI_Exec();
 	}
@@ -42,7 +45,7 @@ int cmd_gui_start(int argc, char** argv)
     if(tid != RT_NULL) return -1;
     
     /* create gui thread and run */
-    tid = rt_thread_create("gui_exe", gui_thread_entry, RT_NULL, (1024*2), 0x27, 20);                                                      
+    tid = rt_thread_create("gui_exe", gui_thread_entry, RT_NULL, (1024*3), 0x27, 20);                                                      
     if (tid != RT_NULL)
     {
         rt_thread_startup(tid);		

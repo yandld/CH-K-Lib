@@ -70,6 +70,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         gui_msg_t msg;
         msg.cmd = 1;
         msg.exec = chfile;
+      
         rt_mq_send(guimq, &msg, sizeof(msg));
         break;
       }

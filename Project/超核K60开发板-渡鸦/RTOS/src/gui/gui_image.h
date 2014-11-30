@@ -9,8 +9,7 @@
 
 
 //!< API functions 
-void GUI_IMAGE_DisplayImage(const char * path);
-WM_HWIN GUI_IMAGE_CreateWidget(WM_HWIN hWin);
+void GUI_AppDispImage(const char * path);
 
 #endif
 

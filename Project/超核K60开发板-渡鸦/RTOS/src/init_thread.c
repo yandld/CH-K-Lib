@@ -22,9 +22,9 @@ void init_thread_entry(void* parameter)
     int i;
     rt_uint8_t time_out;
     
-    SRAM_Init();
+   // SRAM_Init();
     rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
-    rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
+  //  rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
 
     /* init finsh */
     rt_device_t dev = rt_device_find("uart0");
@@ -56,21 +56,21 @@ void init_thread_entry(void* parameter)
     touch_ads7843_init("ads7843", "spi20");
     
     
-#ifdef RT_USING_LWIP
-    rt_kprintf(" link beginning \r\n");
-    rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
-    time_out = 0;
-	while(!(netif_list->flags & NETIF_FLAG_UP)) 
-	{
-		rt_thread_delay(RT_TICK_PER_SECOND);
-        if((time_out++) > 3)
-        {
-            rt_kprintf("link failed\r\n");
-            break;
-        }
-	}
-    list_if();
-#endif
+//#ifdef RT_USING_LWIP
+//    rt_kprintf(" link beginning \r\n");
+//    rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
+//    time_out = 0;
+//	while(!(netif_list->flags & NETIF_FLAG_UP)) 
+//	{
+//		rt_thread_delay(RT_TICK_PER_SECOND);
+//        if((time_out++) > 3)
+//        {
+//            rt_kprintf("link failed\r\n");
+//            break;
+//        }
+//	}
+//    list_if();
+//#endif
     
     /* init eeporm */
     at24cxx_init("at24c02", "i2c0");

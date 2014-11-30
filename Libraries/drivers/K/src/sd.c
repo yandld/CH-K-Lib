@@ -225,7 +225,7 @@ uint8_t SD_InitCard(void)
     
 	do 
 	{								 
-		for(delay_cnt=0;delay_cnt<10000;delay_cnt++);
+		for(delay_cnt=0;delay_cnt<1000;delay_cnt++);
 		i++;   
 		SD_CommandStruct1.COMMAND = ESDHC_CMD55;
 		SD_CommandStruct1.ARGUMENT =0;
@@ -517,7 +517,7 @@ static void SDHC_WaitCommandLineIdle(void)
     while (SDHC->PRSSTAT & (SDHC_PRSSTAT_CIHB_MASK | SDHC_PRSSTAT_CDIHB_MASK))
     {
         tm++;
-        if(tm > 500000) break;
+        if(tm > 50000) break;
     }
 }
 /**

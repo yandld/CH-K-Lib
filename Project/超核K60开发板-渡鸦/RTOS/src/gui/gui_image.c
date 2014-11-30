@@ -21,13 +21,13 @@ int _GetData(void * p, const U8 ** ppData, unsigned NumBytes, U32 Off)
     lseek(*(int*)(p),Off,SEEK_SET);
     NumBytesRead = read(*(int*)(p), _acBuffer, NumBytes);
     rt_kprintf("%d %d %d\r\n", Off, NumBytesRead, NumBytes);
+    
     if(gFileSize < 512)
     {
         close(*(int*)(p));
     }
     else if(gFileSize - (Off + NumBytes) < 100 )
     {
-        rt_kprintf("close!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
         close(*(int*)(p));
     }
     *ppData = _acBuffer;
@@ -61,6 +61,12 @@ static int _DispImage(WM_HWIN Handle, const char *path)
     }
     else
     {
+        close(fpic);
+        return -1;
+    }
+    
+    if(!rt_strncmp(_acBuffer, "JPG", 3))
+    {
         GUI_JPEG_INFO Info;
         if(!GUI_JPEG_GetInfo(pData, fileSize ,&Info))
         {
@@ -70,9 +76,11 @@ static int _DispImage(WM_HWIN Handle, const char *path)
         }
         else
         {
+            close(fpic);
             return -1;
         }
     }
+    
     rt_free(_acBuffer);
     return 0;
     /* resize window*/
@@ -86,7 +94,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     int     NCode;
     int     Id;
     static int _x;
-    rt_kprintf("pMsg->MsgID:%d\r\n", pMsg->MsgId);
+    //rt_kprintf("pMsg->MsgID:%d\r\n", pMsg->MsgId);
     switch (pMsg->MsgId)
     {
     case WM_INIT_DIALOG:

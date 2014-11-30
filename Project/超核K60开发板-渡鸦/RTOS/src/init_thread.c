@@ -22,9 +22,9 @@ void init_thread_entry(void* parameter)
     int i;
     rt_uint8_t time_out;
     
-   // SRAM_Init();
+  //  SRAM_Init();
     rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
-  //  rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
+   // rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
 
     /* init finsh */
     rt_device_t dev = rt_device_find("uart0");
@@ -80,8 +80,8 @@ void init_thread_entry(void* parameter)
     w25qxx_init("sf0", "spi21");
     dfs_mount("sf0", "/SF", "elm", 0, 0);
     dfs_mount("sd0", "/SD", "elm", 0, 0);
-  //  tid = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
-  //  if (tid != RT_NULL) rt_thread_startup(tid);
+    tid = rt_thread_create("sd", sd_thread_entry, RT_NULL, 1024, 0x23, 20); 
+   if (tid != RT_NULL) rt_thread_startup(tid);
   
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);

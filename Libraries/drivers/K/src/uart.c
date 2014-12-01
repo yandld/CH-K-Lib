@@ -331,8 +331,10 @@ void UART_SelectDebugInstance(uint32_t instance)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
-    
-    UART_DebugInstance = instance;
+    if(*((uint32_t*) SIM_UARTClockGateTable[instance].addr) & SIM_UARTClockGateTable[instance].mask)
+    {
+        UART_DebugInstance = instance;
+    }
 }
 
 void UART_EnableTxFIFO(uint32_t instance, bool status)

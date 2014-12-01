@@ -37,7 +37,6 @@ int _GetData(void * p, const U8 ** ppData, unsigned NumBytes, U32 Off)
 static int _DispImage(WM_HWIN Handle, const char *path)
 {
     static int fpic;
-    U8 *pData;
     U32 fileSize, xSize, ySize;
     struct stat f_stat;
     fpic = open(path, O_RDONLY , 0);
@@ -61,25 +60,22 @@ static int _DispImage(WM_HWIN Handle, const char *path)
     else
     {
         close(fpic);
-        return -1;
     }
     
-    if(!rt_strncmp(_acBuffer, "JPG", 3))
+    /* try handle JPG file */
+    static GUI_JPEG_INFO Info;
+    if(!GUI_JPEG_GetInfo(_acBuffer, fileSize, &Info))
     {
-        GUI_JPEG_INFO Info;
-        if(!GUI_JPEG_GetInfo(pData, fileSize ,&Info))
-        {
-            xSize = Info.XSize;
-            ySize = Info.YSize;
-            IMAGE_SetJPEGEx(Handle, _GetData, (void*)&fpic);
-        }
-        else
-        {
-            close(fpic);
-            return -1;
-        }
+        xSize = Info.XSize;
+        ySize = Info.YSize;
+        rt_kprintf("xSize:%d ySize:%d\r\n", xSize, ySize);
+        IMAGE_SetJPEGEx(Handle, _GetData, (void*)&fpic);
     }
-    
+    else
+    {
+        close(fpic);
+        return -1;   
+    }
     rt_free(_acBuffer);
     return 0;
     /* resize window*/
@@ -88,7 +84,8 @@ static int _DispImage(WM_HWIN Handle, const char *path)
   //  WM_SetSize(Handle, xSize, ySize);
 }
 
-static void _cbDialog(WM_MESSAGE * pMsg) {
+static void _cbDialog(WM_MESSAGE * pMsg)
+{
     WM_HWIN      hItem;
     int     NCode;
     int     Id;

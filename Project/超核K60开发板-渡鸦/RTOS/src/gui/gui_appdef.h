@@ -4,6 +4,7 @@
 #include <rtthread.h>
 #include "GUI.H"
 #include "WM.H"
+
 extern rt_mq_t guimq;
 
 typedef struct

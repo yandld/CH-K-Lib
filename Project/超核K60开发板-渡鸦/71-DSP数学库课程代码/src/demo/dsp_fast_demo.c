@@ -1,6 +1,6 @@
 #include "chlib_k.h"
 #include "arm_math.h"
-
+#include "dsp_fast_demo.h"
  /**
  * @brief  ÑÝÊ¾arm_cos_f32¹¦ÄÜ
  * @code

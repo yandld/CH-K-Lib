@@ -434,6 +434,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\demo\dsp_fast_demo.c</FilePath>
             </File>
+            <File>
+              <FileName>dsp_complex_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\demo\dsp_complex_demo.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

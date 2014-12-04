@@ -98,6 +98,7 @@ const char *GUI_AooDispChooseFile(void)
     if(!r)
     {
         GUI_MessageBox(Info.pRoot, "File", GUI_MESSAGEBOX_CF_MODAL);
+        
         gui_msg_t msg;
         msg.cmd = 2;
         msg.exec = GUI_AppDispImage;

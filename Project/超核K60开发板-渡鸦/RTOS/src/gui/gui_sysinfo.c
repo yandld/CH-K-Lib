@@ -22,7 +22,7 @@
 // USER END
 
 #include "DIALOG.h"
-
+#include "rtthread.h"
 /*********************************************************************
 *
 *       Defines
@@ -77,21 +77,28 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   WM_HWIN hItem;
   int     NCode;
   int     Id;
-  // USER START (Optionally insert additional variables)
-  // USER END
 
-  switch (pMsg->MsgId) {
-  case WM_INIT_DIALOG:
-    //
-    // Initialization of 'Button'
-    //
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-    BUTTON_SetFont(hItem, GUI_FONT_13_1);
-    BUTTON_SetText(hItem, "OK");
-    WM_MakeModal(pMsg->hWin);
-    
-    
-    break;
+
+switch (pMsg->MsgId)
+{
+    rt_uint32_t tick;
+    rt_uint8_t str_buffer[128];
+    case WM_TIMER:
+        tick = rt_tick_get();
+        rt_sprintf(str_buffer, "run tims:%ds",tick/RT_TICK_PER_SECOND);
+        
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
+        WM_RestartTimer(pMsg->Data.v, 1000);
+        TEXT_SetText(hItem, (const char*)str_buffer);
+        break;
+    case WM_INIT_DIALOG:
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
+        BUTTON_SetFont(hItem, GUI_FONT_13_1);
+        BUTTON_SetText(hItem, "OK");
+        WM_MakeModal(pMsg->hWin);
+        
+        WM_CreateTimer(WM_GetClientWindow(pMsg->hWin), 0, 1000, 0);
+        break;
   case WM_NOTIFY_PARENT:
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;

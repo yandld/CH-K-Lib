@@ -5,6 +5,24 @@
 #include "GUI.H"
 #include "WM.H"
 
+
+typedef enum
+{
+    kJPEG,
+    kJPG,
+    kTXT,
+    kPNG,
+    kMD,
+    kINI,
+    kDOC,
+    kBMP,
+    kAVI,
+    kWMV,
+    kBIN,
+    kHEX,
+    kFileNameMax,
+}GUI_FileType;
+
 extern rt_mq_t guimq;
 
 typedef struct
@@ -20,6 +38,8 @@ void GUI_AppDispCalender(void);
 void GUI_AppDispTime(void);
 const char *GUI_AooDispChooseFile(void);
 WM_HWIN GUI_AppDispSysInfo(void);
+GUI_FileType GUI_AppGetFileType(const char * fileName);
+
 
 #endif
 

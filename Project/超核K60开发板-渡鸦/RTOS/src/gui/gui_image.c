@@ -1,6 +1,7 @@
 #include "DIALOG.h"
 #include <dfs_posix.h>
-
+#include <stdbool.h>
+#include "gui_appdef.h"
 #define ID_FRAMEWIN_0       (GUI_ID_USER + 0x00)
 #define ID_IMAGE_0          (GUI_ID_USER + 0x04)
 
@@ -12,21 +13,31 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
 static unsigned char *_acBuffer = RT_NULL;
 static const char *gpath;
 static U32 gFileSize;
+static int fpic;
+static bool gIsReadOver;
 
 int _GetData(void * p, const U8 ** ppData, unsigned NumBytes, U32 Off)
 {
     rt_uint32_t NumBytesRead;
-    if (NumBytes >512) NumBytes = 512;
-    lseek(*(int*)(p),Off,SEEK_SET);
-    NumBytesRead = read(*(int*)(p), _acBuffer, NumBytes);
-    rt_kprintf("%d %d %d\r\n", Off, NumBytesRead, NumBytes);
     
+    if (NumBytes >512) NumBytes = 512;
+    lseek(fpic, Off, SEEK_SET);
+    NumBytesRead = read(fpic, _acBuffer, NumBytes);
+    if(NumBytesRead == -1)
+    {
+        rt_kprintf("read failed\r\n");
+    }
+    //rt_kprintf("NumBytesRead:%d Off:%d\r\n", NumBytesRead, Off);
     if(gFileSize < 512)
     {
+        //rt_kprintf("close1\r\n");
+        gIsReadOver = true;
         close(*(int*)(p));
     }
     else if(gFileSize - (Off + NumBytes) < 100 )
     {
+        ///rt_kprintf("close2\r\n");
+        gIsReadOver = true;
         close(*(int*)(p));
     }
     *ppData = _acBuffer;
@@ -36,7 +47,7 @@ int _GetData(void * p, const U8 ** ppData, unsigned NumBytes, U32 Off)
 
 static int _DispImage(WM_HWIN Handle, const char *path)
 {
-    static int fpic;
+
     U32 fileSize, xSize, ySize;
     struct stat f_stat;
     fpic = open(path, O_RDONLY , 0);
@@ -51,17 +62,20 @@ static int _DispImage(WM_HWIN Handle, const char *path)
     _acBuffer = rt_malloc(512);
     read(fpic, _acBuffer, 512);
     rt_kprintf("Size:%d\r\n", gFileSize);
-    if(!rt_strncmp(_acBuffer, "BM", 2))
+    gIsReadOver = false;
+    switch(GUI_AppGetFileType(path))
     {
+        case kBMP:
         xSize = GUI_BMP_GetXSize(_acBuffer);
         ySize = GUI_BMP_GetYSize(_acBuffer);
         IMAGE_SetBMPEx(Handle, _GetData, (void*)&fpic);
-    }
-    else
-    {
-        close(fpic);
-    }
-    
+        while(gIsReadOver == false)
+        {
+            GUI_Exec();
+        }
+            break;
+        case kJPG:
+        case kJPEG:
     /* try handle JPG file */
     static GUI_JPEG_INFO Info;
     if(!GUI_JPEG_GetInfo(_acBuffer, fileSize, &Info))
@@ -71,10 +85,8 @@ static int _DispImage(WM_HWIN Handle, const char *path)
         rt_kprintf("xSize:%d ySize:%d\r\n", xSize, ySize);
         IMAGE_SetJPEGEx(Handle, _GetData, (void*)&fpic);
     }
-    else
-    {
-        close(fpic);
-        return -1;   
+            break;
+       
     }
     rt_free(_acBuffer);
     return 0;

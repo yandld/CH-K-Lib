@@ -4,7 +4,7 @@
 #include "chlib_k.h"
 
 void arm_cmplx_conj_f32_demo (void);
-
-
+void arm_cmplx_dot_prod_f32_demo (void); 
+void arm_cmplx_mag_f32_demo (void);
 #else
 #endif

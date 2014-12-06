@@ -94,16 +94,33 @@ const char *GUI_AooDispChooseFile(void)
     WM_MakeModal(hWin);
     FRAMEWIN_SetMoveable(hWin, 1);
     r = GUI_ExecCreatedDialog(hWin);
-    int show_pic(const char *path);
     if(!r)
     {
-        GUI_MessageBox(Info.pRoot, "File", GUI_MESSAGEBOX_CF_MODAL);
-        
         gui_msg_t msg;
-        msg.cmd = 2;
-        msg.exec = GUI_AppDispImage;
-        msg.parameter = Info.pRoot;
-        rt_mq_send(guimq, &msg, sizeof(msg));
+        switch(GUI_AppGetFileType(Info.pRoot))
+        {
+            case kJPEG:
+            case kBMP:
+            case kJPG:
+                
+                msg.cmd = 2;
+                msg.exec = GUI_AppDispImage;
+                msg.parameter = Info.pRoot;
+                rt_mq_send(guimq, &msg, sizeof(msg));
+                break;
+            case kTXT:
+            case kINI:
+            case kMD:
+                msg.cmd = 2;
+                msg.exec = GUI_AppNotepad;
+                msg.parameter = Info.pRoot;
+                rt_mq_send(guimq, &msg, sizeof(msg));
+            default:     
+                GUI_MessageBox(Info.pRoot, "File", GUI_MESSAGEBOX_CF_MODAL);
+                break;
+        }
+
+        
     }
     return Info.pRoot;
 }

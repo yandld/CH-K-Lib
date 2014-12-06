@@ -5,166 +5,131 @@
 #include <dfs_posix.h>
 
 
-#define ID_FRAMEWIN_0    (GUI_ID_USER + 0x00)
-#define ID_MULTIEDIT_0    (GUI_ID_USER + 0x02)
-#define ID_BUTTON_0    (GUI_ID_USER + 0x03)
-#define ID_BUTTON_1    (GUI_ID_USER + 0x04)
+#define ID_FRAMEWIN_0 (GUI_ID_USER + 0x00)
+#define ID_EDIT_0 (GUI_ID_USER + 0x07)
+#define ID_MENU_0 (GUI_ID_USER + 0x0A)
 
-static rt_sem_t sem = RT_NULL;
+static int fpic;
+static const char *gpath;
+
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
-  { FRAMEWIN_CreateIndirect, "Notepad", ID_FRAMEWIN_0, 0, 0, 240, 320, 0, 0x0, 0 },
-  { MULTIEDIT_CreateIndirect, "Multiedit", ID_MULTIEDIT_0, -2, 1, 235, 275, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "open", ID_BUTTON_0, 1, 280, 80, 20, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "close", ID_BUTTON_1, 150, 279, 80, 20, 0, 0x0, 0 },
-  // USER START (Optionally insert additional widgets)
-  // USER END
+  { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, 0, 240, 320, 0, 0x64, 0 },
+  { EDIT_CreateIndirect, "Edit", ID_EDIT_0, 0, 17, 235, 280, 0, 0x64, 0 },
+  { MENU_CreateIndirect, "Menu", ID_MENU_0, 0, -1, 233, 19, 0, 0x0, 0 },
 };
 
-int MYGUI_DLG_NotepadSetText(WM_HWIN hItem, const char * FilePath, U32 MaxChars)
+
+static int _DispText(WM_HWIN Handle, const char *path)
 {
-    int fd;
-    char *pData;
-    int  len;
-    struct stat s;
-    fd = open(FilePath, O_RDONLY, 0);
-	if (fd < 0)
-	{
-		rt_kprintf("open file for read failed\n");
-		return 1;
-	}
-    rt_kprintf("path:%s\r\n", FilePath);
-    stat(FilePath, &s);
-    if(MaxChars < s.st_size) 
+    char *buf;
+    struct stat f_stat;
+    fpic = open(path, O_RDONLY , 0);
+    if(fpic <0)
     {
-        len = MaxChars;
+        rt_kprintf("open file failed\r\n");
+        return 1;
     }
-    else
-    {
-        len = s.st_size;
-    }
-    rt_kprintf("file_size:%d alloc_size:%d\r\n",s.st_size, len);
-    //MULTIEDIT_SetMaxNumChars(hItem, len);
-    pData = rt_malloc(len);
-    if(pData == RT_NULL)
-    {
-        rt_kprintf("no memory!\r\n");
-    }
-    else
-    {
-        len = read(fd, pData, len);
-        MULTIEDIT_SetText(hItem, pData);
-        rt_free(pData);
-    }
-    close(fd);
-    return 0;
+    stat(path, &f_stat);
+    buf = rt_malloc(512);
+    read(fpic, buf, 512);
+
+    EDIT_SetText(Handle, buf);
+    close(fpic);
 }
 
-struct
-{
-    WM_HWIN hParent;
-    const char *pFilePath;
-}NotePad;
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
-  WM_HWIN hItem;
-  int     NCode;
-  int     Id;
+  MENU_ITEM_DATA   ItemData;
+  WM_HWIN          hItem;
+  int              NCode;
+  int              Id;
+  // USER START (Optionally insert additional variables)
+  // USER END
 
-  switch (pMsg->MsgId) {
+  switch (pMsg->MsgId)
+    {
   case WM_INIT_DIALOG:
     hItem = pMsg->hWin;
-    //FRAMEWIN_SetMoveable(hItem, 1);
-    FRAMEWIN_SetFont(hItem, GUI_FONT_13B_1);
-    FRAMEWIN_AddCloseButton(hItem, FRAMEWIN_BUTTON_RIGHT,  0);
+    FRAMEWIN_SetText(hItem, "Notepade");
+    WM_MakeModal(hItem);
+    FRAMEWIN_AddCloseButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
     FRAMEWIN_AddMaxButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
-    FRAMEWIN_AddMinButton(hItem, FRAMEWIN_BUTTON_RIGHT, 1);
+
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_EDIT_0);
+    EDIT_SetText(hItem, "");
+    SCROLLBAR_CreateAttached(hItem, SCROLLBAR_CF_VERTICAL);
   
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIEDIT_0);
-    MULTIEDIT_SetWrapWord(hItem);
-    MULTIEDIT_SetFont(hItem, GUI_FONT_13B_1);
-    MULTIEDIT_SetInsertMode(hItem, 0);
-    //MULTIEDIT_SetReadOnly(hItem, 1);
-    MULTIEDIT_SetAutoScrollV(hItem, 1);
+    _DispText(hItem, gpath);
+  
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_MENU_0);
+    ItemData.Flags    = 0;
+    ItemData.hSubmenu = 0;
+    ItemData.Id       = 0;
+    ItemData.pText    = "File";
+    MENU_AddItem(hItem, &ItemData);
+    ItemData.Flags    = 0;
+    ItemData.hSubmenu = 0;
+    ItemData.Id       = 1;
+    ItemData.pText    = "View";
+    MENU_AddItem(hItem, &ItemData);
+    ItemData.Flags    = 0;
+    ItemData.hSubmenu = 0;
+    ItemData.Id       = 2;
+    ItemData.pText    = "Help";
+    MENU_AddItem(hItem, &ItemData);
+
+    
     break;
   case WM_NOTIFY_PARENT:
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;
-    switch(Id) {
-    case ID_BUTTON_0: // Notifications sent by 'open'
+    switch(Id)
+    {
+
+    case ID_MENU_0: // Notifications sent by 'Menu'
       switch(NCode) {
       case WM_NOTIFICATION_CLICKED:
+
         break;
+      case WM_NOTIFICATION_RELEASED:
+
+        break;
+      case WM_NOTIFICATION_VALUE_CHANGED:
+        // USER START (Optionally insert code for reacting on notification message)
+        // USER END
+        break;
+      // USER START (Optionally insert additional code for further notification handling)
+      // USER END
       }
       break;
-    case ID_BUTTON_1: // Notifications sent by 'close'
-      switch(NCode) {
-      case WM_NOTIFICATION_CLICKED:
-        if(rt_sem_take(sem, RT_WAITING_NO) == RT_EOK)
-        {
-            GUI_EndDialog(pMsg->hWin, 0);
-        }
-        break;
-      }
-      break;
+    // USER START (Optionally insert additional code for further Ids)
+    // USER END
     }
     break;
-
+  // USER START (Optionally insert additional message handling)
+  // USER END
   default:
     WM_DefaultProc(pMsg);
     break;
   }
 }
 
+/*********************************************************************
+*
+*       Public code
+*
+**********************************************************************
+*/
+/*********************************************************************
+*
+*       Createsystem
+*/
 
-
-const char *MYGUI_ExecDialog_ChFile(WM_HWIN hParent, const char *pMask);
-
-static void thread_entry(void* parameter)
+WM_HWIN GUI_AppNotepad(const char* path)
 {
-    int r;
-    WM_HWIN  hDialog;
-    WM_HWIN  hMutiEdit;
-    const char *p;
-    sem = rt_sem_create("sem_nopepad", 1, RT_IPC_FLAG_FIFO);
-    hDialog = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, NotePad.hParent, 0, 0);
-    hMutiEdit = WM_GetDialogItem(hDialog, ID_MULTIEDIT_0);
-    if(NotePad.pFilePath != NULL)
-    {
-        r = MYGUI_DLG_NotepadSetText(hMutiEdit, NotePad.pFilePath, 1024);
-        if(r)
-        {
-            goto __OpenNew;
-        }
-    }
-    else
-    {
-        __OpenNew:
-        rt_sem_take(sem, RT_WAITING_FOREVER);
-      //  p = MYGUI_ExecDialog_ChFile(hDialog, "*.*");
-        rt_sem_release(sem);
-        if(p != NULL)
-        {
-            MYGUI_DLG_NotepadSetText(hMutiEdit, p, 1024);
-        }
-    }
+    gpath = path;
+    GUI_ExecDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
-
-
-    
-int THREAD_Notepad(WM_HWIN hParent, const char *pFilePath)
-{
-    NotePad.hParent = hParent;
-    NotePad.pFilePath = pFilePath;
-    rt_thread_t tid1;
-    tid1 = rt_thread_create("t_notepad", thread_entry, (void*)0, 4096*2, 0x10, 5);
-    if (tid1 != RT_NULL)
-    {
-        rt_thread_startup(tid1);
-        return 0;
-    }
-    return 1;
-}
-
 
 

@@ -15,7 +15,7 @@ GUI_FileType GUI_AppGetFileType(const char * fileName)
     p = rt_strstr(fileName, ".");
     for(i = 0; i < kFileNameMax; i++)
     {
-        if(!rt_strncmp(p + 1, FileNameTbl[i], rt_strlen(FileNameTbl[i])))
+        if(!rt_strcasecmp(p + 1, FileNameTbl[i]))
         {
             return i;
         }

@@ -13,8 +13,8 @@
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { FRAMEWIN_CreateIndirect, "Framewin", ID_FRAMEWIN_0, 0, -1, 240, 320, 0, 0x64, 0 },
-  { BUTTON_CreateIndirect, "CF", ID_BUTTON_0, 71, 8, 60, 35, 0, 0x0, 0 },
-  { BUTTON_CreateIndirect, "Cal", ID_BUTTON_1, 6, 8, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "SysInfo", ID_BUTTON_0, 71, 8, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "Data", ID_BUTTON_1, 6, 8, 60, 35, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Time", ID_BUTTON_2, 137, 8, 60, 35, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "NetWork", ID_BUTTON_3, 6, 49, 60, 35, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "File", ID_BUTTON_4, 71, 49, 60, 35, 0, 0x0, 0 },

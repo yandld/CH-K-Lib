@@ -36,6 +36,7 @@ typedef struct
 void GUI_AppDispImage(const char * path);
 void GUI_AppDispCalender(void);
 void GUI_AppDispTime(void);
+void GUI_AppNotepad(void);
 const char *GUI_AooDispChooseFile(void);
 WM_HWIN GUI_AppDispSysInfo(void);
 GUI_FileType GUI_AppGetFileType(const char * fileName);

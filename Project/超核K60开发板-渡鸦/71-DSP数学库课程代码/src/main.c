@@ -25,6 +25,9 @@ int main(void)
 	
 	/**complex fun*/
 //	arm_cmplx_conj_f32_demo();
+//	arm_cmplx_dot_prod_f32_demo (); 
+//	arm_cmplx_mag_f32_demo ();
+
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

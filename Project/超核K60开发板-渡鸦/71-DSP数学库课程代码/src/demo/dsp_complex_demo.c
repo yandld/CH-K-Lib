@@ -47,12 +47,12 @@ void arm_cmplx_dot_prod_f32_demo (void) {
 			  result_img = 0.0f;
 	uint32_t number_of_complex = 1; /**指的是每个数组里面复数的个数，这里分别都是1*/
 	
-	printf("A=%f +%fj\n\r",A[0],A[1]);
-	printf("B=%f +%fj\n\r",B[0],B[1]);
+	printf("A = %f + %fj\n\r",A[0],A[1]);
+	printf("B = %f + %fj\n\r",B[0],B[1]);
 	
 	arm_cmplx_dot_prod_f32(A,B,number_of_complex,&result_real,&result_img);
 
-	printf("Result =%f +%fj\n\r",result_real,result_img);
+	printf("Result = %f + %fj\n\r",result_real,result_img);
 
 }
 
@@ -79,9 +79,9 @@ void arm_cmplx_mag_f32_demo (void) {
 	printf("Complex_1 = %f + %fj\n\r",Complex[0],Complex[1]);
 	printf("Complex_2 = %f + %fj\n\r",Complex[2],Complex[3]);
 	printf("Complex_3 = %f + %fj\n\r",Complex[4],Complex[5]);	
-	printf("Real of Complex_1 is %f\n\r",result[0]);
-	printf("Real of Complex_2 is %f\n\r",result[1]);
-	printf("Real of Complex_3 is %f\n\r",result[2]);
+	printf("Length of Complex_1 is %f\n\r",result[0]);
+	printf("Length of Complex_2 is %f\n\r",result[1]);
+	printf("Length of Complex_3 is %f\n\r",result[2]);
 }
  
  /**
@@ -101,14 +101,14 @@ void arm_cmplx_mag_squared_f32_demo (void) {
 							};
 	float32_t result[3] = {0,0,0};			/**保存运算结果*/
 	
-	arm_cmplx_mag_f32(Complex,result,3);	/**运算*/
+	arm_cmplx_mag_squared_f32(Complex,result,3);	/**运算*/
 	
 	printf("Complex_1 = %f + %fj\n\r",Complex[0],Complex[1]);
 	printf("Complex_2 = %f + %fj\n\r",Complex[2],Complex[3]);
 	printf("Complex_3 = %f + %fj\n\r",Complex[4],Complex[5]);	
-	printf("Real of Complex_1 is %f\n\r",result[0]);
-	printf("Real of Complex_2 is %f\n\r",result[1]);
-	printf("Real of Complex_3 is %f\n\r",result[2]);
+	printf("Square length of complex_1 is %f\n\r",result[0]);
+	printf("Square length of complex_2 is %f\n\r",result[1]);
+	printf("Square length of complex_3 is %f\n\r",result[2]);
 }
  /**
  * @brief  演示arm_cmplx_mult_cmplx_f32功能

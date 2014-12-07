@@ -34,9 +34,9 @@ void arm_sin_f32_demo (void) {
 	float pi_2 = pi/2; 							//π/2
 	float pi_3_2 = pi_2 * 3;					//3π/2
 	
-	printf("cos(PI) = %f\n\r",arm_sin_f32(pi));	//打印SIN(π) 的近似计算结果
-	printf("cos(PI/2) = %f\n\r",arm_sin_f32(pi_2));//打印SIN(π/2)的近似计算结果
-	printf("cos(3PI/2) = %f\n\r",arm_sin_f32(pi_3_2));//打印SIN(3π/2)的近似计算结果
+	printf("sin(PI) = %f\n\r",arm_sin_f32(pi));	//打印SIN(π) 的近似计算结果
+	printf("sin(PI/2) = %f\n\r",arm_sin_f32(pi_2));//打印SIN(π/2)的近似计算结果
+	printf("sin(3PI/2) = %f\n\r",arm_sin_f32(pi_3_2));//打印SIN(3π/2)的近似计算结果
 }
 
  /**

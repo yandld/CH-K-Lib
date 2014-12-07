@@ -13,25 +13,25 @@
 #define OV7620_H    (60)
 
 
-uint8_t CCDBufferPool[(OV7620_H+1)*(OV7620_W/8)];   //Ê¹ÓÃÄÚ²¿RAM
+uint8_t CCDBufferPool[(OV7620_H+1)*(OV7620_W/8)];   //ä½¿ç”¨å†…éƒ¨RAM
 
-/* CCDÄÚ´æ³Ø */
+/* CCDå†…å­˜æ±  */
 uint8_t * CCDBuffer[OV7620_H+1];
 
-/* Òı½Å¶¨Òå */
+/* å¼•è„šå®šä¹‰ */
 #define BOARD_OV7620_PCLK_PORT      HW_GPIOA
 #define BOARD_OV7620_PCLK_PIN       (7)
 #define BOARD_OV7620_VSYNC_PORT     HW_GPIOA
 #define BOARD_OV7620_VSYNC_PIN      (16)
 #define BOARD_OV7620_HREF_PORT      HW_GPIOA
 #define BOARD_OV7620_HREF_PIN       (17)
-#define BOARD_OV7620_DATA_OFFSET    (8) /* ÉãÏñÍ·Êı¾İÒı½ÅPTA8-PTA15 Ö»ÄÜÎª 0 8 16 24 */
+#define BOARD_OV7620_DATA_OFFSET    (8) /* æ‘„åƒå¤´æ•°æ®å¼•è„šPTA8-PTA15 åªèƒ½ä¸º 0 8 16 24 */
 
-/* ×´Ì¬»ú¶¨Òå */
+/* çŠ¶æ€æœºå®šä¹‰ */
 typedef enum
 {
-    TRANSFER_IN_PROCESS, //Êı¾İÔÚ´¦Àí
-    NEXT_FRAME,          //ÏÂÒ»Ö¡Êı¾İ
+    TRANSFER_IN_PROCESS, //æ•°æ®åœ¨å¤„ç†
+    NEXT_FRAME,          //ä¸‹ä¸€å¸§æ•°æ®
 }OV7620_Status;
 
 static void UserApp(void);
@@ -53,7 +53,7 @@ static void lcd_disp_bin(int x, int y, uint8_t data)
     }
 }
 
-/* ½ÓÊÕÍê³ÉÒ»³¡ºó ÓÃ»§´¦Àíº¯Êı */
+/* æ¥æ”¶å®Œæˆä¸€åœºå ç”¨æˆ·å¤„ç†å‡½æ•° */
 static void UserApp(void)
 {
     uint32_t x, y;
@@ -62,7 +62,22 @@ static void UserApp(void)
         for(x = 1; x < (OV7620_W/8)+1; x++)
         {
             lcd_disp_bin(x*8, y, CCDBuffer[y][x]);
+            printf("%d",(CCDBuffer[y][x]>>7) & 0x01);
+            printf("%d",(CCDBuffer[y][x]>>6) & 0x01);
+            printf("%d",(CCDBuffer[y][x]>>5) & 0x01);
+            printf("%d",(CCDBuffer[y][x]>>4) & 0x01);
+            printf("%d",(CCDBuffer[y][x]>>3) & 0x01);
+            printf("%d",(CCDBuffer[y][x]>>2) & 0x01);
+            printf("%d",(CCDBuffer[y][x]>>1) & 0x01);
+            printf("%d",(CCDBuffer[y][x]>>0) & 0x01);
+            if(x==10)
+                printf("\r\n");   
         }
+        if(y==59)
+    			{
+					printf("                                                                                ");
+				  printf("\r\n");  
+				}				
     }
     DelayMs(20);
 }
@@ -88,7 +103,7 @@ void OV_ISR(uint32_t index)
     static uint32_t h_counter, v_counter;
     static uint32_t i;
     
-    /* ĞĞÖĞ¶Ï */
+    /* è¡Œä¸­æ–­ */
     if(index & (1 << BOARD_OV7620_HREF_PIN))
     {
         DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[h_counter++]);
@@ -98,7 +113,7 @@ void OV_ISR(uint32_t index)
         return;
     }
     
-    /* ³¡ÖĞ¶Ï */
+    /* åœºä¸­æ–­ */
     if(index & (1 << BOARD_OV7620_VSYNC_PIN))
     {
         DisableInterrupts();
@@ -149,7 +164,7 @@ int main(void)
     
     DMA_InitTypeDef DMA_InitStruct1 = {0};
     
-    /* ³¡ÖĞ¶Ï  ĞĞÖĞ¶Ï ÏñËØÖĞ¶Ï */
+    /* åœºä¸­æ–­  è¡Œä¸­æ–­ åƒç´ ä¸­æ–­ */
     GPIO_QuickInit(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_Mode_IPD);
     GPIO_QuickInit(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_Mode_IPD);
     GPIO_QuickInit(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_Mode_IPD);
@@ -162,7 +177,7 @@ int main(void)
     GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
     GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge, true);
     
-    /* ³õÊ¼»¯Êı¾İ¶Ë¿Ú */
+    /* åˆå§‹åŒ–æ•°æ®ç«¯å£ */
     for(i=0;i<8;i++)
     {
         GPIO_QuickInit(HW_GPIOA, BOARD_OV7620_DATA_OFFSET+i, kGPIO_Mode_IFT);
@@ -194,5 +209,3 @@ int main(void)
         
     }
 }
-
-

@@ -2,10 +2,21 @@
 #include <finsh.h>
 #include "GUI.H"
 
-void gui_demo_thread_entry(void* parameter)
+
+
+void gui_thread_entry(void* parameter)
 {
-    rt_kprintf("\r\ngui demo task\r\n");
-    
+    U32 i;
+
+    GUI_Init();
+    GUI_DispString("gui system actived!\r\n");
+    GUI_CURSOR_Show();
+    TOUCH_MainTask();
+    MainTask();
+}
+
+void guit_thread_entry(void* parameter)
+{
 	while(1)
 	{
         GUI_TOUCH_Exec();
@@ -14,28 +25,30 @@ void gui_demo_thread_entry(void* parameter)
 }
 
 
-int cmd_gui_demo(int argc, char** argv)
+int cmd_gui_start(int argc, char** argv)
 {
-    rt_thread_t thread;
+    rt_thread_t tid;
     
     /* this task can not be single */
-    thread = rt_thread_find("gui_demo");
-    if(thread != RT_NULL)
-    {
-        rt_kprintf("task:gui_demo already existed\r\n");
-        return 1;
-    }
+    tid = rt_thread_find("gui_exe");
+    if(tid != RT_NULL) return -1;
     
     /* create gui thread and run */
-    thread = rt_thread_create("gui_demo", gui_demo_thread_entry, RT_NULL, 1024*8, 0x25, 20);                                                      
-    if (thread != RT_NULL)
+    tid = rt_thread_create("gui_exe", gui_thread_entry, RT_NULL, (1024*3), 0x27, 20);                                                      
+    if (tid != RT_NULL)
     {
-        rt_thread_startup(thread);		
+        rt_thread_startup(tid);		
     }
-    TOUCH_MainTask();
-    MainTask();
+    
+    tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (512), 0x23, 20);                                                      
+    if (tid != RT_NULL)
+    {
+        rt_thread_startup(tid);		
+    }
+
+    //TOUCH_MainTask();
     return 0;
 }
 
-FINSH_FUNCTION_EXPORT_ALIAS(cmd_gui_demo, __cmd_gui_demo, run emwin demo.);
+
 

@@ -40,8 +40,8 @@ void GUI_AppNotepad(void);
 const char *GUI_AooDispChooseFile(void);
 WM_HWIN GUI_AppDispSysInfo(void);
 GUI_FileType GUI_AppGetFileType(const char * fileName);
-
-
+void TOUCH_MainTask(void);
+void ExecCalibration(void);
 #endif
 
 

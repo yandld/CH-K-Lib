@@ -119,8 +119,6 @@ const char *GUI_AooDispChooseFile(void)
                 GUI_MessageBox(Info.pRoot, "File", GUI_MESSAGEBOX_CF_MODAL);
                 break;
         }
-
-        
     }
     return Info.pRoot;
 }

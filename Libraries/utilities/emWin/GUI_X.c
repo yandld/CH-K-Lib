@@ -83,7 +83,7 @@ void  GUI_X_InitOS (void)
 static U32 i;
 void GUI_X_Lock (void)
 { 
-    // result = rt_mutex_take(gui_x_mutex, RT_WAITING_FOREVER);
+    //rt_mutex_take(gui_x_mutex, RT_WAITING_FOREVER);
     //rt_kprintf("%d\r\n",i);
     i++;
 }
@@ -92,13 +92,13 @@ void GUI_X_Lock (void)
 void GUI_X_Unlock (void)
 { 
     i--;
-   // rt_mutex_release(gui_x_mutex);
+    //rt_mutex_release(gui_x_mutex);
 }
 
 
-U32  GUI_X_GetTaskId (void) 
+U32 GUI_X_GetTaskId (void) 
 {
-
+    return 1;
 }
 
 

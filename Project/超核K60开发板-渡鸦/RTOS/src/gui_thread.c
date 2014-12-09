@@ -45,13 +45,13 @@ int cmd_gui_start(int argc, char** argv)
     if(tid != RT_NULL) return -1;
     
     /* create gui thread and run */
-    tid = rt_thread_create("gui_exe", gui_thread_entry, RT_NULL, (1024*3), 0x27, 20);                                                      
+    tid = rt_thread_create("gui_exe", gui_thread_entry, RT_NULL, (1024*3), 0x15, 20);                                                      
     if (tid != RT_NULL)
     {
         rt_thread_startup(tid);		
     }
     
-    tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (512), 0x23, 20);                                                      
+    tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (512), 0x14, 20);                                                      
     if (tid != RT_NULL)
     {
         rt_thread_startup(tid);		

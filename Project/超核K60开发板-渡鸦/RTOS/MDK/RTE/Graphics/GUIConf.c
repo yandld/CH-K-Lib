@@ -3,13 +3,13 @@
 *        Solutions for real time microcontroller applications        *
 **********************************************************************
 *                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
+*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
 *                                                                    *
 *        Internet: www.segger.com    Support:  support@segger.com    *
 *                                                                    *
 **********************************************************************
 
-** emWin V5.22 - Graphical user interface for embedded applications **
+** emWin V5.24 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -32,32 +32,45 @@ Purpose     : Display controller initialization
 */
 
 #include "GUI.h"
-#include <rtthread.h>
-#include "sram.h"
 
-#define GUI_NUMBYTES  (1024*512)
-#define GUI_BLOCKSIZE 4
+/*********************************************************************
+*
+*       Defines
+*
+**********************************************************************
+*/
+//
+// Define the available number of bytes available for the GUI
+//
+#define GUI_NUMBYTES  0x200000
 
-static void GUI_Log(const char *s)
-{
-    rt_kprintf("GUI error:%s\r\n", s);
-}
-
-void GUI_X_Config(void)
-{
-    //static U32 aMemory[GUI_NUMBYTES / 4];
-    //U32 * aMemory = (U32*)rt_malloc(GUI_NUMBYTES);
-    U32 *aMemory = (U32*)SRAM_ADDRESS_BASE;
-    if(aMemory == RT_NULL)
-    {
-        rt_kprintf("GUI:not memory\r\n");
-        return;
-    }
-    GUI_ALLOC_AssignMemory(aMemory, GUI_NUMBYTES);
-    GUI_SetOnErrorFunc(GUI_Log);
-    GUITASK_SetMaxTask(5);
-    GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);
-    GUI_SetDefaultFont(GUI_FONT_6X8);
+/*********************************************************************
+*
+*       Public code
+*
+**********************************************************************
+*/
+/*********************************************************************
+*
+*       GUI_X_Config
+*
+* Purpose:
+*   Called during the initialization process in order to set up the
+*   available memory for the GUI.
+*/
+void GUI_X_Config(void) {
+  //
+  // 32 bit aligned memory area
+  //
+  static U32 aMemory[GUI_NUMBYTES / 4];
+  //
+  // Assign memory to emWin
+  //
+  GUI_ALLOC_AssignMemory(aMemory, GUI_NUMBYTES);
+  //
+  // Set default font
+  //
+  GUI_SetDefaultFont(GUI_FONT_6X8);
 }
 
 /*************************** End of file ****************************/

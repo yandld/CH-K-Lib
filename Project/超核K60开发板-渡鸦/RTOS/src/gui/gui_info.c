@@ -7,7 +7,6 @@ int cmd_guiinfo(int argc, char** argv)
     rt_kprintf("NumFreeBlocks:%d\r\n", GUI_ALLOC_GetNumFreeBlocks());
     rt_kprintf("GUI_ALLOC_GetNumFreeBytes:%d\r\n", GUI_ALLOC_GetNumFreeBytes());
     rt_kprintf("GUI_ALLOC_GetNumUsedBytes:%d\r\n", GUI_ALLOC_GetNumUsedBytes());
-    rt_kprintf("GUI_ALLOC_GetNumFreeBytes:%d\r\n", GUI_ALLOC_GetNumFreeBytes());
     return 0;
 }
 

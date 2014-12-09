@@ -83,9 +83,9 @@ void  GUI_X_InitOS (void)
 static U32 i;
 void GUI_X_Lock (void)
 { 
-   // result = rt_mutex_take(gui_x_mutex, RT_WAITING_FOREVER);
+    // result = rt_mutex_take(gui_x_mutex, RT_WAITING_FOREVER);
     //rt_kprintf("%d\r\n",i);
-i++;
+    i++;
 }
 
 

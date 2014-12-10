@@ -84,13 +84,18 @@ const char *GUI_AooDispChooseFile(void)
 {
     int r;
     WM_HWIN hWin;
-    static CHOOSEFILE_INFO Info = { 0 };
-    static char const      * apDrives[1]         = {"/"};
+    static CHOOSEFILE_INFO Info;
+    
+    char              acDir[32]    = "/";
+    char const      * apDrives[1]         = { acDir };
+    
+    rt_memset(&Info, 0, sizeof(CHOOSEFILE_INFO));
     Info.pfGetData = _GetData;
     Info.pMask     = "*.*";
     CHOOSEFILE_SetDelim('/');
-    
-    hWin = CHOOSEFILE_Create(WM_HBKWIN, 0, 0, LCD_GetXSize()*3/4, LCD_GetYSize()*3/4, apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
+    rt_enter_critical();
+    hWin = CHOOSEFILE_Create(WM_HBKWIN, 0, 0, LCD_GetXSize(), LCD_GetYSize(), apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
+    rt_exit_critical();
     WM_MakeModal(hWin);
     FRAMEWIN_SetMoveable(hWin, 1);
     r = GUI_ExecCreatedDialog(hWin);

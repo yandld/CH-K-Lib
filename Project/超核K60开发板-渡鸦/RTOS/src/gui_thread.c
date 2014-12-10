@@ -39,25 +39,19 @@ void guit_thread_entry(void* parameter)
 int cmd_gui_start(int argc, char** argv)
 {
     rt_thread_t tid;
+    //static struct rt_thread thread; 
     
     /* this task can not be single */
     tid = rt_thread_find("gui_exe");
     if(tid != RT_NULL) return -1;
     
     /* create gui thread and run */
-    tid = rt_thread_create("gui_exe", gui_thread_entry, RT_NULL, (1024*3), 0x15, 20);                                                      
-    if (tid != RT_NULL)
-    {
-        rt_thread_startup(tid);		
-    }
-    
-    tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (512), 0x14, 20);                                                      
-    if (tid != RT_NULL)
-    {
-        rt_thread_startup(tid);		
-    }
+    tid = rt_thread_create("gui_exe", gui_thread_entry, RT_NULL, (1024*8), 0x15, 20);                                
+    rt_thread_startup(tid);
 
-    //TOUCH_MainTask();
+    tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (512), 0x14, 20);                                                      
+    rt_thread_startup(tid);	
+
     return 0;
 }
 

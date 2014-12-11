@@ -4,7 +4,7 @@
 #include "gui_appdef.h"
 
 
-const char *FileNameTbl[] = {"JPEG", "JPG", "TXT", "PNG", "MD", "INI", "DOC", "BMP", "AVI", "WMV", "BIN", "HEX"};
+const char *FileNameTbl[] = {"JPEG", "JPG", "TXT", "C", "CPP", "LOG", "PNG", "MD", "INI", "DOC", "BMP", "AVI", "WMV", "BIN", "HEX"};
 
 
 GUI_FileType GUI_AppGetFileType(const char * fileName)

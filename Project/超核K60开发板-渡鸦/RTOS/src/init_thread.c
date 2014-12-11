@@ -23,8 +23,8 @@ void init_thread_entry(void* parameter)
     rt_uint8_t time_out;
     
     SRAM_Init();
-    rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
-   // rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
+    //rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
+    rt_system_heap_init((void*)(SRAM_ADDRESS_BASE + 1024*256), (void*)(SRAM_ADDRESS_BASE + 1024*512));
 
     /* init finsh */
     rt_device_t dev = rt_device_find("uart0");
@@ -53,12 +53,15 @@ void init_thread_entry(void* parameter)
         PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
         rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", &spi_cs_0);
     }
+    
     touch_ads7843_init("ads7843", "spi20");
+    w25qxx_init("sf0", "spi21");
+    dfs_mount("sf0", "/SF", "elm", 0, 0);
+    dfs_mount("sd0", "/SD", "elm", 0, 0);
     
-    
-//#ifdef RT_USING_LWIP
+#ifdef RT_USING_LWIP
 //    rt_kprintf(" link beginning \r\n");
-//    rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
+    rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
 //    time_out = 0;
 //	while(!(netif_list->flags & NETIF_FLAG_UP)) 
 //	{
@@ -70,18 +73,13 @@ void init_thread_entry(void* parameter)
 //        }
 //	}
 //    list_if();
-//#endif
+#endif
     
     /* init eeporm */
     at24cxx_init("at24c02", "i2c0");
 //    rt_uint8_t buf[32];
     
-    // touch_ads7843_init("ads7843", "spi20");
-    w25qxx_init("sf0", "spi21");
-    dfs_mount("sf0", "/SF", "elm", 0, 0);
-    dfs_mount("sd0", "/SD", "elm", 0, 0);
- //   tid = rt_thread_create("sd", sd_thread_entry, RT_NULL, 512, 0x23, 20); 
- //  if (tid != RT_NULL) rt_thread_startup(tid);
+
   
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);

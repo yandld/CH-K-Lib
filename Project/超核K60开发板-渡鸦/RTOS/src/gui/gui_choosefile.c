@@ -115,6 +115,8 @@ const char *GUI_AooDispChooseFile(void)
                 break;
             case kTXT:
             case kINI:
+            case kC:  
+            case kLOG:                
             case kMD:
                 msg.cmd = 2;
                 msg.exec = GUI_AppNotepad;

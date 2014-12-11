@@ -8,18 +8,15 @@
 int mountnfs(const char * host)
 {
     int r;
-	rt_kprintf("mount nfs to %s...", "/NFS");
+    if(!(netif_list->flags & NETIF_FLAG_UP)) 
+    {
+        rt_kprintf("no network\r\n");
+        return -1;
+    }
+
     r = dfs_mount("e0", "/NFS", "nfs", 0, host);
-	if (!r)
-	{
-		rt_kprintf("[ok]\n");
-		return 0;
-	}
-	else
-	{
-		rt_kprintf("[failed!]%d\n", r);
-		return -1;
-	}
+    (!r)?(rt_kprintf("mount OK\r\n")):(rt_kprintf("mount failed\r\n"));
+    return 0;
 }
 
 FINSH_FUNCTION_EXPORT(mountnfs, eg:mountnfs("192.168.1.101:/"))

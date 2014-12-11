@@ -11,9 +11,12 @@ typedef enum
     kJPEG,
     kJPG,
     kTXT,
+    kC,
+    kCPP,
+    kLOG,
+    kINI,
     kPNG,
     kMD,
-    kINI,
     kDOC,
     kBMP,
     kAVI,
@@ -42,6 +45,8 @@ WM_HWIN GUI_AppDispSysInfo(void);
 GUI_FileType GUI_AppGetFileType(const char * fileName);
 void TOUCH_MainTask(void);
 void ExecCalibration(void);
+WM_HWIN GUI_AppDispTaskManager(void);
+
 #endif
 
 

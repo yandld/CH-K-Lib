@@ -4,12 +4,12 @@
 #ifdef FINSH_USING_MSH
 #include <finsh.h>
 
-int cmd_reset(int argc, char** argv)
+static int reset(int argc, char** argv)
 {
     NVIC_SystemReset();
     return 0;
 }
-FINSH_FUNCTION_EXPORT_ALIAS(cmd_reset, __cmd_reset, Reset.);
+MSH_CMD_EXPORT(reset, reset);
 
 #endif
 

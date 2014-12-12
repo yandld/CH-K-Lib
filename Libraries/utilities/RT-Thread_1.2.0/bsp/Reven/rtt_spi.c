@@ -38,9 +38,9 @@ static rt_err_t configure(struct rt_spi_device* device, struct rt_spi_configurat
     {
         SPI_InitStruct1.baudrate = 1000;
     }
-    else if (configuration->max_hz > 50*1000*1000)
+    else if (configuration->max_hz > 47*1000*1000)
     {
-        SPI_InitStruct1.baudrate = 50*1000*1000;
+        SPI_InitStruct1.baudrate = 47*1000*1000;
     }
     else
     {

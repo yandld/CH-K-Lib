@@ -15,12 +15,14 @@
 
 #if (!defined(SPI_BASES))
 
-#ifdef SPI1
-#define SPI_BASES {SPI0, SPI1}
-#elif SPI2
-#define SPI_BASES {SPI0, SPI1, SPI2}
+#ifdef      SPI1
+#define     SPI_BASES {SPI0, SPI1}
+#elif       SPI2
+#define     SPI_BASES {SPI0, SPI1, SPI2}
+#elif       SPI3
+#define     SPI_BASES {SPI0, SPI1, SPI2, SPI3}
 #else
-#define SPI_BASES {SPI0}
+#define     SPI_BASES {SPI0}
 #endif
 
 #endif
@@ -130,6 +132,7 @@ static uint32_t dspi_hal_set_baud(uint32_t instance, uint8_t whichCtar, uint32_t
     }
     SPI_InstanceTable[instance]->CTAR[whichCtar] = temp;
     /* return the actual calculated baud rate*/
+    LIB_TRACE("bestBaudrate:%d\r\n", bestBaudrate);
     return bestBaudrate;
 }
 
@@ -388,7 +391,6 @@ uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint1
         while(!(SPI_InstanceTable[instance]->SR & SPI_SR_TCF_MASK));
         SPI_InstanceTable[instance]->SR |= SPI_SR_TCF_MASK;
     }
-    
     read_data = (uint16_t)SPI_InstanceTable[instance]->POPR;
     return read_data;
 }

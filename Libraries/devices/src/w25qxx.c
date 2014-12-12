@@ -312,7 +312,7 @@ int w25qxx_init(spi_bus_t bus, uint32_t cs)
 {
     uint32_t ret;
     device.csn = cs;
-    device.config.baudrate = 50*1000*1000;
+    device.config.baudrate = 47*1000*1000;
     device.config.data_width = 8;
     device.config.mode = SPI_MODE_0 | SPI_MASTER | SPI_MSB;
     ret = spi_bus_attach_device(bus, &device);

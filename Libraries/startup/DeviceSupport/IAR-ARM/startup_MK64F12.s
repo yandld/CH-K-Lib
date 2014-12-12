@@ -326,7 +326,7 @@ _NVIC_ICPR0     EQU   0xE000E280
         THUMB
 
         PUBWEAK Reset_Handler
-        SECTION .text:CODE:REORDER(2)
+        SECTION .text:CODE:REORDER:NOROOT(2)
 Reset_Handler
         LDR     R0, =SystemInit
         BLX     R0

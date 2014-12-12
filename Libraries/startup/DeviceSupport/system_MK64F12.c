@@ -63,7 +63,7 @@
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Default  part configuration.
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
-         Core clock = 20.97MHz, BusClock = 20.97MHz
+         Core clock = 96MHz, BusClock = 96MHz
    1 ... Multipurpose Clock Generator (MCG) in PLL Engaged External (PEE) mode
          Maximum achievable clock frequency configuration.
          Reference clock source for MCG module is an external clock source 50MHz
@@ -92,7 +92,7 @@
     #define CPU_XTAL32k_CLK_HZ              32768u   /* Value of the external 32k crystal or oscillator clock frequency in Hz */
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
     #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
-    #define DEFAULT_SYSTEM_CLOCK            20485760u /* Default System clock value */
+    #define DEFAULT_SYSTEM_CLOCK            96000000u /* Default System clock value */
 #elif (CLOCK_SETUP == 1)
     #define CPU_XTAL_CLK_HZ                 50000000u /* Value of the external crystal or oscillator clock frequency in Hz */
     #define CPU_XTAL32k_CLK_HZ              32768u   /* Value of the external 32k crystal or oscillator clock frequency in Hz */
@@ -153,7 +153,7 @@ void SystemInit (void) {
   SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0x00) |
                 SIM_CLKDIV1_OUTDIV2(0x00) |
                 SIM_CLKDIV1_OUTDIV3(0x01) |
-                SIM_CLKDIV1_OUTDIV4(0x01); /* Update system prescalers */
+                SIM_CLKDIV1_OUTDIV4(0x02); /* Update system prescalers */
   /* SIM->SOPT2: PLLFLLSEL=0 */
   SIM->SOPT2 &= (uint32_t)~(uint32_t)(SIM_SOPT2_PLLFLLSEL_MASK); /* Select FLL as a clock source for various peripherals */
   /* SIM->SOPT1: OSC32KSEL=3 */
@@ -167,7 +167,7 @@ void SystemInit (void) {
   /* MCG->C2: LOCRE0=0,??=0,RANGE=0,HGO=0,EREFS=0,LP=0,IRCS=0 */
   MCG->C2 = MCG_C2_RANGE(0x00);
   /* MCG->C4: DMX32=0,DRST_DRS=0 */
-  MCG->C4 &= (uint8_t)~(uint8_t)((MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS(0x03)));
+  MCG->C4 |= (uint8_t)((MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS(0x03)));
   /* OSC->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=0,SC4P=0,SC8P=0,SC16P=0 */
   OSC->CR = OSC_CR_ERCLKEN_MASK;
   /* MCG->C7: OSCSEL=0 */

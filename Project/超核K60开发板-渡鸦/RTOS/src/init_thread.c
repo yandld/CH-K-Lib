@@ -58,6 +58,13 @@ void init_thread_entry(void* parameter)
     w25qxx_init("sf0", "spi21");
     dfs_mount("sf0", "/SF", "elm", 0, 0);
     dfs_mount("sd0", "/SD", "elm", 0, 0);
+
+    at24cxx_init("at24c02", "i2c0");
+
+    tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
+    if (tid != RT_NULL) rt_thread_startup(tid);
+  
+    cmd_gui_start(RT_NULL, RT_NULL);
     
 #ifdef RT_USING_LWIP
 //    rt_kprintf(" link beginning \r\n");
@@ -74,18 +81,7 @@ void init_thread_entry(void* parameter)
 //	}
 //    list_if();
 #endif
-    
-    /* init eeporm */
-    at24cxx_init("at24c02", "i2c0");
-//    rt_uint8_t buf[32];
-    
 
-  
-    tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
-    if (tid != RT_NULL) rt_thread_startup(tid);
-  
-    cmd_gui_start(RT_NULL, RT_NULL);
-    
     tid = rt_thread_self();
     rt_thread_delete(tid); 
 }

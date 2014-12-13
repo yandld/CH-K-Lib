@@ -172,6 +172,7 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
         SPI_MCR_PCSIS_MASK |
         SPI_MCR_HALT_MASK  |
         SPI_MCR_CLR_TXF_MASK|
+       // SPI_MCR_MTFE_MASK   |
         SPI_MCR_CLR_RXF_MASK|
         SPI_MCR_DIS_TXF_MASK|
         SPI_MCR_DIS_RXF_MASK;
@@ -238,6 +239,9 @@ void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frame
     /* set SPI clock, SPI use Busclock */
     CLOCK_GetClockFrequency(kBusClock, &clock);
     dspi_hal_set_baud(instance, ctar, baudrate, clock);
+    
+    /* add more CS time */
+    SPI_InstanceTable[instance]->CTAR[ctar] |= SPI_CTAR_ASC(1)|SPI_CTAR_CSSCK(1)|SPI_CTAR_PASC(1)|SPI_CTAR_PCSSCK(1);  
 }
 
 /**

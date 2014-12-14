@@ -31,7 +31,7 @@ void init_thread_entry(void* parameter)
     finsh_system_init();
 
     rt_hw_spi_bus_init(HW_SPI2, "spi2");
-    
+    rt_hw_beep_init("beep");
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 

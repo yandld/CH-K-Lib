@@ -112,7 +112,7 @@ void rt_hw_sd_init(uint32_t instance, const char *name)
 	sd_device.control 	= rt_sd_control;
 	sd_device.user_data	= RT_NULL;
 	
-    rt_device_register(&sd_device, name, RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STANDALONE | RT_DEVICE_FLAG_REMOVABLE);
+    rt_device_register(&sd_device, name, RT_DEVICE_FLAG_RDWR  | RT_DEVICE_FLAG_REMOVABLE);
 }
 
 void rt_hw_sd_init2(void)

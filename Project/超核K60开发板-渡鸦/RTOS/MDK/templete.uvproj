@@ -1474,6 +1474,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\msh_cmd\sys_cmd_nent.c</FilePath>
             </File>
+            <File>
+              <FileName>device_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\msh_cmd\device_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>fs_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\msh_cmd\fs_test.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3247,6 +3257,16 @@
               <FileName>sys_cmd_nent.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\msh_cmd\sys_cmd_nent.c</FilePath>
+            </File>
+            <File>
+              <FileName>device_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\msh_cmd\device_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>fs_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\msh_cmd\fs_test.c</FilePath>
             </File>
           </Files>
         </Group>

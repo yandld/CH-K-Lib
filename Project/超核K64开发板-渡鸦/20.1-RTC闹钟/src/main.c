@@ -5,7 +5,7 @@
 
 void RTC_ISR(void)
 {
-    printf("RTC INT\r\n");
+    printf("RTC INT ENTER\r\n");
 }
 
 
@@ -13,7 +13,7 @@ int main(void)
 {
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     
     /* 声明一个时间结构 */
     RTC_DateTime_Type td = {0};
@@ -26,8 +26,10 @@ int main(void)
     printf("RTC alarm test\r\n");
     
     RTC_QuickInit();
-    if(RTC_IsTimeValid() == 0)
+
+    if(RTC_IsTimeValid())
     {
+        printf("Reconfig!\r\n");
         RTC_SetDateTime(&td);
     }
     /* 开启中断 */

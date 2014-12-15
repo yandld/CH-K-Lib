@@ -5,10 +5,10 @@
 #include "gui.h"
 #include "board.h"
 
-#include "my_gui.h"
+//#include "my_gui.h"
 
-#include "usb.h"
-#include "usb_msc.h"
+//#include "usb.h"
+//#include "usb_msc.h"
 
 
 void led_thread_entry(void* parameter)

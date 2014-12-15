@@ -238,11 +238,17 @@ void RTC_SetCompensation(uint32_t compensationInterval, uint32_t timeCompensatio
  */
 void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
 {
-    uint32_t i;
+    volatile uint32_t i;
     SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;
+    
     // RTC->CR = 0;
+    
+    /* dislabe TSR */
+    RTC->SR &= ~RTC_SR_TCE_MASK;
+    
     /* disable osc */
     RTC->CR &= ~RTC_CR_OSCE_MASK;
+    
     /* OSC load config */
     switch(RTC_InitStruct->oscLoad)
     {
@@ -261,9 +267,11 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
         default:
             break;
     }
-    /* enable OSC */
+    
+    /* enable OSC and wait startup */
     RTC->CR |= RTC_CR_OSCE_MASK;
-	for(i=0;i<0x6000;i++) {};
+	for(i=0;i<0x60000;i++) {};
+        
     /* enable RTC */
     RTC->SR |= RTC_SR_TCE_MASK;
 }

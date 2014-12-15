@@ -97,7 +97,7 @@ const char *GUI_AooDispChooseFile(void)
     hWin = CHOOSEFILE_Create(WM_HBKWIN, 0, 0, LCD_GetXSize(), LCD_GetYSize(), apDrives, GUI_COUNTOF(apDrives), 0, "File Dialog", 0, &Info);
     rt_exit_critical();
     WM_MakeModal(hWin);
-    FRAMEWIN_SetMoveable(hWin, 1);
+    //FRAMEWIN_SetMoveable(hWin, 1);
     r = GUI_ExecCreatedDialog(hWin);
     if(!r)
     {

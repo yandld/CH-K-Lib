@@ -83,6 +83,7 @@ static rt_err_t rt_sd_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 		geometry.block_size = 512;
 		geometry.bytes_per_sector = 512;
         size = SD_GetSizeInMB();
+        
 		geometry.sector_count = size*1024*2;
 		rt_memcpy(args, &geometry, sizeof(struct rt_device_blk_geometry));
 		break;

@@ -13,6 +13,8 @@ void gui_thread_entry(void* parameter)
     gui_msg_t msg;
     GUI_Init();
     GUI_DispString("gui system actived!\r\n");
+    GUI_Delay(100);
+    TOUCH_MainTask();
     GUI_CURSOR_Show();
     gcd();
 	while(1)
@@ -39,7 +41,6 @@ void guit_thread_entry(void* parameter)
 int cmd_gui_start(int argc, char** argv)
 {
     rt_thread_t tid;
-    //static struct rt_thread thread; 
     
     /* this task can not be single */
     tid = rt_thread_find("gui_exe");

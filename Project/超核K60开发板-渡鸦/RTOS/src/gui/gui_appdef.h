@@ -2,9 +2,15 @@
 #define __GUI_APPDEF_H__
 
 #include <rtthread.h>
-#include "GUI.H"
-#include "WM.H"
+#include <stdint.h>
+#include <stdbool.h>
 
+#include    "GUI.H"
+#include    "WM.H"
+#include    "DIALOG.h"
+#include    "BUTTON.h"
+#include    "EDIT.h"
+#include    "FRAMEWIN.h"
 
 typedef enum
 {
@@ -44,8 +50,9 @@ const char *GUI_AooDispChooseFile(void);
 WM_HWIN GUI_AppDispSysInfo(void);
 GUI_FileType GUI_AppGetFileType(const char * fileName);
 void TOUCH_MainTask(void);
-void ExecCalibration(void);
 WM_HWIN GUI_AppDispTaskManager(void);
+WM_HWIN GUI_AppDispCalculator(void);
+
 
 #endif
 

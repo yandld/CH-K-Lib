@@ -14,7 +14,7 @@ int cmd_ui_test(int argc, char** argv)
     }       
     gui_msg_t msg;
     msg.cmd = 2;
-    msg.exec = GUI_AppDispTaskManager;
+    msg.exec = GUI_AppDispCalculator;
     rt_mq_send(guimq, &msg, sizeof(msg));
     return 0;
 }

@@ -23,8 +23,8 @@ void init_thread_entry(void* parameter)
     rt_uint8_t time_out;
     
     SRAM_Init();
-    //rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
-    rt_system_heap_init((void*)(SRAM_ADDRESS_BASE + 1024*256), (void*)(SRAM_ADDRESS_BASE + 1024*512));
+    rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
+    rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
 
     /* init finsh */
     rt_device_t dev = rt_device_find("uart0");

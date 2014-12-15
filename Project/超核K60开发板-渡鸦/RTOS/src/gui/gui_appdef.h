@@ -52,7 +52,7 @@ GUI_FileType GUI_AppGetFileType(const char * fileName);
 void TOUCH_MainTask(void);
 WM_HWIN GUI_AppDispTaskManager(void);
 WM_HWIN GUI_AppDispCalculator(void);
-
+WM_HWIN GUI_ExecCalibrationDialog(void* parameter);
 
 #endif
 

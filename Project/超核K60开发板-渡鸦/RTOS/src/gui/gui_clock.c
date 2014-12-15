@@ -10,7 +10,7 @@
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] =
 {
-  { FRAMEWIN_CreateIndirect, "RTC Clock", ID_FRAMEWIN_0, 0, 1, 189, 75, 0, 0x0, 0 },
+  { FRAMEWIN_CreateIndirect, "RTC Clock", ID_FRAMEWIN_0, 0, 0, 240, 320, 0, 0x0, 0 },
   { TEXT_CreateIndirect, "Sun", ID_TEXT_0, 5, 4, 165, 23, 0, 0x64, 0 },
   { BUTTON_CreateIndirect, "OK", ID_BUTTON_0, 0, 27, 60, 20, 0, 0x0, 0 },
   { BUTTON_CreateIndirect, "Cancel", ID_BUTTON_1, 119, 27, 60, 20, 0, 0x0, 0 },
@@ -24,7 +24,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     switch (pMsg->MsgId)
     {
         case WM_TIMER:
-            //rt_kprintf("WM_TIMER\r\n");
             WM_RestartTimer(pMsg->Data.v, 1000);
             now = time(0);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_TEXT_0);
@@ -33,8 +32,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         case WM_INIT_DIALOG:
             hItem = pMsg->hWin;
             FRAMEWIN_SetTextAlign(hItem, GUI_TA_LEFT | GUI_TA_VCENTER);
-            FRAMEWIN_SetFont(hItem, GUI_FONT_13B_1);
-            FRAMEWIN_SetMoveable(hItem, 1);
             WM_MakeModal(hItem);
             WM_CreateTimer(WM_GetClientWindow(pMsg->hWin), 0, 1000, 0);
         

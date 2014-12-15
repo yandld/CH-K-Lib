@@ -22,7 +22,10 @@ void gui_thread_entry(void* parameter)
         if(rt_mq_recv(guimq, &msg, sizeof(gui_msg_t), 1) == RT_EOK)
         {
             rt_kprintf("%s", msg.parameter);
-            msg.exec(msg.parameter);
+            if(msg.exec != RT_NULL)
+            {
+                msg.exec(msg.parameter);
+            } 
         }
         GUI_Exec();
 	}

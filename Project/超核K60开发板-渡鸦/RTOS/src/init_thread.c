@@ -16,11 +16,7 @@ rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 
 void init_thread_entry(void* parameter)
 {
-    struct rt_spi_device *spi_device;
     rt_thread_t tid;
-    rt_err_t r;
-    int i;
-    rt_uint8_t time_out;
     
     SRAM_Init();
     rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));

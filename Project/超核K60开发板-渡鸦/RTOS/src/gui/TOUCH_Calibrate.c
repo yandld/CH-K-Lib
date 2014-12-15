@@ -1,69 +1,14 @@
-/*********************************************************************
-*                SEGGER Microcontroller GmbH & Co. KG                *
-*        Solutions for real time microcontroller applications        *
-**********************************************************************
-*                                                                    *
-*        (c) 1996 - 2014  SEGGER Microcontroller GmbH & Co. KG       *
-*                                                                    *
-*        Internet: www.segger.com    Support:  support@segger.com    *
-*                                                                    *
-**********************************************************************
 
-** emWin V5.26 - Graphical user interface for embedded applications **
-All  Intellectual Property rights  in the Software belongs to  SEGGER.
-emWin is protected by  international copyright laws.  Knowledge of the
-source code may not be used to write a similar product.  This file may
-only be used in accordance with the following terms:
-
-The software has been licensed to  ARM LIMITED whose registered office
-is situated at  110 Fulbourn Road,  Cambridge CB1 9NJ,  England solely
-for  the  purposes  of  creating  libraries  for  ARM7, ARM9, Cortex-M
-series,  and   Cortex-R4   processor-based  devices,  sublicensed  and
-distributed as part of the  MDK-ARM  Professional  under the terms and
-conditions  of  the   End  User  License  supplied  with  the  MDK-ARM
-Professional. 
-Full source code is available at: www.segger.com
-
-We appreciate your understanding and fairness.
-----------------------------------------------------------------------
-File        : TOUCH_Calibrate.c
-Purpose     : Demonstrates how a touch screen can be calibrated at run time
-Requirements: WindowManager - ( )
-              MemoryDevices - ( )
-              AntiAliasing  - ( )
-              VNC-Server    - ( )
-              PNG-Library   - ( )
-              TrueTypeFonts - ( )
----------------------------END-OF-HEADER------------------------------
-*/
 
 #include "GUI.h"
 
-/********************************************************************
-*
-*       Static data
-*
-*********************************************************************
-*/
 
 static const char * _acPos[] = {
   "(upper left position)",
   "(lower right position)"
 };
 
-/*********************************************************************
-*
-*       Static code
-*
-**********************************************************************
-*/
-/*********************************************************************
-*
-*       _WaitForPressedState
-*
-* Function description
-*   Waits until the touch is in the given pressed state for at least 250 ms
-*/
+
 static void _WaitForPressedState(int Pressed) {
   GUI_PID_STATE State;
 
@@ -176,17 +121,10 @@ static void _Explain(void) {
   _WaitForPressedState(1);
   _WaitForPressedState(0);
 }
-/*********************************************************************
-*
-*       Public code
-*
-**********************************************************************
-*/
-/*********************************************************************
-*
-*       MainTask
-*/
-void TOUCH_MainTask(void) {
+
+
+void TOUCH_MainTask(void)
+{
   int aPhysX[2], aPhysY[2], aLogX[2], aLogY[2], i;
   GUI_Init();
   GUI_SetBkColor(GUI_WHITE);

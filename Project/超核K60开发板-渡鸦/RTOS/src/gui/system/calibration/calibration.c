@@ -33,8 +33,6 @@ static void _DispStringCentered(const char * pString) {
 }
 
 
-
-
 static void _cbDialog(WM_MESSAGE * pMsg)
 {
     WM_HWIN hItem;

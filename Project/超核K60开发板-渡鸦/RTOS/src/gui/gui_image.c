@@ -112,7 +112,6 @@ static void _cbDialog(WM_MESSAGE * pMsg)
     }
 }
 
-
 void GUI_AppDispImage(const char * path)
 {
     gPath = path;
@@ -120,3 +119,28 @@ void GUI_AppDispImage(const char * path)
     return;
 }
 
+
+#ifdef FINSH_USING_MSH
+#include "finsh.h"
+extern char working_directory[];
+
+int ui_image(int argc, char** argv)
+{
+    gui_msg_t msg;
+    char *fullpath;
+    if(argc != 2)
+    {
+        return -1;
+    }
+     
+    fullpath = dfs_normalize_path(NULL, argv[1]);
+
+    msg.cmd = 2;
+    msg.exec = GUI_AppDispImage;
+    msg.parameter = (void *)fullpath;
+    rt_mq_send(guimq, &msg, sizeof(msg));
+    return 0;
+}
+
+MSH_CMD_EXPORT(ui_image, show a picture file.);
+#endif

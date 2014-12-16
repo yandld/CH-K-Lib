@@ -1,8 +1,10 @@
 #include <rtthread.h>
-#include <finsh.h>
 #include "GUI.H"
 
-int cmd_guiinfo(int argc, char** argv)
+#ifdef FINSH_USING_MSH
+#include "finsh.h"
+
+int ui_guiinfo(int argc, char** argv)
 {
     rt_kprintf("NumFreeBlocks:%d\r\n", GUI_ALLOC_GetNumFreeBlocks());
     rt_kprintf("GUI_ALLOC_GetNumFreeBytes:%d\r\n", GUI_ALLOC_GetNumFreeBytes());
@@ -11,8 +13,8 @@ int cmd_guiinfo(int argc, char** argv)
 }
 
 
-FINSH_FUNCTION_EXPORT_ALIAS(cmd_guiinfo, __cmd_guiinfo, show gui info.);
-
+MSH_CMD_EXPORT(ui_guiinfo, show a picture file.);
+#endif
 
 
 

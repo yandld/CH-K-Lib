@@ -22,11 +22,13 @@ static void _WriteByte2File(U8 Data, void *p)
     static rt_uint32_t cnt;
     cnt++;
     if(!(cnt%1000)) rt_kprintf(">");
-    
     write(*(int*)p, &Data, 1);
 }
 
-void cmd_screen_shot(int argc, char** argv)
+#ifdef FINSH_USING_MSH
+#include "finsh.h"
+
+void ui_screenshot(int argc, char** argv)
 {
     int fd, index, length;
     char *buff_ptr;
@@ -43,5 +45,6 @@ void cmd_screen_shot(int argc, char** argv)
 }
 
 
-FINSH_FUNCTION_EXPORT_ALIAS(cmd_screen_shot, __cmd_screen_shot, show a picture file.);
+MSH_CMD_EXPORT(ui_screenshot, show a picture file.);
+#endif
 

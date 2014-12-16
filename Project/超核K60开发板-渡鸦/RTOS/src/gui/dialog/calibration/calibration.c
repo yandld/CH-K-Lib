@@ -129,7 +129,11 @@ WM_HWIN GUI_ExecCalibrationDialog(GUI_TouchData* pTouchData)
         _WaitForPressedState(1);
         State++;
     }
-    rt_memcpy(pTouchData, &tData, sizeof(GUI_TouchData));
+    if(pTouchData != RT_NULL)
+    {
+        rt_memcpy(pTouchData, &tData, sizeof(GUI_TouchData));
+    }
+    GUI_EndDialog(hWin, 0);
     return 0;
 }
 

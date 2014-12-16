@@ -53,7 +53,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 msg.exec = GUI_AooDispChooseFile;
                 break;
             case ID_BUTTON_4:
-                
+                msg.exec = GUI_ExecCalibrationDialog;
                 break;      
             case ID_BUTTON_5:
                 break;

@@ -7,6 +7,7 @@
 const char *FileNameTbl[] = {"JPEG", "JPG", "TXT", "C", "CPP", "LOG", "PNG", "MD", "INI", "DOC", "BMP", "AVI", "WMV", "BIN", "HEX"};
 
 
+
 GUI_FileType GUI_AppGetFileType(const char * fileName)
 {
     rt_uint8_t i;

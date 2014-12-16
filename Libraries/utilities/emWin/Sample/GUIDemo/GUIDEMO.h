@@ -106,22 +106,22 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 */
 
 
-#define   SHOW_GUIDEMO_AATEXT            (1)
+#define   SHOW_GUIDEMO_AATEXT            (0)
 #define   SHOW_GUIDEMO_AUTOMOTIVE        (1)
-#define   SHOW_GUIDEMO_BARGRAPH          (0)
+#define   SHOW_GUIDEMO_BARGRAPH          (1)
 #define   SHOW_GUIDEMO_BITMAP            (0)
 #define   SHOW_GUIDEMO_COLORBAR          (1)
 #define   SHOW_GUIDEMO_CURSOR            (1)
 #define   SHOW_GUIDEMO_FADING            (0)
-#define   SHOW_GUIDEMO_GRAPH             (0)
+#define   SHOW_GUIDEMO_GRAPH             (1)
 #define   SHOW_GUIDEMO_ICONVIEW          (0)
 #define   SHOW_GUIDEMO_IMAGEFLOW         (0)
-#define   SHOW_GUIDEMO_LISTVIEW          (0)
+#define   SHOW_GUIDEMO_LISTVIEW          (1)
 #define   SHOW_GUIDEMO_RADIALMENU        (0)
 #define   SHOW_GUIDEMO_SKINNING          (0)
-#define   SHOW_GUIDEMO_SPEED             (0)
+#define   SHOW_GUIDEMO_SPEED             (1)
 #define   SHOW_GUIDEMO_SPEEDOMETER       (0)
-#define   SHOW_GUIDEMO_TRANSPARENTDIALOG (0)
+#define   SHOW_GUIDEMO_TRANSPARENTDIALOG (1)
 #ifdef    RTE_Graphics_Demo_Treeview
 #define   SHOW_GUIDEMO_TREEVIEW          (0)
 #endif

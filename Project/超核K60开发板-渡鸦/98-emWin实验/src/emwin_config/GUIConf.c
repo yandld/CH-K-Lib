@@ -35,7 +35,7 @@ Purpose     : Display controller initialization
 #include <rtthread.h>
 #include "sram.h"
 
-#define GUI_NUMBYTES  (1024*256)
+#define GUI_NUMBYTES  (1024*512)
 #define GUI_BLOCKSIZE 4
 
 static void GUI_Log(const char *s)

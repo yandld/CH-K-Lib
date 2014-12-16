@@ -58,16 +58,19 @@ static int _GetData(CHOOSEFILE_INFO * pInfo)
     if(r == 0)
     {
         pInfo->pName = dirent->d_name;
+        
         if(s.st_mode & DFS_S_IFDIR)
         {
+         //   pInfo->pExt = "";
             pInfo->pAttrib = "DIR";
         }
         else
         {
-            pInfo->pAttrib = "RW";
+          //  pInfo->pExt = rt_strstr(fullpath, ".") + 1;
+            pInfo->pAttrib = "R";
         }
-        pInfo->SizeL   = s.st_size%0xFFFF;
-        pInfo->SizeH   = s.st_size/0xFFFF;
+        pInfo->SizeL   = s.st_size;
+//        pInfo->SizeH   = s.st_size/0xFFFF;
         
     }
     return r;

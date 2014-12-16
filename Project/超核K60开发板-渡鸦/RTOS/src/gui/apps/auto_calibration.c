@@ -7,7 +7,7 @@ void GUI_AppAutoCalibration(const char* path)
     hFile = open(path, O_RDONLY , 0);
     if(hFile < 0)
     {
-        rt_kprintf("create file:%s\r\n", path);
+        GUI_MessageBox("No touch data\r\n", path, GUI_MESSAGEBOX_CF_MODAL);
         hFile = open(path, O_RDWR | O_CREAT, 0);
         GUI_ExecCalibrationDialog(&tData);
 
@@ -15,8 +15,7 @@ void GUI_AppAutoCalibration(const char* path)
     }
     else
     {
-        rt_kprintf("read file %s\r\n", path);
-
+        GUI_MessageBox("Touch data succ\r\n", path, GUI_MESSAGEBOX_CF_MODAL);
         read(hFile, &tData, sizeof(GUI_TouchData));
         GUI_TOUCH_Calibrate(0, tData.aLogX[0], tData.aLogX[1], tData.aPhysX[0], tData.aPhysX[1]); /* Calibrate X-axis */
         GUI_TOUCH_Calibrate(1, tData.aLogY[0], tData.aLogY[1], tData.aPhysY[0], tData.aPhysY[1]); /* Calibrate Y-axis */

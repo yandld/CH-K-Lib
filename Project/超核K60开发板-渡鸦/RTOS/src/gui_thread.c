@@ -15,6 +15,7 @@ void gui_thread_entry(void* parameter)
 
     GUI_CURSOR_Show();
     gcd();
+    mkdir("/SF/SYS", 0);
     GUI_AppAutoCalibration("/SF/SYS/TDATA");
 	while(1)
 	{

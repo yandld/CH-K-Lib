@@ -19,15 +19,16 @@
 #endif
 
 #if (!defined(UART_BASES))
-
-#ifdef  UART3
+#ifdef  UART2
+    #define UART_BASES {UART0, UART1, UART2}
+#elif   UART3
     #define UART_BASES {UART0, UART1, UART2, UART3}
 #elif   UART4
     #define UART_BASES {UART0, UART1, UART2, UART3, UART4}
 #elif   UART5 
     #define UART_BASES {UART0, UART1, UART2, UART3, UART4, UART5}
 #else
-    #define UART_BASES {UART0, UART1, UART2}
+    #define UART_BASES {UART0, UART1}
 #endif
 #endif
 

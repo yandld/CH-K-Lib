@@ -1,8 +1,4 @@
-#include "DIALOG.h"
-#include <stdint.h>
-#include <dfs.h>
-#include <dfs_file.h>
-#include <dfs_posix.h>
+#include "gui_appdef.h"
 
 
 #define ID_FRAMEWIN_0 (GUI_ID_USER + 0x00)

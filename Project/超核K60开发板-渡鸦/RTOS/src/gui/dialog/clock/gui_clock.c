@@ -1,5 +1,4 @@
-#include "DIALOG.h"
-#include <stdint.h>
+#include "gui_appdef.h"
 #include <time.h>
 
 

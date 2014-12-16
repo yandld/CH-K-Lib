@@ -1,7 +1,5 @@
-
-#include "DIALOG.h"
 #include "gui_appdef.h"
-#include <finsh.h>
+
 
 #define ID_FRAMEWIN_0 (GUI_ID_USER + 0x00)
 #define ID_BUTTON_0 (GUI_ID_USER + 0x01)
@@ -26,6 +24,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     int     NCode;
     int     Id;
     gui_msg_t msg;
+    msg.exec = RT_NULL;
     
     switch (pMsg->MsgId)
     {
@@ -54,14 +53,17 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 msg.exec = GUI_AooDispChooseFile;
                 break;
             case ID_BUTTON_4:
-                msg.exec = GUI_ExecCalibrationDialog;
+                
                 break;      
             case ID_BUTTON_5:
                 break;
             default:
                 break;    
         }
-    rt_mq_send(guimq, &msg, sizeof(msg));
+        if(msg.exec != RT_NULL)
+        {
+            rt_mq_send(guimq, &msg, sizeof(msg));
+        }
     }
 
   default:

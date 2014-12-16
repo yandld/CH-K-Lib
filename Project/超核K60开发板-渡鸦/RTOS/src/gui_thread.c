@@ -1,8 +1,6 @@
-#include <rtthread.h>
-#include <finsh.h>
+
 #include "gui_appdef.h"
-#include "GUI.H"
-#include "WM.H"
+
 
 rt_mq_t guimq;
 
@@ -14,9 +12,10 @@ void gui_thread_entry(void* parameter)
     GUI_Init();
     GUI_DispString("gui system actived!\r\n");
     GUI_Delay(100);
-    TOUCH_MainTask();
+
     GUI_CURSOR_Show();
     gcd();
+    GUI_AppAutoCalibration("/SF/SYS/TDATA");
 	while(1)
 	{
         if(rt_mq_recv(guimq, &msg, sizeof(gui_msg_t), 1) == RT_EOK)

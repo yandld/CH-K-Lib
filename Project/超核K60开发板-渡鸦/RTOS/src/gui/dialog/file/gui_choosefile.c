@@ -1,12 +1,6 @@
 
-#include "DIALOG.h"
-#include <stdint.h>
-#include <dfs.h>
-#include <dfs_file.h>
-#include <dfs_posix.h>
-#include <stdbool.h>
 #include "gui_appdef.h"
-#include <finsh.h>
+
 
 #define _MAX_PATH 256
 static char fullpath[_MAX_PATH];

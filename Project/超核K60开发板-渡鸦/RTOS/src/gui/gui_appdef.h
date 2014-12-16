@@ -2,6 +2,10 @@
 #define __GUI_APPDEF_H__
 
 #include <rtthread.h>
+#include <finsh.h>
+#include <dfs.h>
+#include <dfs_posix.h>
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -41,18 +45,27 @@ typedef struct
     void *parameter;
 }gui_msg_t;
 
+typedef struct
+{
+    rt_uint8_t magic;
+    int aPhysX[2];
+    int aPhysY[2];
+    int aLogX[2];
+    int aLogY[2];
+}GUI_TouchData;
+
 //!< API below API should only call in GUI thread
 void GUI_AppDispImage(const char * path);
 void GUI_AppDispCalender(void);
 void GUI_AppDispTime(void);
-void GUI_AppNotepad(void);
+WM_HWIN GUI_AppNotepad(const char* path);
 const char *GUI_AooDispChooseFile(void);
 WM_HWIN GUI_AppDispSysInfo(void);
 GUI_FileType GUI_AppGetFileType(const char * fileName);
-void TOUCH_MainTask(void);
+void GUI_AppAutoCalibration(const char* path);
 WM_HWIN GUI_AppDispTaskManager(void);
 WM_HWIN GUI_AppDispCalculator(void);
-WM_HWIN GUI_ExecCalibrationDialog(void* parameter);
+WM_HWIN GUI_ExecCalibrationDialog(GUI_TouchData* pTouchData);
 
 #endif
 

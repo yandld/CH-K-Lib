@@ -1,6 +1,3 @@
-#include "DIALOG.h"
-#include <dfs_posix.h>
-#include <stdbool.h>
 #include "gui_appdef.h"
 
 
@@ -89,9 +86,9 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 {
     WM_HWIN      hItem;
     int     NCode;
-//    int     Id;
-//    static int _x;
-//    rt_kprintf("pMsg->MsgID:%d\r\n", pMsg->MsgId);
+//int     Id;
+//static int _x;
+//rt_kprintf("pMsg->MsgID:%d\r\n", pMsg->MsgId);
     switch (pMsg->MsgId)
     {
         case WM_INIT_DIALOG:

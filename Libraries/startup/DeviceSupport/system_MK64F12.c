@@ -58,12 +58,12 @@
 
 #define DISABLE_WDOG    1
 
-#define CLOCK_SETUP     0
+#define CLOCK_SETUP     1
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Default  part configuration.
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
-         Core clock = 96MHz, BusClock = 96MHz
+         Core clock = 96MHz, BusClock = 48MHz
    1 ... Multipurpose Clock Generator (MCG) in PLL Engaged External (PEE) mode
          Maximum achievable clock frequency configuration.
          Reference clock source for MCG module is an external clock source 50MHz
@@ -151,7 +151,7 @@ void SystemInit (void) {
 #if (CLOCK_SETUP == 0)
   /* SIM->CLKDIV1: OUTDIV1=0,OUTDIV2=0,OUTDIV3=1,OUTDIV4=1,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0 */
   SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0x00) |
-                SIM_CLKDIV1_OUTDIV2(0x00) |
+                SIM_CLKDIV1_OUTDIV2(0x01) |
                 SIM_CLKDIV1_OUTDIV3(0x01) |
                 SIM_CLKDIV1_OUTDIV4(0x02); /* Update system prescalers */
   /* SIM->SOPT2: PLLFLLSEL=0 */

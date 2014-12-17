@@ -30,17 +30,16 @@ static void _WriteByte2File(U8 Data, void *p)
 
 void ui_screenshot(int argc, char** argv)
 {
-    int fd, index, length;
-    char *buff_ptr;
+    int hFile;
 
-    fd = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0);
-    if (fd < 0)
+    hFile = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0);
+    if (hFile < 0)
     {
         rt_kprintf("open file:%s failed\n", argv[1]);
         return;
     }
-    GUI_BMP_Serialize(_WriteByte2File, &fd);
-    close(fd);
+    GUI_BMP_Serialize(_WriteByte2File, &hFile);
+    close(hFile);
     rt_kprintf("\r\n");
 }
 

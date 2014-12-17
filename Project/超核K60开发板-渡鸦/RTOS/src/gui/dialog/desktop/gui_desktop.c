@@ -74,14 +74,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
 
 
-WM_HWIN gcd(void)
+WM_HWIN GUI_CreateDesktopDialog(void)
 {
-    WM_HWIN hWin;
-    hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
-    return hWin;
+    GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 
-
-FINSH_FUNCTION_EXPORT(gcd, create a directory);
 
 

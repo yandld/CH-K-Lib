@@ -14,7 +14,7 @@ void gui_thread_entry(void* parameter)
     GUI_Delay(100);
 
     GUI_CURSOR_Show();
-    gcd();
+    GUI_CreateDesktopDialog();
     mkdir("/SF/SYS", 0);
     GUI_AppAutoCalibration("/SF/SYS/TDATA");
 	while(1)
@@ -41,7 +41,7 @@ void guit_thread_entry(void* parameter)
 }
 
 
-int cmd_gui_start(int argc, char** argv)
+int ui_startup(int argc, char** argv)
 {
     rt_thread_t tid;
     
@@ -59,5 +59,10 @@ int cmd_gui_start(int argc, char** argv)
     return 0;
 }
 
-FINSH_FUNCTION_EXPORT_ALIAS(cmd_gui_start, __cmd_gui_start, start gui system.);
+
+#ifdef FINSH_USING_MSH
+#include "finsh.h"
+
+MSH_CMD_EXPORT(ui_startup, show a picture file.);
+#endif
 

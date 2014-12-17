@@ -23,10 +23,10 @@
 
 ## 文件说明
 
-`[Document]`  文档
-`[Libraries]` 固件库源代码 启动代码 第三方组件 等等
-`[Project]`   工程文件及例程 主要以超核K60开发板-渡鸦 为主
-`[readme.md]` 使用前必读
+ * `[Document]`  文档
+ * `[Libraries]` 固件库源代码 启动代码 第三方组件 等等
+ * `[Project]`   工程文件及例程 主要以超核K60开发板-渡鸦 为主
+ * `[readme.md]` 使用前必读
 
 ## 联系我们及获取最新固件库
  - 论坛 [www.beyondcore.net](www.beyondcore.net)

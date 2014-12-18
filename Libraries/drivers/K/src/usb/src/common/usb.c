@@ -45,6 +45,7 @@ uint8_t USB_Init(void)
     if(USB_SetClockDiv(clock))
     {
         LIB_TRACE("USB clock setup fail\r\n");
+        return 1;
     }
     SIM->CLKDIV2 = 0x02;
     (MCG->C6 & MCG_C6_PLLS_MASK)?

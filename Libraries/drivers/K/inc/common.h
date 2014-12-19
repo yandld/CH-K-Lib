@@ -126,6 +126,7 @@ typedef enum
     kBusClock,
     kFlexBusClock,
     kFlashClock,
+    kMCGOutClock,
     kClockNameCount,
 }CLOCK_Source_Type; 
 

@@ -3,17 +3,15 @@
 
 static int USB_SetClockDiv(uint32_t srcClock)
 {
-    uint8_t usbfrac_max, usbdiv_max,frac,div;
-    usbfrac_max = 1;
-    usbdiv_max = 7;
+    uint8_t frac,div;
     
     /* clear all divivder */
     SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBDIV_MASK;
     SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBFRAC_MASK;
     
-    for(frac=0;frac<usbfrac_max;frac++)
+    for(frac = 0; frac < 2; frac++)
     {
-        for(div=0;div<usbdiv_max;div++)
+        for(div = 0; div < 8; div++)
         {
             if((srcClock*(frac+1))/(div+1) == 48000000)
             {
@@ -41,17 +39,24 @@ uint8_t USB_Init(void)
     /* clock config */
     SIM->SOPT2 |= SIM_SOPT2_USBSRC_MASK;
     uint32_t clock;
-    CLOCK_GetClockFrequency(kCoreClock, &clock);
+    CLOCK_GetClockFrequency(kMCGOutClock, &clock);
     if(USB_SetClockDiv(clock))
     {
         LIB_TRACE("USB clock setup fail\r\n");
         return 1;
     }
-    SIM->CLKDIV2 = 0x02;
+
+    SIM->SOPT2 &= ~SIM_SOPT2_PLLFLLSEL_MASK;
+#ifdef SIM_SOPT2_PLLFLLSEL
+    (MCG->C6 & MCG_C6_PLLS_MASK)?
+    (SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL(1)):   /* PLL */
+    (SIM->SOPT2 &= ~SIM_SOPT2_PLLFLLSEL(0));  /* FLL */
+#else
     (MCG->C6 & MCG_C6_PLLS_MASK)?
     (SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK):   /* PLL */
     (SIM->SOPT2 &= ~SIM_SOPT2_PLLFLLSEL_MASK);  /* FLL */
-
+#endif
+    
     /* enable USB clock */
     SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
     

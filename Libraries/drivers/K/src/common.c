@@ -56,6 +56,9 @@ int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* Frequenct
         case kFlashClock:
             *FrequenctInHz = MCGOutClock / MCGOUT_TO_FLASH_DIVIDER;	
             break;
+        case kMCGOutClock:
+            *FrequenctInHz = MCGOutClock;
+            break;
         default:
             return 1;
     }

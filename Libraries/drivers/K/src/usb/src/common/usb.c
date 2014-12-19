@@ -85,7 +85,7 @@ uint8_t USB_Init(void)
     /* enable pull down reisger */
 	USB0->CONTROL |= USB_CONTROL_DPPULLUPNONOTG_MASK;
 
-    NVIC_EnableIRQ(USB0_IRQn); //使能USB模块IRQ中断
+
 	return 0;
 }
 

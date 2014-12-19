@@ -77,9 +77,14 @@ int main(void)
     }
 
     SD_QuickInit(2000*1000);
-    USB_Init();
+    if(USB_Init())
+    {
+        printf("USB  Init failed, clock must be 96M or 48M\r\n");
+        while(1);
+    }
     USB_Class_MSC_Init(0, USB_App_Callback, NULL, MSD_Event_Callback);
-			                    
+    NVIC_EnableIRQ(USB0_IRQn);
+    
     while(1)
     {
         USB_MSC_Periodic_Task();

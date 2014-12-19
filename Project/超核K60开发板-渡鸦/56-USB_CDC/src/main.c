@@ -115,9 +115,14 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     printf("USB CDC Test\r\n");
-    USB_Init();
+    if(USB_Init())
+    {
+        printf("USB  Init failed, clock must be 96M or 48M\r\n");
+        while(1);
+    }
     USB_Class_CDC_Init(0, USB_App_Callback, NULL, USB_Notify_Callback, TRUE);
-                                           
+    NVIC_EnableIRQ(USB0_IRQn);
+	
     while(1)
     {
         /* call the periodic task function */

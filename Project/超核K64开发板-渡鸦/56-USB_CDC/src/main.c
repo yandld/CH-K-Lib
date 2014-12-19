@@ -117,7 +117,8 @@ int main(void)
     printf("USB CDC Test\r\n");
     USB_Init();
     USB_Class_CDC_Init(0, USB_App_Callback, NULL, USB_Notify_Callback, TRUE);
-                                           
+    NVIC_EnableIRQ(USB0_IRQn);
+    
     while(1)
     {
         /* call the periodic task function */

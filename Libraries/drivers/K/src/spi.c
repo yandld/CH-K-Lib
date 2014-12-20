@@ -33,12 +33,26 @@ static SPI_CallBackType SPI_CallBackTable[ARRAY_SIZE(SPI_InstanceTable)] = {NULL
 
 static const struct reg_ops SIM_SPIClockGateTable[] =
 {
+#ifdef SIM_SCGC6_DSPI0_MASK
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_DSPI0_MASK},
+#else
     {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI0_MASK},
+#endif
+    
 #ifdef SPI1
+#ifdef SIM_SCGC6_DSPI1_MASK
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_DSPI1_MASK},
+#else
     {(void*)&(SIM->SCGC6), SIM_SCGC6_SPI1_MASK},
 #endif
+#endif
+    
 #ifdef SPI2
+#ifdef SIM_SCGC3_DSPI2_MASK
+    {(void*)&(SIM->SCGC3), SIM_SCGC3_DSPI2_MASK},
+#else
     {(void*)&(SIM->SCGC3), SIM_SCGC3_SPI2_MASK},
+#endif
 #endif
 };
 static const IRQn_Type SPI_IRQnTable[] = 

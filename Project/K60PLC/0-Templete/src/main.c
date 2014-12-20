@@ -2,10 +2,20 @@
 
 
 #define TEST_LENGTH_SAMPLES 2048 
+/* ------------------------------------------------------------------ 
+* Global variables for FFT Bin Example 
+* ------------------------------------------------------------------- */ 
+uint32_t fftSize = 1024; 
+uint32_t ifftFlag = 0; 
+uint32_t doBitReverse = 1; 
+ 
+/* Reference index at which max energy of bin ocuurs */ 
+uint32_t refIndex = 213, testIndex = 0; 
 
 extern float32_t testInput_f32_10khz[TEST_LENGTH_SAMPLES]; 
-static float32_t testOutput[TEST_LENGTH_SAMPLES/2]; 
- 
+static float32_t testOutput[TEST_LENGTH_SAMPLES/2];  
+
+
 int main(void) {
     DelayInit();
     /* 初始化一个引脚 设置为推挽输出 */
@@ -24,9 +34,25 @@ int main(void) {
 	}
 	printf(" ]\n\r");
 	
-    while(1) {
+	arm_status status; 
+	float32_t maxValue; 
+	status = ARM_MATH_SUCCESS; 
+    
+	arm_cfft_f32(&arm_cfft_sR_f32_len1024, testInput_f32_10khz, ifftFlag, doBitReverse);   
+	arm_cmplx_mag_f32(testInput_f32_10khz, testOutput, fftSize);  
+	arm_max_f32(testOutput, fftSize, &maxValue, &testIndex); 
+	
+	if(testIndex !=  refIndex) { 
+		status = ARM_MATH_TEST_FAILURE; 
+	} 
+	
+   
+  if( status != ARM_MATH_SUCCESS) 
+  { 
+    while(1); 
+  } 
 
-    }
+  while(1);                             /* main function does not return */
 }
 
 

@@ -8,7 +8,7 @@
 /* DSP lib */
 #define ARM_MATH_CM4
 #include "arm_math.h"
-
+#include "arm_const_structs.h"
 
 /**Gauss noise*/
 /**采样率10KHz 高斯白噪声*/

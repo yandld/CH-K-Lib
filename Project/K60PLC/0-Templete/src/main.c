@@ -6,8 +6,8 @@ int main(void)
 {
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 8, kGPIO_Mode_OPP);
-    //UART_QuickInit(UART5_RX_PE08_TX_PE09, 115200);
-   // printf("!!\r\n");
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    printf("System start!\r\n");
     
     
 	/**It's clear to display choose 1 demo*/

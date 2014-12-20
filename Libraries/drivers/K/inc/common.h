@@ -27,6 +27,8 @@
 #include "MK40D10.h"
 #elif MK60D10
 #include "MK60D10.h"
+#elif MK60F15
+#include "MK60F15.h"
 #elif MK60DZ10
 #include "MK60DZ10.h"
 #elif MK70F12

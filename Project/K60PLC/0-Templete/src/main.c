@@ -5,8 +5,11 @@
 int main(void)
 {
     DelayInit();
-    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    GPIO_QuickInit(HW_GPIOE, 8, kGPIO_Mode_OPP);
+    //UART_QuickInit(UART5_RX_PE08_TX_PE09, 115200);
+   // printf("!!\r\n");
+    
+    
 	/**It's clear to display choose 1 demo*/
 //	/**basic fun*/
 //	arm_abs_f32_demo();			
@@ -31,7 +34,7 @@ int main(void)
 //	arm_cmplx_mult_cmplx_f32_demo();
     while(1)
     {
-        GPIO_ToggleBit(HW_GPIOE, 6);
+        GPIO_ToggleBit(HW_GPIOE, 8);
         DelayMs(500);
     }
 }

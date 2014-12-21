@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>mk64f12</TargetName>
+      <TargetName>mk60f15</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK64F12 RAVEN DEBUG</Define>
+              <Define>MK60F15 RAVEN DEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\src\demo</IncludePath>
             </VariousControls>
@@ -480,11 +480,6 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
             </File>
             <File>
-              <FileName>i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
-            </File>
-            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
@@ -493,11 +488,6 @@
               <FileName>lptmr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\lptmr.c</FilePath>
-            </File>
-            <File>
-              <FileName>dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
             </File>
             <File>
               <FileName>flexbus.c</FileName>
@@ -515,11 +505,6 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\rtc.c</FilePath>
             </File>
             <File>
-              <FileName>enet.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\enet.c</FilePath>
-            </File>
-            <File>
               <FileName>tsi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\tsi.c</FilePath>
@@ -528,11 +513,6 @@
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
-            </File>
-            <File>
-              <FileName>sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
             </File>
           </Files>
         </Group>

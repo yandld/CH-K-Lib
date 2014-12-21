@@ -162,7 +162,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>JL2CM3</Key>
-          <Name>-U20080643 -O14 -S0 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight JTAG-DP") -D00(4BA00477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC1000 -FN1 -FF0MK_P1M0 -FS00 -FL0100000 -FP0($$Device:MK60FN1M0xxx15$Flash\MK_P1M0.FLM)</Name>
+          <Name>-U20080643 -O14 -S0 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight JTAG-DP") -D00(4BA00477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC1000 -FN1 -FF0MK_P1M0.FLM -FS00 -FL0100000 -FP0($$Device:MK60FN1M0xxx15$Flash\MK_P1M0.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -217,10 +217,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>49</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>46</TopLine>
+      <CurrentLine>75</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\system_MK60F15.c</PathWithFileName>
       <FilenameWithoutPath>system_MK60F15.c</FilenameWithoutPath>
@@ -235,8 +235,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>472</TopLine>
+      <CurrentLine>473</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60F15.s</PathWithFileName>
       <FilenameWithoutPath>startup_MK60F15.s</FilenameWithoutPath>
@@ -257,10 +257,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>23</ColumnNumber>
+      <ColumnNumber>10</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>4</TopLine>
-      <CurrentLine>19</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>14</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -273,10 +273,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>26</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>3</CurrentLine>
+      <TopLine>91</TopLine>
+      <CurrentLine>92</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\demo\dsp_basic_demo.c</PathWithFileName>
       <FilenameWithoutPath>dsp_basic_demo.c</FilenameWithoutPath>
@@ -289,10 +289,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>15</ColumnNumber>
+      <ColumnNumber>30</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>23</TopLine>
-      <CurrentLine>39</CurrentLine>
+      <CurrentLine>24</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\demo\dsp_fast_demo.c</PathWithFileName>
       <FilenameWithoutPath>dsp_fast_demo.c</FilenameWithoutPath>
@@ -305,10 +305,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>4</ColumnNumber>
+      <ColumnNumber>24</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>101</CurrentLine>
+      <TopLine>123</TopLine>
+      <CurrentLine>131</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\demo\dsp_complex_demo.c</PathWithFileName>
       <FilenameWithoutPath>dsp_complex_demo.c</FilenameWithoutPath>
@@ -347,8 +347,8 @@
       <Focus>0</Focus>
       <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>30</TopLine>
-      <CurrentLine>45</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\uart.c</PathWithFileName>
       <FilenameWithoutPath>uart.c</FilenameWithoutPath>
@@ -443,8 +443,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>27</TopLine>
+      <CurrentLine>30</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\i2c.c</PathWithFileName>
       <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
@@ -457,10 +457,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>38</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>49</TopLine>
+      <CurrentLine>52</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\spi.c</PathWithFileName>
       <FilenameWithoutPath>spi.c</FilenameWithoutPath>
@@ -507,8 +507,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>7</TopLine>
-      <CurrentLine>16</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\flexbus.c</PathWithFileName>
       <FilenameWithoutPath>flexbus.c</FilenameWithoutPath>
@@ -555,8 +555,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>265</TopLine>
+      <CurrentLine>268</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\enet.c</PathWithFileName>
       <FilenameWithoutPath>enet.c</FilenameWithoutPath>
@@ -587,8 +587,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>106</TopLine>
+      <CurrentLine>109</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\common.c</PathWithFileName>
       <FilenameWithoutPath>common.c</FilenameWithoutPath>
@@ -601,10 +601,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>27</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>112</TopLine>
+      <CurrentLine>115</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\sd.c</PathWithFileName>
       <FilenameWithoutPath>sd.c</FilenameWithoutPath>
@@ -615,7 +615,7 @@
 
   <Group>
     <GroupName>DSP_Lib</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

@@ -33,7 +33,7 @@
 #endif
 
 /* gloabl const table defination */
-UART_Type * const UART_InstanceTable[] = UART_BASES;
+static UART_Type * const UART_InstanceTable[] = UART_BASES;
 /* callback function slot */
 static UART_CallBackTxType UART_CallBackTxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
 static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};

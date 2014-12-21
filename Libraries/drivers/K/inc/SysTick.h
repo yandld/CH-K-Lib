@@ -21,6 +21,7 @@ void SYSTICK_Cmd(bool NewState);
 void SYSTICK_ITConfig(bool NewState);
 void SYSTICK_DelayUs(uint32_t us);
 void SYSTICK_DelayMs(uint32_t ms);
+uint32_t SYSTICK_GetVal(void);
 
 #endif
 

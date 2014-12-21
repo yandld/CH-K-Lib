@@ -141,7 +141,12 @@ void SYSTICK_DelayMs(uint32_t ms)
         while((temp & SysTick_CTRL_ENABLE_Msk) && !(temp & SysTick_CTRL_COUNTFLAG_Msk));
 	}
 }
- 
+
+uint32_t SYSTICK_GetVal(void)
+{
+    return SysTick->VAL;
+}
+
  
 //! @}
 

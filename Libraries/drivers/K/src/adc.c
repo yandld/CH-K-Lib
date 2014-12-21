@@ -25,7 +25,7 @@
 
 #endif
 /* global vars */
-ADC_Type * const ADC_InstanceTable[] = ADC_BASES;
+static ADC_Type * const ADC_InstanceTable[] = ADC_BASES;
 static ADC_CallBackType ADC_CallBackTable[ARRAY_SIZE(ADC_InstanceTable)] = {NULL};
 
 static const struct reg_ops SIM_ADCClockGateTable[] =

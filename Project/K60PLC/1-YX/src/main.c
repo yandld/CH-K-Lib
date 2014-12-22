@@ -1,5 +1,5 @@
 #include "chlib_k.h"
-
+#include "fifo.h"
 #include "boarddef.h"
 
 
@@ -14,7 +14,6 @@ static void PIT0_ISR(void)
     static int chl;
     static int i;
     *pADCChl[chl] = ADC_ReadValue(gADC_InstanceTable[chl], kADC_MuxA);
-    
     
     ADC_StartConversion(gADC_InstanceTable[chl], gADC_ChnTable[chl], kADC_MuxA);
     
@@ -60,15 +59,17 @@ int main(void)
         pADCChl[i] = &gADCBuf[i][0];
     }
     
-    PIT_QuickInit(HW_PIT_CH0, 833);
+    // Init PIT 833US
+    PIT_QuickInit(HW_PIT_CH0, 833); 
     PIT_CallbackInstall(HW_PIT_CH0, PIT0_ISR);
     PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
     
-
+    // Test ADC conversion time 
     i = SYSTICK_GetVal();
     ADC_QuickReadValue(ADC1_SE0_DP0);
     printf("ADC_QuickReadValue cost: %dticks\r\n", i - SYSTICK_GetVal());
     
+    //Test FIFO system
     fifo_test();
     
     while(1)

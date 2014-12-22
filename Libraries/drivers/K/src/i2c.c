@@ -27,9 +27,18 @@ static I2C_CallBackType I2C_CallBackTable[ARRAY_SIZE(I2C_InstanceTable)] = {NULL
 
 static const uint32_t SIM_I2CClockGateTable[] =
 {
+#ifdef SIM_SCGC4_IIC0_MASK
+    SIM_SCGC4_IIC0_MASK,
+#else
     SIM_SCGC4_I2C0_MASK,
+#endif
+    
 #ifdef I2C1
+#ifdef SIM_SCGC4_IIC1_MASK
+    SIM_SCGC4_IIC1_MASK,
+#else
     SIM_SCGC4_I2C1_MASK,
+#endif
 #endif
 };
 static const IRQn_Type I2C_IRQnTable[] = 

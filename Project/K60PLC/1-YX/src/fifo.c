@@ -1,5 +1,5 @@
 #include "fifo.h"
-
+#include <stdio.h>
 
 void fifo_init(struct FIFO *fifo,int size, uint16_t *buf)  
 /*???*/  
@@ -74,9 +74,9 @@ int fifo_test(void)
     fifo_put(&fifo, 3);
     fifo_put(&fifo, 4);
     fifo_put(&fifo, 5);
-    printf("!%d\r\n", buf[fifo_get(&fifo)]);
-    printf("!!%d\r\n", buf[fifo_get(&fifo)]);
-    printf("!!!%d\r\n", buf[fifo_get(&fifo)]);
+    printf("get once:%d\r\n", buf[fifo_get(&fifo)]);
+    printf("get once:%d\r\n", buf[fifo_get(&fifo)]);
+    printf("get once:%d\r\n", buf[fifo_get(&fifo)]);
     printf("free:%d\r\n", fifo_free(&fifo));
     
     return 0;

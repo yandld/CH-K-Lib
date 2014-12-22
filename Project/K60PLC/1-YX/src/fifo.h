@@ -24,7 +24,7 @@ int fifo_put(struct FIFO *fifo, uint16_t data);
 int fifo_get(struct FIFO *fifo);  
 int fifo_status(struct FIFO *fifo);  
 int fifo_free(struct FIFO *fifo);  
-
+int fifo_test(void);
 
 
 #endif

@@ -1,37 +1,37 @@
 #include "chlib_k.h"
 #include "fifo.h"
 #include "boarddef.h"
+#include "DataScope_DP.h"
 
+uint16_t gFIFOBuf[16][64];
 
-volatile uint16_t gFIFOBuf[16][64];
-volatile uint16_t *pADCChl[16];
-volatile static int cnt;
 static struct FIFO fifo[16];
     
-const int gADC_InstanceTable[] =   ADC_PORTS;
-const int gADC_ChnTable[] =        ADC_CHANNELS;
+const int gADC_InstanceTable[] =  ADC_PORTS;
+const int gADC_ChnTable[] = ADC_CHANNELS;
 
 static void PIT0_ISR(void)
 {
+    uint16_t val;
     static int chl;
     static int i;
-    *pADCChl[chl] = ADC_ReadValue(gADC_InstanceTable[chl], kADC_MuxA);
+    val = ADC_ReadValue(gADC_InstanceTable[chl], kADC_MuxA);
+    
+    fifo_put(&fifo[chl], val);
     
     ADC_StartConversion(gADC_InstanceTable[chl], gADC_ChnTable[chl], kADC_MuxA);
     
     chl++;
     chl%=16;
-    
-    cnt++;
 }
 
 int main(void)
 {
-    uint32_t i;
+    uint32_t i, cnt;
     
     // basic init
     DelayInit();
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_QuickInit(BOARD_UART_MAP, 115200);
     
     // start running systick
     SYSTICK_Init(1000*1000);
@@ -90,9 +90,25 @@ int main(void)
         LED1 = !LED1;
         LED2 = !LED2;
         LED3 = !LED3;
-        printf("%d\r\n", cnt);
-        cnt = 0;
-        DelayMs(500);
+        DataScope_Get_Channel_Data( 1.0,  1 ); //??? 1.0  ???? 1
+        DataScope_Get_Channel_Data( 2.0 , 2 ); //??? 2.0  ???? 2
+        DataScope_Get_Channel_Data( 3.0 , 3 ); //??? 3.0  ???? 3
+        DataScope_Get_Channel_Data( 4.0 , 4 ); //??? 4.0  ???? 4
+        DataScope_Get_Channel_Data( 5.0 , 5 ); //??? 5.0  ???? 5
+        DataScope_Get_Channel_Data( 6.0 , 6 ); //??? 6.0  ???? 6
+        DataScope_Get_Channel_Data( 7.0 , 7 ); //??? 7.0  ???? 7
+        DataScope_Get_Channel_Data( 8.0 , 8 ); //??? 8.0  ???? 8
+        DataScope_Get_Channel_Data( 9.0 , 9 ); //??? 9.0  ???? 9
+        DataScope_Get_Channel_Data( 10.0 , 10); //??? 10.0 ???? 10
+        
+        cnt = DataScope_Data_Generate(10); //??10???? ??????,???????
+		
+        for( i = 0 ; i < cnt; i++)  //????,??????   
+        {
+            UART_WriteByte(HW_UART0, DataScope_OutPut_Buffer[i]);  
+        }  
+        
+        DelayMs(5);
     }
 }
 

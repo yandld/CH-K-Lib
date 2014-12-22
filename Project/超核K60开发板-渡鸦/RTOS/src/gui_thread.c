@@ -63,6 +63,6 @@ int ui_startup(int argc, char** argv)
 #ifdef FINSH_USING_MSH
 #include "finsh.h"
 
-MSH_CMD_EXPORT(ui_startup, show a picture file.);
+MSH_CMD_EXPORT(ui_startup, start GUI app.);
 #endif
 

@@ -28,12 +28,17 @@ static void PIT0_ISR(void)
 int main(void)
 {
     uint32_t i;
+    
+    // basic init
     DelayInit();
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    
+    // start running systick
     SYSTICK_Init(1000*1000);
     SYSTICK_Cmd(true);
     
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    printf("System start!\r\n");
+    CLOCK_GetClockFrequency(kCoreClock, &i);
+    printf("CoreClock:%d\r\n", i);
     
     //init LED
     GPIO_QuickInit(LED0_PORT, LED0_PIN, kGPIO_Mode_OPP);

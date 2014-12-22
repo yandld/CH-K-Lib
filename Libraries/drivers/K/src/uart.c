@@ -328,6 +328,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     is_fitst_init = false;
 }
 
+#pragma weak UART_SelectDebugInstance
 void UART_SelectDebugInstance(uint32_t instance)
 {
 	/* param check */

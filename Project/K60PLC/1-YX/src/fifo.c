@@ -1,8 +1,7 @@
 #include "fifo.h"
 #include <stdio.h>
 
-void fifo_init(struct FIFO *fifo,int size, uint16_t *buf)  
-/*???*/  
+void fifo_init(struct FIFO *fifo,int size, uint16_t *buf)   
 {  
         fifo->buf = buf;  
         fifo->flags = 0;            
@@ -33,8 +32,7 @@ int fifo_put(struct FIFO *fifo, uint16_t data)
     return 0;  
 }  
 
-int fifo_get(struct FIFO *fifo)  
-/*?FIFO ??????? */  
+int fifo_get(struct FIFO *fifo)   
 {  
     int data;  
     if(fifo->free == fifo->size)

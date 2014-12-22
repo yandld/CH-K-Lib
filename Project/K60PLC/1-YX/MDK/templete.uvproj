@@ -244,7 +244,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>0</Im2Chk>
+            <Im2Chk>1</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -431,6 +431,11 @@
               <FileName>fifo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>boarddef.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\boarddef.h</FilePath>
             </File>
           </Files>
         </Group>

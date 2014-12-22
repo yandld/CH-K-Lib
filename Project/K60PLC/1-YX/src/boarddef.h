@@ -3,6 +3,9 @@
 
 #include "chlib_k.h"
 
+#define     BOARD_UART_INSTANCE     HW_UART0
+#define     BOARD_UART_MAP          UART0_RX_PD06_TX_PD07
+
 #define     LED0_PORT   HW_GPIOE
 #define     LED0_PIN    10
 #define     LED1_PORT   HW_GPIOE
@@ -22,6 +25,16 @@
 #define ADC_PORTS           {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
+#define DIN_PINS            
+#define DIN_PORTS           
+
+#define DOUT_PINS           
+#define DOUT_PORTS          
+
+
+#define RS485_CH0_MAP       
+#define RS485_CH1_MAP       
+#define RS485_CH2_MAP       
 
 
 

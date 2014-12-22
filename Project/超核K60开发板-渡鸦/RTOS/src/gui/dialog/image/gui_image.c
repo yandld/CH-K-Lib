@@ -94,7 +94,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
         case WM_INIT_DIALOG:
             hItem = pMsg->hWin;
             FRAMEWIN_AddCloseButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
-            FRAMEWIN_AddMaxButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
+            //FRAMEWIN_AddMaxButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
             WM_MakeModal(hItem);
         
             hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);

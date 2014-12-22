@@ -25,14 +25,14 @@ int main(void)
     /* 打印芯片信息 */
     printf("%s - %dP\r\n", CPUIDY_GetFamID(), CPUIDY_GetPinCount());
     /* 打印时钟频率 */
-    CLOCK_GetClockFrequency(kCoreClock, &clock);
-    printf("core clock:%dHz\r\n", clock);
-    CLOCK_GetClockFrequency(kBusClock, &clock);
-    printf("bus clock:%dHz\r\n", clock);
+//  CLOCK_GetClockFrequency(kCoreClock, &clock);
+//    printf("core clock:%dHz\r\n", clock);
+//    CLOCK_GetClockFrequency(kBusClock, &clock);
+ //   printf("bus clock:%dHz\r\n", clock);
 
     while(1)
     { 
-        DataScope_Get_Channel_Data( sin(num+=0.1) , 1 ); //将数据 1.0  写入通道 1
+        DataScope_Get_Channel_Data( sin(num+=0.5) , 1 ); //将数据 1.0  写入通道 1
         DataScope_Get_Channel_Data( 2.0 , 2 ); //将数据 2.0  写入通道 2
         DataScope_Get_Channel_Data( 3.0 , 3 ); //将数据 3.0  写入通道 3
         DataScope_Get_Channel_Data( 4.0 , 4 ); //将数据 4.0  写入通道 4
@@ -49,8 +49,8 @@ int main(void)
         {
             UART_WriteByte(HW_UART0, DataScope_OutPut_Buffer[i]);  
         }
-        GPIO_ToggleBit(HW_GPIOE, 6);
-        DelayMs(5);
+    //    GPIO_ToggleBit(HW_GPIOE, 6);
+        DelayMs(1);
         }
 }
 

@@ -63,7 +63,7 @@ const char *GUI_AooDispChooseFile(void);
 WM_HWIN GUI_AppDispSysInfo(void);
 GUI_FileType GUI_AppGetFileType(const char * fileName);
 void GUI_AppAutoCalibration(const char* path);
-WM_HWIN GUI_AppDispTaskManager(void);
+WM_HWIN GUI_CreateTaskerDialog(void);
 WM_HWIN GUI_AppDispCalculator(void);
 WM_HWIN GUI_ExecCalibrationDialog(GUI_TouchData* pTouchData);
 

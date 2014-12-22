@@ -56,6 +56,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 msg.exec = GUI_ExecCalibrationDialog;
                 break;      
             case ID_BUTTON_5:
+                msg.exec = GUI_CreateTaskerDialog;
                 break;
             default:
                 break;    

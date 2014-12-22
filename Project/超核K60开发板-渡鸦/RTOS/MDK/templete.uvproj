@@ -967,6 +967,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\gui\dialog\tasker\tasker.c</FilePath>
             </File>
+            <File>
+              <FileName>tasker_page1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\dialog\tasker\tasker_page1.c</FilePath>
+            </File>
+            <File>
+              <FileName>tasker_page2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\dialog\tasker\tasker_page2.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2610,6 +2620,16 @@
               <FileName>tasker.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\gui\dialog\tasker\tasker.c</FilePath>
+            </File>
+            <File>
+              <FileName>tasker_page1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\dialog\tasker\tasker_page1.c</FilePath>
+            </File>
+            <File>
+              <FileName>tasker_page2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\dialog\tasker\tasker_page2.c</FilePath>
             </File>
           </Files>
         </Group>

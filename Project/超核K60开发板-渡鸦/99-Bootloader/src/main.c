@@ -161,7 +161,7 @@ int main(void)
     
     /* set DMA callback and initalize transfer */
     DMA_CallbackInstall(HW_DMA_CH0, DMA_ISR);
-    DMA_ITConfig(HW_DMA_CH0, kDMA_IT_Major);
+    DMA_ITConfig(HW_DMA_CH0, kDMA_IT_Major, true);
     DMA_EnableRequest(HW_DMA_CH0);
     
     msg_t *pMsg;

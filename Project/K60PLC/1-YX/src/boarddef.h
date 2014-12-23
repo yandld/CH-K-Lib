@@ -7,13 +7,13 @@
 #define     BOARD_UART_MAP          UART0_RX_PD06_TX_PD07
 
 #define     LED0_PORT   HW_GPIOE
-#define     LED0_PIN    10
+#define     LED0_PIN    (10)
 #define     LED1_PORT   HW_GPIOE
-#define     LED1_PIN    11
+#define     LED1_PIN    (11)
 #define     LED2_PORT   HW_GPIOE
-#define     LED2_PIN    12
+#define     LED2_PIN    (12)
 #define     LED3_PORT   HW_GPIOE
-#define     LED3_PIN    24
+#define     LED3_PIN    (24)
 
 #define     LED0  PEout(LED0_PIN)
 #define     LED1  PEout(LED1_PIN)
@@ -25,19 +25,27 @@
 #define ADC_PORTS           {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
-#define DIN_PINS            
-#define DIN_PORTS           
-
-#define DOUT_PINS           
-#define DOUT_PORTS          
-
-
-#define RS485_CH0_MAP       
-#define RS485_CH1_MAP       
-#define RS485_CH2_MAP       
+#define DIN_PINS            {27, 26, 25, 24, 17, 16};
+#define DIN_PORTS           { 0,  0,  0,  0,  0,  0};
+#define DIN0                PAin(27)
+#define DIN1                PAin(26)
+#define DIN2                PAin(25)
+#define DIN3                PAin(24)
+#define DIN4                PAin(17)
+#define DIN5                PAin(16)
 
 
+#define DOUT_PINS           {15, 14, 13, 12, 11, 10};
+#define DOUT_PORTS          { 0,  0,  0,  0,  0,  0};
 
+#define RELAY_PINS          {21, 20, 19, 18, 17, 16};
+#define RELAT_PORTS         { 1,  1,  1,  1,  1,  1};
+
+#define RS485_CH1_MAP       UART5_RX_PE09_TX_PE08
+#define RS485_CH2_MAP       UART3_RX_PE05_TX_PE04
+#define RS485_CH3_MAP       UART4_RX_PC14_TX_PC15
+
+#define BOARD_I2C_MAP       I2C1_SCL_PE01_SDA_PE00
 
 
 #endif

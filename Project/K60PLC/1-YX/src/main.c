@@ -32,6 +32,9 @@ int main(void)
     // basic init
     DelayInit();
     UART_QuickInit(BOARD_UART_MAP, 115200);
+    UART_QuickInit(RS485_CH1_MAP, 115200);
+    UART_QuickInit(RS485_CH2_MAP, 115200);
+    UART_QuickInit(RS485_CH3_MAP, 115200);
     
     // start running systick
     SYSTICK_Init(1000*1000);

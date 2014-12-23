@@ -4,10 +4,8 @@
 #define ID_FRAMEWIN_0  (GUI_ID_USER + 0x00)
 #define ID_MULTIPAGE_0  (GUI_ID_USER + 0x04)
 
-
-extern const GUI_WIDGET_CREATE_INFO _aDialogCreate1[3];
-extern const GUI_WIDGET_CREATE_INFO _aDialogCreate2[2];
-    
+WM_HWIN _TaskerAddPageTest(void);
+WM_HWIN _TaskerAddPageThread(void);  
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { FRAMEWIN_CreateIndirect, "Task Manager", ID_FRAMEWIN_0, 0, 0, 240, 320, 0, 0x0, 0 },
@@ -31,10 +29,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0);
 
     WM_HWIN hDialog;
-    hDialog = GUI_CreateDialogBox(_aDialogCreate2, GUI_COUNTOF(_aDialogCreate2), NULL, WM_UNATTACHED, 0, 0);
+    hDialog = _TaskerAddPageTest();
+    MULTIPAGE_AddPage(hItem, hDialog, "Test");
+    hDialog = _TaskerAddPageThread();
     MULTIPAGE_AddPage(hItem, hDialog, "Thread");
-    hDialog = GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), NULL, WM_UNATTACHED, 0, 0);
-    MULTIPAGE_AddPage(hItem, hDialog, "Page1");
 
     break;
   case WM_NOTIFY_PARENT:

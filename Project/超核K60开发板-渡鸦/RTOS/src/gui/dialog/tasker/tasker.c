@@ -4,6 +4,9 @@
 #define ID_FRAMEWIN_0  (GUI_ID_USER + 0x00)
 #define ID_MULTIPAGE_0  (GUI_ID_USER + 0x04)
 
+
+
+
 WM_HWIN _TaskerAddPageTest(void);
 WM_HWIN _TaskerAddPageThread(void);  
 
@@ -18,23 +21,22 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   int     NCode;
   int     Id;
 
+  int i;
+    switch (pMsg->MsgId)
+    {
+        case WM_INIT_DIALOG:
 
-  switch (pMsg->MsgId) {
-  case WM_INIT_DIALOG:
+        hItem = pMsg->hWin;
+        FRAMEWIN_SetFont(hItem, GUI_FONT_13_1);
+        FRAMEWIN_AddCloseButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0);
 
-    hItem = pMsg->hWin;
-    FRAMEWIN_SetFont(hItem, GUI_FONT_13_1);
-    FRAMEWIN_AddCloseButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
-  
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0);
-
-    WM_HWIN hDialog;
-    hDialog = _TaskerAddPageTest();
-    MULTIPAGE_AddPage(hItem, hDialog, "Test");
-    hDialog = _TaskerAddPageThread();
-    MULTIPAGE_AddPage(hItem, hDialog, "Thread");
-
-    break;
+        WM_HWIN hDialog;
+        hDialog = _TaskerAddPageTest();
+        MULTIPAGE_AddPage(hItem, hDialog, "Test");
+        hDialog = _TaskerAddPageThread();
+        MULTIPAGE_AddPage(hItem, hDialog, "Thread");
+        break;
   case WM_NOTIFY_PARENT:
     Id    = WM_GetId(pMsg->hWinSrc);
     NCode = pMsg->Data.v;

@@ -29,13 +29,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         hItem = pMsg->hWin;
         FRAMEWIN_SetFont(hItem, GUI_FONT_13_1);
         FRAMEWIN_AddCloseButton(hItem, FRAMEWIN_BUTTON_RIGHT, 0);
+        WM_MakeModal(hItem);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0);
 
         WM_HWIN hDialog;
-        hDialog = _TaskerAddPageTest();
-        MULTIPAGE_AddPage(hItem, hDialog, "Test");
         hDialog = _TaskerAddPageThread();
         MULTIPAGE_AddPage(hItem, hDialog, "Thread");
+        hDialog = _TaskerAddPageTest();
+        MULTIPAGE_AddPage(hItem, hDialog, "Performance");
+
         break;
   case WM_NOTIFY_PARENT:
     Id    = WM_GetId(pMsg->hWinSrc);

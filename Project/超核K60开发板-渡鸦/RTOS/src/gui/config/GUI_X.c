@@ -48,6 +48,7 @@ We appreciate your understanding and fairness.
 
 GUI_TIMER_TIME GUI_X_GetTime (void) 
 {
+    rt_thread_delay(1);
     return (rt_tick_get()*(1000/RT_TICK_PER_SECOND));
 }
 

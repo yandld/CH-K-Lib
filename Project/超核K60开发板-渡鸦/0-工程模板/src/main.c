@@ -39,6 +39,7 @@ int main(void)
     printf("HelloWorld!\r\n");
     while(1)
     {
+        
         /* …¡À∏–°µ∆ */
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(500);

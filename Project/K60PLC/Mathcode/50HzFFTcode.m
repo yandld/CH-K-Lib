@@ -1,0 +1,20 @@
+t_s = 0.000625;
+n = 32;
+t_start = 0.000625;
+t_end = n*t_s;
+t = t_start:t_s:t_end;
+y = 1.25*sin(2*pi*50*t);
+y_f = fft(y)*2/32;
+dur = t_end - t_start;
+sample_point = dur/t_s + 1;
+fs = 1/t_s;
+f_x = 0:1600/32:1600-t_s;
+subplot(2,1,1);
+plot(t,y);
+title('original signal');
+grid on;
+subplot(2,1,2);
+plot(f_x,abs(y_f));
+title('FFT');
+grid on;
+

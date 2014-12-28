@@ -57,8 +57,8 @@ int main(void)
 	/**key interrupt ISR*/
 	GPIO_CallbackInstall(HW_GPIOE, PortE_Key_ISR);
     /**打开PTE26、PTE27 引脚的中断下降沿触发*/
-    GPIO_ITDMAConfig(HW_GPIOE, 26,  kGPIO_IT_FallingEdge);
-	GPIO_ITDMAConfig(HW_GPIOE, 27,  kGPIO_IT_FallingEdge);
+    GPIO_ITDMAConfig(HW_GPIOE, 26,  kGPIO_IT_FallingEdge, true);
+	GPIO_ITDMAConfig(HW_GPIOE, 27,  kGPIO_IT_FallingEdge, true);
 	/**PE6 is a led show system status*/
 	GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
 	/**UART console*/
@@ -117,11 +117,11 @@ void PortE_Key_ISR (uint32_t pinxArray)
 		static uint8_t flag_key = 0;
 		if(!flag_key)
 		{
-			PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
+			PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
 		}
 		else
 		{
-			PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_Disable);
+			PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, false);
 			millisecond = 0;
 			second = 0;
 			minute = 0;

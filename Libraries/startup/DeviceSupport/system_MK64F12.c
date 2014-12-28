@@ -58,7 +58,9 @@
 
 #define DISABLE_WDOG    1
 
+#ifndef CLOCK_SETUP
 #define CLOCK_SETUP     1
+#endif
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Default  part configuration.

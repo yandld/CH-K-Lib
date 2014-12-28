@@ -51,13 +51,28 @@ int main(void)
 	
     while(1)
     {
+        static int i;
         USB_Class_HID_Periodic_Task();
         
         /* send USB data */
-        buf[2] = 1;
-        buf[1] = 0x00;
-        buf[0] = 0x00;
-        USB_Class_HID_Send_Data(0,HID_ENDPOINT,buf,4);
+        i++;i%=4;
+        switch(i)
+        {
+            case 0:
+                buf[1] = 2; buf[2] = 0;
+                break;
+            case 1:
+                buf[1] = 0; buf[2] = 2; 
+                break;
+            case 2:
+                buf[1] = -2; buf[2] = 0;
+                break;
+            case 3:
+                buf[1] = 0; buf[2] = -2;  
+                break;
+        }
+        DelayMs(50);
+        USB_Class_HID_Send_Data(0, HID_ENDPOINT, buf, 4);
     }
 }
 

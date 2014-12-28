@@ -733,6 +733,22 @@ uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t
     return I2C_BurstRead(instance, deviceAddress, registerAddress, 1, pData, 1);
 }
 
+/* i2c bus scan test */
+void I2C_Scan(uint32_t MAP)
+{
+    uint8_t i;
+    uint8_t ret;
+    uint32_t instance;
+    instance = I2C_QuickInit(MAP, 100*1000);
+    for(i = 1; i < 127; i++)
+    {
+        ret = I2C_BurstWrite(instance , i, 0, 0, NULL, 0);
+        if(!ret)
+        {
+            LIB_TRACE("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
+        }
+    }
+}
 
 int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData)
 {
@@ -795,6 +811,8 @@ int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAdd
 {
     return I2C_WriteSingleRegister(instance, chipAddr, subAddr, data);
 }
+
+
 
 //! @}
 

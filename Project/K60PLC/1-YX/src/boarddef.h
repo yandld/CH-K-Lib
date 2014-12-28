@@ -37,9 +37,22 @@
 
 #define DOUT_PINS           {15, 14, 13, 12, 11, 10};
 #define DOUT_PORTS          { 0,  0,  0,  0,  0,  0};
+#define DOUT0               PAout(15)
+#define DOUT1               PAout(14)
+#define DOUT2               PAout(13)
+#define DOUT3               PAout(12)
+#define DOUT4               PAout(11)
+#define DOUT5               PAout(10)
 
 #define RELAY_PINS          {21, 20, 19, 18, 17, 16};
 #define RELAT_PORTS         { 1,  1,  1,  1,  1,  1};
+#define RELAY0              PBout(21)
+#define RELAY1              PBout(20)
+#define RELAY2              PBout(19)
+#define RELAY3              PBout(18)
+#define RELAY4              PBout(17)
+#define RELAY5              PBout(16)
+
 
 #define RS485_CH1_MAP       UART5_RX_PE09_TX_PE08
 #define RS485_CH2_MAP       UART3_RX_PE05_TX_PE04

@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60F15 RAVEN DEBUG</Define>
+              <Define>MK60F15 RAVEN LIB_DEBUG</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\src\demo</IncludePath>
             </VariousControls>
@@ -443,6 +443,11 @@
               <FileName>DataScope_DP.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\DataScope_DP.h</FilePath>
+            </File>
+            <File>
+              <FileName>mb85rc64.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\mb85rc64.c</FilePath>
             </File>
           </Files>
         </Group>

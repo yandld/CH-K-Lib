@@ -1,15 +1,16 @@
 #include "chlib_k.h"
 #include "fifo.h"
+#include "mb85rc64.h"
 #include "boarddef.h"
 #include "DataScope_DP.h"
 
+// global vars
 uint16_t gFIFOBuf[16][64];
-
 static struct FIFO fifo[16];
-    
 const int gADC_InstanceTable[] =  ADC_PORTS;
 const int gADC_ChnTable[] = ADC_CHANNELS;
 
+//PIT ISR
 static void PIT0_ISR(void)
 {
     uint16_t val;
@@ -25,10 +26,53 @@ static void PIT0_ISR(void)
     chl%=16;
 }
 
+//485_1 Rx ISR
+static void UART_485_ISR1(uint16_t data)
+{
+    printf("%s:%d %c\r\n", __func__, data, data);
+}
+
+//485_2 Rx ISR
+static void UART_485_ISR2(uint16_t data)
+{
+    printf("%s:%d %c\r\n", __func__, data, data);
+}
+
+//485_3 Rx ISR
+static void UART_485_ISR3(uint16_t data)
+{
+    printf("%s:%d %c\r\n", __func__, data, data);
+}
+
+void rs485_test(void)
+{
+    uint32_t instance[3];
+    instance[0] = UART_QuickInit(RS485_CH1_MAP, 115200);
+    UART_CallbackRxInstall(instance[0], UART_485_ISR1);
+    
+    instance[1] = UART_QuickInit(RS485_CH2_MAP, 115200);
+    UART_CallbackRxInstall(instance[1], UART_485_ISR2);
+    
+    instance[2] = UART_QuickInit(RS485_CH3_MAP, 115200);
+    UART_CallbackRxInstall(instance[2], UART_485_ISR3);
+    
+    UART_ITDMAConfig(instance[0], kUART_IT_Rx, true);
+    UART_ITDMAConfig(instance[1], kUART_IT_Rx, true);
+    UART_ITDMAConfig(instance[2], kUART_IT_Rx, true);
+    
+    UART_WriteByte(instance[0], 'H');
+    DelayMs(10);
+    UART_WriteByte(instance[1], 'L');
+    DelayMs(10);
+    UART_WriteByte(instance[2], 'O');
+    DelayMs(10);
+    
+}
+
 int main(void)
 {
     uint32_t i, cnt;
-    
+    int r;
     // basic init
     DelayInit();
     UART_QuickInit(BOARD_UART_MAP, 115200);
@@ -64,11 +108,6 @@ int main(void)
         ADC_InitStruct.vref = kADC_VoltageVREF;
         ADC_Init(&ADC_InitStruct);   
     }
-
-    for(i = 0; i < 16; i++)
-    {
-    //    pADCChl[i] = &gADCBuf[i][0];
-    }
     
     // init PIT , 833US
     PIT_QuickInit(HW_PIT_CH0, 833); 
@@ -86,7 +125,11 @@ int main(void)
         fifo_init(&fifo[i], 32,  &gFIFOBuf[i][0]);
     }
     fifo_test();
+    rs485_test();
     
+    r = MB85RC64_Test(BOARD_I2C_MAP);
+    printf("EEP TEST %s\r\n", (r)?("OK"):("Error"));
+
     while(1)
     {
         LED0 = !LED0;
@@ -108,10 +151,10 @@ int main(void)
 		
         for( i = 0 ; i < cnt; i++)  //????,??????   
         {
-            UART_WriteByte(HW_UART0, DataScope_OutPut_Buffer[i]);  
+    //        UART_WriteByte(HW_UART0, DataScope_OutPut_Buffer[i]);  
         }  
         
-        DelayMs(5);
+        DelayMs(50);
     }
 }
 

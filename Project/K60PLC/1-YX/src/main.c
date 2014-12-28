@@ -1,6 +1,12 @@
+
+// dirver lib
 #include "chlib_k.h"
+
+// fifo 
 #include "fifo.h"
 #include "mb85rc64.h"
+
+// board pin define
 #include "boarddef.h"
 #include "DataScope_DP.h"
 

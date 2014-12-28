@@ -2,6 +2,7 @@
 #include "i2c.h"
 #include "boarddef.h"
 
+//MB85RC64 driver 
 
 #define MB85RC64_ADDR       (0x50)
 #define MB85RC64_LEN        (8192)

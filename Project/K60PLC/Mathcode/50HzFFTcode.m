@@ -14,7 +14,7 @@ plot(t,y);
 title('original signal');
 grid on;
 subplot(2,1,2);
-plot(f_x,abs(y_f));
+plot(f_x,abs(y_f)*2/32);
 title('FFT');
 grid on;
 

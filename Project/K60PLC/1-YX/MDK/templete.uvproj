@@ -449,6 +449,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\mb85rc64.c</FilePath>
             </File>
+            <File>
+              <FileName>unit_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\unit_test.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

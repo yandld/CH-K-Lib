@@ -21,6 +21,7 @@
 #include "dac.h"
 #include "i2c.h"
 #include "spi.h"
+#include "rtc.h"
 #include "cpuidy.h"
 #include "dma.h"
 #include "enet.h"

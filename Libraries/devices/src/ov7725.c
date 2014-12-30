@@ -94,12 +94,17 @@ int ov7725_probe(uint8_t i2c_instance)
             for(j = 0; j < ARRAY_SIZE(default_reg_value); j++)
             {
                 r = SCCB_WriteSingleRegister(i2c_instance, ov7725_chip_addr_table[i], default_reg_value[j].addr, default_reg_value[j].val);
+                DelayMs(3);
+                
                 if(r)
                 {
-                    /* capture error */
-                    OV7725_TRACE("device[addr:0x%X]regiser[addr:0x%X] write error!\r\n", ov7725_chip_addr_table[j], default_reg_value[j].addr);
+                    OV7725_TRACE("device[addr:0x%X]regiser[addr:0x%X] write error!\r\n", ov7725_chip_addr_table[i], default_reg_value[j].addr);
                 }
-                DelayMs(1);
+                else
+                {
+                    //OV7725_TRACE("device[addr:0x%X]regiser[addr:0x%X] write OK!\r\n", ov7725_chip_addr_table[i], default_reg_value[j].addr); 
+                }
+                
             }
             h_ov7725.addr = ov7725_chip_addr_table[i];
             h_ov7725.i2c_instance = i2c_instance;

@@ -8,13 +8,10 @@
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 #endif
 
-#define CAMERA_W        (160)
-#define CAMERA_H        (120)
-
 
 typedef enum
 {
-    H_80_W_60, /* Hight:80  Width:60 */
+    H_80_W_60, /* hight:80  width:60 */
     H_120_W_160,
     H_180_W_240,
     H_240_W_320,

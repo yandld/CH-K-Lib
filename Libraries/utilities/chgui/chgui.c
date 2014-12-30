@@ -15,9 +15,43 @@ __weak void GUI_DrawPixel(int color, int x, int y)
     /* defatult function shell */
 }
 
+__weak void GUI_DriverInit(void)
+{
+    
+}
+
+__weak void GUI_HLine(int c ,int x1, int x2, int y)
+{
+    int i;
+    for(i=x1;i<x2;i++)
+    {
+        GUI_DrawPixel(c, i, y);
+    }
+}
+
+__weak void GUI_VLine(int c ,int y1, int y2, int x)
+{
+    int i;
+    for(i=y1;i<y2;i++)
+    {
+        GUI_DrawPixel(c, x, i);
+    }
+}
+
+__weak void GUI_Fill(int c ,int x1, int y1, int x2, int y2)
+{
+    int i;
+    for(i=x1;i<x2;i++)
+    {
+        GUI_VLine(c ,y1, y2, i);
+    }
+}
+
 void CHGUI_Init(void)
 {
     /* do initalizeion here */ 
+    
+    GUI_DriverInit();
 }
 
 

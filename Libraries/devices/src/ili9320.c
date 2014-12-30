@@ -261,4 +261,15 @@ void ili9320_init(void)
     ili9320_clear(BLACK);
 }
 
+void GUI_DrawPixel(int color, int x, int y)
+{
+    write_reg(0x0020, x);
+    write_reg(0x0021, y);
+    WMLCDCOM(0x0022);
+    WMLCDDATA(color);
+}
 
+void GUI_DriverInit(void)
+{
+    ili9320_init();
+}

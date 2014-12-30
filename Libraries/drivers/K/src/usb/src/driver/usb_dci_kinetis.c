@@ -1789,6 +1789,7 @@ void USBHS_ISR(void){
 #if !HIGH_SPEED_DEVICE
 void USB0_IRQHandler(void)
 {
+   // rt_interrupt_enter();
     /* Which interrupt occured and also was enabled */
 	uint_8 v1 = USB0->ISTAT;
 	uint_8 v2 = USB0->INTEN;
@@ -1963,6 +1964,7 @@ void USB0_IRQHandler(void)
            and clear suspend condition */
         USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
     }
+    //rt_interrupt_leave();
     return;
 }
 #endif // HIGH_SPEED_DEVICE

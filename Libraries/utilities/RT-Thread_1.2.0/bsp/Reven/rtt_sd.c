@@ -45,30 +45,36 @@ rt_err_t rt_sd_indicate(rt_device_t dev, rt_size_t size)
 static rt_size_t rt_sd_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
     int r;
-    rt_mutex_take(mutex, RT_WAITING_FOREVER);
+    if(rt_mutex_take(mutex, RT_WAITING_NO))
+    {
+        return 0;
+    }
     r = SD_ReadMultiBlock(pos, (rt_uint8_t *)buffer, size);
-    rt_mutex_release(mutex);
     if(r)
     {
         rt_kprintf("sd_read error!%d\r\n", r);
         dev->open_flag = RT_DEVICE_OFLAG_CLOSE;
         return 0;
     }
+    rt_mutex_release(mutex);
 	return size;
 }
 
 static rt_size_t rt_sd_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
     int r;
-    rt_mutex_take(mutex, RT_WAITING_FOREVER);
+    if(rt_mutex_take(mutex, RT_WAITING_NO))
+    {
+        return 0;
+    }
     r = SD_WriteMultiBlock(pos, (rt_uint8_t *)buffer, size);
-    rt_mutex_release(mutex);
     if(r)
     {
         rt_kprintf("sd_write error!%d\r\n", r);
         dev->open_flag = RT_DEVICE_OFLAG_CLOSE;
         return 0;
     }
+    rt_mutex_release(mutex);
     return size;
 }
 
@@ -113,7 +119,7 @@ void rt_hw_sd_init(uint32_t instance, const char *name)
 	sd_device.control 	= rt_sd_control;
 	sd_device.user_data	= RT_NULL;
 	
-    rt_device_register(&sd_device, name, RT_DEVICE_FLAG_RDWR  | RT_DEVICE_FLAG_REMOVABLE);
+    rt_device_register(&sd_device, name, RT_DEVICE_FLAG_RDWR  | RT_DEVICE_FLAG_REMOVABLE|RT_DEVICE_FLAG_STANDALONE);
 }
 
 void rt_hw_sd_init2(void)

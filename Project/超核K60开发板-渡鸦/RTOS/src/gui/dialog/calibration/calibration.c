@@ -114,6 +114,7 @@ WM_HWIN GUI_ExecCalibrationDialog(GUI_TouchData* pTouchData)
                 tData.aPhysY[1] = GUI_TOUCH_GetyPhys();
                 WM_HideWindow(WM_GetDialogItem(hWin, ID_BUTTON_1));
                 WM_HideWindow(WM_GetDialogItem(hWin, ID_TEXT_3));
+                rt_kprintf("Touch Data:%d %d %d %d", tData.aPhysX[0], tData.aPhysX[1], tData.aPhysY[0], tData.aPhysY[1]);
                 GUI_TOUCH_Calibrate(0, tData.aLogX[0], tData.aLogX[1], tData.aPhysX[0], tData.aPhysX[1]); /* Calibrate X-axis */
                 GUI_TOUCH_Calibrate(1, tData.aLogY[0], tData.aLogY[1], tData.aPhysY[0], tData.aPhysY[1]); /* Calibrate Y-axis */
                 GUI_CURSOR_Show();

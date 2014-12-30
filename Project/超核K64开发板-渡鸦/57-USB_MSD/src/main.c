@@ -12,7 +12,6 @@
 
 void USB_App_Callback(uint8_t controller_ID, uint8_t event_type, void* val)
 {
-    printf("USB_App_Callback%d\r\n", event_type);
     if((event_type == USB_APP_BUS_RESET) || (event_type == USB_APP_CONFIG_CHANGED))
     {
         

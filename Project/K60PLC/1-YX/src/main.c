@@ -12,8 +12,8 @@
 #include "unit_test.h"
 
 
-#define PIT0_TIME_IN_US    1000
-#define PIT1_TIME_IN_US    50*1000
+#define PIT0_TIME_IN_US    (1000)
+#define PIT1_TIME_IN_US    (50*1000)
 
 // global vars
 uint16_t gFIFOBuf[16][64];
@@ -82,8 +82,7 @@ int main(void)
 
     // init RTC
     RTC_QuickInit();
-    
-    
+
     //≤‚ ‘œµÕ≥
     TestClock();
     TestADCTime();
@@ -91,6 +90,7 @@ int main(void)
     TestRS485Receive();
     TestMB85RC64();
     TestRTC();
+    TestFFTTime();
     
     // Init ADC 
     ADC_InitTypeDef ADC_InitStruct;

@@ -7,6 +7,7 @@
 #include "chlib_k.h"
 
 
+
 void TestClock(void)
 {
     uint32_t i;
@@ -112,6 +113,39 @@ void TestRTC(void)
     
 }
 
+
+float32_t test_signal[32] = {
+0		,0.3090	,0.5878	,0.8090	,0.9511	,1.0000	,0.9511	,0.8090,  
+0.5878	,0.3090	,0.0000	,-0.3090,-0.5878,-0.8090,-0.9511,-1.0000,
+-0.9511	,-0.8090,-0.5878,-0.3090,-0.0000,0.3090	,0.5878	,0.8090,
+0.9511 	,1.0000	,0.9511	,0.8090	,0.5878	,0.3090	,0.0000	,-0.3090   
+};
+
+float32_t test_input[64] = {0};
+float32_t test_output[32] = {0};
+
+void TestFFTTime(void)
+{
+    uint32_t i, clock;
+    printf("%s...\r\n", __func__);
+    
+    uint32_t fftSize = 32; 
+    uint32_t ifftFlag = 0; 
+    uint32_t doBitReverse = 1;
+    
+    i = SYSTICK_GetVal();
+
+	arm_cfft_f32(&arm_cfft_sR_f32_len32, test_input, ifftFlag, doBitReverse);
+	arm_cmplx_mag_f32(test_input, test_output, fftSize);
+    
+    i =  i - SYSTICK_GetVal();
+    
+    CLOCK_GetClockFrequency(kCoreClock, &clock);
+    
+    printf("arm_cfft_f32 cost: %dticks , %dus\r\n", i, i/(clock/1000/1000));
+    
+    printf("%s done.\r\n", __func__);
+}
 
 
 

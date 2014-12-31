@@ -39,7 +39,10 @@
 
 /* DSP lib */
 #define ARM_MATH_CM4
+
+#include "arm_const_structs.h"
 #include "arm_math.h"
+#include "arm_common_tables.h"
 
 #endif
 

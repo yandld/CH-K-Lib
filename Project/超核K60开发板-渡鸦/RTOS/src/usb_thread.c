@@ -21,7 +21,7 @@ static void USB_App_Callback(uint8_t controller_ID, uint8_t event_type, void* va
     }
     else if(event_type == USB_APP_ENUM_COMPLETE)
     {
-        rt_kprintf("Usb App enum OK.\r\n");
+        rt_kprintf("usb app enum OK.\r\n");
     }
     
 }
@@ -36,9 +36,9 @@ static void MSD_Event_Callback(uint_8 controller_ID,
     switch(event_type)
 	{
         case USB_MSC_DEVICE_GET_INFO:
+            rt_kprintf("usb msc get info\r\n");
             device_lba_info_ptr = (PTR_DEVICE_LBA_INFO_STRUCT)val;
             rt_device_control(device, RT_DEVICE_CTRL_BLK_GETGEOME, &geometry);
-            rt_kprintf("USB_MSC_DEVICE_GET_INFO\r\n");
             device_lba_info_ptr->total_lba_device_supports = geometry.sector_count;	
             device_lba_info_ptr->length_of_each_lba_of_device = 512;
             device_lba_info_ptr->num_lun_supported = 1;
@@ -49,6 +49,7 @@ static void MSD_Event_Callback(uint_8 controller_ID,
             //SD_ReadSingleBlock(lba_data_ptr->offset/512, lba_data_ptr->buff_ptr);
             break;
         case USB_APP_SEND_COMPLETE:
+            //rt_kprintf("usb app send complete\r\n");
             break;
         case USB_MSC_DEVICE_WRITE_REQUEST: 
             lba_data_ptr = (PTR_LBA_APP_STRUCT)val;
@@ -56,7 +57,7 @@ static void MSD_Event_Callback(uint_8 controller_ID,
           //  SD_WriteSingleBlock(lba_data_ptr->offset/512, lba_data_ptr->buff_ptr);
             break;
         case USB_MSC_DEVICE_REMOVAL_REQUEST:
-            
+            rt_kprintf("usb app removel request\r\n");
             break;
         default:
             rt_kprintf("Unknown event type:%X\r\n", event_type);
@@ -70,11 +71,11 @@ void usb_thread_entry(void* parameter)
 {
     int i;
     
-    device = rt_device_find("sd0");
+    device = rt_device_find(parameter);
     
     if( device == RT_NULL)
     {
-        rt_kprintf("%s:device %s: not found!\r\n", __func__, parameter);
+        rt_kprintf("device %s: not found!\r\n", parameter);
         return;
     }
     
@@ -103,17 +104,26 @@ int usb(int argc, char** argv)
 {
     rt_thread_t tid;
     
+    if(argc != 2)
+    {
+        rt_kprintf("error param\r\n");
+        return 1;
+    }
+    
     /* this task can not be single */
     tid = rt_thread_find("usb_exe");
     if(tid != RT_NULL) return -1;
     
-    tid = rt_thread_create("usb_exe", usb_thread_entry, RT_NULL, 1024*2, 30, 20);
+    static char arg[32];
+    rt_memcpy(arg, argv[1], rt_strlen(argv[1]));
+
+    tid = rt_thread_create("usb_exe", usb_thread_entry, arg, 1024*2, 30, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
 
     return 0;
 }
 
-MSH_CMD_EXPORT(usb, show a picture file.);
+MSH_CMD_EXPORT(usb, eg:usb sd0);
 
 #endif
 

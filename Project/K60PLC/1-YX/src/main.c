@@ -27,6 +27,15 @@ static struct FIFO fifo[16];
 const int gADC_InstanceTable[] =  ADC_PORTS;
 const int gADC_ChnTable[] = ADC_CHANNELS;
 
+/************************************/
+/**test space*/
+/************************************/
+static void normalization (uint32_t *data,uint32_t len,float32_t *out) {
+	for(int i=0;i<len;i++) {
+		out[i] = ((float32_t)((int32_t)data[i]-2048)/4096)*2.5;
+	}
+}
+
 //PIT0 ÖÐ¶Ï
 static void PIT0_ISR(void)
 {
@@ -126,7 +135,7 @@ int main(void)
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF, true);
     printf("%dus Interrupt Enabled\r\n", PIT1_TIME_IN_US);
 
-   
+	
     while(1)
     {
 

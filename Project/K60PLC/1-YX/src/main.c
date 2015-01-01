@@ -11,12 +11,18 @@
 
 #include "unit_test.h"
 
-
-#define PIT0_TIME_IN_US    (1000)
+/**
+	Sample rate 	= 1.6 Ks/s
+	Sample point 	= 32 
+	FFT Speed		= 3846 HardwareCycle(@120 MHz) = 32 us
+	NOTE : DO NOT CHANGE PIT0_TIME_IN_US VALUE!
+*/
+#define PIT0_TIME_IN_US    (625)
+/**console check*/
 #define PIT1_TIME_IN_US    (50*1000)
 
 // global vars
-uint16_t gFIFOBuf[16][64];
+uint16_t gFIFOBuf[16][32];
 static struct FIFO fifo[16];
 const int gADC_InstanceTable[] =  ADC_PORTS;
 const int gADC_ChnTable[] = ADC_CHANNELS;

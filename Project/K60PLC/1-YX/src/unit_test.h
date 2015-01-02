@@ -12,6 +12,8 @@ void TestMB85RC64(void);
 void TestRS485Receive(void);
 void TestRTC(void);
 void TestFFTTime(void);
+void TestRS485IntSend(void);
+    
 
 #endif
 

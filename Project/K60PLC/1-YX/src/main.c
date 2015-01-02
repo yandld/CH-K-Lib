@@ -153,6 +153,8 @@ int main(void)
     TestMB85RC64();
     TestRTC();
     TestFFTTime();
+    TestRS485IntSend();
+    
     
     // Init ADC 
     ADC_InitTypeDef ADC_InitStruct;

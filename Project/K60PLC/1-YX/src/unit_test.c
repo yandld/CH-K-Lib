@@ -85,6 +85,32 @@ void TestRS485Receive(void)
     printf("%s done.\r\n", __func__);
 }
 
+//RS485 中断发送
+
+
+void UART_485_TXISR1(uint16_t dataToSend)
+{
+    static char data[] = "HelloWorld";
+    static char *p = data;
+    dataToSend = *p++;
+    
+    // 当发送完全部数据 关闭发送中断 复位指针
+    if(p == (data + sizeof(data)))
+    {
+        UART_ITDMAConfig(HW_UART5, kUART_IT_Tx, false);
+        p = data;
+    }
+}
+
+void TestRS485IntSend(void)
+{
+    uint32_t instance;
+    printf("%s...\r\n", __func__);
+    instance = UART_QuickInit(RS485_CH1_MAP, 115200);
+    UART_CallbackRxInstall(instance, UART_485_TXISR1);
+    UART_ITDMAConfig(instance, kUART_IT_Tx, true);
+    printf("%s done.\r\n", __func__);
+}
 
 void TestRTC(void)
 {

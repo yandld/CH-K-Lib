@@ -3,7 +3,7 @@ n = 32;
 t_start = 0.000625;
 t_end = n*t_s;
 t = t_start:t_s:t_end;
-y = 1.25*sin(2*pi*50*t);
+y = 1.25*sin(2*pi*50*t)+0.5*sin(2*pi*100*t+pi)+0.25*sin(2*pi*150*t+1.5*pi)+0.125*sin(2*pi*200*t);
 y_f = fft(y)*2/32;
 dur = t_end - t_start;
 sample_point = dur/t_s + 1;
@@ -14,7 +14,7 @@ plot(t,y);
 title('original signal');
 grid on;
 subplot(2,1,2);
-plot(f_x,abs(y_f)*2/32);
+stem(f_x,abs(y_f)*2/32);
 title('FFT');
 grid on;
 

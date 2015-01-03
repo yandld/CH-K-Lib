@@ -11,7 +11,7 @@
 
 
 // 改变图像大小
-#define IMAGE_SIZE  0
+#define IMAGE_SIZE  2
 
 #if (IMAGE_SIZE  ==  0)
 #define OV7620_W    (80)

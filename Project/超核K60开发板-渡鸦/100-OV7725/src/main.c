@@ -11,7 +11,7 @@
 
 
 // 改变图像大小
-#define IMAGE_SIZE  2
+#define IMAGE_SIZE  0
 
 #if (IMAGE_SIZE  ==  0)
 #define OV7620_W    (80)
@@ -33,7 +33,7 @@
 uint8_t CCDBufferPool[(OV7620_H)*((OV7620_W/8)+1)];   //使用内部RAM
 
 /* CCD内存池 */
-uint8_t * CCDBuffer[OV7620_H];
+uint8_t * CCDBuffer[OV7620_H+1];
 
 /* 引脚定义 */
 #define BOARD_OV7620_PCLK_PORT      HW_GPIOA
@@ -69,7 +69,7 @@ int SCCB_Init(uint32_t I2C_MAP)
 {
     int r;
     uint32_t instance;
-    instance = I2C_QuickInit(I2C_MAP, 5*1000);
+    instance = I2C_QuickInit(I2C_MAP, 100*1000);
     r = ov7725_probe(instance);
     if(r)
     {
@@ -96,7 +96,7 @@ void OV_ISR(uint32_t index)
     {
         DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[h_counter++]);
         i = DMA_GetMajorLoopCount(HW_DMA_CH2);
-        DMA_SetMajorLoopCounter(HW_DMA_CH2, OV7620_W/8);
+        DMA_SetMajorLoopCounter(HW_DMA_CH2, (OV7620_W/8)+1);
         DMA_EnableRequest(HW_DMA_CH2);
         
         return;

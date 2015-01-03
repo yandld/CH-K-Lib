@@ -86,13 +86,11 @@ void TestRS485Receive(void)
 }
 
 //RS485 中断发送
-
-
 void UART_485_TXISR1(uint16_t dataToSend)
 {
     static char data[] = "HelloWorld";
     static char *p = data;
-    dataToSend = *p++;
+    dataToSend = *p++; //把数据丢给dataToSend 中断服务函数结束后，就会自动启动发送
     
     // 当发送完全部数据 关闭发送中断 复位指针
     if(p == (data + sizeof(data)))
@@ -102,6 +100,7 @@ void UART_485_TXISR1(uint16_t dataToSend)
     }
 }
 
+//485 中断发送测试
 void TestRS485IntSend(void)
 {
     uint32_t instance;

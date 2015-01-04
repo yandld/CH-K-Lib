@@ -12,6 +12,8 @@ void usb_thread_entry(void* parameter);
 void sd_thread_entry(void* parameter);
 void usb_thread_entry(void* parameter);
 int ui_startup(int argc, char** argv);
+void key_thread_entry(void* parameter);
+
 
 rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 
@@ -61,8 +63,13 @@ void init_thread_entry(void* parameter)
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
   
+
+    
+    
     ui_startup(RT_NULL, RT_NULL);
     
+    tid = rt_thread_create("key", key_thread_entry, RT_NULL, 512, 0x14, 20);
+    if (tid != RT_NULL) rt_thread_startup(tid);
     
 #ifdef RT_USING_LWIP
 //    rt_kprintf(" link beginning \r\n");

@@ -138,7 +138,7 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>0</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
             <RestoreTracepoints>1</RestoreTracepoints>
             <RestoreTracepoints>1</RestoreTracepoints>
           </Target>

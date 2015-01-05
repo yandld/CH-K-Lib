@@ -73,7 +73,7 @@ int main(void)
     /* 初始化 并配置中断 */
     DMA_Init(&DMA_InitStruct1);
     DMA_CallbackInstall(HW_DMA_CH0, DMA_ISR);
-    DMA_ITConfig(HW_DMA_CH0, kDMA_IT_Major);
+    DMA_ITConfig(HW_DMA_CH0, kDMA_IT_Major, true);
     DMA_EnableRequest(HW_DMA_CH0);/* 启动DMA传输 */
     while(1)
     {

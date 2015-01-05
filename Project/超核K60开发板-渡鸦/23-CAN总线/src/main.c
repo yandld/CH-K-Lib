@@ -2,7 +2,6 @@
 #include "uart.h"
 #include "can.h"
 
-
 /*
      实验名称：CAN通信测试
      实验平台：渡鸦开发板

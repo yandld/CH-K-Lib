@@ -59,7 +59,7 @@ int main(void)
     /* 开启PIT中断 */
     PIT_QuickInit(HW_PIT_CH0, 200*1000);
     PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF);
+    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
     
     /* 开启一个ADC模块用于测量 DAC的值 */
     ADC_QuickInit(ADC0_SE23, kADC_SingleDiff12or13);

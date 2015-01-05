@@ -12,7 +12,7 @@
       <name>C-SPY</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>26</version>
+        <version>25</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -81,15 +81,15 @@
         </option>
         <option>
           <name>OCProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>6.60.1.5099</state>
         </option>
         <option>
           <name>OCDynDriverList</name>
-          <state>ARMSIM_ID</state>
+          <state>JLINK_ID</state>
         </option>
         <option>
           <name>OCLastSavedByProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>6.60.1.5099</state>
         </option>
         <option>
           <name>OCDownloadAttachToProgram</name>
@@ -97,7 +97,7 @@
         </option>
         <option>
           <name>UseFlashLoader</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CLowLevel</name>
@@ -183,30 +183,6 @@
           <name>OCAllMTBOptions</name>
           <state>1</state>
         </option>
-        <option>
-          <name>OCMulticoreNrOfCores</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>OCMulticoreMaster</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>OCMulticorePort</name>
-          <state>53461</state>
-        </option>
-        <option>
-          <name>OCMulticoreWorkspace</name>
-          <state></state>
-        </option>
-        <option>
-          <name>OCMulticoreSlaveProject</name>
-          <state></state>
-        </option>
-        <option>
-          <name>OCMulticoreSlaveConfiguration</name>
-          <state></state>
-        </option>
       </data>
     </settings>
     <settings>
@@ -281,7 +257,7 @@
       <name>CMSISDAP_ID</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>2</version>
+        <version>0</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -356,7 +332,7 @@
         </option>
         <option>
           <name>RDICatchUndef</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>RDICatchSWI</name>
@@ -364,11 +340,11 @@
         </option>
         <option>
           <name>RDICatchData</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>RDICatchPrefetch</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>RDICatchIRQ</name>
@@ -384,31 +360,31 @@
         </option>
         <option>
           <name>CatchMMERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchNOCPERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchCHKERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchSTATERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchBUSERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchINTERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchHARDERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchDummy</name>
@@ -421,30 +397,6 @@
         <option>
           <name>CMSISDAPMultiCPUNumber</name>
           <state>0</state>
-        </option>
-        <option>
-          <name>OCProbeCfgOverride</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>OCProbeConfig</name>
-          <state></state>
-        </option>
-        <option>
-          <name>CMSISDAPProbeConfigRadio</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>CMSISDAPSelectedCPUBehaviour</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>ICpuName</name>
-          <state></state>
-        </option>
-        <option>
-          <name>OCJetEmuParams</name>
-          <state>1</state>
         </option>
       </data>
     </settings>
@@ -520,7 +472,7 @@
       <name>IJET_ID</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>3</version>
+        <version>2</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -714,10 +666,6 @@
           <name>ICpuName</name>
           <state></state>
         </option>
-        <option>
-          <name>OCJetEmuParams</name>
-          <state>1</state>
-        </option>
       </data>
     </settings>
     <settings>
@@ -729,7 +677,7 @@
         <debug>1</debug>
         <option>
           <name>JLinkSpeed</name>
-          <state>1000</state>
+          <state>32</state>
         </option>
         <option>
           <name>CCJLinkDoLogfile</name>
@@ -749,7 +697,7 @@
         </option>
         <option>
           <name>JLinkInitialSpeed</name>
-          <state>1000</state>
+          <state>32</state>
         </option>
         <option>
           <name>CCDoJlinkMultiTarget</name>
@@ -835,7 +783,7 @@
         <option>
           <name>CCJLinkResetList</name>
           <version>6</version>
-          <state>5</state>
+          <state>7</state>
         </option>
         <option>
           <name>CCJLinkInterfaceCmdLine</name>
@@ -1259,7 +1207,7 @@
         </option>
         <option>
           <name>CCXds100InterfaceList</name>
-          <version>2</version>
+          <version>1</version>
           <state>0</state>
         </option>
         <option>
@@ -1306,15 +1254,19 @@
         <loadFlag>0</loadFlag>
       </plugin>
       <plugin>
+        <file>$TOOLKIT_DIR$\plugins\rtos\PowerPac\PowerPacRTOS.ewplugin</file>
+        <loadFlag>0</loadFlag>
+      </plugin>
+      <plugin>
+        <file>$TOOLKIT_DIR$\plugins\rtos\Quadros\Quadros_EWB6_Plugin.ewplugin</file>
+        <loadFlag>0</loadFlag>
+      </plugin>
+      <plugin>
         <file>$TOOLKIT_DIR$\plugins\rtos\SafeRTOS\SafeRTOSPlugin.ewplugin</file>
         <loadFlag>0</loadFlag>
       </plugin>
       <plugin>
         <file>$TOOLKIT_DIR$\plugins\rtos\ThreadX\ThreadXArmPlugin.ENU.ewplugin</file>
-        <loadFlag>0</loadFlag>
-      </plugin>
-      <plugin>
-        <file>$TOOLKIT_DIR$\plugins\rtos\TI-RTOS\tirtosplugin.ewplugin</file>
         <loadFlag>0</loadFlag>
       </plugin>
       <plugin>
@@ -1357,7 +1309,7 @@
       <name>C-SPY</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>26</version>
+        <version>25</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -1390,7 +1342,7 @@
         </option>
         <option>
           <name>MemFile</name>
-          <state></state>
+          <state>$TOOLKIT_DIR$\CONFIG\debugger\Freescale\MK60DN512xxx10.ddf</state>
         </option>
         <option>
           <name>RunToEnable</name>
@@ -1426,15 +1378,15 @@
         </option>
         <option>
           <name>OCProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>6.60.1.5099</state>
         </option>
         <option>
           <name>OCDynDriverList</name>
-          <state>ARMSIM_ID</state>
+          <state>JLINK_ID</state>
         </option>
         <option>
           <name>OCLastSavedByProductVersion</name>
-          <state></state>
+          <state>6.60.1.5099</state>
         </option>
         <option>
           <name>OCDownloadAttachToProgram</name>
@@ -1442,7 +1394,7 @@
         </option>
         <option>
           <name>UseFlashLoader</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CLowLevel</name>
@@ -1462,7 +1414,7 @@
         </option>
         <option>
           <name>FlashLoadersV3</name>
-          <state></state>
+          <state>$TOOLKIT_DIR$\config\flashloader\Freescale\FlashK60Dxxx128K.board</state>
         </option>
         <option>
           <name>OCImagesSuppressCheck1</name>
@@ -1528,30 +1480,6 @@
           <name>OCAllMTBOptions</name>
           <state>1</state>
         </option>
-        <option>
-          <name>OCMulticoreNrOfCores</name>
-          <state>1</state>
-        </option>
-        <option>
-          <name>OCMulticoreMaster</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>OCMulticorePort</name>
-          <state>53461</state>
-        </option>
-        <option>
-          <name>OCMulticoreWorkspace</name>
-          <state></state>
-        </option>
-        <option>
-          <name>OCMulticoreSlaveProject</name>
-          <state></state>
-        </option>
-        <option>
-          <name>OCMulticoreSlaveConfiguration</name>
-          <state></state>
-        </option>
       </data>
     </settings>
     <settings>
@@ -1626,7 +1554,7 @@
       <name>CMSISDAP_ID</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>2</version>
+        <version>0</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -1701,7 +1629,7 @@
         </option>
         <option>
           <name>RDICatchUndef</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>RDICatchSWI</name>
@@ -1709,11 +1637,11 @@
         </option>
         <option>
           <name>RDICatchData</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>RDICatchPrefetch</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>RDICatchIRQ</name>
@@ -1729,31 +1657,31 @@
         </option>
         <option>
           <name>CatchMMERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchNOCPERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchCHKERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchSTATERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchBUSERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchINTERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchHARDERR</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CatchDummy</name>
@@ -1766,30 +1694,6 @@
         <option>
           <name>CMSISDAPMultiCPUNumber</name>
           <state>0</state>
-        </option>
-        <option>
-          <name>OCProbeCfgOverride</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>OCProbeConfig</name>
-          <state></state>
-        </option>
-        <option>
-          <name>CMSISDAPProbeConfigRadio</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>CMSISDAPSelectedCPUBehaviour</name>
-          <state>0</state>
-        </option>
-        <option>
-          <name>ICpuName</name>
-          <state></state>
-        </option>
-        <option>
-          <name>OCJetEmuParams</name>
-          <state>1</state>
         </option>
       </data>
     </settings>
@@ -1865,7 +1769,7 @@
       <name>IJET_ID</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>3</version>
+        <version>2</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -2059,10 +1963,6 @@
           <name>ICpuName</name>
           <state></state>
         </option>
-        <option>
-          <name>OCJetEmuParams</name>
-          <state>1</state>
-        </option>
       </data>
     </settings>
     <settings>
@@ -2074,7 +1974,7 @@
         <debug>0</debug>
         <option>
           <name>JLinkSpeed</name>
-          <state>1000</state>
+          <state>32</state>
         </option>
         <option>
           <name>CCJLinkDoLogfile</name>
@@ -2094,7 +1994,7 @@
         </option>
         <option>
           <name>JLinkInitialSpeed</name>
-          <state>1000</state>
+          <state>32</state>
         </option>
         <option>
           <name>CCDoJlinkMultiTarget</name>
@@ -2180,7 +2080,7 @@
         <option>
           <name>CCJLinkResetList</name>
           <version>6</version>
-          <state>5</state>
+          <state>7</state>
         </option>
         <option>
           <name>CCJLinkInterfaceCmdLine</name>
@@ -2604,7 +2504,7 @@
         </option>
         <option>
           <name>CCXds100InterfaceList</name>
-          <version>2</version>
+          <version>1</version>
           <state>0</state>
         </option>
         <option>
@@ -2651,15 +2551,19 @@
         <loadFlag>0</loadFlag>
       </plugin>
       <plugin>
+        <file>$TOOLKIT_DIR$\plugins\rtos\PowerPac\PowerPacRTOS.ewplugin</file>
+        <loadFlag>0</loadFlag>
+      </plugin>
+      <plugin>
+        <file>$TOOLKIT_DIR$\plugins\rtos\Quadros\Quadros_EWB6_Plugin.ewplugin</file>
+        <loadFlag>0</loadFlag>
+      </plugin>
+      <plugin>
         <file>$TOOLKIT_DIR$\plugins\rtos\SafeRTOS\SafeRTOSPlugin.ewplugin</file>
         <loadFlag>0</loadFlag>
       </plugin>
       <plugin>
         <file>$TOOLKIT_DIR$\plugins\rtos\ThreadX\ThreadXArmPlugin.ENU.ewplugin</file>
-        <loadFlag>0</loadFlag>
-      </plugin>
-      <plugin>
-        <file>$TOOLKIT_DIR$\plugins\rtos\TI-RTOS\tirtosplugin.ewplugin</file>
         <loadFlag>0</loadFlag>
       </plugin>
       <plugin>

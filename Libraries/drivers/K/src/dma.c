@@ -13,6 +13,10 @@
 #include "common.h"
 
 static DMA_CallBackType DMA_CallBackTable[16] = {NULL};
+static uint32_t DMAChlMAP;
+
+uint32_t _DMA_ChlAlloc(void);
+void DMA_ChlFree(uint32_t chl);
 
 /* DMA中断向量入口 */
 static const IRQn_Type DMA_IRQnTable[] = 
@@ -39,13 +43,17 @@ static const IRQn_Type DMA_IRQnTable[] =
 /**
  * @brief  初始化DMA模块
  * @param  DMA_InitStruct :DMA初始化配置结构体，详见dma.h
- * @retval None
+ * @retval 分配到的DMA 通道
  */
-void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
+uint32_t DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 {
 	/* enable DMA and DMAMUX clock */
 	SIM->SCGC6 |= SIM_SCGC6_DMAMUX_MASK;    
 	SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;
+    
+    /* alloc a DMA chl */
+    _DMA_ChlAlloc();
+    
     /* disable chl first */
     DMA0->ERQ &= ~(1<<(DMA_InitStruct->chl));
     /* dma chl source config */
@@ -86,6 +94,33 @@ void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
     DMA0->TCD[DMA_InitStruct->chl].CSR |= DMA_CSR_DREQ_MASK;
 	/* enable DMAMUX */
 	DMAMUX->CHCFG[DMA_InitStruct->chl] |= DMAMUX_CHCFG_ENBL_MASK;
+    
+    return DMA_InitStruct->chl;
+}
+
+uint32_t _DMA_ChlAlloc(void)
+{
+    uint32_t i;
+    uint32_t MaxDMAChl;
+    
+    /* get max DMA chl on this device */
+    MaxDMAChl = (ARRAY_SIZE(DMAMUX->CHCFG)>32)?(ARRAY_SIZE(DMAMUX->CHCFG)):(32);
+    
+    /* alloc a channel */
+    for(i=0;i<MaxDMAChl;i++)
+    {
+        if(!(DMAChlMAP & (1<< i)))
+        {
+            DMAChlMAP |= (1<<i);
+            return i;
+        }
+    }
+    return 0;
+} 
+
+void _DMA_ChlFree(uint32_t chl)
+{
+    DMAChlMAP &= ~(1<<chl);
 }
 
 /**

@@ -92,6 +92,7 @@ typedef void (*UART_CallBackRxType)(uint16_t byteReceived);
 
 uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate);
 void UART_Init(UART_InitTypeDef * UART_InitStruct);
+void UART_DeInit(uint32_t instance);
 int UART_printf(const char *format,...);
 uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch);
 void UART_WriteByte(uint32_t instance, uint16_t ch);

@@ -328,6 +328,18 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     is_fitst_init = false;
 }
 
+void UART_DeInit(uint32_t instance)
+{
+    /* waitting sending complete */
+    while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
+	
+    /* disable Tx Rx */
+    UART_InstanceTable[instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    
+    /* disable clock gate */
+    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
+}
+
 #pragma weak UART_SelectDebugInstance
 void UART_SelectDebugInstance(uint32_t instance)
 {

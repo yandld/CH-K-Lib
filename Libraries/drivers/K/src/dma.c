@@ -47,58 +47,59 @@ static const IRQn_Type DMA_IRQnTable[] =
  */
 uint32_t DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 {
+    uint8_t chl;
+    
 	/* enable DMA and DMAMUX clock */
 	SIM->SCGC6 |= SIM_SCGC6_DMAMUX_MASK;    
 	SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;
     
-    /* alloc a DMA chl */
-    _DMA_ChlAlloc();
-    
+    chl = DMA_InitStruct->chl;
+
     /* disable chl first */
-    DMA0->ERQ &= ~(1<<(DMA_InitStruct->chl));
+    DMA0->ERQ &= ~(1<<(chl));
     /* dma chl source config */
-    DMAMUX->CHCFG[DMA_InitStruct->chl] = DMAMUX_CHCFG_SOURCE(DMA_InitStruct->chlTriggerSource);
+    DMAMUX->CHCFG[chl] = DMAMUX_CHCFG_SOURCE(DMA_InitStruct->chlTriggerSource);
     /* trigger mode */
     switch(DMA_InitStruct->triggerSourceMode)
     {
         case kDMA_TriggerSource_Normal:
-            DMAMUX->CHCFG[DMA_InitStruct->chl] &= ~DMAMUX_CHCFG_TRIG_MASK;
+            DMAMUX->CHCFG[chl] &= ~DMAMUX_CHCFG_TRIG_MASK;
             break;
         case kDMA_TriggerSource_Periodic:
-            DMAMUX->CHCFG[DMA_InitStruct->chl] |= DMAMUX_CHCFG_TRIG_MASK;
+            DMAMUX->CHCFG[chl] |= DMAMUX_CHCFG_TRIG_MASK;
             break;
         default:
             break;
     }
     /* clear some register */
-    DMA0->TCD[DMA_InitStruct->chl].ATTR  = 0;
-    DMA0->TCD[DMA_InitStruct->chl].CSR   = 0;
+    DMA0->TCD[chl].ATTR  = 0;
+    DMA0->TCD[chl].CSR   = 0;
     /* minor loop cnt */
-    DMA0->TCD[DMA_InitStruct->chl].NBYTES_MLNO = DMA_NBYTES_MLNO_NBYTES(DMA_InitStruct->minorLoopByteCnt);
+    DMA0->TCD[chl].NBYTES_MLNO = DMA_NBYTES_MLNO_NBYTES(DMA_InitStruct->minorLoopByteCnt);
     /* major loop cnt */
-	DMA0->TCD[DMA_InitStruct->chl].CITER_ELINKNO = DMA_CITER_ELINKNO_CITER(DMA_InitStruct->majorLoopCnt);
-	DMA0->TCD[DMA_InitStruct->chl].BITER_ELINKNO = DMA_BITER_ELINKNO_BITER(DMA_InitStruct->majorLoopCnt);
+	DMA0->TCD[chl].CITER_ELINKNO = DMA_CITER_ELINKNO_CITER(DMA_InitStruct->majorLoopCnt);
+	DMA0->TCD[chl].BITER_ELINKNO = DMA_BITER_ELINKNO_BITER(DMA_InitStruct->majorLoopCnt);
     /* source config */
-    DMA0->TCD[DMA_InitStruct->chl].SADDR = DMA_InitStruct->sAddr;
-    DMA0->TCD[DMA_InitStruct->chl].SOFF = DMA_InitStruct->sAddrOffset;
-    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_SSIZE(DMA_InitStruct->sDataWidth);
-    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_SMOD(DMA_InitStruct->sMod);
-    DMA0->TCD[DMA_InitStruct->chl].SLAST = DMA_SLAST_SLAST(DMA_InitStruct->sLastAddrAdj);
+    DMA0->TCD[chl].SADDR = DMA_InitStruct->sAddr;
+    DMA0->TCD[chl].SOFF = DMA_InitStruct->sAddrOffset;
+    DMA0->TCD[chl].ATTR |= DMA_ATTR_SSIZE(DMA_InitStruct->sDataWidth);
+    DMA0->TCD[chl].ATTR |= DMA_ATTR_SMOD(DMA_InitStruct->sMod);
+    DMA0->TCD[chl].SLAST = DMA_SLAST_SLAST(DMA_InitStruct->sLastAddrAdj);
     /* destation config */
-    DMA0->TCD[DMA_InitStruct->chl].DADDR = DMA_InitStruct->dAddr;
-    DMA0->TCD[DMA_InitStruct->chl].DOFF = DMA_InitStruct->dAddrOffset;
-    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_DSIZE(DMA_InitStruct->dDataWidth);
-    DMA0->TCD[DMA_InitStruct->chl].ATTR |= DMA_ATTR_DMOD(DMA_InitStruct->dMod);
-    DMA0->TCD[DMA_InitStruct->chl].DLAST_SGA = DMA_DLAST_SGA_DLASTSGA(DMA_InitStruct->dLastAddrAdj);
+    DMA0->TCD[chl].DADDR = DMA_InitStruct->dAddr;
+    DMA0->TCD[chl].DOFF = DMA_InitStruct->dAddrOffset;
+    DMA0->TCD[chl].ATTR |= DMA_ATTR_DSIZE(DMA_InitStruct->dDataWidth);
+    DMA0->TCD[chl].ATTR |= DMA_ATTR_DMOD(DMA_InitStruct->dMod);
+    DMA0->TCD[chl].DLAST_SGA = DMA_DLAST_SGA_DLASTSGA(DMA_InitStruct->dLastAddrAdj);
     /* auto close enable(disable req on major loop complete)*/
-    DMA0->TCD[DMA_InitStruct->chl].CSR |= DMA_CSR_DREQ_MASK;
+    DMA0->TCD[chl].CSR |= DMA_CSR_DREQ_MASK;
 	/* enable DMAMUX */
-	DMAMUX->CHCFG[DMA_InitStruct->chl] |= DMAMUX_CHCFG_ENBL_MASK;
+	DMAMUX->CHCFG[chl] |= DMAMUX_CHCFG_ENBL_MASK;
     
-    return DMA_InitStruct->chl;
+    return chl;
 }
 
-uint32_t _DMA_ChlAlloc(void)
+uint32_t DMA_ChlAlloc(void)
 {
     uint32_t i;
     uint32_t MaxDMAChl;
@@ -118,7 +119,7 @@ uint32_t _DMA_ChlAlloc(void)
     return 0;
 } 
 
-void _DMA_ChlFree(uint32_t chl)
+void DMA_ChlFree(uint32_t chl)
 {
     DMAChlMAP &= ~(1<<chl);
 }

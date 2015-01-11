@@ -814,5 +814,76 @@ static const QuickInit_Type UART_QuickInitTable[] =
 };
 */
 
+#ifdef UART_DMA_SUPPORT
+#include "dma.h"
+static uint32_t DMA2UARTChlTable[5];
 
+static const uint32_t _DMA_UARTTrigTable[] =
+{
+    UART0_TRAN_DMAREQ,
+    UART1_TRAN_DMAREQ,
+    UART2_TRAN_DMAREQ,
+    UART3_TRAN_DMAREQ,
+    UART4_TRAN_DMAREQ,
+    UART5_TRAN_DMAREQ
+};
 
+static const void* _UART_DMA_sAddrTable[] = 
+{
+    (void*)&UART0->D,
+    (void*)&UART1->D,
+    (void*)&UART2->D,
+    (void*)&UART3->D,
+    (void*)&UART4->D,
+    (void*)&UART5->D,    
+};
+
+void UART_DMATxQuickInit(uint32_t MAP, uint32_t baudrate)
+{
+    uint32_t instance, dma_chl;
+    instance = UART_QuickInit(MAP, baudrate);
+    UART_ITDMAConfig(instance, kUART_DMA_Tx, true);
+    
+    /* init DMA */
+    dma_chl = DMA_ChlAlloc();
+    DMA_InitTypeDef DMA_InitStruct;
+    DMA_InitStruct.chl = dma_chl;
+    DMA_InitStruct.chlTriggerSource = _DMA_UARTTrigTable[instance];
+    DMA_InitStruct.triggerSourceMode = kDMA_TriggerSource_Normal;
+    DMA_InitStruct.minorLoopByteCnt = 1;
+    DMA_InitStruct.majorLoopCnt = 0;
+        
+    DMA_InitStruct.sAddr = NULL;
+    DMA_InitStruct.sLastAddrAdj = 0; 
+    DMA_InitStruct.sAddrOffset = 1;
+    DMA_InitStruct.sDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct.sMod = kDMA_ModuloDisable;
+    
+    DMA_InitStruct.dAddr = (uint32_t)_UART_DMA_sAddrTable[instance]; 
+    DMA_InitStruct.dLastAddrAdj = 0;
+    DMA_InitStruct.dAddrOffset = 0;
+    DMA_InitStruct.dDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct.dMod = kDMA_ModuloDisable;
+
+    DMA_Init(&DMA_InitStruct);
+    DMA2UARTChlTable[instance] = dma_chl;
+}
+
+void UART_DMASendByte(uint32_t instance, uint8_t* buf, uint32_t size)
+{
+    DMA_SetSourceAddress(DMA2UARTChlTable[instance], (uint32_t)buf);
+    DMA_SetMajorLoopCounter(DMA2UARTChlTable[instance], size);
+    
+    /* start transfer */
+    DMA_EnableRequest(DMA2UARTChlTable[instance]);
+}
+
+bool UART_DMAIsComplete(uint32_t instance)
+{
+    if(DMA_GetMajorLoopCount(DMA2UARTChlTable[instance]) == 0)
+    {
+        return true;
+    }
+    return false;
+}
+#endif

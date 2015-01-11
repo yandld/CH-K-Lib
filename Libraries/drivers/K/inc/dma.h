@@ -169,6 +169,8 @@ typedef enum
 typedef void (*DMA_CallBackType)(void);
 
 //!< API functions
+uint32_t DMA_ChlAlloc(void);
+void DMA_ChlFree(uint32_t chl);
 uint32_t DMA_Init(DMA_InitTypeDef *DMA_InitStruct);
 /* get vars and status */
 uint32_t DMA_GetDestAddress(uint8_t ch);

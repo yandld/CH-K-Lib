@@ -425,24 +425,9 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>fifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\fifo.c</FilePath>
-            </File>
-            <File>
               <FileName>boarddef.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\boarddef.h</FilePath>
-            </File>
-            <File>
-              <FileName>DataScope_DP.C</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\DataScope_DP.C</FilePath>
-            </File>
-            <File>
-              <FileName>DataScope_DP.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\DataScope_DP.h</FilePath>
             </File>
             <File>
               <FileName>mb85rc64.c</FileName>
@@ -453,6 +438,41 @@
               <FileName>unit_test.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\unit_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>asm_fun.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\src\asm_fun.asm</FilePath>
+            </File>
+            <File>
+              <FileName>uart0_isr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\uart0_isr.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart3_isr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\uart3_isr.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart4_isr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\uart4_isr.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart5_isr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\uart5_isr.c</FilePath>
+            </File>
+            <File>
+              <FileName>pit0.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\pit0.c</FilePath>
+            </File>
+            <File>
+              <FileName>pit1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\pit1.c</FilePath>
             </File>
           </Files>
         </Group>

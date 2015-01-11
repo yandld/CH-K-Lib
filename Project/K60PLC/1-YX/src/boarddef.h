@@ -61,5 +61,9 @@
 #define BOARD_I2C_MAP       I2C1_SCL_PE01_SDA_PE00
 
 
+//函数变量声明
+
+
+
 #endif
 

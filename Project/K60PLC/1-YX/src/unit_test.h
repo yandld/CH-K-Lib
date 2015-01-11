@@ -13,7 +13,7 @@ void TestRS485Receive(void);
 void TestRTC(void);
 void TestFFTTime(void);
 void TestRS485IntSend(void);
-    
+void TestAbsAddress(void); 
 
 #endif
 

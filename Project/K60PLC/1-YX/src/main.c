@@ -1,7 +1,7 @@
 
 // dirver lib
 #include "chlib_k.h"
-
+#include <absacc.h> 
 #include "fifo.h"
 #include "mb85rc64.h"
 
@@ -146,6 +146,8 @@ int main(void)
     RTC_QuickInit();
 
     //测试系统
+    TestAbsAddress();   //绝对地址测试
+    
     TestClock();
     TestADCTime();
     TestLED();
@@ -155,6 +157,11 @@ int main(void)
     TestFFTTime();
     TestRS485IntSend();
     
+    extern int GetPcValue(void);
+    //测试调用汇编子程序
+    
+    printf("ASM sun func call test\r\n");
+    printf("call GetPCValue: PC:0x%X\r\n", GetPcValue());
     
     // Init ADC 
     ADC_InitTypeDef ADC_InitStruct;

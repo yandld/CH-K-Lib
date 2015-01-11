@@ -1,3 +1,5 @@
+#include <absacc.h> 
+
 #include "unit_test.h"
 #include "mb85rc64.h"
 #include "chlib_k.h"
@@ -122,7 +124,7 @@ void TestRTC(void)
     td.minute = 59;
     td.second = 50;
     td.year = 2014;
-    td.month = 11;
+    td.month = 11; 
     RTC_QuickInit();
 
     if(RTC_IsTimeValid())
@@ -138,6 +140,21 @@ void TestRTC(void)
     
 }
 
+static char xArray[128] __at (0x20000000);
+void TestAbsAddress(void)
+{
+    printf("%s...\r\n", __func__);
+    //赋值
+    xArray[0] ='H';
+    xArray[1] ='E';
+    
+    //指向位置
+    char *p = (char*) 0x20000000;
+    
+    // 显示 指定位置的数据
+    printf("0x%X:%c\r\n", p, *p);
+    printf("0x%X:%c\r\n", p+1, *(p+1));
+}
 
 float32_t test_signal[32] = {
 0		,0.3090	,0.5878	,0.8090	,0.9511	,1.0000	,0.9511	,0.8090,  

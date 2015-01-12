@@ -838,6 +838,36 @@ static const void* _UART_DMA_sAddrTable[] =
     (void*)&UART5->D,    
 };
 
+void UART_EnterDMATxMode(uint32_t instance)
+{
+    /* init DMA */
+    dma_chl = DMA_ChlAlloc();
+    DMA_InitTypeDef DMA_InitStruct;
+    DMA_InitStruct.chl = dma_chl;
+    DMA_InitStruct.chlTriggerSource = _DMA_UARTTrigTable[instance];
+    DMA_InitStruct.triggerSourceMode = kDMA_TriggerSource_Normal;
+    DMA_InitStruct.minorLoopByteCnt = 1;
+    DMA_InitStruct.majorLoopCnt = 0;
+        
+    DMA_InitStruct.sAddr = NULL;
+    DMA_InitStruct.sLastAddrAdj = 0; 
+    DMA_InitStruct.sAddrOffset = 1;
+    DMA_InitStruct.sDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct.sMod = kDMA_ModuloDisable;
+    
+    DMA_InitStruct.dAddr = (uint32_t)_UART_DMA_sAddrTable[instance]; 
+    DMA_InitStruct.dLastAddrAdj = 0;
+    DMA_InitStruct.dAddrOffset = 0;
+    DMA_InitStruct.dDataWidth = kDMA_DataWidthBit_8;
+    DMA_InitStruct.dMod = kDMA_ModuloDisable;
+
+    DMA_Init(&DMA_InitStruct);
+    DMA2UARTChlTable[instance] = dma_chl;
+    
+    /* */
+    UART_ITDMAConfig(instance, kUART_DMA_Tx, true);
+}
+
 void UART_DMATxQuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint32_t instance, dma_chl;

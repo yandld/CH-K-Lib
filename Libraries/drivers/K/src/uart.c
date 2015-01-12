@@ -814,7 +814,7 @@ static const QuickInit_Type UART_QuickInitTable[] =
 };
 */
 
-#ifdef UART_DMA_SUPPORT
+#ifdef DMA0
 #include "dma.h"
 static uint32_t DMA2UARTChlTable[5];
 
@@ -841,6 +841,8 @@ static const void* _UART_DMA_sAddrTable[] =
 void UART_EnterDMATxMode(uint32_t instance)
 {
     /* init DMA */
+    uint8_t dma_chl;
+    
     dma_chl = DMA_ChlAlloc();
     DMA_InitTypeDef DMA_InitStruct;
     DMA_InitStruct.chl = dma_chl;

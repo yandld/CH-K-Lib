@@ -115,7 +115,8 @@ void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool stat
 int printf(const char *fmt, ...);
 #endif
 
-#ifdef UART_DMA_SUPPORT
+/* DMA support */
+#ifdef DMA0
 void UART_DMATxQuickInit(uint32_t MAP, uint32_t baudrate);
 void UART_DMASendByte(uint32_t instance, uint8_t* buf, uint32_t size);
 bool UART_DMAIsComplete(uint32_t instance);

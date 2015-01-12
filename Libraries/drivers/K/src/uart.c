@@ -832,74 +832,59 @@ static const void* _UART_DMA_sAddrTable[] =
 {
     (void*)&UART0->D,
     (void*)&UART1->D,
+#ifdef  UART2   
     (void*)&UART2->D,
+#endif
+#ifdef  UART3   
     (void*)&UART3->D,
+#endif 
+#ifdef  UART4
     (void*)&UART4->D,
+#endif
+#ifdef  UART5
     (void*)&UART5->D,    
+#endif
 };
 
-void UART_EnterDMATxMode(uint32_t instance)
+void UART_SetDMATxMode(uint32_t instance, bool status)
 {
     /* init DMA */
     uint8_t dma_chl;
     
-    dma_chl = DMA_ChlAlloc();
-    DMA_InitTypeDef DMA_InitStruct;
-    DMA_InitStruct.chl = dma_chl;
-    DMA_InitStruct.chlTriggerSource = _DMA_UARTTrigTable[instance];
-    DMA_InitStruct.triggerSourceMode = kDMA_TriggerSource_Normal;
-    DMA_InitStruct.minorLoopByteCnt = 1;
-    DMA_InitStruct.majorLoopCnt = 0;
+    if(status)
+    {
+        dma_chl = DMA_ChlAlloc();
+        DMA_InitTypeDef DMA_InitStruct;
+        DMA_InitStruct.chl = dma_chl;
+        DMA_InitStruct.chlTriggerSource = _DMA_UARTTrigTable[instance];
+        DMA_InitStruct.triggerSourceMode = kDMA_TriggerSource_Normal;
+        DMA_InitStruct.minorLoopByteCnt = 1;
+        DMA_InitStruct.majorLoopCnt = 0;
+            
+        DMA_InitStruct.sAddr = NULL;
+        DMA_InitStruct.sLastAddrAdj = 0; 
+        DMA_InitStruct.sAddrOffset = 1;
+        DMA_InitStruct.sDataWidth = kDMA_DataWidthBit_8;
+        DMA_InitStruct.sMod = kDMA_ModuloDisable;
         
-    DMA_InitStruct.sAddr = NULL;
-    DMA_InitStruct.sLastAddrAdj = 0; 
-    DMA_InitStruct.sAddrOffset = 1;
-    DMA_InitStruct.sDataWidth = kDMA_DataWidthBit_8;
-    DMA_InitStruct.sMod = kDMA_ModuloDisable;
-    
-    DMA_InitStruct.dAddr = (uint32_t)_UART_DMA_sAddrTable[instance]; 
-    DMA_InitStruct.dLastAddrAdj = 0;
-    DMA_InitStruct.dAddrOffset = 0;
-    DMA_InitStruct.dDataWidth = kDMA_DataWidthBit_8;
-    DMA_InitStruct.dMod = kDMA_ModuloDisable;
+        DMA_InitStruct.dAddr = (uint32_t)_UART_DMA_sAddrTable[instance]; 
+        DMA_InitStruct.dLastAddrAdj = 0;
+        DMA_InitStruct.dAddrOffset = 0;
+        DMA_InitStruct.dDataWidth = kDMA_DataWidthBit_8;
+        DMA_InitStruct.dMod = kDMA_ModuloDisable;
 
-    DMA_Init(&DMA_InitStruct);
-    DMA2UARTChlTable[instance] = dma_chl;
+        DMA_Init(&DMA_InitStruct);
+        DMA2UARTChlTable[instance] = dma_chl; 
+    }
+    else
+    {
+        DMA_ChlFree(DMA2UARTChlTable[instance]);
+    }
     
     /* */
-    UART_ITDMAConfig(instance, kUART_DMA_Tx, true);
+    UART_ITDMAConfig(instance, kUART_DMA_Tx, status);
 }
 
-void UART_DMATxQuickInit(uint32_t MAP, uint32_t baudrate)
-{
-    uint32_t instance, dma_chl;
-    instance = UART_QuickInit(MAP, baudrate);
-    UART_ITDMAConfig(instance, kUART_DMA_Tx, true);
-    
-    /* init DMA */
-    dma_chl = DMA_ChlAlloc();
-    DMA_InitTypeDef DMA_InitStruct;
-    DMA_InitStruct.chl = dma_chl;
-    DMA_InitStruct.chlTriggerSource = _DMA_UARTTrigTable[instance];
-    DMA_InitStruct.triggerSourceMode = kDMA_TriggerSource_Normal;
-    DMA_InitStruct.minorLoopByteCnt = 1;
-    DMA_InitStruct.majorLoopCnt = 0;
-        
-    DMA_InitStruct.sAddr = NULL;
-    DMA_InitStruct.sLastAddrAdj = 0; 
-    DMA_InitStruct.sAddrOffset = 1;
-    DMA_InitStruct.sDataWidth = kDMA_DataWidthBit_8;
-    DMA_InitStruct.sMod = kDMA_ModuloDisable;
-    
-    DMA_InitStruct.dAddr = (uint32_t)_UART_DMA_sAddrTable[instance]; 
-    DMA_InitStruct.dLastAddrAdj = 0;
-    DMA_InitStruct.dAddrOffset = 0;
-    DMA_InitStruct.dDataWidth = kDMA_DataWidthBit_8;
-    DMA_InitStruct.dMod = kDMA_ModuloDisable;
-
-    DMA_Init(&DMA_InitStruct);
-    DMA2UARTChlTable[instance] = dma_chl;
-}
 
 void UART_DMASendByte(uint32_t instance, uint8_t* buf, uint32_t size)
 {
@@ -910,12 +895,10 @@ void UART_DMASendByte(uint32_t instance, uint8_t* buf, uint32_t size)
     DMA_EnableRequest(DMA2UARTChlTable[instance]);
 }
 
-bool UART_DMAIsComplete(uint32_t instance)
+uint32_t UART_DMAGetRemainByte(uint32_t instance)
 {
-    if(DMA_GetMajorLoopCount(DMA2UARTChlTable[instance]) == 0)
-    {
-        return true;
-    }
-    return false;
+    return DMA_GetMajorLoopCount(DMA2UARTChlTable[instance]);
 }
+
+
 #endif

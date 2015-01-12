@@ -117,9 +117,9 @@ int printf(const char *fmt, ...);
 
 /* DMA support */
 #ifdef DMA0
-void UART_DMATxQuickInit(uint32_t MAP, uint32_t baudrate);
+void UART_SetDMATxMode(uint32_t instance, bool status);
 void UART_DMASendByte(uint32_t instance, uint8_t* buf, uint32_t size);
-bool UART_DMAIsComplete(uint32_t instance);
+uint32_t UART_DMAGetRemainByte(uint32_t instance);
 #endif
 
 //!< param check

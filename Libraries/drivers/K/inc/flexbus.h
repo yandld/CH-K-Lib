@@ -12,6 +12,7 @@
 #define __CH_LIB_FLEXBUS_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 //!< Flexbus 数据对其方式选择
 #define kFLEXBUS_DataLeftAligned   (0x00)  //数据左对齐
@@ -84,9 +85,21 @@ typedef struct
     uint32_t CSn;             //片选信号通道
 }FLEXBUS_InitTypeDef;
 
+//!< 高级配置选项
+typedef struct
+{
+    bool kFLEXBUS_brustWriteEnable;
+    bool kFLEXBUS_brustReadEnable;
+    uint32_t kFLEXBUS_ASET:2;
+    uint32_t kFLEXBUS_RDAH:2;
+    uint32_t kFLEXBUS_WRAH:2;
+    uint32_t kFLEXBUS_WS:6;    
+}FLEXBUS_AdvancedConfigTypeDef;
+
 //!< API functions
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct);
 void FLEXBUS_PortMuxConfig(FLEXBUS_PortMultiplexingSelect_Type group, uint32_t config);
+void FLEXBUS_AdvancedConfig(uint32_t CS, FLEXBUS_AdvancedConfigTypeDef* FLEXBUS_AdvancedConfigStruct);
 
 #endif
 

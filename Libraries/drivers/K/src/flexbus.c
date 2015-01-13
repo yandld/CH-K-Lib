@@ -11,7 +11,7 @@
 #include "flexbus.h"
 #include "common.h"
 
-#if (!defined(MK10D5))
+#if (defined(FB))
 
 /**
  * @brief  初始化FlexBus模块
@@ -101,24 +101,54 @@ void FLEXBUS_PortMuxConfig(FLEXBUS_PortMultiplexingSelect_Type group, uint32_t c
     }
 }
 
-
+/**
+ * @brief  高级Flexbus 配置选项
+ * @note   具体的配置应用详见关于FlexBus的使用例程  
+ * @param  FLEXBUS_AdvancedConfigStruct
+ * @retval None
+ */
+void FLEXBUS_AdvancedConfig(uint32_t CS, FLEXBUS_AdvancedConfigTypeDef* FLEXBUS_AdvancedConfigStruct)
+{
+    /* Wait States
+    Specifies the number of wait states inserted after FlexBus asserts the associated chip-select and before
+    an internal transfer acknowledge is generated (WS = 00h inserts 0 wait states, ..., WS = 3Fh inserts 63
+    wait states).
+     */
+    FB->CS[CS].CSCR &= ~FB_CSCR_WS_MASK;
+    FB->CS[CS].CSCR |= FB_CSCR_WS(FLEXBUS_AdvancedConfigStruct->kFLEXBUS_WS);
+    
+    /* Address Setup
+    Controls when the chip-select is asserted with respect to assertion of a valid address and attributes.
+    */
+    FB->CS[CS].CSCR &= ~FB_CSCR_ASET_MASK;
+    FB->CS[CS].CSCR |= FB_CSCR_ASET(FLEXBUS_AdvancedConfigStruct->kFLEXBUS_ASET);
+    
+    /* Read Address Hold or Deselect
+    Controls the address and attribute hold time after the termination during a read cycle that hits in the
+    associated chip-select's address space.
+    */
+    FB->CS[CS].CSCR &= ~FB_CSCR_RDAH_MASK;
+    FB->CS[CS].CSCR |= FB_CSCR_RDAH(FLEXBUS_AdvancedConfigStruct->kFLEXBUS_RDAH);
+    
+    /* Write Address Hold or Deselect
+    Controls the address, data, and attribute hold time after the termination of a write cycle that hits in the
+    associated chip-select's address space.
+    */
+    FB->CS[CS].CSCR &= ~FB_CSCR_WRAH_MASK;
+    FB->CS[CS].CSCR |= FB_CSCR_WRAH(FLEXBUS_AdvancedConfigStruct->kFLEXBUS_WRAH);
+    
+    /* brust read enable */
+    (FLEXBUS_AdvancedConfigStruct->kFLEXBUS_brustReadEnable)?
+    (FB->CS[CS].CSCR |= FB_CSCR_BSTR_MASK):
+    (FB->CS[CS].CSCR &= ~FB_CSCR_BSTR_MASK);
+   
+    /* brust write enable */
+    (FLEXBUS_AdvancedConfigStruct->kFLEXBUS_brustWriteEnable)?
+    (FB->CS[CS].CSCR |= FB_CSCR_BSTW_MASK):
+    (FB->CS[CS].CSCR &= ~FB_CSCR_BSTW_MASK);
+}
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

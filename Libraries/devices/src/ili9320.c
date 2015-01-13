@@ -171,10 +171,21 @@ void ili9320_init(void)
     FLEXBUS_InitStruct.dataWidth = kFLEXBUS_PortSize_16Bit;
     FLEXBUS_InitStruct.baseAddress = ILI9320_BASE;
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
-    FLEXBUS_InitStruct.div = 3;
+    FLEXBUS_InitStruct.div = 0;
     FLEXBUS_Init(&FLEXBUS_InitStruct);
     /* ≈‰÷√Flexbus “˝Ω≈∏¥”√ */
     FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
+    
+    /* advanced config */
+    FLEXBUS_AdvancedConfigTypeDef config;
+    config.kFLEXBUS_brustReadEnable = false;
+    config.kFLEXBUS_brustReadEnable = false;
+    config.kFLEXBUS_ASET = 0;
+    config.kFLEXBUS_RDAH = 0;
+    config.kFLEXBUS_WRAH = 0;
+    config.kFLEXBUS_WS = 2;
+    FLEXBUS_AdvancedConfig(FLEXBUS_InitStruct.CSn, &config);
+    
     /* Back light */
     gpio_instance = GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);
     GPIO_WriteBit(gpio_instance, 3, 1); 

@@ -44,6 +44,10 @@
 #error "No CPU defined! please define CPU Type in Preprocessor Symbols, eg: MK60D10"
 #endif
 
+/* configuration */
+#if !defined(UART_DMA_SUPPORT)
+#define UART_DMA_SUPPORT 0
+#endif
 
 /* means you can use printf via UART */
 #define UART_USE_STDIO

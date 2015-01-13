@@ -81,21 +81,21 @@ void SRAM_Init(void)
     FLEXBUS_InitStruct.div = 0;
     FLEXBUS_Init(&FLEXBUS_InitStruct);
     
-    /* config Flexbus SRAM pinmux */
-    FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
-    FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group2, kFLEXBUS_CSPMCR_GROUP2_BE_31_24);
-    FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group1, kFLEXBUS_CSPMCR_GROUP1_CS1);
-    
     /* advanced config */
     FLEXBUS_AdvancedConfigTypeDef config;
+    config.kFLEXBUS_brustWriteEnable = false;
     config.kFLEXBUS_brustReadEnable = false;
-    config.kFLEXBUS_brustReadEnable = false;
+    config.kFLEXBUS_EXTS = true;
     config.kFLEXBUS_ASET = 0;
     config.kFLEXBUS_RDAH = 0;
     config.kFLEXBUS_WRAH = 0;
     config.kFLEXBUS_WS = 1;
     FLEXBUS_AdvancedConfig(FLEXBUS_InitStruct.CSn, &config);
     
+    /* config Flexbus SRAM pinmux */
+    FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
+    FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group2, kFLEXBUS_CSPMCR_GROUP2_BE_31_24);
+    FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group1, kFLEXBUS_CSPMCR_GROUP1_CS1);
     
 }
 

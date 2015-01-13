@@ -178,12 +178,13 @@ void ili9320_init(void)
     
     /* advanced config */
     FLEXBUS_AdvancedConfigTypeDef config;
+    config.kFLEXBUS_brustWriteEnable = false;
     config.kFLEXBUS_brustReadEnable = false;
-    config.kFLEXBUS_brustReadEnable = false;
-    config.kFLEXBUS_ASET = 0;
-    config.kFLEXBUS_RDAH = 0;
-    config.kFLEXBUS_WRAH = 0;
-    config.kFLEXBUS_WS = 2;
+    config.kFLEXBUS_EXTS = true;
+    config.kFLEXBUS_ASET = 1;
+    config.kFLEXBUS_RDAH = 1;
+    config.kFLEXBUS_WRAH = 1;
+    config.kFLEXBUS_WS = 6;
     FLEXBUS_AdvancedConfig(FLEXBUS_InitStruct.CSn, &config);
     
     /* Back light */

@@ -90,6 +90,7 @@ typedef struct
 {
     bool kFLEXBUS_brustWriteEnable;
     bool kFLEXBUS_brustReadEnable;
+    bool kFLEXBUS_EXTS;
     uint32_t kFLEXBUS_ASET:2;
     uint32_t kFLEXBUS_RDAH:2;
     uint32_t kFLEXBUS_WRAH:2;

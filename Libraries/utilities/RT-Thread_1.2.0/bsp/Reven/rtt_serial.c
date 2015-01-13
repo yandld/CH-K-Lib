@@ -110,6 +110,8 @@ static const struct rt_uart_ops kinetis_uart_ops =
 int rt_hw_usart_init(uint32_t MAP, const char * name)
 {
     uint32_t instance;
+    instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+    
     struct serial_configure config;
     config.baud_rate = BAUD_RATE_115200;
     config.bit_order = BIT_ORDER_LSB;
@@ -118,11 +120,9 @@ int rt_hw_usart_init(uint32_t MAP, const char * name)
     config.stop_bits = STOP_BITS_1;
     config.invert    = NRZ_NORMAL;
     config.reserved  = instance;
+    serial.config = config;
     serial.ops    = &kinetis_uart_ops;
     serial.int_rx = &uart_int_rx;
-    serial.config = config;
-    
-    instance = UART_QuickInit(MAP, BOARD_UART_BAUDRATE);
     UART_CallbackRxInstall(instance, UART_ISR);
     UART_ITDMAConfig(instance, kUART_IT_Rx, true);
     return rt_hw_serial_register(&serial, name,
@@ -134,6 +134,7 @@ int rt_hw_usart_init(uint32_t MAP, const char * name)
 static int init_board_uart(void)
 {
     rt_hw_usart_init(BOARD_UART_DEBUG_MAP, "uart0");
+
     return 0;
 }
 

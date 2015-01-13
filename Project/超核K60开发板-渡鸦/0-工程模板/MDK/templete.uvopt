@@ -73,7 +73,7 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>0</IsCurrentTarget>
+        <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>14</CpuCode>
       <Books>
@@ -453,24 +453,24 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>1</IsCurrentTarget>
+        <IsCurrentTarget>0</IsCurrentTarget>
       </OPTFL>
       <CpuCode>14</CpuCode>
       <Books>
         <Book>
           <Number>0</Number>
           <Title>Quick Start Guide (TWR-K60D100M)</Title>
-          <Path>D:\Software\Keil_V5\Keil\Kinetis_K60_DFP\1.0.2\Documents\TWR-K60D100MQSG.pdf</Path>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100MQSG.pdf</Path>
         </Book>
         <Book>
           <Number>1</Number>
           <Title>User Manual (TWR-K60D100M)</Title>
-          <Path>D:\Software\Keil_V5\Keil\Kinetis_K60_DFP\1.0.2\Documents\TWR-K60D100M_SCH.pdf</Path>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100M_SCH.pdf</Path>
         </Book>
         <Book>
           <Number>2</Number>
           <Title>User Manual (TWR-K60D100M)</Title>
-          <Path>D:\Software\Keil_V5\Keil\Kinetis_K60_DFP\1.0.2\Documents\TWRK60D100MUM.pdf</Path>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWRK60D100MUM.pdf</Path>
         </Book>
         <Book>
           <Number>3</Number>
@@ -537,7 +537,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name></Name>
+          <Name>/</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -602,10 +602,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>19</ColumnNumber>
+      <ColumnNumber>52</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>49</TopLine>
-      <CurrentLine>59</CurrentLine>
+      <TopLine>70</TopLine>
+      <CurrentLine>71</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\system_MK60D10.c</PathWithFileName>
       <FilenameWithoutPath>system_MK60D10.c</FilenameWithoutPath>
@@ -620,8 +620,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>470</TopLine>
-      <CurrentLine>475</CurrentLine>
+      <TopLine>487</TopLine>
+      <CurrentLine>491</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60D10.s</PathWithFileName>
       <FilenameWithoutPath>startup_MK60D10.s</FilenameWithoutPath>
@@ -642,10 +642,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>16</ColumnNumber>
+      <ColumnNumber>25</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>12</TopLine>
-      <CurrentLine>13</CurrentLine>
+      <TopLine>28</TopLine>
+      <CurrentLine>14</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -666,10 +666,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1839748</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>5</CurrentLine>
+      <TopLine>15</TopLine>
+      <CurrentLine>16</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\gpio.c</PathWithFileName>
       <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
@@ -682,10 +682,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1839748</ColumnNumber>
+      <ColumnNumber>24</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>5</CurrentLine>
+      <TopLine>870</TopLine>
+      <CurrentLine>894</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\uart.c</PathWithFileName>
       <FilenameWithoutPath>uart.c</FilenameWithoutPath>
@@ -794,10 +794,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1839748</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>5</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\spi.c</PathWithFileName>
       <FilenameWithoutPath>spi.c</FilenameWithoutPath>
@@ -826,10 +826,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1</ColumnNumber>
+      <ColumnNumber>17</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>374</TopLine>
-      <CurrentLine>380</CurrentLine>
+      <TopLine>58</TopLine>
+      <CurrentLine>59</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\dma.c</PathWithFileName>
       <FilenameWithoutPath>dma.c</FilenameWithoutPath>

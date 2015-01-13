@@ -35,19 +35,16 @@
 #include "rtt_serial.h"
 #include <rtdevice.h>
 
-static volatile struct rt_serial_device serial;
+static struct rt_serial_device serial;
 static struct serial_ringbuffer uart_int_rx;
 
 static uint16_t *gRevCh = RT_NULL;
-static uint8_t test =11;
 static void UART_ISR(uint16_t byteReceived)
 {
     static uint16_t ch;
     rt_interrupt_enter();
     ch = byteReceived;
     gRevCh = &ch;
-   // printf("%s %x %d %d %X\r\n", __func__, serial.serial_rx, test, serial.parent.open_flag);
-   // rt_hw_serial_isr(&serial, RT_SERIAL_EVENT_RX_IND);
     rt_hw_serial_isr(&serial);
     rt_interrupt_leave();
 }
@@ -110,8 +107,9 @@ static const struct rt_uart_ops kinetis_uart_ops =
     kinetis_getc,
 };
 
-int rt_hw_usart_init(uint32_t instance, const char * name)
+int rt_hw_usart_init(uint32_t MAP, const char * name)
 {
+    uint32_t instance;
     struct serial_configure config;
     config.baud_rate = BAUD_RATE_115200;
     config.bit_order = BIT_ORDER_LSB;
@@ -124,21 +122,20 @@ int rt_hw_usart_init(uint32_t instance, const char * name)
     serial.int_rx = &uart_int_rx;
     serial.config = config;
     
-    UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
-    printf("UART_QuickInit\r\n");
+    instance = UART_QuickInit(MAP, BOARD_UART_BAUDRATE);
     UART_CallbackRxInstall(instance, UART_ISR);
     UART_ITDMAConfig(instance, kUART_IT_Rx, true);
-    //printf("%s %x %d\r\n", __func__, serial.serial_rx, serial.parent.open_flag);
     return rt_hw_serial_register(&serial, name,
                           RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_STREAM,
                           RT_NULL);
 
 }
 
-void rt_hw_usart_init2(void)
+static int init_board_uart(void)
 {
-    rt_hw_usart_init(0, "uart0");
+    rt_hw_usart_init(BOARD_UART_DEBUG_MAP, "uart0");
+    return 0;
 }
 
-INIT_BOARD_EXPORT(rt_hw_usart_init2);
+INIT_BOARD_EXPORT(init_board_uart);
 

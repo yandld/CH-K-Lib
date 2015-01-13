@@ -88,10 +88,22 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 #define NVIC_PriorityGroup_3         ((uint32_t)0x4) /*!< 3 bits for pre-emption priority   1 bits for subpriority */                                                   
 #define NVIC_PriorityGroup_4         ((uint32_t)0x3) /*!< 4 bits for pre-emption priority   0 bits for subpriority */
 
+#if !defined(MIN)
 #define MIN(a, b)       ((a) < (b) ? (a) : (b))
+#endif
+
+#if !defined(MAX)
 #define MAX(a, b)       ((a) > (b) ? (a) : (b))
+#endif
+
+#if !defined(ABS)
 #define ABS(a)         (((a) < 0) ? (-(a)) : (a))
+#endif
+
+#if !defined(ARRAY_SIZE)
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
+#endif
+
 /**
  * @ingroup BasicDef
  *

@@ -441,14 +441,15 @@ void ENET_CallbackRxInstall(ENET_CallBackRxType AppCBFun)
  * @brief  查看以太帧否发送完成
  * @retval 0:完成 1:未完成
  */
-uint32_t ENET_IsTransmitComplete(void)
+
+bool ENET_IsTxTransferComplete(void)
 {
     if(ENET->EIR & ENET_EIMR_TXF_MASK)
     {
         ENET->EIR |= ENET_EIMR_TXF_MASK;
-        return 0;
+        return true;
     }
-    return 1;
+    return false;
 }
 
 void ENET_Transmit_IRQHandler(void)

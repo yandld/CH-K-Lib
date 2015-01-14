@@ -142,7 +142,7 @@ uint16_t ENET_MacReceiveData(uint8_t *data);
 void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config);
 void ENET_CallbackTxInstall(ENET_CallBackTxType AppCBFun);
 void ENET_CallbackRxInstall(ENET_CallBackRxType AppCBFun);
-uint32_t ENET_IsTransmitComplete(void);
+bool ENET_IsTxTransferComplete(void);
 
 #ifdef __cplusplus
 }

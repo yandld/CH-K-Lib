@@ -21,10 +21,13 @@ void init_thread_entry(void* parameter)
 {
     rt_thread_t tid;
     
-    SRAM_Init();
     rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
+    
+    #ifndef FRDM
+    SRAM_Init();
     rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-
+    #endif
+    
     /* init finsh */
     rt_device_t dev = rt_device_find("uart0");
     finsh_system_init();
@@ -63,28 +66,17 @@ void init_thread_entry(void* parameter)
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
   
-
-    
-    
-    ui_startup(RT_NULL, RT_NULL);
-    
     tid = rt_thread_create("key", key_thread_entry, RT_NULL, 512, 0x14, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
     
+    #ifndef FRDM
+    ui_startup(RT_NULL, RT_NULL);
+    #endif
+    
+
+    
 #ifdef RT_USING_LWIP
-//    rt_kprintf(" link beginning \r\n");
     rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
-//    time_out = 0;
-//	while(!(netif_list->flags & NETIF_FLAG_UP)) 
-//	{
-//		rt_thread_delay(RT_TICK_PER_SECOND);
-//        if((time_out++) > 3)
-//        {
-//            rt_kprintf("link failed\r\n");
-//            break;
-//        }
-//	}
-//    list_if();
 #endif
 
     tid = rt_thread_self();

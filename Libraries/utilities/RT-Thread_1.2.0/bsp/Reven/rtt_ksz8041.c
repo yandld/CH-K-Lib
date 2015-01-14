@@ -7,23 +7,13 @@
 
 static struct eth_device device;
 static uint8_t gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
-static uint8_t     gRxBuffer[1500];
-__align(16) static uint8_t gTxBuffer[1500];
-uint32_t    rx_len;
+static rt_uint8_t *gTxBuf;
+static rt_uint8_t *gRxBuf;
 
 void ENET_ISR(void)
 {
-    uint32_t len;
-    rx_len = 0;
     rt_interrupt_enter();
-    len = ENET_MacReceiveData(gRxBuffer);
-    if(len)
-    {
-        /* a frame has been received */
-        rx_len = len;
-        eth_device_ready(&device);
-        //rt_kprintf("enet frame received len:%d\r\n", rx_len);
-    }
+    eth_device_ready(&device);
     rt_interrupt_leave();
 }
 
@@ -44,13 +34,12 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     r = ksz8041_init(*(int*)dev->user_data);
     if(r)
     {
-        rt_kprintf("ksz8041 init failed! code:%d\r\n", r);
         return RT_ERROR;
     }
     if(!ksz8041_is_linked())
     {
-        rt_kprintf("no wire connected\r\n");
         eth_device_linkchange(&device, false);
+        return RT_EIO;
     }
     
     ENET_InitTypeDef ENET_InitStruct1;
@@ -91,6 +80,7 @@ static rt_err_t rt_ksz8041_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     switch (cmd)
     {
     case NIOCTL_GADDR:
+        
         /* get mac address */
         if (args) rt_memcpy(args, gCfgLoca_MAC, 6);
         else return -RT_ERROR;
@@ -107,10 +97,12 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
 {
     struct pbuf* p;
     rt_uint32_t i;
-    rt_uint32_t send_cnt = 0;
+    rt_uint32_t rx_len;
+    
     /* init p pointer */
     p = RT_NULL;
     i = 0;
+    rx_len = ENET_MacReceiveData(gRxBuf);
     if(rx_len)
     {
         p = pbuf_alloc(PBUF_LINK, rx_len, PBUF_RAM);
@@ -119,14 +111,12 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
             struct pbuf* q;  
             for (q = p; q != RT_NULL; q = q->next)
             {
-                rt_memcpy((rt_uint8_t*)q->payload, (rt_uint8_t*)&gRxBuffer[i], q->len);
-                send_cnt += q->len;
+                rt_memcpy((rt_uint8_t*)q->payload, (rt_uint8_t*)&gRxBuf[i], q->len);
             }
             rx_len = 0;
         }
         else
         {
-            rt_kprintf("rx: no pbuf%s\r\n", __func__);
             return NULL;
         }
     }
@@ -136,16 +126,17 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
 rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
 {
 
-    rt_uint32_t i;
+    rt_uint32_t tx_len;
     struct pbuf *q;
     
-    i = 0;
+    tx_len = 0;
     for (q = p; q != RT_NULL; q = q->next)
     {
-        rt_memcpy((rt_uint8_t*)&gTxBuffer[i], (rt_uint8_t*)q->payload, q->len);
-        i += q->len;
+        rt_memcpy((rt_uint8_t*)&gTxBuf[tx_len], (rt_uint8_t*)q->payload, q->len);
+        tx_len += q->len;
     }
     
+    /* check if still linked */
     if(!ksz8041_is_linked())
     {
         eth_device_linkchange(&device, false);
@@ -156,10 +147,8 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
         eth_device_linkchange(&device, true);
     }
     
-    ENET_MacSendData(gTxBuffer, i);
-    while(ENET_IsTransmitComplete() == 0);
-    
-    /* check if still linked */
+    ENET_MacSendData(gTxBuf, tx_len);
+    while(ENET_IsTxTransferComplete() == false);
 
     return RT_EOK;
 }
@@ -180,7 +169,19 @@ int rt_hw_ksz8041_init(uint8_t enetPhyAddr)
 
     device.eth_rx     = rt_ksz8041_rx;
     device.eth_tx     = rt_ksz8041_tx;
-
+    
+    gTxBuf = rt_malloc(1500);
+    if(!gTxBuf)
+    {
+        return RT_ENOMEM;
+    }
+    
+    gRxBuf = rt_malloc(1500);
+    if(!gRxBuf)
+    {
+        return RT_ENOMEM;
+    }
+    
     eth_device_init(&device, "e0");
     return 0;
 }

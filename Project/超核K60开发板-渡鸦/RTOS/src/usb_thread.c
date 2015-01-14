@@ -100,14 +100,14 @@ void usb_thread_entry(void* parameter)
 #ifdef FINSH_USING_MSH
 #include "finsh.h"
 
-int usb(int argc, char** argv)
+int usb_startup(int argc, char** argv)
 {
     rt_thread_t tid;
     
     if(argc != 2)
     {
         rt_kprintf("error param\r\n");
-        return 1;
+        return -1;
     }
     
     /* this task can not be single */
@@ -123,7 +123,7 @@ int usb(int argc, char** argv)
     return 0;
 }
 
-MSH_CMD_EXPORT(usb, eg:usb sd0);
+MSH_CMD_EXPORT(usb_startup, eg:usb sd0);
 
 #endif
 

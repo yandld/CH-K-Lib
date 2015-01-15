@@ -12,13 +12,13 @@
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { FRAMEWIN_CreateIndirect, "Framewin",    ID_FRAMEWIN_0, 0, -1, 240, 320, 0, 0x64, 0 },
-  { ICONVIEW_CreateIndirect, "Iconview", ID_ICONVIEW_0, 5, 5, 200, 265, 0, ICONVIEW_CF_AUTOSCROLLBAR_V, ICONVIEW_CF_AUTOSCROLLBAR_V },
- // { BUTTON_CreateIndirect, "Cal",       ID_BUTTON_0, 71, 8, 60, 35, 0, 0x0, 0 },
- // { BUTTON_CreateIndirect, "Info",          ID_BUTTON_1, 6, 8, 60, 35, 0, 0x0, 0 },
-//  { BUTTON_CreateIndirect, "Time",          ID_BUTTON_2, 137, 8, 60, 35, 0, 0x0, 0 },
-//  { BUTTON_CreateIndirect, "File",       ID_BUTTON_3, 6, 49, 60, 35, 0, 0x0, 0 },
- // { BUTTON_CreateIndirect, "Cali",          ID_BUTTON_4, 71, 49, 60, 35, 0, 0x0, 0 },
-//  { BUTTON_CreateIndirect, "Test",          ID_BUTTON_5, 137, 49, 60, 35, 0, 0x0, 0 },
+ // { ICONVIEW_CreateIndirect, "Iconview", ID_ICONVIEW_0, 5, 5, 200, 265, 0, ICONVIEW_CF_AUTOSCROLLBAR_V, ICONVIEW_CF_AUTOSCROLLBAR_V },
+  { BUTTON_CreateIndirect, "Cal",       ID_BUTTON_0, 71, 8, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "Info",          ID_BUTTON_1, 6, 8, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "Time",          ID_BUTTON_2, 137, 8, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "File",       ID_BUTTON_3, 6, 49, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "Cali",          ID_BUTTON_4, 71, 49, 60, 35, 0, 0x0, 0 },
+  { BUTTON_CreateIndirect, "Test",          ID_BUTTON_5, 137, 49, 60, 35, 0, 0x0, 0 },
 };
 
 static GUI_CONST_STORAGE unsigned long _acBrowser[] = {
@@ -192,14 +192,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             hItem = pMsg->hWin;
             FRAMEWIN_SetTitleVis(hItem, 0);
             hItem = WM_GetDialogItem(pMsg->hWin, ID_ICONVIEW_0);
-            ICONVIEW_SetSpace(hItem, GUI_COORD_X, 50);
-            ICONVIEW_SetSpace(hItem, GUI_COORD_Y, 50);
-            ICONVIEW_SetIconAlign(hItem, ICONVIEW_IA_LEFT | ICONVIEW_IA_TOP);
-            ICONVIEW_SetBkColor(hItem, ICONVIEW_CI_SEL, GUI_BLUE | 0xC0000000);
-            ICONVIEW_SetFont(hItem, &GUI_Font13B_ASCII);
+           // ICONVIEW_SetSpace(hItem, GUI_COORD_X, 50);
+           // ICONVIEW_SetSpace(hItem, GUI_COORD_Y, 50);
+           // ICONVIEW_SetIconAlign(hItem, ICONVIEW_IA_LEFT | ICONVIEW_IA_TOP);
+           // ICONVIEW_SetBkColor(hItem, ICONVIEW_CI_SEL, GUI_BLUE | 0xC0000000);
+           // ICONVIEW_SetFont(hItem, &GUI_Font13B_ASCII);
             for (i = 0; i < 7; i++)
             {  
-                ICONVIEW_AddBitmapItem(hItem, &_bmBrowser, "Test");
+            //    ICONVIEW_AddBitmapItem(hItem, &_bmBrowser, "Test");
             }
             break;
         case WM_NOTIFY_PARENT:
@@ -233,7 +233,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         if(msg.exec != RT_NULL)
         {
-        //    rt_mq_send(guimq, &msg, sizeof(msg));
+            rt_mq_send(guimq, &msg, sizeof(msg));
         }
     }
 

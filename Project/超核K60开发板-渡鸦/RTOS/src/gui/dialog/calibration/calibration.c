@@ -15,9 +15,9 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { FRAMEWIN_CreateIndirect,    "Framewin", ID_FRAMEWIN_0, 0, 0, 240, 320, 0, 0x64, 0 },
   { TEXT_CreateIndirect,        "Text", ID_TEXT_0, 18, 104, 194, 109, 0, 0x64, 0 },
   { TEXT_CreateIndirect,        "TOUCH_Calibrate", ID_TEXT_1, 67, 0, 95, 17, 0, 0x64, 0 },
-  { BUTTON_CreateIndirect,      "", ID_BUTTON_0, 0, 0, 13, 13, 0, WM_CF_HIDE, 0 },
+  { BUTTON_CreateIndirect,      "", ID_BUTTON_0, 10, 10, 13, 13, 0, WM_CF_HIDE, 0 },
   { BUTTON_CreateIndirect,      "", ID_BUTTON_1, 215, 300, 13, 13, 0, WM_CF_HIDE, 0 },
-  { TEXT_CreateIndirect,        "Press here", ID_TEXT_2, 2, 14, 98, 20, 0, WM_CF_HIDE, 0 },
+  { TEXT_CreateIndirect,        "Press here", ID_TEXT_2, 10, 25, 98, 20, 0, WM_CF_HIDE, 0 },
   { TEXT_CreateIndirect,        "Press here", ID_TEXT_3, 150, 300, 70, 20, 0, WM_CF_HIDE, 0 },
 };
 
@@ -46,8 +46,6 @@ static void _cbDialog(WM_MESSAGE * pMsg)
 {
 
     WM_HWIN hItem;
-    int NCode;
-    int Id;
     switch (pMsg->MsgId)
     {
         case WM_INIT_DIALOG:
@@ -76,10 +74,10 @@ WM_HWIN GUI_ExecCalibrationDialog(GUI_TouchData* pTouchData)
     WM_HWIN hWin;
     State = 0;
     tData.magic = 'T';
-    tData.aLogX[0] = 0;
-    tData.aLogY[0] = 0;
-    tData.aLogX[1] = 215;
-    tData.aLogY[1] = 300;
+    tData.aLogX[0] = 15;
+    tData.aLogY[0] = 15;
+    tData.aLogX[1] = 220;
+    tData.aLogY[1] = 305;
     
     hWin = GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 

@@ -15,7 +15,6 @@ void GUI_AppAutoCalibration(const char* path)
     }
     else
     {
-        GUI_MessageBox("Touch data succ\r\n", path, GUI_MESSAGEBOX_CF_MODAL);
         read(hFile, &tData, sizeof(GUI_TouchData));
         GUI_TOUCH_Calibrate(0, tData.aLogX[0], tData.aLogX[1], tData.aPhysX[0], tData.aPhysX[1]); /* Calibrate X-axis */
         GUI_TOUCH_Calibrate(1, tData.aLogY[0], tData.aLogY[1], tData.aPhysY[0], tData.aPhysY[1]); /* Calibrate Y-axis */

@@ -184,7 +184,7 @@ void ili9320_init(void)
     config.kFLEXBUS_ASET = 1;
     config.kFLEXBUS_RDAH = 1;
     config.kFLEXBUS_WRAH = 1;
-    config.kFLEXBUS_WS = 6;
+    config.kFLEXBUS_WS = 5;
     FLEXBUS_AdvancedConfig(FLEXBUS_InitStruct.CSn, &config);
     
     /* Back light */

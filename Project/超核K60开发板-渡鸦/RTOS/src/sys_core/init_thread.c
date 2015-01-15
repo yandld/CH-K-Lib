@@ -1,7 +1,6 @@
 #include <rtthread.h>
 #include "board.h"
 #include "components.h"
-#include "rtt_ksz8041.h"
 #include "spi_flash_w25qxx.h"
 #include "chlib_k.h"
 #include "sram.h"
@@ -12,6 +11,7 @@ void usb_thread_entry(void* parameter);
 void sd_thread_entry(void* parameter);
 void usb_thread_entry(void* parameter);
 int ui_startup(int argc, char** argv);
+int network_startup(int argc, char** argv);
 void key_thread_entry(void* parameter);
 
 
@@ -73,11 +73,7 @@ void init_thread_entry(void* parameter)
     ui_startup(RT_NULL, RT_NULL);
     #endif
     
-
-    
-#ifdef RT_USING_LWIP
-    rt_hw_ksz8041_init(BOARD_ENET_PHY_ADDR);
-#endif
+    network_startup(RT_NULL, RT_NULL);
 
     tid = rt_thread_self();
     rt_thread_delete(tid); 

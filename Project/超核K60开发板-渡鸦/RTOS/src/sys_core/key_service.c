@@ -6,12 +6,6 @@
 #include "board.h"
 #include "gui_appdef.h"
 
-//#include "my_gui.h"
-
-//#include "usb.h"
-//#include "usb_msc.h"
-
-
 void key_thread_entry(void* parameter)
 {
     int i,key_num;

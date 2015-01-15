@@ -147,8 +147,10 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
         eth_device_linkchange(&device, true);
     }
     
+    rt_enter_critical();
     ENET_MacSendData(gTxBuf, tx_len);
-    while(ENET_IsTxTransferComplete() == false);
+   // while(ENET_IsTxTransferComplete() == false);
+    rt_exit_critical();
 
     return RT_EOK;
 }
@@ -170,13 +172,13 @@ int rt_hw_ksz8041_init(uint8_t enetPhyAddr)
     device.eth_rx     = rt_ksz8041_rx;
     device.eth_tx     = rt_ksz8041_tx;
     
-    gTxBuf = rt_malloc(1500);
+    gTxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE);
     if(!gTxBuf)
     {
         return RT_ENOMEM;
     }
     
-    gRxBuf = rt_malloc(1500);
+    gRxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE);
     if(!gRxBuf)
     {
         return RT_ENOMEM;

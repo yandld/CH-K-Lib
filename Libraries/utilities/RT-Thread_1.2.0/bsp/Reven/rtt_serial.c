@@ -111,6 +111,8 @@ int rt_hw_usart_init(uint32_t MAP, const char * name)
 {
     uint32_t instance;
     instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+    UART_EnableTxFIFO(instance, true);
+    UART_SetTxFIFOWatermark(instance, UART_GetTxFIFOSize(instance));
     
     struct serial_configure config;
     config.baud_rate = BAUD_RATE_115200;

@@ -11,7 +11,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 100, 100, 0, IMAGE_CF_MEMDEV | IMAGE_CF_ATTACHED | IMAGE_CF_TILE | IMAGE_CF_ALPHA, 0 },
 };
 
-static unsigned char *gBuffer = RT_NULL;
+static unsigned char *gImageBuf = RT_NULL;
 static const char *gPath;
 
 int _GetData(void * p, const U8 ** ppData, unsigned NumBytes, U32 Off)
@@ -26,14 +26,14 @@ int _GetData(void * p, const U8 ** ppData, unsigned NumBytes, U32 Off)
     }
     if (NumBytes >GUI_IMAGE_BUF_SIZE) NumBytes = GUI_IMAGE_BUF_SIZE;
     lseek(hFile, Off, SEEK_SET);
-    NumBytesRead = read(hFile, gBuffer, NumBytes);
+    NumBytesRead = read(hFile, gImageBuf, NumBytes);
     close(hFile);
     if(NumBytesRead == -1)
     {
         rt_kprintf("read failed\r\n");
         return NumBytes;
     }
-    *ppData = gBuffer;
+    *ppData = gImageBuf;
     return NumBytesRead;
 }
 
@@ -45,14 +45,14 @@ static int _DispImage(WM_HWIN Handle, const char *path)
     if(hFile < 0)
     {
         rt_kprintf("open failed\r\n");
-        return 1;
+        return RT_EIO;
     }
     close(hFile);
 
-    gBuffer = rt_malloc(GUI_IMAGE_BUF_SIZE);
-    if(gBuffer == RT_NULL)
+    gImageBuf = rt_malloc(GUI_IMAGE_BUF_SIZE);
+    if(!gImageBuf)
     {
-        return 1;
+        return RT_ENOMEM;
     }
     
     switch(GUI_AppGetFileType(path))

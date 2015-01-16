@@ -247,7 +247,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 
 WM_HWIN GUI_CreateDesktopDialog(void)
 {
-    GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    int i;
+    WM_HWIN hItem;
+   // GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
+    hItem = ICONVIEW_CreateEx(0, 0, 100, 200, WM_HBKWIN, WM_CF_SHOW | WM_CF_HASTRANS, 0, GUI_ID_ICONVIEW0, 55, 60);
+    for (i = 0; i < 7; i++)
+    {
+        ICONVIEW_AddBitmapItem(hItem, &_bmBrowser, "Test");
+    }
 }
 
 

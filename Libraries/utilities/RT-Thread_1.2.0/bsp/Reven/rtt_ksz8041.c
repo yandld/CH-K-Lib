@@ -21,6 +21,14 @@ void ENET_ISR(void)
 static rt_err_t rt_ksz8041_init(rt_device_t dev)
 {
     int r;
+    
+    /* init driver */
+    ENET_InitTypeDef ENET_InitStruct1;
+    ENET_InitStruct1.pMacAddress = gCfgLoca_MAC;
+    ENET_InitStruct1.is10MSpped = false;
+    ENET_InitStruct1.isHalfDuplex = false;
+    ENET_Init(&ENET_InitStruct1);
+    
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOB, 1, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 5, kPinAlt4);
@@ -42,12 +50,6 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
         return RT_EIO;
     }
     
-    ENET_InitTypeDef ENET_InitStruct1;
-    ENET_InitStruct1.pMacAddress = gCfgLoca_MAC;
-    ENET_InitStruct1.is10MSpped = ksz8041_is_phy_10m_speed();
-    ENET_InitStruct1.isHalfDuplex = !ksz8041_is_phy_full_dpx();
-
-    ENET_Init(&ENET_InitStruct1);
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);
     

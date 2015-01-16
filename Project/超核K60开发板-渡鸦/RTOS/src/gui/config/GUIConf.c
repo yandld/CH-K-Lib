@@ -5,7 +5,7 @@
 #include <rtthread.h>
 #include "sram.h"
 
-#define GUI_NUMBYTES  (1024*256)
+#define GUI_NUMBYTES  (1024*300)
 #define GUI_BLOCKSIZE 4
 
 void GUI_Log(const char *s)

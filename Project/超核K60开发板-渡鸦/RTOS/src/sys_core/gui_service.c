@@ -9,14 +9,15 @@ void gui_thread_entry(void* parameter)
     U32 i;
     guimq = rt_mq_create("gui_mq", sizeof(gui_msg_t), 6, RT_IPC_FLAG_FIFO);
     gui_msg_t msg;
+    
     GUI_Init();
     GUI_DispString("gui system actived!\r\n");
     GUI_Delay(100);
 
     GUI_CURSOR_Show();
-    GUI_CreateDesktopDialog();
     mkdir("/SF/SYS", 0);
     GUI_AppAutoCalibration("/SF/SYS/TDATA");
+    GUI_CreateDesktopDialog();
 	while(1)
 	{
         if(rt_mq_recv(guimq, &msg, sizeof(gui_msg_t), 1) == RT_EOK)

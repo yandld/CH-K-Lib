@@ -25,7 +25,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { BUTTON_CreateIndirect, "Time",          ID_BUTTON_2, 0, 80, 50, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "File",          ID_BUTTON_3, 6, 49, 50, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "Cali",          ID_BUTTON_4, 71, 49, 50, 50, 0, 0x0, 0 },
- // { BUTTON_CreateIndirect, "Test",          ID_BUTTON_5, 137, 49, 50, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "Test",          ID_BUTTON_5, 137, 49, 50, 50, 0, 0x0, 0 },
 };
 
 
@@ -56,6 +56,7 @@ static char *AppImageTable[] =
     "/SF/SYS/WIFI.BMP",
     "/SF/SYS/FILE.BMP",
     "/SF/SYS/PER.BMP",
+
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
@@ -85,7 +86,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
 //          IMAGE_SetJPEG(hItem, p[2], 38399);
 
 
-		for (i=0;i<5;i++)
+		for (i=0;i<6;i++)
 		{
 			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0 + i);
             WM_EnableMemdev(hItem);
@@ -149,16 +150,9 @@ WM_HWIN GUI_CreateDesktopDialog(void)
 {
     int i;
     int fd;
-  WM_HWIN  hWin;
-  // // h = GUI_MEMDEV_Create(0, 0, 50, 50);
-  //  GUI_MEMDEV_Select(h);
- //   
-    //WM_SetCallback(WM_HBKWIN, _cb);
-    LCD_SetSizeEx(0, 240, 320);
-	LCD_SetVSizeEx(0, 400, 320);
+    WM_HWIN  hWin;
     WM_MOTION_Enable(1);
-    
-    
+
     hWin = GUI_CreateDialogBox(_aDialogCreate2, GUI_COUNTOF(_aDialogCreate2), _cbDialog2, WM_HBKWIN, -100, -2);
     GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, hWin, 0, 0);
 }

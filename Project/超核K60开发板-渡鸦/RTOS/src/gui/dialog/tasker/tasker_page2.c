@@ -6,32 +6,16 @@
 
 extern struct rt_object_information rt_object_container[];
 
-static const char  * _aTable_1[3] = 
-  { "623499-0010001", "1", "Item 1" };
 
 
 const GUI_WIDGET_CREATE_INFO _aDialogCreate2[] = {
   { WINDOW_CreateIndirect,    "Dialog 1", 0,                   0,   0, 250, 270, FRAMEWIN_CF_MOVEABLE },
   { LISTVIEW_CreateIndirect, "Listview", ID_LISTVIEW_0,        6,  10, 210, 240, 0, 0x0, 0 },
-
 };
 
-void _cbDialog(WM_MESSAGE * pMsg)
+static void _DispThread(WM_HWIN hItem)
 {
-  WM_HWIN hItem;
-  int     NCode;
-  int     Id;
-    
-  switch (pMsg->MsgId) {
-    case WM_INIT_DIALOG:
 
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
-    LISTVIEW_AddColumn(hItem, 60, "Thread", GUI_TA_HCENTER | GUI_TA_VCENTER);
-    LISTVIEW_AddColumn(hItem, 40, "Priority", GUI_TA_HCENTER | GUI_TA_VCENTER);
-    LISTVIEW_AddColumn(hItem, 40, "Stack", GUI_TA_HCENTER | GUI_TA_VCENTER);
-    LISTVIEW_AddColumn(hItem, 50, "Status", GUI_TA_HCENTER | GUI_TA_VCENTER);
-    LISTVIEW_SetGridVis(hItem, 1);
-    
     struct rt_list_node *list;
     struct rt_list_node *node;
     list = &rt_object_container[RT_Object_Class_Thread].object_list;
@@ -63,6 +47,31 @@ void _cbDialog(WM_MESSAGE * pMsg)
     rt_free(sPriority);
     rt_free(sStackSize);
     rt_free(sStatus);
+}
+
+void _cbDialog(WM_MESSAGE * pMsg)
+{
+  WM_HWIN hItem;
+  int     NCode;
+  int     Id;
+    
+  switch (pMsg->MsgId) {
+    case WM_TIMER:
+        hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
+       // _DispThread(hItem);
+        WM_RestartTimer(pMsg->Data.v, 200);
+        break;
+      
+    case WM_INIT_DIALOG:
+    WM_CreateTimer(WM_GetClientWindow(pMsg->hWin), 0, 100, 0);
+    
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_LISTVIEW_0);
+    LISTVIEW_AddColumn(hItem, 60, "Thread", GUI_TA_HCENTER | GUI_TA_VCENTER);
+    LISTVIEW_AddColumn(hItem, 40, "Priority", GUI_TA_HCENTER | GUI_TA_VCENTER);
+    LISTVIEW_AddColumn(hItem, 40, "Stack", GUI_TA_HCENTER | GUI_TA_VCENTER);
+    LISTVIEW_AddColumn(hItem, 50, "Status", GUI_TA_HCENTER | GUI_TA_VCENTER);
+    LISTVIEW_SetGridVis(hItem, 1);
+    _DispThread(hItem);
     
     break;
   default:

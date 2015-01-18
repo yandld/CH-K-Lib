@@ -14,7 +14,7 @@ void gui_thread_entry(void* parameter)
     GUI_DispString("gui system actived!\r\n");
     GUI_Delay(100);
 
-    GUI_CURSOR_Show();
+    //GUI_CURSOR_Show();
     mkdir("/SF/SYS", 0);
     GUI_AppAutoCalibration("/SF/SYS/TDATA");
     GUI_CreateDesktopDialog();

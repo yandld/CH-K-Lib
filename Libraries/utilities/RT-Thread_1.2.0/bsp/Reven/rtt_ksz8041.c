@@ -10,6 +10,10 @@ static uint8_t gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
 static rt_uint8_t *gTxBuf;
 static rt_uint8_t *gRxBuf;
 
+
+
+static enet_phy_data phy_data;
+
 void ENET_ISR(void)
 {
     rt_interrupt_enter();
@@ -21,7 +25,6 @@ void ENET_ISR(void)
 static rt_err_t rt_ksz8041_init(rt_device_t dev)
 {
     int r;
-    
     /* init driver */
     ENET_InitTypeDef ENET_InitStruct1;
     ENET_InitStruct1.pMacAddress = gCfgLoca_MAC;
@@ -82,16 +85,16 @@ static rt_err_t rt_ksz8041_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     switch (cmd)
     {
     case NIOCTL_GADDR:
-        
         /* get mac address */
         if (args) rt_memcpy(args, gCfgLoca_MAC, 6);
         else return -RT_ERROR;
         break;
-
+    case NIOCTL_GET_PHY_DATA:
+        if (args) rt_memcpy(args, &phy_data, sizeof(phy_data));
+        break;
     default :
         break;
     }
-
     return RT_EOK;
 }
 
@@ -107,6 +110,8 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
     rx_len = ENET_MacReceiveData(gRxBuf);
     if(rx_len)
     {
+        phy_data.rx_fcnt++;
+        phy_data.rx_dcnt+= rx_len;
         p = pbuf_alloc(PBUF_LINK, rx_len, PBUF_RAM);
         if (p != RT_NULL)
         {
@@ -151,6 +156,9 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
     
     rt_enter_critical();
     ENET_MacSendData(gTxBuf, tx_len);
+    phy_data.tx_fcnt++;
+    phy_data.tx_dcnt+= tx_len;
+    
    // while(ENET_IsTxTransferComplete() == false);
     rt_exit_critical();
 

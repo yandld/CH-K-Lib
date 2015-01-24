@@ -13,6 +13,8 @@
 #include "common.h"
 #include <string.h>
 
+#if defined(ENET)
+
 //!< ENET DMA Tx&Rx Descriptors memory regin(must be 16 bit agiged)
 static  uint8_t xENETTxDescriptors_unaligned[(CFG_NUM_ENET_TX_BUFFERS*sizeof(NBUF))+16];
 static  uint8_t xENETRxDescriptors_unaligned[(CFG_NUM_ENET_RX_BUFFERS*sizeof(NBUF))+16];
@@ -265,7 +267,12 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 	MCG->C2 &= ~MCG_C2_EREFS0_MASK;
     
     /* enable OSCERCLK output */
+#ifdef OSC0
+    OSC0->CR |= OSC_CR_ERCLKEN_MASK;
+#else
     OSC->CR |= OSC_CR_ERCLKEN_MASK;
+#endif
+    
     
     /* 根据协商结果设置ENET模块 */
     usData = 0;	
@@ -475,5 +482,5 @@ void ENET_Receive_IRQHandler(void)
     }
 }
 
-
+#endif
 

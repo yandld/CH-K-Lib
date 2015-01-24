@@ -12,6 +12,13 @@
 #include "dma.h"
 #include "common.h"
 
+#if !defined(DMAMUX_BASES)
+#define DMAMUX_BASES {DMAMUX};
+
+#endif
+
+/* gloabl const table defination */
+static DMAMUX_Type * const DMAMUX_InstanceTable[] = DMAMUX_BASES;
 static DMA_CallBackType DMA_CallBackTable[16] = {NULL};
 static uint32_t DMAChlMAP;
 
@@ -19,6 +26,7 @@ uint32_t _DMA_ChlAlloc(void);
 void DMA_ChlFree(uint32_t chl);
 
 /* DMA中断向量入口 */
+#if !defined(MK60F15)
 static const IRQn_Type DMA_IRQnTable[] = 
 {
     (IRQn_Type)(DMA0_IRQn + 0),
@@ -38,7 +46,27 @@ static const IRQn_Type DMA_IRQnTable[] =
     (IRQn_Type)(DMA0_IRQn + 14),
     (IRQn_Type)(DMA0_IRQn + 15),
 };
-
+#else
+static const IRQn_Type DMA_IRQnTable[] = 
+{
+    (IRQn_Type)(DMA0_DMA16_IRQn + 0),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 1),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 2),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 3),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 4),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 5),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 6),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 7),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 8),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 9),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 10),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 11),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 12),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 13),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 14),
+    (IRQn_Type)(DMA0_DMA16_IRQn + 15),
+};
+#endif
 
 /**
  * @brief  初始化DMA模块
@@ -50,7 +78,16 @@ uint32_t DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
     uint8_t chl;
     
 	/* enable DMA and DMAMUX clock */
-	SIM->SCGC6 |= SIM_SCGC6_DMAMUX_MASK;    
+#if defined(DMAMUX0)  
+    SIM->SCGC6 |= SIM_SCGC6_DMAMUX0_MASK;
+#endif
+#if  defined(DMAMUX1)
+    SIM->SCGC6 |= SIM_SCGC6_DMAMUX1_MASK;
+#endif
+#if  defined(DMAMUX)
+    SIM->SCGC6 |= SIM_SCGC6_DMAMUX_MASK;
+#endif
+	
 	SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;
     
     chl = DMA_InitStruct->chl;
@@ -58,15 +95,15 @@ uint32_t DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
     /* disable chl first */
     DMA0->ERQ &= ~(1<<(chl));
     /* dma chl source config */
-    DMAMUX->CHCFG[chl] = DMAMUX_CHCFG_SOURCE(DMA_InitStruct->chlTriggerSource);
+    DMAMUX_InstanceTable[0]->CHCFG[chl] = DMAMUX_CHCFG_SOURCE(DMA_InitStruct->chlTriggerSource);
     /* trigger mode */
     switch(DMA_InitStruct->triggerSourceMode)
     {
         case kDMA_TriggerSource_Normal:
-            DMAMUX->CHCFG[chl] &= ~DMAMUX_CHCFG_TRIG_MASK;
+            DMAMUX_InstanceTable[0]->CHCFG[chl] &= ~DMAMUX_CHCFG_TRIG_MASK;
             break;
         case kDMA_TriggerSource_Periodic:
-            DMAMUX->CHCFG[chl] |= DMAMUX_CHCFG_TRIG_MASK;
+            DMAMUX_InstanceTable[0]->CHCFG[chl] |= DMAMUX_CHCFG_TRIG_MASK;
             break;
         default:
             break;
@@ -94,7 +131,7 @@ uint32_t DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
     /* auto close enable(disable req on major loop complete)*/
     DMA0->TCD[chl].CSR |= DMA_CSR_DREQ_MASK;
 	/* enable DMAMUX */
-	DMAMUX->CHCFG[chl] |= DMAMUX_CHCFG_ENBL_MASK;
+	DMAMUX_InstanceTable[0]->CHCFG[chl] |= DMAMUX_CHCFG_ENBL_MASK;
     
     return chl;
 }
@@ -105,7 +142,7 @@ uint32_t DMA_ChlAlloc(void)
     uint32_t MaxDMAChl;
     
     /* get max DMA chl on this device */
-    MaxDMAChl = (ARRAY_SIZE(DMAMUX->CHCFG)>32)?(ARRAY_SIZE(DMAMUX->CHCFG)):(32);
+    MaxDMAChl = (ARRAY_SIZE(DMAMUX_InstanceTable[0]->CHCFG)>32)?(ARRAY_SIZE(DMAMUX_InstanceTable[0]->CHCFG)):(32);
     
     /* alloc a channel */
     for(i=0;i<MaxDMAChl;i++)

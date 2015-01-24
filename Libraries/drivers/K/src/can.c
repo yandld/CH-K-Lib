@@ -11,6 +11,8 @@
 #include "can.h"
 #include "gpio.h"
 
+#if defined(CAN0)
+
 #define CAN_MB_MAX      (16) //最大邮箱数16个
 #if (!defined(CAN_BASES))
 
@@ -508,4 +510,4 @@ void CAN1_ORed_Message_buffer_IRQHandler(void)
     CAN_InstanceTable[HW_CAN1]->IFLAG1 |= temp;
 }
 
-
+#endif

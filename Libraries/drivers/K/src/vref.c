@@ -21,8 +21,13 @@ void VREF_Init(VREF_InitTypeDef *VREF_InitStruct)
     /* open clock gate */
     SIM->SCGC4 |= SIM_SCGC4_VREF_MASK;
     /* enable moudle */
+    #ifdef VREF_SC_ICOMPEN_MASK
     VREF->SC = VREF_SC_VREFEN_MASK | VREF_SC_REGEN_MASK | VREF_SC_ICOMPEN_MASK | VREF_SC_MODE_LV(VREF_InitStruct->bufferMode);
     VREF->TRM |= VREF_TRM_CHOPEN_MASK;
+    #else
+    VREF->SC = VREF_SC_VREFEN_MASK | VREF_SC_REGEN_MASK  | VREF_SC_MODE_LV(VREF_InitStruct->bufferMode);
+    #endif
+    
 }
 
  /**

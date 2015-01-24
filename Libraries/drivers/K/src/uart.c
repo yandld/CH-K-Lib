@@ -814,7 +814,7 @@ static const QuickInit_Type UART_QuickInitTable[] =
 };
 */
 
-#ifdef DMA0
+#ifdef UART_USE_DMA
 #include "dma.h"
 static uint32_t DMA2UARTChlTable[5];
 

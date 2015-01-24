@@ -13,9 +13,8 @@
 #include "sd.h"
 #include "gpio.h"
 
-#ifndef SDHC
-#error  "This chip does not have this moudle, please remove this file"
-#endif
+#if defined(SDHC)
+
 
 //DATA线位宽定义
 #define ESDHC_BUS_WIDTH_1BIT                 (0x00)
@@ -112,8 +111,14 @@ static void SD_SetBaudRate(uint32_t baudrate)
 	uint32_t pres, div, min, minpres = 0x80, mindiv = 0x0F;
 	int  val;
     uint32_t clock;
+    #ifdef SIM_SOPT2_ESDHCSRC_MASK
+    
+    SIM->SOPT2 &= ~SIM_SOPT2_ESDHCSRC_MASK;
+    SIM->SOPT2 |= SIM_SOPT2_ESDHCSRC(0);
+    #else
     SIM->SOPT2 &= ~SIM_SOPT2_SDHCSRC_MASK;
     SIM->SOPT2 |= SIM_SOPT2_SDHCSRC(0);
+    #endif
     CLOCK_GetClockFrequency(kCoreClock, &clock);
     
     /* Find closest setting */
@@ -331,8 +336,11 @@ uint8_t SD_InitCard(void)
 uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct)
 {
     /* enable clock gate */
+    #ifdef SIM_SCGC3_SDHC_MASK
 	SIM->SCGC3 |= SIM_SCGC3_SDHC_MASK;
-	
+	#else
+	SIM->SCGC3 |= SIM_SCGC3_ESDHC_MASK;
+    #endif
     /* reset module */
 	SDHC->SYSCTL = SDHC_SYSCTL_RSTA_MASK | SDHC_SYSCTL_SDCLKFS(0x80);
 	while(SDHC->SYSCTL & SDHC_SYSCTL_RSTA_MASK){};
@@ -724,5 +732,5 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t blockCn
 	return ESDHC_OK;
 }
 
-
+#endif
 

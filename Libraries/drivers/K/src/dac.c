@@ -10,7 +10,7 @@
   
  #include "dac.h"
  #include "common.h"
- 
+ #if defined(DAC0)
  /* global vars */
 static DAC_Type * const DAC_InstanceTable[] = DAC_BASES;
 static DAC_CallBackType DAC_CallBackTable[ARRAY_SIZE(DAC_InstanceTable)] = {NULL};
@@ -324,4 +324,4 @@ void DAC1_IRQHandler(void)
     }  
 }
  
- 
+#endif

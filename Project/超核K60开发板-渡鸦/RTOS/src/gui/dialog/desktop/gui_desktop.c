@@ -75,10 +75,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         
         for(i=0;i<GUI_COUNTOF(UIApp);i++)
         {
-            hItem = BUTTON_CreateAsChild(10, 10, 50, 50, pMsg->hWin, UIApp[i].GUID, WM_CF_SHOW);
+            hItem = BUTTON_CreateAsChild(10, 10, 55, 55, pMsg->hWin, UIApp[i].GUID, WM_CF_SHOW);
             BUTTON_SetText(hItem, UIApp[i].text);
             WM_EnableMemdev(hItem);
-			WM_MoveTo(hItem, 10+(i%3)*70, (i/3)*70 + 17);
+			WM_MoveTo(hItem, 10+(i%3)*75, (i/3)*70 + 17);
             UIApp[i].plogo = rt_malloc(9*1024);
             fd = open(UIApp[i].logoPath, O_RDONLY , 0);
             read(fd, p[i], 8192);
@@ -108,6 +108,14 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         if(msg.exec != RT_NULL)
         {
+            void beep(int argc, char** argv);
+            char argv1[] = "beep";
+            char argv2[] = "100";
+            
+            char* pp[2];
+            pp[0] = argv1;
+            pp[1] = argv2;
+            beep(1, (char**)pp);
             rt_mq_send(guimq, &msg, sizeof(msg));
         }
     }

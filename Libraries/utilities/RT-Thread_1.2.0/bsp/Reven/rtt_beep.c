@@ -67,7 +67,7 @@ static void timer_timeout(void* parameter)
     rt_timer_detach(&timer);
 }
 
-static void beep(int argc, char** argv)
+void beep(int argc, char** argv)
 {
     int val;
     val = strtoul(argv[1],0,0);

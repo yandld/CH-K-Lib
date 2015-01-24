@@ -54,6 +54,22 @@ typedef struct
     int aLogY[2];
 }GUI_TouchData;
 
+
+typedef struct
+{
+    const char* name;
+    const char* text;
+    const char* logoPath;
+    U8 * plogo;
+    int x0;
+    int y0;
+    int xSize;
+    int ySize;
+    U32 GUID;
+    void (*exec)(void *parameter);
+}UIAppEntry;
+
+
 //!< API below API should only call in GUI thread
 void GUI_AppDispImage(const char * path);
 void GUI_AppDispCalender(void);

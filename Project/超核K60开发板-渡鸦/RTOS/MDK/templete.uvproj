@@ -733,6 +733,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\i2c_at24cxx.c</FilePath>
             </File>
+            <File>
+              <FileName>rtt_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_led.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2353,6 +2358,11 @@
               <FileName>i2c_at24cxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\i2c_at24cxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtt_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_led.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4041,6 +4051,11 @@
               <FileName>i2c_at24cxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\i2c_at24cxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtt_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_led.c</FilePath>
             </File>
           </Files>
         </Group>

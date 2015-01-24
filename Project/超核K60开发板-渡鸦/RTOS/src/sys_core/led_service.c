@@ -4,28 +4,28 @@
 #include "gpio.h"
 #include "gui.h"
 #include "board.h"
-
-//#include "my_gui.h"
-
-//#include "usb.h"
-//#include "usb_msc.h"
+#include "rtt_led.h"
 
 
 void led_thread_entry(void* parameter)
 {
-    int i,led_num;
-    uint32_t led_port_tab[] = BOARD_LED_GPIO_BASES;
-    uint32_t led_pin_tab[] = BOARD_LED_PIN_BASES;
-    led_num = ARRAY_SIZE(led_port_tab);
-    for(i=0; i<led_num; i++)
+    int i, led_num;
+    rt_device_t dev;
+    dev = rt_device_find("led");
+    if(!dev)
     {
-        GPIO_QuickInit(led_port_tab[i], led_pin_tab[i], kGPIO_Mode_OPP);
+        return;
     }
+    rt_device_control(dev, RT_DEVICE_GET_LED_NUM, &led_num);
+    rt_kprintf("led num:%d\r\n", led_num);
+    
     while(1)
     {
-        i++; i%=led_num;
-        GPIO_ToggleBit(led_port_tab[i], led_pin_tab[i]);
-        rt_thread_delay(20);
+        for(i=0;i<led_num;i++)
+        {
+            rt_device_control(dev, RT_DEVICE_CTRL_LED_TOGGLE, &i);
+            rt_thread_delay(20);
+        }
     }
 }
 

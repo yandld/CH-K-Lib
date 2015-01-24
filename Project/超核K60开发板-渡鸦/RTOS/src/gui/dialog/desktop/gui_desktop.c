@@ -13,19 +13,25 @@
 #define ID_IMAGE_0      (GUI_ID_USER + 0x04)
 
 
+static UIAppEntry UIApp[] = 
+{
+    {"calendar",    "calendar",     "/SF/SYS/GAME.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_0, GUI_AppDispCalender},
+    {"system",      "system",       "/SF/SYS/GAME.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_1, GUI_AppDispSysInfo},
+    {"file",        "file",         "/SF/SYS/GAME.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_2, GUI_AooDispChooseFile},
+    {"clock",       "clock",        "/SF/SYS/GAME.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_3, GUI_AppDispTime},
+    {"calibration", "calibration",  "/SF/SYS/GAME.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_4, GUI_ExecCalibrationDialog},
+    {"thread",      "thread",       "/SF/SYS/GAME.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_5, GUI_CreateTaskerDialog},
+};
+
+
+
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate2[] = {
     { FRAMEWIN_CreateIndirect,    "Framewin", ID_FRAMEWIN_0, 0, 0, 500, 325, 0, 0, 0 },
 };
     
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 320, 240, 0, 0x0, 0 },
-    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 240, 320, 0, IMAGE_CF_MEMDEV | IMAGE_CF_ATTACHED | IMAGE_CF_TILE | IMAGE_CF_ALPHA, 0 },
-    { BUTTON_CreateIndirect, "Cal",           ID_BUTTON_0, 80, 10, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Info",          ID_BUTTON_1, 0, 10, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Time",          ID_BUTTON_2, 0, 80, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "File",          ID_BUTTON_3, 6, 49, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Cali",          ID_BUTTON_4, 71, 49, 50, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "Test",          ID_BUTTON_5, 137, 49, 50, 50, 0, 0x0, 0 },
+ //   { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 240, 320, 0, IMAGE_CF_MEMDEV | IMAGE_CF_ATTACHED | IMAGE_CF_TILE | IMAGE_CF_ALPHA, 0 },
 };
 
 
@@ -40,9 +46,6 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
         FRAMEWIN_SetTitleVis(hItem, 0);
         FRAMEWIN_SetClientColor(hItem, GUI_LIGHTBLUE);
         break;
-        case WM_PAINT:
-        
-        break;
         default:
         WM_DefaultProc(pMsg);
         break;
@@ -50,14 +53,6 @@ static void _cbDialog2(WM_MESSAGE * pMsg) {
     
 };
 
-static char *AppImageTable[] = 
-{
-    "/SF/SYS/GAME.BMP",
-    "/SF/SYS/WIFI.BMP",
-    "/SF/SYS/FILE.BMP",
-    "/SF/SYS/PER.BMP",
-
-};
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
     int i;
@@ -78,60 +73,38 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         WINDOW_SetBkColor(hItem, GUI_LIGHTBLUE);
         int fd; rt_uint8_t *p[6];
         
+        for(i=0;i<GUI_COUNTOF(UIApp);i++)
+        {
+            hItem = BUTTON_CreateAsChild(10, 10, 50, 50, pMsg->hWin, UIApp[i].GUID, WM_CF_SHOW);
+            BUTTON_SetText(hItem, UIApp[i].text);
+            WM_EnableMemdev(hItem);
+			WM_MoveTo(hItem, 10+(i%3)*70, (i/3)*70 + 17);
+            UIApp[i].plogo = rt_malloc(9*1024);
+            fd = open(UIApp[i].logoPath, O_RDONLY , 0);
+            read(fd, p[i], 8192);
+            BUTTON_SetBMPEx(hItem, BUTTON_BI_UNPRESSED, UIApp[i].plogo ,0, 0);
+            close(fd);
+        }
+        
 //        p[2] = rt_malloc(38399);
 //        fd = open("/SD/DESKTOP.JPG",O_RDONLY , 0);
 //        read(fd, p[2], 38399);
 //        hItem = WM_GetDialogItem(pMsg->hWin, ID_IMAGE_0);
 //        WM_EnableMemdev(hItem);
 //          IMAGE_SetJPEG(hItem, p[2], 38399);
-
-
-		for (i=0;i<6;i++)
-		{
-			hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0 + i);
-            WM_EnableMemdev(hItem);
-			WM_MoveTo(hItem, 10+(i%4)*60, (i/4)*70 + 10);
-            
-            if(AppImageTable[i])
-            {
-                p[i] = rt_malloc(9*1024);
-                fd = open(AppImageTable[i],O_RDONLY , 0);
-                read(fd, p[i], 8192);
-                BUTTON_SetBMPEx(hItem, BUTTON_BI_UNPRESSED, p[i] ,0, 0);
-                close(fd);
-            }
-		}
-        hItem = pMsg->hWin;
-        hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_0);
-        
         break;
     case WM_NOTIFY_PARENT:
         Id = WM_GetId(pMsg->hWinSrc);
         NCode = pMsg->Data.v;
     if(NCode == WM_NOTIFICATION_RELEASED)
     {
-        switch (Id)
+        for(i=0;i<GUI_COUNTOF(UIApp);i++)
         {
-            case ID_BUTTON_0:
-                msg.exec = GUI_AppDispCalender;
+            if(Id == UIApp[i].GUID)
+            {
+                msg.exec = UIApp[i].exec;
                 break;
-            case ID_BUTTON_1:
-                msg.exec = GUI_AppDispSysInfo;
-                break;
-            case ID_BUTTON_2:
-                msg.exec = GUI_AppDispTime;
-                break;
-            case ID_BUTTON_3:
-                msg.exec = GUI_AooDispChooseFile;
-                break;
-            case ID_BUTTON_4:
-                msg.exec = GUI_ExecCalibrationDialog;
-                break;      
-            case ID_BUTTON_5:
-                msg.exec = GUI_CreateTaskerDialog;
-                break;
-            default:
-                break;    
+            }
         }
         if(msg.exec != RT_NULL)
         {

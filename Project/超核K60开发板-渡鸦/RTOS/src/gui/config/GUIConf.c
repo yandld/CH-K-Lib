@@ -45,9 +45,11 @@ void GUI_X_Config(void)
     }
     GUI_ALLOC_AssignMemory(aMemory, GUI_NUMBYTES);
     GUI_SetOnErrorFunc(GUI_Log);
-    GUITASK_SetMaxTask(5);
+    GUITASK_SetMaxTask(3);
     GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);
     GUI_SetDefaultFont(GUI_FONT_13B_1);
+    FRAMEWIN_SetDefaultFont(GUI_FONT_13B_1);
+    BUTTON_SetDefaultFont(GUI_FONT_13B_1);
     _EnableSkinning(1);
 }
 

@@ -3,7 +3,7 @@
 <project>
   <fileVersion>2</fileVersion>
   <configuration>
-    <name>Debug</name>
+    <name>mk60d10</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>
@@ -17,15 +17,15 @@
         <debug>1</debug>
         <option>
           <name>ExePath</name>
-          <state>Debug\Exe</state>
+          <state>mk60d10\Exe</state>
         </option>
         <option>
           <name>ObjPath</name>
-          <state>Debug\Obj</state>
+          <state>mk60d10\Obj</state>
         </option>
         <option>
           <name>ListPath</name>
-          <state>Debug\List</state>
+          <state>mk60d10\List</state>
         </option>
         <option>
           <name>Variant</name>
@@ -87,7 +87,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.60.1.5099</state>
+          <state>7.20.2.7418</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -163,7 +163,7 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>29</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -230,7 +230,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>0000000</state>
+          <state>00000000</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
@@ -401,6 +401,15 @@
         <option>
           <name>CCNoLiteralPool</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CCOptStrategySlave</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -939,34 +948,34 @@
     </settings>
   </configuration>
   <configuration>
-    <name>Release</name>
+    <name>mk64f12</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>
-    <debug>0</debug>
+    <debug>1</debug>
     <settings>
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
         <version>22</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>ExePath</name>
-          <state>Release\Exe</state>
+          <state>mk64f12\Exe</state>
         </option>
         <option>
           <name>ObjPath</name>
-          <state>Release\Obj</state>
+          <state>mk64f12\Obj</state>
         </option>
         <option>
           <name>ListPath</name>
-          <state>Release\List</state>
+          <state>mk64f12\List</state>
         </option>
         <option>
           <name>Variant</name>
           <version>20</version>
-          <state>39</state>
+          <state>40</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -997,7 +1006,7 @@
         <option>
           <name>FPU</name>
           <version>2</version>
-          <state>0</state>
+          <state>5</state>
         </option>
         <option>
           <name>OGCoreOrChip</name>
@@ -1023,7 +1032,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.60.1.5099</state>
+          <state>7.20.2.7418</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1035,11 +1044,11 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>MK60DN512xxx10	Freescale MK60DN512xxx10</state>
+          <state>MK64FN1M0xxx12	Freescale MK64FN1M0xxx12</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GEndianModeBE</name>
@@ -1074,12 +1083,12 @@
         <option>
           <name>GFPUCoreSlave</name>
           <version>20</version>
-          <state>39</state>
+          <state>40</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
           <version>20</version>
-          <state>39</state>
+          <state>40</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -1099,13 +1108,13 @@
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>29</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>CCDefines</name>
-          <state>NDEBUG</state>
-          <state>MK60D10</state>
+          <state>MK64F12</state>
+          <state>DEBUG</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1166,11 +1175,11 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>1111111</state>
+          <state>00000000</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IEndianMode</name>
@@ -1257,7 +1266,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>3</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -1266,7 +1275,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>3</state>
+          <state>1</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -1338,6 +1347,15 @@
           <name>CCNoLiteralPool</name>
           <state>0</state>
         </option>
+        <option>
+          <name>CCOptStrategySlave</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
+        </option>
       </data>
     </settings>
     <settings>
@@ -1346,7 +1364,7 @@
       <data>
         <version>9</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>AObjPrefix</name>
           <state>1</state>
@@ -1386,7 +1404,7 @@
         </option>
         <option>
           <name>ADebug</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>AltRegisterNames</name>
@@ -1512,11 +1530,11 @@
       <data>
         <version>1</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
           <version>2</version>
-          <state>0</state>
+          <state>2</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -1524,7 +1542,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state></state>
+          <state>templete.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -1532,7 +1550,7 @@
         </option>
         <option>
           <name>OOCObjCopyEnable</name>
-          <state>0</state>
+          <state>1</state>
         </option>
       </data>
     </settings>
@@ -1563,7 +1581,7 @@
       <data>
         <version>16</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>IlinkLibIOConfig</name>
           <state>1</state>
@@ -1642,7 +1660,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$TOOLKIT_DIR$\config\linker\Freescale\MK60xN512_10.icf</state>
+          <state>$TOOLKIT_DIR$\config\linker\Freescale\MK64xN1M_12.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1793,7 +1811,7 @@
         </option>
         <option>
           <name>IlinkOptInline</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>IlinkOptExceptionsAllow</name>
@@ -1853,7 +1871,7 @@
       <data>
         <version>0</version>
         <wantNonLocal>1</wantNonLocal>
-        <debug>0</debug>
+        <debug>1</debug>
         <option>
           <name>IarchiveInputs</name>
           <state></state>
@@ -1880,10 +1898,22 @@
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\adc.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\can.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\cmp.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\common.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\cpuidy.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\crc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\dac.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\dma.c</name>
@@ -1907,6 +1937,9 @@
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\lptmr.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\pdb.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\pit.c</name>
     </file>
     <file>
@@ -1928,16 +1961,34 @@
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\uart.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\vref.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\wdog.c</name>
     </file>
   </group>
   <group>
-    <name>startup</name>
+    <name>startup_mk60d10</name>
+    <excluded>
+      <configuration>mk64f12</configuration>
+    </excluded>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport\IAR-ARM\startup_MK60D10.s</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport\system_MK60D10.c</name>
+    </file>
+  </group>
+  <group>
+    <name>statup_mk64f12</name>
+    <excluded>
+      <configuration>mk60d10</configuration>
+    </excluded>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport\IAR-ARM\startup_MK64F12.s</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport\system_MK64F12.c</name>
     </file>
   </group>
   <group>

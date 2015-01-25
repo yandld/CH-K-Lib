@@ -8,6 +8,7 @@
 *.dbgdt
 *.tra
 *.iex
+*.sim
 *.pbd
 *.browse
 *.tmp

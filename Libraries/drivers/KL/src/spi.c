@@ -205,11 +205,19 @@ uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t 
 uint16_t SPI_ReadWriteByte(uint32_t instance, uint16_t data)
 {
     uint16_t temp;
-    while(!(SPI_InstanceTable[instance]->S & SPI_S_SPTEF_MASK)); 
+    while(!(SPI_InstanceTable[instance]->S & SPI_S_SPTEF_MASK));
+    #ifdef SPI_DL_Bits_MASK
     SPI_InstanceTable[instance]->DL = (data & 0x00FF);
     SPI_InstanceTable[instance]->DH = (data & 0xFF00)>>8;
     while(!(SPI_InstanceTable[instance]->S & SPI_S_SPRF_MASK));
     temp =  SPI_InstanceTable[instance]->DL + (SPI_InstanceTable[instance]->DH<<8);
+    #endif
+    
+    #ifdef SPI_D_Bits_MASK
+    SPI_InstanceTable[instance]->D = (data & 0x00FF);
+    while(!(SPI_InstanceTable[instance]->S & SPI_S_SPRF_MASK));
+    temp =  SPI_InstanceTable[instance]->D;
+    #endif
     return temp;
 }
 
@@ -278,7 +286,13 @@ void SPI0_IRQHandler(void)
         /* make sure clear SPRF bit */
         if(SPI_InstanceTable[HW_SPI0]->S & SPI_S_SPRF_MASK)
         {
+            #ifdef SPI_DL_Bits_MASK
             dummy = SPI_InstanceTable[HW_SPI0]->DL;
+            #endif
+            
+            #ifdef SPI_D_Bits_MASK
+            dummy = SPI_InstanceTable[HW_SPI0]->D;
+            #endif
         }
     }
 }
@@ -296,7 +310,13 @@ void SPI1_IRQHandler(void)
         /* make sure clear SPRF bit */
         if(SPI_InstanceTable[HW_SPI1]->S & SPI_S_SPRF_MASK)
         {
+            #ifdef SPI_DL_Bits_MASK
             dummy = SPI_InstanceTable[HW_SPI1]->DL;
+            #endif
+            
+            #ifdef SPI_D_Bits_MASK
+            dummy = SPI_InstanceTable[HW_SPI1]->D;
+            #endif
         }
     }
 }

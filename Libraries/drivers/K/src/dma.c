@@ -26,47 +26,27 @@ uint32_t _DMA_ChlAlloc(void);
 void DMA_ChlFree(uint32_t chl);
 
 /* DMA中断向量入口 */
-#if !defined(MK60F15)
+/* 默认第一个DMA中断向量入口为0 */
 static const IRQn_Type DMA_IRQnTable[] = 
 {
-    (IRQn_Type)(DMA0_IRQn + 0),
-    (IRQn_Type)(DMA0_IRQn + 1),
-    (IRQn_Type)(DMA0_IRQn + 2),
-    (IRQn_Type)(DMA0_IRQn + 3),
-    (IRQn_Type)(DMA0_IRQn + 4),
-    (IRQn_Type)(DMA0_IRQn + 5),
-    (IRQn_Type)(DMA0_IRQn + 6),
-    (IRQn_Type)(DMA0_IRQn + 7),
-    (IRQn_Type)(DMA0_IRQn + 8),
-    (IRQn_Type)(DMA0_IRQn + 9),
-    (IRQn_Type)(DMA0_IRQn + 10),
-    (IRQn_Type)(DMA0_IRQn + 11),
-    (IRQn_Type)(DMA0_IRQn + 12),
-    (IRQn_Type)(DMA0_IRQn + 13),
-    (IRQn_Type)(DMA0_IRQn + 14),
-    (IRQn_Type)(DMA0_IRQn + 15),
+    (IRQn_Type)(0 + 0),
+    (IRQn_Type)(0 + 1),
+    (IRQn_Type)(0 + 2),
+    (IRQn_Type)(0 + 3),
+    (IRQn_Type)(0 + 4),
+    (IRQn_Type)(0 + 5),
+    (IRQn_Type)(0 + 6),
+    (IRQn_Type)(0 + 7),
+    (IRQn_Type)(0 + 8),
+    (IRQn_Type)(0 + 9),
+    (IRQn_Type)(0 + 10),
+    (IRQn_Type)(0 + 11),
+    (IRQn_Type)(0 + 12),
+    (IRQn_Type)(0 + 13),
+    (IRQn_Type)(0 + 14),
+    (IRQn_Type)(0 + 15),
 };
-#else
-static const IRQn_Type DMA_IRQnTable[] = 
-{
-    (IRQn_Type)(DMA0_DMA16_IRQn + 0),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 1),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 2),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 3),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 4),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 5),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 6),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 7),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 8),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 9),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 10),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 11),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 12),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 13),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 14),
-    (IRQn_Type)(DMA0_DMA16_IRQn + 15),
-};
-#endif
+
 
 /**
  * @brief  初始化DMA模块

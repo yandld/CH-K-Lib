@@ -106,15 +106,15 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 */
 
 
-#define   SHOW_GUIDEMO_AATEXT            (0)
-#define   SHOW_GUIDEMO_AUTOMOTIVE        (0)
-#define   SHOW_GUIDEMO_BARGRAPH          (0)
+#define   SHOW_GUIDEMO_AATEXT            (1)
+#define   SHOW_GUIDEMO_AUTOMOTIVE        (1)
+#define   SHOW_GUIDEMO_BARGRAPH          (1)
 #define   SHOW_GUIDEMO_BITMAP            (0)
-#define   SHOW_GUIDEMO_COLORBAR          (0)
-#define   SHOW_GUIDEMO_CURSOR            (0)
+#define   SHOW_GUIDEMO_COLORBAR          (1)
+#define   SHOW_GUIDEMO_CURSOR            (1)
 #define   SHOW_GUIDEMO_FADING            (0)
-#define   SHOW_GUIDEMO_GRAPH             (0)
-#define   SHOW_GUIDEMO_ICONVIEW          (1)
+#define   SHOW_GUIDEMO_GRAPH             (1)
+#define   SHOW_GUIDEMO_ICONVIEW          (0)
 #define   SHOW_GUIDEMO_IMAGEFLOW         (0)
 #define   SHOW_GUIDEMO_LISTVIEW          (0)
 #define   SHOW_GUIDEMO_RADIALMENU        (0)

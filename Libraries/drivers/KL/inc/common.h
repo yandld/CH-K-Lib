@@ -20,6 +20,8 @@
 
 #ifdef MKL25Z4
 #include "MKL25Z4.h"
+#elif  MKL26Z4
+#include "MKL26Z4.h"
 #elif  MKL03Z4
 #include "MKL03Z4.h"
 #elif  MKL46Z4

@@ -3782,8 +3782,6 @@
         <TargetCommonOption>
           <Device>MK70FN1M0xxx12</Device>
           <Vendor>Freescale</Vendor>
-          <PackID>Keil.Kinetis_K70_DFP.1.0.1</PackID>
-          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x00000000,0x100000) IRAM(0x20000000,0x10000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>

@@ -111,7 +111,9 @@ static struct rt_spi_ops kinetis_spi_ops =
 int rt_hw_spi_bus_init(uint32_t instance, const char *name)
 {
     kinetis_spi.ops = &kinetis_spi_ops;
-    
+    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
+    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
     return rt_spi_bus_register(&kinetis_spi, name, &kinetis_spi_ops); 
 }
 

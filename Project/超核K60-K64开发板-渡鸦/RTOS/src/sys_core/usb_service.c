@@ -46,7 +46,6 @@ static void MSD_Event_Callback(uint_8 controller_ID,
         case USB_MSC_DEVICE_READ_REQUEST: 
             lba_data_ptr = (PTR_LBA_APP_STRUCT)val;
             rt_device_read(device, lba_data_ptr->offset/512, lba_data_ptr->buff_ptr, 1);
-            //SD_ReadSingleBlock(lba_data_ptr->offset/512, lba_data_ptr->buff_ptr);
             break;
         case USB_APP_SEND_COMPLETE:
             //rt_kprintf("usb app send complete\r\n");
@@ -54,7 +53,6 @@ static void MSD_Event_Callback(uint_8 controller_ID,
         case USB_MSC_DEVICE_WRITE_REQUEST: 
             lba_data_ptr = (PTR_LBA_APP_STRUCT)val;
             rt_device_write(device, lba_data_ptr->offset/512, lba_data_ptr->buff_ptr, 1);
-          //  SD_WriteSingleBlock(lba_data_ptr->offset/512, lba_data_ptr->buff_ptr);
             break;
         case USB_MSC_DEVICE_REMOVAL_REQUEST:
             rt_kprintf("usb app removel request\r\n");
@@ -123,7 +121,7 @@ int usb_startup(int argc, char** argv)
     return 0;
 }
 
-MSH_CMD_EXPORT(usb_startup, eg:usb sd0);
+MSH_CMD_EXPORT(usb_startup, eg:usb_startup sd0);
 
 #endif
 

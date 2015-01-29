@@ -17,48 +17,47 @@ void key_thread_entry(void* parameter);
 
 rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 
+static void spi_init(void)
+{
+    rt_hw_spi_bus_init(HW_SPI2, "spi2");
+    
+    static struct rt_spi_device spi_21;
+    static struct kinetis_spi_cs cs_21;
+    cs_21.ch = 1;
+    PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
+    rt_spi_bus_attach_device(&spi_21, "spi21", "spi2", &cs_21);
+    
+    static struct rt_spi_device spi_22;
+    static struct kinetis_spi_cs cs_22;
+    cs_22.ch = 0;
+    PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
+    rt_spi_bus_attach_device(&spi_22, "spi20", "spi2", &cs_22);
+    
+}
+
 void init_thread_entry(void* parameter)
 {
     rt_thread_t tid;
     
     rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
     
-    #ifndef FRDM
     SRAM_Init();
     rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-    #endif
     
     /* init finsh */
     rt_device_t dev = rt_device_find("uart0");
     finsh_system_init();
 
-    rt_hw_spi_bus_init(HW_SPI2, "spi2");
     rt_hw_beep_init("beep");
-    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
-    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
-    
-    /* attacted spi2 - 1*/
-    {
-        static struct rt_spi_device spi_device;
-        static struct kinetis_spi_cs spi_cs_0;
-        spi_cs_0.ch = 1;
-        PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
-        rt_spi_bus_attach_device(&spi_device, "spi21", "spi2", &spi_cs_0);
-    }
-    
-    /* attacted spi2 - 0*/
-    {
-        static struct rt_spi_device spi_device;
-        static struct kinetis_spi_cs spi_cs_0;
-        spi_cs_0.ch = 0;
-        PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
-        rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", &spi_cs_0);
-    }
+    spi_init();
     
     touch_ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
-    dfs_mount("sf0", "/SF", "elm", 0, 0);
+    
+    if(dfs_mount("sf0", "/SF", "elm", 0, 0))
+    {
+        dfs_mkfs("elm", "sf0");
+    }
     dfs_mount("sd0", "/SD", "elm", 0, 0);
 
     at24cxx_init("at24c02", "i2c0");

@@ -218,7 +218,11 @@
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>
+<<<<<<< HEAD
       <CLKADS>12000000</CLKADS>
+=======
+      <CLKADS>120000000</CLKADS>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <OPTTT>
         <gFlags>1</gFlags>
         <BeepAtEnd>1</BeepAtEnd>
@@ -266,7 +270,11 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
         <IsCurrentTarget>1</IsCurrentTarget>
+=======
+        <IsCurrentTarget>0</IsCurrentTarget>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       </OPTFL>
       <CpuCode>14</CpuCode>
       <Books>
@@ -321,6 +329,19 @@
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=TWR-K64F120M</Path>
         </Book>
       </Books>
+<<<<<<< HEAD
+=======
+      <DllOpt>
+        <SimDllName>SARMCM3.DLL</SimDllName>
+        <SimDllArguments> </SimDllArguments>
+        <SimDlgDllName>DCM.DLL</SimDlgDllName>
+        <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
+        <TargetDllName>SARMCM3.DLL</TargetDllName>
+        <TargetDllArguments></TargetDllArguments>
+        <TargetDlgDllName>TCM.DLL</TargetDlgDllName>
+        <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
+      </DllOpt>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <DebugOpt>
         <uSim>0</uSim>
         <uTrg>1</uTrg>
@@ -341,7 +362,10 @@
         <tRtrace>0</tRtrace>
         <sRSysVw>1</sRSysVw>
         <tRSysVw>1</tRSysVw>
+<<<<<<< HEAD
         <tPdscDbg>1</tPdscDbg>
+=======
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
         <nTsel>6</nTsel>
@@ -371,7 +395,11 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
+<<<<<<< HEAD
           <Name></Name>
+=======
+          <Name>/</Name>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -381,7 +409,11 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>JL2CM3</Key>
+<<<<<<< HEAD
           <Name>-U4294967295 -O462 -S9 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC4000 -FN1 -FF0MK_P1M0.FLM -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM)</Name>
+=======
+          <Name>-U20080643 -O462 -S9 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC4000 -FN1 -FF0MK_P1M0 -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM)</Name>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
@@ -408,7 +440,11 @@
       <DebugFlag>
         <trace>0</trace>
         <periodic>0</periodic>
+<<<<<<< HEAD
         <aLwin>0</aLwin>
+=======
+        <aLwin>1</aLwin>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
         <aCover>0</aCover>
         <aSer1>0</aSer1>
         <aSer2>0</aSer2>
@@ -426,7 +462,11 @@
         <aPa1>0</aPa1>
         <AscS4>0</AscS4>
         <aSer4>0</aSer4>
+<<<<<<< HEAD
         <StkLoc>1</StkLoc>
+=======
+        <StkLoc>0</StkLoc>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
         <TrcWin>0</TrcWin>
         <newCpu>0</newCpu>
         <uProt>0</uProt>
@@ -437,7 +477,11 @@
   </Target>
 
   <Group>
+<<<<<<< HEAD
     <GroupName>lib_startup_mk6010</GroupName>
+=======
+    <GroupName>lib_startup_mk60d10</GroupName>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -448,7 +492,14 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
       <tvExpOptDlg>0</tvExpOptDlg>
+=======
+      <ColumnNumber>21</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\system_MK60D10.c</PathWithFileName>
       <FilenameWithoutPath>system_MK60D10.c</FilenameWithoutPath>
@@ -461,7 +512,14 @@
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
       <tvExpOptDlg>0</tvExpOptDlg>
+=======
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60D10.s</PathWithFileName>
       <FilenameWithoutPath>startup_MK60D10.s</FilenameWithoutPath>
@@ -482,7 +540,14 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
       <tvExpOptDlg>0</tvExpOptDlg>
+=======
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\system_MK64F12.c</PathWithFileName>
       <FilenameWithoutPath>system_MK64F12.c</FilenameWithoutPath>
@@ -495,7 +560,14 @@
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
       <tvExpOptDlg>0</tvExpOptDlg>
+=======
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK64F12.s</PathWithFileName>
       <FilenameWithoutPath>startup_MK64F12.s</FilenameWithoutPath>
@@ -516,7 +588,14 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
       <tvExpOptDlg>0</tvExpOptDlg>
+=======
+      <ColumnNumber>18</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>20</TopLine>
+      <CurrentLine>26</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\init_thread.c</PathWithFileName>
       <FilenameWithoutPath>init_thread.c</FilenameWithoutPath>
@@ -530,6 +609,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\led_thread.c</PathWithFileName>
       <FilenameWithoutPath>led_thread.c</FilenameWithoutPath>
@@ -543,6 +627,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui_thread.c</PathWithFileName>
       <FilenameWithoutPath>gui_thread.c</FilenameWithoutPath>
@@ -556,6 +645,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\TOUCH_Calibrate.c</PathWithFileName>
       <FilenameWithoutPath>TOUCH_Calibrate.c</FilenameWithoutPath>
@@ -577,6 +671,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\gpio.c</PathWithFileName>
       <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
@@ -590,6 +689,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\uart.c</PathWithFileName>
       <FilenameWithoutPath>uart.c</FilenameWithoutPath>
@@ -603,6 +707,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\pit.c</PathWithFileName>
       <FilenameWithoutPath>pit.c</FilenameWithoutPath>
@@ -616,6 +725,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</PathWithFileName>
       <FilenameWithoutPath>cpuidy.c</FilenameWithoutPath>
@@ -629,6 +743,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\adc.c</PathWithFileName>
       <FilenameWithoutPath>adc.c</FilenameWithoutPath>
@@ -642,6 +761,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\ftm.c</PathWithFileName>
       <FilenameWithoutPath>ftm.c</FilenameWithoutPath>
@@ -655,6 +779,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\i2c.c</PathWithFileName>
       <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
@@ -668,6 +797,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\spi.c</PathWithFileName>
       <FilenameWithoutPath>spi.c</FilenameWithoutPath>
@@ -681,6 +815,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\dma.c</PathWithFileName>
       <FilenameWithoutPath>dma.c</FilenameWithoutPath>
@@ -694,6 +833,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\flexbus.c</PathWithFileName>
       <FilenameWithoutPath>flexbus.c</FilenameWithoutPath>
@@ -707,6 +851,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\systick.c</PathWithFileName>
       <FilenameWithoutPath>systick.c</FilenameWithoutPath>
@@ -720,6 +869,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\rtc.c</PathWithFileName>
       <FilenameWithoutPath>rtc.c</FilenameWithoutPath>
@@ -733,6 +887,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\enet.c</PathWithFileName>
       <FilenameWithoutPath>enet.c</FilenameWithoutPath>
@@ -746,6 +905,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\common.c</PathWithFileName>
       <FilenameWithoutPath>common.c</FilenameWithoutPath>
@@ -759,6 +923,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\sd.c</PathWithFileName>
       <FilenameWithoutPath>sd.c</FilenameWithoutPath>
@@ -780,6 +949,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\ili9320.c</PathWithFileName>
       <FilenameWithoutPath>ili9320.c</FilenameWithoutPath>
@@ -793,6 +967,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\sram.c</PathWithFileName>
       <FilenameWithoutPath>sram.c</FilenameWithoutPath>
@@ -806,6 +985,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\ksz8041.c</PathWithFileName>
       <FilenameWithoutPath>ksz8041.c</FilenameWithoutPath>
@@ -827,6 +1011,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_ili9320.c</PathWithFileName>
       <FilenameWithoutPath>rtt_ili9320.c</FilenameWithoutPath>
@@ -840,6 +1029,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_ksz8041.c</PathWithFileName>
       <FilenameWithoutPath>rtt_ksz8041.c</FilenameWithoutPath>
@@ -853,6 +1047,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_rtc.c</PathWithFileName>
       <FilenameWithoutPath>rtt_rtc.c</FilenameWithoutPath>
@@ -866,6 +1065,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_sd.c</PathWithFileName>
       <FilenameWithoutPath>rtt_sd.c</FilenameWithoutPath>
@@ -879,6 +1083,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</PathWithFileName>
       <FilenameWithoutPath>rtt_serial.c</FilenameWithoutPath>
@@ -892,6 +1101,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_spi.c</PathWithFileName>
       <FilenameWithoutPath>rtt_spi.c</FilenameWithoutPath>
@@ -905,6 +1119,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\spi_flash_w25qxx.c</PathWithFileName>
       <FilenameWithoutPath>spi_flash_w25qxx.c</FilenameWithoutPath>
@@ -918,6 +1137,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\touch_ads7843.c</PathWithFileName>
       <FilenameWithoutPath>touch_ads7843.c</FilenameWithoutPath>
@@ -931,6 +1155,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_beep.c</PathWithFileName>
       <FilenameWithoutPath>rtt_beep.c</FilenameWithoutPath>
@@ -944,6 +1173,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_i2c_bit_ops.c</PathWithFileName>
       <FilenameWithoutPath>rtt_i2c_bit_ops.c</FilenameWithoutPath>
@@ -957,6 +1191,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\i2c_at24cxx.c</PathWithFileName>
       <FilenameWithoutPath>i2c_at24cxx.c</FilenameWithoutPath>
@@ -978,6 +1217,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Lib\GUI_CM3.lib</PathWithFileName>
       <FilenameWithoutPath>GUI_CM3.lib</FilenameWithoutPath>
@@ -991,6 +1235,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\LCDConf.c</PathWithFileName>
       <FilenameWithoutPath>LCDConf.c</FilenameWithoutPath>
@@ -1004,6 +1253,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\emwin_config\GUI_X.c</PathWithFileName>
       <FilenameWithoutPath>GUI_X.c</FilenameWithoutPath>
@@ -1017,6 +1271,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\emwin_config\GUIConf.c</PathWithFileName>
       <FilenameWithoutPath>GUIConf.c</FilenameWithoutPath>
@@ -1038,6 +1297,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO.c</FilenameWithoutPath>
@@ -1051,6 +1315,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_AntialiasedText.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_AntialiasedText.c</FilenameWithoutPath>
@@ -1064,6 +1333,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Automotive.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Automotive.c</FilenameWithoutPath>
@@ -1077,6 +1351,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_BarGraph.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_BarGraph.c</FilenameWithoutPath>
@@ -1090,6 +1369,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Bitmap.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Bitmap.c</FilenameWithoutPath>
@@ -1103,6 +1387,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_ColorBar.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_ColorBar.c</FilenameWithoutPath>
@@ -1116,6 +1405,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Conf.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Conf.c</FilenameWithoutPath>
@@ -1129,6 +1423,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Cursor.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Cursor.c</FilenameWithoutPath>
@@ -1142,6 +1441,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Fading.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Fading.c</FilenameWithoutPath>
@@ -1155,6 +1459,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Graph.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Graph.c</FilenameWithoutPath>
@@ -1168,6 +1477,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_IconView.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_IconView.c</FilenameWithoutPath>
@@ -1181,6 +1495,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_ImageFlow.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_ImageFlow.c</FilenameWithoutPath>
@@ -1194,6 +1513,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Intro.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Intro.c</FilenameWithoutPath>
@@ -1207,6 +1531,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Listview.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Listview.c</FilenameWithoutPath>
@@ -1220,6 +1549,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_RadialMenu.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_RadialMenu.c</FilenameWithoutPath>
@@ -1233,6 +1567,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Resource.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Resource.c</FilenameWithoutPath>
@@ -1246,6 +1585,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Skinning.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Skinning.c</FilenameWithoutPath>
@@ -1259,6 +1603,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Speed.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Speed.c</FilenameWithoutPath>
@@ -1272,6 +1621,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Speedometer.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Speedometer.c</FilenameWithoutPath>
@@ -1285,6 +1639,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Start.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Start.c</FilenameWithoutPath>
@@ -1298,6 +1657,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_TransparentDialog.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_TransparentDialog.c</FilenameWithoutPath>
@@ -1311,6 +1675,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_Treeview.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_Treeview.c</FilenameWithoutPath>
@@ -1324,6 +1693,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_VScreen.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_VScreen.c</FilenameWithoutPath>
@@ -1337,6 +1711,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_WashingMachine.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_WashingMachine.c</FilenameWithoutPath>
@@ -1350,6 +1729,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_ZoomAndRotate.c</PathWithFileName>
       <FilenameWithoutPath>GUIDEMO_ZoomAndRotate.c</FilenameWithoutPath>
@@ -1371,6 +1755,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_clock.c</PathWithFileName>
       <FilenameWithoutPath>gui_clock.c</FilenameWithoutPath>
@@ -1384,6 +1773,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_calendar.c</PathWithFileName>
       <FilenameWithoutPath>gui_calendar.c</FilenameWithoutPath>
@@ -1397,6 +1791,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_desktop.c</PathWithFileName>
       <FilenameWithoutPath>gui_desktop.c</FilenameWithoutPath>
@@ -1410,6 +1809,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_image.c</PathWithFileName>
       <FilenameWithoutPath>gui_image.c</FilenameWithoutPath>
@@ -1423,6 +1827,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_choosefile.c</PathWithFileName>
       <FilenameWithoutPath>gui_choosefile.c</FilenameWithoutPath>
@@ -1436,6 +1845,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_notepad.c</PathWithFileName>
       <FilenameWithoutPath>gui_notepad.c</FilenameWithoutPath>
@@ -1457,6 +1871,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_cmd_pic.c</PathWithFileName>
       <FilenameWithoutPath>gui_cmd_pic.c</FilenameWithoutPath>
@@ -1470,6 +1889,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_cmd_choosefile.c</PathWithFileName>
       <FilenameWithoutPath>gui_cmd_choosefile.c</FilenameWithoutPath>
@@ -1483,6 +1907,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_cmd_screenshot.c</PathWithFileName>
       <FilenameWithoutPath>gui_cmd_screenshot.c</FilenameWithoutPath>
@@ -1496,6 +1925,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\gui\gui_cmd_demo.c</PathWithFileName>
       <FilenameWithoutPath>gui_cmd_demo.c</FilenameWithoutPath>
@@ -1517,6 +1951,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</PathWithFileName>
       <FilenameWithoutPath>msh_cmd.c</FilenameWithoutPath>
@@ -1538,6 +1977,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\RTT_CM4.lib</PathWithFileName>
       <FilenameWithoutPath>RTT_CM4.lib</FilenameWithoutPath>
@@ -1559,6 +2003,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src\rtconfig.h</PathWithFileName>
       <FilenameWithoutPath>rtconfig.h</FilenameWithoutPath>
@@ -1580,6 +2029,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\msh_cmd\kill_thread.c</PathWithFileName>
       <FilenameWithoutPath>kill_thread.c</FilenameWithoutPath>
@@ -1593,6 +2047,11 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< HEAD
+=======
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+>>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\msh_cmd\reset.c</PathWithFileName>
       <FilenameWithoutPath>reset.c</FilenameWithoutPath>

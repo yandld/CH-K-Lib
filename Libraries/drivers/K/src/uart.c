@@ -258,6 +258,10 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     brfa = ((32*UART_InitStruct->srcClock)/((UART_InitStruct->baudrate)*16)) - 32*sbr;
     
     /* config baudrate */
+    UART_InstanceTable[UART_InitStruct->instance]->BDH &= ~UART_BDH_SBR_MASK;
+    UART_InstanceTable[UART_InitStruct->instance]->BDL &= ~UART_BDL_SBR_MASK;
+    UART_InstanceTable[UART_InitStruct->instance]->C4 &= ~UART_C4_BRFA_MASK;
+    
     UART_InstanceTable[UART_InitStruct->instance]->BDH |= UART_BDH_SBR(sbr>>8); 
     UART_InstanceTable[UART_InitStruct->instance]->BDL = UART_BDL_SBR(sbr); 
     UART_InstanceTable[UART_InitStruct->instance]->C4 |= UART_C4_BRFA(brfa);

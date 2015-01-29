@@ -1,4 +1,5 @@
 #include "ov7725.h"
+#include "common.h"
 #include "i2c.h"
 
 

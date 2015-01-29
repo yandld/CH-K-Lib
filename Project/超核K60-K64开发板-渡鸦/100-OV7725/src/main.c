@@ -11,7 +11,10 @@
 
 
 // 改变图像大小
-#define IMAGE_SIZE  2
+//0: 80x60
+//1: 160x120
+//2: 240x180
+#define IMAGE_SIZE  0
 
 #if (IMAGE_SIZE  ==  0)
 #define OV7620_W    (80)
@@ -29,20 +32,26 @@
 #error "Image Size Not Support!"
 #endif
 
+// 图像内存池
+uint8_t gCCD_RAM[(OV7620_H)*((OV7620_W/8)+1)];   //使用内部RAM
 
-uint8_t CCDBufferPool[(OV7620_H)*((OV7620_W/8)+1)];   //使用内部RAM
+/* 行指针 */
+uint8_t * gpHREF[OV7620_H+1];
 
-/* CCD内存池 */
-uint8_t * CCDBuffer[OV7620_H+1];
-
-/* 引脚定义 */
+/* 引脚定义 PCLK VSYNC HREF 接到同一个PORT上 */
 #define BOARD_OV7620_PCLK_PORT      HW_GPIOA
 #define BOARD_OV7620_PCLK_PIN       (7)
 #define BOARD_OV7620_VSYNC_PORT     HW_GPIOA
 #define BOARD_OV7620_VSYNC_PIN      (16)
 #define BOARD_OV7620_HREF_PORT      HW_GPIOA
 #define BOARD_OV7620_HREF_PIN       (17)
-#define BOARD_OV7620_DATA_OFFSET    (8) /* 摄像头数据引脚PTA8-PTA15 只能为 0 8 16 24 */
+/* 
+摄像头数据引脚PTA8-PTA15 只能填入 0 8 16三个值 
+0 :PTA0-PTA7
+8 :PTA8-PTA15
+16:PTA16-PTA24
+*/
+#define BOARD_OV7620_DATA_OFFSET    (8) 
 
 /* 状态机定义 */
 typedef enum
@@ -57,11 +66,9 @@ static void UserApp(uint32_t vcount);
 /* 接收完成一场后 用户处理函数 */
 static void UserApp(uint32_t vcount)
 {
-    uint32_t x, y;
-    GUI_printf(100,0, "%d", vcount);
-    GUI_DispCCDImage(0, 15, OV7620_W, OV7620_H, CCDBuffer);
+    GUI_printf(100,0, "frame:%d", vcount);
+    GUI_DispCCDImage(0, 15, OV7620_W, OV7620_H, gpHREF);
     //SerialDispCCDImage(OV7620_W, OV7620_H, CCDBuffer);
-
 }
 
 
@@ -69,7 +76,7 @@ int SCCB_Init(uint32_t I2C_MAP)
 {
     int r;
     uint32_t instance;
-    instance = I2C_QuickInit(I2C_MAP, 100*1000);
+    instance = I2C_QuickInit(I2C_MAP, 50*1000);
     r = ov7725_probe(instance);
     if(r)
     {
@@ -89,34 +96,34 @@ void OV_ISR(uint32_t index)
 {
     static uint8_t status = TRANSFER_IN_PROCESS;
     static uint32_t h_counter, v_counter;
-    static uint32_t i;
+   // uint32_t i;
     
     /* 行中断 */
     if(index & (1 << BOARD_OV7620_HREF_PIN))
     {
-        DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[h_counter++]);
-        i = DMA_GetMajorLoopCount(HW_DMA_CH2);
+        DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)gpHREF[h_counter++]);
+        //i = DMA_GetMajorLoopCount(HW_DMA_CH2);
         DMA_SetMajorLoopCounter(HW_DMA_CH2, (OV7620_W/8)+1);
         DMA_EnableRequest(HW_DMA_CH2);
         
         return;
     }
-    
     /* 场中断 */
     if(index & (1 << BOARD_OV7620_VSYNC_PIN))
     {
         DisableInterrupts();
         switch(status)
         {
-            case TRANSFER_IN_PROCESS:
+            case TRANSFER_IN_PROCESS: //接受到一帧数据调用用户处理
                     UserApp(v_counter++);
                     //printf("i:%d %d\r\n", h_counter, i);
                     status = NEXT_FRAME;
                     h_counter = 0;
 
                 break;
-            case NEXT_FRAME:
+            case NEXT_FRAME: //等待下次传输
                 status =  TRANSFER_IN_PROCESS;
+                break;
             default:
                 break;
         }
@@ -132,6 +139,7 @@ int main(void)
 {
     uint32_t i;
     DelayInit();
+    /* 打印串口及小灯 */
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
@@ -144,13 +152,14 @@ int main(void)
     //检测摄像头
     if(SCCB_Init(I2C0_SCL_PB00_SDA_PB01))
     {
-        printf("no device found!\r\n");
+        printf("no ov7725device found!\r\n");
+        while(1);
     }
     
     //每行数据指针
     for(i=0; i<OV7620_H+1; i++)
     {
-        CCDBuffer[i] = (uint8_t*)&CCDBufferPool[i*OV7620_W/8];
+        gpHREF[i] = (uint8_t*)&gCCD_RAM[i*OV7620_W/8];
     }
     
     DMA_InitTypeDef DMA_InitStruct1 = {0};
@@ -186,7 +195,7 @@ int main(void)
     DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.sMod = kDMA_ModuloDisable;
     
-    DMA_InitStruct1.dAddr = (uint32_t)CCDBuffer[0];
+    DMA_InitStruct1.dAddr = (uint32_t)gpHREF[0];
     DMA_InitStruct1.dLastAddrAdj = 0;
     DMA_InitStruct1.dAddrOffset = 1;
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;

@@ -1,5 +1,6 @@
 #include "image_display.h"
 #include <stdint.h>
+#include <stdio.h>
 #include "ili9320.h"
 
 static void _DispBin(int x, int y, uint8_t data)

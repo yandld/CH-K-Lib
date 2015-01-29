@@ -15,7 +15,7 @@
 
 ## 所支持的IDE[下载](http://pan.baidu.com/s/1kTgJLaf)
 * Keil(MDK) V5.00 以上版本 
-* IAR 6.6 以上版本
+* IAR 7.2 以上版本
 
 ## 适用型号
 `MK60DNxxx` `MK64F12xxx` `MK10DN32xxx` `MKL25Zxxx` `MKL46Zxxx` `MK10DZ10` `MK20DZ10` `MK70F12` `MK70F15`

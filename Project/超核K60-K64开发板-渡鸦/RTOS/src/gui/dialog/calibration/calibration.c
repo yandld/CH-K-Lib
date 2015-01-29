@@ -117,22 +117,24 @@ WM_HWIN GUI_ExecCalibrationDialog(GUI_TouchData* pTouchData)
                 GUI_TOUCH_Calibrate(1, tData.aLogY[0], tData.aLogY[1], tData.aPhysY[0], tData.aPhysY[1]); /* Calibrate Y-axis */
                 GUI_CURSOR_Show();
                 GUI_MessageBox("Calibrate OK", "OK", GUI_MESSAGEBOX_CF_MODAL);
-                //GUI_EndDialog(hWin, 0);
+                if(pTouchData != RT_NULL)
+                {
+                    if(pTouchData->magic == 'T')
+                    {
+                        rt_memcpy(pTouchData, &tData, sizeof(GUI_TouchData));
+                    }
+                }
+                GUI_EndDialog(hWin, 0);
+                return 0;
                 break;
             default:
                 break;
         }
-
         GUI_Exec();
         _WaitForPressedState(0);
         _WaitForPressedState(1);
         State++;
     }
-    if(pTouchData != RT_NULL)
-    {
-        rt_memcpy(pTouchData, &tData, sizeof(GUI_TouchData));
-    }
-    GUI_EndDialog(hWin, 0);
-    return 0;
+    return 1;
 }
 

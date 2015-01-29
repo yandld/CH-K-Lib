@@ -30,7 +30,7 @@ static rt_err_t rt_beep_open(rt_device_t dev, rt_uint16_t oflag)
     {
         /* Open Interrupt */
     }
-    ftm_instance = FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, 1000);
+    ftm_instance = FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, 10000);
     FTM_PWM_ChangeDuty(ftm_instance, HW_FTM_CH3, 0);
     return RT_EOK;
 }

@@ -109,7 +109,7 @@ int main(void)
     GUI_Init();
     GUI_DispString("BMP file test\r\n");
     GUI_DispString("please insert SD card...\r\n");
-    SD_QuickInit(20*1000*1000);
+    SD_QuickInit(10*1000*1000);
     printf("SD size:%dMB\r\n", SD_GetSizeInMB());
     FATFS fs_sd;
     FATFS *fs = &fs_sd;

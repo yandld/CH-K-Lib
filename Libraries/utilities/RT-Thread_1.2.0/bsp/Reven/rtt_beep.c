@@ -9,6 +9,7 @@ static uint32_t ftm_instance;
 static rt_err_t rt_beep_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
     RT_ASSERT(dev != RT_NULL);
+    static int freq = 10000;
     switch (cmd)
     {
         case RT_DEVICE_CTRL_BEEP_START:
@@ -18,7 +19,9 @@ static rt_err_t rt_beep_control(rt_device_t dev, rt_uint8_t cmd, void *args)
             FTM_PWM_ChangeDuty(ftm_instance, HW_FTM_CH3, 0);
             break;
         case RT_DEVICE_CTRL_SET_BEEP_FRQ:
-            FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, (*(uint32_t*)args));
+            freq = *(int*)args;
+            rt_kprintf("%d\r\n", freq);
+            FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, freq);
             break;
     }
     return RT_EOK;
@@ -69,9 +72,10 @@ static void timer_timeout(void* parameter)
 
 void beep(int argc, char** argv)
 {
-    int val;
-    val = strtoul(argv[1],0,0);
-    if(!val) val = 1;
+    int time, freq;
+    time = strtoul(argv[1],0,0);
+    freq = strtoul(argv[2],0,0);
+    if(!time) time = 1;
 	dev_beep = rt_device_find("beep");
 	if (dev_beep == RT_NULL)
 	{
@@ -79,11 +83,12 @@ void beep(int argc, char** argv)
 		return;
 	}
     rt_device_open(dev_beep, 0);
-    rt_timer_init(&timer, "bt", timer_timeout, RT_NULL, val/(1000/RT_TICK_PER_SECOND), RT_TIMER_FLAG_ONE_SHOT);
+    rt_timer_init(&timer, "bt", timer_timeout, RT_NULL, time/(1000/RT_TICK_PER_SECOND), RT_TIMER_FLAG_ONE_SHOT);
     rt_timer_start(&timer);
+    rt_device_control(dev_beep, RT_DEVICE_CTRL_SET_BEEP_FRQ, &freq);
     rt_device_control(dev_beep, RT_DEVICE_CTRL_BEEP_START, RT_NULL);
 }
 
-MSH_CMD_EXPORT(beep, beep. eg:beep(500))
+MSH_CMD_EXPORT(beep, beep. eg:beep <time> <freq>)
 
 #endif

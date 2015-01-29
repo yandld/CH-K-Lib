@@ -41,6 +41,7 @@ int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* Frequenct
 {
     uint32_t MCGOutClock = 0;
     /* calualte MCGOutClock system_MKxxx.c must not modified */
+    SystemCoreClockUpdate();
     MCGOutClock = SystemCoreClock * MCGOUT_TO_CORE_DIVIDER;
     switch (clockName)
     {

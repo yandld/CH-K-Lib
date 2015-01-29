@@ -13,6 +13,10 @@ void gui_thread_entry(void* parameter)
     GUI_CURSOR_Show();
     TOUCH_MainTask();
     MainTask();
+    while(1)
+    {
+        rt_thread_delay(1);
+    }
 }
 
 void guit_thread_entry(void* parameter)
@@ -40,7 +44,7 @@ int cmd_gui_start(int argc, char** argv)
         rt_thread_startup(tid);		
     }
     
-    tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (512), 0x23, 20);                                                      
+    tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (1024), 0x26, 20);                                                      
     if (tid != RT_NULL)
     {
         rt_thread_startup(tid);		

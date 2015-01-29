@@ -7,6 +7,7 @@
 #include "spi_flash_w25qxx.h"
 #include "gpio.h"
 #include "spi.h"
+#include "sram.h"
 #include "rtt_spi.h"
 
 void led_thread_entry(void* parameter);
@@ -15,8 +16,8 @@ rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 
 void init_thread_entry(void* parameter)
 {
-    
-    rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
+    SRAM_Init();
+    rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_ADDRESS_BASE+SRAM_SIZE));
     
     finsh_system_init();
     struct rt_spi_device *spi_device;

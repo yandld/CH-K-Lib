@@ -80,19 +80,14 @@ void  GUI_X_InitOS (void)
     }
 }
 
-static U32 i;
 void GUI_X_Lock (void)
 { 
-   // result = rt_mutex_take(gui_x_mutex, RT_WAITING_FOREVER);
-    //rt_kprintf("%d\r\n",i);
-i++;
 }
 
 
 void GUI_X_Unlock (void)
 { 
-    i--;
-   // rt_mutex_release(gui_x_mutex);
+    
 }
 
 
@@ -204,5 +199,4 @@ static  void  CheckInit (void)
 void GUI_X_Init (void) 
 {
     touch_device = rt_device_find("ads7843");
-  //  KeySem = OSSemCreate(0);
 }

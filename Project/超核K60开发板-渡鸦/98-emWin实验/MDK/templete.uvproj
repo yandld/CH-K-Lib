@@ -76,9 +76,9 @@
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
-            <RunUserProg1>0</RunUserProg1>
+            <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
+            <UserProg1Name>fromelf --bin !L --output templete.bin</UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -405,11 +405,7 @@
       </TargetOption>
       <Groups>
         <Group>
-<<<<<<< HEAD
           <GroupName>lib_startup_mk6010</GroupName>
-=======
-          <GroupName>lib_startup_mk60d10</GroupName>
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
           <Files>
             <File>
               <FileName>system_MK60D10.c</FileName>
@@ -454,11 +450,7 @@
                 <PlainCh>2</PlainCh>
                 <Ropi>2</Ropi>
                 <Rwpi>2</Rwpi>
-<<<<<<< HEAD
                 <wLevel>2</wLevel>
-=======
-                <wLevel>0</wLevel>
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
@@ -1291,13 +1283,8 @@
       <TargetOption>
         <TargetCommonOption>
           <Device>MK64FN1M0xxx12</Device>
-<<<<<<< HEAD
           <Vendor>Freescale</Vendor>
           <Cpu>IROM(0x00000000,0x100000) IRAM(0x20000000,0x30000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
-=======
-          <Vendor>Freescale Semiconductor</Vendor>
-          <Cpu>IROM(0x00000000,0x100000) IRAM(0x20000000,0x30000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(120000000) ELITTLE</Cpu>
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0MK_P1M0 -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM))</FlashDriverDll>
@@ -1327,11 +1314,7 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-<<<<<<< HEAD
           <OutputDirectory>.\mk64f12\flash\</OutputDirectory>
-=======
-          <OutputDirectory>.\mk64f12\</OutputDirectory>
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
           <OutputName>templete</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
@@ -1359,7 +1342,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-<<<<<<< HEAD
             <nStopB1X>0</nStopB1X>
             <nStopB2X>0</nStopB2X>
           </BeforeMake>
@@ -1367,13 +1349,6 @@
             <RunUserProg1>1</RunUserProg1>
             <RunUserProg2>0</RunUserProg2>
             <UserProg1Name>fromelf --bin !L --output templete.bin</UserProg1Name>
-=======
-          </BeforeMake>
-          <AfterMake>
-            <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
-            <UserProg1Name></UserProg1Name>
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
@@ -1399,11 +1374,7 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-<<<<<<< HEAD
           <SimDllArguments></SimDllArguments>
-=======
-          <SimDllArguments> </SimDllArguments>
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
           <SimDlgDll>DCM.DLL</SimDlgDll>
           <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
@@ -1429,10 +1400,7 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-<<<<<<< HEAD
             <RestoreSysVw>1</RestoreSysVw>
-=======
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -1444,13 +1412,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-<<<<<<< HEAD
             <RestoreSysVw>1</RestoreSysVw>
             <UsePdscDebugDescription>1</UsePdscDebugDescription>
-=======
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -1526,7 +1489,7 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>2</RvdsVP>
+            <RvdsVP>1</RvdsVP>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -1712,11 +1675,7 @@
       </TargetOption>
       <Groups>
         <Group>
-<<<<<<< HEAD
           <GroupName>lib_startup_mk6010</GroupName>
-=======
-          <GroupName>lib_startup_mk60d10</GroupName>
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -1746,11 +1705,7 @@
                 <PlainCh>2</PlainCh>
                 <Ropi>2</Ropi>
                 <Rwpi>2</Rwpi>
-<<<<<<< HEAD
                 <wLevel>2</wLevel>
-=======
-                <wLevel>0</wLevel>
->>>>>>> 6d700c4114d26f2f4cf7a3b18af22c45c3e08d65
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>

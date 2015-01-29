@@ -23,14 +23,8 @@ void gui_thread_entry(void* parameter)
     GUI_DispString(GUI_GetVersionString());
     
     MainTask();
-  //  WM_HWIN hWin;
-  //  GUI_CURSOR_Show();
-  //  hWin = MYGUI_DLG_CreateDesktop();
-
-   // MainMenu_Init();
-
 	while(1)
 	{
-       // rt_thread_delay(10);
+        rt_thread_delay(10);
 	}
 }

@@ -182,13 +182,15 @@ int rt_hw_ksz8041_init(uint8_t enetPhyAddr)
     device.eth_rx     = rt_ksz8041_rx;
     device.eth_tx     = rt_ksz8041_tx;
     
-    gTxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE);
+    gTxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE+16);
+    gTxBuf = (char*)(uint32_t)RT_ALIGN((uint32_t)gTxBuf, 16);
     if(!gTxBuf)
     {
         return RT_ENOMEM;
     }
     
-    gRxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE);
+    gRxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE+16);
+    gRxBuf = (char*)(uint32_t)RT_ALIGN((uint32_t)gRxBuf, 16);
     if(!gRxBuf)
     {
         return RT_ENOMEM;

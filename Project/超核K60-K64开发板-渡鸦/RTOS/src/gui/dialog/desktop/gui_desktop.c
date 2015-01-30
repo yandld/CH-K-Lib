@@ -108,14 +108,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         }
         if(msg.exec != RT_NULL)
         {
-            void beep(int argc, char** argv);
-            char argv1[] = "beep";
-            char argv2[] = "100";
-            
-            char* pp[2];
-            pp[0] = argv1;
-            pp[1] = argv2;
-            beep(1, (char**)pp);
             rt_mq_send(guimq, &msg, sizeof(msg));
         }
     }

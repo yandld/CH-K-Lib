@@ -20,7 +20,6 @@ static rt_err_t rt_beep_control(rt_device_t dev, rt_uint8_t cmd, void *args)
             break;
         case RT_DEVICE_CTRL_SET_BEEP_FRQ:
             freq = *(int*)args;
-            rt_kprintf("%d\r\n", freq);
             FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, freq);
             break;
     }
@@ -49,7 +48,7 @@ int rt_hw_beep_init(const char *name)
 	beep_device.open		= rt_beep_open;
 	beep_device.close		= RT_NULL;
 	beep_device.read 		= RT_NULL;
-	beep_device.write     = RT_NULL;
+	beep_device.write       = RT_NULL;
 	beep_device.control 	= rt_beep_control;
 	beep_device.user_data	= RT_NULL;
 	

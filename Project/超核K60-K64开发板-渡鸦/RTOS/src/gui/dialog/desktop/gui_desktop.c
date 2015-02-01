@@ -10,17 +10,30 @@
 #define ID_BUTTON_3     (GUI_ID_USER + 0x04)
 #define ID_BUTTON_4     (GUI_ID_USER + 0x05)
 #define ID_BUTTON_5     (GUI_ID_USER + 0x06)
+#define ID_BUTTON_6     (GUI_ID_USER + 0x07)
+#define ID_BUTTON_7     (GUI_ID_USER + 0x08)
+#define ID_BUTTON_8     (GUI_ID_USER + 0x09)
+#define ID_BUTTON_9     (GUI_ID_USER + 0x0A)
+#define ID_BUTTON_10    (GUI_ID_USER + 0x0B)
+#define ID_BUTTON_11    (GUI_ID_USER + 0x0C)
+#define ID_BUTTON_12    (GUI_ID_USER + 0x0D)
 #define ID_IMAGE_0      (GUI_ID_USER + 0x04)
 
 
 static UIAppEntry UIApp[] = 
 {
-    {"calendar",    "calendar",     "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_0, GUI_AppDispCalender},
-    {"system",      "system",       "/SD/SYS/APPS/SERVICES.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_1, GUI_AppDispSysInfo},
-    {"file",        "file",         "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_2, GUI_AooDispChooseFile},
-    {"clock",       "clock",        "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_3, GUI_AppDispTime},
+    {"calendar",    "calendar",     "/SD/SYS/APPS/ABOUT.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_0, GUI_AppDispCalender},
+    {"system",      "system",       "/SD/SYS/APPS/CALENDER.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_1, GUI_AppDispSysInfo},
+    {"file",        "file",         "/SD/SYS/APPS/CLOCK.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_2, GUI_AooDispChooseFile},
+    {"clock",       "clock",        "/SD/SYS/APPS/CONFIG.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_3, GUI_AppDispTime},
     {"calibration", "calibration",  "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_4, GUI_ExecCalibrationDialog},
-    {"thread",      "thread",       "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_5, GUI_CreateTaskerDialog},
+    {"thread",      "thread",       "/SD/SYS/APPS/FILE.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_5, GUI_CreateTaskerDialog},
+    {"thread",      "thread",       "/SD/SYS/APPS/MUSIC.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_6, GUI_CreateTaskerDialog},
+    {"thread",      "thread",       "/SD/SYS/APPS/NOTEPAD.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_7, GUI_CreateTaskerDialog},
+    {"thread",      "thread",       "/SD/SYS/APPS/PICTURE.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_8, GUI_CreateTaskerDialog},
+    {"thread",      "thread",       "/SD/SYS/APPS/NOTEPAD.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_9, GUI_CreateTaskerDialog},
+    {"thread",      "thread",       "/SD/SYS/APPS/USB.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_10, GUI_CreateTaskerDialog},
+    {"thread",      "thread",       "/SD/SYS/APPS/PERFOR~1.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_11, GUI_CreateTaskerDialog},
 };
 
 
@@ -121,7 +134,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             hItem = WM_GetDialogItem(pMsg->hWin, UIApp[i].GUID);
             xSize = GUI_BMP_GetXSize(UIApp[i].plogo);
             ySize = GUI_BMP_GetYSize(UIApp[i].plogo);
-            if(LCD_GetXSize() - xPos >= xSize)
+            if(abs(LCD_GetXSize() - xPos) >= xSize)
             {
                 WM_MoveTo(hItem, xPos, yPos);
                 xPos+=xSize;
@@ -131,6 +144,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 xPos = 0;
                 yPos+=ySize;
                 WM_MoveTo(hItem, xPos, yPos);
+                xPos+=xSize;
             }
         }
     

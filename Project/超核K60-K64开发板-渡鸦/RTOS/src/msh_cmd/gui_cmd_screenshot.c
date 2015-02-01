@@ -14,14 +14,13 @@
 #include <rtthread.h>
 #include <dfs_posix.h>
 #include "GUI.H"
-#include <finsh.h>
 
     
 static void _WriteByte2File(U8 Data, void *p)
 {
     static rt_uint32_t cnt;
     cnt++;
-    if(!(cnt%1000)) rt_kprintf(">");
+    if(!(cnt%3000)) rt_kprintf(">");
     write(*(int*)p, &Data, 1);
 }
 
@@ -31,8 +30,15 @@ static void _WriteByte2File(U8 Data, void *p)
 void ui_screenshot(int argc, char** argv)
 {
     int hFile;
-
-    hFile = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0);
+    if(argc == 1)
+    {
+        hFile = open("/SD/SYS/PIC/SCREEN.BMP", O_WRONLY | O_CREAT | O_TRUNC, 0);
+    }
+    else
+    {
+        hFile = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0);
+    }
+    
     if (hFile < 0)
     {
         rt_kprintf("open file:%s failed\n", argv[1]);
@@ -44,6 +50,6 @@ void ui_screenshot(int argc, char** argv)
 }
 
 
-MSH_CMD_EXPORT(ui_screenshot, show a picture file.);
+MSH_CMD_EXPORT(ui_screenshot, <cmd> /SD/cut.bmp);
 #endif
 

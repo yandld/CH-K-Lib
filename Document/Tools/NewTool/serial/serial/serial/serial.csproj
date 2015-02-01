@@ -35,11 +35,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>serial.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,12 +60,6 @@
     </Compile>
     <Compile Include="conDialog.Designer.cs">
       <DependentUpon>conDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frm_terminal.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frm_terminal.Designer.cs">
-      <DependentUpon>frm_terminal.cs</DependentUpon>
     </Compile>
     <Compile Include="frm_download.cs">
       <SubType>Form</SubType>
@@ -85,9 +84,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="conDialog.resx">
       <DependentUpon>conDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frm_terminal.resx">
-      <DependentUpon>frm_terminal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frm_download.resx">
       <DependentUpon>frm_download.cs</DependentUpon>
@@ -118,9 +114,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

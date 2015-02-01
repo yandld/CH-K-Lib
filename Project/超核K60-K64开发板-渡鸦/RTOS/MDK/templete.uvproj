@@ -72,8 +72,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopB1X>0</nStopB1X>
-            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
@@ -130,7 +128,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -142,8 +139,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -362,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60D10 RAVEN CLOCK_SETUP=4</Define>
+              <Define>MK60D10 RAVEN</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src\gui;..\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs;..\..\..\..\Libraries\utilities\emWin\Include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\init;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\arch\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\ipv4;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\netif;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\romfs;..\src\webserver;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\drivers\K\src\usb\src\descriptor\msd;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\init;..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo</IncludePath>
             </VariousControls>
@@ -623,6 +620,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\sys_core\network_service.c</FilePath>
             </File>
+            <File>
+              <FileName>simple_beep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\apps\simple_beep.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -830,6 +832,11 @@
               <FileName>rtt_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtt_iflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_iflash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1704,6 +1711,40 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>ssd_lib</GroupName>
+          <Files>
+            <File>
+              <FileName>MK_P1M0.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flash\lib\MK_P1M0.lib</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds/>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>MK_P512.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flash\lib\MK_P512.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1772,8 +1813,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopB1X>0</nStopB1X>
-            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
@@ -1830,7 +1869,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -1842,8 +1880,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -2360,6 +2398,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\sys_core\network_service.c</FilePath>
             </File>
+            <File>
+              <FileName>simple_beep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\gui\apps\simple_beep.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2567,6 +2610,11 @@
               <FileName>rtt_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtt_iflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_iflash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3419,6 +3467,40 @@
               <FileName>startup.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src\startup.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ssd_lib</GroupName>
+          <Files>
+            <File>
+              <FileName>MK_P1M0.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flash\lib\MK_P1M0.lib</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds/>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>MK_P512.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\flash\lib\MK_P512.lib</FilePath>
             </File>
           </Files>
         </Group>

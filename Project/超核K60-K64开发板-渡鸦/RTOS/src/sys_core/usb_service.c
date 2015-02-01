@@ -115,7 +115,7 @@ int usb_startup(int argc, char** argv)
     static char arg[32];
     rt_memcpy(arg, argv[1], rt_strlen(argv[1]));
 
-    tid = rt_thread_create("usb_exe", usb_thread_entry, arg, 1024*2, 30, 20);
+    tid = rt_thread_create("usb_exe", usb_thread_entry, arg, 1024, 30, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
 
     return 0;

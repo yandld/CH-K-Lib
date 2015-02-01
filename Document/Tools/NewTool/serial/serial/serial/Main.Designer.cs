@@ -67,7 +67,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(415, 228);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Kinetis kBoot下载器";
+            this.tabPage2.Text = "下载程序(Bootloader)";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // panel2
@@ -114,7 +114,7 @@
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(415, 228);
             this.tabPage3.TabIndex = 3;
-            this.tabPage3.Text = "Help";
+            this.tabPage3.Text = "创建工程";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // panel1

@@ -13,7 +13,7 @@ static rt_err_t rt_beep_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     switch (cmd)
     {
         case RT_DEVICE_CTRL_BEEP_START:
-            FTM_PWM_ChangeDuty(ftm_instance, HW_FTM_CH3, 5000);
+            FTM_PWM_ChangeDuty(ftm_instance, HW_FTM_CH3, 3000);
             break;
         case RT_DEVICE_CTRL_BEEP_STOP:
             FTM_PWM_ChangeDuty(ftm_instance, HW_FTM_CH3, 0);
@@ -68,6 +68,9 @@ static void timer_timeout(void* parameter)
     rt_device_control(dev_beep, RT_DEVICE_CTRL_BEEP_STOP, RT_NULL);
     rt_timer_detach(&timer);
 }
+
+
+
 
 void beep(int argc, char** argv)
 {

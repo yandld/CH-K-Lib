@@ -13,7 +13,7 @@ static int USB_SetClockDiv(uint32_t srcClock)
     {
         for(div = 0; div < 8; div++)
         {
-            if((srcClock*(frac+1))/(div+1) == 48000000)
+            if(((srcClock*(frac+1))/(div+1)) > 47000000 && ((srcClock*(frac+1))/(div+1)) < 49000000)
             {
                 SIM->CLKDIV2 |= SIM_CLKDIV2_USBDIV(div);
                 (frac)?(SIM->CLKDIV2 |= SIM_CLKDIV2_USBFRAC_MASK):(SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBFRAC_MASK);

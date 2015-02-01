@@ -15,12 +15,12 @@
 
 static UIAppEntry UIApp[] = 
 {
-    {"calendar",    "calendar",     "/SF/SYS/APPS/CLOCK.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_0, GUI_AppDispCalender},
-    {"system",      "system",       "/SF/SYS/APPS/DEFAULT.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_1, GUI_AppDispSysInfo},
-    {"file",        "file",         "/SF/SYS/APPS/PICTURE.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_2, GUI_AooDispChooseFile},
-    {"clock",       "clock",        "/SF/SYS/APPS/CONFIG.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_3, GUI_AppDispTime},
-  //  {"calibration", "calibration",  "/SF/SYS/APPS/CLOCK.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_4, GUI_ExecCalibrationDialog},
-  //  {"thread",      "thread",       "/SF/SYS/APPS/CLOCK.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_5, GUI_CreateTaskerDialog},
+    {"calendar",    "calendar",     "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_0, GUI_AppDispCalender},
+    {"system",      "system",       "/SD/SYS/APPS/SERVICES.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_1, GUI_AppDispSysInfo},
+    {"file",        "file",         "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_2, GUI_AooDispChooseFile},
+    {"clock",       "clock",        "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_3, GUI_AppDispTime},
+    {"calibration", "calibration",  "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_4, GUI_ExecCalibrationDialog},
+    {"thread",      "thread",       "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_5, GUI_CreateTaskerDialog},
 };
 
 
@@ -73,13 +73,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         WINDOW_SetBkColor(hItem, GUI_WHITE);
         int fd;
         
+
         /* load APP */
         for(i=0;i<GUI_COUNTOF(UIApp);i++)
         {
-            hItem = BUTTON_CreateAsChild(10, 10, 20, 20, pMsg->hWin, UIApp[i].GUID, WM_CF_SHOW);
+            hItem = BUTTON_CreateAsChild(10, 10, 50, 50, pMsg->hWin, UIApp[i].GUID, WM_CF_SHOW);
             BUTTON_SetText(hItem, UIApp[i].text);
             WM_EnableMemdev(hItem);
-            WM_MoveTo(hItem, 0+(i%2)*120, (i/2)*120 + 0);
             struct stat s;
             stat(UIApp[i].logoPath, &s);
             
@@ -91,8 +91,15 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 {
                     rt_kprintf("%s", UIApp[i].logoPath);
                     read(fd, UIApp[i].plogo, s.st_size);
+
+                    
+                    //WM_MoveTo(hItem, 0+(i%2)*120, (i/2)*120 + 0);
                     
                     WM_SetSize(hItem, GUI_BMP_GetXSize(UIApp[i].plogo), GUI_BMP_GetYSize(UIApp[i].plogo));
+                    //xPos+= xSize;
+                    //yPos+= ySize;
+                    
+                    
                     BUTTON_SetBMPEx(hItem, BUTTON_BI_UNPRESSED, UIApp[i].plogo ,0, 0);
                     BUTTON_SetBMPEx(hItem, BUTTON_BI_PRESSED, UIApp[i].plogo ,1, 1);
                     BUTTON_SetTextOffset(hItem, 0, 50);
@@ -102,6 +109,28 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             else
             {
                 rt_kprintf("no mem!\r\n");
+            }
+        }
+        
+        /* algin Apps */
+        int xPos, yPos, xSize, ySize;
+        xPos = 0;
+        yPos = 0;
+        for(i=0;i<GUI_COUNTOF(UIApp);i++)
+        {
+            hItem = WM_GetDialogItem(pMsg->hWin, UIApp[i].GUID);
+            xSize = GUI_BMP_GetXSize(UIApp[i].plogo);
+            ySize = GUI_BMP_GetYSize(UIApp[i].plogo);
+            if(LCD_GetXSize() - xPos >= xSize)
+            {
+                WM_MoveTo(hItem, xPos, yPos);
+                xPos+=xSize;
+            }
+            else
+            {
+                xPos = 0;
+                yPos+=ySize;
+                WM_MoveTo(hItem, xPos, yPos);
             }
         }
     

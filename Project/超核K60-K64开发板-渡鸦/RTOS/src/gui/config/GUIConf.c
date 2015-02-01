@@ -18,7 +18,7 @@ static void _EnableSkinning(int OnOff)
     if (OnOff)
     {
         FRAMEWIN_SetDefaultSkin(FRAMEWIN_SKIN_FLEX);
-        //BUTTON_SetDefaultSkin  (BUTTON_SKIN_FLEX);
+        BUTTON_SetDefaultSkin  (BUTTON_SKIN_FLEX);
         DROPDOWN_SetDefaultSkin(DROPDOWN_SKIN_FLEX);
         HEADER_SetDefaultSkin(HEADER_SKIN_FLEX);
         SCROLLBAR_SetDefaultSkin(SCROLLBAR_SKIN_FLEX);
@@ -26,7 +26,7 @@ static void _EnableSkinning(int OnOff)
     else
     {
         FRAMEWIN_SetDefaultSkinClassic();
-        //BUTTON_SetDefaultSkinClassic();
+        BUTTON_SetDefaultSkinClassic();
         DROPDOWN_SetDefaultSkinClassic();
         HEADER_SetDefaultSkinClassic();
         SCROLLBAR_SetDefaultSkinClassic();

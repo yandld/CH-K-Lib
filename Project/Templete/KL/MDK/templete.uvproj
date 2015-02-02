@@ -1310,8 +1310,6 @@
         <TargetCommonOption>
           <Device>MKL26Z128xxx4</Device>
           <Vendor>Freescale</Vendor>
-          <PackID>Keil.Kinetis_KLxx_DFP.1.4.0</PackID>
-          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x00000000,0x20000) IRAM(0x1FFFF000,0x4000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>

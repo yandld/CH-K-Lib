@@ -57,8 +57,6 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
     {
         case BAUD_RATE_9600:
             break;
-        case BAUD_RATE_115200:
-            break;
     }
 	return RT_EOK;
 }
@@ -70,11 +68,8 @@ static rt_err_t kinetis_control(struct rt_serial_device *serial, int cmd, void *
     switch (cmd)
     {
     case RT_DEVICE_CTRL_CLR_INT:
-        UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, false);
         break;
     case RT_DEVICE_CTRL_SET_INT:
-        UART_CallbackRxInstall(serial->config.reserved, UART_ISR);
-        UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, true);
         break;
     }
     return RT_EOK;
@@ -111,6 +106,8 @@ int rt_hw_usart_init(uint32_t MAP, const char * name)
 {
     uint32_t instance;
     instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+    
+    /* 启动FIFO加速 */
     UART_EnableTxFIFO(instance, true);
     UART_SetTxFIFOWatermark(instance, UART_GetTxFIFOSize(instance));
     
@@ -125,8 +122,12 @@ int rt_hw_usart_init(uint32_t MAP, const char * name)
     serial.config = config;
     serial.ops    = &kinetis_uart_ops;
     serial.int_rx = &uart_int_rx;
+    
+    /* 回调函数 */
     UART_CallbackRxInstall(instance, UART_ISR);
     UART_ITDMAConfig(instance, kUART_IT_Rx, true);
+    
+    
     return rt_hw_serial_register(&serial, name,
                           RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_INT_RX | RT_DEVICE_FLAG_STREAM,
                           RT_NULL);

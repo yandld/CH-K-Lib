@@ -23,6 +23,9 @@ void t2_thread_entry(void* parameter)
     } 
 }
 
+/*  RTT 入口函数 相当于无操作系统下的main函数
+    RTT 成功启动后 会自动执行 init_thread_entry 这个线程
+*/
 void init_thread_entry(void* parameter)
 {
 
@@ -36,7 +39,7 @@ void init_thread_entry(void* parameter)
     tid = rt_thread_create("t2", t2_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
    
-    /* 删除这个进程 */
+    /* 删除 init_thread_entry 这个线程 */
     tid = rt_thread_self();
     rt_thread_delete(tid); 
 }

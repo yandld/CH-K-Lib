@@ -7,8 +7,8 @@
 
 
 
-WM_HWIN _TaskerAddPageTest(void);
-WM_HWIN _TaskerAddPageThread(void);  
+WM_HWIN _TaskerAddPage1(void);
+WM_HWIN _TaskerAddPage2(void);  
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
   { FRAMEWIN_CreateIndirect, "Task Manager", ID_FRAMEWIN_0, 0, 0, 240, 320, 0, 0x0, 0 },
@@ -33,9 +33,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         hItem = WM_GetDialogItem(pMsg->hWin, ID_MULTIPAGE_0);
 
         WM_HWIN hDialog;
-        hDialog = _TaskerAddPageThread();
+        hDialog = _TaskerAddPage2();
         MULTIPAGE_AddPage(hItem, hDialog, "Thread");
-        hDialog = _TaskerAddPageTest();
+        hDialog = _TaskerAddPage1();
         MULTIPAGE_AddPage(hItem, hDialog, "Performance");
 
         break;

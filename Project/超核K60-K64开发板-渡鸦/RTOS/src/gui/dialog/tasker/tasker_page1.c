@@ -1,29 +1,40 @@
 #include "gui_appdef.h"
+#include "rtt_ksz8041.h"
 #include "tasker.h"
 
 void cpu_usage_get(rt_uint8_t *major, rt_uint8_t *minor);
 
 #define ID_FRAMEWIN_0  (GUI_ID_USER + 0x00)
-#define ID_TEXT_0  (GUI_ID_USER + 0x0B)
-#define ID_PROGBAR_0  (GUI_ID_USER + 0x0C)
-#define ID_GRAPH_0  (GUI_ID_USER + 0x0D)
-#define ID_TEXT_1  (GUI_ID_USER + 0x0E)
-#define ID_TEXT_2  (GUI_ID_USER + 0x10)
-#define ID_PROGBAR_1  (GUI_ID_USER + 0x11)
-#define ID_TEXT_3  (GUI_ID_USER + 0x12)
-#define ID_GRAPH_1  (GUI_ID_USER + 0x13)
+
+#define ID_TEXT_0  (GUI_ID_TEXT0 + 0x00)
+#define ID_TEXT_1  (GUI_ID_TEXT0 + 0x01)
+#define ID_TEXT_2  (GUI_ID_TEXT0 + 0x02)
+#define ID_TEXT_3  (GUI_ID_TEXT0 + 0x03)
+
+#define ID_PROGBAR_0  (GUI_ID_PROGBAR0 + 0x00)
+#define ID_PROGBAR_1  (GUI_ID_PROGBAR0 + 0x01)
+#define ID_PROGBAR_2  (GUI_ID_PROGBAR0 + 0x02)
+
+#define ID_GRAPH_0  (GUI_ID_GRAPH0 + 0x00)
+#define ID_GRAPH_1  (GUI_ID_GRAPH0 + 0x01)
+#define ID_GRAPH_2  (GUI_ID_GRAPH0 + 0x02)
+#define ID_GRAPH_3  (GUI_ID_GRAPH0 + 0x03)
 
 const GUI_WIDGET_CREATE_INFO _aDialogCreate1[] =
 {
   { WINDOW_CreateIndirect, "Dialog", ID_FRAMEWIN_0, 0, 0, 250, 270, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "Text", ID_TEXT_0, 5, 5, 82, 17, 0, 0x64, 0 },
-  { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_0, 8, 21, 50, 63, 1, 0x0, 0 },
-  { GRAPH_CreateIndirect, "Graph", ID_GRAPH_0, 80, 21, 135, 65, 0, 0x0, 0 },
-  { TEXT_CreateIndirect, "CPU Usage History", ID_TEXT_1, 92, 5, 104, 20, 0, 0x64, 0 },
-  { TEXT_CreateIndirect, "Memory", ID_TEXT_2, 6, 91, 90, 20, 0, 0x64, 0 },
-  { PROGBAR_CreateIndirect, "Progbar", ID_PROGBAR_1, 8, 111, 50, 63, 1, 0x0, 0 },
-  { TEXT_CreateIndirect, "CPU Usage History", ID_TEXT_3, 103, 91, 89, 20, 0, 0x64, 0 },
-  { GRAPH_CreateIndirect, "Graph", ID_GRAPH_1, 80, 110, 135, 65, 0, 0x0, 0 },
+  { TEXT_CreateIndirect, "Text",   ID_TEXT_0, 5, 5, 82, 17, 0, 0x64, 0 },
+  { TEXT_CreateIndirect, "Memory", ID_TEXT_1, 6, 91, 90, 20, 0, 0x64, 0 },
+  { TEXT_CreateIndirect, "Networking", ID_TEXT_2, 6, 180, 90, 20, 0, 0x64, 0 },
+  
+  { PROGBAR_CreateIndirect, "P0", ID_PROGBAR_0, 8, 21, 50, 63, 1, 0x0, 0 },
+  { GRAPH_CreateIndirect, "G0", ID_GRAPH_0, 80, 21, 135, 65, 0, 0x0, 0 },
+
+  { PROGBAR_CreateIndirect, "P1", ID_PROGBAR_1, 8, 111, 50, 63, 1, 0x0, 0 },
+  { GRAPH_CreateIndirect, "G1", ID_GRAPH_1, 80, 110, 135, 65, 0, 0x0, 0 },
+  
+  { GRAPH_CreateIndirect, "G2", ID_GRAPH_2, 10 , 200, 100, 65, 0, 0x0, 0 },
+  { GRAPH_CreateIndirect, "G3", ID_GRAPH_3, 120, 200, 100, 65, 0, 0x0, 0 },
 };
 
 static void _cbDialog(WM_MESSAGE * pMsg)
@@ -32,7 +43,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
     int     NCode;
     int     Id;
     char * buffer = rt_malloc(64);
-    static GRAPH_DATA_Handle  _ahData[2]; 
+    static GRAPH_DATA_Handle  _ahData[4]; 
     rt_uint8_t major, minor;
     rt_uint32_t  total, used, max_used;
     switch (pMsg->MsgId)
@@ -46,15 +57,25 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0), major);
         
             sprintf(buffer, "Used mem:%d%%", used*100/total);
-            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_2), buffer);
+            TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_1), buffer);
             PROGBAR_SetValue(WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_1), used*100/total);
-        
+
             GRAPH_DATA_YT_AddValue(_ahData[0], major);
             GRAPH_DATA_YT_AddValue(_ahData[1], used*100/total);
-            WM_RestartTimer(pMsg->Data.v, 100);
+        
+            rt_device_t dev;
+            enet_phy_data phy_data;
+            dev = rt_device_find("e0");
+            if(dev)
+            {
+                dev->control(dev, NIOCTL_GET_PHY_DATA, &phy_data);
+                GRAPH_DATA_YT_AddValue(_ahData[2], phy_data.tx_fcnt);
+                GRAPH_DATA_YT_AddValue(_ahData[3], phy_data.rx_fcnt);
+            }
+            WM_RestartTimer(pMsg->Data.v, 20);
             break;
         case WM_INIT_DIALOG:
-            WM_CreateTimer(WM_GetClientWindow(pMsg->hWin), 0, 100, 0);
+            WM_CreateTimer(WM_GetClientWindow(pMsg->hWin), 0, 300, 0);
         
             hItem = WM_GetDialogItem(pMsg->hWin, ID_PROGBAR_0);
             PROGBAR_SetBarColor(hItem, 1, GUI_GREEN);
@@ -67,11 +88,15 @@ static void _cbDialog(WM_MESSAGE * pMsg)
             // GRAPH
             _ahData[0] = GRAPH_DATA_YT_Create(GUI_DARKGREEN, 500, 0, 0);
             _ahData[1] = GRAPH_DATA_YT_Create(GUI_BLUE, 500, 0, 0);
+            _ahData[2] = GRAPH_DATA_YT_Create(GUI_YELLOW, 500, 0, 0);
+            _ahData[3] = GRAPH_DATA_YT_Create(GUI_BROWN, 500, 0, 0);
         
-            WM_HWIN hGRAPH[2];
+            WM_HWIN hGRAPH[4];
             int i;  
             hGRAPH[0] = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_0);
             hGRAPH[1] = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_1);
+            hGRAPH[2] = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_2);
+            hGRAPH[3] = WM_GetDialogItem(pMsg->hWin, ID_GRAPH_3);
             for(i=0;i<GUI_COUNTOF(hGRAPH);i++)
             {
                 GRAPH_SetBorder(hGRAPH[i], 1, 1, 1, 1);
@@ -80,18 +105,6 @@ static void _cbDialog(WM_MESSAGE * pMsg)
                 GRAPH_SetGridDistY(hGRAPH[i], 10); 
                 GRAPH_AttachData(hGRAPH[i], _ahData[i]);                
             }
-        
-         //   static GRAPH_SCALE_Handle _hScaleV;   // Handle of vertical scale
-         //   static GRAPH_SCALE_Handle _hScaleH;   // Handle of horizontal scale
-            
-        //    _hScaleV = GRAPH_SCALE_Create( 35, GUI_TA_RIGHT, GRAPH_SCALE_CF_VERTICAL, 25);
-        //    GRAPH_SCALE_SetTextColor(_hScaleV, GUI_YELLOW);
-          //  GRAPH_AttachScale(hItem, _hScaleV);
-            
-          //  _hScaleH = GRAPH_SCALE_Create(155, GUI_TA_HCENTER, GRAPH_SCALE_CF_HORIZONTAL, 50);
-         //   GRAPH_SCALE_SetTextColor(_hScaleH, GUI_DARKGREEN);
-            //GRAPH_AttachScale(hItem, _hScaleH);
-            
         break;
         default:
             WM_DefaultProc(pMsg);
@@ -100,7 +113,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
     rt_free(buffer);
 }
 
-WM_HWIN _TaskerAddPageTest(void)
+WM_HWIN _TaskerAddPage1(void)
 {
     return GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog, WM_UNATTACHED, 0, 0);
 }

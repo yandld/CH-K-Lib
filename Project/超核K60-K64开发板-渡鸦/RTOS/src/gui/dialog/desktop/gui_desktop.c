@@ -22,18 +22,18 @@
 
 static UIAppEntry UIApp[] = 
 {
-    {"calendar",    "calendar",     "/SD/SYS/APPS/ABOUT.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_0, GUI_AppDispCalender},
-    {"system",      "system",       "/SD/SYS/APPS/CALENDER.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_1, GUI_AppDispSysInfo},
-    {"file",        "file",         "/SD/SYS/APPS/CLOCK.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_2, GUI_AooDispChooseFile},
-    {"clock",       "clock",        "/SD/SYS/APPS/CONFIG.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_3, GUI_AppDispTime},
-    {"calibration", "calibration",  "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_4, GUI_ExecCalibrationDialog},
-    {"thread",      "thread",       "/SD/SYS/APPS/FILE.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_5, GUI_CreateTaskerDialog},
-    {"thread",      "thread",       "/SD/SYS/APPS/MUSIC.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_6, GUI_CreateTaskerDialog},
-    {"thread",      "thread",       "/SD/SYS/APPS/NOTEPAD.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_7, GUI_CreateTaskerDialog},
-    {"thread",      "thread",       "/SD/SYS/APPS/PICTURE.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_8, GUI_CreateTaskerDialog},
-    {"thread",      "thread",       "/SD/SYS/APPS/NOTEPAD.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_9, GUI_CreateTaskerDialog},
-    {"thread",      "thread",       "/SD/SYS/APPS/USB.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_10, GUI_CreateTaskerDialog},
-    {"thread",      "thread",       "/SD/SYS/APPS/PERFOR~1.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_11, GUI_CreateTaskerDialog},
+    {"about",    "about",     "/SD/SYS/APPS/ABOUT.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_0, GUI_AppDispSysInfo},
+    {"calendar",      "calendar",       "/SD/SYS/APPS/CALENDER.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_1, GUI_AppDispSysInfo},
+    {"clock",        "clock",         "/SD/SYS/APPS/CLOCK.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_2, GUI_AooDispChooseFile},
+    {"settings",       "settings",        "/SD/SYS/APPS/CONFIG.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_3, GUI_AppDispTime},
+    {"network",     "network",  "/SD/SYS/APPS/LAN.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_4, GUI_ExecCalibrationDialog},
+    {"file",      "file",       "/SD/SYS/APPS/FILE.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_5, GUI_CreateTaskerDialog},
+    {"music",      "music",       "/SD/SYS/APPS/MUSIC.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_6, GUI_CreateTaskerDialog},
+    {"notepad",     "notepad",       "/SD/SYS/APPS/NOTEPAD.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_7, GUI_CreateTaskerDialog},
+    {"picture",      "picture",       "/SD/SYS/APPS/PICTURE.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_8, GUI_CreateTaskerDialog},
+    {"notepad",      "notepad",       "/SD/SYS/APPS/NOTEPAD.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_9, GUI_CreateTaskerDialog},
+    {"usb",      "usb",       "/SD/SYS/APPS/USB.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_10, GUI_CreateTaskerDialog},
+    {"performence",      "performence",       "/SD/SYS/APPS/PERFOR~1.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_11, GUI_CreateTaskerDialog},
 };
 
 

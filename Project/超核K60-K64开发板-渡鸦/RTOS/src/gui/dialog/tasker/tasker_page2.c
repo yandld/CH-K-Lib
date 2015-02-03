@@ -80,7 +80,7 @@ void _cbDialog(WM_MESSAGE * pMsg)
   }
 }
 
-WM_HWIN _TaskerAddPageThread(void)
+WM_HWIN _TaskerAddPage2(void)
 {
     return GUI_CreateDialogBox(_aDialogCreate2, GUI_COUNTOF(_aDialogCreate2), _cbDialog, WM_UNATTACHED, 0, 0);
 }

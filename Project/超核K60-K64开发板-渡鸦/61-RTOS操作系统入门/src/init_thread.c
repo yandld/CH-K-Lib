@@ -30,7 +30,7 @@ void init_thread_entry(void* parameter)
 {
 
     rt_thread_t tid;
-    
+    finsh_system_init();
     /* 创建线程 t1 堆栈大小256 优先级24 时间片20(没有用)*/
     tid = rt_thread_create("t1", t1_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);

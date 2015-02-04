@@ -49,7 +49,7 @@ static void UART_ISR(uint16_t byteReceived)
     rt_interrupt_leave();
 }
 
-static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial_configure *cfg)
+static rt_err_t _configure(struct rt_serial_device *serial, struct serial_configure *cfg)
 {
     RT_ASSERT(serial != RT_NULL);
     RT_ASSERT(cfg != RT_NULL);
@@ -61,7 +61,7 @@ static rt_err_t kinetis_configure(struct rt_serial_device *serial, struct serial
 	return RT_EOK;
 }
 
-static rt_err_t kinetis_control(struct rt_serial_device *serial, int cmd, void *arg)
+static rt_err_t _control(struct rt_serial_device *serial, int cmd, void *arg)
 {
     RT_ASSERT(serial != RT_NULL);
 
@@ -75,13 +75,13 @@ static rt_err_t kinetis_control(struct rt_serial_device *serial, int cmd, void *
     return RT_EOK;
 }
 
-static int kinetis_putc(struct rt_serial_device *serial, char c)
+static int _putc(struct rt_serial_device *serial, char c)
 {
     UART_WriteByte(serial->config.reserved, c);
     return 1;
 }
 
-static int kinetis_getc(struct rt_serial_device *serial)
+static int _getc(struct rt_serial_device *serial)
 {
     int c;
     c = -1;
@@ -96,10 +96,10 @@ static int kinetis_getc(struct rt_serial_device *serial)
 
 static const struct rt_uart_ops kinetis_uart_ops =
 {
-    kinetis_configure,
-    kinetis_control,
-    kinetis_putc,
-    kinetis_getc,
+    _configure,
+    _control,
+    _putc,
+    _getc,
 };
 
 int rt_hw_usart_init(uint32_t MAP, const char * name)
@@ -137,7 +137,6 @@ int rt_hw_usart_init(uint32_t MAP, const char * name)
 static int init_board_uart(void)
 {
     rt_hw_usart_init(BOARD_UART_DEBUG_MAP, "uart0");
-
     return 0;
 }
 

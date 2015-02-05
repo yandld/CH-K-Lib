@@ -588,9 +588,9 @@
           <GroupName>rtt-driver</GroupName>
           <Files>
             <File>
-              <FileName>rtt_serial.c</FileName>
+              <FileName>drv_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -829,7 +829,7 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>2</RvdsVP>
+            <RvdsVP>1</RvdsVP>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -854,7 +854,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>0</Im2Chk>
+            <Im2Chk>1</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -1198,9 +1198,9 @@
           <GroupName>rtt-driver</GroupName>
           <Files>
             <File>
-              <FileName>rtt_serial.c</FileName>
+              <FileName>drv_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
           </Files>
         </Group>

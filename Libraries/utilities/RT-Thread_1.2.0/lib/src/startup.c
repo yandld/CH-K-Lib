@@ -1,4 +1,4 @@
-#include <rtthread.h>
+#include <rtthread.h>z
 #include <stdint.h>
 #include <rthw.h>
 #include "components.h"
@@ -76,7 +76,6 @@ __weak int main(void)
     rt_components_board_init();
     
     rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
-    rt_kprintf("rt_components_board_init complete, do startup\r\n");
     
 	rtthread_startup();
     

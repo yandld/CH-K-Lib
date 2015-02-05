@@ -190,7 +190,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</Filename>
+          <Filename>C:\Users\B51439\Desktop\CH-K-Lib\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -404,7 +404,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name>/</Name>
+          <Name></Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -414,7 +414,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>JL2CM3</Key>
-          <Name>-U58003465 -O462 -S9 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC4000 -FN1 -FF0MK_P1M0.FLM -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM)</Name>
+          <Name>-U621000000 -O462 -S9 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC4000 -FN1 -FF0MK_P1M0.FLM -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
@@ -775,8 +775,8 @@
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</PathWithFileName>
-      <FilenameWithoutPath>rtt_serial.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</PathWithFileName>
+      <FilenameWithoutPath>drv_uart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -805,7 +805,7 @@
 
   <Group>
     <GroupName>config</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

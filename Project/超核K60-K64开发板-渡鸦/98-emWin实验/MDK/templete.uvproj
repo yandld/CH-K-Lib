@@ -729,11 +729,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_sd.c</FilePath>
             </File>
             <File>
-              <FileName>rtt_serial.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</FilePath>
-            </File>
-            <File>
               <FileName>rtt_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_spi.c</FilePath>
@@ -762,6 +757,11 @@
               <FileName>i2c_at24cxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\i2c_at24cxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1271,6 +1271,16 @@
               <FileName>reset.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\msh_cmd\reset.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>test</GroupName>
+          <Files>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\shell.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1999,11 +2009,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_sd.c</FilePath>
             </File>
             <File>
-              <FileName>rtt_serial.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</FilePath>
-            </File>
-            <File>
               <FileName>rtt_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_spi.c</FilePath>
@@ -2032,6 +2037,11 @@
               <FileName>i2c_at24cxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\i2c_at24cxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2541,6 +2551,16 @@
               <FileName>reset.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\msh_cmd\reset.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>test</GroupName>
+          <Files>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\shell.c</FilePath>
             </File>
           </Files>
         </Group>

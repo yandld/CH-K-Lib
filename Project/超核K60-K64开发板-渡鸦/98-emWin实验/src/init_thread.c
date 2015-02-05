@@ -19,7 +19,7 @@ void init_thread_entry(void* parameter)
     SRAM_Init();
     rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_ADDRESS_BASE+SRAM_SIZE));
     
-    finsh_system_init();
+    //finsh_system_init();
     struct rt_spi_device *spi_device;
     rt_thread_t tid;
     rt_err_t r;

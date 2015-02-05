@@ -43,13 +43,10 @@ void init_thread_entry(void* parameter)
 {
     rt_thread_t tid;
     
-    //rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
+    rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
     
     SRAM_Init();
     rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-    
-    /* init finsh */
-    finsh_system_init();
 
     rt_hw_beep_init("beep");
     spi_init();

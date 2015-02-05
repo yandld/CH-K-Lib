@@ -802,11 +802,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_sd.c</FilePath>
             </File>
             <File>
-              <FileName>rtt_serial.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</FilePath>
-            </File>
-            <File>
               <FileName>rtt_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_spi.c</FilePath>
@@ -840,6 +835,11 @@
               <FileName>rtt_iflash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_iflash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1711,6 +1711,11 @@
               <FileName>startup.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src\startup.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\shell.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2583,11 +2588,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_sd.c</FilePath>
             </File>
             <File>
-              <FileName>rtt_serial.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_serial.c</FilePath>
-            </File>
-            <File>
               <FileName>rtt_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_spi.c</FilePath>
@@ -2621,6 +2621,11 @@
               <FileName>rtt_iflash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\rtt_iflash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3473,6 +3478,11 @@
               <FileName>startup.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src\startup.c</FilePath>
+            </File>
+            <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\shell.c</FilePath>
             </File>
           </Files>
         </Group>

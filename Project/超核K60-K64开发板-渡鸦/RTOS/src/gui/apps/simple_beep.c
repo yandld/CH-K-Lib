@@ -85,6 +85,8 @@ void beep_music(int argc, char** argv)
     rt_device_t dev_beep;
     int tone, time;
     tone = strtoul(argv[1],0,0);
+    if(tone >14) tone = 14;
+    if((time < 1) || (time > 100)) time = 50;
     time = strtoul(argv[2],0,0);
     BeepMusic(tone, time, WangMingMei, sizeof(WangMingMei));
 }

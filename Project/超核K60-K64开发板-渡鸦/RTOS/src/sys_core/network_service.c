@@ -1,6 +1,6 @@
 #include "components.h"
 #include "board.h"
-#include "rtt_ksz8041.h"
+#include "drv_ksz8041.h"
 
 
 int network_startup(int argc, char** argv)

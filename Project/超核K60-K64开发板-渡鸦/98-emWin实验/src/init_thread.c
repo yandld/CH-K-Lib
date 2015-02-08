@@ -3,12 +3,12 @@
 
 #include "board.h"
 #include "components.h"
-#include "rtt_ksz8041.h"
+#include "drv_ksz8041.h"
 #include "spi_flash_w25qxx.h"
 #include "gpio.h"
 #include "spi.h"
 #include "sram.h"
-#include "rtt_spi.h"
+#include "drv_spi.h"
 
 void led_thread_entry(void* parameter);
 

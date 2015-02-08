@@ -4,7 +4,7 @@
 #include "spi_flash_w25qxx.h"
 #include "chlib_k.h"
 #include "sram.h"
-#include "rtt_spi.h"
+#include "drv_spi.h"
 
 void led_thread_entry(void* parameter);
 void usb_thread_entry(void* parameter);

@@ -1,4 +1,4 @@
-#include "rtt_beep.h"
+#include "drv_beep.h"
 #include <stdint.h>
 #include <rtthread.h>
 

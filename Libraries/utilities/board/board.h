@@ -47,7 +47,17 @@
 #define BOARD_I2C_SCL_PIN           2
 #define BOARD_I2C_SDA_PIN           3
 
-
+#elif LZ_K60
+#define BOARD_NAME                      "LZ_K60"
+#define BOARD_UART_BAUDRATE             115200
+#define BOARD_UART_DEBUG_MAP            UART0_RX_PA15_TX_PA14
+#define BOARD_LED_GPIO_BASES            {HW_GPIOE, HW_GPIOE, HW_GPIOE, HW_GPIOE}
+#define BOARD_LED_PIN_BASES             {24, 25, 26, 27}
+#define BOARD_I2C_SCL_PORT          HW_GPIOB
+#define BOARD_I2C_SDA_PORT          HW_GPIOB
+#define BOARD_I2C_SCL_PIN           2
+#define BOARD_I2C_SDA_PIN           3
+#define BOARD_ENET_PHY_ADDR         0x06
 
 #elif CHK60EVB1
 

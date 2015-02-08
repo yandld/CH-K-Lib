@@ -51,11 +51,10 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             int led_num;
             rt_device_control(dev_led, RT_DEVICE_GET_LED_NUM, &led_num);
             rt_device_control(dev_led, RT_DEVICE_CTRL_LED_TOGGLE, &i);
-        
             i++; i%= led_num;
             if(_gMode == LED_WATERLAMP)
             {
-                WM_CreateTimer(WM_GetClientWindow(pMsg->hWin), 0, _gFreq, 0);
+                WM_RestartTimer(pMsg->Data.v, _gFreq);
             }
             break;
       case WM_INIT_DIALOG:

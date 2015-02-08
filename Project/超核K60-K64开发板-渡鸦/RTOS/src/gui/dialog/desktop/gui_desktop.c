@@ -144,7 +144,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                 xPos = 0;
                 yPos+=ySize;
                 WM_MoveTo(hItem, xPos, yPos);
-                xPos+=xSize;
+                xPos+=xSize; 
             }
         }
     

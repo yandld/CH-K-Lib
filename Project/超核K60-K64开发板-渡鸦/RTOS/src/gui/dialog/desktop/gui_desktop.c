@@ -22,7 +22,7 @@
 
 static UIAppEntry UIApp[] = 
 {
-    {"about",    "about",     "/SD/SYS/APPS/ABOUT.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_0, GUI_AppDispSysInfo},
+    {"about",    "about",     "/SD/SYS/APPS/ABOUT.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_0, GUI_AppDispLED},
     {"calendar",      "calendar",       "/SD/SYS/APPS/CALENDER.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_1, GUI_AppDispSysInfo},
     {"clock",        "clock",         "/SD/SYS/APPS/CLOCK.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_2, GUI_AooDispChooseFile},
     {"settings",       "settings",        "/SD/SYS/APPS/CONFIG.BMP", RT_NULL, 10, 10, 50, 50,         ID_BUTTON_3, GUI_AppDispTime},

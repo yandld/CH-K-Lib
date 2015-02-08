@@ -83,6 +83,8 @@ WM_HWIN GUI_CreateTaskerDialog(void);
 WM_HWIN GUI_AppDispCalculator(void);
 WM_HWIN GUI_ExecCalibrationDialog(GUI_TouchData* pTouchData);
 WM_HWIN GUI_CreateDesktopDialog(void);
+WM_HWIN GUI_AppDispLED(void);
+
 #endif
 
 

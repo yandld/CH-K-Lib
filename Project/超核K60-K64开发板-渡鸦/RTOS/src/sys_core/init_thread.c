@@ -62,8 +62,8 @@ void init_thread_entry(void* parameter)
 
     at24cxx_init("at24c02", "i2c0");
 
-    tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
-    if (tid != RT_NULL) rt_thread_startup(tid);
+    //tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
+    //if (tid != RT_NULL) rt_thread_startup(tid);
   
     tid = rt_thread_create("key", key_thread_entry, RT_NULL, 512, 0x14, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);

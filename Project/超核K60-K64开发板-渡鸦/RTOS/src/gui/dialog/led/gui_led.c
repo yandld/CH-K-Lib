@@ -43,12 +43,13 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     int     NCode;
     int     Id;
     int led;
+    static int i;
+    int led_num;
     
     switch (pMsg->MsgId)
     {
         case WM_TIMER:
-            static int i;
-            int led_num;
+
             rt_device_control(dev_led, RT_DEVICE_GET_LED_NUM, &led_num);
             rt_device_control(dev_led, RT_DEVICE_CTRL_LED_TOGGLE, &i);
             i++; i%= led_num;

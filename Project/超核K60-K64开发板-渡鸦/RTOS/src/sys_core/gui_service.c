@@ -6,7 +6,6 @@ rt_mq_t guimq;
 
 void gui_thread_entry(void* parameter)
 {
-    U32 i;
     guimq = rt_mq_create("gui_mq", sizeof(gui_msg_t), 6, RT_IPC_FLAG_FIFO);
     gui_msg_t msg;
     

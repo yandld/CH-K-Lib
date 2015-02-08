@@ -108,14 +108,35 @@ static struct rt_spi_ops kinetis_spi_ops =
     xfer
 };
 
-int rt_hw_spi_bus_init(uint32_t instance, const char *name)
+int rt_hw_spi_bus_init(void)
 {
     kinetis_spi.ops = &kinetis_spi_ops;
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); 
-    return rt_spi_bus_register(&kinetis_spi, name, &kinetis_spi_ops); 
+    return rt_spi_bus_register(&kinetis_spi, "spi2", &kinetis_spi_ops); 
 }
 
+static void rt_hw_spi_init(void)
+{
+    rt_hw_spi_bus_init();
+    struct rt_spi_device* spi_21;
+    struct kinetis_spi_cs* cs_21;
+    spi_21 = rt_malloc(sizeof(struct rt_spi_device));
+    cs_21 = rt_malloc(sizeof(struct kinetis_spi_cs));
+    
+    cs_21->ch = 1;
+    PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); //SPI2_PCS1
+    rt_spi_bus_attach_device(spi_21, "spi21", "spi2", cs_21);
+    
+    struct rt_spi_device* spi_20;
+    struct kinetis_spi_cs* cs_20;
+    spi_20 = rt_malloc(sizeof(struct rt_spi_device));
+    cs_20 = rt_malloc(sizeof(struct kinetis_spi_cs));
+    cs_20->ch = 0;
+    PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
+    rt_spi_bus_attach_device(spi_20, "spi20", "spi2", cs_20);
+}
 
+INIT_BOARD_EXPORT(rt_hw_spi_init);
 

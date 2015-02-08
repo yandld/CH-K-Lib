@@ -38,7 +38,7 @@ static rt_err_t rt_beep_open(rt_device_t dev, rt_uint16_t oflag)
 }
 
 
-int rt_hw_beep_init(const char *name)
+int rt_hw_beep_init(void)
 {
 
 	beep_device.type 		= RT_Device_Class_Miscellaneous;
@@ -52,8 +52,10 @@ int rt_hw_beep_init(const char *name)
 	beep_device.control 	= rt_beep_control;
 	beep_device.user_data	= RT_NULL;
 	
-    return rt_device_register(&beep_device, name, RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STANDALONE | RT_DEVICE_FLAG_REMOVABLE);
+    return rt_device_register(&beep_device, "beep", RT_DEVICE_FLAG_RDWR | RT_DEVICE_FLAG_STANDALONE | RT_DEVICE_FLAG_REMOVABLE);
 }
+
+INIT_BOARD_EXPORT(rt_hw_beep_init);
 
 #ifdef FINSH_USING_MSH
 #include <finsh.h>
@@ -68,9 +70,6 @@ static void timer_timeout(void* parameter)
     rt_device_control(dev_beep, RT_DEVICE_CTRL_BEEP_STOP, RT_NULL);
     rt_timer_detach(&timer);
 }
-
-
-
 
 void beep(int argc, char** argv)
 {

@@ -23,8 +23,10 @@ void init_thread_entry(void* parameter)
     
     rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
     
+    #ifndef FRDM
     SRAM_Init();
     rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
+    #endif
 
     touch_ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
@@ -43,7 +45,9 @@ void init_thread_entry(void* parameter)
     tid = rt_thread_create("key", key_thread_entry, RT_NULL, 512, 0x14, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
     
+    #ifndef FRDM
     ui_startup(RT_NULL, RT_NULL);
+    #endif
     network_startup(RT_NULL, RT_NULL);
 
     tid = rt_thread_self();

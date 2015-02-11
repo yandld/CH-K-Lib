@@ -33,6 +33,9 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     ENET_Init(&ENET_InitStruct1);
     
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);
+    PORT_PinPullConfig(HW_GPIOB, 0, kPullUp);
+    PORT_PinOpenDrainConfig(HW_GPIOB, 0, ENABLE);
+    
     PORT_PinMuxConfig(HW_GPIOB, 1, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 5, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 12, kPinAlt4);

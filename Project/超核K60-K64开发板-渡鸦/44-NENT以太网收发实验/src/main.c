@@ -49,7 +49,7 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
-    r = ksz8041_init(0x01);
+    r = ksz8041_init();
     if(r)
     {
         printf("ksz8041 init failed! code:%d\r\n", r);

@@ -132,8 +132,8 @@ typedef void (*ENET_CallBackRxType)(void);
 
 /* RMII API */
 void ENET_MII_Init(void);
-uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data);
-uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data);
+bool ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data);
+bool ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data);
 
 /* controller API */
 void ENET_Init(ENET_InitTypeDef* ENET_InitStrut);

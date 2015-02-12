@@ -3,7 +3,7 @@
   * @file    ksz8041.h
   * @author  YANDLD
   * @version V2.5
-  * @date    2014.3.25
+  * @date    2015.02.11
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -16,7 +16,7 @@
 
 
 //!< API
-int ksz8041_init(int chip_addr);
+int ksz8041_init(void);
 bool ksz8041_is_linked(void);
 bool ksz8041_is_phy_full_dpx(void);
 bool ksz8041_is_phy_10m_speed(void);

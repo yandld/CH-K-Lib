@@ -10,7 +10,7 @@ void led_thread_entry(void* parameter);
 void usb_thread_entry(void* parameter);
 void sd_thread_entry(void* parameter);
 int ui_startup(int argc, char** argv);
-int network_startup(int argc, char** argv);
+void rt_hw_ksz8041_init(void);
 void key_thread_entry(void* parameter);
 
 
@@ -48,8 +48,9 @@ void init_thread_entry(void* parameter)
     #ifndef FRDM
     ui_startup(RT_NULL, RT_NULL);
     #endif
-    network_startup(RT_NULL, RT_NULL);
 
+    rt_hw_ksz8041_init();
+    
     tid = rt_thread_self();
     rt_thread_delete(tid); 
 }

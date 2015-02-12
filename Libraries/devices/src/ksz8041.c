@@ -3,7 +3,7 @@
   * @file    ksz8041.c
   * @author  YANDLD
   * @version V2.5
-  * @date    2013.12.25
+  * @date    2015.02.11
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -81,7 +81,7 @@
 
 #define KSZ8041_PHY_PHYIDR1_VALUE   (0x22)
 
-#define KSZ8041_DEBUG		0
+#define KSZ8041_DEBUG		1
 #if ( KSZ8041_DEBUG == 1 )
 #define KSZ8041_TRACE	printf
 #else
@@ -90,13 +90,38 @@
 
 static int gChipAddr;
 
-int ksz8041_init(int chip_addr)
+
+static bool _AutoDiscover(uint8_t * Addr)
+{
+    uint8_t i;
+    uint16_t data;
+
+    for(i = 0; i< 0xFF; i++)
+    {
+        data = 0;
+        ENET_MII_Read(i, PHY_PHYIDR1, &data);
+        if((data !=0) && (data != 0xFFFF))
+        {
+            KSZ8041_TRACE("Addr:%d Val:0x%X found!\r\n", i, data);
+            *Addr = i;
+            return true;
+        }
+    }
+    return false;
+}
+    
+
+int ksz8041_init(void)
 {
     uint16_t usData;
 	uint16_t timeout = 0;
-    gChipAddr = chip_addr;
+    
     /* init MII interface */
     ENET_MII_Init();
+    
+    uint8_t addr;
+    _AutoDiscover(&addr);
+    gChipAddr = addr;
     
     /* software reset PHY */
     ENET_MII_Write(gChipAddr, PHY_BMCR, PHY_BMCR_RESET);

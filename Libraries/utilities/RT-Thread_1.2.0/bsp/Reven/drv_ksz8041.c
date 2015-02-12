@@ -45,7 +45,7 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
-    r = ksz8041_init(*(int*)dev->user_data);
+    r = ksz8041_init();
     if(r)
     {
         return RT_ERROR;
@@ -169,10 +169,8 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
 }
 
 /* enetPhyAddr: enet phy chip hardware addr, normally, it's 0 or 1 */
-int rt_hw_ksz8041_init(uint8_t enetPhyAddr)
+int rt_hw_ksz8041_init(void)
 {
-    static uint8_t addr;
-    addr = enetPhyAddr;
     device.parent.init       = rt_ksz8041_init;
     device.parent.open       = rt_ksz8041_open;
     device.parent.close      = rt_ksz8041_close;
@@ -180,20 +178,20 @@ int rt_hw_ksz8041_init(uint8_t enetPhyAddr)
     device.parent.read       = rt_ksz8041_read;
     device.parent.write      = rt_ksz8041_write;
     device.parent.control    = rt_ksz8041_control;
-    device.parent.user_data    = (void*)&addr;
+    device.parent.user_data    = RT_NULL;
 
     device.eth_rx     = rt_ksz8041_rx;
     device.eth_tx     = rt_ksz8041_tx;
     
     gTxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE+16);
-    gTxBuf = (char*)(uint32_t)RT_ALIGN((uint32_t)gTxBuf, 16);
+    gTxBuf = (rt_uint8_t*)(uint32_t)RT_ALIGN((uint32_t)gTxBuf, 16);
     if(!gTxBuf)
     {
         return RT_ENOMEM;
     }
     
     gRxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE+16);
-    gRxBuf = (char*)(uint32_t)RT_ALIGN((uint32_t)gRxBuf, 16);
+    gRxBuf = (rt_uint8_t*)(uint32_t)RT_ALIGN((uint32_t)gRxBuf, 16);
     if(!gRxBuf)
     {
         return RT_ENOMEM;

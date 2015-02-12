@@ -20,7 +20,6 @@
 #define BOARD_KEY_PIN_BASES             {26, 27,  4}
 #define BOARD_ADC_MAP                   ADC0_SE19_DM0
 #define BOARD_LPTMR_MAP                 LPTMR_ALT2_PC05
-#define BOARD_ENET_PHY_ADDR             0x01
 
 #define BOARD_SPI_MAP                   SPI2_SCK_PD12_SOUT_PD13_SIN_PD14
 #define BOARD_SPI_INSTANCE              HW_SPI2
@@ -57,7 +56,6 @@
 #define BOARD_I2C_SDA_PORT          HW_GPIOB
 #define BOARD_I2C_SCL_PIN           2
 #define BOARD_I2C_SDA_PIN           3
-#define BOARD_ENET_PHY_ADDR         0x06
 
 #elif CHK60EVB1
 
@@ -98,8 +96,7 @@
 #define BOARD_I2C_MAP               I2C0_SCL_PE19_SDA_PE18
 #define BOARD_SPI_MAP               SPI0_SCK_PC05_SOUT_PC06_SIN_PC07
 #define BOARD_UART_DEBUG_MAP        UART5_RX_PE08_TX_PE09
-#define BOARD_UART_INSTANCE         (HW_UART5)
-#define BOARD_ENET_PHY_ADDR         0x06
+#define BOARD_UART_INSTANCE         (HW_UART5
 
 #elif defined(RADIUM)
 
@@ -133,7 +130,6 @@
 #define BOARD_CLKOUT_PORT           HW_GPIOC
 #define BOARD_CLKOUT_PIN            3
 #define BOARD_FTM_MAP               FTM0_CH3_PA06
-#define BOARD_ENET_PHY_ADDR         0x00
 #define BOARD_I2C_SDA_PORT          HW_GPIOD
 #define BOARD_I2C_SCL_PORT          HW_GPIOD
 #define BOARD_I2C_SDA_PIN           5

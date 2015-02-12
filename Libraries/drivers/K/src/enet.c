@@ -157,10 +157,13 @@ void ENET_MII_Init(void)
  * @param   data      :需要写入的数据
  * @retval  0 :成功 其它 :失败
  */
-uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
+bool ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
 {
+    bool r;
     uint32_t timeout;
-    DisableInterrupts();
+    
+    r = false;
+    
     /* clear MII it pending bit */
     ENET->EIR |= ENET_EIR_MII_MASK;
     
@@ -178,14 +181,13 @@ uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
     {
         if (ENET->EIR & ENET_EIR_MII_MASK)
         {
-            LIB_TRACE("MII - timeout:%d\r\n", timeout);
             break;  
         }
     }
-   EnableInterrupts();
-    if(timeout == MII_TIMEOUT)
+    LIB_TRACE("MII write:%d\r\n", timeout); 
+    if(!timeout)
     {
-        return timeout;
+        r = true;
     }
     
     /* software clear it */
@@ -198,15 +200,15 @@ uint8_t ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
  * @param   phy_addr    :PHY芯片地址
  * @param   reg_addr    :寄存器在PHY内部的偏移地址
  * @param   data        :需要读入的数据地址
- * @retval  0 :成功 其它 :失败
+ * @retval  true or false
  */
-uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
+bool ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
 {
-    int r;
+    bool r;
     uint32_t timeout;
     
-    r = 0;
-    DisableInterrupts();
+    r = false;
+    
     /* clear MII IT(interrupt) pending bit */
     ENET->EIR |= ENET_EIR_MII_MASK;
     
@@ -226,15 +228,17 @@ uint8_t ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
             break; 
         }
     }
-    if(timeout == MII_TIMEOUT) 
+    LIB_TRACE("MII read:%d\r\n", timeout); 
+    if(!timeout)
     {
-        r = timeout;
+        r = true;
     }
+    
+    /* read data */
+    *data = ENET->MMFR & 0x0000FFFF;
     
     /* software clear it */
     ENET->EIR |= ENET_EIR_MII_MASK;
-    *data = ENET->MMFR & 0x0000FFFF;
-    EnableInterrupts();
     return r;
 }
 

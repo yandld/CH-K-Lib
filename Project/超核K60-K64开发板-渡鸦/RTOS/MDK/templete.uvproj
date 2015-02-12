@@ -662,11 +662,6 @@
               <FilePath>..\src\sys_core\usb_service.c</FilePath>
             </File>
             <File>
-              <FileName>network_service.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sys_core\network_service.c</FilePath>
-            </File>
-            <File>
               <FileName>simple_beep.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\gui\apps\simple_beep.c</FilePath>
@@ -2448,11 +2443,6 @@
               <FilePath>..\src\sys_core\usb_service.c</FilePath>
             </File>
             <File>
-              <FileName>network_service.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sys_core\network_service.c</FilePath>
-            </File>
-            <File>
               <FileName>simple_beep.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\gui\apps\simple_beep.c</FilePath>
@@ -4170,11 +4160,6 @@
               <FileName>usb_service.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\sys_core\usb_service.c</FilePath>
-            </File>
-            <File>
-              <FileName>network_service.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sys_core\network_service.c</FilePath>
             </File>
             <File>
               <FileName>simple_beep.c</FileName>

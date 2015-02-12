@@ -89,7 +89,7 @@ struct __FILE
 /* FILE is typedef¡¯ d in stdio.h. */ 
 FILE __stdout;
 FILE __stdin;
-int fputc(int ch,FILE *f)
+__weak int fputc(int ch,FILE *f)
 {
 	UART_WriteByte(UART_DebugInstance, ch);
 	return ch;
@@ -102,7 +102,7 @@ int fgetc(FILE *f)
     return (ch & 0xFF);
 }
 #elif __ICCARM__ /* IAR support */
-size_t __write(int handle, const unsigned char * buffer, size_t size)
+__weak size_t __write(int handle, const unsigned char * buffer, size_t size)
 {
     size_t nChars = 0;
     if (buffer == 0)

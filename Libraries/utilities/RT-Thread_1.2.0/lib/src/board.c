@@ -21,6 +21,12 @@ __weak void init_thread_entry(void* parameter)
     rt_kprintf("%s is empty!\r\n", __func__);
 }
 
+/* redefine fputc */
+int fputc(int ch,FILE *f)
+{
+    rt_kprintf("%c", ch);
+}
+
 
 void _init_entry(void* parameter)
 {

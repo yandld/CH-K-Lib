@@ -52,6 +52,8 @@ void tcpclient(const char* url, int port)
         return;
     }
 
+    rt_kprintf("connection ok\r\n");
+    
     while(1)
     {
         /* 从sock连接中接收最大BUFSZ - 1字节数据 */

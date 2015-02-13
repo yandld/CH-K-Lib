@@ -192,7 +192,7 @@ bool ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
     
     /* software clear it */
     ENET->EIR |= ENET_EIR_MII_MASK;
-    return 0;
+    return r;
 }
 
 /**

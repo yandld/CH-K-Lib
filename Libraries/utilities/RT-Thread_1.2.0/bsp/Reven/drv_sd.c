@@ -9,9 +9,6 @@ static  rt_mutex_t mutex;
 
 static rt_err_t rt_sd_init (rt_device_t dev)
 {
-    SD_InitTypeDef sdi;
-    sdi.baudrate = 20*1000*1000;
-    SD_Init(&sdi);
     mutex = rt_mutex_create("sd_mutex", RT_IPC_FLAG_FIFO);
     return RT_EOK;
 }
@@ -20,7 +17,7 @@ static rt_err_t rt_sd_open(rt_device_t dev, rt_uint16_t oflag)
 {
     int r;
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
-    r = SD_QuickInit(20*1000*1000);
+    SD_QuickInit(10*1000*1000);
     rt_mutex_release(mutex);
     if(r)
     {
@@ -105,7 +102,7 @@ rt_err_t rt_sd_txcomplete(rt_device_t dev, void *buffer)
 	return RT_EOK;
 }
 
-void rt_hw_sd_init(uint32_t instance, const char *name)
+void rt_hw_sd_init(void)
 {
 
 	sd_device.type 		= RT_Device_Class_Block;
@@ -118,13 +115,9 @@ void rt_hw_sd_init(uint32_t instance, const char *name)
 	sd_device.write     = rt_sd_write;
 	sd_device.control 	= rt_sd_control;
 	sd_device.user_data	= RT_NULL;
-	
-    rt_device_register(&sd_device, name, RT_DEVICE_FLAG_RDWR  | RT_DEVICE_FLAG_REMOVABLE|RT_DEVICE_FLAG_STANDALONE);
+
+    rt_device_register(&sd_device, "sd0", RT_DEVICE_FLAG_RDWR  | RT_DEVICE_FLAG_REMOVABLE|RT_DEVICE_FLAG_STANDALONE);
 }
 
-void rt_hw_sd_init2(void)
-{
-    rt_hw_sd_init(0, "sd0");
-}
     
-INIT_DEVICE_EXPORT(rt_hw_sd_init2);
+INIT_DEVICE_EXPORT(rt_hw_sd_init);

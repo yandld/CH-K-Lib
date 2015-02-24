@@ -21,6 +21,8 @@ void init_thread_entry(void* parameter)
 {
     rt_thread_t tid;
     
+    rt_thread_delay(1);
+    
     rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
     
     #ifndef FRDM
@@ -35,7 +37,11 @@ void init_thread_entry(void* parameter)
     {
         dfs_mkfs("elm", "sf0");
     }
-    dfs_mount("sd0", "/SD", "elm", 0, 0);
+    
+    if(dfs_mount("sd0", "/SD", "elm", 0, 0))
+    {
+        rt_kprintf("sd mount on /SD failed\r\n");
+    }
 
     at24cxx_init("at24c02", "i2c0");
 

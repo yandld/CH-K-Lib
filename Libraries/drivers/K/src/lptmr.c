@@ -19,14 +19,13 @@ static const IRQn_Type LPTMR_IRQnTable[] =
     LPTimer_IRQn,
 };
 
-#ifdef SIM_SCGC5_LPTIMER_MASK
+#if defined(SIM_SCGC5_LPTIMER_MASK)
 static const struct reg_ops SIM_LPTMRClockGateTable[] =
 {
     {(void*)&(SIM->SCGC5), SIM_SCGC5_LPTIMER_MASK},
 };
-#endif
 
-#ifdef SIM_SCGC5_LPTMR_MASK
+#elif defined(SIM_SCGC5_LPTMR_MASK)
 static const struct reg_ops SIM_LPTMRClockGateTable[] =
 {
     {(void*)&(SIM->SCGC5), SIM_SCGC5_LPTMR_MASK},

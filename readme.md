@@ -18,7 +18,7 @@
 * IAR 7.2 以上版本
 
 ## 适用型号
-`MK60DNxxx` `MK64F12xxx` `MK10DN32xxx` `MKL25Zxxx` `MKL46Zxxx` `MK10DZ10` `MK20DZ10` `MK70F12` `MK70F15`
+`MK60DNxxx` `MK64F12xxx` `MK10DN32xxx` `MKL25Zxxx` `MKL46Zxxx` `MK10DZ10` `MK20DZ10` `MK70F12` `MK70F15` `MK22F12`
 * xxx代表任意
 
 ## 文件说明

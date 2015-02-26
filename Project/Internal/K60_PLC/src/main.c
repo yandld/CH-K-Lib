@@ -100,7 +100,7 @@ int main(void)
     for(i = 0; i < 16; i++)
     {
         ADC_InitStruct.instance = gADC_InstanceTable[i];
-        ADC_InitStruct.clockDiv = kADC_ClockDiv1;
+        ADC_InitStruct.clockDiv = kADC_ClockDiv2; //可以改成 kADC_ClockDiv4 kADC_ClockDiv8 增加采样时间
         ADC_InitStruct.resolutionMode = kADC_SingleDiff12or13;
         ADC_InitStruct.triggerMode = kADC_TriggerSoftware;
         ADC_InitStruct.singleOrDiffMode = kADC_Single;
@@ -125,7 +125,11 @@ int main(void)
 	
     while(1)
     {
-
+        for(i=0;i<8;i++)
+        {
+      //      printf("[%d]:%d ", i, gADCValue[i]); //显示所有数据
+        }
+        printf("\r");
     }
 }
 

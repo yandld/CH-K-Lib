@@ -195,7 +195,7 @@ void ADC_ChlMuxConfig(uint32_t instance, uint32_t mux)
  */
 static int32_t ADC_Calibration(uint32_t instance)
 {
-    uint32_t i;
+    volatile uint32_t i;
     uint32_t PG, MG;
     // set max avarage to get the best cal results
     ADC_InstanceTable[instance]->SC3 |= ADC_SC3_AVGS_MASK;
@@ -259,21 +259,28 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 {
     /* enable clock gate */
     *(uint32_t*)SIM_ADCClockGateTable[ADC_InitStruct->instance].addr |= SIM_ADCClockGateTable[ADC_InitStruct->instance].mask;
+    
     /* do calibration */
     ADC_Calibration(ADC_InitStruct->instance);
+    
 	/* set clock configuration */
-	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~ADC_CFG1_ADICLK_MASK;
-	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |=  ADC_CFG1_ADICLK(ADC_InitStruct->clockDiv); 
+	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~ADC_CFG1_ADIV_MASK;
+	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |=  ADC_CFG1_ADIV(ADC_InitStruct->clockDiv); 
+    
     /* voltage reference */
     ADC_InstanceTable[ADC_InitStruct->instance]->SC2 &= ~ADC_SC2_REFSEL_MASK;
     ADC_InstanceTable[ADC_InitStruct->instance]->SC2 |= ADC_SC2_REFSEL(ADC_InitStruct->vref);
+    
     /* resolutionMode */
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~(ADC_CFG1_MODE_MASK); 
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |= ADC_CFG1_MODE(ADC_InitStruct->resolutionMode);
+    
     /* trigger mode */
     (kADC_TriggerHardware == ADC_InitStruct->triggerMode)?(ADC_InstanceTable[ADC_InitStruct->instance]->SC2 |=  ADC_SC2_ADTRG_MASK):(ADC_InstanceTable[ADC_InitStruct->instance]->SC2 &=  ADC_SC2_ADTRG_MASK);
+    
     /* if continues conversion */
     (kADC_ContinueConversionEnable == ADC_InitStruct->continueMode)?(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_ADCO_MASK):(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_ADCO_MASK);
+    
     /* if hardware average enabled */
     switch(ADC_InitStruct->hardwareAveMode)
     {

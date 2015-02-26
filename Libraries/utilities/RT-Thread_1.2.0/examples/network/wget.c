@@ -220,9 +220,13 @@ int wget(int argc, char** argv)
             break;
         }
         total_transfered += bytes_received;
-        rt_kprintf("%dKB transfered   \r", total_transfered/1024);
+        if(!((total_transfered/1024) % 40))
+        {
+            rt_kprintf("%dKB transfered   \r", total_transfered/1024);
+        }
         write(fd, recv_data, bytes_received);
     }
+    rt_kprintf("%dKB transfered   \r", total_transfered/1024);
     rt_kprintf("\r\n");
     return 0;
 }

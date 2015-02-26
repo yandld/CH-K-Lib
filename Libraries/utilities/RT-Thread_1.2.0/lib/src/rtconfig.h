@@ -51,7 +51,7 @@
 /* SECTION: Console options */
 #define RT_USING_CONSOLE
 /* the buffer size of console*/
-#define RT_CONSOLEBUF_SIZE	128
+#define RT_CONSOLEBUF_SIZE	255
 
 /* SECTION: finsh, a C-Express shell */
 #define RT_USING_FINSH
@@ -72,8 +72,8 @@
 /* Reentrancy (thread safe) of the FatFs module.  */
 #define RT_DFS_ELM_REENTRANT
 /* Number of volumes (logical drives) to be used. */
-#define RT_DFS_ELM_DRIVES			    2
-//#define RT_DFS_ELM_USE_LFN			3 
+#define RT_DFS_ELM_DRIVES           2
+#define RT_DFS_ELM_USE_LFN          3 
 #define RT_DFS_ELM_MAX_LFN			255
 /* Maximum sector size to be handled. */
 #define RT_DFS_ELM_MAX_SECTOR_SIZE  4096

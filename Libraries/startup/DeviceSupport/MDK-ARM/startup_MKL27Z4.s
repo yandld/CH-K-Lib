@@ -1,12 +1,39 @@
-;/*****************************************************************************
-; * @file:    startup_MKL46Z4.s
-; * @purpose: CMSIS Cortex-M0plus Core Device Startup File for the
-; *           MKL46Z4
-; * @version: 2.2
-; * @date:    2013-4-12
+; * ---------------------------------------------------------------------------------------
+; * @file:    startup_MKL27Z4.s
+; * @purpose: CMSIS Cortex-M0P Core Device Startup File
+; *           MKL27Z4
+; * @version: 1.3
+; * @date:    2014-08-21
+; * ---------------------------------------------------------------------------------------
 ; *
-; * Copyright: 1997 - 2013 Freescale Semiconductor, Inc. All Rights Reserved.
-;*
+; * Copyright: 1997 - 2014 Freescale Semiconductor, Inc.
+; * All Rights Reserved.
+; *
+; * Redistribution and use in source and binary forms, with or without modification,
+; * are permitted provided that the following conditions are met:
+; *
+; * o Redistributions of source code must retain the above copyright notice, this list
+; *   of conditions and the following disclaimer.
+; *
+; * o Redistributions in binary form must reproduce the above copyright notice, this
+; *   list of conditions and the following disclaimer in the documentation and/or
+; *   other materials provided with the distribution.
+; *
+; * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+; *   contributors may be used to endorse or promote products derived from this
+; *   software without specific prior written permission.
+; *
+; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+; * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+; * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+; * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+; * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+; * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+; * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+; * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+; * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+; * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+; *
 ; *------- <<< Use Configuration Wizard in Context Menu >>> ------------------
 ; *
 ; *****************************************************************************/
@@ -64,38 +91,38 @@ __Vectors       DCD     __initial_sp  ; Top of Stack
                 DCD     SysTick_Handler  ; SysTick Handler
 
                 ; External Interrupts
-                DCD     DMA0_IRQHandler  ; DMA channel 0 transfer complete/error interrupt
-                DCD     DMA1_IRQHandler  ; DMA channel 1 transfer complete/error interrupt
-                DCD     DMA2_IRQHandler  ; DMA channel 2 transfer complete/error interrupt
-                DCD     DMA3_IRQHandler  ; DMA channel 3 transfer complete/error interrupt
-                DCD     Reserved20_IRQHandler  ; Reserved interrupt 20
-                DCD     FTFA_IRQHandler  ; FTFA command complete/read collision interrupt
-                DCD     LVD_LVW_IRQHandler  ; Low Voltage Detect, Low Voltage Warning
-                DCD     LLW_IRQHandler  ; Low Leakage Wakeup
+                DCD     DMA0_IRQHandler  ; DMA channel 0 transfer complete
+                DCD     DMA1_IRQHandler  ; DMA channel 1 transfer complete
+                DCD     DMA2_IRQHandler  ; DMA channel 2 transfer complete
+                DCD     DMA3_IRQHandler  ; DMA channel 3 transfer complete
+                DCD     Reserved20_IRQHandler  ; Reserved interrupt
+                DCD     FTFA_IRQHandler  ; Command complete and read collision
+                DCD     PMC_IRQHandler  ; Low-voltage detect, low-voltage warning
+                DCD     LLWU_IRQHandler  ; Low leakage wakeup
                 DCD     I2C0_IRQHandler  ; I2C0 interrupt
-                DCD     I2C1_IRQHandler  ; I2C0 interrupt 25
-                DCD     SPI0_IRQHandler  ; SPI0 interrupt
-                DCD     SPI1_IRQHandler  ; SPI1 interrupt
-                DCD     UART0_IRQHandler  ; UART0 status/error interrupt
-                DCD     UART1_IRQHandler  ; UART1 status/error interrupt
-                DCD     UART2_IRQHandler  ; UART2 status/error interrupt
+                DCD     I2C1_IRQHandler  ; I2C1 interrupt
+                DCD     SPI0_IRQHandler  ; SPI0 single interrupt vector for all sources
+                DCD     SPI1_IRQHandler  ; SPI1 single interrupt vector for all sources
+                DCD     LPUART0_IRQHandler  ; LPUART0 status and error
+                DCD     LPUART1_IRQHandler  ; LPUART1 status and error
+                DCD     UART2_FLEXIO_IRQHandler  ; UART2 or FLEXIO
                 DCD     ADC0_IRQHandler  ; ADC0 interrupt
                 DCD     CMP0_IRQHandler  ; CMP0 interrupt
-                DCD     TPM0_IRQHandler  ; TPM0 fault, overflow and channels interrupt
-                DCD     TPM1_IRQHandler  ; TPM1 fault, overflow and channels interrupt
-                DCD     TPM2_IRQHandler  ; TPM2 fault, overflow and channels interrupt
-                DCD     RTC_IRQHandler  ; RTC interrupt
-                DCD     RTC_Seconds_IRQHandler  ; RTC seconds interrupt
-                DCD     PIT_IRQHandler  ; PIT timer interrupt
-                DCD     I2S0_IRQHandler  ; I2S0 transmit interrupt
+                DCD     TPM0_IRQHandler  ; TPM0 single interrupt vector for all sources
+                DCD     TPM1_IRQHandler  ; TPM1 single interrupt vector for all sources
+                DCD     TPM2_IRQHandler  ; TPM2 single interrupt vector for all sources
+                DCD     RTC_IRQHandler  ; RTC alarm
+                DCD     RTC_Seconds_IRQHandler  ; RTC seconds
+                DCD     PIT_IRQHandler  ; PIT interrupt
+                DCD     I2S0_IRQHandler  ; I2S0 interrupt
                 DCD     USB0_IRQHandler  ; USB0 interrupt
                 DCD     DAC0_IRQHandler  ; DAC0 interrupt
-                DCD     TSI0_IRQHandler  ; TSI0 interrupt
-                DCD     MCG_IRQHandler  ; MCG interrupt
-                DCD     LPTimer_IRQHandler  ; LPTimer interrupt
-                DCD     LCD_IRQHandler  ; Segment LCD Interrupt
-                DCD     PORTA_IRQHandler  ; Port A interrupt
-                DCD     PORTC_PORTD_IRQHandler  ; Port C and port D interrupt
+                DCD     Reserved42_IRQHandler  ; Reserved interrupt
+                DCD     Reserved43_IRQHandler  ; Reserved interrupt
+                DCD     LPTMR0_IRQHandler  ; LPTMR0 interrupt
+                DCD     Reserved45_IRQHandler  ; Reserved interrupt
+                DCD     PORTA_IRQHandler  ; PORTA Pin detect
+                DCD     PORTCD_IRQHandler  ; Single interrupt vector for PORTC; PORTD Pin detect
 __Vectors_End
 
 __Vectors_Size 	EQU     __Vectors_End - __Vectors
@@ -190,16 +217,23 @@ FPROT3          EQU     nFPROT3:EOR:0xFF
 ;     <o.4>  LPBOOT1
 ;       <0=> Core and system clock divider (OUTDIV1) is 0x7 (divide by 8) or 0x1 (divide by 2)
 ;       <1=> Core and system clock divider (OUTDIV1) is 0x3 (divide by 4) or 0x0 (divide by 1)
+;     <o.1>  BOOTPIN_OPT
+;       <0=> Force Boot from ROM if BOOTCFG0 asserted, where BOOTCFG0 is the boot config function which is muxed with NMI pin
+;       <1=> Boot source configured by FOPT[BOOTSRC_SEL] bits
 ;     <o.2>  NMI_DIS
 ;       <0=> NMI interrupts are always blocked
 ;       <1=> NMI pin/interrupts reset default to enabled
 ;     <o.3>  RESET_PIN_CFG
 ;       <0=> RESET pin is disabled following a POR and cannot be enabled as RESET function
 ;       <1=> RESET pin is dedicated
-;     <o.3>  FAST_INIT
+;     <o.5>  FAST_INIT
 ;       <0=> Slower initialization
 ;       <1=> Fast Initialization
-FOPT            EQU     0xFF
+;     <o.6..7> BOOTSRC_SEL
+;       <0=> Boot from Flash
+;       <2=> Boot from ROM
+;       <3=> Boot from ROM
+FOPT            EQU     0x3D
 ;   </h>
 ;   <h> Flash security byte (FSEC)
 ;     <i> WARNING: If SEC field is configured as "MCU security status is secure" and MEEN field is configured as "Mass erase is disabled",
@@ -237,6 +271,14 @@ FSEC            EQU     0xFE
 
                 AREA    |.text|, CODE, READONLY
 
+;init_data_bss
+;     User defined function for data and bs memory segment initialization.
+;      Weak definition to be replaced by user code.
+
+init_data_bss   PROC
+                EXPORT  init_data_bss             [WEAK]
+                BX      R14
+                ENDP
 
 ; Reset Handler
 
@@ -245,6 +287,8 @@ Reset_Handler   PROC
                 IMPORT  SystemInit
                 IMPORT  __main
                 LDR     R0, =SystemInit
+                BLX     R0
+                LDR     R0, =init_data_bss
                 BLX     R0
                 LDR     R0, =__main
                 BX      R0
@@ -282,15 +326,15 @@ Default_Handler PROC
                 EXPORT  DMA3_IRQHandler     [WEAK]
                 EXPORT  Reserved20_IRQHandler     [WEAK]
                 EXPORT  FTFA_IRQHandler     [WEAK]
-                EXPORT  LVD_LVW_IRQHandler     [WEAK]
-                EXPORT  LLW_IRQHandler     [WEAK]
+                EXPORT  PMC_IRQHandler     [WEAK]
+                EXPORT  LLWU_IRQHandler     [WEAK]
                 EXPORT  I2C0_IRQHandler     [WEAK]
                 EXPORT  I2C1_IRQHandler     [WEAK]
                 EXPORT  SPI0_IRQHandler     [WEAK]
                 EXPORT  SPI1_IRQHandler     [WEAK]
-                EXPORT  UART0_IRQHandler     [WEAK]
-                EXPORT  UART1_IRQHandler     [WEAK]
-                EXPORT  UART2_IRQHandler     [WEAK]
+                EXPORT  LPUART0_IRQHandler     [WEAK]
+                EXPORT  LPUART1_IRQHandler     [WEAK]
+                EXPORT  UART2_FLEXIO_IRQHandler     [WEAK]
                 EXPORT  ADC0_IRQHandler     [WEAK]
                 EXPORT  CMP0_IRQHandler     [WEAK]
                 EXPORT  TPM0_IRQHandler     [WEAK]
@@ -302,12 +346,12 @@ Default_Handler PROC
                 EXPORT  I2S0_IRQHandler     [WEAK]
                 EXPORT  USB0_IRQHandler     [WEAK]
                 EXPORT  DAC0_IRQHandler     [WEAK]
-                EXPORT  TSI0_IRQHandler     [WEAK]
-                EXPORT  MCG_IRQHandler     [WEAK]
-                EXPORT  LPTimer_IRQHandler     [WEAK]
-                EXPORT  LCD_IRQHandler     [WEAK]
+                EXPORT  Reserved42_IRQHandler     [WEAK]
+                EXPORT  Reserved43_IRQHandler     [WEAK]
+                EXPORT  LPTMR0_IRQHandler     [WEAK]
+                EXPORT  Reserved45_IRQHandler     [WEAK]
                 EXPORT  PORTA_IRQHandler     [WEAK]
-                EXPORT  PORTC_PORTD_IRQHandler     [WEAK]
+                EXPORT  PORTCD_IRQHandler     [WEAK]
                 EXPORT  DefaultISR                      [WEAK]
 
 DMA0_IRQHandler
@@ -316,15 +360,15 @@ DMA2_IRQHandler
 DMA3_IRQHandler
 Reserved20_IRQHandler
 FTFA_IRQHandler
-LVD_LVW_IRQHandler
-LLW_IRQHandler
+PMC_IRQHandler
+LLWU_IRQHandler
 I2C0_IRQHandler
 I2C1_IRQHandler
 SPI0_IRQHandler
 SPI1_IRQHandler
-UART0_IRQHandler
-UART1_IRQHandler
-UART2_IRQHandler
+LPUART0_IRQHandler
+LPUART1_IRQHandler
+UART2_FLEXIO_IRQHandler
 ADC0_IRQHandler
 CMP0_IRQHandler
 TPM0_IRQHandler
@@ -336,12 +380,12 @@ PIT_IRQHandler
 I2S0_IRQHandler
 USB0_IRQHandler
 DAC0_IRQHandler
-TSI0_IRQHandler
-MCG_IRQHandler
-LPTimer_IRQHandler
-LCD_IRQHandler
+Reserved42_IRQHandler
+Reserved43_IRQHandler
+LPTMR0_IRQHandler
+Reserved45_IRQHandler
 PORTA_IRQHandler
-PORTC_PORTD_IRQHandler
+PORTCD_IRQHandler
 DefaultISR
 
                 B       .

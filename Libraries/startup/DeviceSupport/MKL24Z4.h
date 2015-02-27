@@ -1,20 +1,20 @@
 /*
 ** ###################################################################
-**     Processors:          MKL25Z128FM4
-**                          MKL25Z128FT4
-**                          MKL25Z128LH4
-**                          MKL25Z128VLK4
+**     Processors:          MKL24Z64FM4
+**                          MKL24Z64FT4
+**                          MKL24Z64LH4
+**                          MKL24Z64VLK4
 **
 **     Compilers:           ARM Compiler
 **                          Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **
-**     Reference manual:    KL25P80M48SF0RM, Rev.3, Sep 2012
-**     Version:             rev. 1.4, 2012-11-22
+**     Reference manual:    KL24P80M48SF0RM, Rev.3, Sep 2012
+**     Version:             rev. 1.3, 2012-11-22
 **
 **     Abstract:
-**         CMSIS Peripheral Access Layer for MKL25Z4
+**         CMSIS Peripheral Access Layer for MKL24Z4
 **
 **     Copyright: 1997 - 2012 Freescale, Inc. All Rights Reserved.
 **
@@ -22,15 +22,13 @@
 **     mail:                 support@freescale.com
 **
 **     Revisions:
-**     - rev. 1.0 (2012-06-13)
+**     - rev. 1.0 (2012-06-21)
 **         Initial version.
-**     - rev. 1.1 (2012-06-21)
-**         Update according to reference manual rev. 1.
-**     - rev. 1.2 (2012-08-01)
+**     - rev. 1.1 (2012-08-01)
 **         Device type UARTLP changed to UART0.
-**     - rev. 1.3 (2012-10-04)
+**     - rev. 1.2 (2012-10-04)
 **         Update according to reference manual rev. 3.
-**     - rev. 1.4 (2012-11-22)
+**     - rev. 1.3 (2012-11-22)
 **         MCG module - bit LOLS in MCG_S register renamed to LOLS0.
 **         NV registers - bit EZPORT_DIS in NV_FOPT register removed.
 **
@@ -38,22 +36,22 @@
 */
 
 /**
- * @file MKL25Z4.h
- * @version 1.4
+ * @file MKL24Z4.h
+ * @version 1.3
  * @date 2012-11-22
- * @brief CMSIS Peripheral Access Layer for MKL25Z4
+ * @brief CMSIS Peripheral Access Layer for MKL24Z4
  *
- * CMSIS Peripheral Access Layer for MKL25Z4
+ * CMSIS Peripheral Access Layer for MKL24Z4
  */
 
-#if !defined(MKL25Z4_H_)
-#define MKL25Z4_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(MKL24Z4_H_)
+#define MKL24Z4_H_                               /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0100u
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0004u
+#define MCU_MEM_MAP_VERSION_MINOR 0x0003u
 
 
 /* ----------------------------------------------------------------------------
@@ -130,7 +128,7 @@ typedef enum IRQn {
 #define __Vendor_SysTickConfig         0         /**< Vendor specific implementation of SysTickConfig is defined */
 
 #include "core_cm0plus.h"              /* Core Peripheral Access Layer */
-#include "system_MKL25Z4.h"            /* Device specific configuration file */
+#include "system_MKL24Z4.h"            /* Device specific configuration file */
 
 /**
  * @}
@@ -186,7 +184,7 @@ typedef struct {
   __IO uint32_t SC3;                               /**< Status and Control Register 3, offset: 0x24 */
   __IO uint32_t OFS;                               /**< ADC Offset Correction Register, offset: 0x28 */
   __IO uint32_t PG;                                /**< ADC Plus-Side Gain Register, offset: 0x2C */
-  __IO uint32_t MG;                                /**< ADC Minus-Side Gain Register, offset: 0x30 */
+       uint8_t RESERVED_0[4];
   __IO uint32_t CLPD;                              /**< ADC Plus-Side General Calibration Value Register, offset: 0x34 */
   __IO uint32_t CLPS;                              /**< ADC Plus-Side General Calibration Value Register, offset: 0x38 */
   __IO uint32_t CLP4;                              /**< ADC Plus-Side General Calibration Value Register, offset: 0x3C */
@@ -194,14 +192,6 @@ typedef struct {
   __IO uint32_t CLP2;                              /**< ADC Plus-Side General Calibration Value Register, offset: 0x44 */
   __IO uint32_t CLP1;                              /**< ADC Plus-Side General Calibration Value Register, offset: 0x48 */
   __IO uint32_t CLP0;                              /**< ADC Plus-Side General Calibration Value Register, offset: 0x4C */
-       uint8_t RESERVED_0[4];
-  __IO uint32_t CLMD;                              /**< ADC Minus-Side General Calibration Value Register, offset: 0x54 */
-  __IO uint32_t CLMS;                              /**< ADC Minus-Side General Calibration Value Register, offset: 0x58 */
-  __IO uint32_t CLM4;                              /**< ADC Minus-Side General Calibration Value Register, offset: 0x5C */
-  __IO uint32_t CLM3;                              /**< ADC Minus-Side General Calibration Value Register, offset: 0x60 */
-  __IO uint32_t CLM2;                              /**< ADC Minus-Side General Calibration Value Register, offset: 0x64 */
-  __IO uint32_t CLM1;                              /**< ADC Minus-Side General Calibration Value Register, offset: 0x68 */
-  __IO uint32_t CLM0;                              /**< ADC Minus-Side General Calibration Value Register, offset: 0x6C */
 } ADC_Type;
 
 /* ----------------------------------------------------------------------------
@@ -217,8 +207,6 @@ typedef struct {
 #define ADC_SC1_ADCH_MASK                        0x1Fu
 #define ADC_SC1_ADCH_SHIFT                       0
 #define ADC_SC1_ADCH(x)                          (((uint32_t)(((uint32_t)(x))<<ADC_SC1_ADCH_SHIFT))&ADC_SC1_ADCH_MASK)
-#define ADC_SC1_DIFF_MASK                        0x20u
-#define ADC_SC1_DIFF_SHIFT                       5
 #define ADC_SC1_AIEN_MASK                        0x40u
 #define ADC_SC1_AIEN_SHIFT                       6
 #define ADC_SC1_COCO_MASK                        0x80u
@@ -295,10 +283,6 @@ typedef struct {
 #define ADC_PG_PG_MASK                           0xFFFFu
 #define ADC_PG_PG_SHIFT                          0
 #define ADC_PG_PG(x)                             (((uint32_t)(((uint32_t)(x))<<ADC_PG_PG_SHIFT))&ADC_PG_PG_MASK)
-/* MG Bit Fields */
-#define ADC_MG_MG_MASK                           0xFFFFu
-#define ADC_MG_MG_SHIFT                          0
-#define ADC_MG_MG(x)                             (((uint32_t)(((uint32_t)(x))<<ADC_MG_MG_SHIFT))&ADC_MG_MG_MASK)
 /* CLPD Bit Fields */
 #define ADC_CLPD_CLPD_MASK                       0x3Fu
 #define ADC_CLPD_CLPD_SHIFT                      0
@@ -327,34 +311,6 @@ typedef struct {
 #define ADC_CLP0_CLP0_MASK                       0x3Fu
 #define ADC_CLP0_CLP0_SHIFT                      0
 #define ADC_CLP0_CLP0(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLP0_CLP0_SHIFT))&ADC_CLP0_CLP0_MASK)
-/* CLMD Bit Fields */
-#define ADC_CLMD_CLMD_MASK                       0x3Fu
-#define ADC_CLMD_CLMD_SHIFT                      0
-#define ADC_CLMD_CLMD(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLMD_CLMD_SHIFT))&ADC_CLMD_CLMD_MASK)
-/* CLMS Bit Fields */
-#define ADC_CLMS_CLMS_MASK                       0x3Fu
-#define ADC_CLMS_CLMS_SHIFT                      0
-#define ADC_CLMS_CLMS(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLMS_CLMS_SHIFT))&ADC_CLMS_CLMS_MASK)
-/* CLM4 Bit Fields */
-#define ADC_CLM4_CLM4_MASK                       0x3FFu
-#define ADC_CLM4_CLM4_SHIFT                      0
-#define ADC_CLM4_CLM4(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLM4_CLM4_SHIFT))&ADC_CLM4_CLM4_MASK)
-/* CLM3 Bit Fields */
-#define ADC_CLM3_CLM3_MASK                       0x1FFu
-#define ADC_CLM3_CLM3_SHIFT                      0
-#define ADC_CLM3_CLM3(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLM3_CLM3_SHIFT))&ADC_CLM3_CLM3_MASK)
-/* CLM2 Bit Fields */
-#define ADC_CLM2_CLM2_MASK                       0xFFu
-#define ADC_CLM2_CLM2_SHIFT                      0
-#define ADC_CLM2_CLM2(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLM2_CLM2_SHIFT))&ADC_CLM2_CLM2_MASK)
-/* CLM1 Bit Fields */
-#define ADC_CLM1_CLM1_MASK                       0x7Fu
-#define ADC_CLM1_CLM1_SHIFT                      0
-#define ADC_CLM1_CLM1(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLM1_CLM1_SHIFT))&ADC_CLM1_CLM1_MASK)
-/* CLM0 Bit Fields */
-#define ADC_CLM0_CLM0_MASK                       0x3Fu
-#define ADC_CLM0_CLM0_SHIFT                      0
-#define ADC_CLM0_CLM0(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLM0_CLM0_SHIFT))&ADC_CLM0_CLM0_MASK)
 
 /**
  * @}
@@ -477,96 +433,6 @@ typedef struct {
 /**
  * @}
  */ /* end of group CMP_Peripheral_Access_Layer */
-
-
-/* ----------------------------------------------------------------------------
-   -- DAC Peripheral Access Layer
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup DAC_Peripheral_Access_Layer DAC Peripheral Access Layer
- * @{
- */
-
-/** DAC - Register Layout Typedef */
-typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x2 */
-    __IO uint8_t DATL;                               /**< DAC Data Low Register, array offset: 0x0, array step: 0x2 */
-    __IO uint8_t DATH;                               /**< DAC Data High Register, array offset: 0x1, array step: 0x2 */
-  } DAT[2];
-       uint8_t RESERVED_0[28];
-  __IO uint8_t SR;                                 /**< DAC Status Register, offset: 0x20 */
-  __IO uint8_t C0;                                 /**< DAC Control Register, offset: 0x21 */
-  __IO uint8_t C1;                                 /**< DAC Control Register 1, offset: 0x22 */
-  __IO uint8_t C2;                                 /**< DAC Control Register 2, offset: 0x23 */
-} DAC_Type;
-
-/* ----------------------------------------------------------------------------
-   -- DAC Register Masks
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup DAC_Register_Masks DAC Register Masks
- * @{
- */
-
-/* DATL Bit Fields */
-#define DAC_DATL_DATA0_MASK                      0xFFu
-#define DAC_DATL_DATA0_SHIFT                     0
-#define DAC_DATL_DATA0(x)                        (((uint8_t)(((uint8_t)(x))<<DAC_DATL_DATA0_SHIFT))&DAC_DATL_DATA0_MASK)
-/* DATH Bit Fields */
-#define DAC_DATH_DATA1_MASK                      0xFu
-#define DAC_DATH_DATA1_SHIFT                     0
-#define DAC_DATH_DATA1(x)                        (((uint8_t)(((uint8_t)(x))<<DAC_DATH_DATA1_SHIFT))&DAC_DATH_DATA1_MASK)
-/* SR Bit Fields */
-#define DAC_SR_DACBFRPBF_MASK                    0x1u
-#define DAC_SR_DACBFRPBF_SHIFT                   0
-#define DAC_SR_DACBFRPTF_MASK                    0x2u
-#define DAC_SR_DACBFRPTF_SHIFT                   1
-/* C0 Bit Fields */
-#define DAC_C0_DACBBIEN_MASK                     0x1u
-#define DAC_C0_DACBBIEN_SHIFT                    0
-#define DAC_C0_DACBTIEN_MASK                     0x2u
-#define DAC_C0_DACBTIEN_SHIFT                    1
-#define DAC_C0_LPEN_MASK                         0x8u
-#define DAC_C0_LPEN_SHIFT                        3
-#define DAC_C0_DACSWTRG_MASK                     0x10u
-#define DAC_C0_DACSWTRG_SHIFT                    4
-#define DAC_C0_DACTRGSEL_MASK                    0x20u
-#define DAC_C0_DACTRGSEL_SHIFT                   5
-#define DAC_C0_DACRFS_MASK                       0x40u
-#define DAC_C0_DACRFS_SHIFT                      6
-#define DAC_C0_DACEN_MASK                        0x80u
-#define DAC_C0_DACEN_SHIFT                       7
-/* C1 Bit Fields */
-#define DAC_C1_DACBFEN_MASK                      0x1u
-#define DAC_C1_DACBFEN_SHIFT                     0
-#define DAC_C1_DACBFMD_MASK                      0x4u
-#define DAC_C1_DACBFMD_SHIFT                     2
-#define DAC_C1_DMAEN_MASK                        0x80u
-#define DAC_C1_DMAEN_SHIFT                       7
-/* C2 Bit Fields */
-#define DAC_C2_DACBFUP_MASK                      0x1u
-#define DAC_C2_DACBFUP_SHIFT                     0
-#define DAC_C2_DACBFRP_MASK                      0x10u
-#define DAC_C2_DACBFRP_SHIFT                     4
-
-/**
- * @}
- */ /* end of group DAC_Register_Masks */
-
-
-/* DAC - Peripheral instance base addresses */
-/** Peripheral DAC0 base address */
-#define DAC0_BASE                                (0x4003F000u)
-/** Peripheral DAC0 base pointer */
-#define DAC0                                     ((DAC_Type *)DAC0_BASE)
-/** Array initializer of DAC peripheral base pointers */
-#define DAC_BASES                                { DAC0 }
-
-/**
- * @}
- */ /* end of group DAC_Peripheral_Access_Layer */
 
 
 /* ----------------------------------------------------------------------------
@@ -2899,8 +2765,6 @@ typedef struct {
 /* SCGC5 Bit Fields */
 #define SIM_SCGC5_LPTMR_MASK                     0x1u
 #define SIM_SCGC5_LPTMR_SHIFT                    0
-#define SIM_SCGC5_TSI_MASK                       0x20u
-#define SIM_SCGC5_TSI_SHIFT                      5
 #define SIM_SCGC5_PORTA_MASK                     0x200u
 #define SIM_SCGC5_PORTA_SHIFT                    9
 #define SIM_SCGC5_PORTB_MASK                     0x400u
@@ -2928,8 +2792,6 @@ typedef struct {
 #define SIM_SCGC6_ADC0_SHIFT                     27
 #define SIM_SCGC6_RTC_MASK                       0x20000000u
 #define SIM_SCGC6_RTC_SHIFT                      29
-#define SIM_SCGC6_DAC0_MASK                      0x80000000u
-#define SIM_SCGC6_DAC0_SHIFT                     31
 /* SCGC7 Bit Fields */
 #define SIM_SCGC7_DMA_MASK                       0x100u
 #define SIM_SCGC7_DMA_SHIFT                      8
@@ -3310,105 +3172,6 @@ typedef struct {
 /**
  * @}
  */ /* end of group TPM_Peripheral_Access_Layer */
-
-
-/* ----------------------------------------------------------------------------
-   -- TSI Peripheral Access Layer
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup TSI_Peripheral_Access_Layer TSI Peripheral Access Layer
- * @{
- */
-
-/** TSI - Register Layout Typedef */
-typedef struct {
-  __IO uint32_t GENCS;                             /**< TSI General Control and Status Register, offset: 0x0 */
-  __IO uint32_t DATA;                              /**< TSI DATA Register, offset: 0x4 */
-  __IO uint32_t TSHD;                              /**< TSI Threshold Register, offset: 0x8 */
-} TSI_Type;
-
-/* ----------------------------------------------------------------------------
-   -- TSI Register Masks
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup TSI_Register_Masks TSI Register Masks
- * @{
- */
-
-/* GENCS Bit Fields */
-#define TSI_GENCS_CURSW_MASK                     0x2u
-#define TSI_GENCS_CURSW_SHIFT                    1
-#define TSI_GENCS_EOSF_MASK                      0x4u
-#define TSI_GENCS_EOSF_SHIFT                     2
-#define TSI_GENCS_SCNIP_MASK                     0x8u
-#define TSI_GENCS_SCNIP_SHIFT                    3
-#define TSI_GENCS_STM_MASK                       0x10u
-#define TSI_GENCS_STM_SHIFT                      4
-#define TSI_GENCS_STPE_MASK                      0x20u
-#define TSI_GENCS_STPE_SHIFT                     5
-#define TSI_GENCS_TSIIEN_MASK                    0x40u
-#define TSI_GENCS_TSIIEN_SHIFT                   6
-#define TSI_GENCS_TSIEN_MASK                     0x80u
-#define TSI_GENCS_TSIEN_SHIFT                    7
-#define TSI_GENCS_NSCN_MASK                      0x1F00u
-#define TSI_GENCS_NSCN_SHIFT                     8
-#define TSI_GENCS_NSCN(x)                        (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_NSCN_SHIFT))&TSI_GENCS_NSCN_MASK)
-#define TSI_GENCS_PS_MASK                        0xE000u
-#define TSI_GENCS_PS_SHIFT                       13
-#define TSI_GENCS_PS(x)                          (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_PS_SHIFT))&TSI_GENCS_PS_MASK)
-#define TSI_GENCS_EXTCHRG_MASK                   0x70000u
-#define TSI_GENCS_EXTCHRG_SHIFT                  16
-#define TSI_GENCS_EXTCHRG(x)                     (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_EXTCHRG_SHIFT))&TSI_GENCS_EXTCHRG_MASK)
-#define TSI_GENCS_DVOLT_MASK                     0x180000u
-#define TSI_GENCS_DVOLT_SHIFT                    19
-#define TSI_GENCS_DVOLT(x)                       (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_DVOLT_SHIFT))&TSI_GENCS_DVOLT_MASK)
-#define TSI_GENCS_REFCHRG_MASK                   0xE00000u
-#define TSI_GENCS_REFCHRG_SHIFT                  21
-#define TSI_GENCS_REFCHRG(x)                     (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_REFCHRG_SHIFT))&TSI_GENCS_REFCHRG_MASK)
-#define TSI_GENCS_MODE_MASK                      0xF000000u
-#define TSI_GENCS_MODE_SHIFT                     24
-#define TSI_GENCS_MODE(x)                        (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_MODE_SHIFT))&TSI_GENCS_MODE_MASK)
-#define TSI_GENCS_ESOR_MASK                      0x10000000u
-#define TSI_GENCS_ESOR_SHIFT                     28
-#define TSI_GENCS_OUTRGF_MASK                    0x80000000u
-#define TSI_GENCS_OUTRGF_SHIFT                   31
-/* DATA Bit Fields */
-#define TSI_DATA_TSICNT_MASK                     0xFFFFu
-#define TSI_DATA_TSICNT_SHIFT                    0
-#define TSI_DATA_TSICNT(x)                       (((uint32_t)(((uint32_t)(x))<<TSI_DATA_TSICNT_SHIFT))&TSI_DATA_TSICNT_MASK)
-#define TSI_DATA_SWTS_MASK                       0x400000u
-#define TSI_DATA_SWTS_SHIFT                      22
-#define TSI_DATA_DMAEN_MASK                      0x800000u
-#define TSI_DATA_DMAEN_SHIFT                     23
-#define TSI_DATA_TSICH_MASK                      0xF0000000u
-#define TSI_DATA_TSICH_SHIFT                     28
-#define TSI_DATA_TSICH(x)                        (((uint32_t)(((uint32_t)(x))<<TSI_DATA_TSICH_SHIFT))&TSI_DATA_TSICH_MASK)
-/* TSHD Bit Fields */
-#define TSI_TSHD_THRESL_MASK                     0xFFFFu
-#define TSI_TSHD_THRESL_SHIFT                    0
-#define TSI_TSHD_THRESL(x)                       (((uint32_t)(((uint32_t)(x))<<TSI_TSHD_THRESL_SHIFT))&TSI_TSHD_THRESL_MASK)
-#define TSI_TSHD_THRESH_MASK                     0xFFFF0000u
-#define TSI_TSHD_THRESH_SHIFT                    16
-#define TSI_TSHD_THRESH(x)                       (((uint32_t)(((uint32_t)(x))<<TSI_TSHD_THRESH_SHIFT))&TSI_TSHD_THRESH_MASK)
-
-/**
- * @}
- */ /* end of group TSI_Register_Masks */
-
-
-/* TSI - Peripheral instance base addresses */
-/** Peripheral TSI0 base address */
-#define TSI0_BASE                                (0x40045000u)
-/** Peripheral TSI0 base pointer */
-#define TSI0                                     ((TSI_Type *)TSI0_BASE)
-/** Array initializer of TSI peripheral base pointers */
-#define TSI_BASES                                { TSI0 }
-
-/**
- * @}
- */ /* end of group TSI_Peripheral_Access_Layer */
 
 
 /* ----------------------------------------------------------------------------
@@ -4318,6 +4081,6 @@ typedef struct {
  */ /* end of group Backward_Compatibility_Symbols */
 
 
-#endif  /* #if !defined(MKL25Z4_H_) */
+#endif  /* #if !defined(MKL24Z4_H_) */
 
-/* MKL25Z4.h, eof. */
+/* MKL24Z4.h, eof. */

@@ -386,7 +386,7 @@ uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
     UART_Type * UARTx = (UART_Type*)UART_InstanceTable[instance];
     
     /* clear OverRun */
-    UARTx->S1 |= UART_S1_OR_MASK;
+    //UARTx->S1 |= UART_S1_OR_MASK;
     
     if(UARTx->S1 & UART_S1_RDRF_MASK)
     {

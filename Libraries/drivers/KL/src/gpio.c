@@ -26,11 +26,11 @@ static const uint32_t SIM_GPIOClockGateTable[] =
 
 static const IRQn_Type GPIO_IRQnTable[] = 
 {
-    PORTA_IRQn,
-    PORTA_IRQn+1,
-    PORTA_IRQn+2,
-    PORTA_IRQn+3,
-    PORTA_IRQn+4,
+    (IRQn_Type)(PORTA_IRQn+0),
+    (IRQn_Type)(PORTA_IRQn+1),
+    (IRQn_Type)(PORTA_IRQn+2),
+    (IRQn_Type)(PORTA_IRQn+3),
+    (IRQn_Type)(PORTA_IRQn+4),
 };
 
 

@@ -16,7 +16,7 @@ static LPTMR_CallBackType LPTMR_CallBackTable[1] = {NULL};
 /* 中断向量入口 */
 static const IRQn_Type LPTMR_IRQnTable[] = 
 {
-    LPTimer_IRQn,
+    (IRQn_Type)28,
 };
 
 /**

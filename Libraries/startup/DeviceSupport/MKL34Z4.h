@@ -1,66 +1,60 @@
 /*
 ** ###################################################################
-**     Processors:          MKL25Z128FM4
-**                          MKL25Z128FT4
-**                          MKL25Z128LH4
-**                          MKL25Z128VLK4
+**     Processors:          MKL34Z64VLH4
+**                          MKL34Z256VLL4
 **
 **     Compilers:           ARM Compiler
 **                          Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **
-**     Reference manual:    KL25P80M48SF0RM, Rev.3, Sep 2012
-**     Version:             rev. 1.4, 2012-11-22
+**     Reference manual:    KL34P100M48SF4RM, Rev.2, Dec 2012
+**     Version:             rev. 1.2, 2013-04-12
 **
 **     Abstract:
-**         CMSIS Peripheral Access Layer for MKL25Z4
+**         CMSIS Peripheral Access Layer for MKL34Z4
 **
-**     Copyright: 1997 - 2012 Freescale, Inc. All Rights Reserved.
+**     Copyright: 1997 - 2013 Freescale, Inc. All Rights Reserved.
 **
 **     http:                 www.freescale.com
 **     mail:                 support@freescale.com
 **
 **     Revisions:
-**     - rev. 1.0 (2012-06-13)
+**     - rev. 1.0 (2012-12-12)
 **         Initial version.
-**     - rev. 1.1 (2012-06-21)
-**         Update according to reference manual rev. 1.
-**     - rev. 1.2 (2012-08-01)
-**         Device type UARTLP changed to UART0.
-**     - rev. 1.3 (2012-10-04)
-**         Update according to reference manual rev. 3.
-**     - rev. 1.4 (2012-11-22)
-**         MCG module - bit LOLS in MCG_S register renamed to LOLS0.
-**         NV registers - bit EZPORT_DIS in NV_FOPT register removed.
+**     - rev. 1.1 (2013-04-05)
+**         Changed start of doxygen comment.
+**     - rev. 1.2 (2013-04-12)
+**         SystemInit function fixed for clock configuration 1.
+**         Name of the interrupt num. 31 updated to reflect proper function.
 **
 ** ###################################################################
 */
 
-/**
- * @file MKL25Z4.h
- * @version 1.4
- * @date 2012-11-22
- * @brief CMSIS Peripheral Access Layer for MKL25Z4
+/*!
+ * @file MKL34Z4.h
+ * @version 1.2
+ * @date 2013-04-12
+ * @brief CMSIS Peripheral Access Layer for MKL34Z4
  *
- * CMSIS Peripheral Access Layer for MKL25Z4
+ * CMSIS Peripheral Access Layer for MKL34Z4
  */
 
-#if !defined(MKL25Z4_H_)
-#define MKL25Z4_H_                               /**< Symbol preventing repeated inclusion */
+#if !defined(MKL34Z4_H_)
+#define MKL34Z4_H_                               /**< Symbol preventing repeated inclusion */
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
 #define MCU_MEM_MAP_VERSION 0x0100u
 /** Memory map minor version */
-#define MCU_MEM_MAP_VERSION_MINOR 0x0004u
+#define MCU_MEM_MAP_VERSION_MINOR 0x0002u
 
 
 /* ----------------------------------------------------------------------------
    -- Interrupt vector numbers
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup Interrupt_vector_numbers Interrupt vector numbers
  * @{
  */
@@ -99,17 +93,17 @@ typedef enum IRQn {
   RTC_Seconds_IRQn             = 21,               /**< RTC seconds interrupt */
   PIT_IRQn                     = 22,               /**< PIT timer interrupt */
   Reserved39_IRQn              = 23,               /**< Reserved interrupt 39 */
-  USB0_IRQn                    = 24,               /**< USB0 interrupt */
-  DAC0_IRQn                    = 25,               /**< DAC0 interrupt */
-  TSI0_IRQn                    = 26,               /**< TSI0 interrupt */
+  Reserved40_IRQn              = 24,               /**< Reserved interrupt 40 */
+  Reserved41_IRQn              = 25,               /**< Reserved interrupt 41 */
+  Reserved42_IRQn              = 26,               /**< Reserved interrupt 42 */
   MCG_IRQn                     = 27,               /**< MCG interrupt */
   LPTimer_IRQn                 = 28,               /**< LPTimer interrupt */
-  Reserved45_IRQn              = 29,               /**< Reserved interrupt 45 */
+  LCD_IRQn                     = 29,               /**< Segment LCD Interrupt */
   PORTA_IRQn                   = 30,               /**< Port A interrupt */
-  PORTD_IRQn                   = 31                /**< Port D interrupt */
+  PORTC_PORTD_IRQn             = 31                /**< Port C and port D interrupt */
 } IRQn_Type;
 
-/**
+/*!
  * @}
  */ /* end of group Interrupt_vector_numbers */
 
@@ -118,7 +112,7 @@ typedef enum IRQn {
    -- Cortex M0 Core Configuration
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup Cortex_Core_Configuration Cortex M0 Core Configuration
  * @{
  */
@@ -130,9 +124,9 @@ typedef enum IRQn {
 #define __Vendor_SysTickConfig         0         /**< Vendor specific implementation of SysTickConfig is defined */
 
 #include "core_cm0plus.h"              /* Core Peripheral Access Layer */
-#include "system_MKL25Z4.h"            /* Device specific configuration file */
+#include "system_MKL34Z4.h"            /* Device specific configuration file */
 
-/**
+/*!
  * @}
  */ /* end of group Cortex_Core_Configuration */
 
@@ -141,7 +135,7 @@ typedef enum IRQn {
    -- Device Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup Peripheral_access_layer Device Peripheral Access Layer
  * @{
  */
@@ -169,7 +163,7 @@ typedef enum IRQn {
    -- ADC Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ADC_Peripheral_Access_Layer ADC Peripheral Access Layer
  * @{
  */
@@ -208,7 +202,7 @@ typedef struct {
    -- ADC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ADC_Register_Masks ADC Register Masks
  * @{
  */
@@ -356,7 +350,7 @@ typedef struct {
 #define ADC_CLM0_CLM0_SHIFT                      0
 #define ADC_CLM0_CLM0(x)                         (((uint32_t)(((uint32_t)(x))<<ADC_CLM0_CLM0_SHIFT))&ADC_CLM0_CLM0_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group ADC_Register_Masks */
 
@@ -369,7 +363,7 @@ typedef struct {
 /** Array initializer of ADC peripheral base pointers */
 #define ADC_BASES                                { ADC0 }
 
-/**
+/*!
  * @}
  */ /* end of group ADC_Peripheral_Access_Layer */
 
@@ -378,7 +372,7 @@ typedef struct {
    -- CMP Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CMP_Peripheral_Access_Layer CMP Peripheral Access Layer
  * @{
  */
@@ -397,7 +391,7 @@ typedef struct {
    -- CMP Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup CMP_Register_Masks CMP Register Masks
  * @{
  */
@@ -461,7 +455,7 @@ typedef struct {
 #define CMP_MUXCR_PSTM_MASK                      0x80u
 #define CMP_MUXCR_PSTM_SHIFT                     7
 
-/**
+/*!
  * @}
  */ /* end of group CMP_Register_Masks */
 
@@ -474,106 +468,16 @@ typedef struct {
 /** Array initializer of CMP peripheral base pointers */
 #define CMP_BASES                                { CMP0 }
 
-/**
+/*!
  * @}
  */ /* end of group CMP_Peripheral_Access_Layer */
-
-
-/* ----------------------------------------------------------------------------
-   -- DAC Peripheral Access Layer
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup DAC_Peripheral_Access_Layer DAC Peripheral Access Layer
- * @{
- */
-
-/** DAC - Register Layout Typedef */
-typedef struct {
-  struct {                                         /* offset: 0x0, array step: 0x2 */
-    __IO uint8_t DATL;                               /**< DAC Data Low Register, array offset: 0x0, array step: 0x2 */
-    __IO uint8_t DATH;                               /**< DAC Data High Register, array offset: 0x1, array step: 0x2 */
-  } DAT[2];
-       uint8_t RESERVED_0[28];
-  __IO uint8_t SR;                                 /**< DAC Status Register, offset: 0x20 */
-  __IO uint8_t C0;                                 /**< DAC Control Register, offset: 0x21 */
-  __IO uint8_t C1;                                 /**< DAC Control Register 1, offset: 0x22 */
-  __IO uint8_t C2;                                 /**< DAC Control Register 2, offset: 0x23 */
-} DAC_Type;
-
-/* ----------------------------------------------------------------------------
-   -- DAC Register Masks
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup DAC_Register_Masks DAC Register Masks
- * @{
- */
-
-/* DATL Bit Fields */
-#define DAC_DATL_DATA0_MASK                      0xFFu
-#define DAC_DATL_DATA0_SHIFT                     0
-#define DAC_DATL_DATA0(x)                        (((uint8_t)(((uint8_t)(x))<<DAC_DATL_DATA0_SHIFT))&DAC_DATL_DATA0_MASK)
-/* DATH Bit Fields */
-#define DAC_DATH_DATA1_MASK                      0xFu
-#define DAC_DATH_DATA1_SHIFT                     0
-#define DAC_DATH_DATA1(x)                        (((uint8_t)(((uint8_t)(x))<<DAC_DATH_DATA1_SHIFT))&DAC_DATH_DATA1_MASK)
-/* SR Bit Fields */
-#define DAC_SR_DACBFRPBF_MASK                    0x1u
-#define DAC_SR_DACBFRPBF_SHIFT                   0
-#define DAC_SR_DACBFRPTF_MASK                    0x2u
-#define DAC_SR_DACBFRPTF_SHIFT                   1
-/* C0 Bit Fields */
-#define DAC_C0_DACBBIEN_MASK                     0x1u
-#define DAC_C0_DACBBIEN_SHIFT                    0
-#define DAC_C0_DACBTIEN_MASK                     0x2u
-#define DAC_C0_DACBTIEN_SHIFT                    1
-#define DAC_C0_LPEN_MASK                         0x8u
-#define DAC_C0_LPEN_SHIFT                        3
-#define DAC_C0_DACSWTRG_MASK                     0x10u
-#define DAC_C0_DACSWTRG_SHIFT                    4
-#define DAC_C0_DACTRGSEL_MASK                    0x20u
-#define DAC_C0_DACTRGSEL_SHIFT                   5
-#define DAC_C0_DACRFS_MASK                       0x40u
-#define DAC_C0_DACRFS_SHIFT                      6
-#define DAC_C0_DACEN_MASK                        0x80u
-#define DAC_C0_DACEN_SHIFT                       7
-/* C1 Bit Fields */
-#define DAC_C1_DACBFEN_MASK                      0x1u
-#define DAC_C1_DACBFEN_SHIFT                     0
-#define DAC_C1_DACBFMD_MASK                      0x4u
-#define DAC_C1_DACBFMD_SHIFT                     2
-#define DAC_C1_DMAEN_MASK                        0x80u
-#define DAC_C1_DMAEN_SHIFT                       7
-/* C2 Bit Fields */
-#define DAC_C2_DACBFUP_MASK                      0x1u
-#define DAC_C2_DACBFUP_SHIFT                     0
-#define DAC_C2_DACBFRP_MASK                      0x10u
-#define DAC_C2_DACBFRP_SHIFT                     4
-
-/**
- * @}
- */ /* end of group DAC_Register_Masks */
-
-
-/* DAC - Peripheral instance base addresses */
-/** Peripheral DAC0 base address */
-#define DAC0_BASE                                (0x4003F000u)
-/** Peripheral DAC0 base pointer */
-#define DAC0                                     ((DAC_Type *)DAC0_BASE)
-/** Array initializer of DAC peripheral base pointers */
-#define DAC_BASES                                { DAC0 }
-
-/**
- * @}
- */ /* end of group DAC_Peripheral_Access_Layer */
 
 
 /* ----------------------------------------------------------------------------
    -- DMA Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMA_Peripheral_Access_Layer DMA Peripheral Access Layer
  * @{
  */
@@ -599,7 +503,7 @@ typedef struct {
    -- DMA Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMA_Register_Masks DMA Register Masks
  * @{
  */
@@ -669,7 +573,7 @@ typedef struct {
 #define DMA_DCR_EINT_MASK                        0x80000000u
 #define DMA_DCR_EINT_SHIFT                       31
 
-/**
+/*!
  * @}
  */ /* end of group DMA_Register_Masks */
 
@@ -682,7 +586,7 @@ typedef struct {
 /** Array initializer of DMA peripheral base pointers */
 #define DMA_BASES                                { DMA0 }
 
-/**
+/*!
  * @}
  */ /* end of group DMA_Peripheral_Access_Layer */
 
@@ -691,7 +595,7 @@ typedef struct {
    -- DMAMUX Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMAMUX_Peripheral_Access_Layer DMAMUX Peripheral Access Layer
  * @{
  */
@@ -705,7 +609,7 @@ typedef struct {
    -- DMAMUX Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup DMAMUX_Register_Masks DMAMUX Register Masks
  * @{
  */
@@ -719,7 +623,7 @@ typedef struct {
 #define DMAMUX_CHCFG_ENBL_MASK                   0x80u
 #define DMAMUX_CHCFG_ENBL_SHIFT                  7
 
-/**
+/*!
  * @}
  */ /* end of group DMAMUX_Register_Masks */
 
@@ -732,7 +636,7 @@ typedef struct {
 /** Array initializer of DMAMUX peripheral base pointers */
 #define DMAMUX_BASES                             { DMAMUX0 }
 
-/**
+/*!
  * @}
  */ /* end of group DMAMUX_Peripheral_Access_Layer */
 
@@ -741,7 +645,7 @@ typedef struct {
    -- FGPIO Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FGPIO_Peripheral_Access_Layer FGPIO Peripheral Access Layer
  * @{
  */
@@ -760,7 +664,7 @@ typedef struct {
    -- FGPIO Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FGPIO_Register_Masks FGPIO Register Masks
  * @{
  */
@@ -790,7 +694,7 @@ typedef struct {
 #define FGPIO_PDDR_PDD_SHIFT                     0
 #define FGPIO_PDDR_PDD(x)                        (((uint32_t)(((uint32_t)(x))<<FGPIO_PDDR_PDD_SHIFT))&FGPIO_PDDR_PDD_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group FGPIO_Register_Masks */
 
@@ -819,7 +723,7 @@ typedef struct {
 /** Array initializer of FGPIO peripheral base pointers */
 #define FGPIO_BASES                              { FPTA, FPTB, FPTC, FPTD, FPTE }
 
-/**
+/*!
  * @}
  */ /* end of group FGPIO_Peripheral_Access_Layer */
 
@@ -828,7 +732,7 @@ typedef struct {
    -- FTFA Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FTFA_Peripheral_Access_Layer FTFA Peripheral Access Layer
  * @{
  */
@@ -861,7 +765,7 @@ typedef struct {
    -- FTFA Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup FTFA_Register_Masks FTFA Register Masks
  * @{
  */
@@ -968,7 +872,7 @@ typedef struct {
 #define FTFA_FPROT0_PROT_SHIFT                   0
 #define FTFA_FPROT0_PROT(x)                      (((uint8_t)(((uint8_t)(x))<<FTFA_FPROT0_PROT_SHIFT))&FTFA_FPROT0_PROT_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group FTFA_Register_Masks */
 
@@ -981,7 +885,7 @@ typedef struct {
 /** Array initializer of FTFA peripheral base pointers */
 #define FTFA_BASES                               { FTFA }
 
-/**
+/*!
  * @}
  */ /* end of group FTFA_Peripheral_Access_Layer */
 
@@ -990,7 +894,7 @@ typedef struct {
    -- GPIO Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup GPIO_Peripheral_Access_Layer GPIO Peripheral Access Layer
  * @{
  */
@@ -1009,7 +913,7 @@ typedef struct {
    -- GPIO Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup GPIO_Register_Masks GPIO Register Masks
  * @{
  */
@@ -1039,7 +943,7 @@ typedef struct {
 #define GPIO_PDDR_PDD_SHIFT                      0
 #define GPIO_PDDR_PDD(x)                         (((uint32_t)(((uint32_t)(x))<<GPIO_PDDR_PDD_SHIFT))&GPIO_PDDR_PDD_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group GPIO_Register_Masks */
 
@@ -1068,7 +972,7 @@ typedef struct {
 /** Array initializer of GPIO peripheral base pointers */
 #define GPIO_BASES                               { PTA, PTB, PTC, PTD, PTE }
 
-/**
+/*!
  * @}
  */ /* end of group GPIO_Peripheral_Access_Layer */
 
@@ -1077,7 +981,7 @@ typedef struct {
    -- I2C Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup I2C_Peripheral_Access_Layer I2C Peripheral Access Layer
  * @{
  */
@@ -1102,7 +1006,7 @@ typedef struct {
    -- I2C Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup I2C_Register_Masks I2C Register Masks
  * @{
  */
@@ -1214,7 +1118,7 @@ typedef struct {
 #define I2C_SLTL_SSLT_SHIFT                      0
 #define I2C_SLTL_SSLT(x)                         (((uint8_t)(((uint8_t)(x))<<I2C_SLTL_SSLT_SHIFT))&I2C_SLTL_SSLT_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group I2C_Register_Masks */
 
@@ -1231,16 +1135,1363 @@ typedef struct {
 /** Array initializer of I2C peripheral base pointers */
 #define I2C_BASES                                { I2C0, I2C1 }
 
-/**
+/*!
  * @}
  */ /* end of group I2C_Peripheral_Access_Layer */
+
+
+/* ----------------------------------------------------------------------------
+   -- LCD Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup LCD_Peripheral_Access_Layer LCD Peripheral Access Layer
+ * @{
+ */
+
+/** LCD - Register Layout Typedef */
+typedef struct {
+  __IO uint32_t GCR;                               /**< LCD General Control Register, offset: 0x0 */
+  __IO uint32_t AR;                                /**< LCD Auxiliary Register, offset: 0x4 */
+  __IO uint32_t FDCR;                              /**< LCD Fault Detect Control Register, offset: 0x8 */
+  __IO uint32_t FDSR;                              /**< LCD Fault Detect Status Register, offset: 0xC */
+  __IO uint32_t PEN[2];                            /**< LCD Pin Enable register, array offset: 0x10, array step: 0x4 */
+  __IO uint32_t BPEN[2];                           /**< LCD Back Plane Enable register, array offset: 0x18, array step: 0x4 */
+  union {                                          /* offset: 0x20 */
+    __IO uint32_t WF[16];                            /**< LCD Waveform register, array offset: 0x20, array step: 0x4 */
+    __IO uint8_t WF8B[64];                           /**< LCD Waveform Register 0...LCD Waveform Register 63., array offset: 0x20, array step: 0x1 */
+  };
+} LCD_Type;
+
+/* ----------------------------------------------------------------------------
+   -- LCD Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup LCD_Register_Masks LCD Register Masks
+ * @{
+ */
+
+/* GCR Bit Fields */
+#define LCD_GCR_DUTY_MASK                        0x7u
+#define LCD_GCR_DUTY_SHIFT                       0
+#define LCD_GCR_DUTY(x)                          (((uint32_t)(((uint32_t)(x))<<LCD_GCR_DUTY_SHIFT))&LCD_GCR_DUTY_MASK)
+#define LCD_GCR_LCLK_MASK                        0x38u
+#define LCD_GCR_LCLK_SHIFT                       3
+#define LCD_GCR_LCLK(x)                          (((uint32_t)(((uint32_t)(x))<<LCD_GCR_LCLK_SHIFT))&LCD_GCR_LCLK_MASK)
+#define LCD_GCR_SOURCE_MASK                      0x40u
+#define LCD_GCR_SOURCE_SHIFT                     6
+#define LCD_GCR_LCDEN_MASK                       0x80u
+#define LCD_GCR_LCDEN_SHIFT                      7
+#define LCD_GCR_LCDSTP_MASK                      0x100u
+#define LCD_GCR_LCDSTP_SHIFT                     8
+#define LCD_GCR_LCDDOZE_MASK                     0x200u
+#define LCD_GCR_LCDDOZE_SHIFT                    9
+#define LCD_GCR_FFR_MASK                         0x400u
+#define LCD_GCR_FFR_SHIFT                        10
+#define LCD_GCR_ALTSOURCE_MASK                   0x800u
+#define LCD_GCR_ALTSOURCE_SHIFT                  11
+#define LCD_GCR_ALTDIV_MASK                      0x3000u
+#define LCD_GCR_ALTDIV_SHIFT                     12
+#define LCD_GCR_ALTDIV(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_GCR_ALTDIV_SHIFT))&LCD_GCR_ALTDIV_MASK)
+#define LCD_GCR_FDCIEN_MASK                      0x4000u
+#define LCD_GCR_FDCIEN_SHIFT                     14
+#define LCD_GCR_PADSAFE_MASK                     0x8000u
+#define LCD_GCR_PADSAFE_SHIFT                    15
+#define LCD_GCR_VSUPPLY_MASK                     0x20000u
+#define LCD_GCR_VSUPPLY_SHIFT                    17
+#define LCD_GCR_LADJ_MASK                        0x300000u
+#define LCD_GCR_LADJ_SHIFT                       20
+#define LCD_GCR_LADJ(x)                          (((uint32_t)(((uint32_t)(x))<<LCD_GCR_LADJ_SHIFT))&LCD_GCR_LADJ_MASK)
+#define LCD_GCR_CPSEL_MASK                       0x800000u
+#define LCD_GCR_CPSEL_SHIFT                      23
+#define LCD_GCR_RVTRIM_MASK                      0xF000000u
+#define LCD_GCR_RVTRIM_SHIFT                     24
+#define LCD_GCR_RVTRIM(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_GCR_RVTRIM_SHIFT))&LCD_GCR_RVTRIM_MASK)
+#define LCD_GCR_RVEN_MASK                        0x80000000u
+#define LCD_GCR_RVEN_SHIFT                       31
+/* AR Bit Fields */
+#define LCD_AR_BRATE_MASK                        0x7u
+#define LCD_AR_BRATE_SHIFT                       0
+#define LCD_AR_BRATE(x)                          (((uint32_t)(((uint32_t)(x))<<LCD_AR_BRATE_SHIFT))&LCD_AR_BRATE_MASK)
+#define LCD_AR_BMODE_MASK                        0x8u
+#define LCD_AR_BMODE_SHIFT                       3
+#define LCD_AR_BLANK_MASK                        0x20u
+#define LCD_AR_BLANK_SHIFT                       5
+#define LCD_AR_ALT_MASK                          0x40u
+#define LCD_AR_ALT_SHIFT                         6
+#define LCD_AR_BLINK_MASK                        0x80u
+#define LCD_AR_BLINK_SHIFT                       7
+/* FDCR Bit Fields */
+#define LCD_FDCR_FDPINID_MASK                    0x3Fu
+#define LCD_FDCR_FDPINID_SHIFT                   0
+#define LCD_FDCR_FDPINID(x)                      (((uint32_t)(((uint32_t)(x))<<LCD_FDCR_FDPINID_SHIFT))&LCD_FDCR_FDPINID_MASK)
+#define LCD_FDCR_FDBPEN_MASK                     0x40u
+#define LCD_FDCR_FDBPEN_SHIFT                    6
+#define LCD_FDCR_FDEN_MASK                       0x80u
+#define LCD_FDCR_FDEN_SHIFT                      7
+#define LCD_FDCR_FDSWW_MASK                      0xE00u
+#define LCD_FDCR_FDSWW_SHIFT                     9
+#define LCD_FDCR_FDSWW(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_FDCR_FDSWW_SHIFT))&LCD_FDCR_FDSWW_MASK)
+#define LCD_FDCR_FDPRS_MASK                      0x7000u
+#define LCD_FDCR_FDPRS_SHIFT                     12
+#define LCD_FDCR_FDPRS(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_FDCR_FDPRS_SHIFT))&LCD_FDCR_FDPRS_MASK)
+/* FDSR Bit Fields */
+#define LCD_FDSR_FDCNT_MASK                      0xFFu
+#define LCD_FDSR_FDCNT_SHIFT                     0
+#define LCD_FDSR_FDCNT(x)                        (((uint32_t)(((uint32_t)(x))<<LCD_FDSR_FDCNT_SHIFT))&LCD_FDSR_FDCNT_MASK)
+#define LCD_FDSR_FDCF_MASK                       0x8000u
+#define LCD_FDSR_FDCF_SHIFT                      15
+/* PEN Bit Fields */
+#define LCD_PEN_PEN_MASK                         0xFFFFFFFFu
+#define LCD_PEN_PEN_SHIFT                        0
+#define LCD_PEN_PEN(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_PEN_PEN_SHIFT))&LCD_PEN_PEN_MASK)
+/* BPEN Bit Fields */
+#define LCD_BPEN_BPEN_MASK                       0xFFFFFFFFu
+#define LCD_BPEN_BPEN_SHIFT                      0
+#define LCD_BPEN_BPEN(x)                         (((uint32_t)(((uint32_t)(x))<<LCD_BPEN_BPEN_SHIFT))&LCD_BPEN_BPEN_MASK)
+/* WF Bit Fields */
+#define LCD_WF_WF0_MASK                          0xFFu
+#define LCD_WF_WF0_SHIFT                         0
+#define LCD_WF_WF0(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF0_SHIFT))&LCD_WF_WF0_MASK)
+#define LCD_WF_WF60_MASK                         0xFFu
+#define LCD_WF_WF60_SHIFT                        0
+#define LCD_WF_WF60(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF60_SHIFT))&LCD_WF_WF60_MASK)
+#define LCD_WF_WF56_MASK                         0xFFu
+#define LCD_WF_WF56_SHIFT                        0
+#define LCD_WF_WF56(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF56_SHIFT))&LCD_WF_WF56_MASK)
+#define LCD_WF_WF52_MASK                         0xFFu
+#define LCD_WF_WF52_SHIFT                        0
+#define LCD_WF_WF52(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF52_SHIFT))&LCD_WF_WF52_MASK)
+#define LCD_WF_WF4_MASK                          0xFFu
+#define LCD_WF_WF4_SHIFT                         0
+#define LCD_WF_WF4(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF4_SHIFT))&LCD_WF_WF4_MASK)
+#define LCD_WF_WF48_MASK                         0xFFu
+#define LCD_WF_WF48_SHIFT                        0
+#define LCD_WF_WF48(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF48_SHIFT))&LCD_WF_WF48_MASK)
+#define LCD_WF_WF44_MASK                         0xFFu
+#define LCD_WF_WF44_SHIFT                        0
+#define LCD_WF_WF44(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF44_SHIFT))&LCD_WF_WF44_MASK)
+#define LCD_WF_WF40_MASK                         0xFFu
+#define LCD_WF_WF40_SHIFT                        0
+#define LCD_WF_WF40(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF40_SHIFT))&LCD_WF_WF40_MASK)
+#define LCD_WF_WF8_MASK                          0xFFu
+#define LCD_WF_WF8_SHIFT                         0
+#define LCD_WF_WF8(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF8_SHIFT))&LCD_WF_WF8_MASK)
+#define LCD_WF_WF36_MASK                         0xFFu
+#define LCD_WF_WF36_SHIFT                        0
+#define LCD_WF_WF36(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF36_SHIFT))&LCD_WF_WF36_MASK)
+#define LCD_WF_WF32_MASK                         0xFFu
+#define LCD_WF_WF32_SHIFT                        0
+#define LCD_WF_WF32(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF32_SHIFT))&LCD_WF_WF32_MASK)
+#define LCD_WF_WF28_MASK                         0xFFu
+#define LCD_WF_WF28_SHIFT                        0
+#define LCD_WF_WF28(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF28_SHIFT))&LCD_WF_WF28_MASK)
+#define LCD_WF_WF12_MASK                         0xFFu
+#define LCD_WF_WF12_SHIFT                        0
+#define LCD_WF_WF12(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF12_SHIFT))&LCD_WF_WF12_MASK)
+#define LCD_WF_WF24_MASK                         0xFFu
+#define LCD_WF_WF24_SHIFT                        0
+#define LCD_WF_WF24(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF24_SHIFT))&LCD_WF_WF24_MASK)
+#define LCD_WF_WF20_MASK                         0xFFu
+#define LCD_WF_WF20_SHIFT                        0
+#define LCD_WF_WF20(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF20_SHIFT))&LCD_WF_WF20_MASK)
+#define LCD_WF_WF16_MASK                         0xFFu
+#define LCD_WF_WF16_SHIFT                        0
+#define LCD_WF_WF16(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF16_SHIFT))&LCD_WF_WF16_MASK)
+#define LCD_WF_WF5_MASK                          0xFF00u
+#define LCD_WF_WF5_SHIFT                         8
+#define LCD_WF_WF5(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF5_SHIFT))&LCD_WF_WF5_MASK)
+#define LCD_WF_WF49_MASK                         0xFF00u
+#define LCD_WF_WF49_SHIFT                        8
+#define LCD_WF_WF49(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF49_SHIFT))&LCD_WF_WF49_MASK)
+#define LCD_WF_WF45_MASK                         0xFF00u
+#define LCD_WF_WF45_SHIFT                        8
+#define LCD_WF_WF45(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF45_SHIFT))&LCD_WF_WF45_MASK)
+#define LCD_WF_WF61_MASK                         0xFF00u
+#define LCD_WF_WF61_SHIFT                        8
+#define LCD_WF_WF61(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF61_SHIFT))&LCD_WF_WF61_MASK)
+#define LCD_WF_WF25_MASK                         0xFF00u
+#define LCD_WF_WF25_SHIFT                        8
+#define LCD_WF_WF25(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF25_SHIFT))&LCD_WF_WF25_MASK)
+#define LCD_WF_WF17_MASK                         0xFF00u
+#define LCD_WF_WF17_SHIFT                        8
+#define LCD_WF_WF17(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF17_SHIFT))&LCD_WF_WF17_MASK)
+#define LCD_WF_WF41_MASK                         0xFF00u
+#define LCD_WF_WF41_SHIFT                        8
+#define LCD_WF_WF41(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF41_SHIFT))&LCD_WF_WF41_MASK)
+#define LCD_WF_WF13_MASK                         0xFF00u
+#define LCD_WF_WF13_SHIFT                        8
+#define LCD_WF_WF13(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF13_SHIFT))&LCD_WF_WF13_MASK)
+#define LCD_WF_WF57_MASK                         0xFF00u
+#define LCD_WF_WF57_SHIFT                        8
+#define LCD_WF_WF57(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF57_SHIFT))&LCD_WF_WF57_MASK)
+#define LCD_WF_WF53_MASK                         0xFF00u
+#define LCD_WF_WF53_SHIFT                        8
+#define LCD_WF_WF53(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF53_SHIFT))&LCD_WF_WF53_MASK)
+#define LCD_WF_WF37_MASK                         0xFF00u
+#define LCD_WF_WF37_SHIFT                        8
+#define LCD_WF_WF37(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF37_SHIFT))&LCD_WF_WF37_MASK)
+#define LCD_WF_WF9_MASK                          0xFF00u
+#define LCD_WF_WF9_SHIFT                         8
+#define LCD_WF_WF9(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF9_SHIFT))&LCD_WF_WF9_MASK)
+#define LCD_WF_WF1_MASK                          0xFF00u
+#define LCD_WF_WF1_SHIFT                         8
+#define LCD_WF_WF1(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF1_SHIFT))&LCD_WF_WF1_MASK)
+#define LCD_WF_WF29_MASK                         0xFF00u
+#define LCD_WF_WF29_SHIFT                        8
+#define LCD_WF_WF29(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF29_SHIFT))&LCD_WF_WF29_MASK)
+#define LCD_WF_WF33_MASK                         0xFF00u
+#define LCD_WF_WF33_SHIFT                        8
+#define LCD_WF_WF33(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF33_SHIFT))&LCD_WF_WF33_MASK)
+#define LCD_WF_WF21_MASK                         0xFF00u
+#define LCD_WF_WF21_SHIFT                        8
+#define LCD_WF_WF21(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF21_SHIFT))&LCD_WF_WF21_MASK)
+#define LCD_WF_WF26_MASK                         0xFF0000u
+#define LCD_WF_WF26_SHIFT                        16
+#define LCD_WF_WF26(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF26_SHIFT))&LCD_WF_WF26_MASK)
+#define LCD_WF_WF46_MASK                         0xFF0000u
+#define LCD_WF_WF46_SHIFT                        16
+#define LCD_WF_WF46(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF46_SHIFT))&LCD_WF_WF46_MASK)
+#define LCD_WF_WF6_MASK                          0xFF0000u
+#define LCD_WF_WF6_SHIFT                         16
+#define LCD_WF_WF6(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF6_SHIFT))&LCD_WF_WF6_MASK)
+#define LCD_WF_WF42_MASK                         0xFF0000u
+#define LCD_WF_WF42_SHIFT                        16
+#define LCD_WF_WF42(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF42_SHIFT))&LCD_WF_WF42_MASK)
+#define LCD_WF_WF18_MASK                         0xFF0000u
+#define LCD_WF_WF18_SHIFT                        16
+#define LCD_WF_WF18(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF18_SHIFT))&LCD_WF_WF18_MASK)
+#define LCD_WF_WF38_MASK                         0xFF0000u
+#define LCD_WF_WF38_SHIFT                        16
+#define LCD_WF_WF38(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF38_SHIFT))&LCD_WF_WF38_MASK)
+#define LCD_WF_WF22_MASK                         0xFF0000u
+#define LCD_WF_WF22_SHIFT                        16
+#define LCD_WF_WF22(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF22_SHIFT))&LCD_WF_WF22_MASK)
+#define LCD_WF_WF34_MASK                         0xFF0000u
+#define LCD_WF_WF34_SHIFT                        16
+#define LCD_WF_WF34(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF34_SHIFT))&LCD_WF_WF34_MASK)
+#define LCD_WF_WF50_MASK                         0xFF0000u
+#define LCD_WF_WF50_SHIFT                        16
+#define LCD_WF_WF50(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF50_SHIFT))&LCD_WF_WF50_MASK)
+#define LCD_WF_WF14_MASK                         0xFF0000u
+#define LCD_WF_WF14_SHIFT                        16
+#define LCD_WF_WF14(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF14_SHIFT))&LCD_WF_WF14_MASK)
+#define LCD_WF_WF54_MASK                         0xFF0000u
+#define LCD_WF_WF54_SHIFT                        16
+#define LCD_WF_WF54(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF54_SHIFT))&LCD_WF_WF54_MASK)
+#define LCD_WF_WF2_MASK                          0xFF0000u
+#define LCD_WF_WF2_SHIFT                         16
+#define LCD_WF_WF2(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF2_SHIFT))&LCD_WF_WF2_MASK)
+#define LCD_WF_WF58_MASK                         0xFF0000u
+#define LCD_WF_WF58_SHIFT                        16
+#define LCD_WF_WF58(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF58_SHIFT))&LCD_WF_WF58_MASK)
+#define LCD_WF_WF30_MASK                         0xFF0000u
+#define LCD_WF_WF30_SHIFT                        16
+#define LCD_WF_WF30(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF30_SHIFT))&LCD_WF_WF30_MASK)
+#define LCD_WF_WF62_MASK                         0xFF0000u
+#define LCD_WF_WF62_SHIFT                        16
+#define LCD_WF_WF62(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF62_SHIFT))&LCD_WF_WF62_MASK)
+#define LCD_WF_WF10_MASK                         0xFF0000u
+#define LCD_WF_WF10_SHIFT                        16
+#define LCD_WF_WF10(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF10_SHIFT))&LCD_WF_WF10_MASK)
+#define LCD_WF_WF63_MASK                         0xFF000000u
+#define LCD_WF_WF63_SHIFT                        24
+#define LCD_WF_WF63(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF63_SHIFT))&LCD_WF_WF63_MASK)
+#define LCD_WF_WF59_MASK                         0xFF000000u
+#define LCD_WF_WF59_SHIFT                        24
+#define LCD_WF_WF59(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF59_SHIFT))&LCD_WF_WF59_MASK)
+#define LCD_WF_WF55_MASK                         0xFF000000u
+#define LCD_WF_WF55_SHIFT                        24
+#define LCD_WF_WF55(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF55_SHIFT))&LCD_WF_WF55_MASK)
+#define LCD_WF_WF3_MASK                          0xFF000000u
+#define LCD_WF_WF3_SHIFT                         24
+#define LCD_WF_WF3(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF3_SHIFT))&LCD_WF_WF3_MASK)
+#define LCD_WF_WF51_MASK                         0xFF000000u
+#define LCD_WF_WF51_SHIFT                        24
+#define LCD_WF_WF51(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF51_SHIFT))&LCD_WF_WF51_MASK)
+#define LCD_WF_WF47_MASK                         0xFF000000u
+#define LCD_WF_WF47_SHIFT                        24
+#define LCD_WF_WF47(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF47_SHIFT))&LCD_WF_WF47_MASK)
+#define LCD_WF_WF43_MASK                         0xFF000000u
+#define LCD_WF_WF43_SHIFT                        24
+#define LCD_WF_WF43(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF43_SHIFT))&LCD_WF_WF43_MASK)
+#define LCD_WF_WF7_MASK                          0xFF000000u
+#define LCD_WF_WF7_SHIFT                         24
+#define LCD_WF_WF7(x)                            (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF7_SHIFT))&LCD_WF_WF7_MASK)
+#define LCD_WF_WF39_MASK                         0xFF000000u
+#define LCD_WF_WF39_SHIFT                        24
+#define LCD_WF_WF39(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF39_SHIFT))&LCD_WF_WF39_MASK)
+#define LCD_WF_WF35_MASK                         0xFF000000u
+#define LCD_WF_WF35_SHIFT                        24
+#define LCD_WF_WF35(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF35_SHIFT))&LCD_WF_WF35_MASK)
+#define LCD_WF_WF31_MASK                         0xFF000000u
+#define LCD_WF_WF31_SHIFT                        24
+#define LCD_WF_WF31(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF31_SHIFT))&LCD_WF_WF31_MASK)
+#define LCD_WF_WF11_MASK                         0xFF000000u
+#define LCD_WF_WF11_SHIFT                        24
+#define LCD_WF_WF11(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF11_SHIFT))&LCD_WF_WF11_MASK)
+#define LCD_WF_WF27_MASK                         0xFF000000u
+#define LCD_WF_WF27_SHIFT                        24
+#define LCD_WF_WF27(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF27_SHIFT))&LCD_WF_WF27_MASK)
+#define LCD_WF_WF23_MASK                         0xFF000000u
+#define LCD_WF_WF23_SHIFT                        24
+#define LCD_WF_WF23(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF23_SHIFT))&LCD_WF_WF23_MASK)
+#define LCD_WF_WF19_MASK                         0xFF000000u
+#define LCD_WF_WF19_SHIFT                        24
+#define LCD_WF_WF19(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF19_SHIFT))&LCD_WF_WF19_MASK)
+#define LCD_WF_WF15_MASK                         0xFF000000u
+#define LCD_WF_WF15_SHIFT                        24
+#define LCD_WF_WF15(x)                           (((uint32_t)(((uint32_t)(x))<<LCD_WF_WF15_SHIFT))&LCD_WF_WF15_MASK)
+/* WF8B Bit Fields */
+#define LCD_WF8B_BPALCD0_MASK                    0x1u
+#define LCD_WF8B_BPALCD0_SHIFT                   0
+#define LCD_WF8B_BPALCD63_MASK                   0x1u
+#define LCD_WF8B_BPALCD63_SHIFT                  0
+#define LCD_WF8B_BPALCD62_MASK                   0x1u
+#define LCD_WF8B_BPALCD62_SHIFT                  0
+#define LCD_WF8B_BPALCD61_MASK                   0x1u
+#define LCD_WF8B_BPALCD61_SHIFT                  0
+#define LCD_WF8B_BPALCD60_MASK                   0x1u
+#define LCD_WF8B_BPALCD60_SHIFT                  0
+#define LCD_WF8B_BPALCD59_MASK                   0x1u
+#define LCD_WF8B_BPALCD59_SHIFT                  0
+#define LCD_WF8B_BPALCD58_MASK                   0x1u
+#define LCD_WF8B_BPALCD58_SHIFT                  0
+#define LCD_WF8B_BPALCD57_MASK                   0x1u
+#define LCD_WF8B_BPALCD57_SHIFT                  0
+#define LCD_WF8B_BPALCD1_MASK                    0x1u
+#define LCD_WF8B_BPALCD1_SHIFT                   0
+#define LCD_WF8B_BPALCD56_MASK                   0x1u
+#define LCD_WF8B_BPALCD56_SHIFT                  0
+#define LCD_WF8B_BPALCD55_MASK                   0x1u
+#define LCD_WF8B_BPALCD55_SHIFT                  0
+#define LCD_WF8B_BPALCD54_MASK                   0x1u
+#define LCD_WF8B_BPALCD54_SHIFT                  0
+#define LCD_WF8B_BPALCD53_MASK                   0x1u
+#define LCD_WF8B_BPALCD53_SHIFT                  0
+#define LCD_WF8B_BPALCD52_MASK                   0x1u
+#define LCD_WF8B_BPALCD52_SHIFT                  0
+#define LCD_WF8B_BPALCD51_MASK                   0x1u
+#define LCD_WF8B_BPALCD51_SHIFT                  0
+#define LCD_WF8B_BPALCD50_MASK                   0x1u
+#define LCD_WF8B_BPALCD50_SHIFT                  0
+#define LCD_WF8B_BPALCD2_MASK                    0x1u
+#define LCD_WF8B_BPALCD2_SHIFT                   0
+#define LCD_WF8B_BPALCD49_MASK                   0x1u
+#define LCD_WF8B_BPALCD49_SHIFT                  0
+#define LCD_WF8B_BPALCD48_MASK                   0x1u
+#define LCD_WF8B_BPALCD48_SHIFT                  0
+#define LCD_WF8B_BPALCD47_MASK                   0x1u
+#define LCD_WF8B_BPALCD47_SHIFT                  0
+#define LCD_WF8B_BPALCD46_MASK                   0x1u
+#define LCD_WF8B_BPALCD46_SHIFT                  0
+#define LCD_WF8B_BPALCD45_MASK                   0x1u
+#define LCD_WF8B_BPALCD45_SHIFT                  0
+#define LCD_WF8B_BPALCD44_MASK                   0x1u
+#define LCD_WF8B_BPALCD44_SHIFT                  0
+#define LCD_WF8B_BPALCD43_MASK                   0x1u
+#define LCD_WF8B_BPALCD43_SHIFT                  0
+#define LCD_WF8B_BPALCD3_MASK                    0x1u
+#define LCD_WF8B_BPALCD3_SHIFT                   0
+#define LCD_WF8B_BPALCD42_MASK                   0x1u
+#define LCD_WF8B_BPALCD42_SHIFT                  0
+#define LCD_WF8B_BPALCD41_MASK                   0x1u
+#define LCD_WF8B_BPALCD41_SHIFT                  0
+#define LCD_WF8B_BPALCD40_MASK                   0x1u
+#define LCD_WF8B_BPALCD40_SHIFT                  0
+#define LCD_WF8B_BPALCD39_MASK                   0x1u
+#define LCD_WF8B_BPALCD39_SHIFT                  0
+#define LCD_WF8B_BPALCD38_MASK                   0x1u
+#define LCD_WF8B_BPALCD38_SHIFT                  0
+#define LCD_WF8B_BPALCD37_MASK                   0x1u
+#define LCD_WF8B_BPALCD37_SHIFT                  0
+#define LCD_WF8B_BPALCD36_MASK                   0x1u
+#define LCD_WF8B_BPALCD36_SHIFT                  0
+#define LCD_WF8B_BPALCD4_MASK                    0x1u
+#define LCD_WF8B_BPALCD4_SHIFT                   0
+#define LCD_WF8B_BPALCD35_MASK                   0x1u
+#define LCD_WF8B_BPALCD35_SHIFT                  0
+#define LCD_WF8B_BPALCD34_MASK                   0x1u
+#define LCD_WF8B_BPALCD34_SHIFT                  0
+#define LCD_WF8B_BPALCD33_MASK                   0x1u
+#define LCD_WF8B_BPALCD33_SHIFT                  0
+#define LCD_WF8B_BPALCD32_MASK                   0x1u
+#define LCD_WF8B_BPALCD32_SHIFT                  0
+#define LCD_WF8B_BPALCD31_MASK                   0x1u
+#define LCD_WF8B_BPALCD31_SHIFT                  0
+#define LCD_WF8B_BPALCD30_MASK                   0x1u
+#define LCD_WF8B_BPALCD30_SHIFT                  0
+#define LCD_WF8B_BPALCD29_MASK                   0x1u
+#define LCD_WF8B_BPALCD29_SHIFT                  0
+#define LCD_WF8B_BPALCD5_MASK                    0x1u
+#define LCD_WF8B_BPALCD5_SHIFT                   0
+#define LCD_WF8B_BPALCD28_MASK                   0x1u
+#define LCD_WF8B_BPALCD28_SHIFT                  0
+#define LCD_WF8B_BPALCD27_MASK                   0x1u
+#define LCD_WF8B_BPALCD27_SHIFT                  0
+#define LCD_WF8B_BPALCD26_MASK                   0x1u
+#define LCD_WF8B_BPALCD26_SHIFT                  0
+#define LCD_WF8B_BPALCD25_MASK                   0x1u
+#define LCD_WF8B_BPALCD25_SHIFT                  0
+#define LCD_WF8B_BPALCD24_MASK                   0x1u
+#define LCD_WF8B_BPALCD24_SHIFT                  0
+#define LCD_WF8B_BPALCD23_MASK                   0x1u
+#define LCD_WF8B_BPALCD23_SHIFT                  0
+#define LCD_WF8B_BPALCD22_MASK                   0x1u
+#define LCD_WF8B_BPALCD22_SHIFT                  0
+#define LCD_WF8B_BPALCD6_MASK                    0x1u
+#define LCD_WF8B_BPALCD6_SHIFT                   0
+#define LCD_WF8B_BPALCD21_MASK                   0x1u
+#define LCD_WF8B_BPALCD21_SHIFT                  0
+#define LCD_WF8B_BPALCD20_MASK                   0x1u
+#define LCD_WF8B_BPALCD20_SHIFT                  0
+#define LCD_WF8B_BPALCD19_MASK                   0x1u
+#define LCD_WF8B_BPALCD19_SHIFT                  0
+#define LCD_WF8B_BPALCD18_MASK                   0x1u
+#define LCD_WF8B_BPALCD18_SHIFT                  0
+#define LCD_WF8B_BPALCD17_MASK                   0x1u
+#define LCD_WF8B_BPALCD17_SHIFT                  0
+#define LCD_WF8B_BPALCD16_MASK                   0x1u
+#define LCD_WF8B_BPALCD16_SHIFT                  0
+#define LCD_WF8B_BPALCD15_MASK                   0x1u
+#define LCD_WF8B_BPALCD15_SHIFT                  0
+#define LCD_WF8B_BPALCD7_MASK                    0x1u
+#define LCD_WF8B_BPALCD7_SHIFT                   0
+#define LCD_WF8B_BPALCD14_MASK                   0x1u
+#define LCD_WF8B_BPALCD14_SHIFT                  0
+#define LCD_WF8B_BPALCD13_MASK                   0x1u
+#define LCD_WF8B_BPALCD13_SHIFT                  0
+#define LCD_WF8B_BPALCD12_MASK                   0x1u
+#define LCD_WF8B_BPALCD12_SHIFT                  0
+#define LCD_WF8B_BPALCD11_MASK                   0x1u
+#define LCD_WF8B_BPALCD11_SHIFT                  0
+#define LCD_WF8B_BPALCD10_MASK                   0x1u
+#define LCD_WF8B_BPALCD10_SHIFT                  0
+#define LCD_WF8B_BPALCD9_MASK                    0x1u
+#define LCD_WF8B_BPALCD9_SHIFT                   0
+#define LCD_WF8B_BPALCD8_MASK                    0x1u
+#define LCD_WF8B_BPALCD8_SHIFT                   0
+#define LCD_WF8B_BPBLCD1_MASK                    0x2u
+#define LCD_WF8B_BPBLCD1_SHIFT                   1
+#define LCD_WF8B_BPBLCD32_MASK                   0x2u
+#define LCD_WF8B_BPBLCD32_SHIFT                  1
+#define LCD_WF8B_BPBLCD30_MASK                   0x2u
+#define LCD_WF8B_BPBLCD30_SHIFT                  1
+#define LCD_WF8B_BPBLCD60_MASK                   0x2u
+#define LCD_WF8B_BPBLCD60_SHIFT                  1
+#define LCD_WF8B_BPBLCD24_MASK                   0x2u
+#define LCD_WF8B_BPBLCD24_SHIFT                  1
+#define LCD_WF8B_BPBLCD28_MASK                   0x2u
+#define LCD_WF8B_BPBLCD28_SHIFT                  1
+#define LCD_WF8B_BPBLCD23_MASK                   0x2u
+#define LCD_WF8B_BPBLCD23_SHIFT                  1
+#define LCD_WF8B_BPBLCD48_MASK                   0x2u
+#define LCD_WF8B_BPBLCD48_SHIFT                  1
+#define LCD_WF8B_BPBLCD10_MASK                   0x2u
+#define LCD_WF8B_BPBLCD10_SHIFT                  1
+#define LCD_WF8B_BPBLCD15_MASK                   0x2u
+#define LCD_WF8B_BPBLCD15_SHIFT                  1
+#define LCD_WF8B_BPBLCD36_MASK                   0x2u
+#define LCD_WF8B_BPBLCD36_SHIFT                  1
+#define LCD_WF8B_BPBLCD44_MASK                   0x2u
+#define LCD_WF8B_BPBLCD44_SHIFT                  1
+#define LCD_WF8B_BPBLCD62_MASK                   0x2u
+#define LCD_WF8B_BPBLCD62_SHIFT                  1
+#define LCD_WF8B_BPBLCD53_MASK                   0x2u
+#define LCD_WF8B_BPBLCD53_SHIFT                  1
+#define LCD_WF8B_BPBLCD22_MASK                   0x2u
+#define LCD_WF8B_BPBLCD22_SHIFT                  1
+#define LCD_WF8B_BPBLCD47_MASK                   0x2u
+#define LCD_WF8B_BPBLCD47_SHIFT                  1
+#define LCD_WF8B_BPBLCD33_MASK                   0x2u
+#define LCD_WF8B_BPBLCD33_SHIFT                  1
+#define LCD_WF8B_BPBLCD2_MASK                    0x2u
+#define LCD_WF8B_BPBLCD2_SHIFT                   1
+#define LCD_WF8B_BPBLCD49_MASK                   0x2u
+#define LCD_WF8B_BPBLCD49_SHIFT                  1
+#define LCD_WF8B_BPBLCD0_MASK                    0x2u
+#define LCD_WF8B_BPBLCD0_SHIFT                   1
+#define LCD_WF8B_BPBLCD55_MASK                   0x2u
+#define LCD_WF8B_BPBLCD55_SHIFT                  1
+#define LCD_WF8B_BPBLCD56_MASK                   0x2u
+#define LCD_WF8B_BPBLCD56_SHIFT                  1
+#define LCD_WF8B_BPBLCD21_MASK                   0x2u
+#define LCD_WF8B_BPBLCD21_SHIFT                  1
+#define LCD_WF8B_BPBLCD6_MASK                    0x2u
+#define LCD_WF8B_BPBLCD6_SHIFT                   1
+#define LCD_WF8B_BPBLCD29_MASK                   0x2u
+#define LCD_WF8B_BPBLCD29_SHIFT                  1
+#define LCD_WF8B_BPBLCD25_MASK                   0x2u
+#define LCD_WF8B_BPBLCD25_SHIFT                  1
+#define LCD_WF8B_BPBLCD8_MASK                    0x2u
+#define LCD_WF8B_BPBLCD8_SHIFT                   1
+#define LCD_WF8B_BPBLCD54_MASK                   0x2u
+#define LCD_WF8B_BPBLCD54_SHIFT                  1
+#define LCD_WF8B_BPBLCD38_MASK                   0x2u
+#define LCD_WF8B_BPBLCD38_SHIFT                  1
+#define LCD_WF8B_BPBLCD43_MASK                   0x2u
+#define LCD_WF8B_BPBLCD43_SHIFT                  1
+#define LCD_WF8B_BPBLCD20_MASK                   0x2u
+#define LCD_WF8B_BPBLCD20_SHIFT                  1
+#define LCD_WF8B_BPBLCD9_MASK                    0x2u
+#define LCD_WF8B_BPBLCD9_SHIFT                   1
+#define LCD_WF8B_BPBLCD7_MASK                    0x2u
+#define LCD_WF8B_BPBLCD7_SHIFT                   1
+#define LCD_WF8B_BPBLCD50_MASK                   0x2u
+#define LCD_WF8B_BPBLCD50_SHIFT                  1
+#define LCD_WF8B_BPBLCD40_MASK                   0x2u
+#define LCD_WF8B_BPBLCD40_SHIFT                  1
+#define LCD_WF8B_BPBLCD63_MASK                   0x2u
+#define LCD_WF8B_BPBLCD63_SHIFT                  1
+#define LCD_WF8B_BPBLCD26_MASK                   0x2u
+#define LCD_WF8B_BPBLCD26_SHIFT                  1
+#define LCD_WF8B_BPBLCD12_MASK                   0x2u
+#define LCD_WF8B_BPBLCD12_SHIFT                  1
+#define LCD_WF8B_BPBLCD19_MASK                   0x2u
+#define LCD_WF8B_BPBLCD19_SHIFT                  1
+#define LCD_WF8B_BPBLCD34_MASK                   0x2u
+#define LCD_WF8B_BPBLCD34_SHIFT                  1
+#define LCD_WF8B_BPBLCD39_MASK                   0x2u
+#define LCD_WF8B_BPBLCD39_SHIFT                  1
+#define LCD_WF8B_BPBLCD59_MASK                   0x2u
+#define LCD_WF8B_BPBLCD59_SHIFT                  1
+#define LCD_WF8B_BPBLCD61_MASK                   0x2u
+#define LCD_WF8B_BPBLCD61_SHIFT                  1
+#define LCD_WF8B_BPBLCD37_MASK                   0x2u
+#define LCD_WF8B_BPBLCD37_SHIFT                  1
+#define LCD_WF8B_BPBLCD31_MASK                   0x2u
+#define LCD_WF8B_BPBLCD31_SHIFT                  1
+#define LCD_WF8B_BPBLCD58_MASK                   0x2u
+#define LCD_WF8B_BPBLCD58_SHIFT                  1
+#define LCD_WF8B_BPBLCD18_MASK                   0x2u
+#define LCD_WF8B_BPBLCD18_SHIFT                  1
+#define LCD_WF8B_BPBLCD45_MASK                   0x2u
+#define LCD_WF8B_BPBLCD45_SHIFT                  1
+#define LCD_WF8B_BPBLCD27_MASK                   0x2u
+#define LCD_WF8B_BPBLCD27_SHIFT                  1
+#define LCD_WF8B_BPBLCD14_MASK                   0x2u
+#define LCD_WF8B_BPBLCD14_SHIFT                  1
+#define LCD_WF8B_BPBLCD51_MASK                   0x2u
+#define LCD_WF8B_BPBLCD51_SHIFT                  1
+#define LCD_WF8B_BPBLCD52_MASK                   0x2u
+#define LCD_WF8B_BPBLCD52_SHIFT                  1
+#define LCD_WF8B_BPBLCD4_MASK                    0x2u
+#define LCD_WF8B_BPBLCD4_SHIFT                   1
+#define LCD_WF8B_BPBLCD35_MASK                   0x2u
+#define LCD_WF8B_BPBLCD35_SHIFT                  1
+#define LCD_WF8B_BPBLCD17_MASK                   0x2u
+#define LCD_WF8B_BPBLCD17_SHIFT                  1
+#define LCD_WF8B_BPBLCD41_MASK                   0x2u
+#define LCD_WF8B_BPBLCD41_SHIFT                  1
+#define LCD_WF8B_BPBLCD11_MASK                   0x2u
+#define LCD_WF8B_BPBLCD11_SHIFT                  1
+#define LCD_WF8B_BPBLCD46_MASK                   0x2u
+#define LCD_WF8B_BPBLCD46_SHIFT                  1
+#define LCD_WF8B_BPBLCD57_MASK                   0x2u
+#define LCD_WF8B_BPBLCD57_SHIFT                  1
+#define LCD_WF8B_BPBLCD42_MASK                   0x2u
+#define LCD_WF8B_BPBLCD42_SHIFT                  1
+#define LCD_WF8B_BPBLCD5_MASK                    0x2u
+#define LCD_WF8B_BPBLCD5_SHIFT                   1
+#define LCD_WF8B_BPBLCD3_MASK                    0x2u
+#define LCD_WF8B_BPBLCD3_SHIFT                   1
+#define LCD_WF8B_BPBLCD16_MASK                   0x2u
+#define LCD_WF8B_BPBLCD16_SHIFT                  1
+#define LCD_WF8B_BPBLCD13_MASK                   0x2u
+#define LCD_WF8B_BPBLCD13_SHIFT                  1
+#define LCD_WF8B_BPCLCD10_MASK                   0x4u
+#define LCD_WF8B_BPCLCD10_SHIFT                  2
+#define LCD_WF8B_BPCLCD55_MASK                   0x4u
+#define LCD_WF8B_BPCLCD55_SHIFT                  2
+#define LCD_WF8B_BPCLCD2_MASK                    0x4u
+#define LCD_WF8B_BPCLCD2_SHIFT                   2
+#define LCD_WF8B_BPCLCD23_MASK                   0x4u
+#define LCD_WF8B_BPCLCD23_SHIFT                  2
+#define LCD_WF8B_BPCLCD48_MASK                   0x4u
+#define LCD_WF8B_BPCLCD48_SHIFT                  2
+#define LCD_WF8B_BPCLCD24_MASK                   0x4u
+#define LCD_WF8B_BPCLCD24_SHIFT                  2
+#define LCD_WF8B_BPCLCD60_MASK                   0x4u
+#define LCD_WF8B_BPCLCD60_SHIFT                  2
+#define LCD_WF8B_BPCLCD47_MASK                   0x4u
+#define LCD_WF8B_BPCLCD47_SHIFT                  2
+#define LCD_WF8B_BPCLCD22_MASK                   0x4u
+#define LCD_WF8B_BPCLCD22_SHIFT                  2
+#define LCD_WF8B_BPCLCD8_MASK                    0x4u
+#define LCD_WF8B_BPCLCD8_SHIFT                   2
+#define LCD_WF8B_BPCLCD21_MASK                   0x4u
+#define LCD_WF8B_BPCLCD21_SHIFT                  2
+#define LCD_WF8B_BPCLCD49_MASK                   0x4u
+#define LCD_WF8B_BPCLCD49_SHIFT                  2
+#define LCD_WF8B_BPCLCD25_MASK                   0x4u
+#define LCD_WF8B_BPCLCD25_SHIFT                  2
+#define LCD_WF8B_BPCLCD1_MASK                    0x4u
+#define LCD_WF8B_BPCLCD1_SHIFT                   2
+#define LCD_WF8B_BPCLCD20_MASK                   0x4u
+#define LCD_WF8B_BPCLCD20_SHIFT                  2
+#define LCD_WF8B_BPCLCD50_MASK                   0x4u
+#define LCD_WF8B_BPCLCD50_SHIFT                  2
+#define LCD_WF8B_BPCLCD19_MASK                   0x4u
+#define LCD_WF8B_BPCLCD19_SHIFT                  2
+#define LCD_WF8B_BPCLCD26_MASK                   0x4u
+#define LCD_WF8B_BPCLCD26_SHIFT                  2
+#define LCD_WF8B_BPCLCD59_MASK                   0x4u
+#define LCD_WF8B_BPCLCD59_SHIFT                  2
+#define LCD_WF8B_BPCLCD61_MASK                   0x4u
+#define LCD_WF8B_BPCLCD61_SHIFT                  2
+#define LCD_WF8B_BPCLCD46_MASK                   0x4u
+#define LCD_WF8B_BPCLCD46_SHIFT                  2
+#define LCD_WF8B_BPCLCD18_MASK                   0x4u
+#define LCD_WF8B_BPCLCD18_SHIFT                  2
+#define LCD_WF8B_BPCLCD5_MASK                    0x4u
+#define LCD_WF8B_BPCLCD5_SHIFT                   2
+#define LCD_WF8B_BPCLCD63_MASK                   0x4u
+#define LCD_WF8B_BPCLCD63_SHIFT                  2
+#define LCD_WF8B_BPCLCD27_MASK                   0x4u
+#define LCD_WF8B_BPCLCD27_SHIFT                  2
+#define LCD_WF8B_BPCLCD17_MASK                   0x4u
+#define LCD_WF8B_BPCLCD17_SHIFT                  2
+#define LCD_WF8B_BPCLCD51_MASK                   0x4u
+#define LCD_WF8B_BPCLCD51_SHIFT                  2
+#define LCD_WF8B_BPCLCD9_MASK                    0x4u
+#define LCD_WF8B_BPCLCD9_SHIFT                   2
+#define LCD_WF8B_BPCLCD54_MASK                   0x4u
+#define LCD_WF8B_BPCLCD54_SHIFT                  2
+#define LCD_WF8B_BPCLCD15_MASK                   0x4u
+#define LCD_WF8B_BPCLCD15_SHIFT                  2
+#define LCD_WF8B_BPCLCD16_MASK                   0x4u
+#define LCD_WF8B_BPCLCD16_SHIFT                  2
+#define LCD_WF8B_BPCLCD14_MASK                   0x4u
+#define LCD_WF8B_BPCLCD14_SHIFT                  2
+#define LCD_WF8B_BPCLCD32_MASK                   0x4u
+#define LCD_WF8B_BPCLCD32_SHIFT                  2
+#define LCD_WF8B_BPCLCD28_MASK                   0x4u
+#define LCD_WF8B_BPCLCD28_SHIFT                  2
+#define LCD_WF8B_BPCLCD53_MASK                   0x4u
+#define LCD_WF8B_BPCLCD53_SHIFT                  2
+#define LCD_WF8B_BPCLCD33_MASK                   0x4u
+#define LCD_WF8B_BPCLCD33_SHIFT                  2
+#define LCD_WF8B_BPCLCD0_MASK                    0x4u
+#define LCD_WF8B_BPCLCD0_SHIFT                   2
+#define LCD_WF8B_BPCLCD43_MASK                   0x4u
+#define LCD_WF8B_BPCLCD43_SHIFT                  2
+#define LCD_WF8B_BPCLCD7_MASK                    0x4u
+#define LCD_WF8B_BPCLCD7_SHIFT                   2
+#define LCD_WF8B_BPCLCD4_MASK                    0x4u
+#define LCD_WF8B_BPCLCD4_SHIFT                   2
+#define LCD_WF8B_BPCLCD34_MASK                   0x4u
+#define LCD_WF8B_BPCLCD34_SHIFT                  2
+#define LCD_WF8B_BPCLCD29_MASK                   0x4u
+#define LCD_WF8B_BPCLCD29_SHIFT                  2
+#define LCD_WF8B_BPCLCD45_MASK                   0x4u
+#define LCD_WF8B_BPCLCD45_SHIFT                  2
+#define LCD_WF8B_BPCLCD57_MASK                   0x4u
+#define LCD_WF8B_BPCLCD57_SHIFT                  2
+#define LCD_WF8B_BPCLCD42_MASK                   0x4u
+#define LCD_WF8B_BPCLCD42_SHIFT                  2
+#define LCD_WF8B_BPCLCD35_MASK                   0x4u
+#define LCD_WF8B_BPCLCD35_SHIFT                  2
+#define LCD_WF8B_BPCLCD13_MASK                   0x4u
+#define LCD_WF8B_BPCLCD13_SHIFT                  2
+#define LCD_WF8B_BPCLCD36_MASK                   0x4u
+#define LCD_WF8B_BPCLCD36_SHIFT                  2
+#define LCD_WF8B_BPCLCD30_MASK                   0x4u
+#define LCD_WF8B_BPCLCD30_SHIFT                  2
+#define LCD_WF8B_BPCLCD52_MASK                   0x4u
+#define LCD_WF8B_BPCLCD52_SHIFT                  2
+#define LCD_WF8B_BPCLCD58_MASK                   0x4u
+#define LCD_WF8B_BPCLCD58_SHIFT                  2
+#define LCD_WF8B_BPCLCD41_MASK                   0x4u
+#define LCD_WF8B_BPCLCD41_SHIFT                  2
+#define LCD_WF8B_BPCLCD37_MASK                   0x4u
+#define LCD_WF8B_BPCLCD37_SHIFT                  2
+#define LCD_WF8B_BPCLCD3_MASK                    0x4u
+#define LCD_WF8B_BPCLCD3_SHIFT                   2
+#define LCD_WF8B_BPCLCD12_MASK                   0x4u
+#define LCD_WF8B_BPCLCD12_SHIFT                  2
+#define LCD_WF8B_BPCLCD11_MASK                   0x4u
+#define LCD_WF8B_BPCLCD11_SHIFT                  2
+#define LCD_WF8B_BPCLCD38_MASK                   0x4u
+#define LCD_WF8B_BPCLCD38_SHIFT                  2
+#define LCD_WF8B_BPCLCD44_MASK                   0x4u
+#define LCD_WF8B_BPCLCD44_SHIFT                  2
+#define LCD_WF8B_BPCLCD31_MASK                   0x4u
+#define LCD_WF8B_BPCLCD31_SHIFT                  2
+#define LCD_WF8B_BPCLCD40_MASK                   0x4u
+#define LCD_WF8B_BPCLCD40_SHIFT                  2
+#define LCD_WF8B_BPCLCD62_MASK                   0x4u
+#define LCD_WF8B_BPCLCD62_SHIFT                  2
+#define LCD_WF8B_BPCLCD56_MASK                   0x4u
+#define LCD_WF8B_BPCLCD56_SHIFT                  2
+#define LCD_WF8B_BPCLCD39_MASK                   0x4u
+#define LCD_WF8B_BPCLCD39_SHIFT                  2
+#define LCD_WF8B_BPCLCD6_MASK                    0x4u
+#define LCD_WF8B_BPCLCD6_SHIFT                   2
+#define LCD_WF8B_BPDLCD47_MASK                   0x8u
+#define LCD_WF8B_BPDLCD47_SHIFT                  3
+#define LCD_WF8B_BPDLCD23_MASK                   0x8u
+#define LCD_WF8B_BPDLCD23_SHIFT                  3
+#define LCD_WF8B_BPDLCD48_MASK                   0x8u
+#define LCD_WF8B_BPDLCD48_SHIFT                  3
+#define LCD_WF8B_BPDLCD24_MASK                   0x8u
+#define LCD_WF8B_BPDLCD24_SHIFT                  3
+#define LCD_WF8B_BPDLCD15_MASK                   0x8u
+#define LCD_WF8B_BPDLCD15_SHIFT                  3
+#define LCD_WF8B_BPDLCD22_MASK                   0x8u
+#define LCD_WF8B_BPDLCD22_SHIFT                  3
+#define LCD_WF8B_BPDLCD60_MASK                   0x8u
+#define LCD_WF8B_BPDLCD60_SHIFT                  3
+#define LCD_WF8B_BPDLCD10_MASK                   0x8u
+#define LCD_WF8B_BPDLCD10_SHIFT                  3
+#define LCD_WF8B_BPDLCD21_MASK                   0x8u
+#define LCD_WF8B_BPDLCD21_SHIFT                  3
+#define LCD_WF8B_BPDLCD49_MASK                   0x8u
+#define LCD_WF8B_BPDLCD49_SHIFT                  3
+#define LCD_WF8B_BPDLCD1_MASK                    0x8u
+#define LCD_WF8B_BPDLCD1_SHIFT                   3
+#define LCD_WF8B_BPDLCD25_MASK                   0x8u
+#define LCD_WF8B_BPDLCD25_SHIFT                  3
+#define LCD_WF8B_BPDLCD20_MASK                   0x8u
+#define LCD_WF8B_BPDLCD20_SHIFT                  3
+#define LCD_WF8B_BPDLCD2_MASK                    0x8u
+#define LCD_WF8B_BPDLCD2_SHIFT                   3
+#define LCD_WF8B_BPDLCD55_MASK                   0x8u
+#define LCD_WF8B_BPDLCD55_SHIFT                  3
+#define LCD_WF8B_BPDLCD59_MASK                   0x8u
+#define LCD_WF8B_BPDLCD59_SHIFT                  3
+#define LCD_WF8B_BPDLCD5_MASK                    0x8u
+#define LCD_WF8B_BPDLCD5_SHIFT                   3
+#define LCD_WF8B_BPDLCD19_MASK                   0x8u
+#define LCD_WF8B_BPDLCD19_SHIFT                  3
+#define LCD_WF8B_BPDLCD6_MASK                    0x8u
+#define LCD_WF8B_BPDLCD6_SHIFT                   3
+#define LCD_WF8B_BPDLCD26_MASK                   0x8u
+#define LCD_WF8B_BPDLCD26_SHIFT                  3
+#define LCD_WF8B_BPDLCD0_MASK                    0x8u
+#define LCD_WF8B_BPDLCD0_SHIFT                   3
+#define LCD_WF8B_BPDLCD50_MASK                   0x8u
+#define LCD_WF8B_BPDLCD50_SHIFT                  3
+#define LCD_WF8B_BPDLCD46_MASK                   0x8u
+#define LCD_WF8B_BPDLCD46_SHIFT                  3
+#define LCD_WF8B_BPDLCD18_MASK                   0x8u
+#define LCD_WF8B_BPDLCD18_SHIFT                  3
+#define LCD_WF8B_BPDLCD61_MASK                   0x8u
+#define LCD_WF8B_BPDLCD61_SHIFT                  3
+#define LCD_WF8B_BPDLCD9_MASK                    0x8u
+#define LCD_WF8B_BPDLCD9_SHIFT                   3
+#define LCD_WF8B_BPDLCD17_MASK                   0x8u
+#define LCD_WF8B_BPDLCD17_SHIFT                  3
+#define LCD_WF8B_BPDLCD27_MASK                   0x8u
+#define LCD_WF8B_BPDLCD27_SHIFT                  3
+#define LCD_WF8B_BPDLCD53_MASK                   0x8u
+#define LCD_WF8B_BPDLCD53_SHIFT                  3
+#define LCD_WF8B_BPDLCD51_MASK                   0x8u
+#define LCD_WF8B_BPDLCD51_SHIFT                  3
+#define LCD_WF8B_BPDLCD54_MASK                   0x8u
+#define LCD_WF8B_BPDLCD54_SHIFT                  3
+#define LCD_WF8B_BPDLCD13_MASK                   0x8u
+#define LCD_WF8B_BPDLCD13_SHIFT                  3
+#define LCD_WF8B_BPDLCD16_MASK                   0x8u
+#define LCD_WF8B_BPDLCD16_SHIFT                  3
+#define LCD_WF8B_BPDLCD32_MASK                   0x8u
+#define LCD_WF8B_BPDLCD32_SHIFT                  3
+#define LCD_WF8B_BPDLCD14_MASK                   0x8u
+#define LCD_WF8B_BPDLCD14_SHIFT                  3
+#define LCD_WF8B_BPDLCD28_MASK                   0x8u
+#define LCD_WF8B_BPDLCD28_SHIFT                  3
+#define LCD_WF8B_BPDLCD43_MASK                   0x8u
+#define LCD_WF8B_BPDLCD43_SHIFT                  3
+#define LCD_WF8B_BPDLCD4_MASK                    0x8u
+#define LCD_WF8B_BPDLCD4_SHIFT                   3
+#define LCD_WF8B_BPDLCD45_MASK                   0x8u
+#define LCD_WF8B_BPDLCD45_SHIFT                  3
+#define LCD_WF8B_BPDLCD8_MASK                    0x8u
+#define LCD_WF8B_BPDLCD8_SHIFT                   3
+#define LCD_WF8B_BPDLCD62_MASK                   0x8u
+#define LCD_WF8B_BPDLCD62_SHIFT                  3
+#define LCD_WF8B_BPDLCD33_MASK                   0x8u
+#define LCD_WF8B_BPDLCD33_SHIFT                  3
+#define LCD_WF8B_BPDLCD34_MASK                   0x8u
+#define LCD_WF8B_BPDLCD34_SHIFT                  3
+#define LCD_WF8B_BPDLCD29_MASK                   0x8u
+#define LCD_WF8B_BPDLCD29_SHIFT                  3
+#define LCD_WF8B_BPDLCD58_MASK                   0x8u
+#define LCD_WF8B_BPDLCD58_SHIFT                  3
+#define LCD_WF8B_BPDLCD57_MASK                   0x8u
+#define LCD_WF8B_BPDLCD57_SHIFT                  3
+#define LCD_WF8B_BPDLCD42_MASK                   0x8u
+#define LCD_WF8B_BPDLCD42_SHIFT                  3
+#define LCD_WF8B_BPDLCD35_MASK                   0x8u
+#define LCD_WF8B_BPDLCD35_SHIFT                  3
+#define LCD_WF8B_BPDLCD52_MASK                   0x8u
+#define LCD_WF8B_BPDLCD52_SHIFT                  3
+#define LCD_WF8B_BPDLCD7_MASK                    0x8u
+#define LCD_WF8B_BPDLCD7_SHIFT                   3
+#define LCD_WF8B_BPDLCD36_MASK                   0x8u
+#define LCD_WF8B_BPDLCD36_SHIFT                  3
+#define LCD_WF8B_BPDLCD30_MASK                   0x8u
+#define LCD_WF8B_BPDLCD30_SHIFT                  3
+#define LCD_WF8B_BPDLCD41_MASK                   0x8u
+#define LCD_WF8B_BPDLCD41_SHIFT                  3
+#define LCD_WF8B_BPDLCD37_MASK                   0x8u
+#define LCD_WF8B_BPDLCD37_SHIFT                  3
+#define LCD_WF8B_BPDLCD44_MASK                   0x8u
+#define LCD_WF8B_BPDLCD44_SHIFT                  3
+#define LCD_WF8B_BPDLCD63_MASK                   0x8u
+#define LCD_WF8B_BPDLCD63_SHIFT                  3
+#define LCD_WF8B_BPDLCD38_MASK                   0x8u
+#define LCD_WF8B_BPDLCD38_SHIFT                  3
+#define LCD_WF8B_BPDLCD56_MASK                   0x8u
+#define LCD_WF8B_BPDLCD56_SHIFT                  3
+#define LCD_WF8B_BPDLCD40_MASK                   0x8u
+#define LCD_WF8B_BPDLCD40_SHIFT                  3
+#define LCD_WF8B_BPDLCD31_MASK                   0x8u
+#define LCD_WF8B_BPDLCD31_SHIFT                  3
+#define LCD_WF8B_BPDLCD12_MASK                   0x8u
+#define LCD_WF8B_BPDLCD12_SHIFT                  3
+#define LCD_WF8B_BPDLCD39_MASK                   0x8u
+#define LCD_WF8B_BPDLCD39_SHIFT                  3
+#define LCD_WF8B_BPDLCD3_MASK                    0x8u
+#define LCD_WF8B_BPDLCD3_SHIFT                   3
+#define LCD_WF8B_BPDLCD11_MASK                   0x8u
+#define LCD_WF8B_BPDLCD11_SHIFT                  3
+#define LCD_WF8B_BPELCD12_MASK                   0x10u
+#define LCD_WF8B_BPELCD12_SHIFT                  4
+#define LCD_WF8B_BPELCD39_MASK                   0x10u
+#define LCD_WF8B_BPELCD39_SHIFT                  4
+#define LCD_WF8B_BPELCD3_MASK                    0x10u
+#define LCD_WF8B_BPELCD3_SHIFT                   4
+#define LCD_WF8B_BPELCD38_MASK                   0x10u
+#define LCD_WF8B_BPELCD38_SHIFT                  4
+#define LCD_WF8B_BPELCD40_MASK                   0x10u
+#define LCD_WF8B_BPELCD40_SHIFT                  4
+#define LCD_WF8B_BPELCD37_MASK                   0x10u
+#define LCD_WF8B_BPELCD37_SHIFT                  4
+#define LCD_WF8B_BPELCD41_MASK                   0x10u
+#define LCD_WF8B_BPELCD41_SHIFT                  4
+#define LCD_WF8B_BPELCD36_MASK                   0x10u
+#define LCD_WF8B_BPELCD36_SHIFT                  4
+#define LCD_WF8B_BPELCD8_MASK                    0x10u
+#define LCD_WF8B_BPELCD8_SHIFT                   4
+#define LCD_WF8B_BPELCD35_MASK                   0x10u
+#define LCD_WF8B_BPELCD35_SHIFT                  4
+#define LCD_WF8B_BPELCD42_MASK                   0x10u
+#define LCD_WF8B_BPELCD42_SHIFT                  4
+#define LCD_WF8B_BPELCD34_MASK                   0x10u
+#define LCD_WF8B_BPELCD34_SHIFT                  4
+#define LCD_WF8B_BPELCD33_MASK                   0x10u
+#define LCD_WF8B_BPELCD33_SHIFT                  4
+#define LCD_WF8B_BPELCD11_MASK                   0x10u
+#define LCD_WF8B_BPELCD11_SHIFT                  4
+#define LCD_WF8B_BPELCD43_MASK                   0x10u
+#define LCD_WF8B_BPELCD43_SHIFT                  4
+#define LCD_WF8B_BPELCD32_MASK                   0x10u
+#define LCD_WF8B_BPELCD32_SHIFT                  4
+#define LCD_WF8B_BPELCD31_MASK                   0x10u
+#define LCD_WF8B_BPELCD31_SHIFT                  4
+#define LCD_WF8B_BPELCD44_MASK                   0x10u
+#define LCD_WF8B_BPELCD44_SHIFT                  4
+#define LCD_WF8B_BPELCD30_MASK                   0x10u
+#define LCD_WF8B_BPELCD30_SHIFT                  4
+#define LCD_WF8B_BPELCD29_MASK                   0x10u
+#define LCD_WF8B_BPELCD29_SHIFT                  4
+#define LCD_WF8B_BPELCD7_MASK                    0x10u
+#define LCD_WF8B_BPELCD7_SHIFT                   4
+#define LCD_WF8B_BPELCD45_MASK                   0x10u
+#define LCD_WF8B_BPELCD45_SHIFT                  4
+#define LCD_WF8B_BPELCD28_MASK                   0x10u
+#define LCD_WF8B_BPELCD28_SHIFT                  4
+#define LCD_WF8B_BPELCD2_MASK                    0x10u
+#define LCD_WF8B_BPELCD2_SHIFT                   4
+#define LCD_WF8B_BPELCD27_MASK                   0x10u
+#define LCD_WF8B_BPELCD27_SHIFT                  4
+#define LCD_WF8B_BPELCD46_MASK                   0x10u
+#define LCD_WF8B_BPELCD46_SHIFT                  4
+#define LCD_WF8B_BPELCD26_MASK                   0x10u
+#define LCD_WF8B_BPELCD26_SHIFT                  4
+#define LCD_WF8B_BPELCD10_MASK                   0x10u
+#define LCD_WF8B_BPELCD10_SHIFT                  4
+#define LCD_WF8B_BPELCD13_MASK                   0x10u
+#define LCD_WF8B_BPELCD13_SHIFT                  4
+#define LCD_WF8B_BPELCD25_MASK                   0x10u
+#define LCD_WF8B_BPELCD25_SHIFT                  4
+#define LCD_WF8B_BPELCD5_MASK                    0x10u
+#define LCD_WF8B_BPELCD5_SHIFT                   4
+#define LCD_WF8B_BPELCD24_MASK                   0x10u
+#define LCD_WF8B_BPELCD24_SHIFT                  4
+#define LCD_WF8B_BPELCD47_MASK                   0x10u
+#define LCD_WF8B_BPELCD47_SHIFT                  4
+#define LCD_WF8B_BPELCD23_MASK                   0x10u
+#define LCD_WF8B_BPELCD23_SHIFT                  4
+#define LCD_WF8B_BPELCD22_MASK                   0x10u
+#define LCD_WF8B_BPELCD22_SHIFT                  4
+#define LCD_WF8B_BPELCD48_MASK                   0x10u
+#define LCD_WF8B_BPELCD48_SHIFT                  4
+#define LCD_WF8B_BPELCD21_MASK                   0x10u
+#define LCD_WF8B_BPELCD21_SHIFT                  4
+#define LCD_WF8B_BPELCD49_MASK                   0x10u
+#define LCD_WF8B_BPELCD49_SHIFT                  4
+#define LCD_WF8B_BPELCD20_MASK                   0x10u
+#define LCD_WF8B_BPELCD20_SHIFT                  4
+#define LCD_WF8B_BPELCD19_MASK                   0x10u
+#define LCD_WF8B_BPELCD19_SHIFT                  4
+#define LCD_WF8B_BPELCD9_MASK                    0x10u
+#define LCD_WF8B_BPELCD9_SHIFT                   4
+#define LCD_WF8B_BPELCD50_MASK                   0x10u
+#define LCD_WF8B_BPELCD50_SHIFT                  4
+#define LCD_WF8B_BPELCD18_MASK                   0x10u
+#define LCD_WF8B_BPELCD18_SHIFT                  4
+#define LCD_WF8B_BPELCD6_MASK                    0x10u
+#define LCD_WF8B_BPELCD6_SHIFT                   4
+#define LCD_WF8B_BPELCD17_MASK                   0x10u
+#define LCD_WF8B_BPELCD17_SHIFT                  4
+#define LCD_WF8B_BPELCD51_MASK                   0x10u
+#define LCD_WF8B_BPELCD51_SHIFT                  4
+#define LCD_WF8B_BPELCD16_MASK                   0x10u
+#define LCD_WF8B_BPELCD16_SHIFT                  4
+#define LCD_WF8B_BPELCD56_MASK                   0x10u
+#define LCD_WF8B_BPELCD56_SHIFT                  4
+#define LCD_WF8B_BPELCD57_MASK                   0x10u
+#define LCD_WF8B_BPELCD57_SHIFT                  4
+#define LCD_WF8B_BPELCD52_MASK                   0x10u
+#define LCD_WF8B_BPELCD52_SHIFT                  4
+#define LCD_WF8B_BPELCD1_MASK                    0x10u
+#define LCD_WF8B_BPELCD1_SHIFT                   4
+#define LCD_WF8B_BPELCD58_MASK                   0x10u
+#define LCD_WF8B_BPELCD58_SHIFT                  4
+#define LCD_WF8B_BPELCD59_MASK                   0x10u
+#define LCD_WF8B_BPELCD59_SHIFT                  4
+#define LCD_WF8B_BPELCD53_MASK                   0x10u
+#define LCD_WF8B_BPELCD53_SHIFT                  4
+#define LCD_WF8B_BPELCD14_MASK                   0x10u
+#define LCD_WF8B_BPELCD14_SHIFT                  4
+#define LCD_WF8B_BPELCD0_MASK                    0x10u
+#define LCD_WF8B_BPELCD0_SHIFT                   4
+#define LCD_WF8B_BPELCD60_MASK                   0x10u
+#define LCD_WF8B_BPELCD60_SHIFT                  4
+#define LCD_WF8B_BPELCD15_MASK                   0x10u
+#define LCD_WF8B_BPELCD15_SHIFT                  4
+#define LCD_WF8B_BPELCD61_MASK                   0x10u
+#define LCD_WF8B_BPELCD61_SHIFT                  4
+#define LCD_WF8B_BPELCD54_MASK                   0x10u
+#define LCD_WF8B_BPELCD54_SHIFT                  4
+#define LCD_WF8B_BPELCD62_MASK                   0x10u
+#define LCD_WF8B_BPELCD62_SHIFT                  4
+#define LCD_WF8B_BPELCD63_MASK                   0x10u
+#define LCD_WF8B_BPELCD63_SHIFT                  4
+#define LCD_WF8B_BPELCD55_MASK                   0x10u
+#define LCD_WF8B_BPELCD55_SHIFT                  4
+#define LCD_WF8B_BPELCD4_MASK                    0x10u
+#define LCD_WF8B_BPELCD4_SHIFT                   4
+#define LCD_WF8B_BPFLCD13_MASK                   0x20u
+#define LCD_WF8B_BPFLCD13_SHIFT                  5
+#define LCD_WF8B_BPFLCD39_MASK                   0x20u
+#define LCD_WF8B_BPFLCD39_SHIFT                  5
+#define LCD_WF8B_BPFLCD55_MASK                   0x20u
+#define LCD_WF8B_BPFLCD55_SHIFT                  5
+#define LCD_WF8B_BPFLCD47_MASK                   0x20u
+#define LCD_WF8B_BPFLCD47_SHIFT                  5
+#define LCD_WF8B_BPFLCD63_MASK                   0x20u
+#define LCD_WF8B_BPFLCD63_SHIFT                  5
+#define LCD_WF8B_BPFLCD43_MASK                   0x20u
+#define LCD_WF8B_BPFLCD43_SHIFT                  5
+#define LCD_WF8B_BPFLCD5_MASK                    0x20u
+#define LCD_WF8B_BPFLCD5_SHIFT                   5
+#define LCD_WF8B_BPFLCD62_MASK                   0x20u
+#define LCD_WF8B_BPFLCD62_SHIFT                  5
+#define LCD_WF8B_BPFLCD14_MASK                   0x20u
+#define LCD_WF8B_BPFLCD14_SHIFT                  5
+#define LCD_WF8B_BPFLCD24_MASK                   0x20u
+#define LCD_WF8B_BPFLCD24_SHIFT                  5
+#define LCD_WF8B_BPFLCD54_MASK                   0x20u
+#define LCD_WF8B_BPFLCD54_SHIFT                  5
+#define LCD_WF8B_BPFLCD15_MASK                   0x20u
+#define LCD_WF8B_BPFLCD15_SHIFT                  5
+#define LCD_WF8B_BPFLCD32_MASK                   0x20u
+#define LCD_WF8B_BPFLCD32_SHIFT                  5
+#define LCD_WF8B_BPFLCD61_MASK                   0x20u
+#define LCD_WF8B_BPFLCD61_SHIFT                  5
+#define LCD_WF8B_BPFLCD25_MASK                   0x20u
+#define LCD_WF8B_BPFLCD25_SHIFT                  5
+#define LCD_WF8B_BPFLCD60_MASK                   0x20u
+#define LCD_WF8B_BPFLCD60_SHIFT                  5
+#define LCD_WF8B_BPFLCD41_MASK                   0x20u
+#define LCD_WF8B_BPFLCD41_SHIFT                  5
+#define LCD_WF8B_BPFLCD33_MASK                   0x20u
+#define LCD_WF8B_BPFLCD33_SHIFT                  5
+#define LCD_WF8B_BPFLCD53_MASK                   0x20u
+#define LCD_WF8B_BPFLCD53_SHIFT                  5
+#define LCD_WF8B_BPFLCD59_MASK                   0x20u
+#define LCD_WF8B_BPFLCD59_SHIFT                  5
+#define LCD_WF8B_BPFLCD0_MASK                    0x20u
+#define LCD_WF8B_BPFLCD0_SHIFT                   5
+#define LCD_WF8B_BPFLCD46_MASK                   0x20u
+#define LCD_WF8B_BPFLCD46_SHIFT                  5
+#define LCD_WF8B_BPFLCD58_MASK                   0x20u
+#define LCD_WF8B_BPFLCD58_SHIFT                  5
+#define LCD_WF8B_BPFLCD26_MASK                   0x20u
+#define LCD_WF8B_BPFLCD26_SHIFT                  5
+#define LCD_WF8B_BPFLCD36_MASK                   0x20u
+#define LCD_WF8B_BPFLCD36_SHIFT                  5
+#define LCD_WF8B_BPFLCD10_MASK                   0x20u
+#define LCD_WF8B_BPFLCD10_SHIFT                  5
+#define LCD_WF8B_BPFLCD52_MASK                   0x20u
+#define LCD_WF8B_BPFLCD52_SHIFT                  5
+#define LCD_WF8B_BPFLCD57_MASK                   0x20u
+#define LCD_WF8B_BPFLCD57_SHIFT                  5
+#define LCD_WF8B_BPFLCD27_MASK                   0x20u
+#define LCD_WF8B_BPFLCD27_SHIFT                  5
+#define LCD_WF8B_BPFLCD11_MASK                   0x20u
+#define LCD_WF8B_BPFLCD11_SHIFT                  5
+#define LCD_WF8B_BPFLCD56_MASK                   0x20u
+#define LCD_WF8B_BPFLCD56_SHIFT                  5
+#define LCD_WF8B_BPFLCD1_MASK                    0x20u
+#define LCD_WF8B_BPFLCD1_SHIFT                   5
+#define LCD_WF8B_BPFLCD8_MASK                    0x20u
+#define LCD_WF8B_BPFLCD8_SHIFT                   5
+#define LCD_WF8B_BPFLCD40_MASK                   0x20u
+#define LCD_WF8B_BPFLCD40_SHIFT                  5
+#define LCD_WF8B_BPFLCD51_MASK                   0x20u
+#define LCD_WF8B_BPFLCD51_SHIFT                  5
+#define LCD_WF8B_BPFLCD16_MASK                   0x20u
+#define LCD_WF8B_BPFLCD16_SHIFT                  5
+#define LCD_WF8B_BPFLCD45_MASK                   0x20u
+#define LCD_WF8B_BPFLCD45_SHIFT                  5
+#define LCD_WF8B_BPFLCD6_MASK                    0x20u
+#define LCD_WF8B_BPFLCD6_SHIFT                   5
+#define LCD_WF8B_BPFLCD17_MASK                   0x20u
+#define LCD_WF8B_BPFLCD17_SHIFT                  5
+#define LCD_WF8B_BPFLCD28_MASK                   0x20u
+#define LCD_WF8B_BPFLCD28_SHIFT                  5
+#define LCD_WF8B_BPFLCD42_MASK                   0x20u
+#define LCD_WF8B_BPFLCD42_SHIFT                  5
+#define LCD_WF8B_BPFLCD29_MASK                   0x20u
+#define LCD_WF8B_BPFLCD29_SHIFT                  5
+#define LCD_WF8B_BPFLCD50_MASK                   0x20u
+#define LCD_WF8B_BPFLCD50_SHIFT                  5
+#define LCD_WF8B_BPFLCD18_MASK                   0x20u
+#define LCD_WF8B_BPFLCD18_SHIFT                  5
+#define LCD_WF8B_BPFLCD34_MASK                   0x20u
+#define LCD_WF8B_BPFLCD34_SHIFT                  5
+#define LCD_WF8B_BPFLCD19_MASK                   0x20u
+#define LCD_WF8B_BPFLCD19_SHIFT                  5
+#define LCD_WF8B_BPFLCD2_MASK                    0x20u
+#define LCD_WF8B_BPFLCD2_SHIFT                   5
+#define LCD_WF8B_BPFLCD9_MASK                    0x20u
+#define LCD_WF8B_BPFLCD9_SHIFT                   5
+#define LCD_WF8B_BPFLCD3_MASK                    0x20u
+#define LCD_WF8B_BPFLCD3_SHIFT                   5
+#define LCD_WF8B_BPFLCD37_MASK                   0x20u
+#define LCD_WF8B_BPFLCD37_SHIFT                  5
+#define LCD_WF8B_BPFLCD49_MASK                   0x20u
+#define LCD_WF8B_BPFLCD49_SHIFT                  5
+#define LCD_WF8B_BPFLCD20_MASK                   0x20u
+#define LCD_WF8B_BPFLCD20_SHIFT                  5
+#define LCD_WF8B_BPFLCD44_MASK                   0x20u
+#define LCD_WF8B_BPFLCD44_SHIFT                  5
+#define LCD_WF8B_BPFLCD30_MASK                   0x20u
+#define LCD_WF8B_BPFLCD30_SHIFT                  5
+#define LCD_WF8B_BPFLCD21_MASK                   0x20u
+#define LCD_WF8B_BPFLCD21_SHIFT                  5
+#define LCD_WF8B_BPFLCD35_MASK                   0x20u
+#define LCD_WF8B_BPFLCD35_SHIFT                  5
+#define LCD_WF8B_BPFLCD4_MASK                    0x20u
+#define LCD_WF8B_BPFLCD4_SHIFT                   5
+#define LCD_WF8B_BPFLCD31_MASK                   0x20u
+#define LCD_WF8B_BPFLCD31_SHIFT                  5
+#define LCD_WF8B_BPFLCD48_MASK                   0x20u
+#define LCD_WF8B_BPFLCD48_SHIFT                  5
+#define LCD_WF8B_BPFLCD7_MASK                    0x20u
+#define LCD_WF8B_BPFLCD7_SHIFT                   5
+#define LCD_WF8B_BPFLCD22_MASK                   0x20u
+#define LCD_WF8B_BPFLCD22_SHIFT                  5
+#define LCD_WF8B_BPFLCD38_MASK                   0x20u
+#define LCD_WF8B_BPFLCD38_SHIFT                  5
+#define LCD_WF8B_BPFLCD12_MASK                   0x20u
+#define LCD_WF8B_BPFLCD12_SHIFT                  5
+#define LCD_WF8B_BPFLCD23_MASK                   0x20u
+#define LCD_WF8B_BPFLCD23_SHIFT                  5
+#define LCD_WF8B_BPGLCD14_MASK                   0x40u
+#define LCD_WF8B_BPGLCD14_SHIFT                  6
+#define LCD_WF8B_BPGLCD55_MASK                   0x40u
+#define LCD_WF8B_BPGLCD55_SHIFT                  6
+#define LCD_WF8B_BPGLCD63_MASK                   0x40u
+#define LCD_WF8B_BPGLCD63_SHIFT                  6
+#define LCD_WF8B_BPGLCD15_MASK                   0x40u
+#define LCD_WF8B_BPGLCD15_SHIFT                  6
+#define LCD_WF8B_BPGLCD62_MASK                   0x40u
+#define LCD_WF8B_BPGLCD62_SHIFT                  6
+#define LCD_WF8B_BPGLCD54_MASK                   0x40u
+#define LCD_WF8B_BPGLCD54_SHIFT                  6
+#define LCD_WF8B_BPGLCD61_MASK                   0x40u
+#define LCD_WF8B_BPGLCD61_SHIFT                  6
+#define LCD_WF8B_BPGLCD60_MASK                   0x40u
+#define LCD_WF8B_BPGLCD60_SHIFT                  6
+#define LCD_WF8B_BPGLCD59_MASK                   0x40u
+#define LCD_WF8B_BPGLCD59_SHIFT                  6
+#define LCD_WF8B_BPGLCD53_MASK                   0x40u
+#define LCD_WF8B_BPGLCD53_SHIFT                  6
+#define LCD_WF8B_BPGLCD58_MASK                   0x40u
+#define LCD_WF8B_BPGLCD58_SHIFT                  6
+#define LCD_WF8B_BPGLCD0_MASK                    0x40u
+#define LCD_WF8B_BPGLCD0_SHIFT                   6
+#define LCD_WF8B_BPGLCD57_MASK                   0x40u
+#define LCD_WF8B_BPGLCD57_SHIFT                  6
+#define LCD_WF8B_BPGLCD52_MASK                   0x40u
+#define LCD_WF8B_BPGLCD52_SHIFT                  6
+#define LCD_WF8B_BPGLCD7_MASK                    0x40u
+#define LCD_WF8B_BPGLCD7_SHIFT                   6
+#define LCD_WF8B_BPGLCD56_MASK                   0x40u
+#define LCD_WF8B_BPGLCD56_SHIFT                  6
+#define LCD_WF8B_BPGLCD6_MASK                    0x40u
+#define LCD_WF8B_BPGLCD6_SHIFT                   6
+#define LCD_WF8B_BPGLCD51_MASK                   0x40u
+#define LCD_WF8B_BPGLCD51_SHIFT                  6
+#define LCD_WF8B_BPGLCD16_MASK                   0x40u
+#define LCD_WF8B_BPGLCD16_SHIFT                  6
+#define LCD_WF8B_BPGLCD1_MASK                    0x40u
+#define LCD_WF8B_BPGLCD1_SHIFT                   6
+#define LCD_WF8B_BPGLCD17_MASK                   0x40u
+#define LCD_WF8B_BPGLCD17_SHIFT                  6
+#define LCD_WF8B_BPGLCD50_MASK                   0x40u
+#define LCD_WF8B_BPGLCD50_SHIFT                  6
+#define LCD_WF8B_BPGLCD18_MASK                   0x40u
+#define LCD_WF8B_BPGLCD18_SHIFT                  6
+#define LCD_WF8B_BPGLCD19_MASK                   0x40u
+#define LCD_WF8B_BPGLCD19_SHIFT                  6
+#define LCD_WF8B_BPGLCD8_MASK                    0x40u
+#define LCD_WF8B_BPGLCD8_SHIFT                   6
+#define LCD_WF8B_BPGLCD49_MASK                   0x40u
+#define LCD_WF8B_BPGLCD49_SHIFT                  6
+#define LCD_WF8B_BPGLCD20_MASK                   0x40u
+#define LCD_WF8B_BPGLCD20_SHIFT                  6
+#define LCD_WF8B_BPGLCD9_MASK                    0x40u
+#define LCD_WF8B_BPGLCD9_SHIFT                   6
+#define LCD_WF8B_BPGLCD21_MASK                   0x40u
+#define LCD_WF8B_BPGLCD21_SHIFT                  6
+#define LCD_WF8B_BPGLCD13_MASK                   0x40u
+#define LCD_WF8B_BPGLCD13_SHIFT                  6
+#define LCD_WF8B_BPGLCD48_MASK                   0x40u
+#define LCD_WF8B_BPGLCD48_SHIFT                  6
+#define LCD_WF8B_BPGLCD22_MASK                   0x40u
+#define LCD_WF8B_BPGLCD22_SHIFT                  6
+#define LCD_WF8B_BPGLCD5_MASK                    0x40u
+#define LCD_WF8B_BPGLCD5_SHIFT                   6
+#define LCD_WF8B_BPGLCD47_MASK                   0x40u
+#define LCD_WF8B_BPGLCD47_SHIFT                  6
+#define LCD_WF8B_BPGLCD23_MASK                   0x40u
+#define LCD_WF8B_BPGLCD23_SHIFT                  6
+#define LCD_WF8B_BPGLCD24_MASK                   0x40u
+#define LCD_WF8B_BPGLCD24_SHIFT                  6
+#define LCD_WF8B_BPGLCD25_MASK                   0x40u
+#define LCD_WF8B_BPGLCD25_SHIFT                  6
+#define LCD_WF8B_BPGLCD46_MASK                   0x40u
+#define LCD_WF8B_BPGLCD46_SHIFT                  6
+#define LCD_WF8B_BPGLCD26_MASK                   0x40u
+#define LCD_WF8B_BPGLCD26_SHIFT                  6
+#define LCD_WF8B_BPGLCD27_MASK                   0x40u
+#define LCD_WF8B_BPGLCD27_SHIFT                  6
+#define LCD_WF8B_BPGLCD10_MASK                   0x40u
+#define LCD_WF8B_BPGLCD10_SHIFT                  6
+#define LCD_WF8B_BPGLCD45_MASK                   0x40u
+#define LCD_WF8B_BPGLCD45_SHIFT                  6
+#define LCD_WF8B_BPGLCD28_MASK                   0x40u
+#define LCD_WF8B_BPGLCD28_SHIFT                  6
+#define LCD_WF8B_BPGLCD29_MASK                   0x40u
+#define LCD_WF8B_BPGLCD29_SHIFT                  6
+#define LCD_WF8B_BPGLCD4_MASK                    0x40u
+#define LCD_WF8B_BPGLCD4_SHIFT                   6
+#define LCD_WF8B_BPGLCD44_MASK                   0x40u
+#define LCD_WF8B_BPGLCD44_SHIFT                  6
+#define LCD_WF8B_BPGLCD30_MASK                   0x40u
+#define LCD_WF8B_BPGLCD30_SHIFT                  6
+#define LCD_WF8B_BPGLCD2_MASK                    0x40u
+#define LCD_WF8B_BPGLCD2_SHIFT                   6
+#define LCD_WF8B_BPGLCD31_MASK                   0x40u
+#define LCD_WF8B_BPGLCD31_SHIFT                  6
+#define LCD_WF8B_BPGLCD43_MASK                   0x40u
+#define LCD_WF8B_BPGLCD43_SHIFT                  6
+#define LCD_WF8B_BPGLCD32_MASK                   0x40u
+#define LCD_WF8B_BPGLCD32_SHIFT                  6
+#define LCD_WF8B_BPGLCD33_MASK                   0x40u
+#define LCD_WF8B_BPGLCD33_SHIFT                  6
+#define LCD_WF8B_BPGLCD42_MASK                   0x40u
+#define LCD_WF8B_BPGLCD42_SHIFT                  6
+#define LCD_WF8B_BPGLCD34_MASK                   0x40u
+#define LCD_WF8B_BPGLCD34_SHIFT                  6
+#define LCD_WF8B_BPGLCD11_MASK                   0x40u
+#define LCD_WF8B_BPGLCD11_SHIFT                  6
+#define LCD_WF8B_BPGLCD35_MASK                   0x40u
+#define LCD_WF8B_BPGLCD35_SHIFT                  6
+#define LCD_WF8B_BPGLCD12_MASK                   0x40u
+#define LCD_WF8B_BPGLCD12_SHIFT                  6
+#define LCD_WF8B_BPGLCD41_MASK                   0x40u
+#define LCD_WF8B_BPGLCD41_SHIFT                  6
+#define LCD_WF8B_BPGLCD36_MASK                   0x40u
+#define LCD_WF8B_BPGLCD36_SHIFT                  6
+#define LCD_WF8B_BPGLCD3_MASK                    0x40u
+#define LCD_WF8B_BPGLCD3_SHIFT                   6
+#define LCD_WF8B_BPGLCD37_MASK                   0x40u
+#define LCD_WF8B_BPGLCD37_SHIFT                  6
+#define LCD_WF8B_BPGLCD40_MASK                   0x40u
+#define LCD_WF8B_BPGLCD40_SHIFT                  6
+#define LCD_WF8B_BPGLCD38_MASK                   0x40u
+#define LCD_WF8B_BPGLCD38_SHIFT                  6
+#define LCD_WF8B_BPGLCD39_MASK                   0x40u
+#define LCD_WF8B_BPGLCD39_SHIFT                  6
+#define LCD_WF8B_BPHLCD63_MASK                   0x80u
+#define LCD_WF8B_BPHLCD63_SHIFT                  7
+#define LCD_WF8B_BPHLCD62_MASK                   0x80u
+#define LCD_WF8B_BPHLCD62_SHIFT                  7
+#define LCD_WF8B_BPHLCD61_MASK                   0x80u
+#define LCD_WF8B_BPHLCD61_SHIFT                  7
+#define LCD_WF8B_BPHLCD60_MASK                   0x80u
+#define LCD_WF8B_BPHLCD60_SHIFT                  7
+#define LCD_WF8B_BPHLCD59_MASK                   0x80u
+#define LCD_WF8B_BPHLCD59_SHIFT                  7
+#define LCD_WF8B_BPHLCD58_MASK                   0x80u
+#define LCD_WF8B_BPHLCD58_SHIFT                  7
+#define LCD_WF8B_BPHLCD57_MASK                   0x80u
+#define LCD_WF8B_BPHLCD57_SHIFT                  7
+#define LCD_WF8B_BPHLCD0_MASK                    0x80u
+#define LCD_WF8B_BPHLCD0_SHIFT                   7
+#define LCD_WF8B_BPHLCD56_MASK                   0x80u
+#define LCD_WF8B_BPHLCD56_SHIFT                  7
+#define LCD_WF8B_BPHLCD55_MASK                   0x80u
+#define LCD_WF8B_BPHLCD55_SHIFT                  7
+#define LCD_WF8B_BPHLCD54_MASK                   0x80u
+#define LCD_WF8B_BPHLCD54_SHIFT                  7
+#define LCD_WF8B_BPHLCD53_MASK                   0x80u
+#define LCD_WF8B_BPHLCD53_SHIFT                  7
+#define LCD_WF8B_BPHLCD52_MASK                   0x80u
+#define LCD_WF8B_BPHLCD52_SHIFT                  7
+#define LCD_WF8B_BPHLCD51_MASK                   0x80u
+#define LCD_WF8B_BPHLCD51_SHIFT                  7
+#define LCD_WF8B_BPHLCD50_MASK                   0x80u
+#define LCD_WF8B_BPHLCD50_SHIFT                  7
+#define LCD_WF8B_BPHLCD1_MASK                    0x80u
+#define LCD_WF8B_BPHLCD1_SHIFT                   7
+#define LCD_WF8B_BPHLCD49_MASK                   0x80u
+#define LCD_WF8B_BPHLCD49_SHIFT                  7
+#define LCD_WF8B_BPHLCD48_MASK                   0x80u
+#define LCD_WF8B_BPHLCD48_SHIFT                  7
+#define LCD_WF8B_BPHLCD47_MASK                   0x80u
+#define LCD_WF8B_BPHLCD47_SHIFT                  7
+#define LCD_WF8B_BPHLCD46_MASK                   0x80u
+#define LCD_WF8B_BPHLCD46_SHIFT                  7
+#define LCD_WF8B_BPHLCD45_MASK                   0x80u
+#define LCD_WF8B_BPHLCD45_SHIFT                  7
+#define LCD_WF8B_BPHLCD44_MASK                   0x80u
+#define LCD_WF8B_BPHLCD44_SHIFT                  7
+#define LCD_WF8B_BPHLCD43_MASK                   0x80u
+#define LCD_WF8B_BPHLCD43_SHIFT                  7
+#define LCD_WF8B_BPHLCD2_MASK                    0x80u
+#define LCD_WF8B_BPHLCD2_SHIFT                   7
+#define LCD_WF8B_BPHLCD42_MASK                   0x80u
+#define LCD_WF8B_BPHLCD42_SHIFT                  7
+#define LCD_WF8B_BPHLCD41_MASK                   0x80u
+#define LCD_WF8B_BPHLCD41_SHIFT                  7
+#define LCD_WF8B_BPHLCD40_MASK                   0x80u
+#define LCD_WF8B_BPHLCD40_SHIFT                  7
+#define LCD_WF8B_BPHLCD39_MASK                   0x80u
+#define LCD_WF8B_BPHLCD39_SHIFT                  7
+#define LCD_WF8B_BPHLCD38_MASK                   0x80u
+#define LCD_WF8B_BPHLCD38_SHIFT                  7
+#define LCD_WF8B_BPHLCD37_MASK                   0x80u
+#define LCD_WF8B_BPHLCD37_SHIFT                  7
+#define LCD_WF8B_BPHLCD36_MASK                   0x80u
+#define LCD_WF8B_BPHLCD36_SHIFT                  7
+#define LCD_WF8B_BPHLCD3_MASK                    0x80u
+#define LCD_WF8B_BPHLCD3_SHIFT                   7
+#define LCD_WF8B_BPHLCD35_MASK                   0x80u
+#define LCD_WF8B_BPHLCD35_SHIFT                  7
+#define LCD_WF8B_BPHLCD34_MASK                   0x80u
+#define LCD_WF8B_BPHLCD34_SHIFT                  7
+#define LCD_WF8B_BPHLCD33_MASK                   0x80u
+#define LCD_WF8B_BPHLCD33_SHIFT                  7
+#define LCD_WF8B_BPHLCD32_MASK                   0x80u
+#define LCD_WF8B_BPHLCD32_SHIFT                  7
+#define LCD_WF8B_BPHLCD31_MASK                   0x80u
+#define LCD_WF8B_BPHLCD31_SHIFT                  7
+#define LCD_WF8B_BPHLCD30_MASK                   0x80u
+#define LCD_WF8B_BPHLCD30_SHIFT                  7
+#define LCD_WF8B_BPHLCD29_MASK                   0x80u
+#define LCD_WF8B_BPHLCD29_SHIFT                  7
+#define LCD_WF8B_BPHLCD4_MASK                    0x80u
+#define LCD_WF8B_BPHLCD4_SHIFT                   7
+#define LCD_WF8B_BPHLCD28_MASK                   0x80u
+#define LCD_WF8B_BPHLCD28_SHIFT                  7
+#define LCD_WF8B_BPHLCD27_MASK                   0x80u
+#define LCD_WF8B_BPHLCD27_SHIFT                  7
+#define LCD_WF8B_BPHLCD26_MASK                   0x80u
+#define LCD_WF8B_BPHLCD26_SHIFT                  7
+#define LCD_WF8B_BPHLCD25_MASK                   0x80u
+#define LCD_WF8B_BPHLCD25_SHIFT                  7
+#define LCD_WF8B_BPHLCD24_MASK                   0x80u
+#define LCD_WF8B_BPHLCD24_SHIFT                  7
+#define LCD_WF8B_BPHLCD23_MASK                   0x80u
+#define LCD_WF8B_BPHLCD23_SHIFT                  7
+#define LCD_WF8B_BPHLCD22_MASK                   0x80u
+#define LCD_WF8B_BPHLCD22_SHIFT                  7
+#define LCD_WF8B_BPHLCD5_MASK                    0x80u
+#define LCD_WF8B_BPHLCD5_SHIFT                   7
+#define LCD_WF8B_BPHLCD21_MASK                   0x80u
+#define LCD_WF8B_BPHLCD21_SHIFT                  7
+#define LCD_WF8B_BPHLCD20_MASK                   0x80u
+#define LCD_WF8B_BPHLCD20_SHIFT                  7
+#define LCD_WF8B_BPHLCD19_MASK                   0x80u
+#define LCD_WF8B_BPHLCD19_SHIFT                  7
+#define LCD_WF8B_BPHLCD18_MASK                   0x80u
+#define LCD_WF8B_BPHLCD18_SHIFT                  7
+#define LCD_WF8B_BPHLCD17_MASK                   0x80u
+#define LCD_WF8B_BPHLCD17_SHIFT                  7
+#define LCD_WF8B_BPHLCD16_MASK                   0x80u
+#define LCD_WF8B_BPHLCD16_SHIFT                  7
+#define LCD_WF8B_BPHLCD15_MASK                   0x80u
+#define LCD_WF8B_BPHLCD15_SHIFT                  7
+#define LCD_WF8B_BPHLCD6_MASK                    0x80u
+#define LCD_WF8B_BPHLCD6_SHIFT                   7
+#define LCD_WF8B_BPHLCD14_MASK                   0x80u
+#define LCD_WF8B_BPHLCD14_SHIFT                  7
+#define LCD_WF8B_BPHLCD13_MASK                   0x80u
+#define LCD_WF8B_BPHLCD13_SHIFT                  7
+#define LCD_WF8B_BPHLCD12_MASK                   0x80u
+#define LCD_WF8B_BPHLCD12_SHIFT                  7
+#define LCD_WF8B_BPHLCD11_MASK                   0x80u
+#define LCD_WF8B_BPHLCD11_SHIFT                  7
+#define LCD_WF8B_BPHLCD10_MASK                   0x80u
+#define LCD_WF8B_BPHLCD10_SHIFT                  7
+#define LCD_WF8B_BPHLCD9_MASK                    0x80u
+#define LCD_WF8B_BPHLCD9_SHIFT                   7
+#define LCD_WF8B_BPHLCD8_MASK                    0x80u
+#define LCD_WF8B_BPHLCD8_SHIFT                   7
+#define LCD_WF8B_BPHLCD7_MASK                    0x80u
+#define LCD_WF8B_BPHLCD7_SHIFT                   7
+
+/*!
+ * @}
+ */ /* end of group LCD_Register_Masks */
+
+
+/* LCD - Peripheral instance base addresses */
+/** Peripheral LCD base address */
+#define LCD_BASE                                 (0x40053000u)
+/** Peripheral LCD base pointer */
+#define LCD                                      ((LCD_Type *)LCD_BASE)
+/** Array initializer of LCD peripheral base pointers */
+#define LCD_BASES                                { LCD }
+
+/*!
+ * @}
+ */ /* end of group LCD_Peripheral_Access_Layer */
 
 
 /* ----------------------------------------------------------------------------
    -- LLWU Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LLWU_Peripheral_Access_Layer LLWU Peripheral Access Layer
  * @{
  */
@@ -1263,7 +2514,7 @@ typedef struct {
    -- LLWU Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LLWU_Register_Masks LLWU Register Masks
  * @{
  */
@@ -1407,7 +2658,7 @@ typedef struct {
 #define LLWU_FILT2_FILTF_MASK                    0x80u
 #define LLWU_FILT2_FILTF_SHIFT                   7
 
-/**
+/*!
  * @}
  */ /* end of group LLWU_Register_Masks */
 
@@ -1420,7 +2671,7 @@ typedef struct {
 /** Array initializer of LLWU peripheral base pointers */
 #define LLWU_BASES                               { LLWU }
 
-/**
+/*!
  * @}
  */ /* end of group LLWU_Peripheral_Access_Layer */
 
@@ -1429,7 +2680,7 @@ typedef struct {
    -- LPTMR Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LPTMR_Peripheral_Access_Layer LPTMR Peripheral Access Layer
  * @{
  */
@@ -1446,7 +2697,7 @@ typedef struct {
    -- LPTMR Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup LPTMR_Register_Masks LPTMR Register Masks
  * @{
  */
@@ -1485,7 +2736,7 @@ typedef struct {
 #define LPTMR_CNR_COUNTER_SHIFT                  0
 #define LPTMR_CNR_COUNTER(x)                     (((uint32_t)(((uint32_t)(x))<<LPTMR_CNR_COUNTER_SHIFT))&LPTMR_CNR_COUNTER_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group LPTMR_Register_Masks */
 
@@ -1498,7 +2749,7 @@ typedef struct {
 /** Array initializer of LPTMR peripheral base pointers */
 #define LPTMR_BASES                              { LPTMR0 }
 
-/**
+/*!
  * @}
  */ /* end of group LPTMR_Peripheral_Access_Layer */
 
@@ -1507,7 +2758,7 @@ typedef struct {
    -- MCG Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCG_Peripheral_Access_Layer MCG Peripheral Access Layer
  * @{
  */
@@ -1536,7 +2787,7 @@ typedef struct {
    -- MCG Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCG_Register_Masks MCG Register Masks
  * @{
  */
@@ -1566,6 +2817,8 @@ typedef struct {
 #define MCG_C2_RANGE0_MASK                       0x30u
 #define MCG_C2_RANGE0_SHIFT                      4
 #define MCG_C2_RANGE0(x)                         (((uint8_t)(((uint8_t)(x))<<MCG_C2_RANGE0_SHIFT))&MCG_C2_RANGE0_MASK)
+#define MCG_C2_FCFTRIM_MASK                      0x40u
+#define MCG_C2_FCFTRIM_SHIFT                     6
 #define MCG_C2_LOCRE0_MASK                       0x80u
 #define MCG_C2_LOCRE0_SHIFT                      7
 /* C3 Bit Fields */
@@ -1615,8 +2868,8 @@ typedef struct {
 #define MCG_S_PLLST_SHIFT                        5
 #define MCG_S_LOCK0_MASK                         0x40u
 #define MCG_S_LOCK0_SHIFT                        6
-#define MCG_S_LOLS0_MASK                         0x80u
-#define MCG_S_LOLS0_SHIFT                        7
+#define MCG_S_LOLS_MASK                          0x80u
+#define MCG_S_LOLS_SHIFT                         7
 /* SC Bit Fields */
 #define MCG_SC_LOCS0_MASK                        0x1u
 #define MCG_SC_LOCS0_SHIFT                       0
@@ -1643,7 +2896,7 @@ typedef struct {
 #define MCG_C8_LOLRE_MASK                        0x40u
 #define MCG_C8_LOLRE_SHIFT                       6
 
-/**
+/*!
  * @}
  */ /* end of group MCG_Register_Masks */
 
@@ -1656,7 +2909,7 @@ typedef struct {
 /** Array initializer of MCG peripheral base pointers */
 #define MCG_BASES                                { MCG }
 
-/**
+/*!
  * @}
  */ /* end of group MCG_Peripheral_Access_Layer */
 
@@ -1665,7 +2918,7 @@ typedef struct {
    -- MCM Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCM_Peripheral_Access_Layer MCM Peripheral Access Layer
  * @{
  */
@@ -1684,7 +2937,7 @@ typedef struct {
    -- MCM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MCM_Register_Masks MCM Register Masks
  * @{
  */
@@ -1722,7 +2975,7 @@ typedef struct {
 #define MCM_CPO_CPOWOI_MASK                      0x4u
 #define MCM_CPO_CPOWOI_SHIFT                     2
 
-/**
+/*!
  * @}
  */ /* end of group MCM_Register_Masks */
 
@@ -1735,7 +2988,7 @@ typedef struct {
 /** Array initializer of MCM peripheral base pointers */
 #define MCM_BASES                                { MCM }
 
-/**
+/*!
  * @}
  */ /* end of group MCM_Peripheral_Access_Layer */
 
@@ -1744,7 +2997,7 @@ typedef struct {
    -- MTB Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTB_Peripheral_Access_Layer MTB Peripheral Access Layer
  * @{
  */
@@ -1776,7 +3029,7 @@ typedef struct {
    -- MTB Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTB_Register_Masks MTB Register Masks
  * @{
  */
@@ -1865,7 +3118,7 @@ typedef struct {
 #define MTB_COMPID_COMPID_SHIFT                  0
 #define MTB_COMPID_COMPID(x)                     (((uint32_t)(((uint32_t)(x))<<MTB_COMPID_COMPID_SHIFT))&MTB_COMPID_COMPID_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group MTB_Register_Masks */
 
@@ -1878,7 +3131,7 @@ typedef struct {
 /** Array initializer of MTB peripheral base pointers */
 #define MTB_BASES                                { MTB }
 
-/**
+/*!
  * @}
  */ /* end of group MTB_Peripheral_Access_Layer */
 
@@ -1887,7 +3140,7 @@ typedef struct {
    -- MTBDWT Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTBDWT_Peripheral_Access_Layer MTBDWT Peripheral Access Layer
  * @{
  */
@@ -1915,7 +3168,7 @@ typedef struct {
    -- MTBDWT Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup MTBDWT_Register_Masks MTBDWT Register Masks
  * @{
  */
@@ -1974,7 +3227,7 @@ typedef struct {
 #define MTBDWT_COMPID_COMPID_SHIFT               0
 #define MTBDWT_COMPID_COMPID(x)                  (((uint32_t)(((uint32_t)(x))<<MTBDWT_COMPID_COMPID_SHIFT))&MTBDWT_COMPID_COMPID_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group MTBDWT_Register_Masks */
 
@@ -1987,7 +3240,7 @@ typedef struct {
 /** Array initializer of MTBDWT peripheral base pointers */
 #define MTBDWT_BASES                             { MTBDWT }
 
-/**
+/*!
  * @}
  */ /* end of group MTBDWT_Peripheral_Access_Layer */
 
@@ -1996,7 +3249,7 @@ typedef struct {
    -- NV Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NV_Peripheral_Access_Layer NV Peripheral Access Layer
  * @{
  */
@@ -2023,7 +3276,7 @@ typedef struct {
    -- NV Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup NV_Register_Masks NV Register Masks
  * @{
  */
@@ -2101,7 +3354,7 @@ typedef struct {
 #define NV_FOPT_FAST_INIT_MASK                   0x20u
 #define NV_FOPT_FAST_INIT_SHIFT                  5
 
-/**
+/*!
  * @}
  */ /* end of group NV_Register_Masks */
 
@@ -2114,7 +3367,7 @@ typedef struct {
 /** Array initializer of NV peripheral base pointers */
 #define NV_BASES                                 { FTFA_FlashConfig }
 
-/**
+/*!
  * @}
  */ /* end of group NV_Peripheral_Access_Layer */
 
@@ -2123,7 +3376,7 @@ typedef struct {
    -- OSC Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup OSC_Peripheral_Access_Layer OSC Peripheral Access Layer
  * @{
  */
@@ -2137,7 +3390,7 @@ typedef struct {
    -- OSC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup OSC_Register_Masks OSC Register Masks
  * @{
  */
@@ -2156,7 +3409,7 @@ typedef struct {
 #define OSC_CR_ERCLKEN_MASK                      0x80u
 #define OSC_CR_ERCLKEN_SHIFT                     7
 
-/**
+/*!
  * @}
  */ /* end of group OSC_Register_Masks */
 
@@ -2169,7 +3422,7 @@ typedef struct {
 /** Array initializer of OSC peripheral base pointers */
 #define OSC_BASES                                { OSC0 }
 
-/**
+/*!
  * @}
  */ /* end of group OSC_Peripheral_Access_Layer */
 
@@ -2178,7 +3431,7 @@ typedef struct {
    -- PIT Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PIT_Peripheral_Access_Layer PIT Peripheral Access Layer
  * @{
  */
@@ -2202,7 +3455,7 @@ typedef struct {
    -- PIT Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PIT_Register_Masks PIT Register Masks
  * @{
  */
@@ -2239,7 +3492,7 @@ typedef struct {
 #define PIT_TFLG_TIF_MASK                        0x1u
 #define PIT_TFLG_TIF_SHIFT                       0
 
-/**
+/*!
  * @}
  */ /* end of group PIT_Register_Masks */
 
@@ -2252,7 +3505,7 @@ typedef struct {
 /** Array initializer of PIT peripheral base pointers */
 #define PIT_BASES                                { PIT }
 
-/**
+/*!
  * @}
  */ /* end of group PIT_Peripheral_Access_Layer */
 
@@ -2261,7 +3514,7 @@ typedef struct {
    -- PMC Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PMC_Peripheral_Access_Layer PMC Peripheral Access Layer
  * @{
  */
@@ -2277,7 +3530,7 @@ typedef struct {
    -- PMC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PMC_Register_Masks PMC Register Masks
  * @{
  */
@@ -2314,7 +3567,7 @@ typedef struct {
 #define PMC_REGSC_BGEN_MASK                      0x10u
 #define PMC_REGSC_BGEN_SHIFT                     4
 
-/**
+/*!
  * @}
  */ /* end of group PMC_Register_Masks */
 
@@ -2327,7 +3580,7 @@ typedef struct {
 /** Array initializer of PMC peripheral base pointers */
 #define PMC_BASES                                { PMC }
 
-/**
+/*!
  * @}
  */ /* end of group PMC_Peripheral_Access_Layer */
 
@@ -2336,7 +3589,7 @@ typedef struct {
    -- PORT Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PORT_Peripheral_Access_Layer PORT Peripheral Access Layer
  * @{
  */
@@ -2354,7 +3607,7 @@ typedef struct {
    -- PORT Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup PORT_Register_Masks PORT Register Masks
  * @{
  */
@@ -2397,7 +3650,7 @@ typedef struct {
 #define PORT_ISFR_ISF_SHIFT                      0
 #define PORT_ISFR_ISF(x)                         (((uint32_t)(((uint32_t)(x))<<PORT_ISFR_ISF_SHIFT))&PORT_ISFR_ISF_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group PORT_Register_Masks */
 
@@ -2426,7 +3679,7 @@ typedef struct {
 /** Array initializer of PORT peripheral base pointers */
 #define PORT_BASES                               { PORTA, PORTB, PORTC, PORTD, PORTE }
 
-/**
+/*!
  * @}
  */ /* end of group PORT_Peripheral_Access_Layer */
 
@@ -2435,7 +3688,7 @@ typedef struct {
    -- RCM Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RCM_Peripheral_Access_Layer RCM Peripheral Access Layer
  * @{
  */
@@ -2453,7 +3706,7 @@ typedef struct {
    -- RCM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RCM_Register_Masks RCM Register Masks
  * @{
  */
@@ -2493,7 +3746,7 @@ typedef struct {
 #define RCM_RPFW_RSTFLTSEL_SHIFT                 0
 #define RCM_RPFW_RSTFLTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<RCM_RPFW_RSTFLTSEL_SHIFT))&RCM_RPFW_RSTFLTSEL_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group RCM_Register_Masks */
 
@@ -2506,7 +3759,7 @@ typedef struct {
 /** Array initializer of RCM peripheral base pointers */
 #define RCM_BASES                                { RCM }
 
-/**
+/*!
  * @}
  */ /* end of group RCM_Peripheral_Access_Layer */
 
@@ -2515,7 +3768,7 @@ typedef struct {
    -- ROM Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ROM_Peripheral_Access_Layer ROM Peripheral Access Layer
  * @{
  */
@@ -2541,7 +3794,7 @@ typedef struct {
    -- ROM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup ROM_Register_Masks ROM Register Masks
  * @{
  */
@@ -2595,7 +3848,7 @@ typedef struct {
 #define ROM_COMPID_COMPID_SHIFT                  0
 #define ROM_COMPID_COMPID(x)                     (((uint32_t)(((uint32_t)(x))<<ROM_COMPID_COMPID_SHIFT))&ROM_COMPID_COMPID_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group ROM_Register_Masks */
 
@@ -2608,7 +3861,7 @@ typedef struct {
 /** Array initializer of ROM peripheral base pointers */
 #define ROM_BASES                                { ROM }
 
-/**
+/*!
  * @}
  */ /* end of group ROM_Peripheral_Access_Layer */
 
@@ -2617,7 +3870,7 @@ typedef struct {
    -- RTC Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RTC_Peripheral_Access_Layer RTC Peripheral Access Layer
  * @{
  */
@@ -2638,7 +3891,7 @@ typedef struct {
    -- RTC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup RTC_Register_Masks RTC Register Masks
  * @{
  */
@@ -2719,7 +3972,7 @@ typedef struct {
 #define RTC_IER_WPON_MASK                        0x80u
 #define RTC_IER_WPON_SHIFT                       7
 
-/**
+/*!
  * @}
  */ /* end of group RTC_Register_Masks */
 
@@ -2732,7 +3985,7 @@ typedef struct {
 /** Array initializer of RTC peripheral base pointers */
 #define RTC_BASES                                { RTC }
 
-/**
+/*!
  * @}
  */ /* end of group RTC_Peripheral_Access_Layer */
 
@@ -2741,7 +3994,7 @@ typedef struct {
    -- SIM Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SIM_Peripheral_Access_Layer SIM Peripheral Access Layer
  * @{
  */
@@ -2781,7 +4034,7 @@ typedef struct {
    -- SIM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SIM_Register_Masks SIM Register Masks
  * @{
  */
@@ -2820,8 +4073,9 @@ typedef struct {
 #define SIM_SOPT2_UART0SRC_SHIFT                 26
 #define SIM_SOPT2_UART0SRC(x)                    (((uint32_t)(((uint32_t)(x))<<SIM_SOPT2_UART0SRC_SHIFT))&SIM_SOPT2_UART0SRC_MASK)
 /* SOPT4 Bit Fields */
-#define SIM_SOPT4_TPM1CH0SRC_MASK                0x40000u
+#define SIM_SOPT4_TPM1CH0SRC_MASK                0xC0000u
 #define SIM_SOPT4_TPM1CH0SRC_SHIFT               18
+#define SIM_SOPT4_TPM1CH0SRC(x)                  (((uint32_t)(((uint32_t)(x))<<SIM_SOPT4_TPM1CH0SRC_SHIFT))&SIM_SOPT4_TPM1CH0SRC_MASK)
 #define SIM_SOPT4_TPM2CH0SRC_MASK                0x100000u
 #define SIM_SOPT4_TPM2CH0SRC_SHIFT               20
 #define SIM_SOPT4_TPM0CLKSEL_MASK                0x1000000u
@@ -2911,11 +4165,15 @@ typedef struct {
 #define SIM_SCGC5_PORTD_SHIFT                    12
 #define SIM_SCGC5_PORTE_MASK                     0x2000u
 #define SIM_SCGC5_PORTE_SHIFT                    13
+#define SIM_SCGC5_SLCD_MASK                      0x80000u
+#define SIM_SCGC5_SLCD_SHIFT                     19
 /* SCGC6 Bit Fields */
 #define SIM_SCGC6_FTF_MASK                       0x1u
 #define SIM_SCGC6_FTF_SHIFT                      0
 #define SIM_SCGC6_DMAMUX_MASK                    0x2u
 #define SIM_SCGC6_DMAMUX_SHIFT                   1
+#define SIM_SCGC6_I2S_MASK                       0x8000u
+#define SIM_SCGC6_I2S_SHIFT                      15
 #define SIM_SCGC6_PIT_MASK                       0x800000u
 #define SIM_SCGC6_PIT_SHIFT                      23
 #define SIM_SCGC6_TPM0_MASK                      0x1000000u
@@ -2949,6 +4207,9 @@ typedef struct {
 #define SIM_FCFG1_PFSIZE_SHIFT                   24
 #define SIM_FCFG1_PFSIZE(x)                      (((uint32_t)(((uint32_t)(x))<<SIM_FCFG1_PFSIZE_SHIFT))&SIM_FCFG1_PFSIZE_MASK)
 /* FCFG2 Bit Fields */
+#define SIM_FCFG2_MAXADDR1_MASK                  0x7F0000u
+#define SIM_FCFG2_MAXADDR1_SHIFT                 16
+#define SIM_FCFG2_MAXADDR1(x)                    (((uint32_t)(((uint32_t)(x))<<SIM_FCFG2_MAXADDR1_SHIFT))&SIM_FCFG2_MAXADDR1_MASK)
 #define SIM_FCFG2_MAXADDR0_MASK                  0x7F000000u
 #define SIM_FCFG2_MAXADDR0_SHIFT                 24
 #define SIM_FCFG2_MAXADDR0(x)                    (((uint32_t)(((uint32_t)(x))<<SIM_FCFG2_MAXADDR0_SHIFT))&SIM_FCFG2_MAXADDR0_MASK)
@@ -2977,7 +4238,7 @@ typedef struct {
 #define SIM_SRVCOP_SRVCOP_SHIFT                  0
 #define SIM_SRVCOP_SRVCOP(x)                     (((uint32_t)(((uint32_t)(x))<<SIM_SRVCOP_SRVCOP_SHIFT))&SIM_SRVCOP_SRVCOP_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group SIM_Register_Masks */
 
@@ -2990,7 +4251,7 @@ typedef struct {
 /** Array initializer of SIM peripheral base pointers */
 #define SIM_BASES                                { SIM }
 
-/**
+/*!
  * @}
  */ /* end of group SIM_Peripheral_Access_Layer */
 
@@ -2999,7 +4260,7 @@ typedef struct {
    -- SMC Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SMC_Peripheral_Access_Layer SMC Peripheral Access Layer
  * @{
  */
@@ -3016,7 +4277,7 @@ typedef struct {
    -- SMC Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SMC_Register_Masks SMC Register Masks
  * @{
  */
@@ -3051,7 +4312,7 @@ typedef struct {
 #define SMC_PMSTAT_PMSTAT_SHIFT                  0
 #define SMC_PMSTAT_PMSTAT(x)                     (((uint8_t)(((uint8_t)(x))<<SMC_PMSTAT_PMSTAT_SHIFT))&SMC_PMSTAT_PMSTAT_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group SMC_Register_Masks */
 
@@ -3064,7 +4325,7 @@ typedef struct {
 /** Array initializer of SMC peripheral base pointers */
 #define SMC_BASES                                { SMC }
 
-/**
+/*!
  * @}
  */ /* end of group SMC_Peripheral_Access_Layer */
 
@@ -3073,32 +4334,76 @@ typedef struct {
    -- SPI Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SPI_Peripheral_Access_Layer SPI Peripheral Access Layer
  * @{
  */
 
 /** SPI - Register Layout Typedef */
 typedef struct {
-  __IO uint8_t C1;                                 /**< SPI control register 1, offset: 0x0 */
-  __IO uint8_t C2;                                 /**< SPI control register 2, offset: 0x1 */
-  __IO uint8_t BR;                                 /**< SPI baud rate register, offset: 0x2 */
-  __I  uint8_t S;                                  /**< SPI status register, offset: 0x3 */
-       uint8_t RESERVED_0[1];
-  __IO uint8_t D;                                  /**< SPI data register, offset: 0x5 */
-       uint8_t RESERVED_1[1];
-  __IO uint8_t M;                                  /**< SPI match register, offset: 0x7 */
+  __I  uint8_t S;                                  /**< SPI status register, offset: 0x0 */
+  __IO uint8_t BR;                                 /**< SPI baud rate register, offset: 0x1 */
+  __IO uint8_t C2;                                 /**< SPI control register 2, offset: 0x2 */
+  __IO uint8_t C1;                                 /**< SPI control register 1, offset: 0x3 */
+  __IO uint8_t ML;                                 /**< SPI match register low, offset: 0x4 */
+  __IO uint8_t MH;                                 /**< SPI match register high, offset: 0x5 */
+  __IO uint8_t DL;                                 /**< SPI data register low, offset: 0x6 */
+  __IO uint8_t DH;                                 /**< SPI data register high, offset: 0x7 */
+       uint8_t RESERVED_0[2];
+  __IO uint8_t CI;                                 /**< SPI clear interrupt register, offset: 0xA */
+  __IO uint8_t C3;                                 /**< SPI control register 3, offset: 0xB */
 } SPI_Type;
 
 /* ----------------------------------------------------------------------------
    -- SPI Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup SPI_Register_Masks SPI Register Masks
  * @{
  */
 
+/* S Bit Fields */
+#define SPI_S_RFIFOEF_MASK                       0x1u
+#define SPI_S_RFIFOEF_SHIFT                      0
+#define SPI_S_TXFULLF_MASK                       0x2u
+#define SPI_S_TXFULLF_SHIFT                      1
+#define SPI_S_TNEAREF_MASK                       0x4u
+#define SPI_S_TNEAREF_SHIFT                      2
+#define SPI_S_RNFULLF_MASK                       0x8u
+#define SPI_S_RNFULLF_SHIFT                      3
+#define SPI_S_MODF_MASK                          0x10u
+#define SPI_S_MODF_SHIFT                         4
+#define SPI_S_SPTEF_MASK                         0x20u
+#define SPI_S_SPTEF_SHIFT                        5
+#define SPI_S_SPMF_MASK                          0x40u
+#define SPI_S_SPMF_SHIFT                         6
+#define SPI_S_SPRF_MASK                          0x80u
+#define SPI_S_SPRF_SHIFT                         7
+/* BR Bit Fields */
+#define SPI_BR_SPR_MASK                          0xFu
+#define SPI_BR_SPR_SHIFT                         0
+#define SPI_BR_SPR(x)                            (((uint8_t)(((uint8_t)(x))<<SPI_BR_SPR_SHIFT))&SPI_BR_SPR_MASK)
+#define SPI_BR_SPPR_MASK                         0x70u
+#define SPI_BR_SPPR_SHIFT                        4
+#define SPI_BR_SPPR(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_BR_SPPR_SHIFT))&SPI_BR_SPPR_MASK)
+/* C2 Bit Fields */
+#define SPI_C2_SPC0_MASK                         0x1u
+#define SPI_C2_SPC0_SHIFT                        0
+#define SPI_C2_SPISWAI_MASK                      0x2u
+#define SPI_C2_SPISWAI_SHIFT                     1
+#define SPI_C2_RXDMAE_MASK                       0x4u
+#define SPI_C2_RXDMAE_SHIFT                      2
+#define SPI_C2_BIDIROE_MASK                      0x8u
+#define SPI_C2_BIDIROE_SHIFT                     3
+#define SPI_C2_MODFEN_MASK                       0x10u
+#define SPI_C2_MODFEN_SHIFT                      4
+#define SPI_C2_TXDMAE_MASK                       0x20u
+#define SPI_C2_TXDMAE_SHIFT                      5
+#define SPI_C2_SPIMODE_MASK                      0x40u
+#define SPI_C2_SPIMODE_SHIFT                     6
+#define SPI_C2_SPMIE_MASK                        0x80u
+#define SPI_C2_SPMIE_SHIFT                       7
 /* C1 Bit Fields */
 #define SPI_C1_LSBFE_MASK                        0x1u
 #define SPI_C1_LSBFE_SHIFT                       0
@@ -3116,47 +4421,54 @@ typedef struct {
 #define SPI_C1_SPE_SHIFT                         6
 #define SPI_C1_SPIE_MASK                         0x80u
 #define SPI_C1_SPIE_SHIFT                        7
-/* C2 Bit Fields */
-#define SPI_C2_SPC0_MASK                         0x1u
-#define SPI_C2_SPC0_SHIFT                        0
-#define SPI_C2_SPISWAI_MASK                      0x2u
-#define SPI_C2_SPISWAI_SHIFT                     1
-#define SPI_C2_RXDMAE_MASK                       0x4u
-#define SPI_C2_RXDMAE_SHIFT                      2
-#define SPI_C2_BIDIROE_MASK                      0x8u
-#define SPI_C2_BIDIROE_SHIFT                     3
-#define SPI_C2_MODFEN_MASK                       0x10u
-#define SPI_C2_MODFEN_SHIFT                      4
-#define SPI_C2_TXDMAE_MASK                       0x20u
-#define SPI_C2_TXDMAE_SHIFT                      5
-#define SPI_C2_SPMIE_MASK                        0x80u
-#define SPI_C2_SPMIE_SHIFT                       7
-/* BR Bit Fields */
-#define SPI_BR_SPR_MASK                          0xFu
-#define SPI_BR_SPR_SHIFT                         0
-#define SPI_BR_SPR(x)                            (((uint8_t)(((uint8_t)(x))<<SPI_BR_SPR_SHIFT))&SPI_BR_SPR_MASK)
-#define SPI_BR_SPPR_MASK                         0x70u
-#define SPI_BR_SPPR_SHIFT                        4
-#define SPI_BR_SPPR(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_BR_SPPR_SHIFT))&SPI_BR_SPPR_MASK)
-/* S Bit Fields */
-#define SPI_S_MODF_MASK                          0x10u
-#define SPI_S_MODF_SHIFT                         4
-#define SPI_S_SPTEF_MASK                         0x20u
-#define SPI_S_SPTEF_SHIFT                        5
-#define SPI_S_SPMF_MASK                          0x40u
-#define SPI_S_SPMF_SHIFT                         6
-#define SPI_S_SPRF_MASK                          0x80u
-#define SPI_S_SPRF_SHIFT                         7
-/* D Bit Fields */
-#define SPI_D_Bits_MASK                          0xFFu
-#define SPI_D_Bits_SHIFT                         0
-#define SPI_D_Bits(x)                            (((uint8_t)(((uint8_t)(x))<<SPI_D_Bits_SHIFT))&SPI_D_Bits_MASK)
-/* M Bit Fields */
-#define SPI_M_Bits_MASK                          0xFFu
-#define SPI_M_Bits_SHIFT                         0
-#define SPI_M_Bits(x)                            (((uint8_t)(((uint8_t)(x))<<SPI_M_Bits_SHIFT))&SPI_M_Bits_MASK)
+/* ML Bit Fields */
+#define SPI_ML_Bits_MASK                         0xFFu
+#define SPI_ML_Bits_SHIFT                        0
+#define SPI_ML_Bits(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_ML_Bits_SHIFT))&SPI_ML_Bits_MASK)
+/* MH Bit Fields */
+#define SPI_MH_Bits_MASK                         0xFFu
+#define SPI_MH_Bits_SHIFT                        0
+#define SPI_MH_Bits(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_MH_Bits_SHIFT))&SPI_MH_Bits_MASK)
+/* DL Bit Fields */
+#define SPI_DL_Bits_MASK                         0xFFu
+#define SPI_DL_Bits_SHIFT                        0
+#define SPI_DL_Bits(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_DL_Bits_SHIFT))&SPI_DL_Bits_MASK)
+/* DH Bit Fields */
+#define SPI_DH_Bits_MASK                         0xFFu
+#define SPI_DH_Bits_SHIFT                        0
+#define SPI_DH_Bits(x)                           (((uint8_t)(((uint8_t)(x))<<SPI_DH_Bits_SHIFT))&SPI_DH_Bits_MASK)
+/* CI Bit Fields */
+#define SPI_CI_SPRFCI_MASK                       0x1u
+#define SPI_CI_SPRFCI_SHIFT                      0
+#define SPI_CI_SPTEFCI_MASK                      0x2u
+#define SPI_CI_SPTEFCI_SHIFT                     1
+#define SPI_CI_RNFULLFCI_MASK                    0x4u
+#define SPI_CI_RNFULLFCI_SHIFT                   2
+#define SPI_CI_TNEAREFCI_MASK                    0x8u
+#define SPI_CI_TNEAREFCI_SHIFT                   3
+#define SPI_CI_RXFOF_MASK                        0x10u
+#define SPI_CI_RXFOF_SHIFT                       4
+#define SPI_CI_TXFOF_MASK                        0x20u
+#define SPI_CI_TXFOF_SHIFT                       5
+#define SPI_CI_RXFERR_MASK                       0x40u
+#define SPI_CI_RXFERR_SHIFT                      6
+#define SPI_CI_TXFERR_MASK                       0x80u
+#define SPI_CI_TXFERR_SHIFT                      7
+/* C3 Bit Fields */
+#define SPI_C3_FIFOMODE_MASK                     0x1u
+#define SPI_C3_FIFOMODE_SHIFT                    0
+#define SPI_C3_RNFULLIEN_MASK                    0x2u
+#define SPI_C3_RNFULLIEN_SHIFT                   1
+#define SPI_C3_TNEARIEN_MASK                     0x4u
+#define SPI_C3_TNEARIEN_SHIFT                    2
+#define SPI_C3_INTCLR_MASK                       0x8u
+#define SPI_C3_INTCLR_SHIFT                      3
+#define SPI_C3_RNFULLF_MARK_MASK                 0x10u
+#define SPI_C3_RNFULLF_MARK_SHIFT                4
+#define SPI_C3_TNEAREF_MARK_MASK                 0x20u
+#define SPI_C3_TNEAREF_MARK_SHIFT                5
 
-/**
+/*!
  * @}
  */ /* end of group SPI_Register_Masks */
 
@@ -3173,7 +4485,7 @@ typedef struct {
 /** Array initializer of SPI peripheral base pointers */
 #define SPI_BASES                                { SPI0, SPI1 }
 
-/**
+/*!
  * @}
  */ /* end of group SPI_Peripheral_Access_Layer */
 
@@ -3182,7 +4494,7 @@ typedef struct {
    -- TPM Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TPM_Peripheral_Access_Layer TPM Peripheral Access Layer
  * @{
  */
@@ -3206,7 +4518,7 @@ typedef struct {
    -- TPM Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup TPM_Register_Masks TPM Register Masks
  * @{
  */
@@ -3286,7 +4598,7 @@ typedef struct {
 #define TPM_CONF_TRGSEL_SHIFT                    24
 #define TPM_CONF_TRGSEL(x)                       (((uint32_t)(((uint32_t)(x))<<TPM_CONF_TRGSEL_SHIFT))&TPM_CONF_TRGSEL_MASK)
 
-/**
+/*!
  * @}
  */ /* end of group TPM_Register_Masks */
 
@@ -3307,115 +4619,16 @@ typedef struct {
 /** Array initializer of TPM peripheral base pointers */
 #define TPM_BASES                                { TPM0, TPM1, TPM2 }
 
-/**
+/*!
  * @}
  */ /* end of group TPM_Peripheral_Access_Layer */
-
-
-/* ----------------------------------------------------------------------------
-   -- TSI Peripheral Access Layer
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup TSI_Peripheral_Access_Layer TSI Peripheral Access Layer
- * @{
- */
-
-/** TSI - Register Layout Typedef */
-typedef struct {
-  __IO uint32_t GENCS;                             /**< TSI General Control and Status Register, offset: 0x0 */
-  __IO uint32_t DATA;                              /**< TSI DATA Register, offset: 0x4 */
-  __IO uint32_t TSHD;                              /**< TSI Threshold Register, offset: 0x8 */
-} TSI_Type;
-
-/* ----------------------------------------------------------------------------
-   -- TSI Register Masks
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup TSI_Register_Masks TSI Register Masks
- * @{
- */
-
-/* GENCS Bit Fields */
-#define TSI_GENCS_CURSW_MASK                     0x2u
-#define TSI_GENCS_CURSW_SHIFT                    1
-#define TSI_GENCS_EOSF_MASK                      0x4u
-#define TSI_GENCS_EOSF_SHIFT                     2
-#define TSI_GENCS_SCNIP_MASK                     0x8u
-#define TSI_GENCS_SCNIP_SHIFT                    3
-#define TSI_GENCS_STM_MASK                       0x10u
-#define TSI_GENCS_STM_SHIFT                      4
-#define TSI_GENCS_STPE_MASK                      0x20u
-#define TSI_GENCS_STPE_SHIFT                     5
-#define TSI_GENCS_TSIIEN_MASK                    0x40u
-#define TSI_GENCS_TSIIEN_SHIFT                   6
-#define TSI_GENCS_TSIEN_MASK                     0x80u
-#define TSI_GENCS_TSIEN_SHIFT                    7
-#define TSI_GENCS_NSCN_MASK                      0x1F00u
-#define TSI_GENCS_NSCN_SHIFT                     8
-#define TSI_GENCS_NSCN(x)                        (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_NSCN_SHIFT))&TSI_GENCS_NSCN_MASK)
-#define TSI_GENCS_PS_MASK                        0xE000u
-#define TSI_GENCS_PS_SHIFT                       13
-#define TSI_GENCS_PS(x)                          (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_PS_SHIFT))&TSI_GENCS_PS_MASK)
-#define TSI_GENCS_EXTCHRG_MASK                   0x70000u
-#define TSI_GENCS_EXTCHRG_SHIFT                  16
-#define TSI_GENCS_EXTCHRG(x)                     (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_EXTCHRG_SHIFT))&TSI_GENCS_EXTCHRG_MASK)
-#define TSI_GENCS_DVOLT_MASK                     0x180000u
-#define TSI_GENCS_DVOLT_SHIFT                    19
-#define TSI_GENCS_DVOLT(x)                       (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_DVOLT_SHIFT))&TSI_GENCS_DVOLT_MASK)
-#define TSI_GENCS_REFCHRG_MASK                   0xE00000u
-#define TSI_GENCS_REFCHRG_SHIFT                  21
-#define TSI_GENCS_REFCHRG(x)                     (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_REFCHRG_SHIFT))&TSI_GENCS_REFCHRG_MASK)
-#define TSI_GENCS_MODE_MASK                      0xF000000u
-#define TSI_GENCS_MODE_SHIFT                     24
-#define TSI_GENCS_MODE(x)                        (((uint32_t)(((uint32_t)(x))<<TSI_GENCS_MODE_SHIFT))&TSI_GENCS_MODE_MASK)
-#define TSI_GENCS_ESOR_MASK                      0x10000000u
-#define TSI_GENCS_ESOR_SHIFT                     28
-#define TSI_GENCS_OUTRGF_MASK                    0x80000000u
-#define TSI_GENCS_OUTRGF_SHIFT                   31
-/* DATA Bit Fields */
-#define TSI_DATA_TSICNT_MASK                     0xFFFFu
-#define TSI_DATA_TSICNT_SHIFT                    0
-#define TSI_DATA_TSICNT(x)                       (((uint32_t)(((uint32_t)(x))<<TSI_DATA_TSICNT_SHIFT))&TSI_DATA_TSICNT_MASK)
-#define TSI_DATA_SWTS_MASK                       0x400000u
-#define TSI_DATA_SWTS_SHIFT                      22
-#define TSI_DATA_DMAEN_MASK                      0x800000u
-#define TSI_DATA_DMAEN_SHIFT                     23
-#define TSI_DATA_TSICH_MASK                      0xF0000000u
-#define TSI_DATA_TSICH_SHIFT                     28
-#define TSI_DATA_TSICH(x)                        (((uint32_t)(((uint32_t)(x))<<TSI_DATA_TSICH_SHIFT))&TSI_DATA_TSICH_MASK)
-/* TSHD Bit Fields */
-#define TSI_TSHD_THRESL_MASK                     0xFFFFu
-#define TSI_TSHD_THRESL_SHIFT                    0
-#define TSI_TSHD_THRESL(x)                       (((uint32_t)(((uint32_t)(x))<<TSI_TSHD_THRESL_SHIFT))&TSI_TSHD_THRESL_MASK)
-#define TSI_TSHD_THRESH_MASK                     0xFFFF0000u
-#define TSI_TSHD_THRESH_SHIFT                    16
-#define TSI_TSHD_THRESH(x)                       (((uint32_t)(((uint32_t)(x))<<TSI_TSHD_THRESH_SHIFT))&TSI_TSHD_THRESH_MASK)
-
-/**
- * @}
- */ /* end of group TSI_Register_Masks */
-
-
-/* TSI - Peripheral instance base addresses */
-/** Peripheral TSI0 base address */
-#define TSI0_BASE                                (0x40045000u)
-/** Peripheral TSI0 base pointer */
-#define TSI0                                     ((TSI_Type *)TSI0_BASE)
-/** Array initializer of TSI peripheral base pointers */
-#define TSI_BASES                                { TSI0 }
-
-/**
- * @}
- */ /* end of group TSI_Peripheral_Access_Layer */
 
 
 /* ----------------------------------------------------------------------------
    -- UART Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART_Peripheral_Access_Layer UART Peripheral Access Layer
  * @{
  */
@@ -3437,7 +4650,7 @@ typedef struct {
    -- UART Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART_Register_Masks UART Register Masks
  * @{
  */
@@ -3562,7 +4775,7 @@ typedef struct {
 #define UART_C4_TDMAS_MASK                       0x80u
 #define UART_C4_TDMAS_SHIFT                      7
 
-/**
+/*!
  * @}
  */ /* end of group UART_Register_Masks */
 
@@ -3579,7 +4792,7 @@ typedef struct {
 /** Array initializer of UART peripheral base pointers */
 #define UART_BASES                               { UART1, UART2 }
 
-/**
+/*!
  * @}
  */ /* end of group UART_Peripheral_Access_Layer */
 
@@ -3588,7 +4801,7 @@ typedef struct {
    -- UART0 Peripheral Access Layer
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART0_Peripheral_Access_Layer UART0 Peripheral Access Layer
  * @{
  */
@@ -3613,7 +4826,7 @@ typedef struct {
    -- UART0 Register Masks
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup UART0_Register_Masks UART0 Register Masks
  * @{
  */
@@ -3762,7 +4975,7 @@ typedef struct {
 #define UART0_C5_TDMAE_MASK                      0x80u
 #define UART0_C5_TDMAE_SHIFT                     7
 
-/**
+/*!
  * @}
  */ /* end of group UART0_Register_Masks */
 
@@ -3775,342 +4988,9 @@ typedef struct {
 /** Array initializer of UART0 peripheral base pointers */
 #define UART0_BASES                              { UART0 }
 
-/**
+/*!
  * @}
  */ /* end of group UART0_Peripheral_Access_Layer */
-
-
-/* ----------------------------------------------------------------------------
-   -- USB Peripheral Access Layer
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup USB_Peripheral_Access_Layer USB Peripheral Access Layer
- * @{
- */
-
-/** USB - Register Layout Typedef */
-typedef struct {
-  __I  uint8_t PERID;                              /**< Peripheral ID register, offset: 0x0 */
-       uint8_t RESERVED_0[3];
-  __I  uint8_t IDCOMP;                             /**< Peripheral ID Complement register, offset: 0x4 */
-       uint8_t RESERVED_1[3];
-  __I  uint8_t REV;                                /**< Peripheral Revision register, offset: 0x8 */
-       uint8_t RESERVED_2[3];
-  __I  uint8_t ADDINFO;                            /**< Peripheral Additional Info register, offset: 0xC */
-       uint8_t RESERVED_3[3];
-  __IO uint8_t OTGISTAT;                           /**< OTG Interrupt Status register, offset: 0x10 */
-       uint8_t RESERVED_4[3];
-  __IO uint8_t OTGICR;                             /**< OTG Interrupt Control Register, offset: 0x14 */
-       uint8_t RESERVED_5[3];
-  __IO uint8_t OTGSTAT;                            /**< OTG Status register, offset: 0x18 */
-       uint8_t RESERVED_6[3];
-  __IO uint8_t OTGCTL;                             /**< OTG Control register, offset: 0x1C */
-       uint8_t RESERVED_7[99];
-  __IO uint8_t ISTAT;                              /**< Interrupt Status register, offset: 0x80 */
-       uint8_t RESERVED_8[3];
-  __IO uint8_t INTEN;                              /**< Interrupt Enable register, offset: 0x84 */
-       uint8_t RESERVED_9[3];
-  __IO uint8_t ERRSTAT;                            /**< Error Interrupt Status register, offset: 0x88 */
-       uint8_t RESERVED_10[3];
-  __IO uint8_t ERREN;                              /**< Error Interrupt Enable register, offset: 0x8C */
-       uint8_t RESERVED_11[3];
-  __I  uint8_t STAT;                               /**< Status register, offset: 0x90 */
-       uint8_t RESERVED_12[3];
-  __IO uint8_t CTL;                                /**< Control register, offset: 0x94 */
-       uint8_t RESERVED_13[3];
-  __IO uint8_t ADDR;                               /**< Address register, offset: 0x98 */
-       uint8_t RESERVED_14[3];
-  __IO uint8_t BDTPAGE1;                           /**< BDT Page Register 1, offset: 0x9C */
-       uint8_t RESERVED_15[3];
-  __IO uint8_t FRMNUML;                            /**< Frame Number Register Low, offset: 0xA0 */
-       uint8_t RESERVED_16[3];
-  __IO uint8_t FRMNUMH;                            /**< Frame Number Register High, offset: 0xA4 */
-       uint8_t RESERVED_17[3];
-  __IO uint8_t TOKEN;                              /**< Token register, offset: 0xA8 */
-       uint8_t RESERVED_18[3];
-  __IO uint8_t SOFTHLD;                            /**< SOF Threshold Register, offset: 0xAC */
-       uint8_t RESERVED_19[3];
-  __IO uint8_t BDTPAGE2;                           /**< BDT Page Register 2, offset: 0xB0 */
-       uint8_t RESERVED_20[3];
-  __IO uint8_t BDTPAGE3;                           /**< BDT Page Register 3, offset: 0xB4 */
-       uint8_t RESERVED_21[11];
-  struct {                                         /* offset: 0xC0, array step: 0x4 */
-    __IO uint8_t ENDPT;                              /**< Endpoint Control register, array offset: 0xC0, array step: 0x4 */
-         uint8_t RESERVED_0[3];
-  } ENDPOINT[16];
-  __IO uint8_t USBCTRL;                            /**< USB Control register, offset: 0x100 */
-       uint8_t RESERVED_22[3];
-  __I  uint8_t OBSERVE;                            /**< USB OTG Observe register, offset: 0x104 */
-       uint8_t RESERVED_23[3];
-  __IO uint8_t CONTROL;                            /**< USB OTG Control register, offset: 0x108 */
-       uint8_t RESERVED_24[3];
-  __IO uint8_t USBTRC0;                            /**< USB Transceiver Control Register 0, offset: 0x10C */
-       uint8_t RESERVED_25[7];
-  __IO uint8_t USBFRMADJUST;                       /**< Frame Adjust Register, offset: 0x114 */
-} USB_Type;
-
-/* ----------------------------------------------------------------------------
-   -- USB Register Masks
-   ---------------------------------------------------------------------------- */
-
-/**
- * @addtogroup USB_Register_Masks USB Register Masks
- * @{
- */
-
-/* PERID Bit Fields */
-#define USB_PERID_ID_MASK                        0x3Fu
-#define USB_PERID_ID_SHIFT                       0
-#define USB_PERID_ID(x)                          (((uint8_t)(((uint8_t)(x))<<USB_PERID_ID_SHIFT))&USB_PERID_ID_MASK)
-/* IDCOMP Bit Fields */
-#define USB_IDCOMP_NID_MASK                      0x3Fu
-#define USB_IDCOMP_NID_SHIFT                     0
-#define USB_IDCOMP_NID(x)                        (((uint8_t)(((uint8_t)(x))<<USB_IDCOMP_NID_SHIFT))&USB_IDCOMP_NID_MASK)
-/* REV Bit Fields */
-#define USB_REV_REV_MASK                         0xFFu
-#define USB_REV_REV_SHIFT                        0
-#define USB_REV_REV(x)                           (((uint8_t)(((uint8_t)(x))<<USB_REV_REV_SHIFT))&USB_REV_REV_MASK)
-/* ADDINFO Bit Fields */
-#define USB_ADDINFO_IEHOST_MASK                  0x1u
-#define USB_ADDINFO_IEHOST_SHIFT                 0
-#define USB_ADDINFO_IRQNUM_MASK                  0xF8u
-#define USB_ADDINFO_IRQNUM_SHIFT                 3
-#define USB_ADDINFO_IRQNUM(x)                    (((uint8_t)(((uint8_t)(x))<<USB_ADDINFO_IRQNUM_SHIFT))&USB_ADDINFO_IRQNUM_MASK)
-/* OTGISTAT Bit Fields */
-#define USB_OTGISTAT_AVBUSCHG_MASK               0x1u
-#define USB_OTGISTAT_AVBUSCHG_SHIFT              0
-#define USB_OTGISTAT_B_SESS_CHG_MASK             0x4u
-#define USB_OTGISTAT_B_SESS_CHG_SHIFT            2
-#define USB_OTGISTAT_SESSVLDCHG_MASK             0x8u
-#define USB_OTGISTAT_SESSVLDCHG_SHIFT            3
-#define USB_OTGISTAT_LINE_STATE_CHG_MASK         0x20u
-#define USB_OTGISTAT_LINE_STATE_CHG_SHIFT        5
-#define USB_OTGISTAT_ONEMSEC_MASK                0x40u
-#define USB_OTGISTAT_ONEMSEC_SHIFT               6
-#define USB_OTGISTAT_IDCHG_MASK                  0x80u
-#define USB_OTGISTAT_IDCHG_SHIFT                 7
-/* OTGICR Bit Fields */
-#define USB_OTGICR_AVBUSEN_MASK                  0x1u
-#define USB_OTGICR_AVBUSEN_SHIFT                 0
-#define USB_OTGICR_BSESSEN_MASK                  0x4u
-#define USB_OTGICR_BSESSEN_SHIFT                 2
-#define USB_OTGICR_SESSVLDEN_MASK                0x8u
-#define USB_OTGICR_SESSVLDEN_SHIFT               3
-#define USB_OTGICR_LINESTATEEN_MASK              0x20u
-#define USB_OTGICR_LINESTATEEN_SHIFT             5
-#define USB_OTGICR_ONEMSECEN_MASK                0x40u
-#define USB_OTGICR_ONEMSECEN_SHIFT               6
-#define USB_OTGICR_IDEN_MASK                     0x80u
-#define USB_OTGICR_IDEN_SHIFT                    7
-/* OTGSTAT Bit Fields */
-#define USB_OTGSTAT_AVBUSVLD_MASK                0x1u
-#define USB_OTGSTAT_AVBUSVLD_SHIFT               0
-#define USB_OTGSTAT_BSESSEND_MASK                0x4u
-#define USB_OTGSTAT_BSESSEND_SHIFT               2
-#define USB_OTGSTAT_SESS_VLD_MASK                0x8u
-#define USB_OTGSTAT_SESS_VLD_SHIFT               3
-#define USB_OTGSTAT_LINESTATESTABLE_MASK         0x20u
-#define USB_OTGSTAT_LINESTATESTABLE_SHIFT        5
-#define USB_OTGSTAT_ONEMSECEN_MASK               0x40u
-#define USB_OTGSTAT_ONEMSECEN_SHIFT              6
-#define USB_OTGSTAT_ID_MASK                      0x80u
-#define USB_OTGSTAT_ID_SHIFT                     7
-/* OTGCTL Bit Fields */
-#define USB_OTGCTL_OTGEN_MASK                    0x4u
-#define USB_OTGCTL_OTGEN_SHIFT                   2
-#define USB_OTGCTL_DMLOW_MASK                    0x10u
-#define USB_OTGCTL_DMLOW_SHIFT                   4
-#define USB_OTGCTL_DPLOW_MASK                    0x20u
-#define USB_OTGCTL_DPLOW_SHIFT                   5
-#define USB_OTGCTL_DPHIGH_MASK                   0x80u
-#define USB_OTGCTL_DPHIGH_SHIFT                  7
-/* ISTAT Bit Fields */
-#define USB_ISTAT_USBRST_MASK                    0x1u
-#define USB_ISTAT_USBRST_SHIFT                   0
-#define USB_ISTAT_ERROR_MASK                     0x2u
-#define USB_ISTAT_ERROR_SHIFT                    1
-#define USB_ISTAT_SOFTOK_MASK                    0x4u
-#define USB_ISTAT_SOFTOK_SHIFT                   2
-#define USB_ISTAT_TOKDNE_MASK                    0x8u
-#define USB_ISTAT_TOKDNE_SHIFT                   3
-#define USB_ISTAT_SLEEP_MASK                     0x10u
-#define USB_ISTAT_SLEEP_SHIFT                    4
-#define USB_ISTAT_RESUME_MASK                    0x20u
-#define USB_ISTAT_RESUME_SHIFT                   5
-#define USB_ISTAT_ATTACH_MASK                    0x40u
-#define USB_ISTAT_ATTACH_SHIFT                   6
-#define USB_ISTAT_STALL_MASK                     0x80u
-#define USB_ISTAT_STALL_SHIFT                    7
-/* INTEN Bit Fields */
-#define USB_INTEN_USBRSTEN_MASK                  0x1u
-#define USB_INTEN_USBRSTEN_SHIFT                 0
-#define USB_INTEN_ERROREN_MASK                   0x2u
-#define USB_INTEN_ERROREN_SHIFT                  1
-#define USB_INTEN_SOFTOKEN_MASK                  0x4u
-#define USB_INTEN_SOFTOKEN_SHIFT                 2
-#define USB_INTEN_TOKDNEEN_MASK                  0x8u
-#define USB_INTEN_TOKDNEEN_SHIFT                 3
-#define USB_INTEN_SLEEPEN_MASK                   0x10u
-#define USB_INTEN_SLEEPEN_SHIFT                  4
-#define USB_INTEN_RESUMEEN_MASK                  0x20u
-#define USB_INTEN_RESUMEEN_SHIFT                 5
-#define USB_INTEN_ATTACHEN_MASK                  0x40u
-#define USB_INTEN_ATTACHEN_SHIFT                 6
-#define USB_INTEN_STALLEN_MASK                   0x80u
-#define USB_INTEN_STALLEN_SHIFT                  7
-/* ERRSTAT Bit Fields */
-#define USB_ERRSTAT_PIDERR_MASK                  0x1u
-#define USB_ERRSTAT_PIDERR_SHIFT                 0
-#define USB_ERRSTAT_CRC5EOF_MASK                 0x2u
-#define USB_ERRSTAT_CRC5EOF_SHIFT                1
-#define USB_ERRSTAT_CRC16_MASK                   0x4u
-#define USB_ERRSTAT_CRC16_SHIFT                  2
-#define USB_ERRSTAT_DFN8_MASK                    0x8u
-#define USB_ERRSTAT_DFN8_SHIFT                   3
-#define USB_ERRSTAT_BTOERR_MASK                  0x10u
-#define USB_ERRSTAT_BTOERR_SHIFT                 4
-#define USB_ERRSTAT_DMAERR_MASK                  0x20u
-#define USB_ERRSTAT_DMAERR_SHIFT                 5
-#define USB_ERRSTAT_BTSERR_MASK                  0x80u
-#define USB_ERRSTAT_BTSERR_SHIFT                 7
-/* ERREN Bit Fields */
-#define USB_ERREN_PIDERREN_MASK                  0x1u
-#define USB_ERREN_PIDERREN_SHIFT                 0
-#define USB_ERREN_CRC5EOFEN_MASK                 0x2u
-#define USB_ERREN_CRC5EOFEN_SHIFT                1
-#define USB_ERREN_CRC16EN_MASK                   0x4u
-#define USB_ERREN_CRC16EN_SHIFT                  2
-#define USB_ERREN_DFN8EN_MASK                    0x8u
-#define USB_ERREN_DFN8EN_SHIFT                   3
-#define USB_ERREN_BTOERREN_MASK                  0x10u
-#define USB_ERREN_BTOERREN_SHIFT                 4
-#define USB_ERREN_DMAERREN_MASK                  0x20u
-#define USB_ERREN_DMAERREN_SHIFT                 5
-#define USB_ERREN_BTSERREN_MASK                  0x80u
-#define USB_ERREN_BTSERREN_SHIFT                 7
-/* STAT Bit Fields */
-#define USB_STAT_ODD_MASK                        0x4u
-#define USB_STAT_ODD_SHIFT                       2
-#define USB_STAT_TX_MASK                         0x8u
-#define USB_STAT_TX_SHIFT                        3
-#define USB_STAT_ENDP_MASK                       0xF0u
-#define USB_STAT_ENDP_SHIFT                      4
-#define USB_STAT_ENDP(x)                         (((uint8_t)(((uint8_t)(x))<<USB_STAT_ENDP_SHIFT))&USB_STAT_ENDP_MASK)
-/* CTL Bit Fields */
-#define USB_CTL_USBENSOFEN_MASK                  0x1u
-#define USB_CTL_USBENSOFEN_SHIFT                 0
-#define USB_CTL_ODDRST_MASK                      0x2u
-#define USB_CTL_ODDRST_SHIFT                     1
-#define USB_CTL_RESUME_MASK                      0x4u
-#define USB_CTL_RESUME_SHIFT                     2
-#define USB_CTL_HOSTMODEEN_MASK                  0x8u
-#define USB_CTL_HOSTMODEEN_SHIFT                 3
-#define USB_CTL_RESET_MASK                       0x10u
-#define USB_CTL_RESET_SHIFT                      4
-#define USB_CTL_TXSUSPENDTOKENBUSY_MASK          0x20u
-#define USB_CTL_TXSUSPENDTOKENBUSY_SHIFT         5
-#define USB_CTL_SE0_MASK                         0x40u
-#define USB_CTL_SE0_SHIFT                        6
-#define USB_CTL_JSTATE_MASK                      0x80u
-#define USB_CTL_JSTATE_SHIFT                     7
-/* ADDR Bit Fields */
-#define USB_ADDR_ADDR_MASK                       0x7Fu
-#define USB_ADDR_ADDR_SHIFT                      0
-#define USB_ADDR_ADDR(x)                         (((uint8_t)(((uint8_t)(x))<<USB_ADDR_ADDR_SHIFT))&USB_ADDR_ADDR_MASK)
-#define USB_ADDR_LSEN_MASK                       0x80u
-#define USB_ADDR_LSEN_SHIFT                      7
-/* BDTPAGE1 Bit Fields */
-#define USB_BDTPAGE1_BDTBA_MASK                  0xFEu
-#define USB_BDTPAGE1_BDTBA_SHIFT                 1
-#define USB_BDTPAGE1_BDTBA(x)                    (((uint8_t)(((uint8_t)(x))<<USB_BDTPAGE1_BDTBA_SHIFT))&USB_BDTPAGE1_BDTBA_MASK)
-/* FRMNUML Bit Fields */
-#define USB_FRMNUML_FRM_MASK                     0xFFu
-#define USB_FRMNUML_FRM_SHIFT                    0
-#define USB_FRMNUML_FRM(x)                       (((uint8_t)(((uint8_t)(x))<<USB_FRMNUML_FRM_SHIFT))&USB_FRMNUML_FRM_MASK)
-/* FRMNUMH Bit Fields */
-#define USB_FRMNUMH_FRM_MASK                     0x7u
-#define USB_FRMNUMH_FRM_SHIFT                    0
-#define USB_FRMNUMH_FRM(x)                       (((uint8_t)(((uint8_t)(x))<<USB_FRMNUMH_FRM_SHIFT))&USB_FRMNUMH_FRM_MASK)
-/* TOKEN Bit Fields */
-#define USB_TOKEN_TOKENENDPT_MASK                0xFu
-#define USB_TOKEN_TOKENENDPT_SHIFT               0
-#define USB_TOKEN_TOKENENDPT(x)                  (((uint8_t)(((uint8_t)(x))<<USB_TOKEN_TOKENENDPT_SHIFT))&USB_TOKEN_TOKENENDPT_MASK)
-#define USB_TOKEN_TOKENPID_MASK                  0xF0u
-#define USB_TOKEN_TOKENPID_SHIFT                 4
-#define USB_TOKEN_TOKENPID(x)                    (((uint8_t)(((uint8_t)(x))<<USB_TOKEN_TOKENPID_SHIFT))&USB_TOKEN_TOKENPID_MASK)
-/* SOFTHLD Bit Fields */
-#define USB_SOFTHLD_CNT_MASK                     0xFFu
-#define USB_SOFTHLD_CNT_SHIFT                    0
-#define USB_SOFTHLD_CNT(x)                       (((uint8_t)(((uint8_t)(x))<<USB_SOFTHLD_CNT_SHIFT))&USB_SOFTHLD_CNT_MASK)
-/* BDTPAGE2 Bit Fields */
-#define USB_BDTPAGE2_BDTBA_MASK                  0xFFu
-#define USB_BDTPAGE2_BDTBA_SHIFT                 0
-#define USB_BDTPAGE2_BDTBA(x)                    (((uint8_t)(((uint8_t)(x))<<USB_BDTPAGE2_BDTBA_SHIFT))&USB_BDTPAGE2_BDTBA_MASK)
-/* BDTPAGE3 Bit Fields */
-#define USB_BDTPAGE3_BDTBA_MASK                  0xFFu
-#define USB_BDTPAGE3_BDTBA_SHIFT                 0
-#define USB_BDTPAGE3_BDTBA(x)                    (((uint8_t)(((uint8_t)(x))<<USB_BDTPAGE3_BDTBA_SHIFT))&USB_BDTPAGE3_BDTBA_MASK)
-/* ENDPT Bit Fields */
-#define USB_ENDPT_EPHSHK_MASK                    0x1u
-#define USB_ENDPT_EPHSHK_SHIFT                   0
-#define USB_ENDPT_EPSTALL_MASK                   0x2u
-#define USB_ENDPT_EPSTALL_SHIFT                  1
-#define USB_ENDPT_EPTXEN_MASK                    0x4u
-#define USB_ENDPT_EPTXEN_SHIFT                   2
-#define USB_ENDPT_EPRXEN_MASK                    0x8u
-#define USB_ENDPT_EPRXEN_SHIFT                   3
-#define USB_ENDPT_EPCTLDIS_MASK                  0x10u
-#define USB_ENDPT_EPCTLDIS_SHIFT                 4
-#define USB_ENDPT_RETRYDIS_MASK                  0x40u
-#define USB_ENDPT_RETRYDIS_SHIFT                 6
-#define USB_ENDPT_HOSTWOHUB_MASK                 0x80u
-#define USB_ENDPT_HOSTWOHUB_SHIFT                7
-/* USBCTRL Bit Fields */
-#define USB_USBCTRL_PDE_MASK                     0x40u
-#define USB_USBCTRL_PDE_SHIFT                    6
-#define USB_USBCTRL_SUSP_MASK                    0x80u
-#define USB_USBCTRL_SUSP_SHIFT                   7
-/* OBSERVE Bit Fields */
-#define USB_OBSERVE_DMPD_MASK                    0x10u
-#define USB_OBSERVE_DMPD_SHIFT                   4
-#define USB_OBSERVE_DPPD_MASK                    0x40u
-#define USB_OBSERVE_DPPD_SHIFT                   6
-#define USB_OBSERVE_DPPU_MASK                    0x80u
-#define USB_OBSERVE_DPPU_SHIFT                   7
-/* CONTROL Bit Fields */
-#define USB_CONTROL_DPPULLUPNONOTG_MASK          0x10u
-#define USB_CONTROL_DPPULLUPNONOTG_SHIFT         4
-/* USBTRC0 Bit Fields */
-#define USB_USBTRC0_USB_RESUME_INT_MASK          0x1u
-#define USB_USBTRC0_USB_RESUME_INT_SHIFT         0
-#define USB_USBTRC0_SYNC_DET_MASK                0x2u
-#define USB_USBTRC0_SYNC_DET_SHIFT               1
-#define USB_USBTRC0_USBRESMEN_MASK               0x20u
-#define USB_USBTRC0_USBRESMEN_SHIFT              5
-#define USB_USBTRC0_USBRESET_MASK                0x80u
-#define USB_USBTRC0_USBRESET_SHIFT               7
-/* USBFRMADJUST Bit Fields */
-#define USB_USBFRMADJUST_ADJ_MASK                0xFFu
-#define USB_USBFRMADJUST_ADJ_SHIFT               0
-#define USB_USBFRMADJUST_ADJ(x)                  (((uint8_t)(((uint8_t)(x))<<USB_USBFRMADJUST_ADJ_SHIFT))&USB_USBFRMADJUST_ADJ_MASK)
-
-/**
- * @}
- */ /* end of group USB_Register_Masks */
-
-
-/* USB - Peripheral instance base addresses */
-/** Peripheral USB0 base address */
-#define USB0_BASE                                (0x40072000u)
-/** Peripheral USB0 base pointer */
-#define USB0                                     ((USB_Type *)USB0_BASE)
-/** Array initializer of USB peripheral base pointers */
-#define USB_BASES                                { USB0 }
-
-/**
- * @}
- */ /* end of group USB_Peripheral_Access_Layer */
 
 
 /*
@@ -4129,7 +5009,7 @@ typedef struct {
   #error Not supported compiler type
 #endif
 
-/**
+/*!
  * @}
  */ /* end of group Peripheral_access_layer */
 
@@ -4138,186 +5018,18 @@ typedef struct {
    -- Backward Compatibility
    ---------------------------------------------------------------------------- */
 
-/**
+/*!
  * @addtogroup Backward_Compatibility_Symbols Backward Compatibility
  * @{
  */
 
-#define DMA_REQC_ARR_DMAC_MASK                   This_symbol_has_been_deprecated
-#define DMA_REQC_ARR_DMAC_SHIFT                  This_symbol_has_been_deprecated
-#define DMA_REQC_ARR_DMAC(x)                     This_symbol_has_been_deprecated
-#define DMA_REQC_ARR_CFSM_MASK                   This_symbol_has_been_deprecated
-#define DMA_REQC_ARR_CFSM_SHIFT                  This_symbol_has_been_deprecated
-#define DMA_REQC0                                This_symbol_has_been_deprecated
-#define DMA_REQC1                                This_symbol_has_been_deprecated
-#define DMA_REQC2                                This_symbol_has_been_deprecated
-#define DMA_REQC3                                This_symbol_has_been_deprecated
-#define MCG_S_LOLS_MASK                          MCG_S_LOLS0_MASK
-#define MCG_S_LOLS_SHIFT                         MCG_S_LOLS0_SHIFT
-#define SIM_FCFG2_MAXADDR_MASK                   SIM_FCFG2_MAXADDR0_MASK
-#define SIM_FCFG2_MAXADDR_SHIFT                  SIM_FCFG2_MAXADDR0_SHIFT
-#define SIM_FCFG2_MAXADDR                        SIM_FCFG2_MAXADDR0
-#define SPI_C2_SPLPIE_MASK                       This_symbol_has_been_deprecated
-#define SPI_C2_SPLPIE_SHIFT                      This_symbol_has_been_deprecated
-#define UART_C4_LBKDDMAS_MASK                    This_symbol_has_been_deprecated
-#define UART_C4_LBKDDMAS_SHIFT                   This_symbol_has_been_deprecated
-#define UART_C4_ILDMAS_MASK                      This_symbol_has_been_deprecated
-#define UART_C4_ILDMAS_SHIFT                     This_symbol_has_been_deprecated
-#define UART_C4_TCDMAS_MASK                      This_symbol_has_been_deprecated
-#define UART_C4_TCDMAS_SHIFT                     This_symbol_has_been_deprecated
-#define UARTLP_Type                              UART0_Type
-#define UARTLP_BDH_REG                           UART0_BDH_REG
-#define UARTLP_BDL_REG                           UART0_BDL_REG
-#define UARTLP_C1_REG                            UART0_C1_REG
-#define UARTLP_C2_REG                            UART0_C2_REG
-#define UARTLP_S1_REG                            UART0_S1_REG
-#define UARTLP_S2_REG                            UART0_S2_REG
-#define UARTLP_C3_REG                            UART0_C3_REG
-#define UARTLP_D_REG                             UART0_D_REG
-#define UARTLP_MA1_REG                           UART0_MA1_REG
-#define UARTLP_MA2_REG                           UART0_MA2_REG
-#define UARTLP_C4_REG                            UART0_C4_REG
-#define UARTLP_C5_REG                            UART0_C5_REG
-#define UARTLP_BDH_SBR_MASK                      UART0_BDH_SBR_MASK
-#define UARTLP_BDH_SBR_SHIFT                     UART0_BDH_SBR_SHIFT
-#define UARTLP_BDH_SBR(x)                        UART0_BDH_SBR(x)
-#define UARTLP_BDH_SBNS_MASK                     UART0_BDH_SBNS_MASK
-#define UARTLP_BDH_SBNS_SHIFT                    UART0_BDH_SBNS_SHIFT
-#define UARTLP_BDH_RXEDGIE_MASK                  UART0_BDH_RXEDGIE_MASK
-#define UARTLP_BDH_RXEDGIE_SHIFT                 UART0_BDH_RXEDGIE_SHIFT
-#define UARTLP_BDH_LBKDIE_MASK                   UART0_BDH_LBKDIE_MASK
-#define UARTLP_BDH_LBKDIE_SHIFT                  UART0_BDH_LBKDIE_SHIFT
-#define UARTLP_BDL_SBR_MASK                      UART0_BDL_SBR_MASK
-#define UARTLP_BDL_SBR_SHIFT                     UART0_BDL_SBR_SHIFT
-#define UARTLP_BDL_SBR(x)                        UART0_BDL_SBR(x)
-#define UARTLP_C1_PT_MASK                        UART0_C1_PT_MASK
-#define UARTLP_C1_PT_SHIFT                       UART0_C1_PT_SHIFT
-#define UARTLP_C1_PE_MASK                        UART0_C1_PE_MASK
-#define UARTLP_C1_PE_SHIFT                       UART0_C1_PE_SHIFT
-#define UARTLP_C1_ILT_MASK                       UART0_C1_ILT_MASK
-#define UARTLP_C1_ILT_SHIFT                      UART0_C1_ILT_SHIFT
-#define UARTLP_C1_WAKE_MASK                      UART0_C1_WAKE_MASK
-#define UARTLP_C1_WAKE_SHIFT                     UART0_C1_WAKE_SHIFT
-#define UARTLP_C1_M_MASK                         UART0_C1_M_MASK
-#define UARTLP_C1_M_SHIFT                        UART0_C1_M_SHIFT
-#define UARTLP_C1_RSRC_MASK                      UART0_C1_RSRC_MASK
-#define UARTLP_C1_RSRC_SHIFT                     UART0_C1_RSRC_SHIFT
-#define UARTLP_C1_DOZEEN_MASK                    UART0_C1_DOZEEN_MASK
-#define UARTLP_C1_DOZEEN_SHIFT                   UART0_C1_DOZEEN_SHIFT
-#define UARTLP_C1_LOOPS_MASK                     UART0_C1_LOOPS_MASK
-#define UARTLP_C1_LOOPS_SHIFT                    UART0_C1_LOOPS_SHIFT
-#define UARTLP_C2_SBK_MASK                       UART0_C2_SBK_MASK
-#define UARTLP_C2_SBK_SHIFT                      UART0_C2_SBK_SHIFT
-#define UARTLP_C2_RWU_MASK                       UART0_C2_RWU_MASK
-#define UARTLP_C2_RWU_SHIFT                      UART0_C2_RWU_SHIFT
-#define UARTLP_C2_RE_MASK                        UART0_C2_RE_MASK
-#define UARTLP_C2_RE_SHIFT                       UART0_C2_RE_SHIFT
-#define UARTLP_C2_TE_MASK                        UART0_C2_TE_MASK
-#define UARTLP_C2_TE_SHIFT                       UART0_C2_TE_SHIFT
-#define UARTLP_C2_ILIE_MASK                      UART0_C2_ILIE_MASK
-#define UARTLP_C2_ILIE_SHIFT                     UART0_C2_ILIE_SHIFT
-#define UARTLP_C2_RIE_MASK                       UART0_C2_RIE_MASK
-#define UARTLP_C2_RIE_SHIFT                      UART0_C2_RIE_SHIFT
-#define UARTLP_C2_TCIE_MASK                      UART0_C2_TCIE_MASK
-#define UARTLP_C2_TCIE_SHIFT                     UART0_C2_TCIE_SHIFT
-#define UARTLP_C2_TIE_MASK                       UART0_C2_TIE_MASK
-#define UARTLP_C2_TIE_SHIFT                      UART0_C2_TIE_SHIFT
-#define UARTLP_S1_PF_MASK                        UART0_S1_PF_MASK
-#define UARTLP_S1_PF_SHIFT                       UART0_S1_PF_SHIFT
-#define UARTLP_S1_FE_MASK                        UART0_S1_FE_MASK
-#define UARTLP_S1_FE_SHIFT                       UART0_S1_FE_SHIFT
-#define UARTLP_S1_NF_MASK                        UART0_S1_NF_MASK
-#define UARTLP_S1_NF_SHIFT                       UART0_S1_NF_SHIFT
-#define UARTLP_S1_OR_MASK                        UART0_S1_OR_MASK
-#define UARTLP_S1_OR_SHIFT                       UART0_S1_OR_SHIFT
-#define UARTLP_S1_IDLE_MASK                      UART0_S1_IDLE_MASK
-#define UARTLP_S1_IDLE_SHIFT                     UART0_S1_IDLE_SHIFT
-#define UARTLP_S1_RDRF_MASK                      UART0_S1_RDRF_MASK
-#define UARTLP_S1_RDRF_SHIFT                     UART0_S1_RDRF_SHIFT
-#define UARTLP_S1_TC_MASK                        UART0_S1_TC_MASK
-#define UARTLP_S1_TC_SHIFT                       UART0_S1_TC_SHIFT
-#define UARTLP_S1_TDRE_MASK                      UART0_S1_TDRE_MASK
-#define UARTLP_S1_TDRE_SHIFT                     UART0_S1_TDRE_SHIFT
-#define UARTLP_S2_RAF_MASK                       UART0_S2_RAF_MASK
-#define UARTLP_S2_RAF_SHIFT                      UART0_S2_RAF_SHIFT
-#define UARTLP_S2_LBKDE_MASK                     UART0_S2_LBKDE_MASK
-#define UARTLP_S2_LBKDE_SHIFT                    UART0_S2_LBKDE_SHIFT
-#define UARTLP_S2_BRK13_MASK                     UART0_S2_BRK13_MASK
-#define UARTLP_S2_BRK13_SHIFT                    UART0_S2_BRK13_SHIFT
-#define UARTLP_S2_RWUID_MASK                     UART0_S2_RWUID_MASK
-#define UARTLP_S2_RWUID_SHIFT                    UART0_S2_RWUID_SHIFT
-#define UARTLP_S2_RXINV_MASK                     UART0_S2_RXINV_MASK
-#define UARTLP_S2_RXINV_SHIFT                    UART0_S2_RXINV_SHIFT
-#define UARTLP_S2_MSBF_MASK                      UART0_S2_MSBF_MASK
-#define UARTLP_S2_MSBF_SHIFT                     UART0_S2_MSBF_SHIFT
-#define UARTLP_S2_RXEDGIF_MASK                   UART0_S2_RXEDGIF_MASK
-#define UARTLP_S2_RXEDGIF_SHIFT                  UART0_S2_RXEDGIF_SHIFT
-#define UARTLP_S2_LBKDIF_MASK                    UART0_S2_LBKDIF_MASK
-#define UARTLP_S2_LBKDIF_SHIFT                   UART0_S2_LBKDIF_SHIFT
-#define UARTLP_C3_PEIE_MASK                      UART0_C3_PEIE_MASK
-#define UARTLP_C3_PEIE_SHIFT                     UART0_C3_PEIE_SHIFT
-#define UARTLP_C3_FEIE_MASK                      UART0_C3_FEIE_MASK
-#define UARTLP_C3_FEIE_SHIFT                     UART0_C3_FEIE_SHIFT
-#define UARTLP_C3_NEIE_MASK                      UART0_C3_NEIE_MASK
-#define UARTLP_C3_NEIE_SHIFT                     UART0_C3_NEIE_SHIFT
-#define UARTLP_C3_ORIE_MASK                      UART0_C3_ORIE_MASK
-#define UARTLP_C3_ORIE_SHIFT                     UART0_C3_ORIE_SHIFT
-#define UARTLP_C3_TXINV_MASK                     UART0_C3_TXINV_MASK
-#define UARTLP_C3_TXINV_SHIFT                    UART0_C3_TXINV_SHIFT
-#define UARTLP_C3_TXDIR_MASK                     UART0_C3_TXDIR_MASK
-#define UARTLP_C3_TXDIR_SHIFT                    UART0_C3_TXDIR_SHIFT
-#define UARTLP_C3_R9T8_MASK                      UART0_C3_R9T8_MASK
-#define UARTLP_C3_R9T8_SHIFT                     UART0_C3_R9T8_SHIFT
-#define UARTLP_C3_R8T9_MASK                      UART0_C3_R8T9_MASK
-#define UARTLP_C3_R8T9_SHIFT                     UART0_C3_R8T9_SHIFT
-#define UARTLP_D_R0T0_MASK                       UART0_D_R0T0_MASK
-#define UARTLP_D_R0T0_SHIFT                      UART0_D_R0T0_SHIFT
-#define UARTLP_D_R1T1_MASK                       UART0_D_R1T1_MASK
-#define UARTLP_D_R1T1_SHIFT                      UART0_D_R1T1_SHIFT
-#define UARTLP_D_R2T2_MASK                       UART0_D_R2T2_MASK
-#define UARTLP_D_R2T2_SHIFT                      UART0_D_R2T2_SHIFT
-#define UARTLP_D_R3T3_MASK                       UART0_D_R3T3_MASK
-#define UARTLP_D_R3T3_SHIFT                      UART0_D_R3T3_SHIFT
-#define UARTLP_D_R4T4_MASK                       UART0_D_R4T4_MASK
-#define UARTLP_D_R4T4_SHIFT                      UART0_D_R4T4_SHIFT
-#define UARTLP_D_R5T5_MASK                       UART0_D_R5T5_MASK
-#define UARTLP_D_R5T5_SHIFT                      UART0_D_R5T5_SHIFT
-#define UARTLP_D_R6T6_MASK                       UART0_D_R6T6_MASK
-#define UARTLP_D_R6T6_SHIFT                      UART0_D_R6T6_SHIFT
-#define UARTLP_D_R7T7_MASK                       UART0_D_R7T7_MASK
-#define UARTLP_D_R7T7_SHIFT                      UART0_D_R7T7_SHIFT
-#define UARTLP_MA1_MA_MASK                       UART0_MA1_MA_MASK
-#define UARTLP_MA1_MA_SHIFT                      UART0_MA1_MA_SHIFT
-#define UARTLP_MA1_MA(x)                         UART0_MA1_MA(x)
-#define UARTLP_MA2_MA_MASK                       UART0_MA2_MA_MASK
-#define UARTLP_MA2_MA_SHIFT                      UART0_MA2_MA_SHIFT
-#define UARTLP_MA2_MA(x)                         UART0_MA2_MA(x)
-#define UARTLP_C4_OSR_MASK                       UART0_C4_OSR_MASK
-#define UARTLP_C4_OSR_SHIFT                      UART0_C4_OSR_SHIFT
-#define UARTLP_C4_OSR(x)                         UART0_C4_OSR(x)
-#define UARTLP_C4_M10_MASK                       UART0_C4_M10_MASK
-#define UARTLP_C4_M10_SHIFT                      UART0_C4_M10_SHIFT
-#define UARTLP_C4_MAEN2_MASK                     UART0_C4_MAEN2_MASK
-#define UARTLP_C4_MAEN2_SHIFT                    UART0_C4_MAEN2_SHIFT
-#define UARTLP_C4_MAEN1_MASK                     UART0_C4_MAEN1_MASK
-#define UARTLP_C4_MAEN1_SHIFT                    UART0_C4_MAEN1_SHIFT
-#define UARTLP_C5_RESYNCDIS_MASK                 UART0_C5_RESYNCDIS_MASK
-#define UARTLP_C5_RESYNCDIS_SHIFT                UART0_C5_RESYNCDIS_SHIFT
-#define UARTLP_C5_BOTHEDGE_MASK                  UART0_C5_BOTHEDGE_MASK
-#define UARTLP_C5_BOTHEDGE_SHIFT                 UART0_C5_BOTHEDGE_SHIFT
-#define UARTLP_C5_RDMAE_MASK                     UART0_C5_RDMAE_MASK
-#define UARTLP_C5_RDMAE_SHIFT                    UART0_C5_RDMAE_SHIFT
-#define UARTLP_C5_TDMAE_MASK                     UART0_C5_TDMAE_MASK
-#define UARTLP_C5_TDMAE_SHIFT                    UART0_C5_TDMAE_SHIFT
-#define UARTLP_BASES                             UARTLP_BASES
-#define NV_FOPT_EZPORT_DIS_MASK                  This_symbol_has_been_deprecated
-#define NV_FOPT_EZPORT_DIS_SHIFT                 This_symbol_has_been_deprecated
+/* No backward compatibility issues. */
 
-/**
+/*!
  * @}
  */ /* end of group Backward_Compatibility_Symbols */
 
 
-#endif  /* #if !defined(MKL25Z4_H_) */
+#endif  /* #if !defined(MKL34Z4_H_) */
 
-/* MKL25Z4.h, eof. */
+/* MKL34Z4.h, eof. */

@@ -1,19 +1,24 @@
 /*
 ** ###################################################################
-**     Processors:          MKL46Z256VLH4
-**                          MKL46Z128VLH4
-**                          MKL46Z256VLL4
-**                          MKL46Z128VLL4
-**                          MKL46Z256VMC4
-**                          MKL46Z128VMC4
+**     Processors:          MKL16Z128VFM4
+**                          MKL16Z64VFM4
+**                          MKL16Z32VFM4
+**                          MKL16Z128VFT4
+**                          MKL16Z64VFT4
+**                          MKL16Z32VFT4
+**                          MKL16Z256VLH4
+**                          MKL16Z128VLH4
+**                          MKL16Z64VH4
+**                          MKL16Z32VLH4
+**                          MKL16Z256LKC4
 **
 **     Compilers:           ARM Compiler
 **                          Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **
-**     Reference manual:    KL46P121M48SF4RM, Rev.2, Dec 2012
-**     Version:             rev. 2.2, 2013-04-12
+**     Reference manual:    KL16P121M48SF4RM, Rev.2, Dec 2012
+**     Version:             rev. 1.2, 2013-04-12
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -26,13 +31,11 @@
 **     mail:                 support@freescale.com
 **
 **     Revisions:
-**     - rev. 1.0 (2012-10-16)
+**     - rev. 1.0 (2012-12-12)
 **         Initial version.
-**     - rev. 2.0 (2012-12-12)
-**         Update to reference manual rev. 1.
-**     - rev. 2.1 (2013-04-05)
+**     - rev. 1.1 (2013-04-05)
 **         Changed start of doxygen comment.
-**     - rev. 2.2 (2013-04-12)
+**     - rev. 1.2 (2013-04-12)
 **         SystemInit function fixed for clock configuration 1.
 **         Name of the interrupt num. 31 updated to reflect proper function.
 **
@@ -40,10 +43,10 @@
 */
 
 /*!
- * @file MKL46Z4
- * @version 2.2
+ * @file MKL16Z4
+ * @version 1.2
  * @date 2013-04-12
- * @brief Device specific configuration file for MKL46Z4 (implementation file)
+ * @brief Device specific configuration file for MKL16Z4 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
  * the system frequency. It configures the device and initializes the oscillator
@@ -51,7 +54,7 @@
  */
 
 #include <stdint.h>
-#include "MKL46Z4.h"
+#include "MKL16Z4.h"
 
 #define DISABLE_WDOG    1
 

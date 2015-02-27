@@ -1,49 +1,47 @@
 /*
 ** ###################################################################
-**     Processors:          MKL46Z256VLH4
-**                          MKL46Z128VLH4
-**                          MKL46Z256VLL4
-**                          MKL46Z128VLL4
-**                          MKL46Z256VMC4
-**                          MKL46Z128VMC4
+**     Processors:          MKL14Z64FM4
+**                          MKL14Z64FT4
+**                          MKL14Z64LH4
+**                          MKL14Z64VLK4
 **
 **     Compilers:           ARM Compiler
 **                          Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
 **
-**     Reference manual:    KL46P121M48SF4RM, Rev.2, Dec 2012
-**     Version:             rev. 2.2, 2013-04-12
+**     Reference manual:    KL14P80M48SF0RM, Rev.3, Sep 2012
+**     Version:             rev. 1.3, 2012-11-22
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
 **         contains the system frequency. It configures the device and initializes
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
-**     Copyright: 2013 Freescale, Inc. All Rights Reserved.
+**     Copyright: 2012 Freescale, Inc. All Rights Reserved.
 **
 **     http:                 www.freescale.com
 **     mail:                 support@freescale.com
 **
 **     Revisions:
-**     - rev. 1.0 (2012-10-16)
+**     - rev. 1.0 (2012-06-21)
 **         Initial version.
-**     - rev. 2.0 (2012-12-12)
-**         Update to reference manual rev. 1.
-**     - rev. 2.1 (2013-04-05)
-**         Changed start of doxygen comment.
-**     - rev. 2.2 (2013-04-12)
-**         SystemInit function fixed for clock configuration 1.
-**         Name of the interrupt num. 31 updated to reflect proper function.
+**     - rev. 1.1 (2012-08-01)
+**         Device type UARTLP changed to UART0.
+**     - rev. 1.2 (2012-10-04)
+**         Update according to reference manual rev. 3.
+**     - rev. 1.3 (2012-11-22)
+**         MCG module - bit LOLS in MCG_S register renamed to LOLS0.
+**         NV registers - bit EZPORT_DIS in NV_FOPT register removed.
 **
 ** ###################################################################
 */
 
-/*!
- * @file MKL46Z4
- * @version 2.2
- * @date 2013-04-12
- * @brief Device specific configuration file for MKL46Z4 (implementation file)
+/**
+ * @file MKL14Z4
+ * @version 1.3
+ * @date 2012-11-22
+ * @brief Device specific configuration file for MKL14Z4 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
  * the system frequency. It configures the device and initializes the oscillator
@@ -51,7 +49,7 @@
  */
 
 #include <stdint.h>
-#include "MKL46Z4.h"
+#include "MKL14Z4.h"
 
 #define DISABLE_WDOG    1
 
@@ -111,8 +109,8 @@ void SystemInit (void) {
   /* Switch to FEI Mode */
   /* MCG->C1: CLKS=0,FRDIV=0,IREFS=1,IRCLKEN=1,IREFSTEN=0 */
   MCG->C1 = (uint8_t)0x06U;
-  /* MCG_C2: LOCRE0=0,RANGE0=0,HGO0=0,EREFS0=0,LP=0,IRCS=0 */
-  MCG->C2 &= (uint8_t)~(uint8_t)0xBFU;
+  /* MCG_C2: LOCRE0=0,??=0,RANGE0=0,HGO0=0,EREFS0=0,LP=0,IRCS=0 */
+  MCG->C2 = (uint8_t)0x00U;
   /* MCG->C4: DMX32=0,DRST_DRS=1 */
   MCG->C4 = (uint8_t)((MCG->C4 & (uint8_t)~(uint8_t)0xC0U) | (uint8_t)0x20U);
   /* OSC0->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=0,SC4P=0,SC8P=0,SC16P=0 */
@@ -135,11 +133,11 @@ void SystemInit (void) {
   /* PORTA->PCR19: ISF=0,MUX=0 */
   PORTA->PCR[19] &= (uint32_t)~0x01000700UL;
   /* Switch to FBE Mode */
-  /* MCG_C2: LOCRE0=0,RANGE0=2,HGO0=0,EREFS0=1,LP=0,IRCS=0 */
-  MCG->C2 = (uint8_t)((MCG->C2 & (uint8_t)~(uint8_t)0x9BU) | (uint8_t)0x24U);
-  /* OSC0->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=1,SC4P=0,SC8P=0,SC16P=0 */
-  OSC0->CR = (uint8_t)0x80U;
-  /* MCG_C1: CLKS=2,FRDIV=3,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
+  /* OSC0->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=1,SC4P=0,SC8P=0,SC16P=1 */
+  OSC0->CR = (uint8_t)0x89U;
+  /* MCG->C2: LOCRE0=0,??=0,RANGE0=2,HGO0=0,EREFS0=1,LP=0,IRCS=0 */
+  MCG->C2 = (uint8_t)0x24U;
+  /* MCG->C1: CLKS=2,FRDIV=3,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
   MCG->C1 = (uint8_t)0x9AU;
   /* MCG->C4: DMX32=0,DRST_DRS=0 */
   MCG->C4 &= (uint8_t)~(uint8_t)0xE0U;
@@ -173,10 +171,10 @@ void SystemInit (void) {
   /* PORTA->PCR19: ISF=0,MUX=0 */
   PORTA->PCR[19] &= (uint32_t)~0x01000700UL;
   /* Switch to FBE Mode */
+  /* OSC0->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=1,SC4P=0,SC8P=0,SC16P=1 */
+  OSC0->CR = (uint8_t)0x89U;
   /* MCG->C2: LOCRE0=0,??=0,RANGE0=2,HGO0=0,EREFS0=1,LP=0,IRCS=0 */
   MCG->C2 = (uint8_t)0x24U;
-  /* OSC0->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=1,SC4P=0,SC8P=0,SC16P=0 */
-  OSC0->CR = (uint8_t)0x80U;
   /* MCG->C1: CLKS=2,FRDIV=3,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
   MCG->C1 = (uint8_t)0x9AU;
   /* MCG->C4: DMX32=0,DRST_DRS=0 */
@@ -190,8 +188,8 @@ void SystemInit (void) {
   while((MCG->S & 0x0CU) != 0x08U) {    /* Wait until external reference clock is selected as MCG output */
   }
   /* Switch to BLPE Mode */
-  /* MCG_C2: LOCRE0=0,RANGE0=2,HGO0=0,EREFS0=1,LP=1,IRCS=0 */
-  MCG->C2 = (uint8_t)((MCG->C2 & (uint8_t)~(uint8_t)0x99U) | (uint8_t)0x26U);
+  /* MCG->C2: LOCRE0=0,??=0,RANGE0=2,HGO0=0,EREFS0=1,LP=1,IRCS=0 */
+  MCG->C2 = (uint8_t)0x26U;
   while((MCG->S & 0x0CU) != 0x08U) {    /* Wait until external reference clock is selected as MCG output */
   }
 #endif /* (CLOCK_SETUP == 2) */

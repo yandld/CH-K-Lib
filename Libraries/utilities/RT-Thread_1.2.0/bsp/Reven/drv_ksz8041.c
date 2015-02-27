@@ -45,16 +45,13 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
-    r = ksz8041_init();
-    if(r)
-    {
-        return RT_ERROR;
-    }
-    if(!ksz8041_is_linked())
-    {
-        eth_device_linkchange(&device, false);
-        return RT_EIO;
-    }
+    ksz8041_init();
+
+//    if(!ksz8041_is_linked())
+//    {
+//        eth_device_linkchange(&device, false);
+//        return RT_EIO;
+//    }
     
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);

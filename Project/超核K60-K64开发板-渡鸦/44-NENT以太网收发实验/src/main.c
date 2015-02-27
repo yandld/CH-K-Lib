@@ -27,7 +27,6 @@ void ENET_ISR(void)
 int main(void)
 {
     int r;
-    uint32_t clock;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);

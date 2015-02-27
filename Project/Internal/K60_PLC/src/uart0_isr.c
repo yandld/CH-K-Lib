@@ -11,7 +11,7 @@ void UART0_RX_ISR(uint16_t data)
     switch(data)
     {
         case '0':
-            printf("ADC[%d]:%d\r\n", 0, gADCValue[0]);
+            printf("AAAAAAAAAAAAADC[%d]:%d\r\n", 0, gADCValue[0]);
             break;
         case '1':
             printf("ADC[%d]:%d\r\n", 1, gADCValue[1]);

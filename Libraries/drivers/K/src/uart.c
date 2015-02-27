@@ -358,7 +358,7 @@ void UART_SelectDebugInstance(uint32_t instance)
 void UART_EnableTxFIFO(uint32_t instance, bool status)
 {
     /* waitting for all data has been shifted out */
-    while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
+    //while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
     
     (status)?
     (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_TXFE_MASK):

@@ -26,6 +26,8 @@
 #include "MKL03Z4.h"
 #elif  MKL46Z4
 #include "MKL46Z4.h"
+#elif  MKL43Z4
+#include "MKL43Z4.h"
 #else
 #error "No CPU defined!"
 

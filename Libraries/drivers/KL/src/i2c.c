@@ -799,7 +799,7 @@ void I2C0_IRQHandler(void)
     
 }
 
-#if (!defined(MK10D5))
+#if defined(I2C1)
 void I2C1_IRQHandler(void)
 {
     /* clear pending bit */
@@ -810,7 +810,6 @@ void I2C1_IRQHandler(void)
     }
 }
 #endif
-
 
 
 #if 0

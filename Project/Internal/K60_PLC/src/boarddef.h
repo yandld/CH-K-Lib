@@ -21,8 +21,8 @@
 #define     LED3  PEout(LED3_PIN)
 
 
-#define ADC_CHANNELS        {6, 7, 8, 9,10,11,12,13,10,11,12,13,14,15,21,22};
-#define ADC_PORTS           {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+#define ADC_CHANNELS        {23, 7, 8, 9,10,11,12,13,10,11,12,13,14,15,21,22};
+#define ADC_PORTS           {0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
 #define DIN_PINS            {27, 26, 25, 24, 17, 16};

@@ -17,7 +17,7 @@ void PIT0_ISR(void)
     uint16_t val;
     int i;
     
-    for(i=0;i<16;i++)
+    for(i=0;i<1;i++)
     {
         //ADC sampling and store
         ADC_StartConversion(gADC_InstanceTable[i], gADC_ChnTable[i], kADC_MuxA);

@@ -36,7 +36,7 @@ static rt_err_t rt_rtc_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     return RT_EOK;
 }
 
-int rt_hw_rtc_init(const char* name)
+int rt_hw_rtc_init(void)
 {
     rtc.type	= RT_Device_Class_RTC;
     RTC_QuickInit();
@@ -51,7 +51,7 @@ int rt_hw_rtc_init(const char* name)
 
     /* no private */
     rtc.user_data = RT_NULL;
-    rt_device_register(&rtc, name, RT_DEVICE_FLAG_RDWR);
+    rt_device_register(&rtc, "rtc", RT_DEVICE_FLAG_RDWR);
     
     /* provent ignore linking from lib */
     extern void list_date(void);
@@ -59,10 +59,6 @@ int rt_hw_rtc_init(const char* name)
     return 0;
 }
 
-void rt_hw_rtc_init2(void)
-{
-    rt_hw_rtc_init("rtc");
-}
     
-INIT_DEVICE_EXPORT(rt_hw_rtc_init2);
+INIT_DEVICE_EXPORT(rt_hw_rtc_init);
 

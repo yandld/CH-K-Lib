@@ -44,11 +44,25 @@
  *
  */
 
+
+#define SNTP_SYSTEM_TIME(t)   rtt_set_sys_time(t)
+
+
+void rtt_set_sys_time(rt_uint32_t t)
+{
+    rt_device_t rtc;
+    rtc = rt_device_find("rtc");
+    if(rtc)
+    {
+        rt_device_control(rtc, RT_DEVICE_CTRL_RTC_SET_TIME, &t);
+    }
+}
+
 /**
  * SNTP_DEBUG: Enable debugging for SNTP.
  */
 #ifndef SNTP_DEBUG
-#define SNTP_DEBUG                  LWIP_DBG_ON
+#define SNTP_DEBUG                  LWIP_DBG_OFF
 #endif
 
 /** SNTP server port */
@@ -58,17 +72,17 @@
 
 /** SNTP server address as IPv4 address in "u32_t" format */
 #ifndef SNTP_SERVER_ADDRESS
-#define SNTP_SERVER_ADDRESS         inet_addr("213.161.194.93") /* pool.ntp.org */
+#define SNTP_SERVER_ADDRESS         inet_addr("133.100.11.8") /* pool.ntp.org */
 #endif
 
 /** SNTP receive timeout - in milliseconds */
 #ifndef SNTP_RECV_TIMEOUT
-#define SNTP_RECV_TIMEOUT           3000
+#define SNTP_RECV_TIMEOUT           500
 #endif
 
 /** SNTP update delay - in milliseconds */
 #ifndef SNTP_UPDATE_DELAY
-#define SNTP_UPDATE_DELAY           60000
+#define SNTP_UPDATE_DELAY           100
 #endif
 
 /** SNTP macro to change system time and/or the update the RTC clock */
@@ -85,6 +99,7 @@
 #define SNTP_MODE_SERVER            0x04
 #define SNTP_MODE_BROADCAST         0x05
 #define SNTP_MODE_MASK              0x07
+#define SNTP_TIME_ZONE_OFS          (8*60*60) /* GMT+8 */
 
 /* number of seconds between 1900 and 1970 */
 #define DIFF_SEC_1900_1970         (2208988800)
@@ -167,7 +182,7 @@ static void sntp_request()
 							/* extract GMT time from response */
 							SMEMCPY( &timestamp, (sntp_response+SNTP_RCV_TIME_OFS), sizeof(timestamp));
 							t = (ntohl(timestamp) - DIFF_SEC_1900_1970);
-
+                            t += SNTP_TIME_ZONE_OFS;
 							/* do time processing */
 							sntp_process(t);
 

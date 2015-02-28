@@ -170,7 +170,7 @@ int32_t ADC_ReadValue(uint32_t instance, uint32_t mux);
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux);
 uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux);
 void ADC_ChlMuxConfig(uint32_t instance, uint32_t mux);
-
+int32_t ADC_Calibration(uint32_t instance);
 //hardware trigger 
 void ADC_EnableHardwareTrigger(uint32_t instance, bool status);
 

@@ -32,7 +32,7 @@ void UART5_TX_ISR(uint16_t * pbyteToSend);
 
 int main(void)
 {
-    uint32_t i, cnt;
+    uint32_t i;
     int r;
     
     // UART and Delay init
@@ -97,19 +97,20 @@ int main(void)
     // Init ADC 
     ADC_InitTypeDef ADC_InitStruct;
 
-    for(i = 0; i < 16; i++)
-    {
-        ADC_InitStruct.instance = gADC_InstanceTable[i];
-        ADC_InitStruct.clockDiv = kADC_ClockDiv2; //可以改成 kADC_ClockDiv4 kADC_ClockDiv8 增加采样时间
-        ADC_InitStruct.resolutionMode = kADC_SingleDiff12or13;
-        ADC_InitStruct.triggerMode = kADC_TriggerSoftware;
-        ADC_InitStruct.singleOrDiffMode = kADC_Single;
-        ADC_InitStruct.continueMode = kADC_ContinueConversionDisable;
-        ADC_InitStruct.hardwareAveMode = kADC_HardwareAverageDisable;
-        ADC_InitStruct.vref = kADC_VoltageVREF;
-        ADC_Init(&ADC_InitStruct);   
-    }
-	   
+
+    ADC_InitStruct.instance = HW_ADC0;
+    ADC_InitStruct.clockDiv = kADC_ClockDiv8; //可以改成 kADC_ClockDiv4 kADC_ClockDiv8 增加采样时间
+    ADC_InitStruct.resolutionMode = kADC_SingleDiff12or13;
+    ADC_InitStruct.triggerMode = kADC_TriggerSoftware;
+    ADC_InitStruct.singleOrDiffMode = kADC_Single;
+    ADC_InitStruct.continueMode = kADC_ContinueConversionDisable;
+    ADC_InitStruct.hardwareAveMode = kADC_HardwareAverage_4;
+    ADC_InitStruct.vref = kADC_VoltageVREF;
+    ADC_Init(&ADC_InitStruct);
+    ADC_InitStruct.instance = HW_ADC1;
+    ADC_Init(&ADC_InitStruct);
+
+    
     // init PIT
     PIT_QuickInit(HW_PIT_CH0, PIT0_TIME_IN_US); 
     PIT_CallbackInstall(HW_PIT_CH0, PIT0_ISR);
@@ -122,12 +123,11 @@ int main(void)
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF, true);
     printf("%dus Interrupt Enabled\r\n", PIT1_TIME_IN_US);
 
-	
     while(1)
     {
         for(i=0;i<8;i++)
         {
-      //      printf("[%d]:%d ", i, gADCValue[i]); //显示所有数据
+        //   printf("[%d]:%d ", i, gADCValue[i]); //显示所有数据
         }
         printf("\r");
     }

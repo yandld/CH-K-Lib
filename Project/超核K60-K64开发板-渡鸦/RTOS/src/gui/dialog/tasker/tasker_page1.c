@@ -113,7 +113,7 @@ static void _cbDialog(WM_MESSAGE * pMsg)
     rt_free(buffer);
 }
 
-WM_HWIN _TaskerAddPage1(void)
+WM_HWIN _TaskerAddPage1(WM_HWIN hWin)
 {
     return GUI_CreateDialogBox(_aDialogCreate1, GUI_COUNTOF(_aDialogCreate1), _cbDialog, WM_UNATTACHED, 0, 0);
 }

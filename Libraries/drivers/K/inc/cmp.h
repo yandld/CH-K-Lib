@@ -17,4 +17,18 @@
 
 #include <stdint.h> 
 
+/*!< CMP 回调函数声明 */
+typedef void (*CMP_CallBackType)(void);
+     
+typedef struct
+{
+    uint32_t                instance;
+}CMP_InitTypeDef;
+
+
+//!< API functions
+void CMP_Init(CMP_InitTypeDef* CMP_InitStruct);
+void CMP_CallbackInstall(uint32_t instance, CMP_CallBackType AppCBFun);
+
+     
 #endif

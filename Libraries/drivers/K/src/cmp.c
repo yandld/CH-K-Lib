@@ -13,3 +13,11 @@
 
 
 
+void CMP_Init(CMP_InitTypeDef* CMP_InitStruct)
+{
+    
+}
+
+
+
+

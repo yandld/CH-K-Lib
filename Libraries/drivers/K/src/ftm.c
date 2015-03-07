@@ -20,7 +20,7 @@
     #define FTM_BASES {FTM0, FTM1}
 #elif  FTM2
     #define FTM_BASES {FTM0, FTM1, FTM2}
-#elif FTM3
+#elif  FTM3
     #define FTM_BASES {FTM0, FTM1, FTM2, FTM3}
 #else
     #define FTM_BASES {FTM0}     

@@ -21,7 +21,8 @@
 /* FTM 硬件模块号 */
 #define HW_FTM0    (0x00)
 #define HW_FTM1    (0x01) 
-#define HW_FTM2    (0x02) 
+#define HW_FTM2    (0x02)
+#define HW_FTM3    (0x03)
 
 /* FTM可用的通道 */
 #define HW_FTM_CH0 (0x00)
@@ -131,6 +132,25 @@ typedef enum
 #define FTM2_CH1_PA11   (0x856c2U)
 #define FTM2_CH0_PB18   (0x64caU)
 #define FTM2_CH1_PB19   (0x866caU)
+#define FTM3_CH0_PE05   (0X00004BA3U)
+#define FTM3_CH1_PE06   (0X00084DA3U)
+#define FTM3_CH2_PE07   (0X00104FA3U)
+#define FTM3_CH3_PE08   (0X001851A3U)
+#define FTM3_CH4_PE09   (0X002053A3U)
+#define FTM3_CH5_PE10   (0X002855A3U)
+#define FTM3_CH6_PE11   (0X003057A3U)
+#define FTM3_CH7_PE12   (0X003859A3U)
+#define FTM3_CH4_PC08   (0X002050D3U)
+#define FTM3_CH5_PC09   (0X002852D3U)
+#define FTM3_CH6_PC10   (0X003054D3U)
+#define FTM3_CH7_PC11   (0X003856D3U)
+#define FTM3_CH0_PD00   (0X0000411BU)
+#define FTM3_CH1_PD01   (0X0008431BU)
+#define FTM3_CH2_PD02   (0X0010451BU)
+#define FTM3_CH3_PD03   (0X0018471BU)
+
+
+
 //!< FTM 正交解码快速初始化
 #define FTM1_QD_PHA_PA08_PHB_PA09       (0x9181U) /* FTM1模块的PTA8、PTA9为正交解码 */
 #define FTM1_QD_PHA_PA12_PHB_PA13       (0x99c1U)

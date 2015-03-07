@@ -180,6 +180,9 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~ADC_CFG1_ADIV_MASK;
 	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |=  ADC_CFG1_ADIV(ADC_InitStruct->clockDiv); 
     
+    /* long sample time */
+	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |=  ADC_CFG1_ADLPC_MASK;
+    
     /* voltage reference */
     ADC_InstanceTable[ADC_InitStruct->instance]->SC2 &= ~ADC_SC2_REFSEL_MASK;
     ADC_InstanceTable[ADC_InitStruct->instance]->SC2 |= ADC_SC2_REFSEL(ADC_InitStruct->vref);

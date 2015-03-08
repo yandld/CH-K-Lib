@@ -40,7 +40,6 @@
 #include "usb_devapi.h" /* USB Device API Header File */
 #include "usb_dci_kinetis.h"    /* USB DCI Header File */
 #include "usb_bdt_kinetis.h"    /* USB BDT Structure Header File */
-#include "common.h"
 #include "usb_class.h"
 
 /*****************************************************************************

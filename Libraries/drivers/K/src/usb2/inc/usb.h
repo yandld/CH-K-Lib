@@ -2,34 +2,76 @@
 #define	__USB_H_
 #include "common.h"
 #include "message_manage.h"
-#include "stdio.h"
-/***********************************************************************************************
-//CH_Kinetis驱动库  V2.3   
-//作者    :YANDLD 
-//E-MAIL  :yandld@126.com
-//修改日期:2013/2/14
-//版本：V2.3
-//淘宝：http://upcmcu.taobao.com
-//QQ    1453363089
-//Copyright(C) YANDLD 2012-2022
-//All rights reserved
-************************************************************************************************/
-/*选择当前USB设备的类型*/
+#include <stdio.h>
+
+#ifdef USB0
+
+#if !defined(ARRAY_SIZE)
+#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
+#endif
+
+#ifndef ALIGN
+/* Compiler Related Definitions */
+#ifdef __CC_ARM                         /* ARM Compiler */
+    #define ALIGN(n)                    __attribute__((aligned(n)))
+#elif defined (__IAR_SYSTEMS_ICC__)     /* for IAR Compiler */
+    #define PRAGMA(x)                   _Pragma(#x)
+    #define ALIGN(n)                    PRAGMA(data_alignment=n)
+#elif defined (__GNUC__)                /* GNU GCC Compiler */
+    #define ALIGN(n)                    __attribute__((aligned(n)))
+#endif /* Compiler Related Definitions */
+#endif
+
+#define USB_DEBUG
+
+#ifdef USB_DEBUG
+
+/* Turn on some of these (set to non-zero) to debug kernel */
+#ifndef USB_DEBUG_MIN
+#define USB_DEBUG_MIN                   1
+#endif
+
+#ifndef USB_DEBUG_EP0
+#define USB_DEBUG_EP0                   1
+#endif
+
+#ifndef USB_DEBUG_DESCRIPTOR
+#define USB_DEBUG_DESCRIPTOR            1
+#endif
+
+
+
+
+#define USB_DEBUG_LOG(type, message)                                            \
+do                                                                              \
+{                                                                               \
+    if (type)                                                                   \
+        printf message;                                                         \
+}                                                                               \
+while (0)
+
+#define USB_ASSERT(EX)                                                      \
+if (!(EX))                                                                  \
+{                                                                           \
+    volatile char dummy = 0;                                                \
+    printf("(%s) assert failed at %s:%d \n", #EX, __FUNCTION__, __LINE__);  \
+    while (dummy == 0);                                                     \
+}
+
+    
+#else
+#define USB_ASSERT(EX)
+#define USB_DEBUG_LOG(type, message)
+#endif
+
+
 #define USB_DEVICE_CLASS USB_DEVICE_CLASS_HID
 
 //常用操作宏定义
 #define BIT_SET(BitNumber, Register)        (Register |=(1<<BitNumber))
 #define BIT_CLR(BitNumber, Register)        (Register &=~(1<<BitNumber))
-#define BIT_CHK(BitNumber, Register)        (Register & (1<<BitNumber))
 
-//本构件使用的输出输入节点
-//输出使用端点3
-#define EP_OUT          (3)
-//输入使用端点2
-#define EP_IN           (2)
 
-//USB分频因子
-#define USB_FARCTIONAL_VALUE    0x02
 
 //EP0缓冲区设置
 #define EP0_SIZE            32
@@ -66,13 +108,6 @@
 #define EP6_VALUE           DISABLE
 #define EP6_SIZE            1
 #define EP6_BUFF_OFFSET     0x08
-
-
-//设置使用的输入 输出 端点
-#define _EP_IN      USB_ENDPT_EPTXEN_MASK //时能该端点的输入传输 //USB所有的输入输出针对于主机来说
-#define _EP_OUT     USB_ENDPT_EPRXEN_MASK //时能该端点的输出传输 //USB所有的输入输出针对于主机来说
-
-#define DISABLE 0
 
 
 // BDT状态
@@ -127,15 +162,7 @@
 #define USB_DEVICE_CLASS_HUB          7
 #define USB_DEVICE_CLASS_CDC_DATA     8
 #define USB_DEVICE_CLASS_SMARTCARD    9
-//.......
-/***********************************************************************************************
-// SETUP请求类型 在USB标准请求结构的 bmRequestType 中
-************************************************************************************************/
-enum
-{
-    uSETUP,
-    uDATA
-};
+
 
 enum
 {
@@ -147,7 +174,6 @@ enum
     EP5,
     DUMMY,
     LOADER
-    
 };
 
 enum
@@ -158,10 +184,11 @@ enum
     uADDRESS,
     uREADY    
 };
+
 enum
 {
-    fIN,
-    fOUT
+    kUSB_IN,
+    kUSB_OUT
 };
 
 enum
@@ -183,10 +210,7 @@ enum
     bEP3IN_ODD,
     bEP3IN_EVEN
 };
-/***********************************************************************************************
- 缓冲区描述符表(BDT)结构体
- 每个端点2个BDT(一个用于微控制器，一个用于USB模块) 每个 BDT 8字节
-************************************************************************************************/
+
 typedef union _tBDT_STAT
 {
     uint8_t _byte;
@@ -208,22 +232,31 @@ typedef union _tBDT_STAT
         uint8_t    :2;
     }RecPid;
 } tBDT_STAT,*ptBDT_STAT;                            //缓冲区描述符表结构体
-//BDT：缓冲区描述符表
+
+
 typedef struct _tBDT
 {
     tBDT_STAT Stat;
     uint8_t  dummy;
     uint16_t Cnt;     //接受到的字节数
-    uint32_t Addr;    //缓冲区地址         
-  } tBDT,*ptBDT;
+    uint32_t bufAddr;    //缓冲区地址         
+} tBDT,*ptBDT;
 
-/***********************************************************************************************
- SETUP包结构体
-************************************************************************************************/
+
+struct urequest
+{
+    uint8_t request_type;
+    uint8_t request;
+    uint16_t value;
+    uint16_t index;
+    uint16_t length;
+};
+typedef struct urequest* ureq_t;
+
 typedef struct _tUSB_Setup 
 {
-       uint8_t bmRequestType; //D7:传输方向 D[6:5]类型 D[4:0]接收端 
-       uint8_t bRequest;      //特定请求
+       uint8_t bmRequestType; 
+       uint8_t bRequest;      
        uint8_t wValue_l;      //字大小字段,根据请求的不同而不同
        uint8_t wValue_h;      
        uint8_t wIndex_l;      //字大小字段,根据请求的不同而不同,通常是传递索引和位移量
@@ -232,8 +265,6 @@ typedef struct _tUSB_Setup
        uint8_t wLength_h;
 }tUSB_Setup;
 
-//BDT 缓存描述符
-extern tBDT tBDTtable[16];													//内部SRAM内存池
 
 //本构件实现的接口函数
 void USB_WaitDeviceEnumed(void);
@@ -248,3 +279,4 @@ void USB_Connect(void);
 
 #endif
 
+#endif

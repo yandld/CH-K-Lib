@@ -25,19 +25,13 @@ static int USB_SetClockDiv(uint32_t srcClock)
     return 1;
 }
 
-uint8_t USB_Init(void)
+
+uint8_t USB_ClockInit(void)
 {
-    /* disable flash protect */
-	FMC->PFAPR |= (FMC_PFAPR_M4AP_MASK);
-    
-    /* enable USB reguator */
-	SIM->SOPT1 |= SIM_SOPT1_USBREGEN_MASK;
-    
-    /* disable memory protection */
-    MPU->CESR=0;
+    /* open clock gate */
+    SIM->SOPT2 |= SIM_SOPT2_USBSRC_MASK;
     
     /* clock config */
-    SIM->SOPT2 |= SIM_SOPT2_USBSRC_MASK;
     uint32_t clock;
     CLOCK_GetClockFrequency(kMCGOutClock, &clock);
     if(USB_SetClockDiv(clock))
@@ -46,6 +40,7 @@ uint8_t USB_Init(void)
         return 1;
     }
 
+    /* which MCG generator is to be used */
     SIM->SOPT2 &= ~SIM_SOPT2_PLLFLLSEL_MASK;
 #ifdef SIM_SOPT2_PLLFLLSEL
     (MCG->C6 & MCG_C6_PLLS_MASK)?
@@ -56,51 +51,7 @@ uint8_t USB_Init(void)
     (SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK):   /* PLL */
     (SIM->SOPT2 &= ~SIM_SOPT2_PLLFLLSEL_MASK);  /* FLL */
 #endif
-    
-    /* enable USB clock */
-    SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
-    
-    USB0->USBTRC0 = 0x40; 
-    /* enable USB reset IT */
-	//设置BDT基址寄存器
-	//( 低9 位是默认512 字节的偏移) 512 = 16 * 4 * 8 。
-	//8 位表示: 4 个字节的控制状态，4 个字节的缓冲区地址
-
-    /* reset USB moudle */
-	USB0->USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
-	while(USB0->USBTRC0 & USB_USBTRC0_USBRESET_MASK){};
-    
-    /* set BDT table address */
-	//USB0->BDTPAGE1=(uint8_t)((uint32_t)tBDTtable>>8);
-	//USB0->BDTPAGE2=(uint8_t)((uint32_t)tBDTtable>>16);
-	//USB0->BDTPAGE3=(uint8_t)((uint32_t)tBDTtable>>24);
-        
-    /* clear all IT bit */
-    USB0->ISTAT |= 0xFF;
-    
-    /* enable USB reset IT */
-    USB0->INTEN |= USB_INTEN_USBRSTEN_MASK;
-
-	USB0->USBCTRL = USB_USBCTRL_PDE_MASK;       //D-  D+ 下拉
-	USB0->USBTRC0 |= 0x40;                      //强制设置第6位为1  真是纠结，DS上就这么写的
-
-    /* enable USB moudle */
-	USB0->CTL |= USB_CTL_USBENSOFEN_MASK;
-    
-    /* enable pull down reisger */
-	USB0->CONTROL |= USB_CONTROL_DPPULLUPNONOTG_MASK;
-
-
 	return 0;
 }
 
 
-void USB_DisConnect(void)
-{
-	USB0->CONTROL &= ~USB_CONTROL_DPPULLUPNONOTG_MASK;
-}
-
-void USB_Connect(void)
-{
-	USB0->CONTROL |= USB_CONTROL_DPPULLUPNONOTG_MASK;
-}

@@ -140,24 +140,20 @@ void HID_Proc(void)
 			pMsg = fn_msg_pop();
 			if(pMsg->m_Command == USB_DEVICE_CLASS_HID)
 			{
-				if(pMsg->m_MessageType == fIN) //需要发送数据
+				if(pMsg->m_MessageType == kUSB_IN) //需要发送数据
 				{
 					USB_EP_IN_Transfer(EP2,USB_HID_SendBuffer,USB_HID_SendLen); //发送数据
 					memset(USB_HID_SendBuffer,0,USB_HID_SendLen);  //清空数据
 				}
-				else if(pMsg->m_MessageType == fOUT) //接收到了数据
+				else if(pMsg->m_MessageType == kUSB_OUT) //接收到了数据
 				{
 					 USB_HID_RecFlag = 1;
 				}
 			}
 	}
 }
-/***********************************************************************************************
- 功能：USB_HID_数据接收函数
- 形参：buf: 用于接收数据的缓冲区     
- 返回：接收到的数据长度
- 详解：用户接口
-************************************************************************************************/
+
+
 uint8_t USB_HID_RecData(uint8_t* buf)
 {
 	if(USB_HID_RecFlag == 1)

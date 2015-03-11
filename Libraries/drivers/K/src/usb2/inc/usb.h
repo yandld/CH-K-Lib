@@ -94,23 +94,8 @@ if (!(EX))                                                                  \
 #define EP3_SIZE            32
 #define EP3_BUFF_OFFSET     0x28
 
-//EP4设置
-#define EP4_VALUE           DISABLE
-#define EP4_SIZE            1
-#define EP4_BUFF_OFFSET     0x08
-
-//EP5设置
-#define EP5_VALUE           DISABLE
-#define EP5_SIZE            1
-#define EP5_BUFF_OFFSET     0x08
-
-//EP6设置
-#define EP6_VALUE           DISABLE
-#define EP6_SIZE            1
-#define EP6_BUFF_OFFSET     0x08
 
 
-// BDT状态
 //DBT由MCU控制
 #define kMCU      0x00
 //DBT由SIE(USB)模块控制
@@ -127,23 +112,39 @@ if (!(EX))                                                                  \
 #define mIN_TOKEN       0x09
 
 
-/***********************************************************************************************
-//标准的SETUP请求命令  在标准请求的8个字节中的第二个
-************************************************************************************************/
-#define mGET_STATUS           0
-#define mCLR_FEATURE          1
-#define mSET_FEATURE          3
-#define mSET_ADDRESS          5
-#define mGET_DESC             6
-#define mSET_DESC             7
-#define mGET_CONFIG           8
-#define mSET_CONFIG           9
-#define mGET_INTF             10
-#define mSET_INTF             11
-#define mSYNC_FRAME           12
-#define	mGET_MAXLUN	          0xFE
+/* Standard requests */
+#define GET_STATUS        (0)
+#define CLEAR_FEATURE     (1)
+#define SET_FEATURE       (3)
+#define SET_ADDRESS       (5)
+#define GET_DESCRIPTOR    (6)
+#define SET_DESCRIPTOR    (7)
+#define GET_CONFIGURATION (8)
+#define SET_CONFIGURATION (9)
+#define GET_INTERFACE     (10)
+#define SET_INTERFACE     (11)
 
-//获取描述符
+/* bmRequestType.dataTransferDirection */
+#define HOST_TO_DEVICE (0)
+#define DEVICE_TO_HOST (1)
+
+/* bmRequestType.Type*/
+#define STANDARD_TYPE  (0)
+#define CLASS_TYPE     (1)
+#define VENDOR_TYPE    (2)
+#define RESERVED_TYPE  (3)
+
+/* bmRequestType.Recipient */
+#define DEVICE_RECIPIENT    (0)
+#define INTERFACE_RECIPIENT (1)
+#define ENDPOINT_RECIPIENT  (2)
+#define OTHER_RECIPIENT     (3)
+
+/* Descriptors */
+#define DESCRIPTOR_TYPE(wValue)  (wValue >> 8)
+#define DESCRIPTOR_INDEX(wValue) (wValue & 0xff)
+
+
 #define DEVICE_DESCRIPTOR         1
 #define CONFIGURATION_DESCRIPTOR  2
 #define STRING_DESCRIPTOR         3
@@ -151,8 +152,7 @@ if (!(EX))                                                                  \
 #define ENDPOINT_DESCRIPTOR       5
 #define REPORT_DESCRIPTOR         0x22
 
-/*根据USB2.0标准*/
-/*定义USB设备的类型*/
+
 #define USB_DEVICE_CLASS_AUDIO        1
 #define USB_DEVICE_CLASS_CDC          2
 #define USB_DEVICE_CLASS_HID          3
@@ -162,6 +162,14 @@ if (!(EX))                                                                  \
 #define USB_DEVICE_CLASS_HUB          7
 #define USB_DEVICE_CLASS_CDC_DATA     8
 #define USB_DEVICE_CLASS_SMARTCARD    9
+
+/*string offset*/
+#define STRING_OFFSET_LANGID            (0)
+#define STRING_OFFSET_IMANUFACTURER     (1)
+#define STRING_OFFSET_IPRODUCT          (2)
+#define STRING_OFFSET_ISERIAL           (3)
+#define STRING_OFFSET_ICONFIGURATION    (4)
+#define STRING_OFFSET_IINTERFACE        (5)
 
 
 enum
@@ -176,14 +184,13 @@ enum
     LOADER
 };
 
-enum
-{
-    uPOWER,
-    uENUMERATED,
-    uENABLED,
-    uADDRESS,
-    uREADY    
-};
+typedef enum {ATTACHED, POWERED, DEFAULT, ADDRESS, CONFIGURED} DEVICE_STATE;
+
+typedef struct {
+    volatile DEVICE_STATE state;
+    uint8_t configuration;
+    bool suspended;
+} USB_DEVICE;
 
 enum
 {
@@ -243,15 +250,17 @@ typedef struct _tBDT
 } tBDT,*ptBDT;
 
 
-struct urequest
-{
-    uint8_t request_type;
-    uint8_t request;
-    uint16_t value;
-    uint16_t index;
-    uint16_t length;
-};
-typedef struct urequest* ureq_t;
+typedef struct {
+    struct {
+        uint8_t dataTransferDirection;
+        uint8_t Type;
+        uint8_t Recipient;
+    } bmRequestType;
+    uint8_t  bRequest;
+    uint16_t wValue;
+    uint16_t wIndex;
+    uint16_t wLength;
+} SETUP_PACKET;
 
 typedef struct _tUSB_Setup 
 {
@@ -267,15 +276,11 @@ typedef struct _tUSB_Setup
 
 
 //本构件实现的接口函数
-void USB_WaitDeviceEnumed(void);
-uint8_t USB_IsDeviceEnumed(void);
+
 void USB_EP_IN_Transfer(uint8_t uint8_tEP,uint8_t *puint8_tDataPointer,uint8_t uint8_tDataSize);
 uint16_t USB_EP_OUT_SizeCheck(uint8_t uint8_tEP);
 void USB_EnableInterface(void);
-void USB_GetDescHandler(void);
-uint8_t USB_Init2(void);
-void USB_DisConnect(void);
-void USB_Connect(void);
+uint8_t USB_Init(void);
 
 #endif
 

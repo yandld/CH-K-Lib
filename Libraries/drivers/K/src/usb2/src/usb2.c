@@ -5,10 +5,6 @@
 
 /* BDT RAM */
 ALIGN(512) tBDT tBDTtable[16];
-//USB模块内部全局变量
-uint8_t guint8_tUSBClearFlags;            //内部使用
-
-
 tUSB_Setup *Setup_Pkt;             //指向端点0OUT数据首地址
 
 static USB_DEVICE gUSBDevice;
@@ -81,9 +77,6 @@ const uint8_t* String_Table[4]=
 
 //SETUP包后面只能跟DATA0
 
-
-
-
 void USBD_DecodeSetupPacket(uint8_t *data, SETUP_PACKET *packet)
 {
     /* Fill in the elements of a SETUP_PACKET structure from raw data */
@@ -102,19 +95,14 @@ uint32_t USB_GetPhyEPNumber(void)
     return ARRAY_SIZE(USB0->ENDPOINT);
 }
 
-
 void USB_EP_IN_Transfer(uint8_t ep, uint8_t *buf, uint8_t len)
 {
     uint8_t *p;
     uint8_t transfer_size;     //端点的数据长度
     uint16_t uint16_tLenght=0;    
-    static uint8_t uint8_tEndPointFlag;
-    static uint8_t *pData;          //内部使用
+    static uint8_t *pData;
     static uint8_t remain;
-    uint8_t phyEP, logEP;
-    /*调整当前缓冲区的位置*/
-    uint8_tEndPointFlag = ep;
-    phyEP = ep;
+    static bool new_transfer = true;
     
     transfer_size = 0;
     
@@ -123,65 +111,41 @@ void USB_EP_IN_Transfer(uint8_t ep, uint8_t *buf, uint8_t len)
     p = BufferPointer[ep];   //将新EP的BUFFER地址给puint8_tEPBuffer
   
     /* a new transfer */
-    if(guint8_tUSBClearFlags & (1<<kUSB_IN))
+    if(new_transfer)
     {
         pData = buf;
         remain = len;
-
+        
         uint16_tLenght=(Setup_Pkt->wLength_h<<8) + Setup_Pkt->wLength_l;
         if((uint16_tLenght < len) && (ep == 2))
         {
-            remain = Setup_Pkt->wLength_l; //只发送setup中的低8位长度
+            remain = Setup_Pkt->wLength_l;
         }
     }
     
-    /*检查发送长度*/
     if(remain > cEP_Size[ep]) //如果发送数据包的长度 大于32字节时
     {
-      //  printf("guint8_tIN_Counter:%d\r\n", guint8_tIN_Counter);
         transfer_size = cEP_Size[ep];     //将此时端点的长度限制在端点的默认长度
         remain -= cEP_Size[ep]; //将数据包的长度减少EP_Size
-        BIT_CLR(kUSB_IN,guint8_tUSBClearFlags);//将guint8_tUSBClearFlags清零
+        new_transfer = false;
     }
     else
     {
         transfer_size = remain;      //如果小于
         remain = 0;            
-        BIT_SET(kUSB_IN,guint8_tUSBClearFlags);//将guint8_tUSBClearFlags置一
+        new_transfer = true;
     }
     
     /*将用户缓冲的区的值复制到EP 缓冲区中准备发送*/
     tBDTtable[ep].Cnt=(transfer_size);
-    
-    //if(len !=uint8_tEPSize )
-    //printf("\r\n       len:%d    size:%d\r\n", len, uint8_tEPSize);
-    printf("len:%d\r\n", transfer_size);
-    if(transfer_size)
+    //printf("len:%d\r\n", transfer_size);
+    while(transfer_size--)
     {
-        while(transfer_size--)
-        {
-            *p++ = *pData++; //将用户的数据赋值给EP存储区   
-           // printf("%d\r\n", *p);
-        }
+        *p++ = *pData++; //将用户的数据赋值给EP存储区   
     }
-    //printf("DataPointer:%d\r\n", (uint32_t)puint8_tIN_DataPointer);
-
-
     static uint8_t data1 = kUDATA0;
     data1 ^= 0x40;
-    
     tBDTtable[ep].Stat._byte = data1;
-//    if(gDataFlag & (1<<0))
-//    {
-//        tBDTtable[ep].Stat._byte = kUDATA0;
-//        BIT_CLR(uint8_tEndPointFlag, gDataFlag);
-//    }
-//    else
-//    {
-//        tBDTtable[ep].Stat._byte = kUDATA1;          
-//        BIT_SET(uint8_tEndPointFlag, gDataFlag);
-//    }
-    
 }
 
 
@@ -446,8 +410,6 @@ void USB_BusResetHandler(void)
     uint32_t i, phy_ep;
     USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb reset\r\n"));
 
-	guint8_tUSBClearFlags=0xFF;
-	//gDataFlag=0;
     
     phy_ep = USB_GetPhyEPNumber();
     
@@ -503,7 +465,6 @@ void USB_EP0_IN_Handler(SETUP_PACKET *packet)
     {
         USB0->ADDR = packet->wValue & 0xFF;
         gUSBDevice.state = CONFIGURED;
-        BIT_SET(kUSB_IN, guint8_tUSBClearFlags);
         USB_DEBUG_LOG(USB_DEBUG_EP0, ("new addr:%d\r\n", USB0->ADDR));
     }
     

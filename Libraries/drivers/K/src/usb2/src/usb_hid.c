@@ -43,17 +43,17 @@ void HID_Proc(void)
 {
 	uint8_t i;
 	pMsg = NULL;
-	if(fn_msg_exist()) //如果存在消息
+	if(fn_msg_exist())
 	{
 			pMsg = fn_msg_pop();
 			if(pMsg->m_Command == USB_DEVICE_CLASS_HID)
 			{
 				if(pMsg->m_MessageType == kUSB_IN) //需要发送数据
 				{
-					USB_EP_IN_Transfer(EP2,USB_HID_SendBuffer,USB_HID_SendLen); //发送数据
-					memset(USB_HID_SendBuffer,0,USB_HID_SendLen);  //清空数据
+					USB_EP_IN_Transfer(EP2, USB_HID_SendBuffer, USB_HID_SendLen);
+					memset(USB_HID_SendBuffer, 0, USB_HID_SendLen); 
 				}
-				else if(pMsg->m_MessageType == kUSB_OUT) //接收到了数据
+				else if(pMsg->m_MessageType == kUSB_OUT)
 				{
 					 USB_HID_RecFlag = 1;
 				}

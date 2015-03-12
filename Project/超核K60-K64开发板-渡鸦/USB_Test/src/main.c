@@ -30,7 +30,6 @@ int main(void)
 	
     while(1)
     {
-        static int i;
         USB_HID_SetMouse(1,0,0,0);
         HID_Proc();
     }

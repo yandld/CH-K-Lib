@@ -72,7 +72,6 @@ if (!(EX))                                                                  \
 #define BIT_CLR(BitNumber, Register)        (Register &=~(1<<BitNumber))
 
 
-
 //EP0缓冲区设置
 #define EP0_SIZE            32
 
@@ -140,17 +139,7 @@ if (!(EX))                                                                  \
 #define ENDPOINT_RECIPIENT  (2)
 #define OTHER_RECIPIENT     (3)
 
-/* Descriptors */
-#define DESCRIPTOR_TYPE(wValue)  (wValue >> 8)
-#define DESCRIPTOR_INDEX(wValue) (wValue & 0xff)
 
-
-#define DEVICE_DESCRIPTOR         1
-#define CONFIGURATION_DESCRIPTOR  2
-#define STRING_DESCRIPTOR         3
-#define INTERFACE_DESCRIPTOR      4
-#define ENDPOINT_DESCRIPTOR       5
-#define REPORT_DESCRIPTOR         0x22
 
 
 #define USB_DEVICE_CLASS_AUDIO        1
@@ -163,14 +152,48 @@ if (!(EX))                                                                  \
 #define USB_DEVICE_CLASS_CDC_DATA     8
 #define USB_DEVICE_CLASS_SMARTCARD    9
 
-/*string offset*/
-#define STRING_OFFSET_LANGID            (0)
-#define STRING_OFFSET_IMANUFACTURER     (1)
-#define STRING_OFFSET_IPRODUCT          (2)
-#define STRING_OFFSET_ISERIAL           (3)
-#define STRING_OFFSET_ICONFIGURATION    (4)
-#define STRING_OFFSET_IINTERFACE        (5)
 
+
+
+#define NUMBER_OF_LOGICAL_ENDPOINTS (16)
+#define NUMBER_OF_PHYSICAL_ENDPOINTS (NUMBER_OF_LOGICAL_ENDPOINTS * 2)
+
+/* Define physical endpoint numbers */
+
+/*      Endpoint    No.   */
+/*      ----------------  */
+#define EP0OUT      (0)
+#define EP0IN       (1)
+#define EP1OUT      (2)
+#define EP1IN       (3)
+#define EP2OUT      (4)
+#define EP2IN       (5)
+#define EP3OUT      (6)
+#define EP3IN       (7)
+#define EP4OUT      (8)
+#define EP4IN       (9)
+#define EP5OUT      (10)
+#define EP5IN       (11)
+#define EP6OUT      (12)
+#define EP6IN       (13)
+#define EP7OUT      (14)
+#define EP7IN       (15)
+#define EP8OUT      (16)
+#define EP8IN       (17)
+#define EP9OUT      (18)
+#define EP9IN       (19)
+#define EP10OUT     (20)
+#define EP10IN      (21)
+#define EP11OUT     (22)
+#define EP11IN      (23)
+#define EP12OUT     (24)
+#define EP12IN      (25)
+#define EP13OUT     (26)
+#define EP13IN      (27)
+#define EP14OUT     (28)
+#define EP14IN      (29)
+#define EP15OUT     (30)
+#define EP15IN      (31)
 
 enum
 {
@@ -187,6 +210,28 @@ enum
 typedef enum {ATTACHED, POWERED, DEFAULT, ADDRESS, CONFIGURED} DEVICE_STATE;
 
 typedef struct {
+    struct {
+        uint8_t dataTransferDirection;
+        uint8_t Type;
+        uint8_t Recipient;
+    } bmRequestType;
+    uint8_t  bRequest;
+    uint16_t wValue;
+    uint16_t wIndex;
+    uint16_t wLength;
+} SETUP_PACKET;
+
+typedef struct {
+    SETUP_PACKET setup;
+    uint8_t *ptr;
+    uint32_t remaining;
+    uint8_t direction;
+    bool zlp;
+    bool notify;
+} CONTROL_TRANSFER;
+
+typedef struct {
+    SETUP_PACKET setup_pkt;
     volatile DEVICE_STATE state;
     uint8_t configuration;
     bool suspended;
@@ -250,35 +295,8 @@ typedef struct _tBDT
 } tBDT,*ptBDT;
 
 
-typedef struct {
-    struct {
-        uint8_t dataTransferDirection;
-        uint8_t Type;
-        uint8_t Recipient;
-    } bmRequestType;
-    uint8_t  bRequest;
-    uint16_t wValue;
-    uint16_t wIndex;
-    uint16_t wLength;
-} SETUP_PACKET;
-
-typedef struct _tUSB_Setup 
-{
-       uint8_t bmRequestType; 
-       uint8_t bRequest;      
-       uint8_t wValue_l;      //字大小字段,根据请求的不同而不同
-       uint8_t wValue_h;      
-       uint8_t wIndex_l;      //字大小字段,根据请求的不同而不同,通常是传递索引和位移量
-       uint8_t wIndex_h;
-       uint8_t wLength_l;     //如果有数据阶段，该域表示所要传输的字节大小
-       uint8_t wLength_h;
-}tUSB_Setup;
-
-
-//本构件实现的接口函数
-
-void USB_EP_IN_Transfer(uint8_t uint8_tEP,uint8_t *puint8_tDataPointer,uint8_t uint8_tDataSize);
-uint16_t USB_EP_OUT_SizeCheck(uint8_t uint8_tEP);
+void USB_EP_IN_Transfer(uint8_t ep, uint8_t *buf, uint8_t len);
+uint16_t USB_EP_OUT_SizeCheck(uint8_t ep);
 void USB_EnableInterface(void);
 uint8_t USB_Init(void);
 

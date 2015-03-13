@@ -72,28 +72,6 @@ if (!(EX))                                                                  \
 #define BIT_CLR(BitNumber, Register)        (Register &=~(1<<BitNumber))
 
 
-//EP0缓冲区设置
-#define EP0_SIZE            32
-
-//EP1设置
-#define EP1_VALUE           _EP_IN
-#define EP1_TYPE            INTERRUPT
-#define EP1_SIZE            32
-#define EP1_BUFF_OFFSET     0x18
-
-//EP2设置
-#define EP2_VALUE           _EP_IN
-#define EP2_TYPE            BULK
-#define EP2_SIZE            32
-#define EP2_BUFF_OFFSET     0x20
-
-//EP3设置
-#define EP3_VALUE           _EP_OUT
-#define EP3_TYPE            BULK
-#define EP3_SIZE            32
-#define EP3_BUFF_OFFSET     0x28
-
-
 
 //DBT由MCU控制
 #define kMCU      0x00
@@ -195,6 +173,23 @@ if (!(EX))                                                                  \
 #define EP15OUT     (30)
 #define EP15IN      (31)
 
+#define MAX_PACKET_SIZE_EP0  (64)
+#define MAX_PACKET_SIZE_EP1  (64)
+#define MAX_PACKET_SIZE_EP2  (64)
+#define MAX_PACKET_SIZE_EP3  (1023)
+#define MAX_PACKET_SIZE_EP4  (64)
+#define MAX_PACKET_SIZE_EP5  (64)
+#define MAX_PACKET_SIZE_EP6  (64)
+#define MAX_PACKET_SIZE_EP7  (64)
+#define MAX_PACKET_SIZE_EP8  (64)
+#define MAX_PACKET_SIZE_EP9  (64)
+#define MAX_PACKET_SIZE_EP10 (64)
+#define MAX_PACKET_SIZE_EP11 (64)
+#define MAX_PACKET_SIZE_EP12 (64)
+#define MAX_PACKET_SIZE_EP13 (64)
+#define MAX_PACKET_SIZE_EP14 (64)
+#define MAX_PACKET_SIZE_EP15 (64)
+
 enum
 {
     EP0,
@@ -265,7 +260,7 @@ enum
 
 typedef union _tBDT_STAT
 {
-    uint8_t _byte;
+    uint8_t info;
 	//发送的MCU控制字段
     struct{
         uint8_t :1;
@@ -288,10 +283,10 @@ typedef union _tBDT_STAT
 
 typedef struct _tBDT
 {
-    tBDT_STAT Stat;
-    uint8_t  dummy;
-    uint16_t Cnt;     //接受到的字节数
-    uint32_t bufAddr;    //缓冲区地址         
+    tBDT_STAT Stat;         // BD[0:7]
+    uint8_t  dummy;         // RSVD: BD[8:15]
+    uint16_t byte_count;    // BD[16:32]
+    uint32_t address;       // Addr
 } tBDT,*ptBDT;
 
 
@@ -299,6 +294,7 @@ void USB_EP_IN_Transfer(uint8_t ep, uint8_t *buf, uint8_t len);
 uint16_t USB_EP_OUT_SizeCheck(uint8_t ep);
 void USB_EnableInterface(void);
 uint8_t USB_Init(void);
+uint8_t* USBD_GetStdDesc(SETUP_PACKET *packet, uint32_t *len);
 
 #endif
 

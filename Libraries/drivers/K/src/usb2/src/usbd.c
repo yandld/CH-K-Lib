@@ -1,6 +1,5 @@
 #include "usb.h"
 #include "usb_desc.h"
-#include "usb_desc_type.h"
 #include "usb_hid.h"
 #include "message_manage.h"
 
@@ -11,22 +10,22 @@ static CONTROL_TRANSFER transfer;
 static USB_DEVICE device;
 
 //各个端点的数据缓冲区
-uint8_t EP0_OUT_ODD_Buffer[EP0_SIZE];
-uint8_t EP0_OUT_EVEN_Buffer[EP0_SIZE];
-uint8_t EP0_IN_ODD_Buffer[EP0_SIZE];
-uint8_t EP0_IN_EVEN_Buffer[EP0_SIZE];
-uint8_t EP1_OUT_ODD_Buffer[EP1_SIZE];
-uint8_t EP1_OUT_EVEN_Buffer[EP1_SIZE];
-uint8_t EP1_IN_ODD_Buffer[EP1_SIZE];
-uint8_t EP1_IN_EVEN_Buffer[EP1_SIZE];
-uint8_t EP2_OUT_ODD_Buffer[EP2_SIZE];
-uint8_t EP2_OUT_EVEN_Buffer[EP2_SIZE];
-uint8_t EP2_IN_ODD_Buffer[EP2_SIZE];
-uint8_t EP2_IN_EVEN_Buffer[EP2_SIZE];
-uint8_t EP3_OUT_ODD_Buffer[EP3_SIZE];
-uint8_t EP3_OUT_EVEN_Buffer[EP3_SIZE];
-uint8_t EP3_IN_ODD_Buffer[EP3_SIZE];
-uint8_t EP3_IN_EVEN_Buffer[EP3_SIZE];
+uint8_t EP0_OUT_ODD_Buffer[MAX_PACKET_SIZE_EP0];
+uint8_t EP0_OUT_EVEN_Buffer[MAX_PACKET_SIZE_EP0];
+uint8_t EP0_IN_ODD_Buffer[MAX_PACKET_SIZE_EP0];
+uint8_t EP0_IN_EVEN_Buffer[MAX_PACKET_SIZE_EP0];
+uint8_t EP1_OUT_ODD_Buffer[MAX_PACKET_SIZE_EP1];
+uint8_t EP1_OUT_EVEN_Buffer[MAX_PACKET_SIZE_EP1];
+uint8_t EP1_IN_ODD_Buffer[MAX_PACKET_SIZE_EP1];
+uint8_t EP1_IN_EVEN_Buffer[MAX_PACKET_SIZE_EP1];
+uint8_t EP2_OUT_ODD_Buffer[MAX_PACKET_SIZE_EP2];
+uint8_t EP2_OUT_EVEN_Buffer[MAX_PACKET_SIZE_EP2];
+uint8_t EP2_IN_ODD_Buffer[MAX_PACKET_SIZE_EP2];
+uint8_t EP2_IN_EVEN_Buffer[MAX_PACKET_SIZE_EP2];
+uint8_t EP3_OUT_ODD_Buffer[MAX_PACKET_SIZE_EP3];
+uint8_t EP3_OUT_EVEN_Buffer[MAX_PACKET_SIZE_EP3];
+uint8_t EP3_IN_ODD_Buffer[MAX_PACKET_SIZE_EP3];
+uint8_t EP3_IN_EVEN_Buffer[MAX_PACKET_SIZE_EP3];
 //指向各个缓冲区的地址指针
 uint8_t *BufferPointer[]=
 {
@@ -48,33 +47,27 @@ uint8_t *BufferPointer[]=
     EP3_IN_EVEN_Buffer
 };
 //每个缓冲区大小
-const uint8_t cEP_Size[]=
+const uint32_t cEP_Size[]=
 {
-    EP0_SIZE,    
-    EP0_SIZE,    
-    EP0_SIZE,    
-    EP0_SIZE,    
-    EP1_SIZE,    
-    EP1_SIZE,    
-    EP1_SIZE,    
-    EP1_SIZE,    
-    EP2_SIZE,    
-    EP2_SIZE,    
-    EP2_SIZE,    
-    EP2_SIZE,    
-    EP3_SIZE,
-    EP3_SIZE,
-    EP3_SIZE,
-    EP3_SIZE
+    MAX_PACKET_SIZE_EP0,    
+    MAX_PACKET_SIZE_EP0,    
+    MAX_PACKET_SIZE_EP0,    
+    MAX_PACKET_SIZE_EP0,    
+    MAX_PACKET_SIZE_EP1,    
+    MAX_PACKET_SIZE_EP1,    
+    MAX_PACKET_SIZE_EP1,    
+    MAX_PACKET_SIZE_EP1,    
+    MAX_PACKET_SIZE_EP2,    
+    MAX_PACKET_SIZE_EP2,    
+    MAX_PACKET_SIZE_EP2,    
+    MAX_PACKET_SIZE_EP2,    
+    MAX_PACKET_SIZE_EP3,
+    MAX_PACKET_SIZE_EP3,
+    MAX_PACKET_SIZE_EP3,
+    MAX_PACKET_SIZE_EP3
 };
 
-const uint8_t* String_Table[4]=
-{
-    String_Descriptor0,
-    String_Descriptor1,
-    String_Descriptor2,
-    String_Descriptor3
-};
+
 
 //SETUP包后面只能跟DATA0
 
@@ -135,7 +128,7 @@ void USB_EP_IN_Transfer(uint8_t ep, uint8_t *buf, uint8_t len)
         new_transfer = true;
     }
     
-    tBDTtable[ep].Cnt=(transfer_size);
+    tBDTtable[ep].byte_count=(transfer_size);
     while(transfer_size--)
     {
         *p++ = *pData++; //将用户的数据赋值给EP存储区   
@@ -144,14 +137,14 @@ void USB_EP_IN_Transfer(uint8_t ep, uint8_t *buf, uint8_t len)
     /* DATA0 DATA1 transfer */
     static uint8_t data1 = kUDATA0;
     data1 ^= 0x40;
-    tBDTtable[ep].Stat._byte = data1;
+    tBDTtable[ep].Stat.info = data1;
 }
 
 
 uint16_t USB_GetPacketSize(uint8_t ep)
 {
     uint8_t size; 
-    size = tBDTtable[ep << 2].Cnt;
+    size = tBDTtable[ep << 2].byte_count;
     return(size & 0x03FF);
 }
 
@@ -168,81 +161,13 @@ void USB_EnableInterface(void)
         USB0->ENDPOINT[i].ENDPT |= (USB_ENDPT_EPHSHK_MASK | USB_ENDPT_EPTXEN_MASK | USB_ENDPT_EPRXEN_MASK);
     }
 
-    tBDTtable[bEP2IN_ODD].Stat._byte= kUDATA1;
-    tBDTtable[bEP2IN_ODD].Cnt = 0x00;
-    tBDTtable[bEP2IN_ODD].bufAddr =(uint32_t  )EP2_IN_ODD_Buffer;            
+    tBDTtable[bEP2IN_ODD].Stat.info= kUDATA1;
+    tBDTtable[bEP2IN_ODD].byte_count = 0x00;
+    tBDTtable[bEP2IN_ODD].address =(uint32_t  )EP2_IN_ODD_Buffer;            
 
-    tBDTtable[bEP3OUT_ODD].Stat._byte= kUDATA0;
-    tBDTtable[bEP3OUT_ODD].Cnt = 0xFF;
-    tBDTtable[bEP3OUT_ODD].bufAddr =(uint32_t)EP3_OUT_ODD_Buffer;            
-}
-
-//USBD_GetDesc
-uint8_t* USBD_GetStdDesc(SETUP_PACKET *packet, uint32_t *len)
-{
-    uint8_t *p;
-    
-    *len = 0;
-    p = 0;
-    
-    switch(DESCRIPTOR_TYPE(packet->wValue))
-	{
-		case DEVICE_DESCRIPTOR:
-            USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("device desc\r\n"));
-            p = (uint8_t*)Device_Descriptor;
-            *len = sizeof(Device_Descriptor);
-			break;
-        
-		case CONFIGURATION_DESCRIPTOR:
-			USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("config desc\r\n"));
-            p = (uint8_t*)Configuration_Descriptor;
-            *len = sizeof(Configuration_Descriptor);
-			break;
-        
-		case STRING_DESCRIPTOR:
-            switch (DESCRIPTOR_INDEX(packet->wValue))
-			{
-				case STRING_OFFSET_LANGID:
-                    USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("string desc: language\r\n"));
-                    p = (uint8_t*)String_Table[STRING_OFFSET_LANGID];
-                    *len = sizeof(String_Table[STRING_OFFSET_LANGID]);
-					break;
-				case STRING_OFFSET_IMANUFACTURER:
-                    USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("string desc: vender\r\n"));
-                    p = (uint8_t*)String_Table[STRING_OFFSET_IMANUFACTURER];
-                    *len = sizeof(String_Table[STRING_OFFSET_IMANUFACTURER]);
-					break;
-				case STRING_OFFSET_IPRODUCT:
-                    USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("string desc: vender string\r\n"));
-                    p = (uint8_t*)String_Table[STRING_OFFSET_IPRODUCT];
-                    *len = sizeof(String_Table[STRING_OFFSET_IPRODUCT]);
-					break;
-				case STRING_OFFSET_ISERIAL:
-                    USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("string desc: vender serail number\r\n"));
-                    p = (uint8_t*)String_Table[STRING_OFFSET_ISERIAL];
-                    *len = sizeof(String_Table[STRING_OFFSET_ISERIAL]);
-					break;
-				case STRING_OFFSET_ICONFIGURATION:
-                    USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("string desc: congiuration\r\n"));
-					break;
-				case STRING_OFFSET_IINTERFACE:
-                    USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("string desc: interface\r\n"));
-					break;
-				default: 
-                    USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("string desc: unknow:%d\r\n",DESCRIPTOR_INDEX(packet->wValue)));
-					break; 
-			}
-			break;
-        case REPORT_DESCRIPTOR:
-            USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("report desc\r\n"));
-            p = (uint8_t*)Report_Descriptor;
-            *len = sizeof(Report_Descriptor);
-            break;
-		default:
-            USB_DEBUG_LOG(USB_DEBUG_DESCRIPTOR, ("desc:unknow%d\r\n",  DESCRIPTOR_TYPE(packet->wValue)));
-			break;
-    }
-    return p;
+    tBDTtable[bEP3OUT_ODD].Stat.info= kUDATA0;
+    tBDTtable[bEP3OUT_ODD].byte_count = 0xFF;
+    tBDTtable[bEP3OUT_ODD].address =(uint32_t)EP3_OUT_ODD_Buffer;            
 }
 
 
@@ -258,7 +183,6 @@ void USB_EP0_OUT_Handler(SETUP_PACKET *packet)
     
 	if(packet->bmRequestType.dataTransferDirection == DEVICE_TO_HOST)
 	{
-        printf("DEVICE_TO_HOST\r\n");
         switch(packet->bmRequestType.Type)
         {
 			case STANDARD_TYPE:
@@ -270,10 +194,7 @@ void USB_EP0_OUT_Handler(SETUP_PACKET *packet)
 					case GET_DESCRIPTOR:
                         USB_DEBUG_LOG(USB_DEBUG_EP0, ("standrd request: get desc - "));
                         p = USBD_GetStdDesc(packet, &size);
-                        if(size)
-                        {
-                            USB_EP_IN_Transfer(EP0, p, size);
-                        }
+                        USB_EP_IN_Transfer(EP0, p, size);
 						break;
 					case GET_INTERFACE:
                         USB_DEBUG_LOG(USB_DEBUG_EP0, ("standrd request: get interface\r\n"));
@@ -299,7 +220,6 @@ void USB_EP0_OUT_Handler(SETUP_PACKET *packet)
 	}
 	else
 	{
-        printf("HOST_TO_DEIVCE\r\n");
 		switch(packet->bmRequestType.Type)
 		{
 			case STANDARD_TYPE:
@@ -353,8 +273,9 @@ void USB_EP0_OUT_Handler(SETUP_PACKET *packet)
 				break;
 		}
 	}
-	tBDTtable[bEP0OUT_ODD].Stat._byte= kUDATA0;
-	BIT_CLR(USB_CTL_TXSUSPENDTOKENBUSY_SHIFT,USB0->CTL); // 为0 时: SIE 继续处理令牌
+    
+	tBDTtable[bEP0OUT_ODD].Stat.info= kUDATA0;
+	BIT_CLR(USB_CTL_TXSUSPENDTOKENBUSY_SHIFT,USB0->CTL);
 }
 
 
@@ -417,21 +338,21 @@ void USB_BusResetHandler(void)
     }
 
     /*端点0 BDT 启动端点设置*/
-    tBDTtable[bEP0OUT_ODD].Cnt = EP0_SIZE;
-    tBDTtable[bEP0OUT_ODD].bufAddr =(uint32_t)EP0_OUT_ODD_Buffer;
-    tBDTtable[bEP0OUT_ODD].Stat._byte = kUDATA1;   
+    tBDTtable[bEP0OUT_ODD].byte_count = MAX_PACKET_SIZE_EP0;
+    tBDTtable[bEP0OUT_ODD].address =(uint32_t)EP0_OUT_ODD_Buffer;
+    tBDTtable[bEP0OUT_ODD].Stat.info = kUDATA1;   
    
-    tBDTtable[bEP0OUT_EVEN].Cnt = EP0_SIZE;
-    tBDTtable[bEP0OUT_EVEN].bufAddr =(uint32_t)EP0_OUT_EVEN_Buffer;
-    tBDTtable[bEP0OUT_EVEN].Stat._byte = kUDATA1;     
+    tBDTtable[bEP0OUT_EVEN].byte_count = MAX_PACKET_SIZE_EP0;
+    tBDTtable[bEP0OUT_EVEN].address =(uint32_t)EP0_OUT_EVEN_Buffer;
+    tBDTtable[bEP0OUT_EVEN].Stat.info = kUDATA1;     
    
-    tBDTtable[bEP0IN_ODD].Cnt = EP0_SIZE;
-    tBDTtable[bEP0IN_ODD].bufAddr =(uint32_t)EP0_IN_ODD_Buffer;      
-    tBDTtable[bEP0IN_ODD].Stat._byte = kUDATA0;
+    tBDTtable[bEP0IN_ODD].byte_count = MAX_PACKET_SIZE_EP0;
+    tBDTtable[bEP0IN_ODD].address =(uint32_t)EP0_IN_ODD_Buffer;      
+    tBDTtable[bEP0IN_ODD].Stat.info = kUDATA0;
    
-    tBDTtable[bEP0IN_EVEN].Cnt = EP0_SIZE; 
-    tBDTtable[bEP0IN_EVEN].bufAddr =(uint32_t)EP0_IN_EVEN_Buffer;      
-    tBDTtable[bEP0IN_EVEN].Stat._byte = kUDATA0;
+    tBDTtable[bEP0IN_EVEN].byte_count = MAX_PACKET_SIZE_EP0; 
+    tBDTtable[bEP0IN_EVEN].address =(uint32_t)EP0_IN_EVEN_Buffer;      
+    tBDTtable[bEP0IN_EVEN].Stat.info = kUDATA0;
 
     /* reset all BDT to even */
     USB0->CTL |= USB_CTL_ODDRST_MASK;
@@ -475,7 +396,7 @@ void USB_EP2_IN_Handler(void)
 	m_Msg.m_Command = USB_DEVICE_CLASS;
 	m_Msg.m_MessageType = kUSB_IN;
 	fn_msg_push(m_Msg); //发送一个消息
-	// tBDTtable[bEP2IN_ODD].Stat._byte= kUDATA0;
+	// tBDTtable[bEP2IN_ODD].Stat.info= kUDATA0;
 
     USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
 }
@@ -486,8 +407,8 @@ void USB_EPCallback(uint8_t ep, uint8_t dir)
     {
         m_Msg.m_Command = USB_DEVICE_CLASS;
         m_Msg.m_MessageType = kUSB_IN;
-        fn_msg_push(m_Msg); //发送一个消息
-        // tBDTtable[bEP2IN_ODD].Stat._byte= kUDATA0;
+        fn_msg_push(m_Msg);
+        // tBDTtable[bEP2IN_ODD].Stat.info= kUDATA0;
         USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
     }
     if((ep == 3) && (dir == kUSB_OUT))
@@ -496,29 +417,29 @@ void USB_EPCallback(uint8_t ep, uint8_t dir)
         m_Msg.m_MessageType = kUSB_OUT;
         m_Msg.m_MsgLen = USB_GetPacketSize(EP3);
         m_Msg.pMessage = BufferPointer[bEP3OUT_ODD];
-        fn_msg_push(m_Msg); //发送一个消息
-        tBDTtable[EP3<<2].Stat._byte= kSIE;
-        tBDTtable[bEP3OUT_ODD].Cnt = EP3_SIZE;
+        fn_msg_push(m_Msg);
+        tBDTtable[EP3<<2].Stat.info= kSIE;
+        tBDTtable[bEP3OUT_ODD].byte_count = MAX_PACKET_SIZE_EP3;
     }
     
 }
 
 void USB_Handler(void)
 {
-    uint8_t ep;
+    uint8_t num;
     uint8_t dir;
 
     /* get endpoint direction and ep number */
     (USB0->STAT & USB_STAT_TX_MASK)?(dir = kUSB_IN):(dir = kUSB_OUT);
-    ep = ((USB0->STAT & USB_STAT_ENDP_MASK )>> USB_STAT_ENDP_SHIFT);
+    num = ((USB0->STAT & USB_STAT_ENDP_MASK )>> USB_STAT_ENDP_SHIFT);
     
-    USB_DEBUG_LOG(USB_DEBUG_MIN, ("EP%d-DIR:%d - ", ep, dir));
+    USB_DEBUG_LOG(USB_DEBUG_MIN, ("EP%d-DIR:%d - ", num, dir));
     
-	if(ep == 0)
+	if(num == 0)
 	{
         SETUP_PACKET packet;
         
-        //printf("!%d\r\n", tBDTtable[0].Cnt);
+        //printf("!%d\r\n", tBDTtable[0].byte_count);
         USBD_DecodeSetupPacket((uint8_t*)BufferPointer[bEP0OUT_ODD], &packet);
         device.setup_pkt = packet;
         
@@ -533,7 +454,7 @@ void USB_Handler(void)
 	}
     
     /* other ep callback */
-    USB_EPCallback(ep, dir);
+    USB_EPCallback(num, dir);
 }
 
 
@@ -583,7 +504,6 @@ void USB0_IRQHandler(void)
         uint8_t err = USB0->ERRSTAT;
         USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb error:%0x%X\r\n", err));
         
-        /* clear */
         USB0->ISTAT |= USB_ISTAT_ERROR_MASK;
         USB0->ERRSTAT = 0xFF;
 	}

@@ -16,7 +16,7 @@ uint8_t USB_CDC_InterfaceReq_Handler(void)
 			{
 				BIT_CLR(EP0,guint8_tUSB_Toogle_flags);
 				EP_OUT_Transfer(EP0,(uint8_t*)&LineCoding);
-				USB_EP_IN_Transfer(EP0,0,0);       
+				USB_EP_IN_Transfer(EP0, 0, 0);       
 			}
 		break;
 		case SET_CONTROL_LINE_STATE:

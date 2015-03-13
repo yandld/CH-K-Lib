@@ -1,5 +1,6 @@
-#ifndef __USBDESC_TYPE_H_
-#define	__USBDESC_TYPE_H_
+#ifndef __USBD_DESC_H_
+#define	__USBD_DESC_H_
+
 
 
 /* Descriptors */

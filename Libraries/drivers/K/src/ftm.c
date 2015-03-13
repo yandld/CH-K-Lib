@@ -42,6 +42,9 @@ static const struct reg_ops SIM_FTMClockGateTable[] =
 #ifdef FTM2
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM2_MASK},
 #endif
+#ifdef FTM3
+    {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM3_MASK},
+#endif  
 };
 static const IRQn_Type FTM_IRQnTable[] = 
 {

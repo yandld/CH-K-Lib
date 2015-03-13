@@ -221,6 +221,7 @@ static uint8_t Configuration_Descriptor[9+9+9+7+7]=
 };
 
 
+
 uint8_t* USBD_GetStdDesc(SETUP_PACKET *packet, uint32_t *len)
 {
     uint8_t *p;

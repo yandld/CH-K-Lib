@@ -2,10 +2,28 @@
 #include "usb.h"
 #include "string.h"
 
-uint8_t USB_HID_RecFlag = 0;  //接收标志
+
+
+
+uint8_t USB_HID_RecFlag = 0;
 uint8_t USB_HID_SendBuffer[32];
 uint8_t USB_HID_SendLen = 0;
-static  MessageType_t* pMsg;         /* 消息指针 */
+static  MessageType_t* pMsg;
+
+
+extern USB_DEVICE device;
+
+
+uint8_t USBD_HID_ClassSetup(SETUP_PACKET *packet)
+{
+    printf("USBD_HID_ClassCallback\r\n");
+    return 1;
+}
+
+void USBD_HID_Init(void)
+{
+    device.ClassSetup = USBD_HID_ClassSetup;
+}
 
 
 void USB_HID_SendData(uint8_t* buf,uint8_t len)
@@ -50,7 +68,7 @@ void HID_Proc(void)
 			{
 				if(pMsg->m_MessageType == kUSB_IN) //需要发送数据
 				{
-					USB_EP_IN_Transfer(EP2, USB_HID_SendBuffer, USB_HID_SendLen);
+					USBD_EPWrite(EP2, USB_HID_SendBuffer, USB_HID_SendLen);
 					memset(USB_HID_SendBuffer, 0, USB_HID_SendLen); 
 				}
 				else if(pMsg->m_MessageType == kUSB_OUT)

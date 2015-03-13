@@ -9,18 +9,18 @@ uint8_t USB_CDC_InterfaceReq_Handler(void)
 	switch(Setup_Pkt->bRequest)
 	{        
 		case GET_LINE_CODING:
-			USB_EP_IN_Transfer(EP0,(uint8_t*)&LineCoding,7);
+			USBD_EPWrite(EP0,(uint8_t*)&LineCoding,7);
 		break;
 		case SET_LINE_CODING:
 			if(BIT_CHK(EP0,guint8_tUSB_Toogle_flags))//
 			{
 				BIT_CLR(EP0,guint8_tUSB_Toogle_flags);
 				EP_OUT_Transfer(EP0,(uint8_t*)&LineCoding);
-				USB_EP_IN_Transfer(EP0, 0, 0);       
+				USBD_EPWrite(EP0, 0, 0);       
 			}
 		break;
 		case SET_CONTROL_LINE_STATE:
-			USB_EP_IN_Transfer(EP0,0,0);//
+			USBD_EPWrite(EP0,0,0);//
 			break;
 		case LOADER_MODE:
           //  Buffer_Init(CDC_OUT_Data,CDC_BUFFER_SIZE);
@@ -34,7 +34,7 @@ uint8_t USB_CDC_InterfaceReq_Handler(void)
 //USB CDC·¢ËÍÊý¾Ý
 void USB_CDCComTx(uint8_t *tx_buf,uint8_t len)
 {
-   USB_EP_IN_Transfer(EP2,tx_buf,len);
+   USBD_EPWrite(EP2,tx_buf,len);
 }
 
 /*

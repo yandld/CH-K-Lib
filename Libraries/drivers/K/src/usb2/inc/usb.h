@@ -225,7 +225,12 @@ typedef struct {
     bool notify;
 } CONTROL_TRANSFER;
 
-typedef struct {
+
+typedef struct
+{
+    uint8_t (*ClassSetup)(SETUP_PACKET *packet);
+    uint8_t (*ClassData)(uint8_t event, void* args);
+    uint8_t (*AppCallback)(uint8_t event, void* args);
     SETUP_PACKET setup_pkt;
     volatile DEVICE_STATE state;
     uint8_t configuration;
@@ -290,11 +295,14 @@ typedef struct _tBDT
 } tBDT,*ptBDT;
 
 
-void USB_EP_IN_Transfer(uint8_t ep, uint8_t *buf, uint8_t len);
+void USBD_EPWrite(uint8_t ep, uint8_t *buf, uint8_t len);
+void USBD_EPRead(uint8_t ep, uint8_t *buf, uint32_t *bytesRead);
+
 uint16_t USB_EP_OUT_SizeCheck(uint8_t ep);
 void USB_EnableInterface(void);
 uint8_t USB_Init(void);
 uint8_t* USBD_GetStdDesc(SETUP_PACKET *packet, uint32_t *len);
+
 
 #endif
 

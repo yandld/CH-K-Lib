@@ -630,7 +630,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>usb2</GroupName>
+          <GroupName>usblib</GroupName>
+          <Files>
+            <File>
+              <FileName>usbd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usbd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_desc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usbd_desc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>usblib\class</GroupName>
           <Files>
             <File>
               <FileName>usb_cdc.c</FileName>
@@ -684,16 +699,6 @@
               <FileName>usb_hid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usb_hid.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usbd.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_desc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usbd_desc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1323,7 +1328,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>usb2</GroupName>
+          <GroupName>usblib</GroupName>
+          <Files>
+            <File>
+              <FileName>usbd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usbd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_desc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usbd_desc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>usblib\class</GroupName>
           <Files>
             <File>
               <FileName>usb_cdc.c</FileName>
@@ -1377,16 +1397,6 @@
               <FileName>usb_hid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usb_hid.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usbd.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_desc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb2\src\usbd_desc.c</FilePath>
             </File>
           </Files>
         </Group>

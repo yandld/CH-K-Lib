@@ -7,7 +7,7 @@
 ALIGN(512) tBDT tBDTtable[NUMBER_OF_PHYSICAL_ENDPOINTS];
 
 static CONTROL_TRANSFER transfer;
-static USB_DEVICE device;
+USB_DEVICE device;
 
 //各个端点的数据缓冲区
 uint8_t EP0_OUT_ODD_Buffer[MAX_PACKET_SIZE_EP0];
@@ -89,7 +89,23 @@ uint32_t USB_GetPhyEPNumber(void)
     return ARRAY_SIZE(USB0->ENDPOINT);
 }
 
-void USB_EP_IN_Transfer(uint8_t ep, uint8_t *buf, uint8_t len)
+
+void USBD_EPRead(uint8_t ep, uint8_t *buf, uint32_t *bytesRead)
+{
+    uint32_t i, sz;
+    uint8_t *p;
+    ep *= 4;
+    sz = tBDTtable[ep].byte_count;
+    
+    *bytesRead = sz;
+    p = (uint8_t*)tBDTtable[ep].address;
+    while(sz--)
+    {
+        *buf++ = *p++; 
+    }
+}
+
+void USBD_EPWrite(uint8_t ep, uint8_t *buf, uint8_t len)
 {
     uint8_t *p;
     uint8_t transfer_size;     //端点的数据长度 
@@ -194,7 +210,7 @@ void USB_EP0_OUT_Handler(SETUP_PACKET *packet)
 					case GET_DESCRIPTOR:
                         USB_DEBUG_LOG(USB_DEBUG_EP0, ("standrd request: get desc - "));
                         p = USBD_GetStdDesc(packet, &size);
-                        USB_EP_IN_Transfer(EP0, p, size);
+                        USBD_EPWrite(EP0, p, size);
 						break;
 					case GET_INTERFACE:
                         USB_DEBUG_LOG(USB_DEBUG_EP0, ("standrd request: get interface\r\n"));
@@ -231,12 +247,12 @@ void USB_EP0_OUT_Handler(SETUP_PACKET *packet)
 					case SET_ADDRESS:
                         USB_DEBUG_LOG(USB_DEBUG_EP0, ("set standrd request: get addr:%d\r\n", packet->wValue));
                         device.state = ADDRESS;
-						USB_EP_IN_Transfer(EP0, 0, 0);
+						USBD_EPWrite(EP0, 0, 0);
 						break;
 					case SET_CONFIGURATION:
                         USB_DEBUG_LOG(USB_DEBUG_EP0, ("set standrd request: set config\r\n"));
                         USB_EnableInterface();
-                        USB_EP_IN_Transfer(EP0, 0, 0);
+                        USBD_EPWrite(EP0, 0, 0);
                         device.state = CONFIGURED;
 						break;
 					case SET_DESCRIPTOR:
@@ -256,7 +272,7 @@ void USB_EP0_OUT_Handler(SETUP_PACKET *packet)
 					switch(Setup_Pkt->bRequest)
 					{
 						case 0x0A:
-							USB_EP_IN_Transfer(EP0,0,0); //等待，发送0数据包即可
+							USBD_EPWrite(EP0,0,0); //等待，发送0数据包即可
 							UART_printf("设置空闲\r\n");
 							break;
 						default:
@@ -386,20 +402,18 @@ void USB_EP0_IN_Handler(SETUP_PACKET *packet)
         device.state = CONFIGURED;
         USB_DEBUG_LOG(USB_DEBUG_EP0, ("new addr:%d\r\n", USB0->ADDR));
     }
-    USB_EP_IN_Transfer(EP0, 0, 0); 
+    USBD_EPWrite(EP0, 0, 0); 
 }
+
+void USBD_StallEP(uint8_t ep)
+{
+    USB0->ENDPOINT[ep].ENDPT |= USB_ENDPT_EPSTALL_MASK;
+}
+
 
 
 static  MessageType_t m_Msg;
-void USB_EP2_IN_Handler(void)
-{
-	m_Msg.m_Command = USB_DEVICE_CLASS;
-	m_Msg.m_MessageType = kUSB_IN;
-	fn_msg_push(m_Msg); //发送一个消息
-	// tBDTtable[bEP2IN_ODD].Stat.info= kUDATA0;
 
-    USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
-}
 
 void USB_EPCallback(uint8_t ep, uint8_t dir)
 {
@@ -409,7 +423,7 @@ void USB_EPCallback(uint8_t ep, uint8_t dir)
         m_Msg.m_MessageType = kUSB_IN;
         fn_msg_push(m_Msg);
         // tBDTtable[bEP2IN_ODD].Stat.info= kUDATA0;
-        USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
+//        USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
     }
     if((ep == 3) && (dir == kUSB_OUT))
     {
@@ -428,28 +442,34 @@ void USB_Handler(void)
 {
     uint8_t num;
     uint8_t dir;
-
+    uint8_t buf[MAX_PACKET_SIZE_EP0];
+    
     /* get endpoint direction and ep number */
     (USB0->STAT & USB_STAT_TX_MASK)?(dir = kUSB_IN):(dir = kUSB_OUT);
     num = ((USB0->STAT & USB_STAT_ENDP_MASK )>> USB_STAT_ENDP_SHIFT);
     
-    USB_DEBUG_LOG(USB_DEBUG_MIN, ("EP%d-DIR:%d - ", num, dir));
+    uint32_t sz;
     
+
+    
+    /* EP0 Handling */
 	if(num == 0)
 	{
-        SETUP_PACKET packet;
+        USBD_EPRead(num, buf, &sz);
+        USBD_DecodeSetupPacket(buf, &device.setup_pkt);
         
-        //printf("!%d\r\n", tBDTtable[0].byte_count);
-        USBD_DecodeSetupPacket((uint8_t*)BufferPointer[bEP0OUT_ODD], &packet);
-        device.setup_pkt = packet;
+        if(!device.ClassSetup(&device.setup_pkt))
+        {
+            return;
+        }
         
 		if(dir == kUSB_IN)
 		{
-			USB_EP0_IN_Handler(&packet);
+			USB_EP0_IN_Handler(&device.setup_pkt);
 		}
 		else
 		{
-			USB_EP0_OUT_Handler(&packet);
+			USB_EP0_OUT_Handler(&device.setup_pkt);
 		}
 	}
     
@@ -509,4 +529,8 @@ void USB0_IRQHandler(void)
 	}
 }
 
-
+//void USBD_EventCallback(uint8_t cmd, void* args)
+//{
+//    
+//    
+//}

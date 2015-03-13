@@ -27,7 +27,7 @@ int main(void)
     }
     USB_Init();
     NVIC_EnableIRQ(USB0_IRQn);
-	
+    USBD_HID_Init();
     while(1)
     {
         USB_HID_SetMouse(1,0,0,0);

@@ -5,10 +5,12 @@
 #include "sram.h"
 #include "ili9320.h"
 #include "dma.h"
-#include "i2c.h"
+
 #include "ov7725.h"
 #include "image_display.h"
+#include "i2c.h"
 
+/* 请将I2C.H中的 I2C_GPIO_SIM 改为 1 */
 
 // 改变图像大小
 //0: 80x60
@@ -111,7 +113,8 @@ void OV_ISR(uint32_t index)
     /* 场中断 */
     if(index & (1 << BOARD_OV7620_VSYNC_PIN))
     {
-        DisableInterrupts();
+        GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, false);
+        GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, false);
         switch(status)
         {
             case TRANSFER_IN_PROCESS: //接受到一帧数据调用用户处理
@@ -127,7 +130,8 @@ void OV_ISR(uint32_t index)
             default:
                 break;
         }
-        EnableInterrupts(); 
+        GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
+        GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
         h_counter = 0;
         return;
     }
@@ -155,6 +159,7 @@ int main(void)
         printf("no ov7725device found!\r\n");
         while(1);
     }
+    printf("OV7620 setup complete\r\n");
     
     //每行数据指针
     for(i=0; i<OV7620_H+1; i++)

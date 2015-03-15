@@ -11,6 +11,282 @@
 #include "i2c.h"
 #include "gpio.h"
 
+#ifndef I2C_GPIO_SIM
+#define I2C_GPIO_SIM   0
+#endif
+
+#if I2C_GPIO_SIM
+
+#define SDA_DDR_OUT()       do {GPIO_PinConfig(i2c.instace, i2c.sda_pin, kOutput);}while(0)
+#define SDA_DDR_IN()        do {GPIO_PinConfig(i2c.instace, i2c.sda_pin, kInput);}while(0)
+#define SDA_H()             do {GPIO_WriteBit(i2c.instace, i2c.sda_pin, 1);}while(0)
+#define SDA_L()             do {GPIO_WriteBit(i2c.instace, i2c.sda_pin, 0);}while(0)
+#define SCL_H()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 1);}while(0)
+#define SCL_L()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 0);}while(0)
+#define SCCB_DELAY()        DelayUs(2)
+
+typedef struct
+{
+    uint32_t instace;
+    uint32_t sda_pin;
+    uint32_t scl_pin;
+}i2c_gpio;
+
+static i2c_gpio i2c;
+
+uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
+{
+    uint8_t i;
+    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    
+    /* open drain and pull up */
+    for(i = 0; i < pq->io_offset; i++)
+    {
+        GPIO_QuickInit(pq->io_instance, pq->io_base + i, kGPIO_Mode_OOD);
+        GPIO_WriteBit(pq->io_instance, pq->io_base + i, 1);
+        PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullUp);
+    }
+
+    /* i2c_gpio struct setup */
+    i2c.instace = pq->io_instance;
+    
+    switch(MAP)
+    {
+        case I2C1_SCL_PE01_SDA_PE00:
+            i2c.scl_pin = 1;i2c.sda_pin = 0;
+            break;
+        case I2C0_SCL_PE19_SDA_PE18:
+            i2c.scl_pin = 19;i2c.sda_pin = 18;
+            break;
+        case I2C0_SCL_PF22_SDA_PF23:
+            i2c.scl_pin = 22;i2c.sda_pin = 23;
+            break;
+        case I2C0_SCL_PB00_SDA_PB01:
+            i2c.scl_pin = 0;i2c.sda_pin = 1;
+            break;
+        case I2C0_SCL_PB02_SDA_PB03:
+            i2c.scl_pin = 2;i2c.sda_pin = 3;
+            break;
+        case I2C1_SCL_PC10_SDA_PC11:
+            i2c.scl_pin = 10;i2c.sda_pin = 11;
+            break;
+        case I2C0_SCL_PD08_SDA_PD09:
+            i2c.scl_pin = 8;i2c.sda_pin = 9;
+            break;
+        case I2C0_SCL_PE24_SDA_PE25:
+            i2c.scl_pin = 24;i2c.sda_pin = 25;
+            break;
+        default:
+            break;
+    }
+    return pq->ip_instance;
+}
+
+static uint8_t SDA_IN(void)
+{
+    return GPIO_ReadBit(i2c.instace, i2c.sda_pin);
+}
+
+static bool I2C_Start(void)
+{
+    SDA_H();
+    SCL_H();
+    SCCB_DELAY();
+
+    SDA_DDR_OUT();
+    SDA_L();
+
+    SCCB_DELAY();
+    SCL_L();
+
+    /* i2c is busy */
+    if(SDA_IN())
+    {
+        SDA_DDR_OUT();
+        return false;
+    }
+    return true;
+}
+
+static void I2C_Stop(void)
+{
+    SCL_L();
+    SDA_L();
+    
+    SCCB_DELAY();
+    SCL_H();
+    SCCB_DELAY();
+    SDA_H();
+    SCCB_DELAY();
+}
+
+static void _I2C_Ack(void)
+{
+    SCL_L();
+    SCCB_DELAY();
+    SDA_L();
+    SCCB_DELAY();
+    SCL_H();
+    SCCB_DELAY();
+    SCL_L();
+    SCCB_DELAY();
+}
+
+static void _I2C_NoAck(void)
+{
+    SCL_L();
+    SCCB_DELAY();
+    SDA_H();
+    SCCB_DELAY();
+    SCL_H();
+    SCCB_DELAY();
+    SCL_L();
+    SCCB_DELAY();
+}
+
+static bool _I2C_WaitAck(void)
+{
+    SCL_L();
+    SDA_DDR_IN();
+    SCCB_DELAY();
+    SCL_H();
+    SCCB_DELAY();
+    if(SDA_IN())
+    {
+        SDA_DDR_OUT();
+        SCL_L();
+        return false;
+    }
+    SDA_DDR_OUT();
+    SCL_L();
+    return true;
+}
+
+static void I2C_SendByte(uint8_t data)
+{
+    volatile uint8_t i = 8;
+    while(i--)
+    {
+        if(data & 0x80) 
+            SDA_H();
+        else SDA_L();
+        
+        data <<= 1;
+        SCCB_DELAY();
+        SCL_H();
+        SCCB_DELAY();
+        SCL_L();
+    }
+}
+
+static int I2C_ReadByte(void)
+{
+    uint8_t i = 8;
+    uint8_t data = 0;
+
+    SDA_DDR_IN();
+
+    while(i--)
+    {
+        data <<= 1;
+        SCL_L();
+        SCCB_DELAY();
+        SCL_H();
+        SCCB_DELAY();
+
+        if(SDA_IN())
+        {
+            data |= 0x01;
+        }
+    }
+    SDA_DDR_OUT();
+    SCL_L();
+    return data;
+}
+
+int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData)
+{
+    uint8_t length = 1;
+    
+    chipAddr <<= 1;
+    
+    if(!I2C_Start())
+    {
+        return 1;
+    }
+    I2C_SendByte(chipAddr);
+    if(!_I2C_WaitAck())
+    {
+        I2C_Stop();
+        return 2;
+    }
+    I2C_SendByte(chipAddr);
+    _I2C_WaitAck();
+    I2C_Stop();
+
+    if(!I2C_Start())
+    {
+        return 3;
+    }
+    I2C_SendByte(chipAddr+1);
+
+    if(!_I2C_WaitAck())
+    {
+        I2C_Stop();
+        return 4;
+    }
+    while(length)
+    {
+        *pData = I2C_ReadByte();
+        if(length == 1)
+        {
+            _I2C_NoAck();
+        }
+        else
+        {
+            _I2C_Ack();
+        }
+        pData++;
+        length--;
+    }
+    I2C_Stop();
+    return 0;
+}
+
+uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData)
+{
+    return SCCB_ReadSingleRegister(instance, chipAddr, subAddr, pData);
+}
+
+int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data)
+{
+    if(!I2C_Start())
+    {
+        return 1;
+    }
+    I2C_SendByte( chipAddr<<1 );
+    if( !_I2C_WaitAck() )
+    {
+        I2C_Stop();
+        return 2;
+    }
+    I2C_SendByte((uint8_t)(subAddr & 0x00FF));
+    _I2C_WaitAck();
+    I2C_SendByte(data);
+    _I2C_WaitAck();
+    I2C_Stop();
+    return 0;
+}
+
+
+uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data)
+{
+    return SCCB_WriteSingleRegister(instance, chipAddr, subAddr, data);
+}
+
+
+#else
+
 /* leagacy support for Kineis Z Version(Inital Version) */
 #if (!defined(I2C_BASES))
 #ifdef I2C1
@@ -750,6 +1026,7 @@ void I2C_Scan(uint32_t MAP)
     }
 }
 
+#if 0
 int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData)
 {
     uint32_t time_out = 0;
@@ -796,14 +1073,12 @@ int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr
     I2C_SetMasterMode(instance,kI2C_Read);
     /* dummy read */
     I2C_ReadData(instance);
-	I2C_GenerateAck(instance);
+	I2C_GenerateNAck(instance);
 	I2C_WaitAck(instance);
-    *pData = I2C_ReadData(instance);
-    /* stop and finish */
-    I2C_GenerateNAck(instance);
-    I2C_WaitAck(instance);
     I2C_GenerateSTOP(instance);
     while(!I2C_IsBusy(instance));
+    *pData = I2C_ReadData(instance);
+
     return 0;
 }
 
@@ -811,7 +1086,7 @@ int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAdd
 {
     return I2C_WriteSingleRegister(instance, chipAddr, subAddr, data);
 }
-
+#endif
 
 
 //! @}
@@ -860,4 +1135,6 @@ static const QuickInit_Type I2C_QuickInitTable[] =
     { 0, 3, 2, 8, 2, 0}, //I2C0_SCL_PD08_SDA_PD09 2
     { 0, 4, 5,24, 2, 0}, //I2C0_SCL_PE24_SDA_PE25 5 //only on K64
 };
+#endif
+
 #endif

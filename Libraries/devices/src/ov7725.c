@@ -2,6 +2,9 @@
 #include "common.h"
 #include "i2c.h"
 
+#if I2C_GPIO_SIM == 0
+#error "Change I2C_GPIO_SIM in i2c.h/c to 1!"
+#endif
 
 #define OV7725_DEBUG		1
 #if ( OV7725_DEBUG == 1 )
@@ -29,7 +32,7 @@ static uint8_t ov7725_chip_addr_table[] = {0x21};
 static const struct ov7725_reg default_reg_value[] =
 {
 
-    {OV7725_COM4         , 0x81},
+    {OV7725_COM4         , 0x60},
     {OV7725_CLKRC        , 0x00},
     {OV7725_COM2         , 0x01},
     {OV7725_COM3         , 0xD0},
@@ -85,7 +88,7 @@ int ov7725_probe(uint8_t i2c_instance)
     uint8_t dummy;
     for(i = 0; i < ARRAY_SIZE(ov7725_chip_addr_table); i++)
     {
-        if(SCCB_ReadSingleRegister(i2c_instance, ov7725_chip_addr_table[i], OV7725_VER, &dummy) == 0)
+        if(!SCCB_ReadSingleRegister(i2c_instance, ov7725_chip_addr_table[i], OV7725_VER, &dummy))
         {
             /* found device */
             OV7725_TRACE("device found addr:0x%X\r\n", ov7725_chip_addr_table[i]);
@@ -94,9 +97,8 @@ int ov7725_probe(uint8_t i2c_instance)
             /* inject default register value */
             for(j = 0; j < ARRAY_SIZE(default_reg_value); j++)
             {
-                r = SCCB_WriteSingleRegister(i2c_instance, ov7725_chip_addr_table[i], default_reg_value[j].addr, default_reg_value[j].val);
                 DelayMs(3);
-                
+                r = SCCB_WriteSingleRegister(i2c_instance, ov7725_chip_addr_table[i], default_reg_value[j].addr, default_reg_value[j].val);
                 if(r)
                 {
                     OV7725_TRACE("device[addr:0x%X]regiser[addr:0x%X] write error!\r\n", ov7725_chip_addr_table[i], default_reg_value[j].addr);
@@ -121,40 +123,37 @@ int ov7725_probe(uint8_t i2c_instance)
 
 int ov7725_set_image_size(ov7725_size size)
 {
-    int r;
-    r = 0;
     switch(size)
     {
         case H_80_W_60:
             h_ov7725.h_size = 80;
             h_ov7725.v_size = 60;
-            r += SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_HOutSize, 0x14);
-            r += SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_VOutSize, 0x1E);
+            SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_HOutSize, 0x14);
+            SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_VOutSize, 0x1E);
             break;
         case H_120_W_160:
             h_ov7725.h_size = 160;
             h_ov7725.v_size = 120;
-            r += SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_HOutSize, 0x28);
-            r += SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_VOutSize, 0x3C);  
+            SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_HOutSize, 0x28);
+            SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_VOutSize, 0x3C);  
             break;
         case H_180_W_240:
             h_ov7725.h_size = 240;
             h_ov7725.v_size = 180;
-            r += SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_HOutSize, 0x3C);
-            r += SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_VOutSize, 0x5A);  
+            SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_HOutSize, 0x3C);
+            SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_VOutSize, 0x5A);  
             break;
         case H_240_W_320:
             h_ov7725.h_size = 320;
             h_ov7725.v_size = 240;
-            r += SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_HOutSize, 0x50);
-            r += SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_VOutSize, 0x78);  
+            SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_HOutSize, 0x50);
+            SCCB_WriteSingleRegister(h_ov7725.i2c_instance, h_ov7725.addr, OV7725_VOutSize, 0x78);  
             break;
         default:
-            r ++;
             OV7725_TRACE("wrong param in func:ov7725_set_image_size\r\n");
             break;
     }
-    return r;
+    return 0;
 }
 
 

@@ -72,6 +72,8 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopB1X>0</nStopB1X>
+            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
@@ -128,6 +130,7 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -139,8 +142,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
+            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -1068,41 +1071,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>rtt_examples/net</GroupName>
-          <Files>
-            <File>
-              <FileName>tcpclient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpclient.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpsendpacket.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpsendpacket.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpserver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpserver.c</FilePath>
-            </File>
-            <File>
-              <FileName>udpclient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpclient.c</FilePath>
-            </File>
-            <File>
-              <FileName>udpserver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpserver.c</FilePath>
-            </File>
-            <File>
-              <FileName>wget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\wget.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>RTT_120</GroupName>
           <Files>
             <File>
@@ -1183,11 +1151,46 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>wget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webserver\wget.c</FilePath>
+            </File>
+            <File>
+              <FileName>websrv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webserver\websrv.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>lwip\apps</GroupName>
           <Files>
+            <File>
+              <FileName>tcpclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcpsendpacket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpsendpacket.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcpserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpserver.c</FilePath>
+            </File>
+            <File>
+              <FileName>udpclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>udpserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpserver.c</FilePath>
+            </File>
             <File>
               <FileName>ftpd.c</FileName>
               <FileType>1</FileType>
@@ -1222,102 +1225,6 @@
               <FileName>sntp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\sntp.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpecho.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\tcpecho.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>udpecho.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\udpecho.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
           </Files>
         </Group>
@@ -1793,6 +1700,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>yeelink</GroupName>
+          <Files>
+            <File>
+              <FileName>yeelink.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\yeelink\yeelink.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1861,6 +1778,8 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopB1X>0</nStopB1X>
+            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
@@ -1917,6 +1836,7 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -1928,8 +1848,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
+            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -2849,41 +2769,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>rtt_examples/net</GroupName>
-          <Files>
-            <File>
-              <FileName>tcpclient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpclient.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpsendpacket.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpsendpacket.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpserver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpserver.c</FilePath>
-            </File>
-            <File>
-              <FileName>udpclient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpclient.c</FilePath>
-            </File>
-            <File>
-              <FileName>udpserver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpserver.c</FilePath>
-            </File>
-            <File>
-              <FileName>wget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\wget.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>RTT_120</GroupName>
           <Files>
             <File>
@@ -2964,11 +2849,46 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>wget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webserver\wget.c</FilePath>
+            </File>
+            <File>
+              <FileName>websrv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webserver\websrv.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>lwip\apps</GroupName>
           <Files>
+            <File>
+              <FileName>tcpclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcpsendpacket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpsendpacket.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcpserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpserver.c</FilePath>
+            </File>
+            <File>
+              <FileName>udpclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>udpserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpserver.c</FilePath>
+            </File>
             <File>
               <FileName>ftpd.c</FileName>
               <FileType>1</FileType>
@@ -3046,102 +2966,6 @@
               <FileName>sntp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\sntp.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpecho.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\tcpecho.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>udpecho.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\udpecho.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
           </Files>
         </Group>
@@ -3514,6 +3338,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>yeelink</GroupName>
+          <Files>
+            <File>
+              <FileName>yeelink.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\yeelink\yeelink.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -3582,6 +3416,8 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopB1X>0</nStopB1X>
+            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
@@ -3638,6 +3474,7 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -3649,8 +3486,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
+            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -4759,41 +4596,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>rtt_examples/net</GroupName>
-          <Files>
-            <File>
-              <FileName>tcpclient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpclient.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpsendpacket.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpsendpacket.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpserver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpserver.c</FilePath>
-            </File>
-            <File>
-              <FileName>udpclient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpclient.c</FilePath>
-            </File>
-            <File>
-              <FileName>udpserver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpserver.c</FilePath>
-            </File>
-            <File>
-              <FileName>wget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\wget.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>RTT_120</GroupName>
           <Files>
             <File>
@@ -4874,11 +4676,89 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>wget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webserver\wget.c</FilePath>
+            </File>
+            <File>
+              <FileName>websrv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webserver\websrv.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>2</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>lwip\apps</GroupName>
           <Files>
+            <File>
+              <FileName>tcpclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcpsendpacket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpsendpacket.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcpserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\tcpserver.c</FilePath>
+            </File>
+            <File>
+              <FileName>udpclient.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpclient.c</FilePath>
+            </File>
+            <File>
+              <FileName>udpserver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\udpserver.c</FilePath>
+            </File>
             <File>
               <FileName>ftpd.c</FileName>
               <FileType>1</FileType>
@@ -4956,102 +4836,6 @@
               <FileName>sntp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\sntp.c</FilePath>
-            </File>
-            <File>
-              <FileName>tcpecho.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\tcpecho.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>udpecho.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\udpecho.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
           </Files>
         </Group>
@@ -5730,6 +5514,16 @@
               <FileName>MK_P512.lib</FileName>
               <FileType>4</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\flash\lib\MK_P512.lib</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>yeelink</GroupName>
+          <Files>
+            <File>
+              <FileName>yeelink.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\yeelink\yeelink.c</FilePath>
             </File>
           </Files>
         </Group>

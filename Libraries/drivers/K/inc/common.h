@@ -120,9 +120,14 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 #define CHLIB_ALIGN(size, align)           (((size) + (align) - 1) & ~((align) - 1))
 #endif
 
-#define BSWAP_16(x)     (uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))
+#ifndef BSWAP_32
 #define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
+#endif
+
+#ifndef BSWAP_16
+#define BSWAP_16(x)     (uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))
+#endif
 
 
 /* QuickInitType */

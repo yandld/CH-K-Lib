@@ -48,13 +48,35 @@
 #define APSEL          0xFF000000  // APSEL Mask
 
 
+#ifndef BSWAP_32
+#define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
+                                   (BSWAP_16((uint32_t)((val) >> 0x10))))
+#endif
 
+#ifndef BSWAP_16
+#define BSWAP_16(x)     (uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))
+#endif
 
+#ifndef NULL
+#define NULL    0
+#endif
+
+void CHSW_IOInit(void);
 void SW_CLOCK_CYCLE(void);
 void SW_WRITE_BIT(uint32_t bit);
 uint32_t SW_READ_BIT(void);
 void PIN_SWDIO_OUT(uint32_t bit);
 void PIN_SWDIO_OUT_DISABLE(void);
 void PIN_SWDIO_OUT_ENABLE(void);
+
+
+
+//!< API
+
+uint8_t JTAG2SWD(void);
+
+
+
+
 
 #endif

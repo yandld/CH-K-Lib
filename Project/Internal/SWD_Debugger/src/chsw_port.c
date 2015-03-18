@@ -11,7 +11,7 @@
 #define SWD_O               PEout(SWD_DO_PIN)
 #define SWD_I               PEin(SWD_DO_PIN)
 
-#define PIN_DELAY()         DelayUs(1)
+#define PIN_DELAY()         __NOP()
 
 
 void PIN_SWDIO_OUT_ENABLE(void)
@@ -62,6 +62,7 @@ __weak void CHSW_IOInit(void)
 {
     GPIO_QuickInit(SWD_INSTANCE, SWD_CLK_PIN, kGPIO_Mode_OPP);
     GPIO_QuickInit(SWD_INSTANCE, SWD_DO_PIN, kGPIO_Mode_OPP);
+
 }
 
 

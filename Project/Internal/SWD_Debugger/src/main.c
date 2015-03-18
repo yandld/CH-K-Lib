@@ -48,10 +48,13 @@ int main(void)
         return 0;
     }
 
-
-    if (!swd_read_ap(MDM_IDR, &val)) {
-        return 0;
-    }
+    int res;
+    
+    swd_read_ap(MDM_IDR, &val);
+    printf("val:0x%X\r\n", val);
+   // res = swd_write_ap(MDM_CTRL, 0x55);
+  //  printf("res:%d\r\n", res);
+    swd_read_ap(MDM_CTRL, &val);
     printf("val:0x%X\r\n", val);
     
 

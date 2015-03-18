@@ -502,6 +502,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
+            <File>
+              <FileName>chsw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\chsw.c</FilePath>
+            </File>
+            <File>
+              <FileName>chsw_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\chsw_port.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

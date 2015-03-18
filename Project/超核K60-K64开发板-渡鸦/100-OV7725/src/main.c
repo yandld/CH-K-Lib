@@ -132,6 +132,7 @@ void OV_ISR(uint32_t index)
         }
         GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
         GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
+        PORTA->ISFR = 0xFFFFFFFF;
         h_counter = 0;
         return;
     }

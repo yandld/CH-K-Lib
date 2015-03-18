@@ -32,9 +32,9 @@ static uint8_t ov7725_chip_addr_table[] = {0x21};
 static const struct ov7725_reg default_reg_value[] =
 {
 
-    {OV7725_COM4         , 0x60},
+    {OV7725_COM4         , 0x21},
     {OV7725_CLKRC        , 0x00},
-    {OV7725_COM2         , 0x01},
+    {OV7725_COM2         , 0x03},
     {OV7725_COM3         , 0xD0},
     {OV7725_COM7         , 0x40},
     {OV7725_HSTART       , 0x3F},

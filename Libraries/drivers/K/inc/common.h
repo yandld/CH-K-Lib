@@ -50,8 +50,6 @@
 #define UART_DMA_SUPPORT 0
 #endif
 
-/* means you can use printf via UART */
-#define UART_USE_STDIO
 
 /* version information */
 #define CHK_VERSION                   2L              /*  major version number */

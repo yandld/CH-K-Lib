@@ -11,12 +11,12 @@
 #include "gpio.h"
 #include "common.h"
 
-#ifdef UART_USE_STDIO
+
 #if __ICCARM__
 #include <yfuns.h>
 #endif
 #include <stdio.h>
-#endif
+
 
 #if (!defined(UART_BASES))
 #ifdef  UART2
@@ -74,10 +74,8 @@ static const IRQn_Type UART_IRQnTable[] =
 #endif
 };
 
-
 static const uint32_t UART_TIFOSizeTable[] = {1, 4, 8, 16, 32, 64, 128};
 
-#ifdef UART_USE_STDIO
 #ifdef __CC_ARM // MDK Support
 struct __FILE 
 { 
@@ -95,7 +93,7 @@ __weak int fputc(int ch,FILE *f)
 	return ch;
 }
 
-int fgetc(FILE *f)
+__weak int fgetc(FILE *f)
 {
     uint16_t ch;
     while(UART_ReadByte(UART_DebugInstance, &ch));
@@ -127,7 +125,7 @@ __weak size_t __write(int handle, const unsigned char * buffer, size_t size)
     return nChars;
 }
 
-size_t __read(int handle, unsigned char * buffer, size_t size)
+__weak size_t __read(int handle, unsigned char * buffer, size_t size)
 {
     size_t nChars = 0;
     uint16_t ch = 0;
@@ -153,11 +151,8 @@ size_t __read(int handle, unsigned char * buffer, size_t size)
     }
     return nChars;
 }
+#endif
 
-
-#endif /* comiler support */
-
-#else /* DO NOT USE STDIO */
 static void UART_putstr(uint32_t instance, const char *str)
 {
     while(*str != '\0')
@@ -206,7 +201,7 @@ _loop:
     goto _loop;
     return 0;
 }
-#endif /*end of UART_USE_STDIO */
+
 
 //! @defgroup CHKinetis
 //! @{

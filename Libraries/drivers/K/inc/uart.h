@@ -18,9 +18,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 	 
-#ifdef UART_USE_STDIO
-#define UART_printf(fmt,args...)    printf (fmt ,##args)
-#endif
+
 
 /*!< UART 硬件模块号 */
 #define HW_UART0  (0x00U)  /* 芯片的UART0端口 */
@@ -110,10 +108,8 @@ void UART_SetRxFIFOWatermark(uint32_t instance, uint32_t size);
 void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun);
 void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun);
 void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool status);
+int UART_printf(const char *fmt, ...);
 
-#ifdef UART_USE_STDIO
-int printf(const char *fmt, ...);
-#endif
 
 /* DMA support */
 #ifdef DMA0

@@ -6,78 +6,7 @@
 #include "chsw.h"
 
 
-int main(void)
-{   
-    uint32_t tmp = 0;
-    uint32_t clock;
-    DelayInit();
-    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
 
-    CHSW_IOInit();
-
-    if (!JTAG2SWD()) {
-        printf("faile!\r\n");
-        return 0;
-    }
-    uint32_t val;
-    swd_read_idcode(&val);
-    printf("DP_CTRL_STAT:0x%X\r\n", val);
-    
-    if (!swd_write_dp(DP_ABORT, STKCMPCLR | STKERRCLR | WDERRCLR | ORUNERRCLR)) {
-        return 0;
-    }
-
-    // Ensure CTRL/STAT register selected in DPBANKSEL
-    if (!swd_write_dp(DP_SELECT, 0)) {
-        return 0;
-    }
-
-    // Power up
-    if (!swd_write_dp(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ)) {
-        return 0;
-    }
-
-    do {
-        if (!swd_read_dp(DP_CTRL_STAT, &tmp)) {
-            return 0;
-        }
-    } while ((tmp & (CDBGPWRUPACK | CSYSPWRUPACK)) != (CDBGPWRUPACK | CSYSPWRUPACK));
-
-    if (!swd_write_dp(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ | TRNNORMAL | MASKLANE)) {
-        return 0;
-    }
-
-    int res;
-    
-    swd_read_ap(MDM_IDR, &val);
-    printf("val:0x%X\r\n", val);
-   // res = swd_write_ap(MDM_CTRL, 0x55);
-  //  printf("res:%d\r\n", res);
-    swd_read_ap(MDM_CTRL, &val);
-    printf("val:0x%X\r\n", val);
-    
-
-
-    while(1)
-    {
-       // shell_main_loop("SHELL");
-        /* …¡À∏–°µ∆ */
-      //  GPIO_ToggleBit(HW_GPIOE, 6);
-      //  DelayMs(500);
-    }
-}
-
-
-
-
-
-
-
-
-
-
-#if 0
 
 #define SHELL_MAX_ARGS      (5)
 #define CMD_BUF_LEN         (128)
@@ -127,35 +56,104 @@ static int parse_line (char * line, char * argv[])
 
 
 
-#define ESC         0x1b
-#define ENTER       0x0d
-#define BACKSPACE   0x08
-#define SPACE       0x20
+#define ESC         0x1BU
+#define ENTER       0x0DU
+#define BACKSPACE   0x7FU
+#define SPACE       0x20U
 
-void get_line(void)
+void get_line(char *buf, uint32_t len)
 {
-    char c;
-    while(1)
+    char i;
+    
+    i = 0;
+    memset(buf, len, 0);
+    
+    while(len--)
     {
-        c = getc();
-        if(c == ENTER)
+        *buf = getc();
+        if(*buf == ENTER)
         {
+            putc('\r');
+            putc('\n');
             break;
+        }
+        
+        switch(*buf)
+        {
+            case BACKSPACE:
+                if(i > 0)
+                {
+                    len++;
+                    *buf--;
+                    putc(BACKSPACE);
+                    i--;
+                }
+                break;
+            default:
+                i++;
+                putc(*buf++);
+                len--;
+                break;
         }
     }
 }
 
+
 void shell_main_loop(char* prompt)
 {
     char cmd_buf[CMD_BUF_LEN];
-    char c;
+
     while(1)
     {
-        c = getc();
-        printf("%c", c);
+        printf("%s>>", prompt);
+        get_line(cmd_buf, CMD_BUF_LEN);
+        printf("data:%s\r\n", cmd_buf);
+    }
+}
+
+int main(void)
+{   
+    uint32_t tmp, val;
+    uint32_t clock;
+    DelayInit();
+    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
+
+    CHSW_IOInit();
+
+    swd_init_debug();
+    
+    swd_read_idcode(&val);
+    printf("DP_IDR:0x%X\r\n", val);
+    
+
+
+    int res;
+    
+    swd_read_ap(MDM_IDR, &val);
+    printf("val:0x%X\r\n", val);
+   // res = swd_write_ap(MDM_CTRL, 0x55);
+  //  printf("res:%d\r\n", res);
+    swd_read_ap(MDM_CTRL, &val);
+    printf("val:0x%X\r\n", val);
+    
+
+
+    while(1)
+    {
+        shell_main_loop("SHELL");
+        /* …¡À∏–°µ∆ */
+      //  GPIO_ToggleBit(HW_GPIOE, 6);
+      //  DelayMs(500);
     }
 }
 
 
-#endif
+
+
+
+
+
+
+
 

@@ -109,17 +109,6 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 #endif
 
-/**
- * @ingroup BasicDef
- *
- * @def ALIGN(size, align)
- * Return the most contiguous size aligned at specified width. RT_ALIGN(13, 4)
- * would return 16.
- */
-#ifndef CHLIB_ALIGN
-#define CHLIB_ALIGN(size, align)           (((size) + (align) - 1) & ~((align) - 1))
-#endif
-
 #ifndef BSWAP_32
 #define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
@@ -160,24 +149,28 @@ struct reg_ops
     uint32_t    mask;
 };
 
+static inline void EnableInterrupts(void)
+{
+    __enable_irq();
+}
 
-//!< API functions
-#ifndef EnableInterrupts
-#define EnableInterrupts   __enable_irq
-#endif
-#ifndef DisableInterrupts
-#define DisableInterrupts  __disable_irq
-#endif
-#define SystemSoftReset    NVIC_SystemReset
-uint32_t QuickInitEncode(QuickInit_Type * type);
-void QuickInitDecode(uint32_t map, QuickInit_Type* type);
+static inline void DisableInterrupts(void)
+{
+    __disable_irq();
+}
+ 
+static inline void SystemSoftReset(void)
+{
+    NVIC_SystemReset();
+}
+
 void DelayMs(uint32_t ms);
-void DelayUs(uint32_t ms);
+void DelayUs(uint32_t us);
 void DelayInit(void);
 int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
-/* DWT Delay API */
-void DWT_DelayInit(void);
-void DWT_DelayUs(uint32_t us);
-void DWT_DelayMs(uint32_t ms);
+uint32_t QuickInitEncode(QuickInit_Type * type);
+void QuickInitDecode(uint32_t map, QuickInit_Type* type);
+
+
 
 #endif

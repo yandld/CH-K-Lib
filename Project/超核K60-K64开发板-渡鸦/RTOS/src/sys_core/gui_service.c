@@ -52,8 +52,8 @@ int ui_startup(int argc, char** argv)
     tid = rt_thread_create("gui_exe", gui_thread_entry, RT_NULL, (1024*4), 0x13, 20);                                
     rt_thread_startup(tid);
 
-    tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (512), 0x14, 20);                                                      
-    rt_thread_startup(tid);	
+ //   tid = rt_thread_create("guit_exe", guit_thread_entry, RT_NULL, (512), 0x14, 20);                                                      
+ //   rt_thread_startup(tid);	
 
     return 0;
 }

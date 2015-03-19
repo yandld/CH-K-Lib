@@ -217,7 +217,7 @@ int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData) {
     //
     // ...
     #ifndef WIN32
-    ili9320_init();
+    
     #endif
     return 0;
   }

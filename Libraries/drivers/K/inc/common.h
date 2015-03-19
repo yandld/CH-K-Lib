@@ -147,21 +147,14 @@ struct reg_ops
     uint32_t    mask;
 };
 
-static inline void EnableInterrupts(void)
-{
-    __enable_irq();
-}
-
-static inline void DisableInterrupts(void)
-{
-    __disable_irq();
-}
  
 static inline void SystemSoftReset(void)
 {
     NVIC_SystemReset();
 }
 
+#define EnableInterrupts    __enable_irq
+#define DisableInterrupts   __disable_irq
 void DelayMs(uint32_t ms);
 void DelayUs(uint32_t us);
 void DelayInit(void);

@@ -7,7 +7,7 @@ void GUI_AppAutoCalibration(const char* path)
     hFile = open(path, O_RDONLY , 0);
     if(hFile < 0)
     {
-        GUI_MessageBox("No touch data\r\n", path, GUI_MESSAGEBOX_CF_MODAL);
+//        GUI_MessageBox("No touch data\r\n", path, GUI_MESSAGEBOX_CF_MODAL);
         hFile = open(path, O_RDWR | O_CREAT, 0);
         tData.magic = 'T';
         GUI_ExecCalibrationDialog(&tData);

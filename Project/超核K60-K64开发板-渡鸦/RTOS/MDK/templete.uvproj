@@ -709,6 +709,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\gui\apps\simple_beep.c</FilePath>
             </File>
+            <File>
+              <FileName>romfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\romfs.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2443,6 +2448,11 @@
               <FileName>simple_beep.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\gui\apps\simple_beep.c</FilePath>
+            </File>
+            <File>
+              <FileName>romfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\romfs.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4245,6 +4255,11 @@
               <FileName>simple_beep.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\gui\apps\simple_beep.c</FilePath>
+            </File>
+            <File>
+              <FileName>romfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\romfs.c</FilePath>
             </File>
           </Files>
         </Group>

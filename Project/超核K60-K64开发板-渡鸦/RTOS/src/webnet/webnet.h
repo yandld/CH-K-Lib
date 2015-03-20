@@ -29,7 +29,7 @@
 #define WEBNET_PRIORITY         21			/* webnet thread priority */
 #define WEBNET_THREAD_STACKSIZE 1024		/* webnet thread stack size */
 #define WEBNET_PORT				80			/* webnet server listen port */
-#define WEBNET_ROOT				"/webnet"	/* webnet server root directory */
+#define WEBNET_ROOT				"/SD/webnet"	/* webnet server root directory */
 #define WEBNET_SERVER			"Server: webnet (RT-Thread)\r\n"
 #define WEBNET_PATH_MAX			256			/* maxiaml path length in webnet */
 

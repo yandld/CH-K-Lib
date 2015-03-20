@@ -289,7 +289,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     //设置ENET模块MAC地址
     ENET_SetAddress(ENET_InitStrut->pMacAddress);
     //设置接收控制寄存器，最大长度、RMII模式、接收CRC校验等
-    ENET->RCR = ENET_RCR_MAX_FL(CFG_ENET_MAX_PACKET_SIZE) | ENET_RCR_MII_MODE_MASK | ENET_RCR_CRCFWD_MASK | ENET_RCR_RMII_MODE_MASK;
+    ENET->RCR = ENET_RCR_MAX_FL(1518) | ENET_RCR_MII_MODE_MASK | ENET_RCR_CRCFWD_MASK | ENET_RCR_RMII_MODE_MASK;
     //清除发送接收控制
     ENET->TCR = 0;
     

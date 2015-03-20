@@ -24,8 +24,8 @@ int sys_info(int argc, char** argv)
     extern void list_mem(void);
     list_mem();
     rt_kprintf("UI MEMORY:  ");
-    rt_kprintf("ui_mem_total:%d\r\n", GUI_ALLOC_GetNumUsedBytes()+GUI_ALLOC_GetNumFreeBytes());
-    rt_kprintf("ui_mem_free:%d\r\n", GUI_ALLOC_GetNumFreeBytes());
+    //rt_kprintf("ui_mem_total:%d\r\n", GUI_ALLOC_GetNumUsedBytes()+GUI_ALLOC_GetNumFreeBytes());
+    //rt_kprintf("ui_mem_free:%d\r\n", GUI_ALLOC_GetNumFreeBytes());
     
     rt_kprintf("NETWORK\r\n");
     rt_device_t dev;

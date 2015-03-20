@@ -51,6 +51,7 @@ void init_thread_entry(void* parameter)
     tid = rt_thread_create("key", key_thread_entry, RT_NULL, 512, 0x14, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
     #endif
+    
     rt_hw_ksz8041_init();
     
     tid = rt_thread_self();

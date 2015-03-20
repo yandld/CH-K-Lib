@@ -154,13 +154,14 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
         eth_device_linkchange(&device, true);
     }
     
-    rt_enter_critical();
+    //rt_enter_critical();
+    DisableInterrupts();
     ENET_MacSendData(gTxBuf, tx_len);
+    EnableInterrupts();
     phy_data.tx_fcnt++;
     phy_data.tx_dcnt+= tx_len;
-    
-   // while(ENET_IsTxTransferComplete() == false);
-    rt_exit_critical();
+
+    //rt_exit_critical();
 
     return RT_EOK;
 }

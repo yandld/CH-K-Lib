@@ -349,7 +349,7 @@ void ENET_MacSendData(uint8_t *data, uint16_t len)
 {
     
     /* check if buffer is readly */
-    while( pxENETTxDescriptor->status & TX_BD_R ) {};
+    //while( pxENETTxDescriptor->status & TX_BD_R ) {};
         
     /* set Tx Descriptor */
     pxENETTxDescriptor->data = (uint8_t *)__REV((uint32_t)data);		

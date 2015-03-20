@@ -7,7 +7,6 @@
 #include "dma.h"
 
 #include "ov7725.h"
-#include "image_display.h"
 #include "i2c.h"
 
 /* 请将I2C.H中的 I2C_GPIO_SIM 改为 1 */
@@ -35,7 +34,7 @@
 #endif
 
 uint8_t gCCD_RAM[(OV7725_H)*(OV7725_W/8)];
-uint8_t img[OV7725_H*OV7725_W]; 
+uint8_t gImge[OV7725_H*OV7725_W]; 
 
 
 typedef enum
@@ -92,10 +91,8 @@ void OV_ISR(uint32_t index)
         if(gStatus == IMG_START)                   
         {
             gStatus = IMG_GATHER;
-            DMA_SetDestAddress (HW_DMA_CH2,(uint32_t)gCCD_RAM);
-            PORTA ->ISFR |= 1<<BOARD_OV7725_PCLK_PIN;
-            DMA_EnableRequest (HW_DMA_CH2 );
-            PORTA ->ISFR |= 1 <<  BOARD_OV7725_PCLK_PIN;
+            DMA_SetDestAddress(HW_DMA_CH2,(uint32_t)gCCD_RAM);
+            DMA_EnableRequest(HW_DMA_CH2 );
         }
     }
 }
@@ -103,8 +100,25 @@ void OV_ISR(uint32_t index)
 
 void img_extract(uint8_t *dst, uint8_t *src, uint32_t srclen)
 {
+    int i,j;
+    uint8_t buf0[OV7725_H];
+    uint8_t buf1[OV7725_H];
     uint8_t colour[2] = {0, 1}; 
-   
+    int wlen = OV7725_W/8;
+    
+    /* 矩阵变化 */
+    for(j=0;j<OV7725_H;j++)
+    {
+        buf0[j] = src[j*wlen + 0];
+        buf1[j] = src[j*wlen + 1];
+        for(i=0;i<8;i++)
+        {
+            src[j*wlen+i] = src[j*wlen+i+2];
+        }
+        src[j*wlen+8] = buf0[j];
+        src[j*wlen+9] = buf1[j];
+    }
+    
     uint8_t tmpsrc;
     while(srclen --)
     {
@@ -120,21 +134,18 @@ void img_extract(uint8_t *dst, uint8_t *src, uint32_t srclen)
     }
 }
 
-#define  DMA_IRQ_CLEAN(DMA_CHn) DMA0->INT|=(DMA_INT_INT0_MASK<<DMA_CHn) 
 
 void ov7725_DMA(void )
 {
     gStatus = IMG_FINISH ;
-    DMA_DisableRequest (HW_DMA_CH2 );
-    DMA_IRQ_CLEAN (HW_DMA_CH2);
+    DMA_DisableRequest (HW_DMA_CH2);
 }
 
 void camera_get_image()
 {
     gStatus = IMG_START;
-    printf("IMG_START--1\r\n");
-    PORTA->ISFR |= (1 << BOARD_OV7725_VSYNC_PIN);
-    NVIC_EnableIRQ(PORTA_IRQn);
+    GPIO_ITDMAConfig(BOARD_OV7725_VSYNC_PORT, BOARD_OV7725_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
+
    
     while(gStatus != IMG_FINISH)
     {
@@ -142,7 +153,7 @@ void camera_get_image()
     }
 }
 
-void SerialDispImage(uint8_t* srcData)
+void DispImage(uint8_t* srcData)
 {
     uint32_t x, y;
     for(y = 0; y < OV7725_H; y++)
@@ -232,7 +243,7 @@ int main(void)
     while(1)
     {
        camera_get_image();
-       img_extract(img, gCCD_RAM ,OV7725_H*(OV7725_W/8));  
-       SerialDispImage(img);
+       img_extract(gImge, gCCD_RAM ,OV7725_H*(OV7725_W/8));  
+       DispImage(gImge);
     }
 }

@@ -199,7 +199,6 @@ _loop:
     }
     adx++;
     goto _loop;
-    return 0;
 }
 
 

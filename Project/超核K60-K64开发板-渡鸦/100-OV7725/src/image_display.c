@@ -10,11 +10,11 @@ static void _DispBin(int x, int y, uint8_t data)
     {
         if((data >> i) & 1)
         {
-            ili9320_write_pixel(x+8-i, y, 0x0000);
+            ili9320_write_pixel(x+8-i, y, BLACK);
         }
         else
         {
-            ili9320_write_pixel(x+8-i, y, 0xFFFF);
+            ili9320_write_pixel(x+8-i, y, WHITE);
         }
     }
 }

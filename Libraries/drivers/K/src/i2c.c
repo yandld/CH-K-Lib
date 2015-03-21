@@ -23,7 +23,7 @@
 #define SDA_L()             do {GPIO_WriteBit(i2c.instace, i2c.sda_pin, 0);}while(0)
 #define SCL_H()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 1);}while(0)
 #define SCL_L()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 0);}while(0)
-#define SCCB_DELAY()        DelayUs(2)
+#define SCCB_DELAY()        DelayUs(1)
 
 typedef struct
 {
@@ -258,8 +258,9 @@ uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subA
     return SCCB_ReadSingleRegister(instance, chipAddr, subAddr, pData);
 }
 
-int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data)
+int _SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data)
 {
+
     if(!I2C_Start())
     {
         return 1;
@@ -271,11 +272,31 @@ int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAdd
         return 2;
     }
     I2C_SendByte((uint8_t)(subAddr & 0x00FF));
-    _I2C_WaitAck();
+    if(!_I2C_WaitAck())
+    {
+        return 3;
+    }
     I2C_SendByte(data);
-    _I2C_WaitAck();
+    if(!_I2C_WaitAck())
+    {
+        return 4;
+    }
     I2C_Stop();
     return 0;
+}
+
+int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data)
+{
+    uint8_t i = 0;
+    while(false == _SCCB_WriteSingleRegister(instance, chipAddr, subAddr, data))
+    {
+        i++;
+        if(i == 30)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 

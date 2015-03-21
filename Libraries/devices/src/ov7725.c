@@ -32,8 +32,8 @@ static uint8_t ov7725_chip_addr_table[] = {0x21};
 static const struct ov7725_reg default_reg_value[] =
 {
 
-    {OV7725_COM4         , 0x01},
-    {OV7725_CLKRC        , 0x00},
+    {OV7725_COM4         , 0x81},
+    {OV7725_CLKRC        , 0x01},
     {OV7725_COM2         , 0x03},
     {OV7725_COM3         , 0xD0},
     {OV7725_COM7         , 0x40},
@@ -97,7 +97,6 @@ int ov7725_probe(uint8_t i2c_instance)
             /* inject default register value */
             for(j = 0; j < ARRAY_SIZE(default_reg_value); j++)
             {
-                DelayMs(3);
                 r = SCCB_WriteSingleRegister(i2c_instance, ov7725_chip_addr_table[i], default_reg_value[j].addr, default_reg_value[j].val);
                 if(r)
                 {

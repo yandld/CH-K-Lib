@@ -7,6 +7,7 @@
 #include "dma.h"
 
 #include "ov7725.h"
+#include "image_display.h"
 #include "i2c.h"
 
 /* 请将I2C.H中的 I2C_GPIO_SIM 改为 1 */
@@ -18,50 +19,59 @@
 #define IMAGE_SIZE  0
 
 #if (IMAGE_SIZE  ==  0)
-#define OV7725_W    (80)
-#define OV7725_H    (60)
+#define OV7620_W    (80)
+#define OV7620_H    (60)
 
 #elif (IMAGE_SIZE == 1)
-#define OV7725_W    (160)
-#define OV7725_H    (120)
+#define OV7620_W    (160)
+#define OV7620_H    (120)
 
 #elif (IMAGE_SIZE == 2)
-#define OV7725_W    (240)
-#define OV7725_H    (180)
+#define OV7620_W    (240)
+#define OV7620_H    (180)
 
 #else
 #error "Image Size Not Support!"
 #endif
 
-uint8_t gCCD_RAM[(OV7725_H)*(OV7725_W/8)];
-uint8_t gImge[OV7725_H*OV7725_W]; 
+// 图像内存池
+uint8_t gCCD_RAM[(OV7620_H)*((OV7620_W/8)+1)];   //使用内部RAM
 
-
-typedef enum
-{
-    IMG_FINISH,
-    IMG_FAIL,
-    IMG_GATHER,
-    IMG_START,
-} OV_Status;
-
-volatile OV_Status gStatus;
+/* 行指针 */
+uint8_t * gpHREF[OV7620_H+1];
 
 /* 引脚定义 PCLK VSYNC HREF 接到同一个PORT上 */
-#define BOARD_OV7725_PCLK_PORT      HW_GPIOA
-#define BOARD_OV7725_PCLK_PIN       (7)
-#define BOARD_OV7725_VSYNC_PORT     HW_GPIOA
-#define BOARD_OV7725_VSYNC_PIN      (16)
-#define BOARD_OV7725_HREF_PORT      HW_GPIOA
-#define BOARD_OV7725_HREF_PIN       (17)
+#define BOARD_OV7620_PCLK_PORT      HW_GPIOA
+#define BOARD_OV7620_PCLK_PIN       (7)
+#define BOARD_OV7620_VSYNC_PORT     HW_GPIOA
+#define BOARD_OV7620_VSYNC_PIN      (16)
+#define BOARD_OV7620_HREF_PORT      HW_GPIOA
+#define BOARD_OV7620_HREF_PIN       (17)
 /* 
 摄像头数据引脚PTA8-PTA15 只能填入 0 8 16三个值 
 0 :PTA0-PTA7
 8 :PTA8-PTA15
 16:PTA16-PTA24
 */
-#define BOARD_OV7725_DATA_OFFSET    (8) 
+#define BOARD_OV7620_DATA_OFFSET    (8) 
 
+/* 状态机定义 */
+typedef enum
+{
+    TRANSFER_IN_PROCESS, //数据在处理
+    NEXT_FRAME,          //下一帧数据
+}OV7620_Status;
+
+static void UserApp(uint32_t vcount);
+
+
+/* 接收完成一场后 用户处理函数 */
+static void UserApp(uint32_t vcount)
+{
+    GUI_printf(100,0, "frame:%d", vcount);
+    GUI_DispCCDImage(0, 15, OV7620_W, OV7620_H, gpHREF);
+    //SerialDispCCDImage(OV7620_W, OV7620_H, CCDBuffer);
+}
 
 
 int SCCB_Init(uint32_t I2C_MAP)
@@ -86,91 +96,48 @@ int SCCB_Init(uint32_t I2C_MAP)
 //航中断和长中断都使用PTA中断
 void OV_ISR(uint32_t index)
 {
-    if(index & (1 << BOARD_OV7725_VSYNC_PIN))
-    {
-        if(gStatus == IMG_START)                   
-        {
-            gStatus = IMG_GATHER;
-            DMA_SetDestAddress(HW_DMA_CH2,(uint32_t)gCCD_RAM);
-            DMA_EnableRequest(HW_DMA_CH2 );
-        }
-    }
-}
-
-
-void img_extract(uint8_t *dst, uint8_t *src, uint32_t srclen)
-{
-    int i,j;
-    uint8_t buf0[OV7725_H];
-    uint8_t buf1[OV7725_H];
-    uint8_t colour[2] = {0, 1}; 
-    int wlen = OV7725_W/8;
+    static uint8_t status = TRANSFER_IN_PROCESS;
+    static uint32_t h_counter, v_counter;
+   // uint32_t i;
     
-    /* 矩阵变化 */
-    for(j=0;j<OV7725_H;j++)
+    /* 行中断 */
+    if(index & (1 << BOARD_OV7620_HREF_PIN))
     {
-        buf0[j] = src[j*wlen + 0];
-        buf1[j] = src[j*wlen + 1];
-        for(i=0;i<8;i++)
-        {
-            src[j*wlen+i] = src[j*wlen+i+2];
-        }
-        src[j*wlen+8] = buf0[j];
-        src[j*wlen+9] = buf1[j];
-    }
-    
-    uint8_t tmpsrc;
-    while(srclen --)
-    {
-        tmpsrc = *src++;
-        *dst++ = colour[ (tmpsrc >> 7 ) & 0x01 ];
-        *dst++ = colour[ (tmpsrc >> 6 ) & 0x01 ];
-        *dst++ = colour[ (tmpsrc >> 5 ) & 0x01 ];
-        *dst++ = colour[ (tmpsrc >> 4 ) & 0x01 ];
-        *dst++ = colour[ (tmpsrc >> 3 ) & 0x01 ];
-        *dst++ = colour[ (tmpsrc >> 2 ) & 0x01 ];
-        *dst++ = colour[ (tmpsrc >> 1 ) & 0x01 ];
-        *dst++ = colour[ (tmpsrc >> 0 ) & 0x01 ];
-    }
-}
-
-
-void ov7725_DMA(void )
-{
-    gStatus = IMG_FINISH ;
-    DMA_DisableRequest (HW_DMA_CH2);
-}
-
-void camera_get_image()
-{
-    gStatus = IMG_START;
-    GPIO_ITDMAConfig(BOARD_OV7725_VSYNC_PORT, BOARD_OV7725_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
-
-   
-    while(gStatus != IMG_FINISH)
-    {
+        DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)gpHREF[h_counter++]);
+        //i = DMA_GetMajorLoopCount(HW_DMA_CH2);
+        DMA_SetMajorLoopCounter(HW_DMA_CH2, (OV7620_W/8)+1);
+        DMA_EnableRequest(HW_DMA_CH2);
         
+        return;
+    }
+    /* 场中断 */
+    if(index & (1 << BOARD_OV7620_VSYNC_PIN))
+    {
+        GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, false);
+        GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, false);
+        switch(status)
+        {
+            case TRANSFER_IN_PROCESS: //接受到一帧数据调用用户处理
+                    UserApp(v_counter++);
+                    //printf("i:%d %d\r\n", h_counter, i);
+                    status = NEXT_FRAME;
+                    h_counter = 0;
+
+                break;
+            case NEXT_FRAME: //等待下次传输
+                status =  TRANSFER_IN_PROCESS;
+                break;
+            default:
+                break;
+        }
+        GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
+        GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
+        PORTA->ISFR = 0xFFFFFFFF;
+        h_counter = 0;
+        return;
     }
 }
 
-void DispImage(uint8_t* srcData)
-{
-    uint32_t x, y;
-    for(y = 0; y < OV7725_H; y++)
-    {
-        for(x = 0; x < (OV7725_W); x++)
-        {
-            if(srcData[y*OV7725_W+x])
-            {
-                ili9320_write_pixel(x, y, BLACK);
-            }
-            else
-            {
-                ili9320_write_pixel(x, y, WHITE);
-            }
-        }			
-    }
-}
 
 
 int main(void)
@@ -195,23 +162,30 @@ int main(void)
     }
     printf("OV7620 setup complete\r\n");
     
+    //每行数据指针
+    for(i=0; i<OV7620_H+1; i++)
+    {
+        gpHREF[i] = (uint8_t*)&gCCD_RAM[i*OV7620_W/8];
+    }
     
     DMA_InitTypeDef DMA_InitStruct1 = {0};
     
-    /* 场中断 像素中断 */
-    GPIO_QuickInit(BOARD_OV7725_PCLK_PORT, BOARD_OV7725_PCLK_PIN, kGPIO_Mode_IPD);
-    GPIO_QuickInit(BOARD_OV7725_VSYNC_PORT, BOARD_OV7725_VSYNC_PIN, kGPIO_Mode_IPD);
+    /* 场中断  行中断 像素中断 */
+    GPIO_QuickInit(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_Mode_IPD);
+    GPIO_QuickInit(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_Mode_IPD);
+    GPIO_QuickInit(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_Mode_IPD);
     
     /* install callback */
-    GPIO_CallbackInstall(BOARD_OV7725_VSYNC_PORT, OV_ISR);
+    GPIO_CallbackInstall(BOARD_OV7620_VSYNC_PORT, OV_ISR);
    
-    GPIO_ITDMAConfig(BOARD_OV7725_VSYNC_PORT, BOARD_OV7725_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
-    GPIO_ITDMAConfig(BOARD_OV7725_PCLK_PORT, BOARD_OV7725_PCLK_PIN, kGPIO_DMA_RisingEdge, true);
+    GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
+    GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
+    GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge, true);
     
     /* 初始化数据端口 */
     for(i=0;i<8;i++)
     {
-        GPIO_QuickInit(HW_GPIOA, BOARD_OV7725_DATA_OFFSET+i, kGPIO_Mode_IFT);
+        GPIO_QuickInit(HW_GPIOA, BOARD_OV7620_DATA_OFFSET+i, kGPIO_Mode_IFT);
     }
     
     //DMA配置
@@ -219,15 +193,15 @@ int main(void)
     DMA_InitStruct1.chlTriggerSource = PORTA_DMAREQ;
     DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
     DMA_InitStruct1.minorLoopByteCnt = 1;
-    DMA_InitStruct1.majorLoopCnt = ((OV7725_W/8)*OV7725_H);
+    DMA_InitStruct1.majorLoopCnt = ((OV7620_W/8) +1);
     
-    DMA_InitStruct1.sAddr = (uint32_t)&PTA->PDIR + BOARD_OV7725_DATA_OFFSET/8;
+    DMA_InitStruct1.sAddr = (uint32_t)&PTA->PDIR + BOARD_OV7620_DATA_OFFSET/8;
     DMA_InitStruct1.sLastAddrAdj = 0;
     DMA_InitStruct1.sAddrOffset = 0;
     DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.sMod = kDMA_ModuloDisable;
     
-    DMA_InitStruct1.dAddr = (uint32_t)gCCD_RAM;
+    DMA_InitStruct1.dAddr = (uint32_t)gpHREF[0];
     DMA_InitStruct1.dLastAddrAdj = 0;
     DMA_InitStruct1.dAddrOffset = 1;
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
@@ -236,14 +210,8 @@ int main(void)
     /* initialize DMA moudle */
     DMA_Init(&DMA_InitStruct1);
     
-    DMA_ITConfig (HW_DMA_CH2 ,kDMA_IT_Major ,true );
-    DMA_CallbackInstall (HW_DMA_CH2 ,ov7725_DMA);
-    DMA_DisableRequest (HW_DMA_CH2 );
-    
     while(1)
     {
-       camera_get_image();
-       img_extract(gImge, gCCD_RAM ,OV7725_H*(OV7725_W/8));  
-       DispImage(gImge);
+        
     }
 }

@@ -68,6 +68,7 @@ void usbd_hid_init (void) {
 
 // USB HID Callback: when data needs to be prepared for the host
 int usbd_hid_get_report (U8 rtype, U8 rid, U8 *buf, U8 req) {
+    printf("usbd_hid_get_report\r\n");
     switch (rtype) {
         case HID_REPORT_INPUT:
             switch (req) {
@@ -99,7 +100,9 @@ int usbd_hid_get_report (U8 rtype, U8 rid, U8 *buf, U8 req) {
 
 // USB HID Callback: when data is received from the host
 void usbd_hid_set_report (U8 rtype, U8 rid, U8 *buf, int len, U8 req) {
+     printf("usbd_hid_set_report\r\n");
     switch (rtype) {
+        
         case HID_REPORT_OUTPUT:
             if (len == 0) break;
             if (buf[0] == ID_DAP_TransferAbort) {

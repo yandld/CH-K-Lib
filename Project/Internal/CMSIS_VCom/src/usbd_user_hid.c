@@ -9,6 +9,7 @@ void usbd_hid_init (void) {}
 int usbd_hid_get_report (U8 rtype, U8 rid, U8 *buf, U8 req) {
   U32 i;
   S8 report[4] = {0, 0, 0, 0};
+
   switch (rtype) {
     case HID_REPORT_INPUT:
       switch (rid) {

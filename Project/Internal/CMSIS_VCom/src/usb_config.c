@@ -165,7 +165,7 @@
 //         </h>
 //       </h>
 //     </e>
-#define USBD_MSC_ENABLE             1
+#define USBD_MSC_ENABLE             0
 #define USBD_MSC_EP_BULKIN          2
 #define USBD_MSC_EP_BULKOUT         2
 #define USBD_MSC_WMAXPACKETSIZE     64
@@ -293,6 +293,7 @@
 #define USBD_CDC_ACM_DIF_STRDESC        L"USB_CDC1"
 #define USBD_CDC_ACM_SENDBUF_SIZE       128
 #define USBD_CDC_ACM_RECEIVEBUF_SIZE    128
+
 #if (((USBD_CDC_ACM_HS_ENABLE1) && (USBD_CDC_ACM_SENDBUF_SIZE    < USBD_CDC_ACM_HS_WMAXPACKETSIZE1)) || (USBD_CDC_ACM_SENDBUF_SIZE    < USBD_CDC_ACM_WMAXPACKETSIZE1))
 #error "Send Buffer size must be larger or equal to Bulk In maximum packet size!"
 #endif

@@ -43,8 +43,8 @@
 //   </h>
 #define USBD_POWER                  0
 #define USBD_MAX_PACKET0            8
-#define USBD_DEVDESC_IDVENDOR       0x0128
-#define USBD_DEVDESC_IDPRODUCT      0x0204
+#define USBD_DEVDESC_IDVENDOR       0x1234
+#define USBD_DEVDESC_IDPRODUCT      0x5678
 #define USBD_DEVDESC_BCDDEVICE      0x0100
 
 //   <h> Configuration Settings

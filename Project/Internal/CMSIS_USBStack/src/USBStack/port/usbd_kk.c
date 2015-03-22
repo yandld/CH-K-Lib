@@ -71,6 +71,57 @@ void          USBD_IntrEna (void) {
 }
 
 
+static int USB_SetClockDiv(uint32_t srcClock)
+{
+    uint8_t frac,div;
+    
+    /* clear all divivder */
+    SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBDIV_MASK;
+    SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBFRAC_MASK;
+    
+    for(frac = 0; frac < 2; frac++)
+    {
+        for(div = 0; div < 8; div++)
+        {
+            if(((srcClock*(frac+1))/(div+1)) > 47000000 && ((srcClock*(frac+1))/(div+1)) < 49000000)
+            {
+                SIM->CLKDIV2 |= SIM_CLKDIV2_USBDIV(div);
+                (frac)?(SIM->CLKDIV2 |= SIM_CLKDIV2_USBFRAC_MASK):(SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBFRAC_MASK);
+                LIB_TRACE("USB clock OK src:%d frac:%d div:%d 0x%08X\r\n", srcClock, frac, div, SIM->CLKDIV2);
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+uint8_t USB_ClockInit(void)
+{
+    /* open clock gate */
+    SIM->SOPT2 |= SIM_SOPT2_USBSRC_MASK;
+    
+    /* clock config */
+    uint32_t clock;
+    CLOCK_GetClockFrequency(kMCGOutClock, &clock);
+    if(USB_SetClockDiv(clock))
+    {
+        LIB_TRACE("USB clock setup fail\r\n");
+        return 1;
+    }
+
+    /* which MCG generator is to be used */
+    SIM->SOPT2 &= ~SIM_SOPT2_PLLFLLSEL_MASK;
+#ifdef SIM_SOPT2_PLLFLLSEL
+    (MCG->C6 & MCG_C6_PLLS_MASK)?
+    (SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL(1)):   /* PLL */
+    (SIM->SOPT2 &= ~SIM_SOPT2_PLLFLLSEL(0));  /* FLL */
+#else
+    (MCG->C6 & MCG_C6_PLLS_MASK)?
+    (SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK):   /* PLL */
+    (SIM->SOPT2 &= ~SIM_SOPT2_PLLFLLSEL_MASK);  /* FLL */
+#endif
+	return 0;
+}
 /*
  *  USB Device Initialize Function
  *   Called by the User to initialize USB
@@ -80,16 +131,18 @@ void          USBD_IntrEna (void) {
 void USBD_Init (void) {
   OutEpSize[0] = USBD_MAX_PACKET0;
 
-  /* Enable all clocks needed for USB to function                             */
-  /* Set USB clock to 48 MHz                                                  */
-//  SIM->SOPT2   |=   SIM_SOPT2_USBSRC_MASK     | /* MCGPLLCLK used as src      */
-//                    SIM_SOPT2_PLLFLLSEL_MASK  ; /* Select MCGPLLCLK as clock  */
-//  SIM->CLKDIV2 &= ~(SIM_CLKDIV2_USBFRAC_MASK  | /* Clear CLKDIV2 FS values    */
-//                    SIM_CLKDIV2_USBDIV_MASK);
-//  SIM->CLKDIV2  =   SIM_CLKDIV2_USBDIV(0)     ; /* USB clk = (PLL*1/2)        */
-//                                                /*         = ( 48*1/1)=48     */
   SIM->SCGC4   |=   SIM_SCGC4_USBOTG_MASK;      /* Enable USBOTG clock        */
+    
+  /* Enable all clocks needed for USB to function                             */
+    if(USB_ClockInit())
+    {
+        printf("USB  Init failed, clock must be 96M or 48M\r\n");
+        return;
+    }
 
+    /* disable memory protection */
+    MPU->CESR=0;
+    
   USBD_IntrEna ();
 
   USB0->USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
@@ -501,7 +554,6 @@ void USB0_IRQHandler(void) {
    
 /* reset interrupt                                                            */
   if (istr & USB_ISTAT_USBRST_MASK) {
-    printf("reset\r\n");
     USBD_Reset();
     usbd_reset_core();
 #ifdef __RTX
@@ -517,7 +569,6 @@ void USB0_IRQHandler(void) {
 
 /* suspend interrupt                                                          */
   if (istr & USB_ISTAT_SLEEP_MASK) {
-          printf("suspend\r\n");
     USBD_Suspend();
 #ifdef __RTX
     if (USBD_RTX_DevTask) {
@@ -572,7 +623,6 @@ void USB0_IRQHandler(void) {
       USBD_P_Error_Event(USB0->ERRSTAT);
     }
 #endif
-    printf("error:0x%X\r\n", USB0->ERRSTAT);
     USB0->ERRSTAT = 0xFF;
   }
 

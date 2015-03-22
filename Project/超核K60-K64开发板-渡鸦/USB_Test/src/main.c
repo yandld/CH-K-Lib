@@ -28,6 +28,13 @@ int main(void)
     USB_Init();
     NVIC_EnableIRQ(USB0_IRQn);
     USBD_HID_Init();
+    
+      S8 report[4] = {0, 0, 0, 0};
+      
+      report[0] = 1;
+      report[1] = 1;
+      report[2] = 1;
+      report[3] = 1;
     while(1)
     {
         USB_HID_SetMouse(1,0,0,0);

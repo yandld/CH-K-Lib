@@ -173,7 +173,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\src\usbd_kk.c</Filename>
+          <Filename>C:\Users\Yandld\Desktop\CH-K-Lib\Project\Internal\CMSIS_USBStack_UDisk\src\usbd_kk.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -189,7 +189,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\src\usbd_user_hid.c</Filename>
+          <Filename>C:\Users\Yandld\Desktop\CH-K-Lib\Project\Internal\CMSIS_USBStack_UDisk\src\usbd_user_hid.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -426,7 +426,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\src\usbd_kk.c</Filename>
+          <Filename>C:\Users\Yandld\Desktop\CH-K-Lib\Project\Internal\CMSIS_USBStack_UDisk\src\usbd_kk.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -442,7 +442,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\src\usbd_user_hid.c</Filename>
+          <Filename>C:\Users\Yandld\Desktop\CH-K-Lib\Project\Internal\CMSIS_USBStack_UDisk\src\usbd_user_hid.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\templete\../src/usbd_user_hid.c\60</Expression>
         </Bp>
@@ -573,10 +573,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>3</ColumnNumber>
+      <ColumnNumber>16</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>10</TopLine>
-      <CurrentLine>22</CurrentLine>
+      <TopLine>16</TopLine>
+      <CurrentLine>29</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -589,10 +589,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>23</ColumnNumber>
+      <ColumnNumber>10</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>81</TopLine>
-      <CurrentLine>70</CurrentLine>
+      <TopLine>104</TopLine>
+      <CurrentLine>177</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\usb_config.c</PathWithFileName>
       <FilenameWithoutPath>usb_config.c</FilenameWithoutPath>
@@ -605,13 +605,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>8</ColumnNumber>
+      <ColumnNumber>11</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>10</CurrentLine>
+      <TopLine>1361</TopLine>
+      <CurrentLine>1366</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\src\usbd_user_hid.c</PathWithFileName>
-      <FilenameWithoutPath>usbd_user_hid.c</FilenameWithoutPath>
+      <PathWithFileName>..\src\USBStack\INC\usb_lib.c</PathWithFileName>
+      <FilenameWithoutPath>usb_lib.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -621,13 +621,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1975</TopLine>
-      <CurrentLine>1227</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\src\USBStack\INC\usb_lib.c</PathWithFileName>
-      <FilenameWithoutPath>usb_lib.c</FilenameWithoutPath>
+      <PathWithFileName>..\src\USBStack\port\usbd_kk.c</PathWithFileName>
+      <FilenameWithoutPath>usbd_kk.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -637,13 +637,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>14</ColumnNumber>
+      <ColumnNumber>18</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>138</TopLine>
-      <CurrentLine>139</CurrentLine>
+      <TopLine>121</TopLine>
+      <CurrentLine>137</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\src\USBStack\port\usbd_kk.c</PathWithFileName>
-      <FilenameWithoutPath>usbd_kk.c</FilenameWithoutPath>
+      <PathWithFileName>..\src\DiskImg.c</PathWithFileName>
+      <FilenameWithoutPath>DiskImg.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -653,13 +653,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>19</ColumnNumber>
+      <ColumnNumber>16</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>13</TopLine>
-      <CurrentLine>23</CurrentLine>
+      <TopLine>22</TopLine>
+      <CurrentLine>22</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\src\usbd_user_desc.c</PathWithFileName>
-      <FilenameWithoutPath>usbd_user_desc.c</FilenameWithoutPath>
+      <PathWithFileName>..\src\usbd_user_msc.c</PathWithFileName>
+      <FilenameWithoutPath>usbd_user_msc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -811,7 +811,7 @@
 
   <Group>
     <GroupName>USBStack</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -837,10 +837,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>8</ColumnNumber>
+      <ColumnNumber>36</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>51</TopLine>
-      <CurrentLine>63</CurrentLine>
+      <TopLine>333</TopLine>
+      <CurrentLine>346</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\USBStack\SRC\usbd_core.c</PathWithFileName>
       <FilenameWithoutPath>usbd_core.c</FilenameWithoutPath>
@@ -869,7 +869,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>23</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
@@ -885,10 +885,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2888740</ColumnNumber>
+      <ColumnNumber>40</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>45</TopLine>
+      <CurrentLine>12</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\USBStack\SRC\usbd_core_msc.c</PathWithFileName>
       <FilenameWithoutPath>usbd_core_msc.c</FilenameWithoutPath>
@@ -917,10 +917,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2888740</ColumnNumber>
+      <ColumnNumber>30</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>68</TopLine>
+      <CurrentLine>22</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\USBStack\SRC\usbd_msc.c</PathWithFileName>
       <FilenameWithoutPath>usbd_msc.c</FilenameWithoutPath>

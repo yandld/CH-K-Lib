@@ -463,11 +463,6 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
             </File>
             <File>
-              <FileName>cpuidy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
-            </File>
-            <File>
               <FileName>systick.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
@@ -476,6 +471,11 @@
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>iflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\iflash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -501,6 +501,196 @@
               <FileName>usbd_kk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\port\usbd_kk.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Flash</GroupName>
+          <Files>
+            <File>
+              <FileName>DEFlashPartition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\DEFlashPartition.c</FilePath>
+            </File>
+            <File>
+              <FileName>DFlashGetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\DFlashGetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>DFlashSetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\DFlashSetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>EEEWrite.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\EEEWrite.c</FilePath>
+            </File>
+            <File>
+              <FileName>EERAMGetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\EERAMGetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>EERAMSetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\EERAMSetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashCheckSum.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashCheckSum.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashCommandSequence.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashCommandSequence.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashDev.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseAllBlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseAllBlock.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseBlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseBlock.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseResume.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseResume.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseSector.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseSector.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseSector_Keil.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseSector_Keil.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseSuspend.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseSuspend.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashGetInterruptEnable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashGetInterruptEnable.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashGetSecurityState.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashGetSecurityState.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashInit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashInit.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashPrg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashPrg.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramCheck.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramCheck.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramLongword.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramLongword.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramLongword_Keil.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramLongword_Keil.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramOnce.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramOnce.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramPhrase.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramPhrase.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramSection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramSection.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashReadOnce.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashReadOnce.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashReadResource.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashReadResource.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashSecurityBypass.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashSecurityBypass.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashSetInterruptEnable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashSetInterruptEnable.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashVerifyAllBlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashVerifyAllBlock.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashVerifyBlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashVerifyBlock.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashVerifySection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashVerifySection.c</FilePath>
+            </File>
+            <File>
+              <FileName>PFlashGetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\PFlashGetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>PFlashGetSwapStatus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\PFlashGetSwapStatus.c</FilePath>
+            </File>
+            <File>
+              <FileName>PFlashSetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\PFlashSetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>PFlashSwap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\PFlashSwap.c</FilePath>
+            </File>
+            <File>
+              <FileName>SetEEEEnable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\SetEEEEnable.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -864,9 +1054,9 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99 --gnu</MiscControls>
-              <Define>MK22F25612  RAVEN DEBUG</Define>
+              <Define>MK22F25612  RAVEN DEBUG MKP256</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\src\USBStack\inc</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\src\USBStack\inc;..\src\Flash\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1051,9 +1241,119 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
             </File>
             <File>
-              <FileName>cpuidy.c</FileName>
+              <FileName>systick.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>iflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\iflash.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>usb</GroupName>
+          <Files>
+            <File>
+              <FileName>usbd_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\USBStack\src\usbd_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_core_msc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\USBStack\src\usbd_core_msc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_msc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\USBStack\src\usbd_msc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_kk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\USBStack\port\usbd_kk.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Flash</GroupName>
+          <Files>
+            <File>
+              <FileName>DEFlashPartition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\DEFlashPartition.c</FilePath>
+            </File>
+            <File>
+              <FileName>DFlashGetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\DFlashGetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>DFlashSetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\DFlashSetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>EEEWrite.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\EEEWrite.c</FilePath>
+            </File>
+            <File>
+              <FileName>EERAMGetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\EERAMGetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>EERAMSetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\EERAMSetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashCheckSum.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashCheckSum.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashCommandSequence.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashCommandSequence.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashDev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashDev.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseAllBlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseAllBlock.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseBlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseBlock.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseResume.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseResume.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseSector.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseSector.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashEraseSector_Keil.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashEraseSector_Keil.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -1099,39 +1399,162 @@
               </FileOption>
             </File>
             <File>
-              <FileName>systick.c</FileName>
+              <FileName>FlashEraseSuspend.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
+              <FilePath>..\src\Flash\src\FlashEraseSuspend.c</FilePath>
             </File>
             <File>
-              <FileName>common.c</FileName>
+              <FileName>FlashGetInterruptEnable.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>usb</GroupName>
-          <Files>
-            <File>
-              <FileName>usbd_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\USBStack\src\usbd_core.c</FilePath>
+              <FilePath>..\src\Flash\src\FlashGetInterruptEnable.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_core_msc.c</FileName>
+              <FileName>FlashGetSecurityState.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\USBStack\src\usbd_core_msc.c</FilePath>
+              <FilePath>..\src\Flash\src\FlashGetSecurityState.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_msc.c</FileName>
+              <FileName>FlashInit.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\USBStack\src\usbd_msc.c</FilePath>
+              <FilePath>..\src\Flash\src\FlashInit.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_kk.c</FileName>
+              <FileName>FlashPrg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\USBStack\port\usbd_kk.c</FilePath>
+              <FilePath>..\src\Flash\src\FlashPrg.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramCheck.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramCheck.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramLongword.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramLongword.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramLongword_Keil.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramLongword_Keil.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>2</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>FlashProgramOnce.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramOnce.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramPhrase.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramPhrase.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashProgramSection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashProgramSection.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashReadOnce.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashReadOnce.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashReadResource.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashReadResource.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashSecurityBypass.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashSecurityBypass.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashSetInterruptEnable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashSetInterruptEnable.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashVerifyAllBlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashVerifyAllBlock.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashVerifyBlock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashVerifyBlock.c</FilePath>
+            </File>
+            <File>
+              <FileName>FlashVerifySection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\FlashVerifySection.c</FilePath>
+            </File>
+            <File>
+              <FileName>PFlashGetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\PFlashGetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>PFlashGetSwapStatus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\PFlashGetSwapStatus.c</FilePath>
+            </File>
+            <File>
+              <FileName>PFlashSetProtection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\PFlashSetProtection.c</FilePath>
+            </File>
+            <File>
+              <FileName>PFlashSwap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\PFlashSwap.c</FilePath>
+            </File>
+            <File>
+              <FileName>SetEEEEnable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Flash\src\SetEEEEnable.c</FilePath>
             </File>
           </Files>
         </Group>

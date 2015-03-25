@@ -88,15 +88,15 @@ extern "C" {
 #define DISABLE_WDOG    1
 
 #ifndef CLOCK_SETUP
-  #define CLOCK_SETUP   1
+  #define CLOCK_SETUP   0
 #endif
 
 /* Predefined clock setups
    0 ... Default  part configuration
          Multipurpose Clock Generator (MCG) in FEI mode.
          Reference clock source for MCG module: Slow internal reference clock
-         Core clock = 20.97152MHz
-         Bus clock  = 20.97152MHz
+         Core clock = 48MHz
+         Bus clock  = 48MHz
    1 ... Maximum achievable clock frequency configuration
          Multipurpose Clock Generator (MCG) in PEE mode.
          Reference clock source for MCG module: System oscillator 0 reference clock
@@ -142,14 +142,14 @@ extern "C" {
 /* #undef FAST_FINE_TRIM_ADDRESS */                        /* Fast oscillator not trimmed. Commented out for MISRA compliance. */
 
 #if (CLOCK_SETUP == 0)
-    #define DEFAULT_SYSTEM_CLOCK            20971520u /* Default System clock value */
+    #define DEFAULT_SYSTEM_CLOCK            48000000u /* Default System clock value */
   #define MCG_MODE_FEI                 /* Clock generator mode */
   /* MCG_C1: CLKS=0,FRDIV=0,IREFS=1,IRCLKEN=1,IREFSTEN=0 */
   #define MCG_C1_VALUE                 0x06U               /* MCG_C1 */
   /* MCG_C2: LOCRE0=0,FCFTRIM=0,RANGE=2,HGO=0,EREFS=1,LP=0,IRCS=0 */
   #define MCG_C2_VALUE                 0x24U               /* MCG_C2 */
   /* MCG_C4: DMX32=0,DRST_DRS=0,FCTRIM=0,SCFTRIM=0 */
-  #define MCG_C4_VALUE                 0x00U               /* MCG_C4 */
+  #define MCG_C4_VALUE                 0xA0U               /* MCG_C4 */
   /* MCG_SC: ATME=0,ATMS=0,ATMF=0,FLTPRSRV=0,FCRDIV=0,LOCS0=0 */
   #define MCG_SC_VALUE                 0x00U               /* MCG_SC */
 /* MCG_C5: PLLCLKEN0=0,PLLSTEN0=0,PRDIV0=0 */

@@ -23,19 +23,15 @@ uint32_t GetUID(void)
 }
 
 
-/* get  residue flash size */
-#define TEST_ADDR_BEIGN  (2048*80)
+//static int MKP512FlashInit(void)
+//{
+//    uint32_t clock;
+//    uint32_t flash_clock = CLOCK_GetClockFrequency(kFlashClock, &clock);
+//    /* fnc:  Function Code (1 - Erase, 2 - Program, 3 - Verify) */
 
-
-static int MKP512FlashInit(void)
-{
-    uint32_t clock;
-    uint32_t flash_clock = CLOCK_GetClockFrequency(kFlashClock, &clock);
-    /* fnc:  Function Code (1 - Erase, 2 - Program, 3 - Verify) */
-
-    /* func:Init is SSD API */    
-    return Init(0x00000000, clock, 2); 
-}
+//    /* func:Init is SSD API */    
+//    return Init(0x00000000, clock, 2); 
+//}
 
 static void FlashTest(void)
 {

@@ -42,7 +42,7 @@
 //       <i> Device release number in binary-coded decimal (bcdDevice)
 //   </h>
 #define USBD_POWER                  0
-#define USBD_MAX_PACKET0            8
+#define USBD_MAX_PACKET0            32
 #define USBD_DEVDESC_IDVENDOR       0xC251
 #define USBD_DEVDESC_IDPRODUCT      0x3505
 #define USBD_DEVDESC_BCDDEVICE      0x0100
@@ -326,7 +326,9 @@
 
 #define USBD_IF_NUM                (USBD_HID_ENABLE+USBD_MSC_ENABLE+(USBD_ADC_ENABLE*2)+(USBD_CDC_ACM_ENABLE*2)+USBD_CLS_ENABLE)
 #define USBD_MULTI_IF              (0)//USBD_CDC_ACM_ENABLE*(USBD_HID_ENABLE|USBD_MSC_ENABLE|USBD_ADC_ENABLE))
-#define MAX(x, y)                (((x) < (y)) ? (y) : (x))
+#ifndef MAX
+#define  MAX(x, y)                (((x) < (y)) ? (y) : (x))
+#endif
 #define USBD_EP_NUM_CALC0           MAX((USBD_HID_ENABLE    *(USBD_HID_EP_INTIN     )), (USBD_HID_ENABLE    *(USBD_HID_EP_INTOUT!=0)*(USBD_HID_EP_INTOUT)))
 #define USBD_EP_NUM_CALC1           MAX((USBD_MSC_ENABLE    *(USBD_MSC_EP_BULKIN    )), (USBD_MSC_ENABLE    *(USBD_MSC_EP_BULKOUT)))
 #define USBD_EP_NUM_CALC2           MAX((USBD_ADC_ENABLE    *(USBD_ADC_EP_ISOOUT    )), (USBD_CDC_ACM_ENABLE*(USBD_CDC_ACM_EP_INTIN)))

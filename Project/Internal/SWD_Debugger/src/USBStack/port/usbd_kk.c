@@ -27,7 +27,19 @@ typedef struct __BUF_DESC {
   uint32_t   buf_addr;
 }BUF_DESC;
 
-BUF_DESC __align(512) BD[(USBD_EP_NUM + 1) * 2 * 2];
+#ifndef ALIGN
+/* Compiler Related Definitions */
+#ifdef __CC_ARM                         /* ARM Compiler */
+    #define ALIGN(n)                    __attribute__((aligned(n)))
+#elif defined (__IAR_SYSTEMS_ICC__)     /* for IAR Compiler */
+    #define PRAGMA(x)                   _Pragma(#x)
+    #define ALIGN(n)                    PRAGMA(data_alignment=n)
+#elif defined (__GNUC__)                /* GNU GCC Compiler */
+    #define ALIGN(n)                    __attribute__((aligned(n)))
+#endif /* Compiler Related Definitions */
+#endif
+
+ALIGN(512) BUF_DESC BD[(USBD_EP_NUM + 1) * 2 * 2];
 uint8_t EPBuf[(USBD_EP_NUM + 1)* 2 * 2][64];
 uint8_t OutEpSize[USBD_EP_NUM + 1];
 
@@ -51,9 +63,18 @@ uint32_t Data1  = 0x55555555;
 #define OUT_TOKEN      0x01
 #define TOK_PID(idx)   ((BD[idx].stat >> 2) & 0x0F)
 
-__inline static void protected_and (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) & val),addr)); }
-__inline static void protected_or  (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) | val),addr)); }
-__inline static void protected_xor (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) ^ val),addr)); }
+/* Compiler Related Definitions */
+#ifdef __CC_ARM                         /* ARM Compiler */
+    static void protected_and (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) & val),addr)); }
+    static void protected_or  (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) | val),addr)); }
+    static void protected_xor (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) ^ val),addr)); }
+#elif defined (__IAR_SYSTEMS_ICC__)     /* for IAR Compiler */
+    static void protected_and (unsigned long volatile *addr, uint32_t val) { while(__STREX((__LDREX(addr) & val),addr)); }
+    static void protected_or  (unsigned long volatile *addr, uint32_t val) { while(__STREX((__LDREX(addr) | val),addr)); }
+    static void protected_xor (unsigned long volatile *addr, uint32_t val) { while(__STREX((__LDREX(addr) ^ val),addr)); }
+#endif
+
+
 
 /*
  *  USB Device Interrupt enable
@@ -141,7 +162,9 @@ void USBD_Init (void) {
     }
 
     /* disable memory protection */
- //   MPU->CESR=0;
+    #ifdef MPU
+    MPU->CESR=0;
+    #endif
     
   USBD_IntrEna ();
 

@@ -309,8 +309,10 @@ uint8_t USB_Init(void)
 	SIM->SOPT1 |= SIM_SOPT1_USBREGEN_MASK;
     
     /* disable memory protection */
+    #ifdef MPU
     MPU->CESR=0;
-
+    #endif
+    
     /* reset USB moudle */
 	USB0->USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
 	while(USB0->USBTRC0 & USB_USBTRC0_USBRESET_MASK){};
@@ -438,7 +440,7 @@ void USB_EPCallback(uint8_t ep, uint8_t dir)
     
 }
 
-void USB_Handler(void)
+void USB_TokenDone(void)
 {
     uint8_t num;
     uint8_t dir;
@@ -479,23 +481,26 @@ void USB_Handler(void)
 
 
 void USB0_IRQHandler(void)
-{
-	uint8_t v1 = USB0->ISTAT;
-	uint8_t v2 = USB0->INTEN;
-    uint8_t status = (v1 & v2);
+{    
+    uint32_t istr, num, dir, ev_odd, stat;
+
+    istr  = USB0->ISTAT;
+    stat  = USB0->STAT;
+   // USB0->ISTAT = istr;
+    istr &= USB0->INTEN;
     
-    if(status & USB_ISTAT_USBRST_MASK)
+    if(istr & USB_ISTAT_USBRST_MASK)
     {
         USB_BusResetHandler();
     }
 
-	if(status & USB_ISTAT_SOFTOK_MASK) 
+	if(istr & USB_ISTAT_SOFTOK_MASK) 
 	{
         USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb sof\r\n"));
-		USB0->ISTAT = USB_ISTAT_SOFTOK_MASK;   
+		USB0->ISTAT |= USB_ISTAT_SOFTOK_MASK;   
 	}
 	
-	if(status & USB_ISTAT_STALL_MASK)
+	if(istr & USB_ISTAT_STALL_MASK)
 	{
 		USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb stall\r\n"));
         
@@ -507,19 +512,19 @@ void USB0_IRQHandler(void)
         USB0->ISTAT |= USB_ISTAT_STALL_MASK;
 	}
 
-	if(status & USB_ISTAT_TOKDNE_MASK) 
+	if(istr & USB_ISTAT_TOKDNE_MASK) 
 	{
-		USB_Handler();
+		USB_TokenDone();
         USB0->ISTAT |= USB_ISTAT_TOKDNE_MASK;
 	}
 
-	if(status & USB_ISTAT_SLEEP_MASK) 
+	if(istr & USB_ISTAT_SLEEP_MASK) 
 	{
 		USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb sleep\r\n"));
         USB0->ISTAT |= USB_ISTAT_SLEEP_MASK;      
 	}
 
-	if(status & USB_ISTAT_ERROR_MASK)
+	if(istr & USB_ISTAT_ERROR_MASK)
 	{
         uint8_t err = USB0->ERRSTAT;
         USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb error:%0x%X\r\n", err));
@@ -529,8 +534,3 @@ void USB0_IRQHandler(void)
 	}
 }
 
-//void USBD_EventCallback(uint8_t cmd, void* args)
-//{
-//    
-//    
-//}

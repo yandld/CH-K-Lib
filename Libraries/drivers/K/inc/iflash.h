@@ -13,14 +13,14 @@
 #include <stdint.h>
 
 
-#define SECTOR_SIZE        (2048)
+#define SECTOR_SIZE         (2048)
 #define DEV_SIZE            (0x40000)
 
 //!< API declare
-void IFLASH_Init(void);
-uint8_t FLASH_WriteSector(uint32_t sectorNo, uint16_t count, uint8_t const *buffer);
+void FLASH_Init(void);
+uint8_t FLASH_WriteSector(uint32_t sectorNo, uint16_t count, uint8_t *buffer);
 uint8_t FLASH_EraseSector(uint32_t sectorNo);
-uint8_t FLASH_ProgramWord(uint32_t sectorNo, const uint8_t *buffer);
+uint8_t FLASH_ProgramWord(uint32_t sectorNo, uint8_t *buffer);
 
 #endif
 

@@ -13,19 +13,19 @@
 #include <rl_usb.h>
 #include <string.h>
 
-//extern const unsigned char DiskImage[0x1000];
+extern const unsigned char DiskImage[0x1000];
 
-U8 Memory[16384];                       /* MSC Memory in RAM                  */
+U8 Memory[1024*4];                       /* MSC Memory in RAM                  */
 U8 BlockBuf[512];
 
 void usbd_msc_init () {
-  USBD_MSC_MemorySize = 16384;
+  USBD_MSC_MemorySize = 1024*4;
   USBD_MSC_BlockSize  = 512;
   USBD_MSC_BlockGroup = 1;
   USBD_MSC_BlockCount = USBD_MSC_MemorySize / USBD_MSC_BlockSize;
   USBD_MSC_BlockBuf   = BlockBuf;
 
-  //memcpy(Memory, DiskImage, sizeof(DiskImage));
+  memcpy(Memory, DiskImage, sizeof(DiskImage));
   USBD_MSC_MediaReady = __TRUE;
 }
 

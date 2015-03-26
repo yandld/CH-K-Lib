@@ -8,6 +8,8 @@
 #include "FlashOS.h"
 #include "iflash.h"
 
+#include <stdio.h>
+
 /* disable WDOG */
 void DisableWDT(void)
 {
@@ -22,32 +24,25 @@ uint32_t GetUID(void)
     return (SIM->UIDML) ^ (SIM->UIDL) ^ (SIM->UIDML) ^ (SIM->UIDMH);
 }
 
-
-//static int MKP512FlashInit(void)
-//{
-//    uint32_t clock;
-//    uint32_t flash_clock = CLOCK_GetClockFrequency(kFlashClock, &clock);
-//    /* fnc:  Function Code (1 - Erase, 2 - Program, 3 - Verify) */
-
-//    /* func:Init is SSD API */    
-//    return Init(0x00000000, clock, 2); 
-//}
+#define CACHE_DISABLE     FMC->PFB0CR &= ~(FMC_PFB0CR_B0SEBE_MASK | FMC_PFB0CR_B0IPE_MASK | FMC_PFB0CR_B0DPE_MASK | FMC_PFB0CR_B0ICE_MASK | FMC_PFB0CR_B0DCE_MASK);
 
 static void FlashTest(void)
 {
     int secNo, i,err;
     uint8_t *p;
-    char buf[SECTOR_SIZE];
+    uint8_t buf[SECTOR_SIZE];
     
+    //CACHE_DISABLE;
+  //  FLASH_Init();
+      
     for(i=0;i<SECTOR_SIZE;i++)
     {
         buf[i] = i % 0xFF;
     }
     
-    for (secNo = 10; secNo < (DEV_SIZE/SECTOR_SIZE); secNo++)
+    for (secNo = 20; secNo < (DEV_SIZE/SECTOR_SIZE); secNo++)
     {
         printf("program sec:%d ", secNo);
-        
         err = 0;
         err += FLASH_EraseSector(secNo);
         err += FLASH_WriteSector(secNo, SECTOR_SIZE, buf);
@@ -80,13 +75,15 @@ static void FlashTest(void)
 
 int main(void)
 {   
-    int r;
-    uint32_t i;
     DelayInit();
     GPIO_QuickInit(HW_GPIOC, 10, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     
-    uint32_t clock;
+    #ifdef MK22F25612
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
+    #elif  MK20D5
+    UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);
+    #endif
+    
 
     printf("program for Manley\r\n");
     printf("this program manly display 3 features:\r\n");
@@ -179,7 +176,7 @@ int main(void)
     }
     
     usbd_init();                          /* USB Device Initialization          */
- //   usbd_connect(__TRUE);                 /* USB Device Connect                 */
+    usbd_connect(__TRUE);                 /* USB Device Connect                 */
 
     while(1)
     {

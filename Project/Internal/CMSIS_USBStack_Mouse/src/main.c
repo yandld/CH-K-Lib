@@ -42,11 +42,7 @@ int main(void)
     #endif
     
     printf("USB test\r\n");
-    if(USB_ClockInit())
-    {
-        printf("USB  Init failed, clock must be 96M or 48M\r\n");
-        while(1);
-    }
+
     
     usbd_init();                          /* USB Device Initialization          */
     usbd_connect(__TRUE);                 /* USB Device Connect                 */
@@ -55,6 +51,7 @@ int main(void)
     {
         GetMouseInReport(report, 4);
         usbd_hid_get_report_trigger(0, (U8 *)report, 4);
+        DelayMs(10);
     }
 }
 

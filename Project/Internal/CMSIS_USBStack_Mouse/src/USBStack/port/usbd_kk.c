@@ -130,34 +130,33 @@ uint8_t USB_ClockInit(void)
 
 void USBD_Init (void) {
   OutEpSize[0] = USBD_MAX_PACKET0;
-
-  SIM->SCGC4   |=   SIM_SCGC4_USBOTG_MASK;      /* Enable USBOTG clock        */
     
-  /* Enable all clocks needed for USB to function                             */
+    /* config USB clock route */
     if(USB_ClockInit())
     {
         printf("USB  Init failed, clock must be 96M or 48M\r\n");
         return;
     }
 
+    /* Enable USBOTG clock        */
+    SIM->SCGC4   |=   SIM_SCGC4_USBOTG_MASK;      
+    
     /* disable memory protection */
     MPU->CESR=0;
     
-  USBD_IntrEna ();
+    USBD_IntrEna ();
 
-  USB0->USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
-  while (USB0->USBTRC0 & USB_USBTRC0_USBRESET_MASK);
+    USB0->USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
+    while (USB0->USBTRC0 & USB_USBTRC0_USBRESET_MASK);
 
-  USB0->BDTPAGE1 = (uint8_t) ((uint32_t) BD >> 8 );
-  USB0->BDTPAGE2 = (uint8_t) ((uint32_t) BD >> 16);
-  USB0->BDTPAGE3 = (uint8_t) ((uint32_t) BD >> 24);
+    USB0->BDTPAGE1 = (uint8_t) ((uint32_t) BD >> 8 );
+    USB0->BDTPAGE2 = (uint8_t) ((uint32_t) BD >> 16);
+    USB0->BDTPAGE3 = (uint8_t) ((uint32_t) BD >> 24);
 
-  USB0->ISTAT   = 0xFF;                 /* clear interrupt flags              */
+    USB0->ISTAT   = 0xFF;                 /* clear interrupt flags              */
 
   /* enable interrupts                                                        */
-  USB0->INTEN =                            USB_INTEN_USBRSTEN_MASK |
-                                           USB_INTEN_TOKDNEEN_MASK |
-                                           USB_INTEN_SLEEPEN_MASK  |
+  USB0->INTEN = USB_INTEN_USBRSTEN_MASK | USB_INTEN_TOKDNEEN_MASK | USB_INTEN_SLEEPEN_MASK  |
 #ifdef __RTX
               ((USBD_RTX_DevTask   != 0) ? USB_INTEN_SOFTOKEN_MASK : 0) |
               ((USBD_RTX_DevTask   != 0) ? USB_INTEN_ERROREN_MASK  : 0) ;
@@ -166,8 +165,11 @@ void USBD_Init (void) {
               ((USBD_P_Error_Event != 0) ? USB_INTEN_ERROREN_MASK  : 0) ;
 #endif
 
-  USB0->USBCTRL  = USB_USBCTRL_PDE_MASK;/* pull dawn on D+ and D-             */
-  USB0->USBTRC0 |= (1 << 6);            /* bit 6 must be set to 1             */
+    /* pull dawn on D+ and D- */
+    USB0->USBCTRL  = USB_USBCTRL_PDE_MASK;
+    
+    /* bit 6 must be set to 1 */
+    USB0->USBTRC0 |= (1 << 6);            
 }
 
 

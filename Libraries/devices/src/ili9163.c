@@ -207,7 +207,7 @@ void GUI_DrawPixel(int x, int y)
 {
     ili9163_set_window(x,y,1,1);//设置光标位置 
 	LCD_COM(0x2C);
-    LCD_DATA(0x5555>>8);
-    LCD_DATA(0x5555);
+    LCD_DATA(0x5555 >> 8);
+    LCD_DATA(0x5555 & 0xFF);
 }
 

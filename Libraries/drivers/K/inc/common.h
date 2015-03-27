@@ -13,9 +13,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-#ifdef LIB_DEBUG
-#include <stdio.h>
-#endif
 
 #ifdef MK10D5
 #include "MK10D5.h"

@@ -17,7 +17,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-	 
+#include <stdio.h>
 
 
 /*!< UART Ó²¼þÄ£¿éºÅ */

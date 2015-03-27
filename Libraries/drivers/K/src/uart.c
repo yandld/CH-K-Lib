@@ -15,7 +15,7 @@
 #if __ICCARM__
 #include <yfuns.h>
 #endif
-#include <stdio.h>
+
 
 
 #if (!defined(UART_BASES))

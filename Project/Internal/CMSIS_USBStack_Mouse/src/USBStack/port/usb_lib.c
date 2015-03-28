@@ -16,6 +16,7 @@
 //#include <RTL.h>
 #include <rl_usb.h>
 #include <usb.h>
+#include "usb_config.h"
 
 #pragma thumb
 #pragma O3
@@ -1226,35 +1227,65 @@ void USBD_RTX_TaskInit (void) {
       7     IN7          OUT7
 */
 
-__weak \
+//__weak \
+//const U8 USBD_HID_ReportDescriptor[] = {
+//  HID_UsagePageVendor( 0x00                      ),
+//  HID_Usage          ( 0x01                      ),
+//  HID_Collection     ( HID_Application           ),
+//    HID_LogicalMin   ( 0                         ), /* value range: 0 - 0xFF */
+//    HID_LogicalMaxS  ( 0xFF                      ),
+//    HID_ReportSize   ( 8                         ), /* 8 bits */
+//#if (USBD_HID_INREPORT_MAX_SZ > 255)
+//    HID_ReportCountS ( USBD_HID_INREPORT_MAX_SZ  ),
+//#else
+//    HID_ReportCount  ( USBD_HID_INREPORT_MAX_SZ  ),
+//#endif
+//    HID_Usage        ( 0x01                      ),
+//    HID_Input        ( HID_Data | HID_Variable | HID_Absolute ),
+//#if (USBD_HID_OUTREPORT_MAX_SZ > 255)
+//    HID_ReportCountS ( USBD_HID_OUTREPORT_MAX_SZ ),
+//#else
+//    HID_ReportCount  ( USBD_HID_OUTREPORT_MAX_SZ ),
+//#endif
+//    HID_Usage        ( 0x01                      ),
+//    HID_Output       ( HID_Data | HID_Variable | HID_Absolute ),
+//#if (USBD_HID_FEATREPORT_MAX_SZ > 255)
+//    HID_ReportCountS ( USBD_HID_FEATREPORT_MAX_SZ),
+//#else
+//    HID_ReportCount  ( USBD_HID_FEATREPORT_MAX_SZ),
+//#endif
+//    HID_Usage        ( 0x01                      ),
+//    HID_Feature      ( HID_Data | HID_Variable | HID_Absolute ),
+//  HID_EndCollection,
+//};
+
 const U8 USBD_HID_ReportDescriptor[] = {
-  HID_UsagePageVendor( 0x00                      ),
-  HID_Usage          ( 0x01                      ),
-  HID_Collection     ( HID_Application           ),
-    HID_LogicalMin   ( 0                         ), /* value range: 0 - 0xFF */
-    HID_LogicalMaxS  ( 0xFF                      ),
-    HID_ReportSize   ( 8                         ), /* 8 bits */
-#if (USBD_HID_INREPORT_MAX_SZ > 255)
-    HID_ReportCountS ( USBD_HID_INREPORT_MAX_SZ  ),
-#else
-    HID_ReportCount  ( USBD_HID_INREPORT_MAX_SZ  ),
-#endif
-    HID_Usage        ( 0x01                      ),
-    HID_Input        ( HID_Data | HID_Variable | HID_Absolute ),
-#if (USBD_HID_OUTREPORT_MAX_SZ > 255)
-    HID_ReportCountS ( USBD_HID_OUTREPORT_MAX_SZ ),
-#else
-    HID_ReportCount  ( USBD_HID_OUTREPORT_MAX_SZ ),
-#endif
-    HID_Usage        ( 0x01                      ),
-    HID_Output       ( HID_Data | HID_Variable | HID_Absolute ),
-#if (USBD_HID_FEATREPORT_MAX_SZ > 255)
-    HID_ReportCountS ( USBD_HID_FEATREPORT_MAX_SZ),
-#else
-    HID_ReportCount  ( USBD_HID_FEATREPORT_MAX_SZ),
-#endif
-    HID_Usage        ( 0x01                      ),
-    HID_Feature      ( HID_Data | HID_Variable | HID_Absolute ),
+  HID_UsagePage      ( HID_USAGE_PAGE_GENERIC                 ),
+  HID_Usage          ( HID_USAGE_GENERIC_MOUSE                ),
+  HID_Collection     ( HID_Application                        ),
+    HID_Usage        ( HID_USAGE_GENERIC_POINTER              ),
+    HID_Collection   ( HID_Physical                           ),
+      HID_UsagePage  ( HID_USAGE_PAGE_BUTTON                  ),
+      HID_UsageMin   ( 1                                      ),
+      HID_UsageMax   ( 3                                      ),
+      HID_LogicalMin ( 0                                      ),
+      HID_LogicalMax ( 1                                      ),
+      HID_ReportCount( 3                                      ),
+      HID_ReportSize ( 1                                      ),
+      HID_Input      ( HID_Data | HID_Variable | HID_Absolute ),
+      HID_ReportCount( 1                                      ),
+      HID_ReportSize ( 5                                      ),
+      HID_Input      ( HID_Constant                           ),
+      HID_UsagePage  ( HID_USAGE_PAGE_GENERIC                 ),
+      HID_Usage      ( HID_USAGE_GENERIC_X                    ),
+      HID_Usage      ( HID_USAGE_GENERIC_Y                    ),
+      HID_Usage      ( HID_USAGE_GENERIC_WHEEL                ),
+      HID_LogicalMin ( (U8)-127                               ),
+      HID_LogicalMax ( 127                                    ),
+      HID_ReportSize ( 8                                      ),
+      HID_ReportCount( 3                                      ),
+      HID_Input      ( HID_Data | HID_Variable | HID_Relative ),
+    HID_EndCollection,
   HID_EndCollection,
 };
 

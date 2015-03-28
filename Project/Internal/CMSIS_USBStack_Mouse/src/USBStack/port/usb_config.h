@@ -42,11 +42,12 @@
 //       <i> Device release number in binary-coded decimal (bcdDevice)
 //   </h>
 #define USBD_POWER                  0
-#define USBD_MAX_PACKET0            8
-#define USBD_DEVDESC_IDVENDOR       0x1234
-#define USBD_DEVDESC_IDPRODUCT      0x5678
+#define USBD_MAX_PACKET0            32
+#define USBD_DEVDESC_IDVENDOR       0x0D28
+#define USBD_DEVDESC_IDPRODUCT      0x0204
 #define USBD_DEVDESC_BCDDEVICE      0x0100
 
+  
 //   <h> Configuration Settings
 //     <i> These settings affect Configuration Descriptor
 //     <o0.5> Remote Wakeup
@@ -75,8 +76,8 @@
 //     </e>
 //   </h>
 #define USBD_STRDESC_LANGID         0x0409
-#define USBD_STRDESC_MAN            L"MBED"
-#define USBD_STRDESC_PROD           L"MBED CMSIS-DAP"
+#define USBD_STRDESC_MAN            L"RAVEN"
+#define USBD_STRDESC_PROD           L"RAVEN USB"
 #define USBD_STRDESC_SER_ENABLE     1
 #define USBD_STRDESC_SER            L"0001A0000000"
 
@@ -122,7 +123,7 @@
 //     </e>
 #define USBD_HID_ENABLE             1
 #define USBD_HID_EP_INTIN           1
-#define USBD_HID_EP_INTOUT          1
+#define USBD_HID_EP_INTOUT          0
 #define USBD_HID_WMAXPACKETSIZE     64
 #define USBD_HID_BINTERVAL          1
 #define USBD_HID_HS_ENABLE          0
@@ -165,7 +166,7 @@
 //         </h>
 //       </h>
 //     </e>
-#define USBD_MSC_ENABLE             0
+#define USBD_MSC_ENABLE             1
 #define USBD_MSC_EP_BULKIN          2
 #define USBD_MSC_EP_BULKOUT         2
 #define USBD_MSC_WMAXPACKETSIZE     64
@@ -276,7 +277,7 @@
 //            <256=> 256 Bytes <512=> 512 Bytes <1024=> 1024 Bytes
 //       </h>
 //     </e>
-#define USBD_CDC_ACM_ENABLE             0
+#define USBD_CDC_ACM_ENABLE             1
 #define USBD_CDC_ACM_EP_INTIN           3
 #define USBD_CDC_ACM_WMAXPACKETSIZE     16
 #define USBD_CDC_ACM_BINTERVAL          32
@@ -467,7 +468,7 @@
 #define  __USB_CONFIG__
 
 #ifndef  __NO_USB_LIB_C
-#include "usb_lib.c"
+
 #endif
 
 #endif  /* __USB_CONFIG__ */

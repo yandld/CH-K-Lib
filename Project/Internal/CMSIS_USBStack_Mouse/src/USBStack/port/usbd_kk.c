@@ -18,7 +18,7 @@
 #include <common.h>
 
 #define __NO_USB_LIB_C
-#include "usb_config.c"
+#include "usb_config.h"
 
 typedef struct __BUF_DESC {
   uint8_t    stat;

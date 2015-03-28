@@ -338,6 +338,7 @@ BOOL USBD_ReqGetDescriptor (void) {
           }
           USBD_EP0Data.pData = pD;
           len = ((USB_CONFIGURATION_DESCRIPTOR *)pD)->wTotalLength;
+          printf("USB_CONFIGURATION_DESCRIPTOR:%d\r\n", len);
           break;
         case USB_OTHER_SPEED_CONFIG_DESCRIPTOR_TYPE:
           if (!usbd_hs_enable) {

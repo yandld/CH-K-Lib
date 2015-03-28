@@ -35,9 +35,10 @@ int usbd_hid_get_report (U8 rtype, U8 rid, U8 *buf, U8 req) {
 }
 
 void usbd_hid_set_report (U8 rtype, U8 rid, U8 *buf, int len, U8 req) {
-
+static int i;
   switch (rtype) {
     case HID_REPORT_OUTPUT:
+        printf("%d  %d\r\n", i++, len);
       break;
     case HID_REPORT_FEATURE:
       break;

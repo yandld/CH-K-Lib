@@ -51,7 +51,7 @@ int main(void)
     {
         GetMouseInReport(report, 4);
         usbd_hid_get_report_trigger(0, (U8 *)report, 4);
-        DelayMs(10);
+        DelayMs(100);
     }
 }
 

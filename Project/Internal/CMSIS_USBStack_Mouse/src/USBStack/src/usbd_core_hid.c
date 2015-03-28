@@ -41,6 +41,7 @@ __weak BOOL USBD_ReqGetDescriptor_HID (U8 **pD, U32 *len) {
       }
       USBD_EP0Data.pData = *pD + USBD_HID_DescriptorOffset;
       *len = USB_HID_DESC_SIZE;
+      printf("USB_HID_DESC_SIZE:%d\r\n", *len);
       break;
     case HID_REPORT_DESCRIPTOR_TYPE:
       if (USBD_SetupPacket.wIndexL != usbd_hid_if_num) {
@@ -48,6 +49,7 @@ __weak BOOL USBD_ReqGetDescriptor_HID (U8 **pD, U32 *len) {
       }
       USBD_EP0Data.pData = (U8 *)USBD_HID_ReportDescriptor;
       *len = USBD_HID_ReportDescriptorSize;
+      printf("USBD_HID_ReportDescriptor:%d\r\n", *len);
       break;
     case HID_PHYSICAL_DESCRIPTOR_TYPE:
       return (__FALSE);    /* HID Physical Descriptor is not supported */

@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60D10 RAVEN LIB_DEBUG</Define>
+              <Define>MK60D10 RAVEN</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\src\USBStack\INC</IncludePath>
             </VariousControls>
@@ -500,29 +500,29 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>usb_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\usb_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_user_hid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\usbd_user_hid.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_lib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\USBStack\INC\usb_lib.c</FilePath>
-            </File>
-            <File>
               <FileName>usbd_kk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\port\usbd_kk.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_user_desc.c</FileName>
+              <FileName>DiskImg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\usbd_user_desc.c</FilePath>
+              <FilePath>..\src\DiskImg.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_user_cdc_acm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\usbd_user_cdc_acm.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_user_msc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\usbd_user_msc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_user_hid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\usbd_user_hid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -643,49 +643,6 @@
               <FileName>usbd_cdc_acm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\SRC\usbd_cdc_acm.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>usbd_core.c</FileName>
@@ -696,49 +653,6 @@
               <FileName>usbd_core_cdc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\SRC\usbd_core_cdc.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>usbd_core_hid.c</FileName>
@@ -749,49 +663,6 @@
               <FileName>usbd_core_msc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\SRC\usbd_core_msc.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>usbd_hid.c</FileName>
@@ -802,49 +673,21 @@
               <FileName>usbd_msc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\SRC\usbd_msc.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USBStack/port</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\USBStack\port\usb_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>usb_lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\USBStack\port\usb_lib.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1344,29 +1187,72 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>usb_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\usb_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_user_hid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\usbd_user_hid.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_lib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\USBStack\INC\usb_lib.c</FilePath>
-            </File>
-            <File>
               <FileName>usbd_kk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\port\usbd_kk.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_user_desc.c</FileName>
+              <FileName>DiskImg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\usbd_user_desc.c</FilePath>
+              <FilePath>..\src\DiskImg.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_user_cdc_acm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\usbd_user_cdc_acm.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_user_msc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\usbd_user_msc.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>usbd_user_hid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\usbd_user_hid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1487,49 +1373,6 @@
               <FileName>usbd_cdc_acm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\SRC\usbd_cdc_acm.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
             </File>
             <File>
               <FileName>usbd_core.c</FileName>
@@ -1540,6 +1383,11 @@
               <FileName>usbd_core_cdc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\SRC\usbd_core_cdc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_core_hid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\USBStack\SRC\usbd_core_hid.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -1583,11 +1431,6 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
-            </File>
-            <File>
-              <FileName>usbd_core_hid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\USBStack\SRC\usbd_core_hid.c</FilePath>
             </File>
             <File>
               <FileName>usbd_core_msc.c</FileName>
@@ -1641,6 +1484,49 @@
               <FileName>usbd_hid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\USBStack\SRC\usbd_hid.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>usbd_msc.c</FileName>
@@ -1689,6 +1575,21 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USBStack/port</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\USBStack\port\usb_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>usb_lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\USBStack\port\usb_lib.c</FilePath>
             </File>
           </Files>
         </Group>

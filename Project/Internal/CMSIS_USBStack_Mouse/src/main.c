@@ -46,7 +46,11 @@ int main(void)
     
     usbd_init();                          /* USB Device Initialization          */
     usbd_connect(__TRUE);                 /* USB Device Connect                 */
+ //   while (!usbd_configured ())          // Wait for device to configure
 
+                                     // Send message over USB Vitual COM Port
+                                     // to the USB Host
+    //USBD_CDC_ACM_DataSend ("Send data over USB Virtual COM Port.", 36);
     while(1)
     {
         GetMouseInReport(report, 4);

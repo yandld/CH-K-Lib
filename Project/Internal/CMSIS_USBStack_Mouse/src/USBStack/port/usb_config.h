@@ -43,11 +43,13 @@
 //   </h>
 #define USBD_POWER                  0
 #define USBD_MAX_PACKET0            32
-#define USBD_DEVDESC_IDVENDOR       0x0D28
-#define USBD_DEVDESC_IDPRODUCT      0x0204
+#define USBD_DEVDESC_IDVENDOR       0x0425
+#define USBD_DEVDESC_IDPRODUCT      0x0010
 #define USBD_DEVDESC_BCDDEVICE      0x0100
 
-  
+//#define USBD_DEVDESC_IDVENDOR       0x0D28
+//#define USBD_DEVDESC_IDPRODUCT      0x0204
+
 //   <h> Configuration Settings
 //     <i> These settings affect Configuration Descriptor
 //     <o0.5> Remote Wakeup

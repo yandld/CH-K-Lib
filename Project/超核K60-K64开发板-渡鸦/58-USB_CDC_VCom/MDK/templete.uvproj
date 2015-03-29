@@ -509,6 +509,11 @@
               <FileType>5</FileType>
               <FilePath>..\src\usb_config.h</FilePath>
             </File>
+            <File>
+              <FileName>usbd_user_cdc_acm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\usbd_user_cdc_acm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -630,19 +635,19 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_core_hid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_hid.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_hid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_hid.c</FilePath>
-            </File>
-            <File>
               <FileName>usbd_kk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_kk.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_cdc_acm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_cdc_acm.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_core_cdc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_cdc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1151,6 +1156,11 @@
               <FileType>5</FileType>
               <FilePath>..\src\usb_config.h</FilePath>
             </File>
+            <File>
+              <FileName>usbd_user_cdc_acm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\usbd_user_cdc_acm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1272,19 +1282,19 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_core_hid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_hid.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_hid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_hid.c</FilePath>
-            </File>
-            <File>
               <FileName>usbd_kk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_kk.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_cdc_acm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_cdc_acm.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_core_cdc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_cdc.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -44,5 +44,8 @@
 #include "arm_math.h"
 #include "arm_common_tables.h"
 
+/* USB */
+#include "../src/usb/inc/rl_usb.h"
+
 #endif
 

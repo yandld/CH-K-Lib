@@ -299,6 +299,7 @@
         <option>
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\inc</state>
+          <state>$PROJ_DIR$\..\..\..\..\Libraries\devices\inc</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\CoreSupport</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport\IAR-ARM</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport</state>

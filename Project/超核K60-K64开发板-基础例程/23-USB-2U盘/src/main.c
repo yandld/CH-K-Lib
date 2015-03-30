@@ -1,9 +1,9 @@
 #include "chlib_k.h"
 
-#define UDISK_SIZE          (400*1024)
+#define UDISK_SIZE          (300*1024)
 #define SECTER_SIZE         (0x000800)  /* min erase unit */
 #define PROGRAM_PAGE_SIZE   (512)       /* min write unit */
-#define FLASH_OFFSET        (50*1024)    /* UDASK is under 100*1024 - 200*1024 */
+#define FLASH_OFFSET        (64*1024)   /* UDisk start offset */
 
 U8 BlockBuf[SECTER_SIZE];
 

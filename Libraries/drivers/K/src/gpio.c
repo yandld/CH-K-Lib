@@ -78,10 +78,6 @@ static const IRQn_Type GPIO_IRQnTable[] =
  */
 void PORT_PinMuxConfig(uint32_t instance, uint8_t pin, PORT_PinMux_Type pinMux)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pin));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     PORT_InstanceTable[instance]->PCR[pin] &= ~(PORT_PCR_MUX_MASK);
     PORT_InstanceTable[instance]->PCR[pin] |=  PORT_PCR_MUX(pinMux);
@@ -107,10 +103,6 @@ void PORT_PinMuxConfig(uint32_t instance, uint8_t pin, PORT_PinMux_Type pinMux)
  */
 void PORT_PinPullConfig(uint32_t instance, uint8_t pin, PORT_Pull_Type pull)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pin));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     switch(pull)
     {
@@ -198,10 +190,6 @@ void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pin, FunctionalState
  */
 void GPIO_PinConfig(uint32_t instance, uint8_t pin, GPIO_PinConfig_Type mode)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pin));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     (mode == kOutput) ? (GPIO_InstanceTable[instance]->PDDR |= (1 << pin)):(GPIO_InstanceTable[instance]->PDDR &= ~(1 << pin));
 }
@@ -223,10 +211,6 @@ void GPIO_PinConfig(uint32_t instance, uint8_t pin, GPIO_PinConfig_Type mode)
  */
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(GPIO_InitStruct->instance));
-    assert_param(IS_PORT_ALL_INSTANCE(GPIO_InitStruct->instance));
-    assert_param(IS_GPIO_ALL_PIN(GPIO_InitStruct->pinx));
     /* config state */
     switch(GPIO_InitStruct->mode)
     {
@@ -314,10 +298,6 @@ uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
  */
 void GPIO_WriteBit(uint32_t instance, uint8_t pin, uint8_t data)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pin));
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pin)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pin));
 }
@@ -352,10 +332,6 @@ void GPIO_ResetBit(uint32_t instance, uint32_t pin)
  */
 uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pin)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pin));
     /* input or output */
     if(((GPIO_InstanceTable[instance]->PDDR) >> pin) & 0x01)
     {
@@ -384,10 +360,6 @@ uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pin)
  */
 void GPIO_ToggleBit(uint32_t instance, uint8_t pin)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pin));
     GPIO_InstanceTable[instance]->PTOR |= (1 << pin);
 }
 
@@ -408,9 +380,6 @@ void GPIO_ToggleBit(uint32_t instance, uint8_t pin)
  */
 uint32_t GPIO_ReadPort(uint32_t instance)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
     return (GPIO_InstanceTable[instance]->PDIR);
 }
 /**
@@ -430,9 +399,6 @@ uint32_t GPIO_ReadPort(uint32_t instance)
  */
 void GPIO_WritePort(uint32_t instance, uint32_t data)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
     GPIO_InstanceTable[instance]->PDOR = data;
 }
 
@@ -463,10 +429,6 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
  */
 void GPIO_ITDMAConfig(uint32_t instance, uint8_t pin, GPIO_ITDMAConfig_Type config, bool status)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
-    assert_param(IS_GPIO_ALL_PIN(pin));
     /* init moudle */
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_IRQC_MASK;
@@ -526,9 +488,6 @@ void GPIO_ITDMAConfig(uint32_t instance, uint8_t pin, GPIO_ITDMAConfig_Type conf
  */
 void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun)
 {
-    /* param check */
-    assert_param(IS_GPIO_ALL_INSTANCE(instance));
-    assert_param(IS_PORT_ALL_INSTANCE(instance));
     /* init moudle */
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
     if(AppCBFun != NULL)

@@ -19,15 +19,15 @@
 #include <stdint.h>
 
 /* GPIO端口定义 */
-#define HW_GPIOA  (0x00U)   //PTA引脚端口定义
-#define HW_GPIOB  (0x01U)   //PTB引脚端口定义
-#define HW_GPIOC  (0x02U)   //PTC引脚端口定义
-#define HW_GPIOD  (0x03U)   //PTD引脚端口定义
-#define HW_GPIOE  (0x04U)   //PTE引脚端口定义
-#define HW_GPIOF  (0x05U)   //PTF引脚端口定义
+#define HW_GPIOA  (0x00U)   /* hardware GPIOA */
+#define HW_GPIOB  (0x01U)
+#define HW_GPIOC  (0x02U)
+#define HW_GPIOD  (0x03U)
+#define HW_GPIOE  (0x04U)
+#define HW_GPIOF  (0x05U)
 
 
-/* 端口复用选择 根据手册 Signal Multiplexing and Signal Descriptions 章节选择复用*/
+/* 端口复用选择 根据手册 Signal Multiplexing and Signal Descriptions 章节选择复用 */
 typedef enum
 {
     kPinAlt0,  //0功能复用
@@ -40,7 +40,7 @@ typedef enum
     kPinAlt7,  //7功能复用
 }PORT_PinMux_Type;
 
-/* 端口上下拉配置 ，电阻阻值约为20K*/
+/* 端口上下拉配置 ，电阻阻值约为20K */
 typedef enum
 {
     kPullDisabled,  //关闭上下拉电阻功能
@@ -51,18 +51,18 @@ typedef enum
 /* GPIO端口模式配置 */
 typedef enum
 {
-    kGPIO_Mode_IFT = 0x00,       //浮空输入
-    kGPIO_Mode_IPD = 0x01,       //下拉输入
-    kGPIO_Mode_IPU = 0x02,       //上拉输入
-    kGPIO_Mode_OOD = 0x03,       //开漏输出
-    kGPIO_Mode_OPP = 0x04,       //推挽输出
+    kGPIO_Mode_IFT = 0x00,       /* 浮空输入 */
+    kGPIO_Mode_IPD = 0x01,       /* 下拉输入 */
+    kGPIO_Mode_IPU = 0x02,       /* 上拉输入 */
+    kGPIO_Mode_OOD = 0x03,       /* 开漏输出 */
+    kGPIO_Mode_OPP = 0x04,       /* 推挽输出 */
 }GPIO_Mode_Type;
 
 /* 端口输入输出模式选择 */
 typedef enum
 {
-    kInput,                  //引脚输入模式
-    kOutput,                 //引脚输出模式
+    kInput,                  /* 引脚输入模式 */
+    kOutput,                 /* 引脚输出模式 */
 }GPIO_PinConfig_Type;
 
 /* 端口中断及DMA配置选择 */
@@ -89,10 +89,6 @@ typedef struct
 /* 端口中断回调函数定义 */
 typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 
-/* 参数检查宏 */
-#define IS_GPIO_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(GPIO_InstanceTable))
-#define IS_PORT_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(PORT_InstanceTable))
-#define IS_GPIO_ALL_PIN(PIN)  (PIN < 32)
 
 /* 位带操作 内存偏移计算 详见 Cortex-M4 Generic User Guide 2.25 */
 /* CM4中有2块bitband区域 0x2000_0000-0x200F_FFFF 映射至 0x2200_0000-0x23FF_FFFF

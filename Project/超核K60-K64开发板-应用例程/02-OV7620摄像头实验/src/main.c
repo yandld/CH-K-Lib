@@ -31,7 +31,8 @@ static void UserApp(void);
 /* 摄像头场中断处理函数 */
 void OV7620_ISR(uint32_t pinArray)
 {
-
+    if(pinArray & (1<<BOARD_OV7620_VSYNC_PIN))
+    {
     static uint8_t status = TRANSFER_IN_PROCESS;  
     switch(status)
     {
@@ -55,12 +56,14 @@ void OV7620_ISR(uint32_t pinArray)
         case NEXT_FRAME:
             /* 传输完成 复位buffer地址 开始下一场传输 */
             DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)CCDBuffer[0]);
-            DMA_EnableRequest(HW_DMA_CH2); 
+            DMA_EnableRequest(HW_DMA_CH2);
             status =  TRANSFER_IN_PROCESS;
             break;
         default:
             break;
     }
+    }
+
 }
 
 static uint16_t RGB2COLOR(uint8_t RR,uint8_t GG,uint8_t BB)
@@ -157,7 +160,7 @@ int main(void)
     SRAM_Init();
     /* 摄像头速度非常快 把FLexbus 总线速度调到最高 */
     SIM->CLKDIV1 &= ~SIM_CLKDIV1_OUTDIV3_MASK;
-    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(2);
+    SIM->CLKDIV1 |= SIM_CLKDIV1_OUTDIV3(0);
     OV7620_Init();
     SCCB_Init();
     while(1)

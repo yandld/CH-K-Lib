@@ -59,7 +59,7 @@
 #define DISABLE_WDOG    1
 
 #ifndef CLOCK_SETUP
-#define CLOCK_SETUP     4
+#define CLOCK_SETUP     0
 #endif
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
@@ -155,7 +155,7 @@ void SystemInit (void) {
   SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1(0x00) |
                 SIM_CLKDIV1_OUTDIV2(0x01) |
                 SIM_CLKDIV1_OUTDIV3(0x01) |
-                SIM_CLKDIV1_OUTDIV4(0x02); /* Update system prescalers */
+                SIM_CLKDIV1_OUTDIV4(0x04); /* Update system prescalers */
   /* SIM->SOPT2: PLLFLLSEL=0 */
   SIM->SOPT2 &= (uint32_t)~(uint32_t)(SIM_SOPT2_PLLFLLSEL_MASK); /* Select FLL as a clock source for various peripherals */
   /* SIM->SOPT1: OSC32KSEL=3 */

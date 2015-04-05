@@ -759,26 +759,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lib-devices</GroupName>
-          <Files>
-            <File>
-              <FileName>ili9320.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
-            </File>
-            <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
-              <FileName>ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>rtt-driver</GroupName>
           <Files>
             <File>
@@ -878,6 +858,21 @@
               <FileName>drv_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>ksz8041.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1096,79 +1091,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>app/web</GroupName>
-          <Files>
-            <File>
-              <FileName>fs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\fs.c</FilePath>
-            </File>
-            <File>
-              <FileName>httpd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\httpd.c</FilePath>
-            </File>
-            <File>
-              <FileName>ssi_cgi_handle.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\ssi_cgi_handle.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>4</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>wget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\wget.c</FilePath>
-            </File>
-            <File>
-              <FileName>websrv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\websrv.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>lwip\apps</GroupName>
           <Files>
             <File>
@@ -1333,6 +1255,11 @@
               <FileName>dfs_nfs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\dfs_nfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>wget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\msh_cmd\wget.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2479,26 +2406,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lib-devices</GroupName>
-          <Files>
-            <File>
-              <FileName>ili9320.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
-            </File>
-            <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
-              <FileName>ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>rtt-driver</GroupName>
           <Files>
             <File>
@@ -2555,6 +2462,21 @@
               <FileName>drv_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>ksz8041.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2814,79 +2736,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>app/web</GroupName>
-          <Files>
-            <File>
-              <FileName>fs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\fs.c</FilePath>
-            </File>
-            <File>
-              <FileName>httpd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\httpd.c</FilePath>
-            </File>
-            <File>
-              <FileName>ssi_cgi_handle.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\ssi_cgi_handle.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>4</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>wget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\wget.c</FilePath>
-            </File>
-            <File>
-              <FileName>websrv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\websrv.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>lwip\apps</GroupName>
           <Files>
             <File>
@@ -3051,6 +2900,11 @@
               <FileName>dfs_nfs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\dfs_nfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>wget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\msh_cmd\wget.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4283,26 +4137,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lib-devices</GroupName>
-          <Files>
-            <File>
-              <FileName>ili9320.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
-            </File>
-            <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
-              <FileName>ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>rtt-driver</GroupName>
           <Files>
             <File>
@@ -4359,6 +4193,21 @@
               <FileName>drv_led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_led.c</FilePath>
+            </File>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>ksz8041.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4678,122 +4527,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>app/web</GroupName>
-          <Files>
-            <File>
-              <FileName>fs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\fs.c</FilePath>
-            </File>
-            <File>
-              <FileName>httpd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\httpd.c</FilePath>
-            </File>
-            <File>
-              <FileName>ssi_cgi_handle.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\ssi_cgi_handle.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>4</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>wget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\wget.c</FilePath>
-            </File>
-            <File>
-              <FileName>websrv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\webserver\websrv.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>lwip\apps</GroupName>
           <Files>
             <File>
@@ -5044,6 +4777,11 @@
               <FileName>dfs_nfs.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs\dfs_nfs.c</FilePath>
+            </File>
+            <File>
+              <FileName>wget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\msh_cmd\wget.c</FilePath>
             </File>
           </Files>
         </Group>

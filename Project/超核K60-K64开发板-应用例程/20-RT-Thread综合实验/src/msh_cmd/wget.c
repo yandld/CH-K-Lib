@@ -282,8 +282,7 @@ int Save_File(char *filebuf,int filelength,char *filename)
  
 int HTTP_GetResponseCode(void)
 {
- 
- 
+    return 0;
 }
 
  /*
@@ -542,8 +541,6 @@ int HTTP_Get_IP_PORT(char *url,char *ip,char *port)
             return 2;
 
         }
-
-
         return 0;
     }
     

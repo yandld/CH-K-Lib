@@ -16,7 +16,11 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     printf("FATFS test\r\n");
     printf("please insert SD card...\r\n");
-    SD_QuickInit(20*1000*1000);
+    if(SD_QuickInit(20*1000*1000))
+    {
+        printf("SD card init failed!\r\n");
+        while(1);
+    }
     printf("SD size:%dMB\r\n", SD_GetSizeInMB());
     FRESULT rc;
     FATFS fs_sd;

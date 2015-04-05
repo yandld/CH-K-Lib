@@ -9,7 +9,7 @@
 #else
 #define ILI9320_TRACE(...)
 #endif
-
+uint32_t lcd_id;
 static void write_reg(uint16_t addr, uint16_t val)
 {
     WMLCDCOM(addr);
@@ -41,8 +41,8 @@ static uint16_t LCD_BGR2RGB(uint16_t c)
 int ili9320_read_pixel(int x, int y)
 {
     int value;
-    write_reg(0x0020, x);
-    write_reg(0x0021, y);
+    write_reg(0x004e,x);        
+		write_reg(0x004f,y);  
     WMLCDCOM(0x0022);
     value = ILI9320_DATA_ADDRESS;
     WMLCDCOM(0x0022);
@@ -71,55 +71,124 @@ void ili9320_write_gram(uint16_t *buf, int len)
 }
 void ili9320_write_pixel(int x, int y, int c)
 {
-    write_reg(0x0020, x);
-    write_reg(0x0021, y);
-    WMLCDCOM(0x0022);
-    WMLCDDATA(c);
+    switch(lcd_id)
+    {
+        case 0x9320:
+            write_reg(0x0020, x);
+            write_reg(0x0021, y);
+            WMLCDCOM(0x0022);
+            WMLCDDATA(c);
+            break;
+        case 0x8989:
+            write_reg(0x004e,x);        
+            write_reg(0x004f,y);  
+            WMLCDCOM(0x0022);
+            WMLCDDATA(c);
+            break;
+        default:
+            break;   
+    }
+  
 }
 
 void ili9320_set_window(int x, int y, int xlen, int ylen)
 {
-    write_reg(0x0020, x);
-    write_reg(0x0021, y);
-    write_reg(0x0050, x);
-    write_reg(0x0052, y);
-    write_reg(0x0051, x + xlen - 1);
-    write_reg(0x0053, y + ylen - 1);                      
+    switch(lcd_id)
+    {
+        case 0x9320:
+            write_reg(0x0020, x);
+            write_reg(0x0021, y);
+            write_reg(0x0050, x);
+            write_reg(0x0052, y);
+            write_reg(0x0051, x + xlen - 1);
+            write_reg(0x0053, y + ylen - 1);  
+            break;        
+        case 0x8989:
+            write_reg(0x004e,x);       
+            write_reg(0x004f,y);  
+            write_reg(0x0044, (x|((x + xlen - 1)<<8)));
+            write_reg(0x0045, y);
+            write_reg(0x0046, y + ylen - 1);   
+            break;
+        default:
+            break;   
+    }    
 } 
 
 void ili9320_hline(int xs, int xe, int y, int c)
 {
-    write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
-    write_reg(0x0020, xs);
-    write_reg(0x0021, y);
-    WMLCDCOM(0x0022);
-    while(xs < xe)
+    switch(lcd_id)
     {
-        WMLCDDATA(c);
-        xs++;
+        case 0x9320:
+            write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
+            write_reg(0x0020, xs);
+            write_reg(0x0021, y);
+            WMLCDCOM(0x0022);
+            while(xs < xe)
+            {
+                WMLCDDATA(c);
+                xs++;
+            }
+          //  write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
+            break;
+        case 0x8989:
+            write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
+            write_reg(0x004e, xs);
+            write_reg(0x004f, y);
+            WMLCDCOM(0x0022);
+            while(xs < xe)
+            {
+            WMLCDDATA(c);
+            xs++;
+            }
+           // write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
+            break;
+        default:
+            break;   
     }
+   
 }
 
 
 void ili9320_vline(int ys, int ye, int x, int c)
 {
-    write_reg(0x03,(0<<5)|(0<<4)|(1<<3)|(1<<12));
-    write_reg(0x0020, x);
-    write_reg(0x0021, ys);
-    WMLCDCOM(0x0022);
-    while(ys < ye)
+    
+    switch(lcd_id)
     {
-        WMLCDDATA(c);
-        ys++;
+        case 0x9320:
+            write_reg(0x03,(0<<5)|(0<<4)|(1<<3)|(1<<12));
+            write_reg(0x0020, x);
+            write_reg(0x0021, ys);
+            WMLCDCOM(0x0022);
+            while(ys < ye)
+            {
+                WMLCDDATA(c);
+                ys++;
+            }
+           // write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
+            break;
+        case 0x8989:
+            write_reg(0x11,(0<<5)|(0<<4)|(1<<3));
+            write_reg(0x004e, x);
+            write_reg(0x004f, ys);
+            WMLCDCOM(0x0022);
+            while(ys < ye)
+            {
+            WMLCDDATA(c);
+            ys++;
+            }
+           // write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
+            break;
+        default:
+            break;   
     }
-    write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
 }
 
 void ili9320_init(void)
 {
-    uint32_t lcd_id;
+   
     uint32_t gpio_instance;
-    /* 减低flexbus总线速度 总线速度太高 不能正确执行读点操作 */
+    /* ??flexbus???? ?????? ?????????? */
     /* Flexbus Init */
     SIM->SCGC5 |= (SIM_SCGC5_PORTA_MASK | SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTD_MASK | SIM_SCGC5_PORTE_MASK);
     /*control signals */
@@ -174,7 +243,7 @@ void ili9320_init(void)
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
     FLEXBUS_InitStruct.div = 1;
     FLEXBUS_Init(&FLEXBUS_InitStruct);
-    /* 配置Flexbus 引脚复用 */
+    /* ??Flexbus ???? */
     FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
     
     /* advanced config */
@@ -210,7 +279,7 @@ void ili9320_init(void)
             write_reg(0x02,0x0700);  //set the line inversion    
             //LCD_WR_REG(0x03,0x1018);  //65536 colors     
             write_reg(0x03,0x1030);   
-            //横屏
+            //??
             #ifdef LCD_USE_HORIZONTAL
             write_reg(0x03,(0<<5)|(0<<4)|(1<<3)|(1<<12));
             #else
@@ -269,48 +338,49 @@ void ili9320_init(void)
             write_reg(0x38,0x0505);   
             write_reg(0x39,0x0407);   
             write_reg(0x3c,0x0500);   
-            write_reg(0x3d,0x0503);   
+            write_reg(0x3d,0x0503); 
+            write_reg(0x07,0x0173);            
             break;
         case 0x8989:
-            write_reg(0x0000,0x0001);DelayMs(1);
-            write_reg(0x0003,0xA8A4);DelayMs(1);
-            write_reg(0x000C,0x0000);DelayMs(1);    
-            write_reg(0x000D,0x080C);DelayMs(1);    
-            write_reg(0x000E,0x2B00);DelayMs(1);    
-            write_reg(0x001E,0x00B0);DelayMs(1);    
-            write_reg(0x0001,0x2B3F);DelayMs(1);
-            write_reg(0x0002,0x0600);DelayMs(1); 
-            write_reg(0x0010,0x0000);DelayMs(1); 
-            write_reg(0x0011,0x6070);DelayMs(1);
-            write_reg(0x0005,0x0000);DelayMs(1); 
-            write_reg(0x0006,0x0000);DelayMs(1); 
-            write_reg(0x0016,0xEF1C);DelayMs(1); 
-            write_reg(0x0017,0x0003);DelayMs(1); 
-            write_reg(0x0007,0x0233);DelayMs(1);
-            write_reg(0x000B,0x0000);DelayMs(1); 
-            write_reg(0x000F,0x0000);DelayMs(1);
-            write_reg(0x0041,0x0000);DelayMs(1); 
-            write_reg(0x0042,0x0000);DelayMs(1); 
-            write_reg(0x0048,0x0000);DelayMs(1); 
-            write_reg(0x0049,0x013F);DelayMs(1); 
-            write_reg(0x004A,0x0000);DelayMs(1); 
-            write_reg(0x004B,0x0000);DelayMs(1); 
-            write_reg(0x0044,0xEF00);DelayMs(1); 
-            write_reg(0x0045,0x0000);DelayMs(1); 
-            write_reg(0x0046,0x013F);DelayMs(1); 
-            write_reg(0x0030,0x0707);DelayMs(1); 
-            write_reg(0x0031,0x0204);DelayMs(1); 
-            write_reg(0x0032,0x0204);DelayMs(1); 
-            write_reg(0x0033,0x0502);DelayMs(1); 
-            write_reg(0x0034,0x0507);DelayMs(1); 
-            write_reg(0x0035,0x0204);DelayMs(1); 
-            write_reg(0x0036,0x0204);DelayMs(1); 
-            write_reg(0x0037,0x0502);DelayMs(1); 
-            write_reg(0x003A,0x0302);DelayMs(1); 
-            write_reg(0x003B,0x0302);DelayMs(1); 
-            write_reg(0x0023,0x0000);DelayMs(1); 
-            write_reg(0x0024,0x0000);DelayMs(1); 
-            write_reg(0x0025,0x8000);DelayMs(1); 
+            write_reg(0x0000,0x0001);DelayMs(5);
+            write_reg(0x0003,0xA8A4);DelayMs(5);
+            write_reg(0x000C,0x0000);DelayMs(5);    
+            write_reg(0x000D,0x080C);DelayMs(5);   
+            write_reg(0x000E,0x2B00);DelayMs(5);    
+            write_reg(0x001E,0x00B0);DelayMs(5);    
+            write_reg(0x0001,0x2B3F);DelayMs(5);
+            write_reg(0x0002,0x0600);DelayMs(5);
+            write_reg(0x0010,0x0000);DelayMs(5); 
+            write_reg(0x0011,0x6070);DelayMs(5);
+            write_reg(0x0005,0x0000);DelayMs(5); 
+            write_reg(0x0006,0x0000);DelayMs(5); 
+            write_reg(0x0016,0xEF1C);DelayMs(5); 
+            write_reg(0x0017,0x0003);DelayMs(5); 
+            write_reg(0x0007,0x0233);DelayMs(5);
+            write_reg(0x000B,0x0000);DelayMs(5); 
+            write_reg(0x000F,0x0000);DelayMs(5);
+            write_reg(0x0041,0x0000);DelayMs(5); 
+            write_reg(0x0042,0x0000);DelayMs(5); 
+            write_reg(0x0048,0x0000);DelayMs(5); 
+            write_reg(0x0049,0x013F);DelayMs(5); 
+            write_reg(0x004A,0x0000);DelayMs(5); 
+            write_reg(0x004B,0x0000);DelayMs(5); 
+            write_reg(0x0044,0xEF00);DelayMs(5); 
+            write_reg(0x0045,0x0000);DelayMs(5); 
+            write_reg(0x0046,0x013F);DelayMs(5); 
+            write_reg(0x0030,0x0707);DelayMs(5); 
+            write_reg(0x0031,0x0204);DelayMs(5); 
+            write_reg(0x0032,0x0204);DelayMs(5); 
+            write_reg(0x0033,0x0502);DelayMs(5); 
+            write_reg(0x0034,0x0507);DelayMs(5); 
+            write_reg(0x0035,0x0204);DelayMs(5); 
+            write_reg(0x0036,0x0204);DelayMs(5); 
+            write_reg(0x0037,0x0502);DelayMs(5); 
+            write_reg(0x003A,0x0302);DelayMs(5); 
+            write_reg(0x003B,0x0302);DelayMs(5); 
+            write_reg(0x0023,0x0000);DelayMs(5); 
+            write_reg(0x0024,0x0000);DelayMs(5); 
+            write_reg(0x0025,0x8000);DelayMs(5); 
             write_reg(0x004f,0);
             write_reg(0x004e,0);
             break;
@@ -318,18 +388,32 @@ void ili9320_init(void)
             break;
     }
     
-    //开启显示 
+    //???? 
     ILI9320_TRACE("ID:0x%X\r\n", ili9320_get_id());
-    write_reg(0x07,0x0173);
+    
     ili9320_clear(BLACK);
 }
 
 void GUI_DrawPixel(int color, int x, int y)
 {
-    write_reg(0x0020, x);
-    write_reg(0x0021, y);
-    WMLCDCOM(0x0022);
-    WMLCDDATA(color);
+    switch(lcd_id)
+    {
+        case 0x9320:
+            write_reg(0x0020, x);
+            write_reg(0x0021, y);
+            WMLCDCOM(0x0022);
+            WMLCDDATA(color);
+            break;
+        case 0x8989:
+            write_reg(0x004e,x);        
+            write_reg(0x004f,y);  
+            WMLCDCOM(0x0022);
+            WMLCDDATA(color);
+            break;
+        default:
+            break;   
+    }
+    
 }
 
 void GUI_DriverInit(void)

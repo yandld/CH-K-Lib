@@ -37,34 +37,11 @@ static UIAppEntry UIApp[] =
 };
 
 
-
-static const GUI_WIDGET_CREATE_INFO _aDialogCreate2[] = {
-    { FRAMEWIN_CreateIndirect,    "Framewin", ID_FRAMEWIN_0, 0, 0, 240, 320, 0, 0, 0 },
-};
-    
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Window", ID_WINDOW_0, 0, 0, 240, 400, 0, 0x0, 0 },
 //    { IMAGE_CreateIndirect, "Image", ID_IMAGE_0, 0, 0, 240, 320, 0, IMAGE_CF_MEMDEV | IMAGE_CF_ATTACHED | IMAGE_CF_TILE | IMAGE_CF_ALPHA, 0 },
 };
 
-
-
-static void _cbDialog2(WM_MESSAGE * pMsg) {
-    WM_HWIN hItem;
-    switch (pMsg->MsgId)
-    {
-        case WM_INIT_DIALOG:
-        hItem = pMsg->hWin;
-        FRAMEWIN_SetBorderSize(hItem, 0);
-        FRAMEWIN_SetTitleVis(hItem, 0);
-        FRAMEWIN_SetClientColor(hItem, GUI_WHITE);
-        break;
-        default:
-        WM_DefaultProc(pMsg);
-        break;
-    }    
-    
-};
 
 
 static void _cbDialog(WM_MESSAGE * pMsg) {
@@ -74,7 +51,6 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     int     Id;
     gui_msg_t msg;
     msg.exec = RT_NULL;
-    const GUI_PID_STATE * pState;
     
     switch (pMsg->MsgId)
     {
@@ -127,13 +103,23 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
         
         /* algin Apps */
         int xPos, yPos, xSize, ySize;
-        xPos = 0;
-        yPos = 0;
+        xPos = 0; xSize = 0;
+        yPos = 0; ySize = 0;
         for(i=0;i<GUI_COUNTOF(UIApp);i++)
         {
             hItem = WM_GetDialogItem(pMsg->hWin, UIApp[i].GUID);
             xSize = GUI_BMP_GetXSize(UIApp[i].plogo);
             ySize = GUI_BMP_GetYSize(UIApp[i].plogo);
+            
+            if(xSize == 0 || xSize > 9999)
+            {
+                xSize = 60;
+            }
+            if(ySize == 0 || ySize > 9999)
+            {
+                ySize = 60;
+            }
+            
             if(abs(LCD_GetXSize() - xPos) >= xSize)
             {
                 WM_MoveTo(hItem, xPos, yPos);
@@ -184,12 +170,9 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
   
 WM_HWIN GUI_CreateDesktopDialog(void)
 {
-    int i;
-    int fd;
     WM_HWIN  hWin;
     WM_MOTION_Enable(1);
 
-   // hWin = GUI_CreateDialogBox(_aDialogCreate2, GUI_COUNTOF(_aDialogCreate2), _cbDialog2, WM_HBKWIN, -100, -2);
     GUI_CreateDialogBox(_aDialogCreate, GUI_COUNTOF(_aDialogCreate), _cbDialog, WM_HBKWIN, 0, 0);
 }
 

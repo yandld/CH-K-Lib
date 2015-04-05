@@ -146,9 +146,15 @@ static int ads_filter(int* buf)
 }
 
 
-void GUI_TOUCH_X_ActivateX(void)  {}
-void GUI_TOUCH_X_ActivateY(void)  {}
+void GUI_TOUCH_X_ActivateX(void)
+{
+    
+}
 
+void GUI_TOUCH_X_ActivateY(void) 
+{
+    
+}
 
 int GUI_TOUCH_X_MeasureX(void) 
 {
@@ -166,35 +172,16 @@ void GUI_X_ErrorOut(const char * s)
 {
     GUI_DispString(s);
 }
+
 void GUI_X_Warn(const char * s)
 {
     GUI_DispString(s);
 }
+
 void GUI_X_Log(const char * s)
 {
     GUI_DispString(s);
 }
-
-/*
-*********************************************************************************************************
-*                                        GUI_X_WaitEvent()
-*                                        GUI_X_SignalEvent()
-*********************************************************************************************************
-*/
-
-
-/*
-*********************************************************************************************************
-*                                      KEYBOARD INTERFACE FUNCTIONS
-*
-* Purpose: The keyboard routines are required only by some widgets.
-*          If widgets are not used, they may be eliminated.
-*
-* Note(s): If uC/OS-II is used, characters typed into the log window will be placed	in the keyboard buffer. 
-*          This is a neat feature which allows you to operate your target system without having to use or 
-*          even to have a keyboard connected to it. (useful for demos !)
-*********************************************************************************************************
-*/
 
 static  void  CheckInit (void) 
 {
@@ -205,5 +192,4 @@ static  void  CheckInit (void)
 void GUI_X_Init (void) 
 {
     touch_device = rt_device_find("ads7843");
-  //  KeySem = OSSemCreate(0);
 }

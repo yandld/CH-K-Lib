@@ -11,9 +11,7 @@
 #include "i2c.h"
 #include "gpio.h"
 
-#ifndef I2C_GPIO_SIM
-#define I2C_GPIO_SIM   0
-#endif
+#define I2C_GPIO_SIM  1
 
 #if I2C_GPIO_SIM
 
@@ -23,7 +21,7 @@
 #define SDA_L()             do {GPIO_WriteBit(i2c.instace, i2c.sda_pin, 0);}while(0)
 #define SCL_H()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 1);}while(0)
 #define SCL_L()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 0);}while(0)
-#define SCCB_DELAY()        DelayUs(1)
+#define I2C_DELAY()         DelayUs(1)
 
 typedef struct
 {
@@ -82,29 +80,20 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
     return pq->ip_instance;
 }
 
-static uint8_t SDA_IN(void)
+static inline uint8_t SDA_IN(void)
 {
     return GPIO_ReadBit(i2c.instace, i2c.sda_pin);
 }
 
 static bool I2C_Start(void)
 {
+    SDA_DDR_OUT();
     SDA_H();
     SCL_H();
-    SCCB_DELAY();
-
-    SDA_DDR_OUT();
+    I2C_DELAY();
     SDA_L();
-
-    SCCB_DELAY();
+    I2C_DELAY();
     SCL_L();
-
-    /* i2c is busy */
-    if(SDA_IN())
-    {
-        SDA_DDR_OUT();
-        return false;
-    }
     return true;
 }
 
@@ -112,198 +101,234 @@ static void I2C_Stop(void)
 {
     SCL_L();
     SDA_L();
-    
-    SCCB_DELAY();
+    I2C_DELAY();
     SCL_H();
-    SCCB_DELAY();
     SDA_H();
-    SCCB_DELAY();
+    I2C_DELAY();
 }
 
-static void _I2C_Ack(void)
+static void I2C_Ack(void)
 {
     SCL_L();
-    SCCB_DELAY();
     SDA_L();
-    SCCB_DELAY();
+    I2C_DELAY();
     SCL_H();
-    SCCB_DELAY();
+    I2C_DELAY();
     SCL_L();
-    SCCB_DELAY();
+    I2C_DELAY();
 }
 
-static void _I2C_NoAck(void)
+static void I2C_NAck(void)
 {
     SCL_L();
-    SCCB_DELAY();
+    I2C_DELAY();
     SDA_H();
-    SCCB_DELAY();
+    I2C_DELAY();
     SCL_H();
-    SCCB_DELAY();
+    I2C_DELAY();
     SCL_L();
-    SCCB_DELAY();
+    I2C_DELAY();
 }
 
-static bool _I2C_WaitAck(void)
+static bool I2C_WaitAck(void)
 {
-    SCL_L();
+    uint8_t ack;
     SDA_DDR_IN();
-    SCCB_DELAY();
-    SCL_H();
-    SCCB_DELAY();
-    if(SDA_IN())
-    {
-        SDA_DDR_OUT();
-        SCL_L();
-        return false;
-    }
-    SDA_DDR_OUT();
     SCL_L();
-    return true;
+    
+    I2C_DELAY();
+    SCL_H();
+    I2C_DELAY();
+    ack = SDA_IN();
+    SCL_L();
+    SDA_DDR_OUT();
+    
+    return ack;
 }
 
 static void I2C_SendByte(uint8_t data)
 {
-    volatile uint8_t i = 8;
+    volatile uint8_t i;
+    
+    i = 8;
     while(i--)
     {
-        if(data & 0x80) 
-            SDA_H();
+        if(data & 0x80) SDA_H();
         else SDA_L();
-        
         data <<= 1;
-        SCCB_DELAY();
+        I2C_DELAY();
         SCL_H();
-        SCCB_DELAY();
+        I2C_DELAY();
         SCL_L();
     }
+
 }
 
-static int I2C_ReadByte(void)
+static uint8_t I2C_GetByte(void)
 {
-    uint8_t i = 8;
-    uint8_t data = 0;
+    uint8_t i,byte;
+    
+    i = 8;
+    byte = 0;
 
     SDA_DDR_IN();
-
     while(i--)
     {
-        data <<= 1;
         SCL_L();
-        SCCB_DELAY();
+        I2C_DELAY();
         SCL_H();
-        SCCB_DELAY();
-
-        if(SDA_IN())
-        {
-            data |= 0x01;
-        }
+        I2C_DELAY();
+        byte = (byte<<1)|(SDA_IN() & 1);
     }
     SDA_DDR_OUT();
-    SCL_L();
-    return data;
+    return byte;
 }
 
-int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData)
+
+uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
 {
-    uint8_t length = 1;
+    uint8_t *p;
+    uint8_t err;
     
+    p = (uint8_t*)&addr;
+    err = 0;
     chipAddr <<= 1;
     
-    if(!I2C_Start())
-    {
-        return 1;
-    }
+    I2C_Start();
     I2C_SendByte(chipAddr);
-    if(!_I2C_WaitAck())
-    {
-        I2C_Stop();
-        return 2;
-    }
-    I2C_SendByte(chipAddr);
-    _I2C_WaitAck();
-    I2C_Stop();
+    err += I2C_WaitAck();
 
-    if(!I2C_Start())
+    while(addrLen--)
     {
-        return 3;
+        I2C_SendByte(*p++);
+        err += I2C_WaitAck();
     }
+    
+    while(len--)
+    {
+        I2C_SendByte(*buf++);
+        err += I2C_WaitAck();  
+    }
+
+    I2C_Stop();
+    return err;
+}
+
+uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t data)
+{
+    return I2C_BurstWrite(instance, chipAddr, addr, 1, &data, 1);
+}
+
+int32_t I2C_BurstRead(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
+{
+    uint8_t *p;
+    uint8_t err;
+    
+    p = (uint8_t*)&addr;
+    err = 0;
+    chipAddr <<= 1;
+    
+    I2C_Start();
+    I2C_SendByte(chipAddr);
+    err += I2C_WaitAck();
+    
+    while(addrLen--)
+    {
+        I2C_SendByte(*p++);
+        err += I2C_WaitAck();
+    }
+    
+    I2C_Start();
     I2C_SendByte(chipAddr+1);
-
-    if(!_I2C_WaitAck())
+    err += I2C_WaitAck();
+    
+    while(len--)
     {
-        I2C_Stop();
-        return 4;
-    }
-    while(length)
-    {
-        *pData = I2C_ReadByte();
-        if(length == 1)
+        *buf++ = I2C_GetByte();
+        if(len)
         {
-            _I2C_NoAck();
+            I2C_Ack();
         }
-        else
-        {
-            _I2C_Ack();
-        }
-        pData++;
-        length--;
     }
+    
+    I2C_NAck();
     I2C_Stop();
-    return 0;
+    
+    return err;
 }
 
-uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData)
+uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t* pData)
 {
-    return SCCB_ReadSingleRegister(instance, chipAddr, subAddr, pData);
+    return I2C_BurstRead(instance, chipAddr, addr, 1, pData, 1);
 }
 
-int _SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data)
-{
 
-    if(!I2C_Start())
+int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t* pData)
+{
+    uint8_t err;
+    uint8_t retry;
+    
+    retry = 10;
+    chipAddr <<= 1;
+    
+    while(retry--)
     {
-        return 1;
-    }
-    I2C_SendByte( chipAddr<<1 );
-    if( !_I2C_WaitAck() )
-    {
+        err = 0;
+        I2C_Start();
+        I2C_SendByte(chipAddr);
+        err += I2C_WaitAck();
+        
+        I2C_SendByte(addr);
+        err += I2C_WaitAck();
+        
         I2C_Stop();
-        return 2;
-    }
-    I2C_SendByte((uint8_t)(subAddr & 0x00FF));
-    if(!_I2C_WaitAck())
-    {
-        return 3;
-    }
-    I2C_SendByte(data);
-    if(!_I2C_WaitAck())
-    {
-        return 4;
-    }
-    I2C_Stop();
-    return 0;
-}
-
-int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data)
-{
-    uint8_t i = 0;
-    while(false == _SCCB_WriteSingleRegister(instance, chipAddr, subAddr, data))
-    {
-        i++;
-        if(i == 30)
+        I2C_Start();
+        I2C_SendByte(chipAddr+1);
+        err += I2C_WaitAck();
+        
+        *pData = I2C_GetByte();
+        err += I2C_WaitAck();
+        
+        I2C_NAck();
+        I2C_Stop();
+        if(!err)
         {
-            return false;
+            break;
         }
     }
-    return true;
+
+    return err;
 }
 
 
-uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data)
+int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t data)
 {
-    return SCCB_WriteSingleRegister(instance, chipAddr, subAddr, data);
+    uint8_t err;
+    uint8_t retry;
+    
+    retry = 10;
+    
+    while(retry--)
+    {
+        err = I2C_WriteSingleRegister(instance, chipAddr, addr, data);
+        if(!err)
+        {
+            break;
+        }
+    }
+    return err;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 #else

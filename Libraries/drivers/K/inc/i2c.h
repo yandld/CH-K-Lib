@@ -56,24 +56,15 @@ typedef enum
 }I2C_ITDMAConfig_Type;
 
 
-
 //!< I2C CallBack Type
 typedef void (*I2C_CallBackType)(void);
 
-/* param check */
-#define IS_I2C_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(I2C_InstanceTable))
 
-/* API functions */
-void I2C_Init(I2C_InitTypeDef* I2C_InitStruct);
 uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate);
-void I2C_ITDMAConfig(uint32_t instance, I2C_ITDMAConfig_Type config);
-void I2C_CallbackInstall(uint32_t instance, I2C_CallBackType AppCBFun);
-/* higher level functions */
 int32_t I2C_BurstRead(uint32_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len);
 uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len);
 uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData);
 uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data);
-/* SCCB support */
 int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData);
 int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data);
 

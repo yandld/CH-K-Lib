@@ -72,10 +72,10 @@ static int write_reg(uint8_t addr, uint8_t val)
     return I2C_WriteSingleRegister(adxl_dev.instance, adxl_dev.addr, addr, val);
 }
 
-static int read_reg(uint8_t addr, uint8_t *val)
-{
-    return I2C_ReadSingleRegister(adxl_dev.instance, adxl_dev.addr, addr, val);
-}
+//static int read_reg(uint8_t addr, uint8_t *val)
+//{
+//    return I2C_ReadSingleRegister(adxl_dev.instance, adxl_dev.addr, addr, val);
+//}
 
 int adxl345_init(uint32_t instance)
 {
@@ -104,6 +104,10 @@ int adxl345_init(uint32_t instance)
                 /*不使用中断 */
                 write_reg(INT_ENABLE, 0x00);
                 
+                write_reg(OFSX, 0);
+                write_reg(OFSY, 0);
+                write_reg(OFSZ, 0);
+                
                 return 0;     
             }
         }
@@ -124,56 +128,60 @@ int adxl345_readXYZ(short *x, short *y, short *z)
     return err;
 }
 
+extern void DelayMs(uint32_t ms);
 
-//int adxl345_calibration(void)
-//{
-//	short tx,ty,tz;
-//	uint8_t i;
-//	short offx=0,offy=0,offz=0; 
-//    adxl345_write_register(POWER_CTL, 0x00);//先进入休眠模式.
-//	DelayMs(40);
-//	adxl345_write_register(DATA_FORMAT, 0X2B);	//低电平中断输出,13位全分辨率,输出数据右对齐,16g量程 
-//	adxl345_write_register(BW_RATE, 0x0A);		//数据输出速度为100Hz
-//	adxl345_write_register(POWER_CTL, 0x28);	   	//链接使能,测量模式
-//	adxl345_write_register(INT_ENABLE, 0x00);	//不使用中断
-// //   adxl345_write_register(device, FIFO_CTL, 0x9F); //开启FIFO
-//	DelayMs(12);
-//	for(i=0;i<10;i++)
-//	{
-//		adxl345_readXYZ(&tx, &ty, &tz);
-//        DelayMs(10);
-//		offx += tx;
-//		offy += ty;
-//		offz += tz;
-//	}	 	
-//	offx /= 10;
-//	offy /= 10;
-//	offz /= 10;
-//	offx = -offx/4;
-//	offy = -offy/4;
-//	offz = -(offz-256)/4;	
-//    ADXL345_TRACE("OFFX:%d OFFY:%d OFFZ:%d \r\n" ,offx, offy, offz);
-// 	adxl345_write_register(OFSX, offx);
-//	adxl345_write_register(OFSY, offy);
-//	adxl345_write_register(OFSZ, offz);
-//    return 0; 
-//}
+int adxl345_calibration(void)
+{
+	short tx,ty,tz;
+	uint8_t i;
+	short offx=0,offy=0,offz=0; 
+    write_reg(POWER_CTL, 0x00);//先进入休眠模式.
+    
+	DelayMs(40);
+    
+	write_reg(DATA_FORMAT, 0X2B);	//低电平中断输出,13位全分辨率,输出数据右对齐,16g量程 
+	write_reg(BW_RATE, 0x0A);		//数据输出速度为100Hz
+	write_reg(POWER_CTL, 0x28);	   	//链接使能,测量模式
+	write_reg(INT_ENABLE, 0x00);	//不使用中断
+ //   adxl345_write_register(device, FIFO_CTL, 0x9F); //开启FIFO
+	DelayMs(12);
+    
+	for(i=0;i<10;i++)
+	{
+		adxl345_readXYZ(&tx, &ty, &tz);
+        DelayMs(10);
+		offx += tx;
+		offy += ty;
+		offz += tz;
+	}	 	
+	offx /= 10;
+	offy /= 10;
+	offz /= 10;
+	offx = -offx/4;
+	offy = -offy/4;
+	offz = -(offz-256)/4;	
+    ADXL345_TRACE("OFFX:%d OFFY:%d OFFZ:%d \r\n" ,offx, offy, offz);
+ 	write_reg(OFSX, offx);
+	write_reg(OFSY, offy);
+	write_reg(OFSZ, offz);
+    return 0; 
+}
 
-////得到角度
-////x,y,z:x,y,z方向的重力加速度分量(不需要单位,直接数值即可)
-////dir:要获得的角度.0,与Z轴的角度;1,与X轴的角度;2,与Y轴的角度.
-////返回值:角度值.单位0.1°.
-//short adxl345_convert_angle(short x, short y, short z, short *ax, short *ay, short *az)
-//{
-//	float temp;
-//    float fx,fy,fz;
-//    fx = (float)x; fy = (float)y;  fz = (float)z; 
+//得到角度
+//x,y,z:x,y,z方向的重力加速度分量(不需要单位,直接数值即可)
+//dir:要获得的角度.0,与Z轴的角度;1,与X轴的角度;2,与Y轴的角度.
+//返回值:角度值.单位0.1°.
+short adxl345_convert_angle(short x, short y, short z, short *ax, short *ay, short *az)
+{
+	float temp;
+    float fx,fy,fz;
+    fx = (float)x; fy = (float)y;  fz = (float)z; 
 
-//    temp = sqrt((fx*fx+fy*fy))/fz;
-//    *az = atan(temp)*1800/3.14;
-//    temp = fx/sqrt((fy*fy+fz*fz));
-//    *ax = atan(temp)*1800/3.14;;
-//    temp = fy/sqrt((fx*fx+fz*fz));
-//    *ay = atan(temp)*1800/3.14;;
-//	return 0;
-//}
+    temp = sqrt((fx*fx+fy*fy))/fz;
+    *az = atan(temp)*1800/3.14;
+    temp = fx/sqrt((fy*fy+fz*fz));
+    *ax = atan(temp)*1800/3.14;;
+    temp = fy/sqrt((fx*fx+fz*fz));
+    *ay = atan(temp)*1800/3.14;;
+	return 0;
+}

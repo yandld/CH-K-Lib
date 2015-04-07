@@ -362,7 +362,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60D10 RAVEN LIB_DEBUG</Define>
+              <Define>MK60D10 RAVEN</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\fatfs;..\..\..\..\Libraries\utilities\ucGUI\inc;..\..\..\..\Libraries\utilities\ucGUI\inc\Config</IncludePath>
             </VariousControls>
@@ -681,11 +681,6 @@
               <FileName>ucGuiFunc_ili9320.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ucGuiFunc_ili9320.c</FilePath>
-            </File>
-            <File>
-              <FileName>i2c_bus_ops.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\i2c_bus_ops.c</FilePath>
             </File>
             <File>
               <FileName>adxl345.c</FileName>
@@ -1376,11 +1371,6 @@
               <FileName>ucGuiFunc_ili9320.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ucGuiFunc_ili9320.c</FilePath>
-            </File>
-            <File>
-              <FileName>i2c_bus_ops.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\i2c_bus_ops.c</FilePath>
             </File>
             <File>
               <FileName>adxl345.c</FileName>

@@ -69,6 +69,7 @@ int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr
 int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data);
 uint8_t I2C_Probe(uint32_t instance, uint8_t chipAddr);
 /* test function */
+uint8_t I2C_Probe(uint32_t instance, uint8_t chipAddr);
 void I2C_Scan(uint32_t MAP);
 
 #ifdef __cplusplus

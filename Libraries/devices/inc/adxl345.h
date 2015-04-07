@@ -12,9 +12,6 @@
 #define __ADXL345_H__
 
 #include <stdint.h>
-#include "i2c_abstraction.h"
-
-
 
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))

@@ -185,6 +185,7 @@ static uint8_t I2C_GetByte(void)
         I2C_DELAY();
         byte = (byte<<1)|(SDA_IN() & 1);
     }
+    SCL_L();
     SDA_DDR_OUT();
     return byte;
 }

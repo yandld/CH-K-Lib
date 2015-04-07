@@ -8,9 +8,10 @@
   ******************************************************************************
   */
 
-#include "i2c_abstraction.h"
+#include <string.h>
 #include "at24cxx.h"
-#include "string.h"
+#include "i2c.h"
+
 /**
   ******************************************************************************
   * @supported chip    AT24C01
@@ -21,49 +22,69 @@
   ******************************************************************************
   */
 
-struct at24cxx_attr
+struct at24cxx
 {
     const char* name;
-    uint32_t total_size;    /* total size */
-    uint16_t page_size;     /* page size */
-    uint8_t  chip_addr;     /* base addr */
+    uint32_t size;      /* total size */
+    uint16_t page;      /* page size */
+    uint8_t  addr;      /* base addr */
 };
 
-static struct i2c_device device;
-static struct at24cxx_attr at24cxx_addr;
-
-static const struct at24cxx_attr at24cxx_attr_table[] = 
+struct at24cxx_device 
 {
-    {"at24c01",    128, 8, 0x50},
-    {"at24c02",    256, 8, 0x50},
-    {"at24c04",    512, 16,0x50},
-    {"at24c08",   1024, 16,0x50},
-    {"at24c16",   2048, 16,0x50},
+    uint8_t     addr;
+    uint8_t     page_size;
+    uint32_t    total_size;
+    uint32_t    instance;
+    void        *user_data;
 };
 
-int at24cxx_get_size(void)
+static struct at24cxx_device at24cxx_dev;
+
+static const struct at24cxx at24cxx_tab[] = 
 {
-    return at24cxx_addr.total_size;
+    {"at24c01",    128, 8,  0x50},
+    {"at24c02",    256, 8,  0x50},
+    {"at24c04",    512, 16, 0x50},
+    {"at24c08",   1024, 16, 0x50},
+    {"at24c16",   2048, 16, 0x50},
+};
+
+int at24cxx_init(uint32_t instance)
+{
+    uint8_t err;
+    uint32_t i;
+    
+    at24cxx_dev.instance = instance;
+    
+    for(i=0;i<ARRAY_SIZE(at24cxx_tab);i++)
+    {
+        if(!I2C_Probe(instance, at24cxx_tab[i].addr))
+        {
+            at24cxx_dev.page_size = 8;
+            at24cxx_dev.total_size = 256;
+            at24cxx_dev.addr = at24cxx_tab[i].addr;
+            return 0;
+        }
+    }
+    return 1;
 }
+
 
 int at24cxx_read(uint32_t addr, uint8_t *buf, uint32_t len)
 {
-    int ret;
-    device.chip_addr = (addr/256) + at24cxx_addr.chip_addr;
-    device.subaddr = addr%256;
-    device.subaddr_len = 1;
-    ret = device.bus->ops->read(&device, buf, len);
-    return ret;
+    uint8_t chip_addr;
+    
+    chip_addr = (addr/256) + at24cxx_dev.addr;
+    return I2C_BurstRead(at24cxx_dev.instance, chip_addr, addr%256, 1, buf, len);
 }
 
 static int at24cxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
 {
-    int ret;
-    device.chip_addr = (addr/256) + at24cxx_addr.chip_addr;
-    device.subaddr = addr%256;
-    device.subaddr_len = 1;
-    ret = device.bus->ops->write(&device, buf, len);
-    return ret;
+    uint8_t chip_addr;
+    
+    chip_addr = (addr/256) + at24cxx_dev.addr;
+    return I2C_BurstWrite(at24cxx_dev.instance, chip_addr, addr%256, 1, buf, len);
 }
 
 int at24cxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
@@ -73,12 +94,12 @@ int at24cxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
 	uint32_t secoff;
 	uint16_t Byteremian;
 	uint32_t pageremain;
-    uint32_t page_size = at24cxx_addr.page_size;
+    uint32_t page_size = at24cxx_dev.page_size;
 	secpos = addr/page_size;
 	secoff = addr%page_size;
 	pageremain = page_size - secoff;
     /* check vailidiation */
-    if((addr + len ) > at24cxx_addr.total_size)
+    if((addr + len ) > at24cxx_dev.total_size)
     {
         return 1;
     }
@@ -87,7 +108,7 @@ int at24cxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
     {
         return ret;
     }
-    while(i2c_probe(&device) != I2C_EOK);
+    while(I2C_Probe(at24cxx_dev.instance, at24cxx_dev.addr));
 	addr += pageremain;
 	secpos++;
 	Byteremian = len - pageremain;
@@ -106,7 +127,7 @@ int at24cxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
         {
             return ret;
         }
-        while(i2c_probe(&device) != I2C_EOK);
+        while(I2C_Probe(at24cxx_dev.instance, at24cxx_dev.addr));
         secpos++;
         buf += pageremain;
         Byteremian -= pageremain;
@@ -147,34 +168,6 @@ int at24cxx_self_test(void)
     return 1;
 }
 
-int at24cxx_init(struct i2c_bus* bus, const char * name)
-{
-    uint32_t i;
-    uint32_t ret = 0;
-    /* find match */
-    for(i=0;i<ARRAY_SIZE(at24cxx_attr_table);i++)
-    {
-        if(!strcmp(at24cxx_attr_table[i].name, name))
-        {
-            at24cxx_addr = at24cxx_attr_table[i];
-            break;
-        }
-    }
-    /* devices not supported */
-    if( i == ARRAY_SIZE(at24cxx_attr_table))
-    {
-        return 2;
-    }
-    /* i2c bus config */
-    device.config.baudrate = 450*1000;
-    device.config.data_width = 8;
-    device.config.mode = 0;
-    device.subaddr_len = 1;
-    device.chip_addr = at24cxx_addr.chip_addr;
-    /* attach device to bus */
-    ret = i2c_bus_attach_device(bus, &device);
-    return ret;
-}
 
 
 

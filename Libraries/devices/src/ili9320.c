@@ -3,7 +3,7 @@
 #include "flexbus.h"
 
 
-#define ILI9320_DEBUG		1
+#define ILI9320_DEBUG		0
 #if ( ILI9320_DEBUG == 1 )
 #define ILI9320_TRACE	printf
 #else
@@ -388,7 +388,6 @@ void ili9320_init(void)
             break;
     }
     
-    //???? 
     ILI9320_TRACE("ID:0x%X\r\n", ili9320_get_id());
     
     ili9320_clear(BLACK);

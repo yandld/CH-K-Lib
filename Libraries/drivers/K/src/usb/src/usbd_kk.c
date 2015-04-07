@@ -20,8 +20,6 @@
 #define __NO_USB_LIB_C
 #include "usb_config.h"
 
-volatile static uint32_t gTxEvOdd = 0;
-volatile static uint32_t gRxEvOdd = 0;
 
 typedef struct __BUF_DESC {
   uint8_t    stat;
@@ -201,43 +199,35 @@ void USBD_Connect (uint32_t con) {
  *   Called automatically on USB Device Reset
  *    Return Value:    None
  */
-
 void USBD_Reset (void) {
   uint32_t i;
 
-    for (i = 1; i < 16; i++)
-    {
-        USB0->ENDPOINT[i].ENDPT = 0x00;
-    }
+  for (i = 1; i < 16; i++) {
+    USB0->ENDPOINT[i].ENDPT = 0x00;
+  }
 
   /* EP0 control endpoint                                                     */
   BD[IDX(0, RX, ODD )].bc       = USBD_MAX_PACKET0;
   BD[IDX(0, RX, ODD )].buf_addr = (uint32_t) &(EPBuf[IDX(0, RX, ODD )][0]);
-  BD[IDX(0, RX, ODD )].stat     = BD_OWN_MASK | BD_DTS_MASK ;
+  BD[IDX(0, RX, ODD )].stat     = BD_OWN_MASK | BD_DTS_MASK | BD_DATA01_MASK;
 
-  BD[IDX(0, RX, EVEN )].bc       = USBD_MAX_PACKET0;
-  BD[IDX(0, RX, EVEN )].buf_addr = (uint32_t) &(EPBuf[IDX(0, RX, EVEN )][0]);
-  BD[IDX(0, RX, EVEN)].stat     =  BD_OWN_MASK | BD_DTS_MASK;
+  BD[IDX(0, RX, EVEN)].stat     = 0;
 
   BD[IDX(0, TX, ODD )].buf_addr = (uint32_t) &(EPBuf[IDX(0, TX, ODD )][0]);
-  BD[IDX(0, TX, EVEN)].buf_addr = (uint32_t) &(EPBuf[IDX(0, TX, EVEN )][0]);
+  BD[IDX(0, TX, EVEN)].buf_addr = 0;
 
   USB0->ENDPOINT[0].ENDPT = USB_ENDPT_EPHSHK_MASK | /* enable ep handshaking  */
                             USB_ENDPT_EPTXEN_MASK | /* enable TX (IN) tran.   */
                             USB_ENDPT_EPRXEN_MASK;  /* enable RX (OUT) tran.  */
-    gTxEvOdd = 0;
-    gRxEvOdd = 0;
-    Data1 = 0x55555555;
-  
-    /* reset all to even buffer */
-    USB0->CTL |= USB_CTL_ODDRST_MASK;
-    USB0->CTL &= ~USB_CTL_ODDRST_MASK;
 
-    USB0->ISTAT   =  0xFF;                /* clear all interrupt status flags   */
-    USB0->ERRSTAT =  0xFF;                /* clear all error flags              */
-    USB0->ERREN   =  0xFF;                /* enable error interrupt sources     */
-    USB0->ADDR    =  0x00;                /* set default address                */
-    
+  Data1 = 0x55555555;
+  USB0->CTL    |=  USB_CTL_ODDRST_MASK;
+
+  USB0->ISTAT   =  0xFF;                /* clear all interrupt status flags   */
+  USB0->ERRSTAT =  0xFF;                /* clear all error flags              */
+  USB0->ERREN   =  0xFF;                /* enable error interrupt sources     */
+  USB0->ADDR    =  0x00;                /* set default address                */
+
 }
 
 
@@ -463,45 +453,41 @@ void USBD_ClearEPBuf (uint32_t EPNum) {
  *    Return Value:    Number of bytes read
  */
 
-uint32_t USBD_ReadEP (uint32_t EPNum, uint8_t *pData)
-{
-    uint32_t n, sz, idx, setup = 0;
+uint32_t USBD_ReadEP (uint32_t EPNum, uint8_t *pData) {
+  uint32_t n, sz, idx, setup = 0;
 
-    idx = IDX(EPNum, RX, gRxEvOdd);
-    
-    sz  = BD[idx].bc;
+  idx = IDX(EPNum, RX, 0);
+  sz  = BD[idx].bc;
 
-    if ((EPNum == 0) && (TOK_PID(idx) == SETUP_TOKEN)) setup = 1;
+  if ((EPNum == 0) && (TOK_PID(idx) == SETUP_TOKEN)) setup = 1;
 
-    //printf("r");
-    
-    for (n = 0; n < sz; n++)
-    {
-        pData[n] = EPBuf[idx][n];
-    }
+  for (n = 0; n < sz; n++) {
+    pData[n] = EPBuf[idx][n];
+  }
 
-    BD[idx].bc = OutEpSize[EPNum];
+  BD[idx].bc = OutEpSize[EPNum];
 
-  if ((Data1 >> (IDX(EPNum, RX, ODD) / 2) & 1) == ((BD[idx].stat >> 6) & 1)) {
+  if ((Data1 >> (idx / 2) & 1) == ((BD[idx].stat >> 6) & 1)) {
     if (setup && (pData[6] == 0)) {     /* if no setup data stage,            */
       protected_and(&Data1, ~1);           /* set DATA0                          */
     } else {
-      protected_xor(&Data1, (1 << (IDX(EPNum, RX, ODD) / 2)));
+      protected_xor(&Data1, (1 << (idx / 2)));
     }
   }
 
-    if ((Data1 >> (IDX(EPNum, RX, ODD) / 2)) & 1)
-    {
-        BD[idx].stat = BD_OWN_MASK | BD_DTS_MASK;
-    }
-    else
-    {
-        BD[idx].stat = BD_OWN_MASK | BD_DTS_MASK | BD_DATA01_MASK;
-    }
-    
-    USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
-    return (sz);
+  if ((Data1 >> (idx / 2)) & 1) {
+    BD[idx].stat  = BD_DTS_MASK | BD_DATA01_MASK;
+    BD[idx].stat |= BD_OWN_MASK;
+  }
+  else {
+    BD[idx].stat  = BD_DTS_MASK;
+    BD[idx].stat |= BD_OWN_MASK;
+  }
+
+  USB0->CTL &= ~USB_CTL_TXSUSPENDTOKENBUSY_MASK;
+  return (sz);
 }
+
 
 /*
  *  Write USB Device Endpoint Data
@@ -512,35 +498,25 @@ uint32_t USBD_ReadEP (uint32_t EPNum, uint8_t *pData)
  *                     cnt:   Number of bytes to write
  *    Return Value:    Number of bytes written
  */
-uint32_t USBD_WriteEP (uint32_t EPNum, uint8_t *pData, uint32_t cnt)
-{
-    uint32_t idx, n;
-    EPNum &= 0x0F;
-    
-    idx = IDX(EPNum, TX, (gTxEvOdd >> EPNum) & 1);
-    gTxEvOdd ^= (1 << EPNum);
-    
-    //printf("w");
-    
-    BD[idx].bc = cnt;
-    for (n = 0; n < cnt; n++)
-    {
-        EPBuf[idx][n] = pData[n];
-    }
-    
-    BD[idx].buf_addr = (uint32_t) &(EPBuf[idx][0]);
-    
-    if ((Data1 >> (idx / 2)) & 1)
-    {
-        BD[idx].stat = BD_OWN_MASK | BD_DTS_MASK;
-    }
-    else
-    {
-        BD[idx].stat = BD_OWN_MASK | BD_DATA01_MASK | BD_DTS_MASK;
-    }
-    protected_xor(&Data1, (1 << (IDX(EPNum, TX, ODD) / 2)));
-    
-    return(cnt);
+
+uint32_t USBD_WriteEP (uint32_t EPNum, uint8_t *pData, uint32_t cnt) {
+  uint32_t idx, n;
+
+  EPNum &=0x0F;
+
+  idx = IDX(EPNum, TX, 0);
+  BD[idx].bc = cnt;
+  for (n = 0; n < cnt; n++) {
+    EPBuf[idx][n] = pData[n];
+  }
+  if ((Data1 >> (idx / 2)) & 1) {
+    BD[idx].stat = BD_OWN_MASK | BD_DTS_MASK;
+  }
+  else {
+    BD[idx].stat = BD_OWN_MASK | BD_DTS_MASK | BD_DATA01_MASK;
+  }
+  protected_xor(&Data1, (1 << (idx / 2)));
+  return(cnt);
 }
 
 /*
@@ -663,7 +639,6 @@ void USB0_IRQHandler(void) {
     dir    = (stat >> 3) & 0x01;
     ev_odd = (stat >> 2) & 0x01;
     
-    gRxEvOdd = ev_odd;
 /* setup packet                                                               */
     if ((num == 0) && (TOK_PID((IDX(num, dir, ev_odd))) == SETUP_TOKEN)) {
 

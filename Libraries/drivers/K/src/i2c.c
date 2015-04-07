@@ -80,6 +80,11 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
     return pq->ip_instance;
 }
 
+void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
+{
+    
+}
+
 static inline uint8_t SDA_IN(void)
 {
     return GPIO_ReadBit(i2c.instace, i2c.sda_pin);
@@ -254,6 +259,20 @@ int32_t I2C_BurstRead(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32
     I2C_NAck();
     I2C_Stop();
     
+    return err;
+}
+
+uint8_t I2C_Probe(uint32_t instance, uint8_t chipAddr)
+{
+    uint8_t err;
+    
+    err = 0;
+    chipAddr <<= 1;
+    
+    I2C_Start();
+    I2C_SendByte(chipAddr);
+    err = I2C_WaitAck();
+    I2C_Stop();
     return err;
 }
 
@@ -1055,22 +1074,6 @@ uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t
     return I2C_BurstRead(instance, deviceAddress, registerAddress, 1, pData, 1);
 }
 
-/* i2c bus scan test */
-void I2C_Scan(uint32_t MAP)
-{
-    uint8_t i;
-    uint8_t ret;
-    uint32_t instance;
-    instance = I2C_QuickInit(MAP, 100*1000);
-    for(i = 1; i < 127; i++)
-    {
-        ret = I2C_BurstWrite(instance , i, 0, 0, NULL, 0);
-        if(!ret)
-        {
-            LIB_TRACE("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
-        }
-    }
-}
 
 #if 0
 int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData)
@@ -1184,3 +1187,23 @@ static const QuickInit_Type I2C_QuickInitTable[] =
 #endif
 
 #endif
+
+
+/* i2c bus scan test */
+void I2C_Scan(uint32_t MAP)
+{
+    uint8_t i;
+    uint8_t ret;
+    uint32_t instance;
+    instance = I2C_QuickInit(MAP, 100*1000);
+    for(i = 1; i < 127; i++)
+    {
+        ret = I2C_Probe(instance , i);
+        if(!ret)
+        {
+            LIB_TRACE("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
+        }
+    }
+}
+
+

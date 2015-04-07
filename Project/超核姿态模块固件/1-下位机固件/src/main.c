@@ -57,6 +57,9 @@ int hmc5883_read_data2(int16_t* x, int16_t* y, int16_t* z)
         *x = cal_data.meg_x_gain  *(xraw - cal_data.meg_x_off);
         *y = cal_data.meg_y_gain *(yraw - cal_data.meg_y_off);
         *z = cal_data.meg_z_gain *(zraw - cal_data.meg_z_off);
+        xraw = *x;
+        yraw = *y;
+        zraw = *z;
     }
     return r;
 }
@@ -66,7 +69,7 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 {
     .imu_get_accel = mpu6050_read_accel,
     .imu_get_gyro = mpu6050_read_gyro,
-    .imu_get_mag = hmc5883_read_data2,
+    .imu_get_mag = hmc5883_read_data,
 };
 
 
@@ -292,31 +295,31 @@ int main(void)
         switch(bmpStatus)
         {
             case BMP_STATUS_T_START:
-             //   bmp180_start_conversion(BMP180_T_MEASURE);
+                bmp180_start_conversion(BMP180_T_MEASURE);
                 bmpStatus = BMP_STATUS_T_WAIT;
                 break;
             case BMP_STATUS_T_WAIT:
-              //  if(!is_conversion_busy())
+                if(!is_conversion_busy())
                 {
                     bmpStatus = BMP_STATUS_T_COMPLETE;
                 }
                 break;
             case BMP_STATUS_T_COMPLETE:
-       //         bmp180_read_temperature(&temperature);
+                bmp180_read_temperature(&temperature);
                 bmpStatus = BMP_STATUS_P_START;
                 break;
             case BMP_STATUS_P_START:
-       //         bmp180_start_conversion(BMP180_P3_MEASURE);
+                bmp180_start_conversion(BMP180_P3_MEASURE);
                 bmpStatus = BMP_STATUS_P_WAIT;
                 break;
             case BMP_STATUS_P_WAIT:
-            //    if(!is_conversion_busy())
+                if(!is_conversion_busy())
                 {
                     bmpStatus = BMP_STATUS_P_COMPLETE;
                 }
                 break;
             case BMP_STATUS_P_COMPLETE:
-             //   bmp180_read_pressure(&pressure);
+                bmp180_read_pressure(&pressure);
                 bmpStatus = BMP_STATUS_T_START;
                 break;
             default:

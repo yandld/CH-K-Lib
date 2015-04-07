@@ -7,11 +7,14 @@
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
-#include "bmp180.h"
-#include "common.h"
+  
+  
 #include <string.h>
 #include <math.h>
-#include "uart.h"
+#include "bmp180.h"
+#include "common.h"
+#include "i2c.h"
+
 
 
 #ifndef ARRAY_SIZE
@@ -64,22 +67,17 @@ __packed struct bmp180_cal
     int16_t B5; /* B5 is intermediate variable for pressure compensatation */
 };
 
-static struct i2c_device device;
-static const uint8_t chip_addr_table[] = {0x77};
-static struct bmp180_cal cal;
 
-int bmp180_init(struct i2c_bus* bus)
+struct bmp_device 
 {
-    uint32_t ret = 0;
-    /* i2c bus config */
-    device.config.baudrate = 400*1000;
-    device.config.data_width = 8;
-    device.config.mode = 0;
-    device.subaddr_len = 1;
-    /* attach device to bus */
-    ret = i2c_bus_attach_device(bus, &device);
-    return ret;
-}
+    uint8_t     addr;
+    uint32_t    instance;
+    void        *user_data;
+};
+
+static struct bmp_device bmp_dev;
+static const uint8_t bmp_addr[] = {0x77};
+static struct bmp180_cal cal;
 
 /*!
  * @brief dump bmp180 calibration data from bmp180 internal eeporm to struct
@@ -88,11 +86,9 @@ int bmp180_init(struct i2c_bus* bus)
  */
 static int dump_calibration_data(void)
 {
-    device.subaddr = BMP180_PROM_START_ADDR;
-    if(device.bus->ops->read(&device, (uint8_t *)&cal, BMP180_PROM_DATA_LEN))
-    {
-        return 1;
-    }
+    
+    I2C_BurstRead(bmp_dev.instance, bmp_dev.addr, BMP180_PROM_START_ADDR, 1, (uint8_t*)&cal, BMP180_PROM_DATA_LEN);
+
     cal.AC1 = SWAP16(cal.AC1);
     cal.AC2 = SWAP16(cal.AC2);
     cal.AC3 = SWAP16(cal.AC3);
@@ -120,55 +116,33 @@ static int dump_calibration_data(void)
     return 0;
 }
 
-int bmp180_probe(void)
+static int write_reg(uint8_t addr, uint8_t val)
 {
-    uint32_t i;
-    uint8_t buf[1];
-    device.subaddr = BMP180_CHIP_ID_REG;
-    for(i=0;i<ARRAY_SIZE(chip_addr_table);i++)
+    return I2C_WriteSingleRegister(bmp_dev.instance, bmp_dev.addr, addr, val);
+}
+
+int bmp180_init(uint32_t instance)
+{
+    int i;
+    uint8_t id;
+    
+    bmp_dev.instance = instance;
+    
+    for(i = 0; i < ARRAY_SIZE(bmp_addr); i++)
     {
-        device.chip_addr = chip_addr_table[i];
-        if(device.bus->ops->read(&device, buf, sizeof(buf)) == I2C_EOK)
+        if(!I2C_ReadSingleRegister(instance, bmp_addr[i], BMP180_CHIP_ID_REG, &id))
         {
-            /* find the device */
-            device.chip_addr = chip_addr_table[i];
-            /* ID match */
-            if(buf[0] == 0x55)
+            if(id == 0x55)
             {
-                LIB_TRACE("bmp180 found!\r\n");
-                /* init sequence */
+                bmp_dev.addr = bmp_addr[i];
                 dump_calibration_data();
-                return 0; 
+                return 0;     
             }
         }
     }
-    return 1; 
+    return 1;
 }
 
-
-static int write_register(uint8_t addr, uint8_t value)
-{
-    uint8_t buf[1];
-    device.subaddr = addr;
-    buf[0] = value;
-    if(device.bus->ops->write(&device, buf, 1))
-    {
-        return 1;
-    }
-    return 0;
-}
-
-static int read_register(uint8_t addr, uint8_t * value)
-{
-    uint8_t buf[1];
-    device.subaddr = addr;
-    if(device.bus->ops->read(&device, buf, 1))
-    {
-        return 1;
-    }
-    *value = buf[0];
-    return 0;
-}
 
 /*
  * @brief start bmp180 conversion
@@ -182,163 +156,163 @@ static int read_register(uint8_t addr, uint8_t * value)
  */
 int bmp180_start_conversion(uint8_t cmd)
 {
-    return write_register(BMP180_CTRL_MEAS_REG, cmd); 
+    return write_reg(BMP180_CTRL_MEAS_REG, cmd); 
 }
 
 
-/*!
- * @brief read raw temperature data
- *
- * @param pointer of the bmp180 device struct
- * @param data pointer
- */
-static int read_raw_temperature(int32_t * data)
-{
-    uint8_t buf[2];
-    device.subaddr = BMP180_ADC_OUT_MSB_REG;
-    if(device.bus->ops->read(&device, buf, sizeof(buf)))
-    {
-        return 1;
-    }
-    *data = ((((int16_t)(buf[0])) << 8) + (int16_t)(buf[1]));
-    return 0;
-}
+///*!
+// * @brief read raw temperature data
+// *
+// * @param pointer of the bmp180 device struct
+// * @param data pointer
+// */
+//static int read_raw_temperature(int32_t * data)
+//{
+//    uint8_t buf[2];
+//    device.subaddr = BMP180_ADC_OUT_MSB_REG;
+//    if(device.bus->ops->read(&device, buf, sizeof(buf)))
+//    {
+//        return 1;
+//    }
+//    *data = ((((int16_t)(buf[0])) << 8) + (int16_t)(buf[1]));
+//    return 0;
+//}
 
-/*!
- * @brief read raw perssure data
- *
- * @param pointer of the bmp180 device struct
- * @param data pointer
- * @param oversampling rate data pointer
- */
-static int read_raw_pressure(int32_t * data, uint8_t *oss)
-{
-    uint8_t buf[3];
-    uint8_t reg1;
-    /* read oss */
-    read_register(BMP180_CTRL_MEAS_REG, &reg1);
-    *oss = reg1 >> 6;
-    device.subaddr = BMP180_ADC_OUT_MSB_REG;
-    if(device.bus->ops->read(&device, buf, sizeof(buf)))
-    {
-        return 1;
-    }
-    *data = (buf[0] << 16) + (buf[1] << 8) + buf[2];
-    *data >>= (8 - (*oss));
-    return 0;
-}
+///*!
+// * @brief read raw perssure data
+// *
+// * @param pointer of the bmp180 device struct
+// * @param data pointer
+// * @param oversampling rate data pointer
+// */
+//static int read_raw_pressure(int32_t * data, uint8_t *oss)
+//{
+//    uint8_t buf[3];
+//    uint8_t reg1;
+//    /* read oss */
+//    read_register(BMP180_CTRL_MEAS_REG, &reg1);
+//    *oss = reg1 >> 6;
+//    device.subaddr = BMP180_ADC_OUT_MSB_REG;
+//    if(device.bus->ops->read(&device, buf, sizeof(buf)))
+//    {
+//        return 1;
+//    }
+//    *data = (buf[0] << 16) + (buf[1] << 8) + buf[2];
+//    *data >>= (8 - (*oss));
+//    return 0;
+//}
 
-/*!
- * @brief tell if bmp180 is in conversion
- *
- * @param pointer of the bmp180 device struct
- * @retval 1:busy 0:idle
- */
-int is_conversion_busy(void)
-{
-    uint8_t reg1;
-    read_register(BMP180_CTRL_MEAS_REG, &reg1);
-    if(reg1 & (1 << 5)) /* busy */
-    {
-        return 1;
-    }
-    return 0;
-}
+///*!
+// * @brief tell if bmp180 is in conversion
+// *
+// * @param pointer of the bmp180 device struct
+// * @retval 1:busy 0:idle
+// */
+//int is_conversion_busy(void)
+//{
+//    uint8_t reg1;
+//    read_register(BMP180_CTRL_MEAS_REG, &reg1);
+//    if(reg1 & (1 << 5)) /* busy */
+//    {
+//        return 1;
+//    }
+//    return 0;
+//}
 
-/*!
- * @brief read real temperature data
- *
- * calculate according to bmp180 data sheet
- *
- * @param pointer of the bmp180 device struct
- * @param pointer of temperature, in 10x, eg:156 = 15.6C
- */
-int bmp180_read_temperature(int32_t * temperature)
-{
-    int32_t raw_temperature;
-    int32_t x1, x2;
+///*!
+// * @brief read real temperature data
+// *
+// * calculate according to bmp180 data sheet
+// *
+// * @param pointer of the bmp180 device struct
+// * @param pointer of temperature, in 10x, eg:156 = 15.6C
+// */
+//int bmp180_read_temperature(int32_t * temperature)
+//{
+//    int32_t raw_temperature;
+//    int32_t x1, x2;
 
-    if(is_conversion_busy())
-    {
-        return 1;
-    }
-    if(read_raw_temperature(&raw_temperature))
-    {
-        return 2;
-    }
+//    if(is_conversion_busy())
+//    {
+//        return 1;
+//    }
+//    if(read_raw_temperature(&raw_temperature))
+//    {
+//        return 2;
+//    }
 
-    LIB_TRACE("raw_t = %d\n\r",raw_temperature);
-    LIB_TRACE("ac6 = %d\n\r",cal.AC6);
-    LIB_TRACE("ac5 = %d\n\r",cal.AC5);
-    LIB_TRACE("ac5/32768 = %f\n\r",((float)cal.AC5)/32768);
-    LIB_TRACE("raw_t-ac6 = %d\n\r",(raw_temperature - cal.AC6));
+//    LIB_TRACE("raw_t = %d\n\r",raw_temperature);
+//    LIB_TRACE("ac6 = %d\n\r",cal.AC6);
+//    LIB_TRACE("ac5 = %d\n\r",cal.AC5);
+//    LIB_TRACE("ac5/32768 = %f\n\r",((float)cal.AC5)/32768);
+//    LIB_TRACE("raw_t-ac6 = %d\n\r",(raw_temperature - cal.AC6));
 
-    x1 = (int32_t)((raw_temperature - cal.AC6) * (int32_t)cal.AC5) >> 15;
-    x2 = (int32_t)(cal.MC <<11) / (x1 + cal.MD);
-    cal.B5 = x1 + x2;
-    *temperature = (cal.B5 + (int32_t)8) >> 4;
+//    x1 = (int32_t)((raw_temperature - cal.AC6) * (int32_t)cal.AC5) >> 15;
+//    x2 = (int32_t)(cal.MC <<11) / (x1 + cal.MD);
+//    cal.B5 = x1 + x2;
+//    *temperature = (cal.B5 + (int32_t)8) >> 4;
 
-    return 0;
-}
+//    return 0;
+//}
 
-/*!
- * @brief read real pressure data
- *
- * calculate according to bmp180 data sheet
- *
- * @param pointer of the bmp180 device struct
- * @param pointer of pressure, in pa
- */
-int bmp180_read_pressure(int32_t * pressure)
-{
-    int32_t raw_pressure;
-    uint8_t oss;
-    if(is_conversion_busy())
-    {
-        return 1;
-    }
-    /* read raw pressure */
-    if(read_raw_pressure(&raw_pressure, &oss))
-    {
-        return 2;
-    }
-    /* temperature compensation */
-    uint32_t b4, b7;
-    int32_t x1, x2, x3, b3, b6;
-    int32_t result;
-    b6 = cal.B5 - 4000;
-        
-    x1 = (cal.B2 * (b6 * b6 >> 12)) >> 11;
-    x2 = cal.AC2 * b6 >> 11;
-    x3 = x1 + x2;
+///*!
+// * @brief read real pressure data
+// *
+// * calculate according to bmp180 data sheet
+// *
+// * @param pointer of the bmp180 device struct
+// * @param pointer of pressure, in pa
+// */
+//int bmp180_read_pressure(int32_t * pressure)
+//{
+//    int32_t raw_pressure;
+//    uint8_t oss;
+//    if(is_conversion_busy())
+//    {
+//        return 1;
+//    }
+//    /* read raw pressure */
+//    if(read_raw_pressure(&raw_pressure, &oss))
+//    {
+//        return 2;
+//    }
+//    /* temperature compensation */
+//    uint32_t b4, b7;
+//    int32_t x1, x2, x3, b3, b6;
+//    int32_t result;
+//    b6 = cal.B5 - 4000;
+//        
+//    x1 = (cal.B2 * (b6 * b6 >> 12)) >> 11;
+//    x2 = cal.AC2 * b6 >> 11;
+//    x3 = x1 + x2;
 
-    b3 = ((((int32_t)cal.AC1 * 4 + x3) << oss) + 2) >> 2;
-    x1 = cal.AC3 * b6 >> 13;
-    x2 = (cal.B1 * (b6 * b6 >> 12)) >> 16;
-    x3 = (x1 + x2 + 2) >> 2;
-    b4 = (cal.AC4 * (uint32_t)(x3 + 32768)) >> 15;
-    b7 = (uint32_t)(raw_pressure - b3) * (50000 >> oss);
+//    b3 = ((((int32_t)cal.AC1 * 4 + x3) << oss) + 2) >> 2;
+//    x1 = cal.AC3 * b6 >> 13;
+//    x2 = (cal.B1 * (b6 * b6 >> 12)) >> 16;
+//    x3 = (x1 + x2 + 2) >> 2;
+//    b4 = (cal.AC4 * (uint32_t)(x3 + 32768)) >> 15;
+//    b7 = (uint32_t)(raw_pressure - b3) * (50000 >> oss);
 
-    if (b7 < 0x80000000)
-    {
-        result = (b7 << 1) / b4;
-    }
-    else
-    {
-        result = (b7 / b4) << 1;
-    }
-    x1 = (result >> 8) * (result >> 8);
-    x1 = (x1 * 3038) >> 16;
-    x2 = (-7357 * result) >> 16;
-    result += ((x1 + x2 + 3791) >> 4);
-		
-    *pressure = result;
-    return 0;
-}
+//    if (b7 < 0x80000000)
+//    {
+//        result = (b7 << 1) / b4;
+//    }
+//    else
+//    {
+//        result = (b7 / b4) << 1;
+//    }
+//    x1 = (result >> 8) * (result >> 8);
+//    x1 = (x1 * 3038) >> 16;
+//    x2 = (-7357 * result) >> 16;
+//    result += ((x1 + x2 + 3791) >> 4);
+//		
+//    *pressure = result;
+//    return 0;
+//}
 
-int bmp180_pressure2altitude(int32_t pressure, int32_t *altitude)
-{
-	*altitude =(int32_t)(44330.0 * (1.0-pow((double)(pressure) / 101325.0, 1.0/5.255)) );
-	return 0;
-}
+//int bmp180_pressure2altitude(int32_t pressure, int32_t *altitude)
+//{
+//	*altitude =(int32_t)(44330.0 * (1.0-pow((double)(pressure) / 101325.0, 1.0/5.255)) );
+//	return 0;
+//}
 

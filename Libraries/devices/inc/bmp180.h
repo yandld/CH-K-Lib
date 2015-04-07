@@ -10,7 +10,7 @@
 #ifndef __BMP180_H__
 #define __BMP180_H__
 
-#include "i2c_abstraction.h"
+#include <stdint.h>
 
 /* BMP180 control values and cmd*/
 #define BMP180_T_MEASURE                0x2E /* temperature measurement */
@@ -21,7 +21,7 @@
 
 
 //!< API functions
-int bmp180_init(struct i2c_bus* bus);
+int bmp180_init(uint32_t instance);
 int bmp180_probe(void);
 int bmp180_read_temperature(int32_t * temperature);
 int bmp180_start_conversion(uint8_t cmd);

@@ -23,7 +23,6 @@
 
 #include "ssd.h"
 
-int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
 int g2401Avalable;
 /* 校准数据 */
 
@@ -135,32 +134,20 @@ int init_2401(void)
 int init_sensor(void)
 {
     uint32_t ret;
-    static struct i2c_bus bus;
-  
-    ret = kinetis_i2c_bus_init(&bus, BOARD_I2C_INSTANCE);
-    /* enable pinmux */
-		
-    PORT_PinMuxConfig(HW_GPIOE, 18, kPinAlt4);
-    PORT_PinMuxConfig(HW_GPIOE, 19, kPinAlt4);
-    PORT_PinOpenDrainConfig(HW_GPIOE, 18, ENABLE);
-    PORT_PinOpenDrainConfig(HW_GPIOE, 19, ENABLE);
-    PORT_PinPullConfig(HW_GPIOE, 18, kPullUp);
-    PORT_PinPullConfig(HW_GPIOE, 19, kPullUp);
+
+    I2C_QuickInit(I2C0_SCL_PE19_SDA_PE18, 100*1000);
     
-    ret = mpu6050_init(&bus);
-    ret = hmc5883_init(&bus);
-    ret = bmp180_init(&bus);
-    ret = mpu6050_probe();
+    ret = mpu6050_init(0);
     if(ret)
     {
         printf("mpu6050 failed:%d\r\n", ret);
     }
-    ret = hmc5883_probe();
+    ret = hmc5883_init(0);
     if(ret)
     {
         printf("hmc5883 failed:%d\r\n", ret);
     }
-    ret = bmp180_probe();
+    ret = bmp180_init(0);
     if(ret)
     {
         printf("bmp180 failed:%d\r\n", ret);
@@ -305,31 +292,31 @@ int main(void)
         switch(bmpStatus)
         {
             case BMP_STATUS_T_START:
-                bmp180_start_conversion(BMP180_T_MEASURE);
+             //   bmp180_start_conversion(BMP180_T_MEASURE);
                 bmpStatus = BMP_STATUS_T_WAIT;
                 break;
             case BMP_STATUS_T_WAIT:
-                if(!is_conversion_busy())
+              //  if(!is_conversion_busy())
                 {
                     bmpStatus = BMP_STATUS_T_COMPLETE;
                 }
                 break;
             case BMP_STATUS_T_COMPLETE:
-                bmp180_read_temperature(&temperature);
+       //         bmp180_read_temperature(&temperature);
                 bmpStatus = BMP_STATUS_P_START;
                 break;
             case BMP_STATUS_P_START:
-                bmp180_start_conversion(BMP180_P3_MEASURE);
+       //         bmp180_start_conversion(BMP180_P3_MEASURE);
                 bmpStatus = BMP_STATUS_P_WAIT;
                 break;
             case BMP_STATUS_P_WAIT:
-                if(!is_conversion_busy())
+            //    if(!is_conversion_busy())
                 {
                     bmpStatus = BMP_STATUS_P_COMPLETE;
                 }
                 break;
             case BMP_STATUS_P_COMPLETE:
-                bmp180_read_pressure(&pressure);
+             //   bmp180_read_pressure(&pressure);
                 bmpStatus = BMP_STATUS_T_START;
                 break;
             default:

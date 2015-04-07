@@ -52,7 +52,6 @@ static const struct at24cxx at24cxx_tab[] =
 
 int at24cxx_init(uint32_t instance)
 {
-    uint8_t err;
     uint32_t i;
     
     at24cxx_dev.instance = instance;

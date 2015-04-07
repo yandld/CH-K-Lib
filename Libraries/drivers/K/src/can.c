@@ -232,48 +232,51 @@ void CAN_SetReceiveMB(uint32_t instance, uint32_t mb, uint32_t id)
 void CAN_Init(CAN_InitTypeDef* CAN_InitStruct)
 {
     uint32_t i;
+    CAN_Type *CANx;
+    
     /* enable clock gate */
     *((uint32_t*) SIM_CANClockGateTable[CAN_InitStruct->instance].addr) |= SIM_CANClockGateTable[CAN_InitStruct->instance].mask; 
   
+    CANx = CANx;
     /* set clock source is bus clock */
-    CAN_InstanceTable[CAN_InitStruct->instance]->CTRL1 |= CAN_CTRL1_CLKSRC_MASK;
+    CANx->CTRL1 |= CAN_CTRL1_CLKSRC_MASK;
 
     /* enable module */
-    CAN_InstanceTable[CAN_InitStruct->instance]->MCR &= ~CAN_MCR_MDIS_MASK;
+    CANx->MCR &= ~CAN_MCR_MDIS_MASK;
     
     /* software reset */
-	CAN_InstanceTable[CAN_InitStruct->instance]->MCR |= CAN_MCR_SOFTRST_MASK;	
-	while(CAN_MCR_SOFTRST_MASK & (CAN_InstanceTable[CAN_InitStruct->instance]->MCR)) {}; 
+	CANx->MCR |= CAN_MCR_SOFTRST_MASK;	
+	while(CAN_MCR_SOFTRST_MASK & (CANx->MCR)) {}; 
         
     /* halt mode */
-    CAN_InstanceTable[CAN_InitStruct->instance]->MCR |= (CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
-	while(!(CAN_MCR_FRZACK_MASK & (CAN_InstanceTable[CAN_InitStruct->instance]->MCR))) {}; 
+    CANx->MCR |= (CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
+	while(!(CAN_MCR_FRZACK_MASK & (CANx->MCR))) {}; 
         
     /* init all mb */
     for(i = 0; i < CAN_MB_MAX; i++)
 	{
-		CAN_InstanceTable[CAN_InitStruct->instance]->MB[i].CS = 0x00000000;
-		CAN_InstanceTable[CAN_InitStruct->instance]->MB[i].ID = 0x00000000;
-		CAN_InstanceTable[CAN_InitStruct->instance]->MB[i].WORD0 = 0x00000000;
-		CAN_InstanceTable[CAN_InitStruct->instance]->MB[i].WORD1 = 0x00000000;
+		CANx->MB[i].CS = 0x00000000;
+		CANx->MB[i].ID = 0x00000000;
+		CANx->MB[i].WORD0 = 0x00000000;
+		CANx->MB[i].WORD1 = 0x00000000;
         /* indviual mask*/
-        CAN_InstanceTable[CAN_InitStruct->instance]->RXIMR[i] = CAN_ID_EXT(CAN_RXIMR_MI_MASK);
+        CANx->RXIMR[i] = CAN_ID_EXT(CAN_RXIMR_MI_MASK);
 	}
 	/* set all masks */
-	//CAN_InstanceTable[CAN_InitStruct->instance]->RXMGMASK = CAN_ID_EXT(CAN_RXMGMASK_MG_MASK); 
-   // CAN_InstanceTable[CAN_InitStruct->instance]->RX14MASK = CAN_ID_EXT(CAN_RX14MASK_RX14M_MASK); 
-   // CAN_InstanceTable[CAN_InitStruct->instance]->RX15MASK = CAN_ID_EXT(CAN_RX15MASK_RX15M_MASK);
+	//CANx->RXMGMASK = CAN_ID_EXT(CAN_RXMGMASK_MG_MASK); 
+   // CANx->RX14MASK = CAN_ID_EXT(CAN_RX14MASK_RX14M_MASK); 
+   // CANx->RX15MASK = CAN_ID_EXT(CAN_RX15MASK_RX15M_MASK);
     /* use indviual mask, do not use RXMGMASK, RX14MASK and RX15MASK */
-    CAN_InstanceTable[CAN_InitStruct->instance]->MCR |= CAN_MCR_IRMQ_MASK;
+    CANx->MCR |= CAN_MCR_IRMQ_MASK;
     
     /* setting baudrate */
-	CAN_SetBaudrate(CAN_InstanceTable[CAN_InitStruct->instance], CAN_InitStruct->baudrate);
-	CAN_InstanceTable[CAN_InitStruct->instance]->MCR &= ~(CAN_MCR_FRZ_MASK| CAN_MCR_HALT_MASK);
+	CAN_SetBaudrate(CANx, CAN_InitStruct->baudrate);
+	CANx->MCR &= ~(CAN_MCR_FRZ_MASK| CAN_MCR_HALT_MASK);
     
     /* enable module */
-    CAN_InstanceTable[CAN_InitStruct->instance]->MCR &= ~(CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
-	while((CAN_MCR_FRZACK_MASK & (CAN_InstanceTable[CAN_InitStruct->instance]->MCR)));
-	while(((CAN_InstanceTable[CAN_InitStruct->instance]->MCR)&CAN_MCR_NOTRDY_MASK));
+    CANx->MCR &= ~(CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
+	while((CAN_MCR_FRZACK_MASK & (CANx->MCR)));
+	while(((CANx->MCR)&CAN_MCR_NOTRDY_MASK));
 }
 
 /**
@@ -335,6 +338,10 @@ uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf
 {
     uint32_t i;
 	uint32_t word[2] = {0};
+    CAN_Type *CANx;
+    
+    CANx = CAN_InstanceTable[instance];
+    
 	if(mb >= CAN_MB_MAX || len > 8)
 	{
 		return 1;
@@ -344,7 +351,7 @@ uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf
         return 2;
     }
     /* clear IT pending bit */
-    CAN_InstanceTable[instance]->IFLAG1 |= (1 << mb);
+    CANx->IFLAG1 |= (1 << mb);
     /* setting data */
 	for(i = 0; i < len; i++)
 	{
@@ -357,29 +364,29 @@ uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf
             word[1] |= (*(buf+i)<<((7-i)*8));  
         }
 	}
-    CAN_InstanceTable[instance]->MB[mb].WORD0 = word[0];
-    CAN_InstanceTable[instance]->MB[mb].WORD1 = word[1];
+    CANx->MB[mb].WORD0 = word[0];
+    CANx->MB[mb].WORD1 = word[1];
     /* DLC field */
-    CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_DLC_MASK;
-    CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_DLC(len);
+    CANx->MB[mb].CS &= ~CAN_CS_DLC_MASK;
+    CANx->MB[mb].CS |= CAN_CS_DLC(len);
     /* clear RTR */
-    CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_RTR_MASK;
+    CANx->MB[mb].CS &= ~CAN_CS_RTR_MASK;
     /* ID and IDE */
     if(id > 0x7FF)
     {
         /* SRR must set to 1 */
-        CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_SRR_MASK;
-        CAN_InstanceTable[instance]->MB[mb].ID |= (id & (CAN_ID_STD_MASK | CAN_ID_EXT_MASK));
-        CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_IDE_MASK;
+        CANx->MB[mb].CS |= CAN_CS_SRR_MASK;
+        CANx->MB[mb].ID |= (id & (CAN_ID_STD_MASK | CAN_ID_EXT_MASK));
+        CANx->MB[mb].CS |= CAN_CS_IDE_MASK;
     }
     else
     {
-        CAN_InstanceTable[instance]->MB[mb].ID |= CAN_ID_STD(id);
-        CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_IDE_MASK;
+        CANx->MB[mb].ID |= CAN_ID_STD(id);
+        CANx->MB[mb].CS &= ~CAN_CS_IDE_MASK;
     }
     /* start transfer */
-    CAN_InstanceTable[instance]->MB[mb].CS &= ~CAN_CS_CODE_MASK;
-    CAN_InstanceTable[instance]->MB[mb].CS |= CAN_CS_CODE(kFlexCanTX_Data);
+    CANx->MB[mb].CS &= ~CAN_CS_CODE_MASK;
+    CANx->MB[mb].CS |= CAN_CS_CODE(kFlexCanTX_Data);
     return 0;
 }
 

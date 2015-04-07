@@ -25,18 +25,14 @@ CAN_Type * const CAN_InstanceTable[] = CAN_BASES;
         
 static const struct reg_ops SIM_CANClockGateTable[] =
 {
-#ifdef CAN0
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FLEXCAN0_MASK},
-#endif
 #ifdef CAN1
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FLEXCAN1_MASK},
 #endif
 }; 
 static const IRQn_Type CAN_IRQnTable[] = 
 {
-#ifdef CAN0
     CAN0_ORed_Message_buffer_IRQn,
-#endif
 #ifdef CAN1
     CAN1_ORed_Message_buffer_IRQn,
 #endif

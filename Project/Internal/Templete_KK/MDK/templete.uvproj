@@ -1026,6 +1026,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>MT47H64M16HR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\MT47H64M16HR.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -2045,6 +2055,16 @@
                 </CommonProperty>
                 <FileArmAds/>
               </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>MT47H64M16HR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\MT47H64M16HR.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3070,6 +3090,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>MT47H64M16HR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\MT47H64M16HR.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -4089,6 +4119,16 @@
                 </CommonProperty>
                 <FileArmAds/>
               </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>MT47H64M16HR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\MT47H64M16HR.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5114,6 +5154,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>MT47H64M16HR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\MT47H64M16HR.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -6133,6 +6183,16 @@
                 </CommonProperty>
                 <FileArmAds/>
               </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>devices</GroupName>
+          <Files>
+            <File>
+              <FileName>MT47H64M16HR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\MT47H64M16HR.c</FilePath>
             </File>
           </Files>
         </Group>

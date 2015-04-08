@@ -4,6 +4,10 @@
 #include "pit.h"
 #include "FlashOS.H"
 #include "nfc.h"
+#include "MT47H64M16HR.h"
+
+
+
 
 
 int main(void)
@@ -16,7 +20,16 @@ int main(void)
     UART_QuickInit(UART2_RX_PE17_TX_PE16, 115200);
     
     printf("HelloWorld\r\n");
- 
+    
+    /* DDR clock is routed from PLL1 */
+    MCG->C10 = (uint8_t)0x14;
+    MCG->C12 = (uint8_t)0x1EU;
+    MCG->C11 = (uint8_t)0x44U;
+    
+    MT47H64M16HR_Init();
+    DDR_SelfTest();
+
+    
     #ifdef NFC
     
     #define PAGE_SIZE 2048
@@ -31,21 +44,19 @@ int main(void)
     uint32_t id0, id1;
     NFC_ReadFlashID(0, &id0, &id1);
     printf("id0:0x%X 0x%X\r\n", id0, id1);
-    
-    
-    
+
     /* erase all */
     for(i=0;i<2048;i++)
     {
         NFC_BlockErase(0, i*64);
     }
     
-for(j = 0 ; j < 2048*64; j++)
-{
-    if(!(j%512))
+    for(j = 0 ; j < 2048*64; j++)
     {
-        printf("program sector:%d...", j);
-    }
+        if(!(j%512))
+        {
+            printf("program sector:%d...", j);
+        }
     
     uint32_t *p;
     

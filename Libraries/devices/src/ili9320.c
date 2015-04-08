@@ -3,7 +3,7 @@
 #include "flexbus.h"
 
 
-#define ILI9320_DEBUG		0
+#define ILI9320_DEBUG		1
 #if ( ILI9320_DEBUG == 1 )
 #define ILI9320_TRACE	printf
 #else
@@ -41,8 +41,8 @@ static uint16_t LCD_BGR2RGB(uint16_t c)
 int ili9320_read_pixel(int x, int y)
 {
     int value;
-    write_reg(0x004e,x);        
-		write_reg(0x004f,y);  
+    write_reg(0x0020, x);
+    write_reg(0x0021, y);
     WMLCDCOM(0x0022);
     value = ILI9320_DATA_ADDRESS;
     WMLCDCOM(0x0022);
@@ -93,6 +93,10 @@ void ili9320_write_pixel(int x, int y, int c)
 
 void ili9320_set_window(int x, int y, int xlen, int ylen)
 {
+   
+
+
+      
     switch(lcd_id)
     {
         case 0x9320:
@@ -141,7 +145,7 @@ void ili9320_hline(int xs, int xe, int y, int c)
             WMLCDDATA(c);
             xs++;
             }
-           // write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
+            write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
             break;
         default:
             break;   
@@ -177,7 +181,7 @@ void ili9320_vline(int ys, int ye, int x, int c)
             WMLCDDATA(c);
             ys++;
             }
-           // write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
+          // write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
             break;
         default:
             break;   
@@ -263,9 +267,9 @@ void ili9320_init(void)
     /* reset */
     gpio_instance = GPIO_QuickInit(HW_GPIOC, 19, kGPIO_Mode_OPP);
     GPIO_WriteBit(gpio_instance, 19, 0); 
-    DelayMs(1);
+    ;
     GPIO_WriteBit(gpio_instance, 19, 1);
-    DelayMs(1);
+    ;
     
     lcd_id = ili9320_get_id();
     
@@ -320,12 +324,12 @@ void ili9320_init(void)
             DelayMs(20);   
             write_reg(0x10,0x17b0);   
             write_reg(0x11,0x0004);   
-            DelayMs(1);   
+            ;   
             write_reg(0x12,0x013e);   
-            DelayMs(1);   
+            ;   
             write_reg(0x13,0x1f00);   
             write_reg(0x29,0x000f);   
-            DelayMs(1);   
+            ;   
             write_reg(0x20,0x0000);   
             write_reg(0x21,0x0000);   
          
@@ -342,45 +346,45 @@ void ili9320_init(void)
             write_reg(0x07,0x0173);            
             break;
         case 0x8989:
-            write_reg(0x0000,0x0001);DelayMs(5);
-            write_reg(0x0003,0xA8A4);DelayMs(5);
-            write_reg(0x000C,0x0000);DelayMs(5);    
-            write_reg(0x000D,0x080C);DelayMs(5);   
-            write_reg(0x000E,0x2B00);DelayMs(5);    
-            write_reg(0x001E,0x00B0);DelayMs(5);    
-            write_reg(0x0001,0x2B3F);DelayMs(5);
-            write_reg(0x0002,0x0600);DelayMs(5);
-            write_reg(0x0010,0x0000);DelayMs(5); 
-            write_reg(0x0011,0x6070);DelayMs(5);
-            write_reg(0x0005,0x0000);DelayMs(5); 
-            write_reg(0x0006,0x0000);DelayMs(5); 
-            write_reg(0x0016,0xEF1C);DelayMs(5); 
-            write_reg(0x0017,0x0003);DelayMs(5); 
-            write_reg(0x0007,0x0233);DelayMs(5);
-            write_reg(0x000B,0x0000);DelayMs(5); 
-            write_reg(0x000F,0x0000);DelayMs(5);
-            write_reg(0x0041,0x0000);DelayMs(5); 
-            write_reg(0x0042,0x0000);DelayMs(5); 
-            write_reg(0x0048,0x0000);DelayMs(5); 
-            write_reg(0x0049,0x013F);DelayMs(5); 
-            write_reg(0x004A,0x0000);DelayMs(5); 
-            write_reg(0x004B,0x0000);DelayMs(5); 
-            write_reg(0x0044,0xEF00);DelayMs(5); 
-            write_reg(0x0045,0x0000);DelayMs(5); 
-            write_reg(0x0046,0x013F);DelayMs(5); 
-            write_reg(0x0030,0x0707);DelayMs(5); 
-            write_reg(0x0031,0x0204);DelayMs(5); 
-            write_reg(0x0032,0x0204);DelayMs(5); 
-            write_reg(0x0033,0x0502);DelayMs(5); 
-            write_reg(0x0034,0x0507);DelayMs(5); 
-            write_reg(0x0035,0x0204);DelayMs(5); 
-            write_reg(0x0036,0x0204);DelayMs(5); 
-            write_reg(0x0037,0x0502);DelayMs(5); 
-            write_reg(0x003A,0x0302);DelayMs(5); 
-            write_reg(0x003B,0x0302);DelayMs(5); 
-            write_reg(0x0023,0x0000);DelayMs(5); 
-            write_reg(0x0024,0x0000);DelayMs(5); 
-            write_reg(0x0025,0x8000);DelayMs(5); 
+            write_reg(0x0000,0x0001);
+            write_reg(0x0003,0xA8A4);
+            write_reg(0x000C,0x0000);     
+            write_reg(0x000D,0x080C);    
+            write_reg(0x000E,0x2B00);     
+            write_reg(0x001E,0x00B0);     
+            write_reg(0x0001,0x2B3F);  
+            write_reg(0x0002,0x0600);  
+            write_reg(0x0010,0x0000);  
+            write_reg(0x0011,0x6070);
+            write_reg(0x0005,0x0000);  
+            write_reg(0x0006,0x0000);  
+            write_reg(0x0016,0xEF1C);  
+            write_reg(0x0017,0x0003);  
+            write_reg(0x0007,0x0233);
+            write_reg(0x000B,0x0000);  
+            write_reg(0x000F,0x0000);
+            write_reg(0x0041,0x0000);  
+            write_reg(0x0042,0x0000);  
+            write_reg(0x0048,0x0000);  
+            write_reg(0x0049,0x013F);  
+            write_reg(0x004A,0x0000);  
+            write_reg(0x004B,0x0000);  
+            write_reg(0x0044,0xEF00);  
+            write_reg(0x0045,0x0000);  
+            write_reg(0x0046,0x013F);  
+            write_reg(0x0030,0x0707);  
+            write_reg(0x0031,0x0204);  
+            write_reg(0x0032,0x0204);  
+            write_reg(0x0033,0x0502);  
+            write_reg(0x0034,0x0507);  
+            write_reg(0x0035,0x0204);  
+            write_reg(0x0036,0x0204);  
+            write_reg(0x0037,0x0502);  
+            write_reg(0x003A,0x0302);  
+            write_reg(0x003B,0x0302);  
+            write_reg(0x0023,0x0000);  
+            write_reg(0x0024,0x0000);  
+            write_reg(0x0025,0x8000);  
             write_reg(0x004f,0);
             write_reg(0x004e,0);
             break;
@@ -388,7 +392,8 @@ void ili9320_init(void)
             break;
     }
     
-    ILI9320_TRACE("ID:0x%X\r\n", ili9320_get_id());
+    //???? 
+   // ILI9320_TRACE("ID:0x%X\r\n", ili9320_get_id());
     
     ili9320_clear(BLACK);
 }

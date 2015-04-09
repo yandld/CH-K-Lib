@@ -30,7 +30,7 @@ int main(void)
     
     swd_io_init();
 
-    //ConnectInit_SWD();
+    ConnectInit_SWD();
     
     swd_read_idcode(&val);
     swd_read_idcode(&val);

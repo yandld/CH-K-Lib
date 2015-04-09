@@ -124,7 +124,7 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
                 {            
                     SW_CLOCK_CYCLE();  /* Dummy Read RDATA[0:31] + Parity */    
                 }         
-            }           
+            }
             /* Turnaround */         
             for (n = 1; n; n--) { SW_CLOCK_CYCLE();}      
             TMS_WR();  
@@ -140,15 +140,13 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
             break;
     }
     
-
-
-   
-  /* Protocol error */       
-  for (n = 1 + 32 + 1; n; n--) {         
-    SW_CLOCK_CYCLE();      /* Back off data phase */   
-  }
-  PIN_SWDIO_OUT(1);          
-  return (ack); 
+    /* Protocol error */       
+    for (n = 1 + 32 + 1; n; n--)
+    {         
+        SW_CLOCK_CYCLE();      /* Back off data phase */   
+    }
+    PIN_SWDIO_OUT(1);          
+    return (ack); 
 }
 
 

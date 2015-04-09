@@ -56,8 +56,6 @@ static inline uint32_t SW_READ_BIT(void)
     PIN_DELAY();
     return bit;
 }
-  
-
 
 static inline void swd_io_init(void)
 {

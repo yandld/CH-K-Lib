@@ -2,72 +2,74 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define TRESET_INSTANCE     (HW_GPIOB)
-#define SWD_INSTANCE        (HW_GPIOC)
-#define TCK_PIN             (5)
-#define SWD_DO_PIN          (6)
-#define TRESET_PIN          (1)
-
-#define TCK                 PCout(TCK_PIN)
-#define SWD_OUT             PCout(SWD_DO_PIN)
-#define SWD_READ            PCin(SWD_DO_PIN)
-#define TRESET_OUT          PBout(TRESET_PIN)
 
 #define PIN_DELAY()         DelayUs(1)
+#define TRESET_INSTANCE     (HW_GPIOB)
+#define SWD_INSTANCE        (HW_GPIOC)
 
-#define SWDIO_DDR_OUT()       GPIO_PinConfig(SWD_INSTANCE, SWD_DO_PIN, kOutput)
-#define SWDIO_DDR_IN()        GPIO_PinConfig(SWD_INSTANCE, SWD_DO_PIN, kInput)
+#define TCK_PIN         (5)
+#define TMS_PIN         (6)
+#define TRST_PIN        (1)
+
+#define TRST_LOW()	 		PBout(TRST_PIN) = 0
+#define TRST_HIGH()	 		PBout(TRST_PIN) = 1
+#define TCK_LOW() 			PCout(TCK_PIN) = 0
+#define TCK_HIGH()			PCout(TCK_PIN) = 1
+#define TMS_LOW() 			PCout(TMS_PIN) = 0
+#define TMS_HIGH() 			PCout(TMS_PIN) = 1
+#define TMS_INPUT()	 	    PCin(TMS_PIN)
 
 
-#define TRST_LOW()	 		PBout(1) = 0;
-
-
-
+#define TMS_WR()            PTB->PDDR |= (1 << TMS_PIN)
+#define TMS_RD()            PTB->PDDR &= ~(1 << TMS_PIN)
+#define DELAY()             DelayUs(1)
 
 static inline void PIN_SWDIO_OUT(uint32_t bit)
 {
-    SWD_OUT = bit;
+    PCout(TMS_PIN) = bit;
 }
 
 static inline void SW_CLOCK_CYCLE(void)
 {
-    TCK = 0;
+    TCK_LOW();
     PIN_DELAY();
-    TCK = 1;
+    TCK_HIGH();
     PIN_DELAY();
 }
 
 static inline void SW_WRITE_BIT(uint32_t bit)
 {
-    SWD_OUT = bit;
-    TCK = 0;
+    PCout(TMS_PIN) = bit;
+    TCK_LOW();
     PIN_DELAY();
-    TCK = 1;
+    TCK_HIGH();
     PIN_DELAY();
 }
 
 static inline uint32_t SW_READ_BIT(void)
 {
     uint32_t bit;
-    TCK = 0;
+    TCK_LOW();
     PIN_DELAY();
-    bit = SWD_READ;
-    TCK = 1;
+    bit = TMS_INPUT();
+    TCK_HIGH();
     PIN_DELAY();
     return bit;
 }
   
-static inline void treset_pin_control(uint32_t val)
-{
-    TRESET_OUT = val & 1;
-}
+
 
 static inline void swd_io_init(void)
 {
     GPIO_QuickInit(SWD_INSTANCE, TCK_PIN, kGPIO_Mode_OPP);
-    GPIO_QuickInit(SWD_INSTANCE, SWD_DO_PIN, kGPIO_Mode_OPP);
-    GPIO_QuickInit(TRESET_INSTANCE, TRESET_PIN, kGPIO_Mode_OOD);
+    GPIO_QuickInit(SWD_INSTANCE, TMS_PIN, kGPIO_Mode_OPP);
+    GPIO_QuickInit(TRESET_INSTANCE, TRST_PIN, kGPIO_Mode_OOD);
     
+    /* release trst pin */
+    TMS_WR();
+    TMS_LOW();
+    TCK_LOW();
+    TRST_HIGH();
 }
 
 

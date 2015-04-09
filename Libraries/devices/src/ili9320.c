@@ -93,10 +93,7 @@ void ili9320_write_pixel(int x, int y, int c)
 
 void ili9320_set_window(int x, int y, int xlen, int ylen)
 {
-   
 
-
-      
     switch(lcd_id)
     {
         case 0x9320:
@@ -247,7 +244,7 @@ void ili9320_init(void)
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
     FLEXBUS_InitStruct.div = 1;
     FLEXBUS_Init(&FLEXBUS_InitStruct);
-    /* ??Flexbus ???? */
+
     FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
     
     /* advanced config */
@@ -267,9 +264,9 @@ void ili9320_init(void)
     /* reset */
     gpio_instance = GPIO_QuickInit(HW_GPIOC, 19, kGPIO_Mode_OPP);
     GPIO_WriteBit(gpio_instance, 19, 0); 
-    ;
+    DelayMs(5);
     GPIO_WriteBit(gpio_instance, 19, 1);
-    ;
+    DelayMs(5);
     
     lcd_id = ili9320_get_id();
     
@@ -387,6 +384,7 @@ void ili9320_init(void)
             write_reg(0x0025,0x8000);  
             write_reg(0x004f,0);
             write_reg(0x004e,0);
+
             break;
         default:
             break;

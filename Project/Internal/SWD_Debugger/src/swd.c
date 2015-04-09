@@ -23,7 +23,7 @@ void SWJ_Sequence(uint32_t count, uint8_t *data)
 }
 
 uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
-{   
+{
     uint32_t ack;
     uint32_t bit;
     uint32_t val;
@@ -51,7 +51,7 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
     SW_WRITE_BIT(1);         /* Park Bit */ 
    
     /* Turnaround */           
-    SWDIO_DDR_IN();   
+    TMS_RD();   
     for (n = 1; n; n--)
     {     
         SW_CLOCK_CYCLE();        
@@ -65,84 +65,83 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
     bit = SW_READ_BIT();          
     ack |= bit << 2;           
    
-    if (ack == DAP_TRANSFER_OK)/* OK response */        
-    {            
-        /* Data transfer */      
-        if (request & DAP_TRANSFER_RnW)
-        {     
-            /* Read data */        
-            val = 0;  
-            parity = 0;            
-            for (n = 32; n; n--)
-            { 
-                bit = SW_READ_BIT();  /* Read RDATA[0:31] */      
-                parity += bit;       
-                val >>= 1;           
-                val  |= bit << 31;   
-            }         
-            bit = SW_READ_BIT();    /* Read Parity */           
-            if ((parity ^ bit) & 1)
-            {           
-                ack = DAP_TRANSFER_ERROR;         
-            }         
-            if (data) *data = val;
+    switch(ack)
+    {
+        case DAP_TRANSFER_OK:
+            if (request & DAP_TRANSFER_RnW) /* read data */
+            {
+                val = 0;  
+                parity = 0;            
+                for (n = 32; n; n--)
+                { 
+                    bit = SW_READ_BIT();  /* Read RDATA[0:31] */      
+                    parity += bit;       
+                    val >>= 1;           
+                    val  |= bit << 31;   
+                }         
+                bit = SW_READ_BIT();    /* Read Parity */           
+                if ((parity ^ bit) & 1)
+                {           
+                    ack = DAP_TRANSFER_ERROR;         
+                }               
+                if (data) *data = val;
             
-            /* Turnaround */       
-            for (n = 1; n; n--)
-            { 
-                SW_CLOCK_CYCLE();    
-            }         
-            SWDIO_DDR_OUT();
-        }
-        else 
-        {    
-            /* Turnaround */       
-            for (n = 1; n; n--) {    SW_CLOCK_CYCLE(); }
+                /* Turnaround */       
+                for (n = 1; n; n--)
+                { 
+                    SW_CLOCK_CYCLE();    
+                }         
+                TMS_WR();
+            }
+            else    /* write data */
+            {
+                /* Turnaround */       
+                for (n = 1; n; n--) {    SW_CLOCK_CYCLE(); }
            
-            SWDIO_DDR_OUT();
-            /* Write data */       
-            val = *data;           
-            parity = 0;            
-            for (n = 32; n; n--)
-            { 
-                SW_WRITE_BIT(val); /* Write WDATA[0:31] */     
-                parity += val;       
-                val >>= 1;           
-            }         
-            SW_WRITE_BIT(parity);/* Write Parity Bit */      
-    }           
-    /* Idle cycles */        
-    n = 0;    
-    if (n)
-    {    
-        PIN_SWDIO_OUT(0);      
-      for (; n; n--) {  SW_CLOCK_CYCLE();   }    
-    }           
-    PIN_SWDIO_OUT(1);        
-    return (ack);            
-  }
-   
-  if ((ack == DAP_TRANSFER_WAIT) || (ack == DAP_TRANSFER_FAULT)) {  
-    /* WAIT or FAULT response */          
-    if (0 && ((request & DAP_TRANSFER_RnW) != 0)) {   
-      for (n = 32+1; n; n--) {            
-        SW_CLOCK_CYCLE();  /* Dummy Read RDATA[0:31] + Parity */    
-      }         
-    }           
-    /* Turnaround */         
-    for (n = 1; n; n--) {   
-      SW_CLOCK_CYCLE();      
-    }           
-    SWDIO_DDR_OUT();  
-    if (0 && ((request & DAP_TRANSFER_RnW) == 0)) {   
-      PIN_SWDIO_OUT(0);      
-      for (n = 32+1; n; n--) {            
-        SW_CLOCK_CYCLE();  /* Dummy Write WDATA[0:31] + Parity */   
-      }         
-    }           
-    PIN_SWDIO_OUT(1);        
-    return (ack);            
-  }
+                TMS_WR();
+                /* Write data */       
+                val = *data;           
+                parity = 0;            
+                for (n = 32; n; n--)
+                { 
+                    SW_WRITE_BIT(val); /* Write WDATA[0:31] */     
+                    parity += val;       
+                    val >>= 1;           
+                }         
+                SW_WRITE_BIT(parity);/* Write Parity Bit */      
+            }
+            
+            /* Idle cycles */               
+            PIN_SWDIO_OUT(1);        
+            return (ack);   
+            break;
+        case DAP_TRANSFER_WAIT:
+        case DAP_TRANSFER_FAULT:
+            /* WAIT or FAULT response */          
+            if (0 && ((request & DAP_TRANSFER_RnW) != 0))
+            {   
+                for (n = 32+1; n; n--)
+                {            
+                    SW_CLOCK_CYCLE();  /* Dummy Read RDATA[0:31] + Parity */    
+                }         
+            }           
+            /* Turnaround */         
+            for (n = 1; n; n--) { SW_CLOCK_CYCLE();}      
+            TMS_WR();  
+            if (0 && ((request & DAP_TRANSFER_RnW) == 0))
+            {   
+                PIN_SWDIO_OUT(0);      
+                for (n = 32+1; n; n--) {    SW_CLOCK_CYCLE();  /* Dummy Write WDATA[0:31] + Parity */   };           
+            }           
+            PIN_SWDIO_OUT(1);        
+            return (ack);  
+        break;
+        default:
+            break;
+    }
+    
+
+
    
   /* Protocol error */       
   for (n = 1 + 32 + 1; n; n--) {         
@@ -392,3 +391,75 @@ uint8_t target_unlock_sequence(void) {
 
     return 1;
 }
+ 
+
+
+
+/* Manley */
+
+#define SWD_SM0		0xE79E
+#define SWD_SM1		0xEDB6
+#define JTAG_SM		0xE73C
+
+void PULSE(void)
+{
+    DELAY();
+	TCK_HIGH();
+    DELAY();
+	TCK_LOW();
+}
+
+void ENCODE_Sequence(uint16_t sequ)
+{
+	uint8_t i;
+	
+	for(i = 0; i < 16; i++)
+    {
+        ((sequ & 0x1) == 1) ? (TMS_HIGH()) : (TMS_LOW());
+		PULSE();
+	    sequ >>= 1;
+	}
+}
+
+
+
+void MoreClock(uint16_t n, uint8_t logic)
+{
+	uint8_t recnt;
+    uint16_t i;
+    
+	if (logic) 	TMS_HIGH();
+	else 		TMS_LOW();
+
+	for(i = 0; i < n; i++)
+    {
+		PULSE();
+	}
+}
+
+void StasusSwitch(uint32_t dat)
+{
+	TMS_HIGH();
+	MoreClock(56,1);
+	ENCODE_Sequence(dat);			//Other MCU must be
+}
+
+void ConnectInit_SWD()
+{
+
+    TMS_WR();
+    TMS_LOW();
+    TCK_LOW();
+    TRST_HIGH();
+		
+    DELAY();
+
+	StasusSwitch(SWD_SM0);
+	StasusSwitch(SWD_SM1);
+	
+	MoreClock(56,1);	
+	MoreClock(16,0);	
+}
+
+
+

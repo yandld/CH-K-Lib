@@ -7,6 +7,8 @@
 #define XSIZE_PHYS 240
 #define YSIZE_PHYS 320
 
+
+static int gLCDCode;
 //
 // Color conversion
 //
@@ -59,25 +61,34 @@ static void LcdWriteReg(U16 Data)
 	GUI_LCD_REG_ADDRESS = Data;
 }
 
-static void LcdWriteData(U16 Data)
+
+
+static inline void LcdWriteData(U16 Data)
 {
-  // ... TBD by user
 	GUI_LCD_DATA_ADDRESS = Data;
 }
 
 
 
-static void LcdWriteDataMultiple(U16 * pData, int NumItems) {
-  while (NumItems--) {
-		GUI_LCD_DATA_ADDRESS = *pData++;
-  }
+static inline void LcdWriteDataMultiple(U16 * pData, int NumItems)
+{
+    while (NumItems--)
+    {
+        GUI_LCD_DATA_ADDRESS = *pData++;
+    }
 }
 
-static void LcdReadDataMultiple(U16 * pData, int NumItems) {
-  *pData = GUI_LCD_DATA_ADDRESS;
-	while (NumItems--) {
-		*pData++=GUI_LCD_DATA_ADDRESS;
-  }
+static void LcdReadDataMultiple(U16 * pData, int NumItems)
+{
+    if(gLCDCode == 0x9320)
+    {
+        *pData = GUI_LCD_DATA_ADDRESS; /* dummy read */
+    }
+  
+    while (NumItems--)
+    {
+        *pData++=GUI_LCD_DATA_ADDRESS;
+    }
 }
 
 /*********************************************************************
@@ -110,7 +121,23 @@ void LCD_X_Config(void) {
     CONFIG_FLEXCOLOR Config = {0};
     GUI_PORT_API PortAPI = {0};
 
-    pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, COLOR_CONVERSION, 0, 0);
+    /* select different controller */
+    ili9320_init();
+    uint16_t lcd_id = ili9320_get_id();
+    gLCDCode = lcd_id;
+    
+    switch(lcd_id)
+    {
+       case 0x9320:
+           pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, GUICC_565, 0, 0);
+           break;
+       case 0x8989:
+           pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, GUICC_M565, 0, 0);
+           break;
+       default:
+           break;
+   }
+    
 
     LCD_SetSizeEx    (0, XSIZE_PHYS,   YSIZE_PHYS);
     LCD_SetVSizeEx   (0, VXSIZE_PHYS,  VYSIZE_PHYS);
@@ -125,14 +152,12 @@ void LCD_X_Config(void) {
     GUI_TOUCH_Calibrate(GUI_COORD_Y, 0, 319, TOUCH_AD_TOP, TOUCH_AD_BOTTOM);	
 
     #ifndef WIN32
-    PortAPI.pfWrite16_A0  = LcdWriteReg; //write REG
-    PortAPI.pfWrite16_A1  = LcdWriteData; //write DATA
-    PortAPI.pfWriteM16_A1 = LcdWriteDataMultiple; //write MUTI
-    PortAPI.pfReadM16_A1  = LcdReadDataMultiple;  //READ muti
+    PortAPI.pfWrite16_A0  = LcdWriteReg;
+    PortAPI.pfWrite16_A1  = LcdWriteData;
+    PortAPI.pfWriteM16_A1 = LcdWriteDataMultiple;
+
+    PortAPI.pfReadM16_A1  = LcdReadDataMultiple;
     
-    /* select different controller */
-    ili9320_init();
-    uint16_t lcd_id = ili9320_get_id();
     switch(lcd_id)
     {
        case 0x9320:

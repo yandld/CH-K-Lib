@@ -30,14 +30,16 @@ int main(void)
     
     swd_io_init();
 
-   // swd_init_debug();
+    //ConnectInit_SWD();
     
-  //  swd_read_idcode(&val);
-  //  printf("DP_IDR:0x%X\r\n", val);
-    PBout(1) = 0;
+    swd_read_idcode(&val);
+    swd_read_idcode(&val);
+    swd_read_idcode(&val);
+    swd_read_idcode(&val);
+    printf("DP_IDR:0x%X\r\n", val);
     while(1)
     {
-     //   printf("loop\r\n");
+        printf("loop\r\n");
         GPIO_ToggleBit(HW_GPIOC, 10);
         DelayMs(500);
     }

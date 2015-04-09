@@ -56,6 +56,7 @@ void GUI_X_Config(void)
     GUITASK_SetMaxTask(5);
     GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);
     GUI_SetDefaultFont(GUI_FONT_6X8);
+
 }
 
 /*************************** End of file ****************************/

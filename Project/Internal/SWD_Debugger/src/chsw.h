@@ -2,6 +2,7 @@
 #define __CHSW_H__
 
 #include <stdint.h>
+#include "sw_config.h"
 #include "debug_cm.h"
 
 // DAP Transfer Response

@@ -51,7 +51,7 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
     SW_WRITE_BIT(1);         /* Park Bit */ 
    
     /* Turnaround */           
-    PIN_SWDIO_OUT_DISABLE();   
+    SWDIO_DDR_IN();   
     for (n = 1; n; n--)
     {     
         SW_CLOCK_CYCLE();        
@@ -92,14 +92,14 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
             { 
                 SW_CLOCK_CYCLE();    
             }         
-            PIN_SWDIO_OUT_ENABLE();
+            SWDIO_DDR_OUT();
         }
         else 
         {    
             /* Turnaround */       
             for (n = 1; n; n--) {    SW_CLOCK_CYCLE(); }
            
-            PIN_SWDIO_OUT_ENABLE();
+            SWDIO_DDR_OUT();
             /* Write data */       
             val = *data;           
             parity = 0;            
@@ -133,7 +133,7 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
     for (n = 1; n; n--) {   
       SW_CLOCK_CYCLE();      
     }           
-    PIN_SWDIO_OUT_ENABLE();  
+    SWDIO_DDR_OUT();  
     if (0 && ((request & DAP_TRANSFER_RnW) == 0)) {   
       PIN_SWDIO_OUT(0);      
       for (n = 32+1; n; n--) {            

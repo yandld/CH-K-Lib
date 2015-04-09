@@ -443,24 +443,14 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_user_msc.c</FileName>
+              <FileName>chsw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\usbd_user_msc.c</FilePath>
+              <FilePath>..\src\chsw.c</FilePath>
             </File>
             <File>
-              <FileName>usb_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\usb_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_lib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\USBStack\inc\usb_lib.c</FilePath>
-            </File>
-            <File>
-              <FileName>DiskImg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\DiskImg.c</FilePath>
+              <FileName>sw_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sw_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -486,11 +476,6 @@
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
-            </File>
-            <File>
-              <FileName>iflash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\iflash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1020,24 +1005,14 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_user_msc.c</FileName>
+              <FileName>chsw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\usbd_user_msc.c</FilePath>
+              <FilePath>..\src\chsw.c</FilePath>
             </File>
             <File>
-              <FileName>usb_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\usb_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_lib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\USBStack\inc\usb_lib.c</FilePath>
-            </File>
-            <File>
-              <FileName>DiskImg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\DiskImg.c</FilePath>
+              <FileName>sw_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sw_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1063,11 +1038,6 @@
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
-            </File>
-            <File>
-              <FileName>iflash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\iflash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1106,8 +1076,6 @@
         <TargetCommonOption>
           <Device>MK20DN128xxx5</Device>
           <Vendor>Freescale</Vendor>
-          <PackID>Keil.Kinetis_K20_DFP.1.2.0</PackID>
-          <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x00000000,0x20000) IRAM(0x20000000,0x2000) IRAM2(0x1FFFE000,0x2000) CPUTYPE("Cortex-M4") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -1597,24 +1565,14 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_user_msc.c</FileName>
+              <FileName>chsw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\usbd_user_msc.c</FilePath>
+              <FilePath>..\src\chsw.c</FilePath>
             </File>
             <File>
-              <FileName>usb_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\usb_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_lib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\USBStack\inc\usb_lib.c</FilePath>
-            </File>
-            <File>
-              <FileName>DiskImg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\DiskImg.c</FilePath>
+              <FileName>sw_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sw_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1641,15 +1599,70 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
             </File>
-            <File>
-              <FileName>iflash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\iflash.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>usb</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>0</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>2</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <useXO>2</useXO>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
           <Files>
             <File>
               <FileName>usbd_core.c</FileName>

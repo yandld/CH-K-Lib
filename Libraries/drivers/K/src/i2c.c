@@ -307,7 +307,7 @@ int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, u
         err += I2C_WaitAck();
         
         *pData = I2C_GetByte();
-        err += I2C_WaitAck();
+       // err += I2C_WaitAck();
         
         I2C_NAck();
         I2C_Stop();

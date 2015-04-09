@@ -1,54 +1,14 @@
-/*********************************************************************
-*                SEGGER Microcontroller GmbH & Co. KG                *
-*        Solutions for real time microcontroller applications        *
-**********************************************************************
-*                                                                    *
-*        (c) 1996 - 2013  SEGGER Microcontroller GmbH & Co. KG       *
-*                                                                    *
-*        Internet: www.segger.com    Support:  support@segger.com    *
-*                                                                    *
-**********************************************************************
-
-
-** emWin V5.22 - Graphical user interface for embedded applications **
-All  Intellectual Property rights  in the Software belongs to  SEGGER.
-emWin is protected by  international copyright laws.  Knowledge of the
-source code may not be used to write a similar product.  This file may
-only be used in accordance with the following terms:
-
-The software has been licensed to  ARM LIMITED whose registered office
-is situated at  110 Fulbourn Road,  Cambridge CB1 9NJ,  England solely
-for  the  purposes  of  creating  libraries  for  ARM7, ARM9, Cortex-M
-series,  and   Cortex-R4   processor-based  devices,  sublicensed  and
-distributed as part of the  MDK-ARM  Professional  under the terms and
-conditions  of  the   End  User  License  supplied  with  the  MDK-ARM
-Professional. 
-Full source code is available at: www.segger.com
-
-We appreciate your understanding and fairness.
-----------------------------------------------------------------------
-File        : LCDConf.c
-Purpose     : Display controller configuration (single layer)
----------------------------END-OF-HEADER------------------------------
-*/
 
 #include "GUI.h"
 #include "GUIDRV_FlexColor.h"
 #include "ili9320.h"
 
-/*********************************************************************
-*
-*       Layer configuration (to be modified)
-*
-**********************************************************************
-*/
 
-//
-// Physical display size
-//
 #define XSIZE_PHYS 240
 #define YSIZE_PHYS 320
 
+
+static int gLCDCode;
 //
 // Color conversion
 //
@@ -95,30 +55,40 @@ Purpose     : Display controller configuration (single layer)
 #define GUI_LCD_ADDRESS_BASE        0x70000000
 #define GUI_LCD_REG_ADDRESS         *(unsigned short *)0x70000000
 #define GUI_LCD_DATA_ADDRESS        *(unsigned short *)0x78000000
+
 static void LcdWriteReg(U16 Data)
 {
 	GUI_LCD_REG_ADDRESS = Data;
 }
 
-static void LcdWriteData(U16 Data)
+
+
+static inline void LcdWriteData(U16 Data)
 {
-  // ... TBD by user
 	GUI_LCD_DATA_ADDRESS = Data;
 }
 
 
 
-static void LcdWriteDataMultiple(U16 * pData, int NumItems) {
-  while (NumItems--) {
-		GUI_LCD_DATA_ADDRESS = *pData++;
-  }
+static inline void LcdWriteDataMultiple(U16 * pData, int NumItems)
+{
+    while (NumItems--)
+    {
+        GUI_LCD_DATA_ADDRESS = *pData++;
+    }
 }
 
-static void LcdReadDataMultiple(U16 * pData, int NumItems) {
-  *pData = GUI_LCD_DATA_ADDRESS;
-	while (NumItems--) {
-		*pData++=GUI_LCD_DATA_ADDRESS;
-  }
+static void LcdReadDataMultiple(U16 * pData, int NumItems)
+{
+    if(gLCDCode == 0x9320)
+    {
+        *pData = GUI_LCD_DATA_ADDRESS; /* dummy read */
+    }
+  
+    while (NumItems--)
+    {
+        *pData++=GUI_LCD_DATA_ADDRESS;
+    }
 }
 
 /*********************************************************************
@@ -145,19 +115,33 @@ static void LcdReadDataMultiple(U16 * pData, int NumItems) {
 
 
 void LCD_X_Config(void) {
+    
+   // uint16_t lcd_id = ili9320_get_id();
     GUI_DEVICE * pDevice;
     CONFIG_FLEXCOLOR Config = {0};
     GUI_PORT_API PortAPI = {0};
-    //
-    // Set display driver and color conversion
-    //
-    pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, COLOR_CONVERSION, 0, 0);
-    //
-    // Display driver configuration, required for Lin-driver
-    //
+
+    /* select different controller */
+    ili9320_init();
+    uint16_t lcd_id = ili9320_get_id();
+    gLCDCode = lcd_id;
+    
+    switch(lcd_id)
+    {
+       case 0x9320:
+           pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, GUICC_565, 0, 0);
+           break;
+       case 0x8989:
+           pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, GUICC_M565, 0, 0);
+           break;
+       default:
+           break;
+   }
+    
 
     LCD_SetSizeEx    (0, XSIZE_PHYS,   YSIZE_PHYS);
     LCD_SetVSizeEx   (0, VXSIZE_PHYS,  VYSIZE_PHYS);
+    
     /* Horzital display */
     Config.Orientation   =  0;
     GUIDRV_FlexColor_Config(pDevice, &Config);
@@ -166,16 +150,27 @@ void LCD_X_Config(void) {
     GUI_TOUCH_SetOrientation(Orientation);
     GUI_TOUCH_Calibrate(GUI_COORD_X, 0, 239, TOUCH_AD_LEFT, TOUCH_AD_RIGHT);
     GUI_TOUCH_Calibrate(GUI_COORD_Y, 0, 319, TOUCH_AD_TOP, TOUCH_AD_BOTTOM);	
-    //
-    // Set controller and operation mode
-    //
+
     #ifndef WIN32
-    PortAPI.pfWrite16_A0  = LcdWriteReg; //write REG
-    PortAPI.pfWrite16_A1  = LcdWriteData; //write DATA
-    PortAPI.pfWriteM16_A1 = LcdWriteDataMultiple; //write MUTI
-    PortAPI.pfReadM16_A1  = LcdReadDataMultiple;  //READ muti
-    GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66708, GUIDRV_FLEXCOLOR_M16C0B16);
+    PortAPI.pfWrite16_A0  = LcdWriteReg;
+    PortAPI.pfWrite16_A1  = LcdWriteData;
+    PortAPI.pfWriteM16_A1 = LcdWriteDataMultiple;
+
+    PortAPI.pfReadM16_A1  = LcdReadDataMultiple;
+    
+    switch(lcd_id)
+    {
+       case 0x9320:
+            GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66708, GUIDRV_FLEXCOLOR_M16C0B16);
+           break;
+       case 0x8989:
+            GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66702, GUIDRV_FLEXCOLOR_M16C0B16);
+           break;
+       default:
+           break;
+   }
     #endif
+    
 }
 
 /*********************************************************************
@@ -217,7 +212,7 @@ int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData) {
     //
     // ...
     #ifndef WIN32
-    
+    ili9320_init();
     #endif
     return 0;
   }

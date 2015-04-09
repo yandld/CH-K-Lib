@@ -2,7 +2,7 @@
 #include "common.h"
 #include "uart.h"
 #include "i2c.h"
-
+#include "CHZT02.h"
 
 /* i2c bus scan */
 static void I2C_Scan(uint32_t instance)
@@ -26,7 +26,7 @@ int main(void)
 
     DelayInit();    
     GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);    
-    UART_QuickInit(UART0_RX_PA01_TX_PA02, 100000);
+    UART_QuickInit(UART0_RX_PA01_TX_PA02, 9600);
     
     printf("HelloWorld\r\n");
     CLOCK_GetClockFrequency(kCoreClock, &clock);
@@ -34,10 +34,8 @@ int main(void)
     CLOCK_GetClockFrequency(kBusClock, &clock);
     printf("kBusClock:%dHz\r\n", clock);
 
-    /* init i2c */
-//    instance = I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
-//    I2C_Scan(instance);
-    
+	CHZT02_Init();
+
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOC, 3);

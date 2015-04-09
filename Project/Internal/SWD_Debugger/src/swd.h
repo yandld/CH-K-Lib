@@ -1,5 +1,5 @@
-#ifndef __CHSW_H__
-#define __CHSW_H__
+#ifndef __SWD_H__
+#define __SWD_H__
 
 #include <stdint.h>
 #include "sw_config.h"

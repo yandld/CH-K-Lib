@@ -443,14 +443,14 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>chsw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\chsw.c</FilePath>
-            </File>
-            <File>
               <FileName>sw_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\sw_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>swd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\swd.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1005,14 +1005,14 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>chsw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\chsw.c</FilePath>
-            </File>
-            <File>
               <FileName>sw_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\sw_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>swd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\swd.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1565,14 +1565,14 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>chsw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\chsw.c</FilePath>
-            </File>
-            <File>
               <FileName>sw_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\sw_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>swd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\swd.c</FilePath>
             </File>
           </Files>
         </Group>

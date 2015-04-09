@@ -16,16 +16,14 @@ rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
 
 void init_thread_entry(void* parameter)
 {
-    SRAM_Init();
-    rt_system_heap_init((void*)SRAM_ADDRESS_BASE, (void*)(SRAM_ADDRESS_BASE+SRAM_SIZE));
+    //SRAM_Init();
+    rt_system_heap_init((void*)0x1FFF0000, (void*)(0x1FFF0000 + 0x10000));
     
-    //finsh_system_init();
+    
     struct rt_spi_device *spi_device;
     rt_thread_t tid;
-    rt_err_t r;
-    int i;
-    rt_uint8_t time_out;
    
+    
     rt_hw_spi_bus_init(HW_SPI2, "spi2");
 
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
@@ -49,11 +47,13 @@ void init_thread_entry(void* parameter)
         PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); //SPI2_PCS0
         rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", &spi_cs_0);
     }
+    
     touch_ads7843_init("ads7843", "spi20");
     
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
-  
+
+    extern int cmd_gui_start(int argc, char** argv);
     cmd_gui_start(0, RT_NULL);
     
     tid = rt_thread_self();

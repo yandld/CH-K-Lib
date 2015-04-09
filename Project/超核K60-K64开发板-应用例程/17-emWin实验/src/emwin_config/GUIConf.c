@@ -35,7 +35,7 @@ Purpose     : Display controller initialization
 #include <rtthread.h>
 #include "sram.h"
 
-#define GUI_NUMBYTES  (1024*256)
+#define GUI_NUMBYTES  (1024*32)
 #define GUI_BLOCKSIZE 4
 
 static void GUI_Log(const char *s)
@@ -45,7 +45,7 @@ static void GUI_Log(const char *s)
 
 void GUI_X_Config(void)
 {
-      U32 * aMemory = (U32*)rt_malloc(GUI_NUMBYTES);
+    U32 * aMemory = (U32*)rt_malloc(GUI_NUMBYTES);
     if(aMemory == RT_NULL)
     {
         rt_kprintf("not enough mem for GUI!\r\n");

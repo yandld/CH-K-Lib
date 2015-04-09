@@ -3,7 +3,7 @@
 #include "uart.h"
 #include "cpuidy.h"
 
-#include "chsw.h"
+#include "swd.h"
 #include "rl_usb.h"
 #include "FlashOS.h"
 #include "iflash.h"
@@ -30,11 +30,11 @@ int main(void)
     
     swd_io_init();
 
-    swd_init_debug();
+   // swd_init_debug();
     
-    swd_read_idcode(&val);
-    printf("DP_IDR:0x%X\r\n", val);
-    
+  //  swd_read_idcode(&val);
+  //  printf("DP_IDR:0x%X\r\n", val);
+    PBout(1) = 0;
     while(1)
     {
      //   printf("loop\r\n");

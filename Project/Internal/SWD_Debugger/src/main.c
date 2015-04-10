@@ -10,6 +10,22 @@
 
 #include <stdio.h>
 
+#define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Base Address  */
+#define ITM_BASE            (0xE0000000UL)                            /*!< ITM Base Address                   */
+#define DWT_BASE            (0xE0001000UL)                            /*!< DWT Base Address                   */
+#define TPI_BASE            (0xE0040000UL)                            /*!< TPI Base Address                   */
+#define CoreDebug_BASE      (0xE000EDF0UL)                            /*!< Core Debug Base Address            */
+#define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address               */
+#define NVIC_BASE           (SCS_BASE +  0x0100UL)                    /*!< NVIC Base Address                  */
+#define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Base Address  */
+#define DBG_Addr     (0xe000edf0)
+// Core Debug Register Addresses
+#define DBG_HCSR       (DBG_Addr + DBG_HCSR_OFS)
+#define DBG_CRSR       (DBG_Addr + DBG_CRSR_OFS)
+#define DBG_CRDR       (DBG_Addr + DBG_CRDR_OFS)
+#define DBG_EMCR       (DBG_Addr + DBG_EMCR_OFS)
+
+
 int main(void)
 {   
     DelayInit();
@@ -21,43 +37,48 @@ int main(void)
     UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);
     #endif
     
-
     printf("program for Manley\r\n");
     printf("this program manly display 3 features:\r\n");
 
-
-    uint32_t val;
+    uint32_t val,err, DP_ID;
     
     swd_io_init();
 
-    ConnectInit_SWD();
+    TRST_LOW();
+    DelayMs(20);
+    //TRST_HIGH();
+//    
+//    
+    SWJ_InitDebug();
+  //  swd_init_debug();
     
-    swd_read_idcode(&val);
-    swd_read_idcode(&val);
-    swd_read_idcode(&val);
-    swd_read_idcode(&val);
-    printf("DP_IDR:0x%X\r\n", val);
+    SWJ_ReadDP(DP_IDCODE, &DP_ID);
+    printf("DP-IDR:0x%X\r\n", DP_ID);
+
+    SWJ_ReadAP(MDM_IDR, &DP_ID);
+    printf("AHB_AP_IDR:0x%X\r\n", DP_ID);
+    
+    SWJ_ReadAP(0x000000FC, &DP_ID);
+    printf("APB_AP_IDR:0x%X\r\n", DP_ID);
+    
+    val = 0;
+    
+    SWJ_Read32((uint32_t)SIM_BASE, &val);
+    printf("mem:0x%X\r\n", val);
+
+    SWJ_Read32(SCB_BASE, &val);
+    printf("mem:0x%X\r\n", val);
+     
+    err += SWJ_WriteAP(0x01000004, 0x0000004);
+    err += SWJ_ReadAP(0x01000004, &DP_ID);
+    printf("MDM_IDR:0x%X %d\r\n", DP_ID, err);
+    
     while(1)
     {
-        printf("loop\r\n");
         GPIO_ToggleBit(HW_GPIOC, 10);
         DelayMs(500);
     }
     
-    
-
-//    
-//
-//
-//    int res;
-//    
-//    swd_read_ap(MDM_IDR, &val);
-//    printf("val:0x%X\r\n", val);
-//   // res = swd_write_ap(MDM_CTRL, 0x55);
-//  //  printf("res:%d\r\n", res);
-//    swd_read_ap(MDM_CTRL, &val);
-//    printf("val:0x%X\r\n", val);
-//    
 }
 
 

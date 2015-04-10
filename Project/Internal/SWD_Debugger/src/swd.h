@@ -62,19 +62,18 @@
 #define NULL    0
 #endif
 
-void CHSW_IOInit(void);
-void SW_CLOCK_CYCLE(void);
-void SW_WRITE_BIT(uint32_t bit);
-uint32_t SW_READ_BIT(void);
-void PIN_SWDIO_OUT(uint32_t bit);
-void PIN_SWDIO_OUT_DISABLE(void);
-void PIN_SWDIO_OUT_ENABLE(void);
+
 
 
 
 //!< API
+uint8_t SWJ_ReadDP(uint8_t adr, uint32_t *val);
+uint8_t SWJ_WriteDP(uint8_t adr, uint32_t val);
+uint8_t SWJ_ReadAP(uint32_t adr, uint32_t *val);
+uint8_t SWJ_WriteAP(uint32_t adr, uint32_t val);
+uint8_t SWJ_InitDebug(void);
+uint8_t SWJ_Read32(uint32_t addr, uint32_t *val);
 
-uint8_t JTAG2SWD(void);
 
 
 

@@ -1,6 +1,5 @@
 #include "swd.h"
 
-
 void SWJ_Sequence(uint32_t count, uint8_t *data)
 {
     uint32_t val;
@@ -114,7 +113,6 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
             /* Idle cycles */               
             PIN_SWDIO_OUT(1);        
             return (ack);   
-            break;
         case DAP_TRANSFER_WAIT:
         case DAP_TRANSFER_FAULT:
             /* WAIT or FAULT response */          
@@ -135,7 +133,6 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
             }           
             PIN_SWDIO_OUT(1);        
             return (ack);  
-        break;
         default:
             break;
     }
@@ -150,139 +147,349 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
 }
 
 
-uint8_t swd_read_dp(uint8_t adr, uint32_t *val)
+
+
+//uint8_t target_unlock_sequence(void) {
+//    uint32_t val;
+
+//    // read the device ID
+//    if (!swd_read_ap(MDM_IDR, &val)) {
+//        return 0;
+//    }
+//    // verify the result
+//    if (val != MCU_ID) {
+//        return 0;
+//    }
+
+//    if (!swd_read_ap(MDM_STATUS, &val)) {
+//        return 0;
+//    }
+
+//    // flash in secured mode
+//    if (val & (1 << 2)) {
+//        // hold the device in reset
+//    //    target_set_state(RESET_HOLD);
+//        // write the mass-erase enable bit
+//        if (!swd_write_ap(MDM_CTRL, 1)) {
+//            return 0;
+//        }
+//        while (1) {
+//            // wait until mass erase is started
+//            if (!swd_read_ap(MDM_STATUS, &val)) {
+//                return 0;
+//            }
+
+//            if (val & 1) {
+//                break;
+//            }
+//        }
+//        // mass erase in progress
+//        while (1) {            
+//            // keep reading until procedure is complete
+//            if (!swd_read_ap(MDM_CTRL, &val)) {
+//                return 0;
+//            }
+
+//            if (val == 0) {
+//                break;
+//            }
+//        }
+//    }
+
+//    return 1;
+//}
+
+// uint8_t swd_init_debug(void) {
+//    uint32_t tmp = 0;
+
+//    // call a target dependant function
+//    // this function can do several stuff before really
+//    // initing the debug
+//   // target_before_init_debug();
+
+//    if (!JTAG2SWD()) {
+//        return 0;
+//    }
+
+//    if (!swd_write_dp(DP_ABORT, STKCMPCLR | STKERRCLR | WDERRCLR | ORUNERRCLR)) {
+//        return 0;
+//    }
+
+//    // Ensure CTRL/STAT register selected in DPBANKSEL
+//    if (!swd_write_dp(DP_SELECT, 0)) {
+//        return 0;
+//    }
+
+//    // Power up
+//    if (!swd_write_dp(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ)) {
+//        return 0;
+//    }
+
+//    do {
+//        if (!swd_read_dp(DP_CTRL_STAT, &tmp)) {
+//            return 0;
+//        }
+//    } while ((tmp & (CDBGPWRUPACK | CSYSPWRUPACK)) != (CDBGPWRUPACK | CSYSPWRUPACK));
+
+//    if (!swd_write_dp(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ | TRNNORMAL | MASKLANE)) {
+//        return 0;
+//    }
+
+//    // call a target dependant function:
+//    // some target can enter in a lock state
+//    // this function can unlock these targets
+//    target_unlock_sequence();
+
+//    if (!swd_write_dp(DP_SELECT, 0)) {
+//        return 0;
+//    }
+
+//    return 1;
+//}
+// 
+
+
+
+
+/********************************************************************************************/
+
+#define PULSE()             \
+        DELAY();            \
+        TCK_HIGH();         \
+        DELAY();            \
+        TCK_LOW();          \
+
+
+
+static void SWJ_SendClock(uint32_t count, uint8_t swdio_logic)
+{
+    (swdio_logic)?(TMS_HIGH()):(TMS_LOW());
+
+    while(count--)
+    {
+        PULSE();
+    }
+}
+
+
+static void SWJ_SendData(uint16_t data)
+{
+    uint8_t i;
+    
+    for(i = 0; i < 16; i++)
+    {
+        ((data & 0x1) == 1) ? (TMS_HIGH()) : (TMS_LOW());
+		PULSE();
+	    data>>=1;
+    }
+}
+
+static uint8_t SWJ_JTAG2SWD(void)
+{
+    SWJ_SendClock(51, 1);
+    SWJ_SendData(0xE79E);
+    SWJ_SendClock(51, 1);
+    SWJ_SendClock(3, 0);
+    return 0;
+}
+
+uint8_t SWJ_ReadDP(uint8_t adr, uint32_t *val)
 {
     uint32_t tmp_in;
-    uint8_t tmp_out[4];
     uint8_t ack;
+    uint8_t err;
 
+    //SWJ_SendClock(8, 0);
+    
     tmp_in = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(adr);
-    ack = SWD_Transfer(tmp_in, (uint32_t *)tmp_out);
+    ack = SWD_Transfer(tmp_in, val);
 
-    *val = (tmp_out[3] << 24) | (tmp_out[2] << 16) | (tmp_out[1] << 8) | tmp_out[0];
-
-    return (ack == 0x01);
+    (ack == DAP_TRANSFER_OK)?(err = 0):(err = 1);
+    return err;
 }
 
-
- uint8_t swd_read_idcode(uint32_t *id)
-{
-    uint8_t tmp_in[1];
-    uint8_t tmp_out[4];
-
-    tmp_in[0] = 0x00;
-
-    SWJ_Sequence(8, tmp_in);
-
-    if (swd_read_dp(0, (uint32_t *)tmp_out) != 0x01) {
-        return 0;
-    }
-
-    *id = (tmp_out[3] << 24) | (tmp_out[2] << 16) | (tmp_out[1] << 8) | tmp_out[0];
-
-    return 1;
-}
-
-static uint8_t swd_reset(void)
-{
-    uint8_t tmp_in[8];
-    uint8_t i = 0;
-    for (i = 0; i < 8; i++)
-    {
-        tmp_in[i] = 0xff;
-    }
-
-    SWJ_Sequence(51, tmp_in);
-
-    return 1;
-}
-
-static uint8_t swd_switch(uint16_t val)
-{
-    uint8_t tmp_in[2];
-
-    tmp_in[0] = val & 0xff;
-    tmp_in[1] = (val >> 8) & 0xff;
-
-    SWJ_Sequence(16, tmp_in);
-
-    return 1;
-}
-
-
-uint8_t JTAG2SWD(void)
-{
-    uint32_t tmp = 0;
-
-    if (!swd_reset()) {
-        return 0;
-    }
-
-    if (!swd_switch(0xE79E)) {
-        return 0;
-    }
-
-    if (!swd_reset()) {
-        return 0;
-    }
-
-    if (!swd_read_idcode(&tmp)) {
-        return 0;
-    }
-    return 1;
-}
-
-
-
-uint8_t swd_write_dp(uint8_t adr, uint32_t val)
+uint8_t SWJ_WriteDP(uint8_t adr, uint32_t val)
 {
     uint32_t req;
-    uint8_t data[4];
     uint8_t ack;
-
+    uint8_t err;
+    
     req = SWD_REG_DP | SWD_REG_W | SWD_REG_ADR(adr);
     ack = SWD_Transfer(req, &val);
 
-    return (ack == 0x01);
+    (ack == DAP_TRANSFER_OK)?(err = 0):(err = 1);
+    return err;
 }
 
+/* Read access port register. */
+uint8_t SWJ_ReadAP(uint32_t adr, uint32_t *val)
+{
+    uint8_t tmp_in, ack, err;
 
-uint8_t swd_read_ap(uint32_t adr, uint32_t *val) {
-    uint8_t tmp_in, ack;
-    uint8_t tmp_out[4];
-
-    uint32_t apsel = adr & 0xff000000;
+    uint32_t apsel = adr & APSEL;
     uint32_t bank_sel = adr & APBANKSEL;
 
-    if (!swd_write_dp(DP_SELECT, apsel | bank_sel)) {
-        return 0;
+    if(SWJ_WriteDP(DP_SELECT, apsel | bank_sel))
+    {
+        return 1;
     }
 
     tmp_in = SWD_REG_AP | SWD_REG_R | SWD_REG_ADR(adr);
 
-    // first dummy read
-    SWD_Transfer(tmp_in, (uint32_t *)tmp_out);
-    ack = SWD_Transfer(tmp_in, (uint32_t *)tmp_out);
+    /* first dummy read */
+    ack = SWD_Transfer(tmp_in, val);
+    ack = SWD_Transfer(tmp_in, val);
+
+    (ack == DAP_TRANSFER_OK)?(err = 0):(err = 1);
+    return err;
+}
+
+
+uint8_t SWJ_WriteAP(uint32_t adr, uint32_t val)
+{
+    uint8_t req, ack, err;
+    
+    uint32_t apsel = adr & APSEL;
+    uint32_t bank_sel = adr & APBANKSEL;
+
+    /* write DP select */
+    if(SWJ_WriteDP(DP_SELECT, apsel | bank_sel))
+    {
+        return 1;
+    }
+
+    /* write AP data */
+    req = SWD_REG_AP | SWD_REG_W | SWD_REG_ADR(adr);
+    ack = SWD_Transfer(req, &val);
+
+    /* read DP buff */
+    req = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(DP_RDBUFF);
+    ack = SWD_Transfer(req, NULL);
+
+    (ack == DAP_TRANSFER_OK)?(err = 0):(err = 1);
+    return err;
+}
+
+/* Read 32-bit word from target memory. */
+// AP CSW register, base value
+#define CSW_VALUE (CSW_RESERVED | CSW_MSTRDBG | CSW_HPROT | CSW_DBGSTAT | CSW_SADDRINC)
+
+
+// Write target memory.
+static uint8_t swd_write_data(uint32_t address, uint32_t data) {
+
+    uint32_t dummy;
+    uint8_t req, ack;
+
+    // put addr in TAR register
+    req = SWD_REG_AP | SWD_REG_W | (1 << 2);
+    ack = SWD_Transfer(req, &address);
+
+    // write data
+    req = SWD_REG_AP | SWD_REG_W | (3 << 2);
+    ack = SWD_Transfer(req, &data);
+
+    /* read DP buff */
+    req = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(DP_RDBUFF);
+    ack = SWD_Transfer(req, NULL);
+
+//    return (ack == 0x01) ? 1 : 0;
+}
+
+uint8_t SWJ_Write32(uint32_t addr, uint32_t val)
+{
+    
+    SWJ_WriteAP(AP_CSW, CSW_VALUE | CSW_SIZE32);
+
+    swd_write_data(addr, val);
+
+    return 1;
+}
+
+static void int2array(uint8_t * res, uint32_t data, uint8_t len) {
+    uint8_t i = 0;
+    for (i = 0; i < len; i++) {
+        res[i] = (data >> 8*i) & 0xff;
+    }
+}
+
+// Read target memory.
+static uint8_t swd_read_data(uint32_t addr, uint32_t *val) {
+    uint8_t tmp_in[4];
+    uint8_t tmp_out[4];
+    uint8_t req, ack;
+
+    // put addr in TAR register
+    int2array(tmp_in, addr, 4);
+    req = SWD_REG_AP | SWD_REG_W | (1 << 2);
+    if (SWD_Transfer(req, (uint32_t *)tmp_in) != 0x01) {
+        return 0;
+    }
+
+    // read data
+    req = SWD_REG_AP | SWD_REG_R | (3 << 2);
+    if (SWD_Transfer(req, (uint32_t *)tmp_out) != 0x01) {
+        return 0;
+    }
+
+    // dummy read
+    req = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(DP_RDBUFF);
+    ack = SWD_Transfer(req, (uint32_t *)tmp_out);
 
     *val = (tmp_out[3] << 24) | (tmp_out[2] << 16) | (tmp_out[1] << 8) | tmp_out[0];
 
     return (ack == 0x01);
 }
 
-uint8_t swd_write_ap(uint32_t adr, uint32_t val)
+// Read target memory.
+static uint8_t SWJ_ReadData(uint32_t addr, uint32_t *val)
 {
+    uint8_t tmp_in[4];
+    uint8_t tmp_out[4];
+    uint8_t req, ack;
+
+    //ack = SWJ_WriteDP(DP_SELECT, 0x00000004);
+    ack = SWJ_WriteAP(AP_TAR, addr);
+    // put addr in TAR register
+    //req = SWD_REG_AP | SWD_REG_W | (1 << 2);
+    //ack = SWD_Transfer(req, &addr);
+
+    // read data
+    req = SWD_REG_AP | SWD_REG_R | (3 << 2);
+    ack = SWD_Transfer(req, val);
+
+    // dummy read
+    req = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(DP_RDBUFF);
+    ack = SWD_Transfer(req, val);
+
+
+//    return (ack == 0x01);
+}
+
+// Write access port register
+uint8_t swd_write_ap(uint32_t adr, uint32_t val) {
     uint8_t data[4];
     uint8_t req, ack;
     uint32_t apsel = adr & 0xff000000;
     uint32_t bank_sel = adr & APBANKSEL;
 
-    if (!swd_write_dp(DP_SELECT, apsel | bank_sel)) {
-        return 0;
-    }
+    SWJ_WriteDP(DP_SELECT, apsel | bank_sel);
+
+
+//    switch(adr) {
+//        case AP_CSW:
+//            if (dap_state.csw == val)
+//                return 1;
+//            dap_state.csw = val;
+//            break;
+//        default:
+//            break;
+//    }
 
     req = SWD_REG_AP | SWD_REG_W | SWD_REG_ADR(adr);
+    int2array(data, val, 4);
 
-    if (SWD_Transfer(req, (uint32_t *)&val) != 0x01) {
+    if (SWD_Transfer(req, (uint32_t *)data) != 0x01) {
         return 0;
     }
 
@@ -292,172 +499,43 @@ uint8_t swd_write_ap(uint32_t adr, uint32_t val)
     return (ack == 0x01);
 }
 
-uint8_t target_unlock_sequence(void) {
-    uint32_t val;
 
-    // read the device ID
-    if (!swd_read_ap(MDM_IDR, &val)) {
-        return 0;
-    }
-    // verify the result
-    if (val != MCU_ID) {
-        return 0;
-    }
-
-    if (!swd_read_ap(MDM_STATUS, &val)) {
-        return 0;
-    }
-
-    // flash in secured mode
-    if (val & (1 << 2)) {
-        // hold the device in reset
-    //    target_set_state(RESET_HOLD);
-        // write the mass-erase enable bit
-        if (!swd_write_ap(MDM_CTRL, 1)) {
-            return 0;
-        }
-        while (1) {
-            // wait until mass erase is started
-            if (!swd_read_ap(MDM_STATUS, &val)) {
-                return 0;
-            }
-
-            if (val & 1) {
-                break;
-            }
-        }
-        // mass erase in progress
-        while (1) {            
-            // keep reading until procedure is complete
-            if (!swd_read_ap(MDM_CTRL, &val)) {
-                return 0;
-            }
-
-            if (val == 0) {
-                break;
-            }
-        }
-    }
-
+uint8_t SWJ_Read32(uint32_t addr, uint32_t *val)
+{
+    SWJ_WriteAP(0x01000000 | AP_CSW, CSW_VALUE | CSW_SIZE32);
+    swd_read_data(addr, val);
     return 1;
 }
 
- uint8_t swd_init_debug(void) {
+uint8_t SWJ_InitDebug(void)
+{
     uint32_t tmp = 0;
-
-    // call a target dependant function
-    // this function can do several stuff before really
-    // initing the debug
-   // target_before_init_debug();
-
-    if (!JTAG2SWD()) {
-        return 0;
+    uint32_t val, err;
+    
+    SWJ_JTAG2SWD();
+    
+    if(SWJ_ReadDP(DP_IDCODE, &val))
+    {
+        return 1;
     }
+    
+    SWJ_WriteDP(DP_ABORT, STKCMPCLR | STKERRCLR | WDERRCLR | ORUNERRCLR);
 
-    if (!swd_write_dp(DP_ABORT, STKCMPCLR | STKERRCLR | WDERRCLR | ORUNERRCLR)) {
-        return 0;
-    }
+    /* Ensure CTRL/STAT register selected in DPBANKSEL */
+    SWJ_WriteDP(DP_SELECT, 0);
 
-    // Ensure CTRL/STAT register selected in DPBANKSEL
-    if (!swd_write_dp(DP_SELECT, 0)) {
-        return 0;
-    }
+    /* Power ups */
+    SWJ_WriteDP(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ);
 
-    // Power up
-    if (!swd_write_dp(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ)) {
-        return 0;
-    }
-
-    do {
-        if (!swd_read_dp(DP_CTRL_STAT, &tmp)) {
+    do
+    {
+        if(!SWJ_ReadDP(DP_CTRL_STAT, &tmp))
+        {
             return 0;
         }
     } while ((tmp & (CDBGPWRUPACK | CSYSPWRUPACK)) != (CDBGPWRUPACK | CSYSPWRUPACK));
 
-    if (!swd_write_dp(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ | TRNNORMAL | MASKLANE)) {
-        return 0;
-    }
-
-    // call a target dependant function:
-    // some target can enter in a lock state
-    // this function can unlock these targets
-    target_unlock_sequence();
-
-    if (!swd_write_dp(DP_SELECT, 0)) {
-        return 0;
-    }
-
-    return 1;
+    SWJ_WriteDP(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ | TRNNORMAL | MASKLANE);
+    return 0;
 }
- 
-
-
-
-/* Manley */
-
-#define SWD_SM0		0xE79E
-#define SWD_SM1		0xEDB6
-#define JTAG_SM		0xE73C
-
-void PULSE(void)
-{
-    DELAY();
-	TCK_HIGH();
-    DELAY();
-	TCK_LOW();
-}
-
-void ENCODE_Sequence(uint16_t sequ)
-{
-	uint8_t i;
-	
-	for(i = 0; i < 16; i++)
-    {
-        ((sequ & 0x1) == 1) ? (TMS_HIGH()) : (TMS_LOW());
-		PULSE();
-	    sequ >>= 1;
-	}
-}
-
-
-
-void MoreClock(uint16_t n, uint8_t logic)
-{
-	uint8_t recnt;
-    uint16_t i;
-    
-	if (logic) 	TMS_HIGH();
-	else 		TMS_LOW();
-
-	for(i = 0; i < n; i++)
-    {
-		PULSE();
-	}
-}
-
-void StasusSwitch(uint32_t dat)
-{
-	TMS_HIGH();
-	MoreClock(56,1);
-	ENCODE_Sequence(dat);			//Other MCU must be
-}
-
-void ConnectInit_SWD()
-{
-
-    TMS_WR();
-    TMS_LOW();
-    TCK_LOW();
-    TRST_HIGH();
-		
-    DELAY();
-
-	StasusSwitch(SWD_SM0);
-	StasusSwitch(SWD_SM1);
-	
-	MoreClock(56,1);	
-	MoreClock(16,0);	
-}
-
-
 

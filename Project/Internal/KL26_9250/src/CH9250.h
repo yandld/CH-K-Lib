@@ -2,25 +2,25 @@
 #define CH9250_H__
 #include "common.h"
 #include "i2c.h"
-#define USE_MPU9250
-/***********************Register Map**************************************/
-#ifdef USE_MPU9250
-#define	MPU9250_ADDR		0x68		/**9250硬件地址 0x68 0x69*/
-#define MPU09250_ID			0x71		/**硬件识别ID*/
 
-#define	MPU09250_SELF_TEST_X_GYRO		0x00		/**自检X轴角速度*/
-#define	MPU09250_SELF_TEST_Y_GYRO		0x01		/**自检Y轴角速度*/
-#define	MPU09250_SELF_TEST_Z_GYRO		0x02		/**自检Z轴角速度*/
-#define	MPU09250_SELF_TEST_X_ACCEL		0x0D		/**自检X轴加速度*/
-#define	MPU09250_SELF_TEST_Y_ACCEL		0x0E		/**自检Y轴加速度*/
-#define	MPU09250_SELF_TEST_Z_ACCEL		0x0F		/**自检Z轴加速度*/
-#define	MPU09250_XG_OFFSET_H			0x13		/**角速度直流偏置*/
+/***********************Mpu9250 Register Map**************************************/
+#ifdef USE_MPU9250
+#define	MPU9250_ADDR		0x68		
+#define MPU09250_ID			0x71		
+
+#define	MPU09250_SELF_TEST_X_GYRO		0x00		/***/
+#define	MPU09250_SELF_TEST_Y_GYRO		0x01		/***/
+#define	MPU09250_SELF_TEST_Z_GYRO		0x02		/***/
+#define	MPU09250_SELF_TEST_X_ACCEL		0x0D		/***/
+#define	MPU09250_SELF_TEST_Y_ACCEL		0x0E		/***/
+#define	MPU09250_SELF_TEST_Z_ACCEL		0x0F		/***/
+#define	MPU09250_XG_OFFSET_H			0x13		/***/
 #define	MPU09250_XG_OFFSET_L			0x14		/***/
 #define	MPU09250_YG_OFFSET_H			0x15		/***/
 #define	MPU09250_YG_OFFSET_L			0x16		/***/
 #define	MPU09250_ZG_OFFSET_H			0x17		/***/
 #define	MPU09250_ZG_OFFSET_L			0x18		/***/
-#define	MPU09250_SMPLRT_DIV				0x19		/**采样率分频器*/
+#define	MPU09250_SMPLRT_DIV				0x19		/***/
 #define	MPU09250_CONFIG					0x1A		/***/
 #define	MPU09250_GYRO_CONFIG			0x1B		/***/
 #define	MPU09250_ACCEL_CONFIG			0x1C		/***/
@@ -110,10 +110,34 @@
 #define	MPU09250_ZA_OFFSET_L			0x7E		/***/
 
 #endif 
+/***********************AK8963 Register Map**************************************/
+#ifdef USE_AK8963
+#define AK8963_ADDRESS   (0x0C<<1)
+//Magnetometer Registers
+#define AK8963_WHO_AM_I  0x00 // should return 0x48
+#define AK8963_INFO      0x01
+#define AK8963_ST1       0x02  // data ready status bit 0
+#define AK8963_XOUT_L    0x03  // data
+#define AK8963_XOUT_H    0x04
+#define AK8963_YOUT_L    0x05
+#define AK8963_YOUT_H    0x06
+#define AK8963_ZOUT_L    0x07
+#define AK8963_ZOUT_H    0x08
+#define AK8963_ST2       0x09  // Data overflow bit 3 and data read error status bit 2
+#define AK8963_CNTL      0x0A  // Power down (0000), single-measurement (0001), self-test (1000) and Fuse ROM (1111) modes on bits 3:0
+#define AK8963_ASTC      0x0C  // Self test control
+#define AK8963_I2CDIS    0x0F  // I2C disable
+#define AK8963_ASAX      0x10  // Fuse ROM x-axis sensitivity adjustment value
+#define AK8963_ASAY      0x11  // Fuse ROM y-axis sensitivity adjustment value
+#define AK8963_ASAZ      0x12  // Fuse ROM z-axis sensitivity adjustment value
+
+#endif
 /***********************Register Map End**************************************/
 
 
-
-int8_t CH9250_Init(void);
+int8_t ch8963GetValue(float * destination);
+int8_t ch9250Init(void);
+int8_t ch9250Reset(void);
+int8_t ch9250RegisterValueCheck(void);
 #else
 #endif

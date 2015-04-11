@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MKL26Z4</Define>
+              <Define>MKL26Z4,USE_MPU9250,USE_AK8963</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X</IncludePath>
             </VariousControls>
@@ -438,6 +438,11 @@
               <FileName>CHZT02.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\CHZT02.c</FilePath>
+            </File>
+            <File>
+              <FileName>scope.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\scope.c</FilePath>
             </File>
           </Files>
         </Group>

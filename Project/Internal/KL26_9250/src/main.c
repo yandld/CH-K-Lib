@@ -1,6 +1,7 @@
 #include "gpio.h"
 #include "common.h"
 #include "uart.h"
+#include "scope.h"
 #include "i2c.h"
 #include "CHZT02.h"
 
@@ -22,23 +23,26 @@ static void I2C_Scan(uint32_t instance)
 
 int main(void)
 {
-    uint32_t instance, clock;
+	uint32_t instance, clock;
+	int16_t i = 0;
 
     DelayInit();    
     GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);    
-    UART_QuickInit(UART0_RX_PA01_TX_PA02, 9600);
-    
+    UART_QuickInit(UART0_RX_PA01_TX_PA02, 9600);    
     printf("HelloWorld\r\n");
     CLOCK_GetClockFrequency(kCoreClock, &clock);
     printf("CoreClock:%dHz\r\n", clock);
     CLOCK_GetClockFrequency(kBusClock, &clock);
     printf("kBusClock:%dHz\r\n", clock);
 
-//	CHZT02_Init();
+	CHZT02_Init();
+
+//	scopeInit();
 
     while(1)
     {
-        GPIO_ToggleBit(HW_GPIOC, 3);
+//		scopeDrawLine(i++,0,0);
+		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(50);
     }
 }

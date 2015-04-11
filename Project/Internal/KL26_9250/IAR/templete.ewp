@@ -30,7 +30,7 @@
         <option>
           <name>Variant</name>
           <version>20</version>
-          <state>39</state>
+          <state>35</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -99,7 +99,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>MK60DN512Zxxx10	Freescale MK60DN512Zxxx10</state>
+          <state>MKL26Z64xxx4	Freescale MKL26Z64xxx4</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -138,12 +138,12 @@
         <option>
           <name>GFPUCoreSlave</name>
           <version>20</version>
-          <state>39</state>
+          <state>35</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
           <version>20</version>
-          <state>39</state>
+          <state>35</state>
         </option>
         <option>
           <name>OGUseCmsis</name>

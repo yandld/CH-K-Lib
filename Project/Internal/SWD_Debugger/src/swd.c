@@ -396,7 +396,7 @@ static uint8_t swd_write_data(uint32_t address, uint32_t data) {
 //    return (ack == 0x01) ? 1 : 0;
 }
 
-uint8_t SWJ_Write32(uint32_t addr, uint32_t val)
+uint8_t SWJ_WriteMem32(uint32_t addr, uint32_t val)
 {
     
     SWJ_WriteAP(AP_CSW, CSW_VALUE | CSW_SIZE32);
@@ -406,53 +406,15 @@ uint8_t SWJ_Write32(uint32_t addr, uint32_t val)
     return 1;
 }
 
-static void int2array(uint8_t * res, uint32_t data, uint8_t len) {
-    uint8_t i = 0;
-    for (i = 0; i < len; i++) {
-        res[i] = (data >> 8*i) & 0xff;
-    }
-}
-
-// Read target memory.
-static uint8_t swd_read_data(uint32_t addr, uint32_t *val) {
-    uint8_t tmp_in[4];
-    uint8_t tmp_out[4];
-    uint8_t req, ack;
-
-    // put addr in TAR register
-    int2array(tmp_in, addr, 4);
-    req = SWD_REG_AP | SWD_REG_W | (1 << 2);
-    if (SWD_Transfer(req, (uint32_t *)tmp_in) != 0x01) {
-        return 0;
-    }
-
-    // read data
-    req = SWD_REG_AP | SWD_REG_R | (3 << 2);
-    if (SWD_Transfer(req, (uint32_t *)tmp_out) != 0x01) {
-        return 0;
-    }
-
-    // dummy read
-    req = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(DP_RDBUFF);
-    ack = SWD_Transfer(req, (uint32_t *)tmp_out);
-
-    *val = (tmp_out[3] << 24) | (tmp_out[2] << 16) | (tmp_out[1] << 8) | tmp_out[0];
-
-    return (ack == 0x01);
-}
 
 // Read target memory.
 static uint8_t SWJ_ReadData(uint32_t addr, uint32_t *val)
 {
     uint8_t tmp_in[4];
     uint8_t tmp_out[4];
-    uint8_t req, ack;
+    uint8_t req, ack, err;
 
-    //ack = SWJ_WriteDP(DP_SELECT, 0x00000004);
-    ack = SWJ_WriteAP(AP_TAR, addr);
-    // put addr in TAR register
-    //req = SWD_REG_AP | SWD_REG_W | (1 << 2);
-    //ack = SWD_Transfer(req, &addr);
+    err = SWJ_WriteAP(AP_TAR, addr);
 
     // read data
     req = SWD_REG_AP | SWD_REG_R | (3 << 2);
@@ -487,7 +449,7 @@ uint8_t swd_write_ap(uint32_t adr, uint32_t val) {
 //    }
 
     req = SWD_REG_AP | SWD_REG_W | SWD_REG_ADR(adr);
-    int2array(data, val, 4);
+   // int2array(data, val, 4);
 
     if (SWD_Transfer(req, (uint32_t *)data) != 0x01) {
         return 0;
@@ -500,10 +462,10 @@ uint8_t swd_write_ap(uint32_t adr, uint32_t val) {
 }
 
 
-uint8_t SWJ_Read32(uint32_t addr, uint32_t *val)
+uint8_t SWJ_ReadMem32(uint32_t addr, uint32_t *val)
 {
-    SWJ_WriteAP(0x01000000 | AP_CSW, CSW_VALUE | CSW_SIZE32);
-    swd_read_data(addr, val);
+    SWJ_WriteAP(AP_CSW, CSW_VALUE | CSW_SIZE32);
+    SWJ_ReadData(addr, val);
     return 1;
 }
 

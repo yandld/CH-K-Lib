@@ -34,7 +34,7 @@ int main(void)
     CLOCK_GetClockFrequency(kBusClock, &clock);
     printf("kBusClock:%dHz\r\n", clock);
 
-	CHZT02_Init();
+//	CHZT02_Init();
 
     while(1)
     {

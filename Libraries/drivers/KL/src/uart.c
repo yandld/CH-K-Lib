@@ -16,6 +16,11 @@
 #include <stdio.h>
 #endif
 
+#if __ICCARM__
+#include <yfuns.h>
+#endif
+
+
 #define UARTN_BASES {(void*)UART0, (void*)UART1, (void*)UART2}
 /* gloabl const table defination */
 const void* UART_InstanceTable[] = UARTN_BASES;

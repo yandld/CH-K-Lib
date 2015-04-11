@@ -46,8 +46,7 @@ int main(void)
 
     TRST_LOW();
     DelayMs(20);
-    //TRST_HIGH();
-//    
+    TRST_HIGH();
 //    
     SWJ_InitDebug();
   //  swd_init_debug();
@@ -63,10 +62,10 @@ int main(void)
     
     val = 0;
     
-    SWJ_Read32((uint32_t)SIM_BASE, &val);
+    SWJ_ReadMem32(0x40048024, &val);
     printf("mem:0x%X\r\n", val);
 
-    SWJ_Read32(SCB_BASE, &val);
+    SWJ_ReadMem32(SCB_BASE, &val);
     printf("mem:0x%X\r\n", val);
      
     err += SWJ_WriteAP(0x01000004, 0x0000004);

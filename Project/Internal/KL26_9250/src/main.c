@@ -28,7 +28,7 @@ int main(void)
 
     DelayInit();    
     GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);    
-    UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);    
+    UART_QuickInit(UART0_RX_PA01_TX_PA02, 9600);    
     printf("HelloWorld\r\n");
     CLOCK_GetClockFrequency(kCoreClock, &clock);
     printf("CoreClock:%dHz\r\n", clock);

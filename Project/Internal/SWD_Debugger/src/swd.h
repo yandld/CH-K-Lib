@@ -64,8 +64,6 @@
 
 
 
-
-
 //!< API
 uint8_t SWJ_ReadDP(uint8_t adr, uint32_t *val);
 uint8_t SWJ_WriteDP(uint8_t adr, uint32_t val);
@@ -74,9 +72,8 @@ uint8_t SWJ_WriteAP(uint32_t adr, uint32_t val);
 uint8_t SWJ_InitDebug(void);
 uint8_t SWJ_ReadMem32(uint32_t addr, uint32_t *val);
 uint8_t SWJ_WriteMem32(uint32_t addr, uint32_t val);
-
-
-
+uint8_t SWJ_ReadMem8(uint32_t addr, uint32_t *val);
+uint8_t SWJ_WriteMem8(uint32_t addr, uint32_t val);
 
 
 #endif

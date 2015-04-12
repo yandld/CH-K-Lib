@@ -133,10 +133,13 @@
 
 #endif
 /***********************Register Map End**************************************/
-
-void ch9250GetAresv(void);
+int8_t funsionDataInit(void);
+void 	ch9250GetMres(void);
+void 	ch9250GetGres(void);
+void 	ch9250GetAres(void);
+int8_t	ch9250GetId(uint8_t* id);
 int8_t 	ch9250Init(void);
-int8_t 	ch8963GetValue(float * destination);
+int8_t 	ch8963Init(float * destination);
 int8_t 	ch9250Reset(void);
 int8_t 	ch9250Calibrate(float * dest1, float * dest2);
 int8_t 	ch9250SelfTest(float * destination) ;

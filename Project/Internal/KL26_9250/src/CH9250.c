@@ -28,8 +28,34 @@ uint8_t Mscale = MFS_16BITS;  // MFS_14BITS or MFS_16BITS, 14-bit or 16-bit magn
 uint8_t Mmode  = 0x06;        // Either 8 Hz 0x02) or 100 Hz (0x06) magnetometer data ODR  
 float aRes, gRes, mRes;       // scale resolutions per LSB for the sensors
 
+int16_t accelCount[3];  // Stores the 16-bit signed accelerometer sensor output
+int16_t gyroCount[3];   // Stores the 16-bit signed gyro sensor output
+int16_t magCount[3];    // Stores the 16-bit signed magnetometer sensor output
+float magCalibration[3] = {0, 0, 0}, magbias[3] = {0, 0, 0};  // Factory mag calibration and mag bias
+float gyroBias[3] = {0, 0, 0}, accelBias[3] = {0, 0, 0}; // Bias corrections for gyro and accelerometer
+float ax, ay, az, gx, gy, gz, mx, my, mz; // variables to hold latest sensor data values 
+int16_t tempCount;   // Stores the real internal chip temperature in degrees Celsius
+float temperature;
+float SelfTest[6];
+// parameters for 6 DoF sensor fusion calculations
+float PI = 3.14159265358979323846f;
+float GyroMeasError;								// = PI * (60.0f / 180.0f);     // gyroscope measurement error in rads/s (start at 60 deg/s), then reduce after ~10 s to 3
+float beta;											// = sqrt(3.0f / 4.0f) * GyroMeasError;  // compute beta
+float GyroMeasDrift;								// = PI * (1.0f / 180.0f);      	// gyroscope measurement drift in rad/s/s (start at 0.0 deg/s/s)
+float zeta;											// = sqrt(3.0f / 4.0f) * GyroMeasDrift;  	// compute zeta, the other free parameter in the Madgwick scheme usually set to a small or zero value
+#define Kp 2.0f * 5.0f // these are the free parameters in the Mahony filter and fusion scheme, Kp for proportional feedback, Ki for integral
+#define Ki 0.0f
 /*************************************************************************************************/
-void getMres() {
+int8_t funsionDataInit(void) {
+	GyroMeasError = PI * (60.0f / 180.0f);     // gyroscope measurement error in rads/s (start at 60 deg/s), then reduce after ~10 s to 3
+	beta = sqrt(3.0f / 4.0f) * GyroMeasError;  // compute beta
+	GyroMeasDrift = PI * (1.0f / 180.0f);      // gyroscope measurement drift in rad/s/s (start at 0.0 deg/s/s)
+	zeta = sqrt(3.0f / 4.0f) * GyroMeasDrift;
+}
+int8_t	ch9250GetId(uint8_t* id) {
+	I2C_ReadSingleRegister(0, MPU9250_ADDR, MPU9250_WHO_AM_I, id);
+}
+void ch9250GetMres(void) {
 	switch (Mscale)
 	{
 		// Possible magnetometer scales (and their register bit settings) are:
@@ -42,7 +68,7 @@ void getMres() {
 			break;
 	}
 }
-void ch9250getGres() {
+void ch9250GetGres(void) {
 	switch (Gscale)
 	{
 		// Possible gyro scales (and their register bit settings) are:
@@ -62,7 +88,7 @@ void ch9250getGres() {
 			break;
 	}
 }
-void ch9250GetAresv(void) {
+void ch9250GetAres(void) {
 	switch (Ascale)
 	{
 		// Possible accelerometer scales (and their register bit settings) are:
@@ -124,7 +150,7 @@ int8_t ch9250Init(void){
 	return 0;
 }
 
-int8_t ch8963GetValue(float * destination){
+int8_t ch8963Init(float * destination){
 	// First extract the factory calibration for each magnetometer axis
 	uint8_t rawData[3] = {0};  // x/y/z gyro calibration data stored here
 	I2C_WriteSingleRegister(0,AK8963_ADDRESS, AK8963_CNTL, 0x00); // Power down magnetometer

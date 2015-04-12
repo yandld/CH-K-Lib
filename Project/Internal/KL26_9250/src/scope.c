@@ -5,7 +5,7 @@
 
 #define SCOPE_UART_MAP		UART0_RX_PA01_TX_PA02
 #define SCOPE_UART_CH		HW_UART0
-#define SCOPE_BAUDRATE		(9600U)
+#define SCOPE_BAUDRATE		(115200U)
 #define SCOPE_WRITE_BYTE(a)	UART_WriteByte(HW_UART0,a)	
 
 /**scopeInit func*/

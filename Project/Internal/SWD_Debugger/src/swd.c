@@ -260,7 +260,6 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
         TCK_LOW();          \
 
 
-
 static void SWJ_SendClock(uint32_t count, uint8_t swdio_logic)
 {
     (swdio_logic)?(TMS_HIGH()):(TMS_LOW());
@@ -270,7 +269,6 @@ static void SWJ_SendClock(uint32_t count, uint8_t swdio_logic)
         PULSE();
     }
 }
-
 
 static void SWJ_SendData(uint16_t data)
 {
@@ -376,97 +374,97 @@ uint8_t SWJ_WriteAP(uint32_t adr, uint32_t val)
 
 
 // Write target memory.
-static uint8_t swd_write_data(uint32_t address, uint32_t data) {
+static uint8_t SWJ_WriteData(uint32_t addr, uint32_t data)
+{
+    uint8_t req, ack, err;
 
-    uint32_t dummy;
-    uint8_t req, ack;
+    SWJ_WriteAP(AP_TAR, addr);
 
-    // put addr in TAR register
-    req = SWD_REG_AP | SWD_REG_W | (1 << 2);
-    ack = SWD_Transfer(req, &address);
-
-    // write data
-    req = SWD_REG_AP | SWD_REG_W | (3 << 2);
+    /* write data */
+    req = SWD_REG_AP | SWD_REG_W | AP_DRW;
     ack = SWD_Transfer(req, &data);
-
+    
     /* read DP buff */
     req = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(DP_RDBUFF);
     ack = SWD_Transfer(req, NULL);
 
-//    return (ack == 0x01) ? 1 : 0;
+    (ack == DAP_TRANSFER_OK)?(err = 0):(err = 1);
+    return err;
 }
 
 uint8_t SWJ_WriteMem32(uint32_t addr, uint32_t val)
 {
+    uint8_t err;
     
     SWJ_WriteAP(AP_CSW, CSW_VALUE | CSW_SIZE32);
-
-    swd_write_data(addr, val);
-
-    return 1;
+    SWJ_WriteData(addr, val);
+    err = SWJ_WriteData(addr, val);
+    return err;
 }
 
 
 // Read target memory.
 static uint8_t SWJ_ReadData(uint32_t addr, uint32_t *val)
 {
-    uint8_t tmp_in[4];
-    uint8_t tmp_out[4];
     uint8_t req, ack, err;
 
-    err = SWJ_WriteAP(AP_TAR, addr);
+    SWJ_WriteAP(AP_TAR, addr);
 
-    // read data
-    req = SWD_REG_AP | SWD_REG_R | (3 << 2);
+    /* read data */
+    req = SWD_REG_AP | SWD_REG_R | AP_DRW;
     ack = SWD_Transfer(req, val);
 
-    // dummy read
+    /* dummy read */
     req = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(DP_RDBUFF);
     ack = SWD_Transfer(req, val);
-
-
-//    return (ack == 0x01);
+    
+    (ack == DAP_TRANSFER_OK)?(err = 0):(err = 1);
+    return err;
 }
 
-// Write access port register
-uint8_t swd_write_ap(uint32_t adr, uint32_t val) {
-    uint8_t data[4];
-    uint8_t req, ack;
-    uint32_t apsel = adr & 0xff000000;
-    uint32_t bank_sel = adr & APBANKSEL;
-
-    SWJ_WriteDP(DP_SELECT, apsel | bank_sel);
-
-
-//    switch(adr) {
-//        case AP_CSW:
-//            if (dap_state.csw == val)
-//                return 1;
-//            dap_state.csw = val;
-//            break;
-//        default:
-//            break;
-//    }
-
-    req = SWD_REG_AP | SWD_REG_W | SWD_REG_ADR(adr);
-   // int2array(data, val, 4);
-
-    if (SWD_Transfer(req, (uint32_t *)data) != 0x01) {
-        return 0;
-    }
-
-    req = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(DP_RDBUFF);
-    ack = SWD_Transfer(req, NULL);
-
-    return (ack == 0x01);
-}
 
 
 uint8_t SWJ_ReadMem32(uint32_t addr, uint32_t *val)
 {
+    uint8_t err;
     SWJ_WriteAP(AP_CSW, CSW_VALUE | CSW_SIZE32);
-    SWJ_ReadData(addr, val);
-    return 1;
+    err = SWJ_ReadData(addr, val);
+    return err;
+}
+
+uint8_t SWJ_WriteMem8(uint32_t addr, uint32_t val)
+{
+    uint32_t tmp;
+    uint8_t err;
+    
+    SWJ_WriteAP(AP_CSW, CSW_VALUE | CSW_SIZE8);
+
+    tmp = val << ((addr & 0x03) << 3);
+    err = SWJ_WriteData(addr, tmp);
+    return err;
+}
+
+uint8_t SWJ_ReadMem8(uint32_t addr, uint32_t *val)
+{
+    uint32_t tmp;
+    uint8_t err;
+    
+    SWJ_WriteAP(AP_CSW, CSW_VALUE | CSW_SIZE8); 
+    
+    err = SWJ_ReadData(addr, &tmp);
+    
+    *val = (uint8_t)(tmp >> ((addr & 0x03) << 3));
+    
+    return err;
+}
+
+// Read 32-bit word aligned values from target memory using address auto-increment.
+// size is in bytes.
+static uint8_t SWJ_ReadBlock(uint32_t addr, uint8_t *buf, uint32_t len)
+{
+        
+        
+        
 }
 
 uint8_t SWJ_InitDebug(void)

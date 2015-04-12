@@ -25,6 +25,7 @@
 #define DBG_CRDR       (DBG_Addr + DBG_CRDR_OFS)
 #define DBG_EMCR       (DBG_Addr + DBG_EMCR_OFS)
 
+#define SIM_SDID_BASE       (0x40048024)
 
 int main(void)
 {   
@@ -62,15 +63,20 @@ int main(void)
     
     val = 0;
     
-    SWJ_ReadMem32(0x40048024, &val);
+    SWJ_ReadMem32(SIM_SDID_BASE, &val);
     printf("mem:0x%X\r\n", val);
 
     SWJ_ReadMem32(SCB_BASE, &val);
     printf("mem:0x%X\r\n", val);
      
-    err += SWJ_WriteAP(0x01000004, 0x0000004);
-    err += SWJ_ReadAP(0x01000004, &DP_ID);
+    err += SWJ_WriteMem8(0x20000013, 0x55);
     printf("MDM_IDR:0x%X %d\r\n", DP_ID, err);
+    
+    DP_ID = 0;
+    err += SWJ_ReadMem8(0x20000013, &DP_ID);
+    printf("MDM_IDR:0x%X %d\r\n", DP_ID, err);
+    
+  //  SWJ_WriteMem32((uint32_t)&PTD->PDDR, 0x00000000);
     
     while(1)
     {

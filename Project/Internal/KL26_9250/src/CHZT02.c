@@ -11,7 +11,7 @@ int8_t CHZT02_Init(void) {
 	/**I2C Init*/
 	I2C_QuickInit(CHZT02_I2C_MAP,180000);
 	/**MPU9250 Init*/
-	ch9250Init();
+//	ch9250Init();
 	ch9250RegisterValueCheck();
 	return 0;
 }

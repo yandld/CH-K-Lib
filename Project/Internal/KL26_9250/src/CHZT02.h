@@ -10,5 +10,6 @@
 
 
 int8_t CHZT02_Init(void);
+int8_t CHZT02_Running (void);
 #else
 #endif

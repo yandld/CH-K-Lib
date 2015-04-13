@@ -37,11 +37,13 @@ int main(void)
 
 	CHZT02_Init();
 
+
 //	scopeInit();
 
     while(1)
     {
 //		scopeDrawLine(i++,0,0);
+			CHZT02_Running();
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(50);
     }

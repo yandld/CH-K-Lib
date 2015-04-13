@@ -43,8 +43,7 @@ float GyroMeasError;								// = PI * (60.0f / 180.0f);     // gyroscope measure
 float beta;											// = sqrt(3.0f / 4.0f) * GyroMeasError;  // compute beta
 float GyroMeasDrift;								// = PI * (1.0f / 180.0f);      	// gyroscope measurement drift in rad/s/s (start at 0.0 deg/s/s)
 float zeta;											// = sqrt(3.0f / 4.0f) * GyroMeasDrift;  	// compute zeta, the other free parameter in the Madgwick scheme usually set to a small or zero value
-#define Kp 2.0f * 5.0f // these are the free parameters in the Mahony filter and fusion scheme, Kp for proportional feedback, Ki for integral
-#define Ki 0.0f
+
 /*************************************************************************************************/
 int8_t funsionDataInit(void) {
 	GyroMeasError = PI * (60.0f / 180.0f);     // gyroscope measurement error in rads/s (start at 60 deg/s), then reduce after ~10 s to 3
@@ -54,6 +53,7 @@ int8_t funsionDataInit(void) {
 }
 int8_t	ch9250GetId(uint8_t* id) {
 	I2C_ReadSingleRegister(0, MPU9250_ADDR, MPU9250_WHO_AM_I, id);
+	return 0;
 }
 void ch9250GetMres(void) {
 	switch (Mscale)
@@ -137,16 +137,16 @@ int8_t ch9250Init(void){
 	/** Set accelerometer sample rate configuration */
 	/** It is possible to get a 4 kHz sample rate from the accelerometer by choosing 1 for */
 	/** accel_fchoice_b bit [3]; in this case the bandwidth is 1.13 kHz */
-	I2C_ReadSingleRegister(0,MPU9250_GYRO_CONFIG, MPU9250_ACCEL_CONFIG2,&r);
-	I2C_WriteSingleRegister(0,MPU9250_GYRO_CONFIG, MPU9250_ACCEL_CONFIG2, r & ~0x0FU); /** Clear accel_fchoice_b (bit 3) and A_DLPFG (bits [2:0])*/  
-	I2C_WriteSingleRegister(0,MPU9250_GYRO_CONFIG, MPU9250_ACCEL_CONFIG2, r | 0x03U); /** Set accelerometer rate to 1 kHz and bandwidth to 41 Hz*/	
+	I2C_ReadSingleRegister(0,MPU9250_ADDR, MPU9250_ACCEL_CONFIG2,&r);
+	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_ACCEL_CONFIG2, r & ~0x0FU); /** Clear accel_fchoice_b (bit 3) and A_DLPFG (bits [2:0])*/  
+	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_ACCEL_CONFIG2, r | 0x03U); /** Set accelerometer rate to 1 kHz and bandwidth to 41 Hz*/	
 	// The accelerometer, gyro, and thermometer are set to 1 kHz sample rates, 
 	// but all these rates are further reduced by a factor of 5 to 200 Hz because of the SMPLRT_DIV setting
 	// Configure Interrupts and Bypass Enable
 	// Set interrupt pin active high, push-pull, and clear on read of INT_STATUS, enable I2C_BYPASS_EN so additional chips 
 	// can join the I2C bus and all can be controlled by the Kinetis as master
-	I2C_WriteSingleRegister(0, MPU9250_GYRO_CONFIG, MPU9250_INT_PIN_CFG, 0x22U);    
-	I2C_WriteSingleRegister(0, MPU9250_GYRO_CONFIG, MPU9250_INT_ENABLE, 0x01U);  // Enable data ready (bit 0) interrupt
+	I2C_WriteSingleRegister(0, MPU9250_ADDR, MPU9250_INT_PIN_CFG, 0x22U);    
+	I2C_WriteSingleRegister(0, MPU9250_ADDR, MPU9250_INT_ENABLE, 0x01U);  // Enable data ready (bit 0) interrupt
 	return 0;
 }
 
@@ -528,6 +528,27 @@ int8_t ch9250RegisterValueCheck(void){
 	I2C_ReadSingleRegister(0,MPU9250_ADDR,MPU9250_YA_OFFSET_L,&value);				printf("MPU9250_YA_OFFSET_L		0x%x\n\r",value);
 	I2C_ReadSingleRegister(0,MPU9250_ADDR,MPU9250_ZA_OFFSET_H,&value);				printf("MPU9250_ZA_OFFSET_H		0x%x\n\r",value);
 	I2C_ReadSingleRegister(0,MPU9250_ADDR,MPU9250_ZA_OFFSET_L,&value);				printf("MPU9250_ZA_OFFSET_L		0x%x\n\r",value);
+	return 0;
+}
+
+int8_t ch8963RegisterValueCheck(void) {
+	uint8_t value = 0;
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_WHO_AM_I ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_INFO     ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_ST1      ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_XOUT_L   ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_XOUT_H   ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_YOUT_L   ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_YOUT_H   ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_ZOUT_L   ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_ZOUT_H   ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_ST2      ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_CNTL     ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_ASTC     ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_I2CDIS   ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_ASAX     ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_ASAY     ,&value);
+	I2C_ReadSingleRegister(0,AK8963_ADDRESS,AK8963_ASAZ     ,&value);
 	return 0;
 }
      

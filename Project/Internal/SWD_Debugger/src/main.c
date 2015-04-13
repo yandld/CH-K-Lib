@@ -9,26 +9,21 @@
 #include "iflash.h"
 
 #include <stdio.h>
+#include "target_flash.h"
 
-#define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Base Address  */
-#define ITM_BASE            (0xE0000000UL)                            /*!< ITM Base Address                   */
-#define DWT_BASE            (0xE0001000UL)                            /*!< DWT Base Address                   */
-#define TPI_BASE            (0xE0040000UL)                            /*!< TPI Base Address                   */
-#define CoreDebug_BASE      (0xE000EDF0UL)                            /*!< Core Debug Base Address            */
-#define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address               */
-#define NVIC_BASE           (SCS_BASE +  0x0100UL)                    /*!< NVIC Base Address                  */
-#define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Base Address  */
-#define DBG_Addr     (0xe000edf0)
-// Core Debug Register Addresses
-#define DBG_HCSR       (DBG_Addr + DBG_HCSR_OFS)
-#define DBG_CRSR       (DBG_Addr + DBG_CRSR_OFS)
-#define DBG_CRDR       (DBG_Addr + DBG_CRDR_OFS)
-#define DBG_EMCR       (DBG_Addr + DBG_EMCR_OFS)
+#include "target_image.h"
 
 #define SIM_SDID_BASE       (0x40048024)
 
+
+uint8_t buf[4*1024];
+
+
+
+
 int main(void)
 {   
+    uint32_t i, id;
     DelayInit();
     GPIO_QuickInit(HW_GPIOC, 10, kGPIO_Mode_OPP);
     
@@ -39,44 +34,43 @@ int main(void)
     #endif
     
     printf("program for Manley\r\n");
-    printf("this program manly display 3 features:\r\n");
 
-    uint32_t val,err, DP_ID;
+    uint8_t err, DP_ID;
     
     swd_io_init();
 
-    TRST_LOW();
-    DelayMs(20);
-    TRST_HIGH();
-//    
     SWJ_InitDebug();
-  //  swd_init_debug();
     
-    SWJ_ReadDP(DP_IDCODE, &DP_ID);
-    printf("DP-IDR:0x%X\r\n", DP_ID);
+    SWJ_ReadDP(DP_IDCODE, &id);
+    printf("DP-IDR:0x%X\r\n", id);
 
-    SWJ_ReadAP(MDM_IDR, &DP_ID);
-    printf("AHB_AP_IDR:0x%X\r\n", DP_ID);
+    SWJ_ReadAP(MDM_IDR, &id);
+    printf("AHB_AP_IDR:0x%X\r\n", id);
     
-    SWJ_ReadAP(0x000000FC, &DP_ID);
-    printf("APB_AP_IDR:0x%X\r\n", DP_ID);
+    SWJ_ReadAP(0x000000FC, &id);
+    printf("APB_AP_IDR:0x%X\r\n", id);
     
-    val = 0;
+    err = 0;
+    for(i=0;i<sizeof(buf);i++)
+    {
+        buf[i] = i & 0xFF;
+    }
     
-    SWJ_ReadMem32(SIM_SDID_BASE, &val);
-    printf("mem:0x%X\r\n", val);
+    swd_write_memory(0x20000011, buf, sizeof(buf));
+    memset(buf, sizeof(buf), 0);
+    swd_read_memory(0x20000011, buf, sizeof(buf));
 
-    SWJ_ReadMem32(SCB_BASE, &val);
-    printf("mem:0x%X\r\n", val);
-     
-    err += SWJ_WriteMem8(0x20000013, 0x55);
-    printf("MDM_IDR:0x%X %d\r\n", DP_ID, err);
+    for(i=0;i<sizeof(buf);i++)
+    {
+        if(buf[i] != (i & 0xFF))
+        {
+            printf("buf[%d]:%d\r\n", i, buf[i]);
+        }
+    }
     
-    DP_ID = 0;
-    err += SWJ_ReadMem8(0x20000013, &DP_ID);
-    printf("MDM_IDR:0x%X %d\r\n", DP_ID, err);
+    SWJ_SetTargetState(RESET_PROGRAM);
     
-  //  SWJ_WriteMem32((uint32_t)&PTD->PDDR, 0x00000000);
+    printf("test complete\r\n");
     
     while(1)
     {
@@ -85,13 +79,6 @@ int main(void)
     }
     
 }
-
-
-
-
-
-
-
 
 
 

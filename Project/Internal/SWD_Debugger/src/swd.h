@@ -41,13 +41,28 @@
 #define MDM_CTRL    0x01000004     //
 #define MDM_IDR     0x010000fc     // read-only identification register
 
-#define MCU_ID      0x001c0020
 
 // Debug Select Register definitions
 #define CTRLSEL        0x00000001  // CTRLSEL (SW Only)
 #define APBANKSEL      0x000000F0  // APBANKSEL Mask
 #define APSEL          0xFF000000  // APSEL Mask
 
+
+typedef enum
+{
+    RESET_HOLD,              // Hold target in reset
+    RESET_PROGRAM,           // Reset target and setup for flash programming.
+    RESET_RUN,               // Reset target and run normally
+    RESET_RUN_WITH_DEBUG,    // Reset target and run with debug enabled (required for semihost)
+    NO_DEBUG,                // Disable debug on running target
+    DEBUG                    // Enable debug on running target
+} TARGET_RESET_STATE;
+
+typedef struct {
+    uint32_t breakpoint;
+    uint32_t static_base;
+    uint32_t stack_pointer;
+} FLASH_SYSCALL;
 
 #ifndef BSWAP_32
 #define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
@@ -63,17 +78,17 @@
 #endif
 
 
-
 //!< API
 uint8_t SWJ_ReadDP(uint8_t adr, uint32_t *val);
 uint8_t SWJ_WriteDP(uint8_t adr, uint32_t val);
 uint8_t SWJ_ReadAP(uint32_t adr, uint32_t *val);
 uint8_t SWJ_WriteAP(uint32_t adr, uint32_t val);
 uint8_t SWJ_InitDebug(void);
-uint8_t SWJ_ReadMem32(uint32_t addr, uint32_t *val);
-uint8_t SWJ_WriteMem32(uint32_t addr, uint32_t val);
-uint8_t SWJ_ReadMem8(uint32_t addr, uint32_t *val);
-uint8_t SWJ_WriteMem8(uint32_t addr, uint32_t val);
+uint8_t swd_read_memory(uint32_t address, uint8_t *data, uint32_t size);
+uint8_t swd_write_memory(uint32_t address, uint8_t *data, uint32_t size);
 
+
+uint8_t SWJ_SetTargetState(TARGET_RESET_STATE state);
+uint8_t swd_flash_syscall_exec(const FLASH_SYSCALL *sysCallParam, uint32_t entry, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4);
 
 #endif

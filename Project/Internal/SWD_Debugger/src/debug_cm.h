@@ -16,6 +16,9 @@
 #ifndef DEBUG_CM_H
 #define DEBUG_CM_H
 
+#define NVIC_Addr    (0xe000e000)
+#define DBG_Addr     (0xe000edf0)
+
 // Debug Port Register Addresses
 #define DP_IDCODE      0x00        // IDCODE Register (Read only)
 #define DP_ABORT       0x00        // Abort Register (Write only)

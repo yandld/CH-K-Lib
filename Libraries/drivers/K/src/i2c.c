@@ -190,7 +190,16 @@ static uint8_t I2C_GetByte(void)
     return byte;
 }
 
-
+/**
+ * @brief  I2C write mutiple data
+ * @param  instance: instance of i2c moudle
+ *         @arg chipAddr   : i2c slave addr
+ *         @arg addr       : i2c slave register offset
+ *         @arg addrLen    : len of slave register addr(in byte)
+ *         @arg buf        : data buf
+ *         @arg buf        : read len
+ * @note 
+ */
 uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
 {
     uint8_t *p;
@@ -220,11 +229,29 @@ uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint3
     return err;
 }
 
+/**
+ * @brief  write single register value
+ * @param  instance: instance of i2c moudle
+ *         @arg chipAddr   : i2c slave addr
+ *         @arg addr       : i2c slave register offset
+ *         @arg pData      : data pointer
+ * @note   usually used on i2c sensor devices
+ */
 uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t data)
 {
     return I2C_BurstWrite(instance, chipAddr, addr, 1, &data, 1);
 }
 
+/**
+ * @brief  I2C read mutiple data
+ * @param  instance: instance of i2c moudle
+ *         @arg chipAddr   : i2c slave addr
+ *         @arg addr       : i2c slave register offset
+ *         @arg addrLen    : len of slave register addr(in byte)
+ *         @arg buf        : data buf
+ *         @arg buf        : read len
+ * @note 
+ */
 int32_t I2C_BurstRead(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
 {
     uint8_t *p;
@@ -263,6 +290,12 @@ int32_t I2C_BurstRead(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32
     return err;
 }
 
+/**
+ * @brief  proble i2c bus
+ * @param  instance: instance of i2c moudle
+ *         @arg chipAddr   : i2c slave addr
+ * @note   see if it's available i2c slave on the bus
+ */
 uint8_t I2C_Probe(uint32_t instance, uint8_t chipAddr)
 {
     uint8_t err;
@@ -277,6 +310,14 @@ uint8_t I2C_Probe(uint32_t instance, uint8_t chipAddr)
     return err;
 }
 
+/**
+ * @brief  read single register value
+ * @param  instance: instance of i2c moudle
+ *         @arg chipAddr   : i2c slave addr
+ *         @arg addr       : i2c slave register offset
+ *         @arg pData      : data pointer
+ * @note   usually used on i2c sensor devices
+ */
 uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t* pData)
 {
     return I2C_BurstRead(instance, chipAddr, addr, 1, pData, 1);

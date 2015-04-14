@@ -19,7 +19,7 @@
 #define HW_SPI0     (0x00)
 #define HW_SPI1     (0x01)
 #define HW_SPI2     (0x02)
-  
+
 #define HW_CTAR0    (0x00)  
 #define HW_CTAR1    (0x01)  
 
@@ -43,7 +43,6 @@ typedef enum
     kSPI_Slave,
 } SPI_Mode_Type;
 
-
 //!< interrupt and DMA select
 typedef enum
 {
@@ -52,12 +51,18 @@ typedef enum
     kSPI_DMA_RFDF,          //!< receive FIFO drain
 }SPI_ITDMAConfig_Type;
 
+/*!< 每帧数据位个数 */
+typedef enum 
+{
+    kSPI_PCS_ReturnInactive  = 0,   //!< 传输完成后CS信号保持片选中状态
+    kSPI_PCS_KeepAsserted  = 1,     //!< 传输完成后CS信号保持未选中状态
+}SPI_PCS_Type;
 
-#define kSPI_PCS_ReturnInactive   (0x00)      //!< 传输完成后CS信号保持片选中状态
-#define kSPI_PCS_KeepAsserted     (0x01)      //!< 传输完成后CS信号保持未选中状态
-
-#define kSPI_MSBFirst             (0x00)      //!< 先发送最高位
-#define kSPI_LSBFirst             (0x01)      //!< 先发送最低位
+typedef enum
+{
+    kSPI_MSBFirst,      //!< 先发送最高位
+    kSPI_LSBFirst,      //!< 先发送最低位
+} SPI_BitOlder_Type;
 
 //!< 初始化结构
 typedef struct
@@ -65,7 +70,7 @@ typedef struct
     uint32_t                instance;               //!< 模块号
 	SPI_Mode_Type           mode;                   //!< 主从模式
     uint8_t                 dataSize;               //!< 每帧数据有多少位 通常为8或16
-    uint8_t                 bitOrder;               //!< 先发高位还是先发地位
+    SPI_BitOlder_Type       bitOrder;               //!< 先发高位还是先发地位
     SPI_FrameFormat_Type    frameFormat;            //!< 四种帧格式选择
     uint32_t                baudrate;               //!< 速率
     uint32_t                ctar;

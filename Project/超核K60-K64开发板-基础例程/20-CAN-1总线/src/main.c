@@ -49,6 +49,7 @@ int main(void)
         /* 使用邮箱2 发送ID:0x10 发送 "CAN TEST" */
         CAN_WriteData(HW_CAN1, 2, 0x10, (uint8_t *)"CAN TEST", 8); /* 使用邮箱2 发送ID:0x10 发送 "CAN TEST" */
         DelayMs(500);
+        GPIO_ToggleBit(HW_GPIOE, 6);
     }
 }
 

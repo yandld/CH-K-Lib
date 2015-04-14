@@ -1,5 +1,7 @@
 #include <rtthread.h>
 #include "chlib_k.h"
+#include "drv_uart.h"
+#include "shell.h"
 
 /* 线程1 入口 */
 void t1_thread_entry(void* parameter)
@@ -39,7 +41,11 @@ void init_thread_entry(void* parameter)
     if (tid != RT_NULL) rt_thread_startup(tid);
    
     /* 启动shell 控制台系统 可选 */
+    dfs_init();
+    rt_hw_uart_init();
+    rt_console_set_device("uart0");
     finsh_system_init();
+
     
     /* 删除 init_thread_entry 这个线程 */
     tid = rt_thread_self();

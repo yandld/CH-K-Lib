@@ -52,11 +52,11 @@ static rt_err_t configure(struct rt_spi_device* device, struct rt_spi_configurat
     /* MSB or LSB */
     if(configuration->mode & RT_SPI_MSB)
     {
-        SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
+        SPI_InitStruct1.bitOrder = kSPI_MSB;
     }
     else
     {
-        SPI_InitStruct1.bitOrder = kSPI_LSBFirst;
+        SPI_InitStruct1.bitOrder = kSPI_LSB;
     }
     SPI_InitStruct1.mode = kSPI_Master;
     SPI_InitStruct1.ctar = HW_CTAR0;

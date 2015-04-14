@@ -40,7 +40,7 @@ void rt_application_init(void);
 
 void rtthread_startup(void)
 {
-	rt_show_version();
+	//rt_show_version();
 	rt_system_timer_init();
     rt_system_scheduler_init();
 
@@ -95,13 +95,11 @@ __weak int main(void)
     /* set system heap */
     uint32_t begin_addr = ((uint32_t)InitalMemPoll);
     uint32_t end_addr = begin_addr + RTT_INITAL_HEAP_SIZE;
+    
     rt_system_heap_init((void*)begin_addr, (void*)end_addr);
+    
     /* init systick */
     SysTick_Config(SystemCoreClock / RT_TICK_PER_SECOND - 1);
-    
-    rt_components_board_init();
-    
-    rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
     
 	rtthread_startup();
     

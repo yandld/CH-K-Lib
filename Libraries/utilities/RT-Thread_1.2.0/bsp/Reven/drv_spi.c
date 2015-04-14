@@ -117,7 +117,7 @@ int rt_hw_spi_bus_init(void)
     return rt_spi_bus_register(&kinetis_spi, "spi2", &kinetis_spi_ops); 
 }
 
-static void rt_hw_spi_init(void)
+void rt_hw_spi_init(void)
 {
     rt_hw_spi_bus_init();
     struct rt_spi_device* spi_21;

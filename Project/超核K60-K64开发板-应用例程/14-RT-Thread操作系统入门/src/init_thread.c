@@ -32,21 +32,26 @@ void init_thread_entry(void* parameter)
 {
 
     rt_thread_t tid;
-    /* 创建线程 t1 堆栈大小256 优先级24 时间片20(没有用)*/
+    /* 创建线程 t1 堆栈大小256 优先级0x24 时间片为20ms */
     tid = rt_thread_create("t1", t1_thread_entry, RT_NULL, 256, 0x24, 20);
-    if (tid != RT_NULL) rt_thread_startup(tid);
+    if (tid != RT_NULL)
+        rt_thread_startup(tid);
   
-    /* 创建线程 t2 堆栈大小256 优先级24 时间片20(没有用)*/
+    /* 创建线程 t2 堆栈大小256 优先级0x24 时间片为20ms*/
     tid = rt_thread_create("t2", t2_thread_entry, RT_NULL, 256, 0x24, 20);
-    if (tid != RT_NULL) rt_thread_startup(tid);
+    if (tid != RT_NULL)
+        rt_thread_startup(tid);
    
     /* 启动shell 控制台系统 可选 */
-    dfs_init();
+
     rt_hw_uart_init();
     rt_console_set_device("uart0");
+    
+    rt_kprintf("hello rt-thread!\r\n");
+    
+    /* 命令行系统启动 */
     finsh_system_init();
 
-    
     /* 删除 init_thread_entry 这个线程 */
     tid = rt_thread_self();
     rt_thread_delete(tid); 

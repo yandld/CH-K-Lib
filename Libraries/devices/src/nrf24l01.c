@@ -209,10 +209,12 @@ void nrf24l01_set_tx_mode(void)
 void nrf24l01_set_rx_mode(void)
 {
 	uint8_t value;
+    
     /* reflash data */
     value = FLUSH_RX;
     spi_xfer(value, kSPI_PCS_ReturnInactive);
 	NRF24L01_CE_LOW();
+    
     /* set CONFIG_PRIM_RX_MASK to enable Rx */
     value = read_reg(CONFIG);
     value |= CONFIG_PRIM_RX_MASK;
@@ -281,10 +283,12 @@ int nrf24l01_read_packet(uint8_t *buf, uint32_t *len)
         /* clear pendign bit */
         sta |= STATUS_RX_DR_MASK;
         write_reg(STATUS, sta);
+        
         /* read len and data */
         rev_len = read_reg(R_RX_PL_WID);
         read_buffer(RD_RX_PLOAD, buf, rev_len);
         *len = rev_len;
+        
         /* if rev_len > 32 which means a error occur, usr FLUSH_RX to clear */
         if(rev_len > 32)
         {

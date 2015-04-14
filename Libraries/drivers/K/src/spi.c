@@ -29,7 +29,6 @@
 
 SPI_Type * const SPI_InstanceTable[] = SPI_BASES;
 static SPI_CallBackType SPI_CallBackTable[ARRAY_SIZE(SPI_InstanceTable)] = {NULL};
-    
 
 static const struct reg_ops SIM_SPIClockGateTable[] =
 {
@@ -158,31 +157,35 @@ static uint32_t dspi_hal_set_baud(uint32_t instance, uint8_t whichCtar, uint32_t
  */
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
 {
+    SPI_Type *SPIx;
+    
+    SPIx = SPI_InstanceTable[SPI_InitStruct->instance];
+    
     /* enable clock gate */
     *(uint32_t*)SIM_SPIClockGateTable[SPI_InitStruct->instance].addr |= SIM_SPIClockGateTable[SPI_InitStruct->instance].mask;
     
     /* let all PCS low when in inactive mode */
     /* stop SPI */
-    SPI_InstanceTable[SPI_InitStruct->instance]->MCR |= SPI_MCR_HALT_MASK;
+    SPIx->MCR |= SPI_MCR_HALT_MASK;
     
     /* master or slave */
     switch(SPI_InitStruct->mode)
     {
         case kSPI_Master:
-            SPI_InstanceTable[SPI_InitStruct->instance]->MCR |= SPI_MCR_MSTR_MASK;
+            SPIx->MCR |= SPI_MCR_MSTR_MASK;
             break;
         case kSPI_Slave:
-            SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_MSTR_MASK;
+            SPIx->MCR &= ~SPI_MCR_MSTR_MASK;
             break;
         default:
             break;
     }
     
     /* enable SPI clock */
-    SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_MDIS_MASK;
+    SPIx->MCR &= ~SPI_MCR_MDIS_MASK;
     
     /* disable FIFO and clear FIFO flag */
-    SPI_InstanceTable[SPI_InitStruct->instance]->MCR |= 
+    SPIx->MCR |= 
         SPI_MCR_PCSIS_MASK |
         SPI_MCR_HALT_MASK  |
         SPI_MCR_CLR_TXF_MASK|
@@ -195,10 +198,10 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
     SPI_CTARConfig(SPI_InitStruct->instance, SPI_InitStruct->ctar, SPI_InitStruct->frameFormat, SPI_InitStruct->dataSize, SPI_InitStruct->bitOrder, SPI_InitStruct->baudrate);
     
     /* clear all flags */
-    SPI_InstanceTable[SPI_InitStruct->instance]->SR = 0xFFFFFFFF;
+    SPIx->SR = 0xFFFFFFFF;
     
     /* launch */
-    SPI_InstanceTable[SPI_InitStruct->instance]->MCR &= ~SPI_MCR_HALT_MASK;
+    SPIx->MCR &= ~SPI_MCR_HALT_MASK;
 }
 
  
@@ -208,20 +211,24 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
  */
 void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate)
 {
+    SPI_Type *SPIx;
     uint32_t clock;
     
+    SPIx = SPI_InstanceTable[instance];
+    
+    
     /* data size */
-    SPI_InstanceTable[instance]->CTAR[ctar] &= ~SPI_CTAR_FMSZ_MASK;
-    SPI_InstanceTable[instance]->CTAR[ctar] |= SPI_CTAR_FMSZ(dataSize-1);
+    SPIx->CTAR[ctar] &= ~SPI_CTAR_FMSZ_MASK;
+    SPIx->CTAR[ctar] |= SPI_CTAR_FMSZ(dataSize-1);
     
     /* bit order */
     switch(bitOrder)
     {
-        case kSPI_MSBFirst:
-            SPI_InstanceTable[instance]->CTAR[ctar] &= ~SPI_CTAR_LSBFE_MASK;
+        case kSPI_MSB:
+            SPIx->CTAR[ctar] &= ~SPI_CTAR_LSBFE_MASK;
             break;
-        case kSPI_LSBFirst:
-            SPI_InstanceTable[instance]->CTAR[ctar] |= SPI_CTAR_LSBFE_MASK;
+        case kSPI_LSB:
+            SPIx->CTAR[ctar] |= SPI_CTAR_LSBFE_MASK;
             break;
         default:
             break;
@@ -231,20 +238,20 @@ void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frame
     switch(frameFormat)
     {
         case kSPI_CPOL0_CPHA0:
-            SPI_InstanceTable[instance]->CTAR[ctar] &= ~SPI_CTAR_CPOL_MASK;
-            SPI_InstanceTable[instance]->CTAR[ctar] &= ~SPI_CTAR_CPHA_MASK;
+            SPIx->CTAR[ctar] &= ~SPI_CTAR_CPOL_MASK;
+            SPIx->CTAR[ctar] &= ~SPI_CTAR_CPHA_MASK;
             break;
         case kSPI_CPOL0_CPHA1:
-            SPI_InstanceTable[instance]->CTAR[ctar] &= ~SPI_CTAR_CPOL_MASK;
-            SPI_InstanceTable[instance]->CTAR[ctar] |= SPI_CTAR_CPHA_MASK;
+            SPIx->CTAR[ctar] &= ~SPI_CTAR_CPOL_MASK;
+            SPIx->CTAR[ctar] |= SPI_CTAR_CPHA_MASK;
             break;   
         case kSPI_CPOL1_CPHA0:
-            SPI_InstanceTable[instance]->CTAR[ctar] |= SPI_CTAR_CPOL_MASK;
-            SPI_InstanceTable[instance]->CTAR[ctar] &= ~SPI_CTAR_CPHA_MASK;
+            SPIx->CTAR[ctar] |= SPI_CTAR_CPOL_MASK;
+            SPIx->CTAR[ctar] &= ~SPI_CTAR_CPHA_MASK;
             break;  
         case kSPI_CPOL1_CPHA1:
-            SPI_InstanceTable[instance]->CTAR[ctar] |= SPI_CTAR_CPOL_MASK;
-            SPI_InstanceTable[instance]->CTAR[ctar] |= SPI_CTAR_CPHA_MASK;  
+            SPIx->CTAR[ctar] |= SPI_CTAR_CPOL_MASK;
+            SPIx->CTAR[ctar] |= SPI_CTAR_CPHA_MASK;  
             break;  
         default:
             break;
@@ -255,7 +262,7 @@ void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frame
     dspi_hal_set_baud(instance, ctar, baudrate, clock);
     
     /* add more CS time */
-    SPI_InstanceTable[instance]->CTAR[ctar] |= SPI_CTAR_ASC(1)|SPI_CTAR_CSSCK(1)|SPI_CTAR_PASC(1)|SPI_CTAR_PCSSCK(1);  
+    SPIx->CTAR[ctar] |= SPI_CTAR_ASC(1)|SPI_CTAR_CSSCK(1)|SPI_CTAR_PASC(1)|SPI_CTAR_PCSSCK(1);  
 }
 
 /**
@@ -283,7 +290,7 @@ uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t 
     SPI_InitStruct1.dataSize = 8;
     SPI_InitStruct1.instance = pq->ip_instance;
     SPI_InitStruct1.mode = kSPI_Master;
-    SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
+    SPI_InitStruct1.bitOrder = kSPI_MSB;
     SPI_InitStruct1.ctar = HW_CTAR0;
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
@@ -333,29 +340,33 @@ void SPI_EnableRxFIFO(uint32_t instance, bool status)
  */
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status)
 {
+    SPI_Type* SPIx;
+    
+    SPIx = SPI_InstanceTable[instance];
+    
     switch(config)
     {
         case kSPI_IT_TCF: 
             (status)?
-            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_TCF_RE_MASK):
-            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_TCF_RE_MASK);
+            (SPIx->RSER |= SPI_RSER_TCF_RE_MASK):
+            (SPIx->RSER &= ~SPI_RSER_TCF_RE_MASK);
             NVIC_EnableIRQ(SPI_IRQnTable[instance]);
             break;
         case kSPI_DMA_TFFF:
             (status)?
-            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_TFFF_RE_MASK):
-            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_TFFF_RE_MASK); 
+            (SPIx->RSER |= SPI_RSER_TFFF_RE_MASK):
+            (SPIx->RSER &= ~SPI_RSER_TFFF_RE_MASK); 
             (status)?
-            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_TFFF_DIRS_MASK):
-            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_TFFF_DIRS_MASK); 
+            (SPIx->RSER |= SPI_RSER_TFFF_DIRS_MASK):
+            (SPIx->RSER &= ~SPI_RSER_TFFF_DIRS_MASK); 
             break;
         case kSPI_DMA_RFDF:
             (status)?
-            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_RFDF_RE_MASK):
-            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_RFDF_RE_MASK); 
+            (SPIx->RSER |= SPI_RSER_RFDF_RE_MASK):
+            (SPIx->RSER &= ~SPI_RSER_RFDF_RE_MASK); 
             (status)?
-            (SPI_InstanceTable[instance]->RSER |= SPI_RSER_RFDF_DIRS_MASK):
-            (SPI_InstanceTable[instance]->RSER &= ~SPI_RSER_RFDF_DIRS_MASK);   
+            (SPIx->RSER |= SPI_RSER_RFDF_DIRS_MASK):
+            (SPIx->RSER &= ~SPI_RSER_RFDF_DIRS_MASK);   
             break;
         default:
             break;
@@ -394,23 +405,20 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
  *          @arg kSPI_PCS_KeepAsserted    :最后保持未选中状态
  * @retval 读取到的数据
  */
-uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, uint16_t csState)
+uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, SPI_PCS_Type csState)
 {
-    uint16_t read_data;
-    
 	SPI_InstanceTable[instance]->PUSHR = (((uint32_t)(((csState))<<SPI_PUSHR_CONT_SHIFT))&SPI_PUSHR_CONT_MASK) 
             | SPI_PUSHR_CTAS(ctar)      
             | SPI_PUSHR_PCS(1<<CSn)
             | SPI_PUSHR_TXDATA(data);
     
     /* waitting for complete */
-    if(!(SPI_InstanceTable[instance]->RSER & SPI_RSER_TCF_RE_MASK)) // if it is polling mode
+    if(!(SPI_InstanceTable[instance]->RSER & SPI_RSER_TCF_RE_MASK)) /* if it is polling mode */
     {
         while(!(SPI_InstanceTable[instance]->SR & SPI_SR_TCF_MASK));
         SPI_InstanceTable[instance]->SR |= SPI_SR_TCF_MASK;
     }
-    read_data = (uint16_t)SPI_InstanceTable[instance]->POPR;
-    return read_data;
+    return (uint16_t)SPI_InstanceTable[instance]->POPR;
 }
 
 

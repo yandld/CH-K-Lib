@@ -10,7 +10,7 @@
   */
   
 #include "nrf24l01.h"
-#include "spi_abstraction.h"
+#include "spi.h"
 
 #define NRF24L01_DEBUG		0
 #if ( NRF24L01_DEBUG == 1 )
@@ -80,38 +80,65 @@
 #define PYNPD               0x1C
 #define FEATURE             0x1D
 
-static struct spi_device device;
+struct nrf24xx_device 
+{
+    uint32_t                spi_instance;
+    uint8_t                 spi_cs;
+    void                    *user_data;
+};
+
+static struct nrf24xx_device nrf_dev;
+
+//static struct spi_device device;
 const uint8_t TX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //发送地址
 const uint8_t RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //接收地址
+
+
+static inline uint8_t spi_xfer(uint8_t data, SPI_PCS_Type csStatus)
+{
+    return (uint8_t)SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, (uint8_t)data, nrf_dev.spi_cs, csStatus);
+}
 
 //读寄存器
 static uint8_t read_reg(uint8_t addr)
 {
-    uint8_t temp = READ_REG + addr;
-    spi_write(&device, &temp, 1, false);
-    spi_read(&device, &temp, 1, true);
-    return temp;
+    uint8_t val;
+    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, READ_REG+(uint8_t)addr, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
+    val = SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, 0x00, nrf_dev.spi_cs, kSPI_PCS_ReturnInactive);
+    return val;
 }
+
 //写寄存器
 static void write_reg(uint8_t addr, uint8_t val)
 {
-    uint8_t temp = WRITE_REG + addr;
-    spi_write(&device, &temp, 1, false);
-    spi_write(&device, &val, 1, true);
+    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, WRITE_REG+(uint8_t)addr, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
+    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, val, nrf_dev.spi_cs, kSPI_PCS_ReturnInactive);
 }
+
 //写数据
 static void write_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
-    uint8_t temp = WRITE_REG + addr;
-    spi_write(&device, &temp, 1, false);
-    spi_write(&device, buf, len, true);
+    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, WRITE_REG+(uint8_t)addr, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
+    while(len--)
+    {
+        if(len)
+            SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, *buf++, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
+        else
+            SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, *buf++, nrf_dev.spi_cs, kSPI_PCS_ReturnInactive);  
+    }
 }
+
 //读数据
 static void read_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
-    uint8_t temp = READ_REG + addr;
-    spi_write(&device, &temp, 1, false);
-    spi_read(&device, buf, len, true);
+    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, READ_REG+(uint8_t)addr, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
+    while(len--)
+    {
+        if(len)
+            *buf++ = SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, 0x00, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
+        else
+            *buf++ = SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, 0x00, nrf_dev.spi_cs, kSPI_PCS_ReturnInactive);  
+    }
 }
 //NRF设备检测，并配置接收和发送地址
 int nrf24l01_probe(void)
@@ -147,24 +174,14 @@ int nrf24l01_probe(void)
     }
     return 1;
 }
+
 //NRF模块初始化
-int nrf24l01_init(spi_bus_t bus, uint32_t cs)
+int nrf24l01_init(uint32_t instance, uint32_t cs)
 {
-    uint32_t ret;
-    device.csn = cs;
-    device.config.baudrate = 1*1000*1000;
-    device.config.data_width = 8;
-    device.config.mode = SPI_MODE_0 | SPI_MASTER | SPI_MSB;
-    ret = spi_bus_attach_device(bus, &device);
-    if(ret)
-    {
-        return ret;
-    }
-    else
-    {
-        ret = spi_config(&device);
-    }
-    return ret;
+    nrf_dev.spi_instance = instance;
+    nrf_dev.spi_cs = cs; 
+    SPI_CTARConfig(instance, HW_CTAR0, kSPI_CPOL0_CPHA0, 8, kSPI_MSB, 2*1000*1000);
+    return 0;
 }
 
 
@@ -178,7 +195,7 @@ void nrf24l01_set_tx_mode(void)
 {
     uint8_t value;
     value = FLUSH_TX;
-    spi_write(&device, &value, 1, true);
+    spi_xfer(FLUSH_TX, kSPI_PCS_ReturnInactive);
     NRF24L01_CE_LOW();
     value = read_reg(CONFIG);
     value &= ~CONFIG_PRIM_RX_MASK;
@@ -194,7 +211,7 @@ void nrf24l01_set_rx_mode(void)
 	uint8_t value;
     /* reflash data */
     value = FLUSH_RX;
-    spi_write(&device, &value, 1, true);
+    spi_xfer(value, kSPI_PCS_ReturnInactive);
 	NRF24L01_CE_LOW();
     /* set CONFIG_PRIM_RX_MASK to enable Rx */
     value = read_reg(CONFIG);
@@ -210,17 +227,26 @@ int nrf24l01_write_packet(uint8_t *buf, uint32_t len)
 {
     uint8_t status;
     uint8_t plos;
+    
     /* clear bits */
     status = read_reg(STATUS);
     status |= STATUS_TX_DS_MASK | STATUS_MAX_RT_MASK;
     write_reg(STATUS, status);
     NRF24L01_CE_LOW();
+    
     /* clear PLOS */
     write_reg(RF_CH, 40); 
+    
     /* write data */
-    uint8_t value = WR_TX_PLOAD;
-    spi_write(&device, &value, 1, false);
-    spi_write(&device, buf, len, true);
+    spi_xfer(WR_TX_PLOAD, kSPI_PCS_KeepAsserted);
+    while(len--)
+    {
+        if(len)
+            spi_xfer(*buf++, kSPI_PCS_KeepAsserted);
+        else
+            spi_xfer(*buf++, kSPI_PCS_ReturnInactive);      
+    }
+    
     NRF24L01_CE_HIGH();
     while(1)
     {
@@ -239,7 +265,7 @@ int nrf24l01_write_packet(uint8_t *buf, uint32_t len)
         if(plos && (status & STATUS_MAX_RT_MASK))
         {
             status = FLUSH_TX; /* clear TX FIFO */
-            spi_write(&device, &status, 1, true);
+            spi_xfer(FLUSH_TX, kSPI_PCS_ReturnInactive);
             return 1;
         }
     }
@@ -264,7 +290,7 @@ int nrf24l01_read_packet(uint8_t *buf, uint32_t *len)
         {
             NRF24L01_TRACE("rev len > 32, error!\r\n");
             sta = FLUSH_RX;
-            spi_write(&device, &sta, 1, true);
+            spi_xfer(FLUSH_RX, kSPI_PCS_ReturnInactive);
             *len = 32;
             return 2;
         }

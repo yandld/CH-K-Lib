@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    nrf24l01.c
+  * @file    nrf24l01.h
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
@@ -12,7 +12,7 @@
 #define __NRF24L01_H	 		  
 
 #include <stdint.h>
-#include "spi_abstraction.h"
+#include "spi.h"
 #include "gpio.h"
 
 
@@ -37,7 +37,7 @@ void nrf24l01_set_rx_mode(void);
 int nrf24l01_write_packet(uint8_t *buf, uint32_t len);
 int nrf24l01_read_packet(uint8_t *buf, uint32_t *len);
 int nrf24l01_probe(void);
-int nrf24l01_init(spi_bus_t bus, uint32_t cs);
+int nrf24l01_init(uint32_t instance, uint32_t cs);
 
 
 #endif

@@ -16,7 +16,7 @@
       TX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //发送地址
       RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //接收地址    
 */
-extern int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
+
 static uint8_t NRF2401RXBuffer[32] = "HelloWorld\r\n";//无线接收数据
 static uint8_t* gpRevChar;
 
@@ -47,9 +47,9 @@ int main(void)
     /* 初始化2401所需的CE引脚 */
     GPIO_QuickInit(HW_GPIOE, 0 , kGPIO_Mode_OPP);
     /* 初始化2401模块*/
-    static struct spi_bus bus;
-    kinetis_spi_bus_init(&bus, HW_SPI1);
-    nrf24l01_init(&bus, 0);
+    SPI_QuickInit(SPI1_SCK_PE02_SOUT_PE01_SIN_PE03, kSPI_CPOL0_CPHA0, 1*1000*1000);
+    nrf24l01_init(HW_SPI1, 0);
+    
     //检测是否存在无线设备，并配置接收和发送地址
     if(nrf24l01_probe())
     {

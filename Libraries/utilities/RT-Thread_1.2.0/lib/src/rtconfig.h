@@ -10,8 +10,8 @@
 /* SECTION: RT_DEBUG */
 /* Thread Debug */
 #define RT_DEBUG
-#define RT_USING_COMPONENTS_INIT
-#define RT_DEBUG_INIT   1
+//#define RT_USING_COMPONENTS_INIT
+//#define RT_DEBUG_INIT   1
 //#define RT_USING_MODULE
 
 #define RT_USING_OVERFLOW_CHECK

@@ -112,7 +112,7 @@
 #endif 
 /***********************AK8963 Register Map**************************************/
 #ifdef USE_AK8963
-#define AK8963_ADDRESS   (0x0C<<1)
+#define AK8963_ADDRESS   (0x0C)
 //Magnetometer Registers
 #define AK8963_WHO_AM_I  0x00 // should return 0x48
 #define AK8963_INFO      0x01
@@ -133,10 +133,13 @@
 
 #endif
 /***********************Register Map End**************************************/
-
-void ch9250GetAresv(void);
+int8_t funsionDataInit(void);
+void 	ch9250GetMres(void);
+void 	ch9250GetGres(void);
+void 	ch9250GetAres(void);
+int8_t	ch9250GetId(uint8_t* id);
 int8_t 	ch9250Init(void);
-int8_t 	ch8963GetValue(float * destination);
+int8_t 	ch8963Init(float * destination);
 int8_t 	ch9250Reset(void);
 int8_t 	ch9250Calibrate(float * dest1, float * dest2);
 int8_t 	ch9250SelfTest(float * destination) ;
@@ -144,6 +147,6 @@ int8_t 	ch9250ReadAccelData(int16_t * destination);
 void 	ch9250ReadGyroData(int16_t * destination);
 void 	ch9250ReadMagData(int16_t * destination);
 int8_t 	ch9250RegisterValueCheck(void);
-
+int8_t 	ch8963RegisterValueCheck(void);
 #else
 #endif

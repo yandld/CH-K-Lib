@@ -18,7 +18,7 @@ void SysTick_Handler(void)
 
 __weak void init_thread_entry(void* parameter)
 {
-    rt_kprintf("%s is empty!\r\n", __func__);
+    rt_kprintf("%s empty init thread!\r\n", __func__);
 }
 
 /* redefine fputc */
@@ -32,17 +32,15 @@ void _init_entry(void* parameter)
 {
     rt_thread_t tid;
     
-    /* init components */
-    rt_components_init();
-    dfs_romfs_init();
-    elm_init();
-    dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
+    //dfs_init();
+    //dfs_romfs_init();
+    //elm_init();
+    //dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
+    
     /* init thread */
     tid = rt_thread_create("init", init_thread_entry, RT_NULL, 1024, 0x20, 20);                       
     if (tid != RT_NULL)
-    {
         rt_thread_startup(tid);		
-    }
 
     tid = rt_thread_self();
     rt_thread_delete(tid);
@@ -56,9 +54,7 @@ void rt_application_init(void)
     /* internal init thread */
     tid = rt_thread_create("init0", _init_entry, RT_NULL, 512, 5, 20);                       
     if (tid != RT_NULL)
-    {
-        rt_thread_startup(tid);		
-    }
+        rt_thread_startup(tid);
 }
 
 

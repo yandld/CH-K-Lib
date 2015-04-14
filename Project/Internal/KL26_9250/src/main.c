@@ -28,7 +28,7 @@ int main(void)
 
     DelayInit();    
     GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);    
-    UART_QuickInit(UART0_RX_PA01_TX_PA02, 9600);    
+    UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);    
     printf("HelloWorld\r\n");
     CLOCK_GetClockFrequency(kCoreClock, &clock);
     printf("CoreClock:%dHz\r\n", clock);
@@ -37,11 +37,13 @@ int main(void)
 
 	CHZT02_Init();
 
+
 //	scopeInit();
 
     while(1)
     {
 //		scopeDrawLine(i++,0,0);
+			CHZT02_Running();
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(50);
     }

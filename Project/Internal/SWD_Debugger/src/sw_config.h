@@ -1,6 +1,8 @@
 #include "gpio.h"
 #include <stdint.h>
 #include <stdbool.h>
+#ifndef __CH_SW_CONFIG_H__
+#define __CH_SW_CONFIG_H__
 
 
 #define PIN_DELAY()         DelayUs(1)
@@ -70,5 +72,6 @@ static inline void swd_io_init(void)
     TRST_HIGH();
 }
 
+#endif
 
 

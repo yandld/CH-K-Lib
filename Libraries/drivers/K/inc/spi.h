@@ -60,8 +60,8 @@ typedef enum
 
 typedef enum
 {
-    kSPI_MSBFirst,      //!< 先发送最高位
-    kSPI_LSBFirst,      //!< 先发送最低位
+    kSPI_MSB,      //!< 先发送最高位
+    kSPI_LSB,      //!< 先发送最低位
 } SPI_BitOlder_Type;
 
 //!< 初始化结构
@@ -73,7 +73,7 @@ typedef struct
     SPI_BitOlder_Type       bitOrder;               //!< 先发高位还是先发地位
     SPI_FrameFormat_Type    frameFormat;            //!< 四种帧格式选择
     uint32_t                baudrate;               //!< 速率
-    uint32_t                ctar;
+    uint32_t                ctar;                   //!< 帧格式寄存器选择 
 }SPI_InitTypeDef;
 
 //!< 快速初始化结构
@@ -90,7 +90,7 @@ typedef void (*SPI_CallBackType)(void);
 
 //!< API functions
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct);
-uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, uint16_t csState);
+uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, SPI_PCS_Type csState);
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status);
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun);
 uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate);

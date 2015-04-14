@@ -8,12 +8,10 @@
   ******************************************************************************
   */
 
-#include "spi_abstraction.h"
-#include "w25qxx.h"
+#include <string.h>
 
-#define W25X_PAGE_SIZE          (256)      //一页尺寸
-#define W25X_SECTOR_SIZE        (4096)
-#define W25X_PBLOCK_SIZE        (64*1024)
+#include "spi.h"
+#include "w25qxx.h"
 
 //芯片WQ25指令
 #define W25X_WriteEnable		0x06 
@@ -46,103 +44,107 @@ uint8_t SPI_FLASH_BUFFER[4096];
 #define W25QXX_TRACE(...)
 #endif
 
-struct w25qxx_attr_t
-{
-    const char* name;
-    uint32_t size;
-    uint16_t id;
-};
-
 //W25芯片信息
-static const struct w25qxx_attr_t w25qxx_attr_table[] = 
+static const struct w25qxx_attr_t w25qxx_tbl[] = 
 {
-    {"W25Q10",    128*1024, 0xEF10},
-    {"W25Q20",    256*1024, 0xEF11},
-    {"W25Q40",    512*1024, 0xEF12},
-    {"W25Q80",   1024*1024, 0xEF13},
-    {"W25Q16",   2048*1024, 0xEF14},
-    {"W25Q32",   4096*1024, 0xEF15},
-    {"W25Q64",   8192*1024, 0xEF16},
-    {"W25Q128", 16384*1024, 0xEF17}, 
+    {"W25Q10",    128*1024, 0xEF10, 256, 4096, (64*1024)},
+    {"W25Q20",    256*1024, 0xEF11, 256, 4096, (64*1024)},
+    {"W25Q40",    512*1024, 0xEF12, 256, 4096, (64*1024)},
+    {"W25Q80",   1024*1024, 0xEF13, 256, 4096, (64*1024)},
+    {"W25Q16",   2048*1024, 0xEF14, 256, 4096, (64*1024)},
+    {"W25Q32",   4096*1024, 0xEF15, 256, 4096, (64*1024)},
+    {"W25Q64",   8192*1024, 0xEF16, 256, 4096, (64*1024)},
+    {"W25Q128", 16384*1024, 0xEF17, 256, 4096, (64*1024)}, 
 };
 
-static struct spi_device device;
-struct w25qxx_attr_t w25qxx_type;
+struct w25qxx_device 
+{
+    const char              *name;
+    uint32_t                spi_instance;
+    uint8_t                 spi_cs;
+    struct w25qxx_attr_t    attr;
+    void                    *user_data;
+};
+
+static struct w25qxx_device w25_dev;
+
+static inline uint8_t spi_xfer(uint8_t data, SPI_PCS_Type csStatus)
+{
+    return (uint8_t)SPI_ReadWriteByte(w25_dev.spi_instance , HW_CTAR0, (uint8_t)data, w25_dev.spi_cs, csStatus);
+}
+
 
 //芯片上电
 static int w25qxx_power_up(void)
 {
     volatile uint32_t i;
-    uint8_t buf[1];
-    buf[0] = W25X_ReleasePowerDown;
-    spi_write(&device, buf, sizeof(buf), true);
+    spi_xfer(W25X_ReleasePowerDown, kSPI_PCS_ReturnInactive);
+    
     /* delay 3us */
-    for(i=0;i<1000;i++);
-    return SPI_EOK;
+    for(i=0;i<1000*5;i++);
+    return 0;
 }
 
 //芯片读
 static uint8_t w25qxx_read_sr2(void)
 {
-    uint8_t buf[1];
-    buf[0] = W25X_ReadStatusReg2;
-    spi_write(&device, buf, 1, false); //false = 保持片选,继续发送
-    spi_read(&device, buf, 1, true);
-    return buf[0];
+    uint8_t sr;
+    
+    spi_xfer(W25X_ReadStatusReg2, kSPI_PCS_KeepAsserted);
+    sr = spi_xfer(0x00, kSPI_PCS_ReturnInactive);
+    
+    return sr;
 }
 
 static uint8_t w25qxx_read_sr(void)
 {
-    uint8_t buf[1];
-    buf[0] = W25X_ReadStatusReg;
-    spi_write(&device, buf, 1, false); //false = 保持片选,继续发送
-    spi_read(&device, buf, 1, true);
-    W25QXX_TRACE("W25QXX BUSY\r\n", buf[0]);
-    return buf[0];
+    uint8_t sr;
+    
+    spi_xfer(W25X_ReadStatusReg, kSPI_PCS_KeepAsserted);
+    sr = spi_xfer(0x00, kSPI_PCS_ReturnInactive);
+    
+    return sr;
 }
 
 //芯片写使能
 static int w25qxx_write_enable(void)
 {
-    uint8_t buf[1];
-    buf[0] = W25X_WriteEnable;
-    spi_write(&device, buf, sizeof(buf), true);
-    return SPI_EOK;
+    spi_xfer(W25X_WriteEnable, kSPI_PCS_ReturnInactive);
+    return 0;
 }
+
 //芯片写
 static int w25qxx_write_sr(uint8_t value)
 {
-    uint8_t buf[2];
-    buf[0] = W25X_WriteStatusReg;
-    buf[1] = value;
     w25qxx_write_enable();
-    spi_write(&device, buf, 2, true); 
-    return SPI_EOK;
+    spi_xfer(W25X_WriteStatusReg, kSPI_PCS_KeepAsserted);
+    spi_xfer(value, kSPI_PCS_ReturnInactive);
+    return 0;
 }
+
 //芯片探测
-int w25qxx_probe(void)
+static int w25qxx_probe(void)
 {
     uint32_t i;
     uint16_t id;
-    uint8_t buf[4];
-    buf[0] = W25X_ManufactDeviceID;
-    buf[1] = 0;
-    buf[2] = 0;
-    buf[3] = 0;
+    uint8_t buf[2];
+
     /* read id */
-    spi_write(&device, buf, 4, false);
-    spi_read(&device, buf, 2, true);
+    spi_xfer(W25X_ManufactDeviceID, kSPI_PCS_KeepAsserted);
+    spi_xfer(0, kSPI_PCS_KeepAsserted);
+    spi_xfer(0, kSPI_PCS_KeepAsserted);
+    spi_xfer(0, kSPI_PCS_KeepAsserted);
+    buf[0] = spi_xfer(0, kSPI_PCS_KeepAsserted);
+    buf[1] = spi_xfer(0, kSPI_PCS_ReturnInactive);
     id = ((buf[0]<<8) + buf[1]);
-    W25QXX_TRACE("ID:%d\r\n", id);
+    W25QXX_TRACE("ID:0x%X\r\n", id);
     //see if we find a match
-    for(i = 0; i< ARRAY_SIZE(w25qxx_attr_table);i++)
+    for(i = 0; i< ARRAY_SIZE(w25qxx_tbl);i++)
     {
-        if(w25qxx_attr_table[i].id == id)
+        if(w25qxx_tbl[i].id == id)
         {
-            // find a match
-            w25qxx_type.name = w25qxx_attr_table[i].name;
-            w25qxx_type.id = w25qxx_attr_table[i].id;
-            w25qxx_type.size = w25qxx_attr_table[i].size;
+            /* find a match */
+            w25_dev.attr = w25qxx_tbl[i];
             w25qxx_power_up();
             buf[0] = w25qxx_read_sr();
             W25QXX_TRACE("SR:0x%X\r\n", buf[0]);
@@ -150,74 +152,75 @@ int w25qxx_probe(void)
             W25QXX_TRACE("SR2:0x%X\r\n", buf[0]);
             // enable full access to all memory regin, something like unlock chip.
             w25qxx_write_sr(0x00);
-            return SPI_EOK; 
+            return 0; 
         }
     }
-    return SPI_ERROR;
+    return 1;
 }
 
-//获取芯片尺寸
-uint32_t w25qxx_get_size(void)
+int w25qxx_get_attr(struct w25qxx_attr_t* attr)
 {
-    return w25qxx_type.size;
-}
-//获取芯片唯一ID
-uint32_t w25qxx_get_id(void)
-{
-    return w25qxx_type.id;
-}
-//获取芯片型号
-const char * w25qxx_get_name(void)
-{
-    return w25qxx_type.name;
+    memcpy(attr, &w25_dev.attr, sizeof(struct w25qxx_attr_t));
+    return 0;
 }
 
 //读取数据
 int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len)
 {
-    uint8_t buf_send[4];
-    buf_send[0] = W25X_ReadData;
-    buf_send[1] = (uint8_t)((addr)>>16);
-    buf_send[2] = (uint8_t)((addr)>>8);
-    buf_send[3] = (uint8_t)addr;
-    
-    if(spi_write(&device, buf_send, sizeof(buf_send), false))
+    /* send addr */
+    spi_xfer(W25X_ReadData, kSPI_PCS_KeepAsserted);
+    spi_xfer((uint8_t)((addr)>>16), kSPI_PCS_KeepAsserted);
+    spi_xfer((uint8_t)((addr)>>8), kSPI_PCS_KeepAsserted);
+    spi_xfer((uint8_t)addr, kSPI_PCS_KeepAsserted);
+   
+    while(len--)
     {
-        return SPI_ERROR;
+        if(len)
+            *buf++ = spi_xfer(0x00, kSPI_PCS_KeepAsserted);
+        else
+            *buf++ = spi_xfer(0x00, kSPI_PCS_ReturnInactive);
     }
-    spi_read(&device, buf, len, true);
-    return SPI_EOK;
+    return 0;
 }
+
 //写一页数据
-static int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
+int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
 {
-    uint8_t buf_send[4];
     w25qxx_write_enable();
-    buf_send[0] = W25X_PageProgram;
-    buf_send[1] = (uint8_t)((addr)>>16);
-    buf_send[2] = (uint8_t)((addr)>>8);
-    buf_send[3] = (uint8_t)addr;
-    if(spi_write(&device, buf_send, sizeof(buf_send), false))
+
+    /* send addr */
+    spi_xfer(W25X_PageProgram, kSPI_PCS_KeepAsserted);
+    spi_xfer((uint8_t)((addr)>>16), kSPI_PCS_KeepAsserted);
+    spi_xfer((uint8_t)((addr)>>8), kSPI_PCS_KeepAsserted);
+    spi_xfer((uint8_t)addr, kSPI_PCS_KeepAsserted);
+    
+    while(len--)
     {
-        return SPI_ERROR;
+        if(len)
+            spi_xfer(*buf, kSPI_PCS_KeepAsserted);
+        else
+            spi_xfer(*buf, kSPI_PCS_ReturnInactive);
+        buf++;
     }
-    spi_write(&device, buf, len, true);
+    
     /* wait busy */
     while((w25qxx_read_sr() & 0x01) == 0x01);
-    return SPI_EOK;
+    return 0;
 }
+
 //写数据
 static int w25qxx_write_no_check(uint32_t addr, uint8_t *buf, uint32_t len)  
 { 			 		 
 	uint16_t pageremain;	   
     W25QXX_TRACE("w25qxx - write_no_check: addr:%d len:%d\r\n", addr, len);
-	pageremain = W25X_PAGE_SIZE-(addr%W25X_PAGE_SIZE); //单页剩余的字节数		 	    
+    
+	pageremain = w25_dev.attr.page_size-(addr%w25_dev.attr.page_size); //单页剩余的字节数		 	    
 	if(len <= pageremain) pageremain = len;//不大于256个字节
 	while(1)
 	{	   
         if(w25qxx_write_page(addr, buf, pageremain))
         {
-            return SPI_ERROR;
+            return 1;
         }
 		if(len == pageremain)break;//写入结束了
 	 	else //NumByteToWrite>pageremain
@@ -229,35 +232,40 @@ static int w25qxx_write_no_check(uint32_t addr, uint8_t *buf, uint32_t len)
 			else pageremain = len; 	  //不够256个字节了
 		}
 	}
-    return SPI_EOK;
+    return 0;
 } 
+
 //擦除扇区
-static int w25qxx_erase_sector(uint32_t addr)
+int w25qxx_erase_sector(uint32_t addr)
 {
-    uint8_t buf_send[4];
-    addr /= W25X_SECTOR_SIZE;
-    addr *= W25X_SECTOR_SIZE; //round addr to N x W25X_SECTOR_SIZE
-    buf_send[0] = W25X_SectorErase;
-    buf_send[1] = (uint8_t)((addr)>>16);
-    buf_send[2] = (uint8_t)((addr)>>8);
-    buf_send[3] = (uint8_t)addr;
+    
+    addr /= w25_dev.attr.sector_size;
+    addr *= w25_dev.attr.sector_size; //round addr to N x W25X_SECTOR_SIZE
+    
     w25qxx_write_enable();
     while((w25qxx_read_sr() & 0x01) == 0x01);
-    spi_write(&device, buf_send, sizeof(buf_send), true);
+    
+    spi_xfer(W25X_SectorErase, kSPI_PCS_KeepAsserted);
+    spi_xfer((uint8_t)((addr)>>16), kSPI_PCS_KeepAsserted);
+    spi_xfer((uint8_t)((addr)>>8), kSPI_PCS_KeepAsserted);
+    spi_xfer((uint8_t)addr, kSPI_PCS_ReturnInactive);
+    
     while((w25qxx_read_sr() & 0x01) == 0x01);
-    return SPI_EOK;
+    return 0;
 }
+
 //擦除整个芯片
 int w25qxx_erase_chip(void)
 {
-    uint8_t buf_send[1]; 
     w25qxx_write_enable();
     while((w25qxx_read_sr() & 0x01) == 0x01);
-    buf_send[0] = W25X_ChipErase;
-    spi_write(&device, buf_send, sizeof(buf_send), true);
+    
+    spi_xfer(W25X_ChipErase, kSPI_PCS_ReturnInactive);
+
     while((w25qxx_read_sr() & 0x01) == 0x01);
-    return SPI_EOK;
+    return 0;
 }
+
 //向芯片写数据
 int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len)  
 { 
@@ -305,25 +313,16 @@ int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
 			else secremain = len;			//下一个扇区可以写完了
 		}	 
 	}
-    return SPI_EOK;
+    return 0;
 }
+
 //芯片初始化
-int w25qxx_init(spi_bus_t bus, uint32_t cs)
+int w25qxx_init(uint32_t instance, uint32_t cs)
 {
-    uint32_t ret;
-    device.csn = cs;
-    device.config.baudrate = 47*1000*1000;
-    device.config.data_width = 8;
-    device.config.mode = SPI_MODE_0 | SPI_MASTER | SPI_MSB;
-    ret = spi_bus_attach_device(bus, &device);
-    if(ret)
-    {
-        return ret;
-    }
-    else
-    {
-        ret = spi_config(&device);
-    }
-    return ret;
+    w25_dev.spi_instance = instance;
+    w25_dev.spi_cs = cs; 
+    SPI_CTARConfig(instance, HW_CTAR0, kSPI_CPOL0_CPHA0, 8, kSPI_MSB, 2*1000*1000);
+    
+    return w25qxx_probe();
 }
 

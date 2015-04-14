@@ -224,10 +224,10 @@ void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frame
     /* bit order */
     switch(bitOrder)
     {
-        case kSPI_MSBFirst:
+        case kSPI_MSB:
             SPIx->CTAR[ctar] &= ~SPI_CTAR_LSBFE_MASK;
             break;
-        case kSPI_LSBFirst:
+        case kSPI_LSB:
             SPIx->CTAR[ctar] |= SPI_CTAR_LSBFE_MASK;
             break;
         default:
@@ -290,7 +290,7 @@ uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t 
     SPI_InitStruct1.dataSize = 8;
     SPI_InitStruct1.instance = pq->ip_instance;
     SPI_InitStruct1.mode = kSPI_Master;
-    SPI_InitStruct1.bitOrder = kSPI_MSBFirst;
+    SPI_InitStruct1.bitOrder = kSPI_MSB;
     SPI_InitStruct1.ctar = HW_CTAR0;
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
@@ -405,7 +405,7 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
  *          @arg kSPI_PCS_KeepAsserted    :最后保持未选中状态
  * @retval 读取到的数据
  */
-uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, uint16_t csState)
+uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, SPI_PCS_Type csState)
 {
 	SPI_InstanceTable[instance]->PUSHR = (((uint32_t)(((csState))<<SPI_PUSHR_CONT_SHIFT))&SPI_PUSHR_CONT_MASK) 
             | SPI_PUSHR_CTAS(ctar)      

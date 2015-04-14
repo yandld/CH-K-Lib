@@ -14,8 +14,6 @@
      板载芯片：MK60DN512ZVQ10
  实验效果：在触控屏上画图    
 */
-static struct spi_bus bus;
-extern int kinetis_spi_bus_init(struct spi_bus* bus, uint32_t instance);
 
 int main(void)
 {
@@ -24,15 +22,13 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("spi touch screen test\r\n");
+    
     /* 初始化SPI2 接口连接触控屏的触控芯片*/
-    kinetis_spi_bus_init(&bus, HW_SPI2);
-    PORT_PinMuxConfig(HW_GPIOD, 12, kPinAlt2); /* SPI2_SCK */
-    PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); /* SPI2_SOUT */
-    PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); /* SPI2_SIN */ 
+    SPI_QuickInit(SPI2_SCK_PD12_SOUT_PD13_SIN_PD14, kSPI_CPOL0_CPHA0, 2*1000*1000);
 
     PORT_PinMuxConfig(HW_GPIOD, 11, kPinAlt2); /* SPI2_PCS0 */
     /* 初始化触控芯片 使用CS0片选 */
-    ads7843_init(&bus, HW_SPI_CS0);
+    ads7843_init(HW_SPI2, HW_SPI_CS0);
     
     GUI_Init();//液晶屏界面初始化
     GUI_SetBkColor(GUI_WHITE); //设置背景色

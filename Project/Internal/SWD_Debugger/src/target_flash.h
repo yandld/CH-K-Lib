@@ -29,6 +29,9 @@ typedef struct
     const uint32_t *image;
     uint32_t algo_start;
     uint32_t algo_size;
+    uint32_t flash_start;
+    uint32_t flash_size;
+    
 }FlashAlgoType;
 
 

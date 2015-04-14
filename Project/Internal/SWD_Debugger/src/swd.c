@@ -638,6 +638,17 @@ uint8_t swd_read_memory(uint32_t address, uint8_t *data, uint32_t size)
     return 0;
 }
 
+uint8_t SWJ_ReadMem(uint32_t addr, uint8_t *buf, uint32_t len)
+{
+    return swd_read_memory(addr, buf, len);
+}
+
+uint8_t SWJ_WriteMem(uint32_t addr, uint8_t *buf, uint32_t len)
+{
+    return swd_write_memory(addr, buf, len);
+}
+
+
 #define MAX_TIMEOUT 1000
 static uint8_t SWJ_WaitUntilHalted(void)
 {

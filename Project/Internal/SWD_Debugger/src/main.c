@@ -4,11 +4,9 @@
 #include "cpuidy.h"
 
 #include "swd.h"
-#include "rl_usb.h"
-#include "FlashOS.h"
-#include "iflash.h"
 
 #include <stdio.h>
+#include <string.h>
 #include "target_flash.h"
 
 #include "target_image.h"
@@ -24,6 +22,8 @@ uint8_t buf[4*1024];
 int main(void)
 {   
     uint32_t i, id;
+    uint8_t err, DP_ID;
+    
     DelayInit();
     GPIO_QuickInit(HW_GPIOC, 10, kGPIO_Mode_OPP);
     
@@ -35,7 +35,7 @@ int main(void)
     
     printf("program for Manley\r\n");
 
-    uint8_t err, DP_ID;
+
     
     swd_io_init();
 
@@ -56,9 +56,9 @@ int main(void)
         buf[i] = i & 0xFF;
     }
     
-    swd_write_memory(0x20000011, buf, sizeof(buf));
+    SWJ_WriteMem(0x20000011, buf, sizeof(buf));
     memset(buf, sizeof(buf), 0);
-    swd_read_memory(0x20000011, buf, sizeof(buf));
+    SWJ_ReadMem(0x20000011, buf, sizeof(buf));
 
     for(i=0;i<sizeof(buf);i++)
     {

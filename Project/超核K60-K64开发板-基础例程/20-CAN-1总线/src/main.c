@@ -7,6 +7,8 @@
 #error "yandld: MK64 only has CAN0, no CAN1"
 #endif
 
+#define CAN_TX_ID  0x10
+#define CAN_RX_ID  0x56
 
 /*
      实验名称：CAN通信测试
@@ -50,11 +52,11 @@ int main(void)
     CAN_ITDMAConfig(HW_CAN1,3, kCAN_IT_RX);
     
     /* 设置 3号邮箱为CAN接收邮箱 */
-    CAN_SetReceiveMB(HW_CAN1, 3, 0x56);
+    CAN_SetReceiveMB(HW_CAN1, 3, CAN_RX_ID);
     while(1)
     {
         /* 使用邮箱2 发送ID:0x10 发送 "CAN TEST" */
-        CAN_WriteData(HW_CAN1, 2, 0x10, (uint8_t *)"CAN TEST", 8); /* 使用邮箱2 发送ID:0x10 发送 "CAN TEST" */
+        CAN_WriteData(HW_CAN1, 2, CAN_TX_ID, (uint8_t *)"CAN TEST", 8); /* 使用邮箱2 发送ID:0x10 发送 "CAN TEST" */
         DelayMs(500);
         GPIO_ToggleBit(HW_GPIOE, 6);
     }

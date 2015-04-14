@@ -321,7 +321,7 @@ int w25qxx_init(uint32_t instance, uint32_t cs)
 {
     w25_dev.spi_instance = instance;
     w25_dev.spi_cs = cs; 
-    SPI_CTARConfig(instance, HW_CTAR0, kSPI_CPOL0_CPHA0, 8, kSPI_MSB, 2*1000*1000);
+    SPI_CTARConfig(instance, HW_CTAR0, kSPI_CPOL0_CPHA0, 8, kSPI_MSB, 30*1000*1000);
     
     return w25qxx_probe();
 }

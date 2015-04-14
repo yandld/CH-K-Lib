@@ -2,6 +2,12 @@
 #include "uart.h"
 #include "can.h"
 
+
+#ifdef MK64F12
+#error "yandld: MK64 only has CAN0, no CAN1"
+#endif
+
+
 /*
      实验名称：CAN通信测试
      实验平台：渡鸦开发板
@@ -26,6 +32,7 @@ void CAN_ISR(void)
         printf("\r\n");
     }
 }
+
 
 int main(void)
 {

@@ -233,7 +233,7 @@ void CAN_Init(CAN_InitTypeDef* CAN_InitStruct)
     /* enable clock gate */
     *((uint32_t*) SIM_CANClockGateTable[CAN_InitStruct->instance].addr) |= SIM_CANClockGateTable[CAN_InitStruct->instance].mask; 
   
-    CANx = CANx;
+    CANx = CAN_InstanceTable[CAN_InitStruct->instance];
     /* set clock source is bus clock */
     CANx->CTRL1 |= CAN_CTRL1_CLKSRC_MASK;
 

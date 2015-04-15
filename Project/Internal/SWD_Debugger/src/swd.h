@@ -37,9 +37,7 @@
 #define SWD_REG_ADR(a)    (a & 0x0c)
 
 
-#define MDM_STATUS  0x01000000
-#define MDM_CTRL    0x01000004     //
-#define MDM_IDR     0x010000fc     // read-only identification register
+
 
 
 // Debug Select Register definitions

@@ -649,7 +649,7 @@ uint8_t SWJ_WriteMem(uint32_t addr, uint8_t *buf, uint32_t len)
 }
 
 
-#define MAX_TIMEOUT 1000
+#define MAX_TIMEOUT 100
 static uint8_t SWJ_WaitUntilHalted(void)
 {
     // Wait for target to stop
@@ -667,6 +667,7 @@ static uint8_t SWJ_WaitUntilHalted(void)
             return 0;
         }
     }
+    printf("SWJ_WaitUntilHalted reach max\r\n");
     return 1;
 }
 
@@ -786,6 +787,7 @@ uint8_t swd_write_debug_state(DEBUG_STATE *state)
     SWJ_ReadDP(DP_CTRL_STAT, &status);
     if (status & (STICKYERR | WDATAERR))
     {
+        printf("write debug states failed\r\n");
         return 1;
     }
 
@@ -810,20 +812,32 @@ uint8_t swd_flash_syscall_exec(const FLASH_SYSCALL *sysCallParam, uint32_t entry
     state.r[15]    = entry;                           // PC: Entry Point
 
     if (swd_write_debug_state(&state))
+    {
+        printf("swd_write_debug_status failed\r\n");
         return 1;
-
+    }
+        
     if(SWJ_WaitUntilHalted())
+    {
+        printf("SWJ_WaitUntilHalted failed\r\n");
         return 1;
-
-    SWJ_ReadCoreReg(0, &state.r[0]);
+    }
+        
+    if(SWJ_ReadCoreReg(0, &state.r[0]))
+    {
+        printf("SWJ_ReadCoreReg failed\r\n");
+        return 1;
+    }
+        
 
     // Flash functions return 0 if successful.
     if (state.r[0] != 0)
     {
-        return 0;
+        printf("resutlt failed:0x%X\r\n", state.r[0]);
+        return 1;
     }
     
-    return 1;
+    return 0;
 }
 
 

@@ -1,9 +1,12 @@
-#include "gpio.h"
-#include <stdint.h>
-#include <stdbool.h>
+
+
 #ifndef __CH_SW_CONFIG_H__
 #define __CH_SW_CONFIG_H__
 
+#include <stdint.h>
+#include <stdbool.h>
+
+#include "gpio.h"
 
 #define PIN_DELAY()         DelayUs(1)
 #define TRESET_INSTANCE     (HW_GPIOB)
@@ -70,6 +73,11 @@ static inline void swd_io_init(void)
     TMS_LOW();
     TCK_LOW();
     TRST_HIGH();
+}
+
+static inline void SWJ_PortOff(void)
+{
+    
 }
 
 #endif

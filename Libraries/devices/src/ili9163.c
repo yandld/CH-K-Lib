@@ -12,7 +12,7 @@
 
 
 #include "ili9163.h"
-#include "spi_abstraction.h"
+#include "spi.h"
 
 #define ILI9163_DEBUG		0
 #if ( ILI9163_DEBUG == 1 )
@@ -35,18 +35,20 @@
 
 
 
-static struct spi_device device;
+
 
 static void LCD_COM(uint8_t cmd)
 {
     LCD_RS_LOW();
-    spi_write(&device, &cmd, 1, true);
+   // SPI_
+   // SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, SPI_PCS_Type csState);
+   // spi_write(&device, &cmd, 1, true);
 }
 
 static inline void LCD_DATA(uint8_t data)
 {
     LCD_RS_HIGH();
-    spi_write(&device, &data, 1, true);
+ //   spi_write(&device, &data, 1, true);
 }
 
 

@@ -15,12 +15,12 @@
 #define __ILI9163_H	 		  
 
 #include <stdint.h>
-#include "spi_abstraction.h"
+#include "spi.h"
 #include "gpio.h"
 
 
 //!< API functions
-int ili9163_init(spi_bus_t bus, uint32_t cs);
+int ili9163_init(uint32_t instance, uint32_t cs);
 void ili9163_clear(uint16_t c);
 void ili9163_write_pixel(int x, int y, int c);
 void GUI_DrawPixel(int x, int y);

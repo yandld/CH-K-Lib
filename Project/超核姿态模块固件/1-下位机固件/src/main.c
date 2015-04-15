@@ -18,7 +18,6 @@
 #include "imu.h"
 #include "trans.h"
 #include "dma.h"
-#include "spi_abstraction.h"
 #include "spi.h"
 
 #include "ssd.h"
@@ -103,27 +102,22 @@ static void PIT_CH1_ISR(void)
     WDOG_Refresh();
 }
 
-int kinetis_i2c_bus_init(struct i2c_bus* bus, uint32_t instance);
+
 
 int init_2401(void)
 {
     int r,i;
-    static struct spi_bus bus;
     QuickInit_Type pq;
     QuickInitDecode(SPI0_SCK_PC05_SOUT_PC06_SIN_PC07, &pq);
     SPI_QuickInit(BOARD_SPI_MAP, kSPI_CPOL0_CPHA0, 1000*1000);
-    r = kinetis_spi_bus_init(&bus, pq.ip_instance);
-    /* pinmux */
-    for(i = 0; i < pq.io_offset; i++)
-    {
-        PORT_PinMuxConfig(pq.io_instance, pq.io_base + i, (PORT_PinMux_Type) pq.mux); 
-    }
+
+
     
     PORT_PinMuxConfig(BOARD_SPI_CS_PORT, BOARD_SPI_CS_PIN, kPinAlt2);
     GPIO_QuickInit(HW_GPIOB, 0, kGPIO_Mode_OPP);
     
     /* init 2401 */
-    r = nrf24l01_init(&bus, BOARD_SPI_CS);
+    r = nrf24l01_init(HW_SPI0, BOARD_SPI_CS);
     r = nrf24l01_probe();
     g2401Avalable = true;
     if(r)

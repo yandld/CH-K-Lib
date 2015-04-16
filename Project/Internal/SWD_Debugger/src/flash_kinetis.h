@@ -27,10 +27,10 @@ typedef struct {
 uint32_t TFlashGetMemID(void);
 uint32_t TFlashGetSDID(void);
 uint8_t TFlash_UnlockSequence(void);
-uint8_t TFlash_Init(TARGET_FLASH* flash);
-uint8_t target_flash_program_page(TARGET_FLASH* flash, uint32_t addr, uint8_t * buf, uint32_t size);
-
-
+uint8_t TFlash_Init(const TARGET_FLASH* flash);
+uint8_t target_flash_program_page(const TARGET_FLASH* flash, uint32_t addr, uint8_t * buf, uint32_t size);
+uint8_t target_flash_erase_sector(const TARGET_FLASH* flash, unsigned int sector);
+uint8_t target_flash_erase_chip(const TARGET_FLASH* flash);
 
 
 #endif

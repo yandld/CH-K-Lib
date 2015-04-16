@@ -76,6 +76,7 @@ int main(void)
     
     
     SWJ_SetTargetState(RESET_PROGRAM);
+    
     err =  TFlash_UnlockSequence();
     printf("TFlash_UnlockSequence %d\r\n", err);
     
@@ -86,7 +87,7 @@ int main(void)
     err = TFlash_Init(&flash);
     printf("TFlash_Init %d\r\n", err);
 
-    err = target_flash_program_page(&flash, 0x00000000, flash.image, 512);
+    err = target_flash_program_page(&flash, 0x00000200, (uint8_t*)flash.image, 512);
     printf("target_flash_program_page %d\r\n", err);
     
     while(1)

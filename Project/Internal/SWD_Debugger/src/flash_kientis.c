@@ -8,6 +8,10 @@
 #define KINETIS_KK_MCU_ID       (0x001C0000)
 #define KINETIS_KL_MCU_ID       (0x001C0020)
 
+#define FLASH_SECTOR_SIZE                  (1024)
+
+#define TARGET_AUTO_INCREMENT_PAGE_SIZE    (0x400)
+
 uint32_t TFlashGetMemID(void)
 {
     uint32_t id;
@@ -91,7 +95,7 @@ uint8_t TFlash_UnlockSequence(void)
 }
 
 
-uint8_t TFlash_Init(TARGET_FLASH* flash)
+uint8_t TFlash_Init(const TARGET_FLASH* flash)
 {
     uint8_t err;
     
@@ -107,7 +111,22 @@ uint8_t TFlash_Init(TARGET_FLASH* flash)
     return err;
 }
 
-uint8_t target_flash_program_page(TARGET_FLASH* flash, uint32_t addr, uint8_t * buf, uint32_t size)
+uint8_t target_flash_erase_sector(const TARGET_FLASH* flash, unsigned int sector)
+{
+    uint8_t err;
+    err = swd_flash_syscall_exec(&flash->sys_call_param, flash->erase_sector, sector * FLASH_SECTOR_SIZE, 0, 0, 0);
+    return err;
+}
+
+uint8_t target_flash_erase_chip(const TARGET_FLASH* flash)
+{
+    uint8_t err;
+    err = swd_flash_syscall_exec(&flash->sys_call_param, flash->erase_chip, 0, 0, 0, 0);
+    return err;
+}
+
+
+uint8_t target_flash_program_page(const TARGET_FLASH* flash, uint32_t addr, uint8_t * buf, uint32_t size)
 {
     uint32_t bytes_written = 0;
 
@@ -123,7 +142,6 @@ uint8_t target_flash_program_page(TARGET_FLASH* flash, uint32_t addr, uint8_t * 
         printf("SWJ_WriteMem failed\r\n");
         return 1;
     }
-
 
     while(bytes_written < size) {
         if (swd_flash_syscall_exec(&flash->sys_call_param,

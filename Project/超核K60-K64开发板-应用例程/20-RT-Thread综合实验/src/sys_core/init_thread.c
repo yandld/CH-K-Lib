@@ -62,9 +62,9 @@ void init_thread_entry(void* parameter)
   //  if (tid != RT_NULL) rt_thread_startup(tid);
     #endif
     
-    usbd_init();                          /* USB Device Initialization          */
-    usbd_connect(__TRUE);                 /* USB Device Connect                 */
-    while (!usbd_configured ());          /* Wait for device to configure        */
+    // usbd_init();                          /* USB Device Initialization          */
+    //   usbd_connect(__TRUE);                 /* USB Device Connect                 */
+    //  while (!usbd_configured ());          /* Wait for device to configure        */
     
     rt_hw_ksz8041_init();
     

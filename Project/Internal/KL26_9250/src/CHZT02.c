@@ -95,7 +95,7 @@ int8_t CHZT02_Running (void) {
 //		// Include factory calibration per data sheet and user environmental corrections
 //		ch9250_imu_raw_data_t.mx = (float)magCount[0]*mRes*magCalibration[0] - magbias[0];  // get actual magnetometer value, this depends on scale being set
 //		ch9250_imu_raw_data_t.my = (float)magCount[1]*mRes*magCalibration[1] - magbias[1];  
-//		ch9250_imu_raw_data_t.mz = (float)magCount[2]*mRes*magCalibration[2] - magbias[2];   
+//		ch9250_imu_raw_data_t.mz = (float)magCount[2]*mRes*magCalibration[2] - magbias[2];		
 		imu_get_euler_angle(&ch9250_imu_float_euler_angle_t,&ch9250_imu_raw_data_t);
 	}
 	

@@ -253,12 +253,12 @@ int8_t ch9250Calibrate(float * dest1, float * dest2) {
 	data[4] = (-gyro_bias[2]/4  >> 8) & 0xFF;
 	data[5] = (-gyro_bias[2]/4)       & 0xFF;
 /// Push gyro biases to hardware registers
-//	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_XG_OFFSET_H, data[0]);
-//	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_XG_OFFSET_L, data[1]);
-//	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_YG_OFFSET_H, data[2]);
-//	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_YG_OFFSET_L, data[3]);
-//	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_ZG_OFFSET_H, data[4]);
-//	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_ZG_OFFSET_L, data[5]);
+	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_XG_OFFSET_H, data[0]);
+	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_XG_OFFSET_L, data[1]);
+	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_YG_OFFSET_H, data[2]);
+	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_YG_OFFSET_L, data[3]);
+	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_ZG_OFFSET_H, data[4]);
+	I2C_WriteSingleRegister(0,MPU9250_ADDR, MPU9250_ZG_OFFSET_L, data[5]);
 	dest1[0] = (float) gyro_bias[0]/(float) gyrosensitivity; // construct gyro bias in deg/s for later manual subtraction
 	dest1[1] = (float) gyro_bias[1]/(float) gyrosensitivity;
 	dest1[2] = (float) gyro_bias[2]/(float) gyrosensitivity;
@@ -420,7 +420,7 @@ int ch9250ReadMagData(int16_t * Mag_x,int16_t * Mag_y,int16_t * Mag_z) {
 		if(!(c & 0x08)) { // Check if magnetic sensor overflow set, if not then report data
 			*Mag_x = (int16_t)(((int16_t)rawData[1] << 8) | rawData[0]);  // Turn the MSB and LSB into a signed 16-bit value
 			*Mag_y = (int16_t)(((int16_t)rawData[3] << 8) | rawData[2]) ;  // Data stored as little Endian
-			*Mag_z = (int16_t)(((int16_t)rawData[5] << 8) | rawData[4]) ; 
+			*Mag_z = (int16_t)(((int16_t)rawData[5] << 8) | rawData[4]) ;	
 		}
 	}
 	return 0;

@@ -44,7 +44,7 @@ int main(void)
 	CHZT02_Init();
 
 
-//	scopeInit();
+	scopeInit();
 
     while(1)
     {
@@ -53,10 +53,11 @@ int main(void)
 		testPitch = ch9250_imu_float_euler_angle_t.imu_pitch;
 		testRoll = ch9250_imu_float_euler_angle_t.imu_roll;
 		testYaw = ch9250_imu_float_euler_angle_t.imu_yaw;
-		printf("\f");
-		printf("Pitch = %f\r\n",testPitch);
-		printf("Roll = %f\r\n",testRoll);
-		printf("Yaw = %f\r\n",testYaw);
+		scopeDrawLine((int16_t)testPitch,(int16_t)testRoll,(int16_t)testYaw);
+//		printf("\f");
+//		printf("Pitch = %f\r\n",testPitch);
+//		printf("Roll = %f\r\n",testRoll);
+//		printf("Yaw = %f\r\n",testYaw);
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(50);
 

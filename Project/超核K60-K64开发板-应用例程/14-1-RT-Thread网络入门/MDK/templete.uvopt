@@ -842,10 +842,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>34</TopLine>
-      <CurrentLine>44</CurrentLine>
+      <CurrentLine>41</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\init_thread.c</PathWithFileName>
       <FilenameWithoutPath>init_thread.c</FilenameWithoutPath>

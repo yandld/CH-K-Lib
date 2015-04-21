@@ -202,7 +202,7 @@
 
   <Group>
     <GroupName>startup_mkl26z4</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -242,7 +242,7 @@
 
   <Group>
     <GroupName>user</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -252,10 +252,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>26</ColumnNumber>
+      <ColumnNumber>31</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>31</TopLine>
-      <CurrentLine>46</CurrentLine>
+      <TopLine>41</TopLine>
+      <CurrentLine>51</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -284,10 +284,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1</ColumnNumber>
+      <ColumnNumber>67</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>52</TopLine>
-      <CurrentLine>57</CurrentLine>
+      <TopLine>330</TopLine>
+      <CurrentLine>331</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\CH9250.c</PathWithFileName>
       <FilenameWithoutPath>CH9250.c</FilenameWithoutPath>
@@ -298,12 +298,12 @@
       <GroupNumber>2</GroupNumber>
       <FileNumber>6</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>42</ColumnNumber>
+      <ColumnNumber>69</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>77</TopLine>
-      <CurrentLine>88</CurrentLine>
+      <TopLine>72</TopLine>
+      <CurrentLine>83</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\CHZT02.c</PathWithFileName>
       <FilenameWithoutPath>CHZT02.c</FilenameWithoutPath>
@@ -330,7 +330,7 @@
 
   <Group>
     <GroupName>drivers</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -358,7 +358,7 @@
       <Focus>0</Focus>
       <ColumnNumber>13</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
+      <TopLine>4</TopLine>
       <CurrentLine>11</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\KL\src\gpio.c</PathWithFileName>
@@ -490,12 +490,12 @@
       <GroupNumber>6</GroupNumber>
       <FileNumber>16</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1</ColumnNumber>
+      <ColumnNumber>38</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>29</TopLine>
-      <CurrentLine>36</CurrentLine>
+      <TopLine>199</TopLine>
+      <CurrentLine>213</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\imu\imu.c</PathWithFileName>
       <FilenameWithoutPath>imu.c</FilenameWithoutPath>
@@ -510,8 +510,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\imu\imu_rev.c</PathWithFileName>
       <FilenameWithoutPath>imu_rev.c</FilenameWithoutPath>

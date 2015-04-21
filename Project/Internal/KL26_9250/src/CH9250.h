@@ -143,9 +143,9 @@ int8_t 	ch8963Init(float * destination);
 int8_t 	ch9250Reset(void);
 int8_t 	ch9250Calibrate(float * dest1, float * dest2);
 int8_t 	ch9250SelfTest(float * destination) ;
-int8_t 	ch9250ReadAccelData(int16_t * destination);
-void 	ch9250ReadGyroData(int16_t * destination);
-void 	ch9250ReadMagData(int16_t * destination);
+int 	ch9250ReadAccelData(int16_t * Acc_x,int16_t * Acc_y,int16_t * Acc_z);
+int	    ch9250ReadGyroData(int16_t * Ryro_x,int16_t * Ryro_y,int16_t * Ryro_z);
+int  	ch9250ReadMagData(int16_t * Mag_x,int16_t * Mag_y,int16_t * Mag_z);
 int8_t 	ch9250RegisterValueCheck(void);
 int8_t 	ch8963RegisterValueCheck(void);
 #else

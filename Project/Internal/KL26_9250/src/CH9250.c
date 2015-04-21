@@ -50,6 +50,7 @@ int8_t funsionDataInit(void) {
 	beta = sqrt(3.0f / 4.0f) * GyroMeasError;  // compute beta
 	GyroMeasDrift = PI * (1.0f / 180.0f);      // gyroscope measurement drift in rad/s/s (start at 0.0 deg/s/s)
 	zeta = sqrt(3.0f / 4.0f) * GyroMeasDrift;
+	return 0;
 }
 int8_t	ch9250GetId(uint8_t* id) {
 	I2C_ReadSingleRegister(0, MPU9250_ADDR, MPU9250_WHO_AM_I, id);
@@ -392,37 +393,37 @@ int16_t ch9250ReadTempData(void){
   return (int16_t)(((int16_t)rawData[0]) << 8 | rawData[1]) ;  // Turn the MSB and LSB into a 16-bit value
 }
 
-int8_t ch9250ReadAccelData(int16_t * destination) {
+int ch9250ReadAccelData(int16_t * Acc_x,int16_t * Acc_y,int16_t * Acc_z) {
 	uint8_t rawData[6];  // x/y/z accel register data stored here
 	I2C_BurstRead(0,MPU9250_ADDR, MPU9250_ACCEL_XOUT_H, 1, &rawData[0],6);  // Read the six raw data registers into data array
-	destination[0] = (int16_t)(((int16_t)rawData[0] << 8) | rawData[1]);  // Turn the MSB and LSB into a signed 16-bit value
-	destination[1] = (int16_t)(((int16_t)rawData[2] << 8) | rawData[3]);  
-	destination[2] = (int16_t)(((int16_t)rawData[4] << 8) | rawData[5]);
+	*Acc_x = (int16_t)(((int16_t)rawData[0] << 8) | rawData[1]);  // Turn the MSB and LSB into a signed 16-bit value
+	*Acc_y = (int16_t)(((int16_t)rawData[2] << 8) | rawData[3]);  
+	*Acc_z = (int16_t)(((int16_t)rawData[4] << 8) | rawData[5]);
 	return 0;
 }
 
-void ch9250ReadGyroData(int16_t * destination)
-{
-  uint8_t rawData[6];  // x/y/z gyro register data stored here
-  I2C_BurstRead(0,MPU9250_ADDR, MPU9250_GYRO_XOUT_H, 1, &rawData[0],6);  // Read the six raw data registers sequentially into data array
-  destination[0] = (int16_t)(((int16_t)rawData[0] << 8) | rawData[1]) ;  // Turn the MSB and LSB into a signed 16-bit value
-  destination[1] = (int16_t)(((int16_t)rawData[2] << 8) | rawData[3]) ;  
-  destination[2] = (int16_t)(((int16_t)rawData[4] << 8) | rawData[5]) ; 
+int ch9250ReadGyroData(int16_t * Ryro_x,int16_t * Ryro_y,int16_t * Ryro_z) {
+	uint8_t rawData[6];  // x/y/z gyro register data stored here
+	I2C_BurstRead(0,MPU9250_ADDR, MPU9250_GYRO_XOUT_H, 1, &rawData[0],6);  // Read the six raw data registers sequentially into data array
+	*Ryro_x = (int16_t)(((int16_t)rawData[0] << 8) | rawData[1]) ;  // Turn the MSB and LSB into a signed 16-bit value
+	*Ryro_y = (int16_t)(((int16_t)rawData[2] << 8) | rawData[3]) ;  
+	*Ryro_z = (int16_t)(((int16_t)rawData[4] << 8) | rawData[5]) ; 
+	return 0;
 }
 
-void ch9250ReadMagData(int16_t * destination)
-{
+int ch9250ReadMagData(int16_t * Mag_x,int16_t * Mag_y,int16_t * Mag_z) {
 	uint8_t rawData[7],data;  // x/y/z gyro register data, ST2 register stored here, must read ST2 at end of data acquisition
 	I2C_ReadSingleRegister(0,AK8963_ADDRESS, AK8963_ST1,&data);
 	if(data & 0x01) { // wait for magnetometer data ready bit to be set
 		I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, &rawData[0],7);  // Read the six raw data and ST2 registers sequentially into data array
 		uint8_t c = rawData[6]; // End data read by reading ST2 register
 		if(!(c & 0x08)) { // Check if magnetic sensor overflow set, if not then report data
-			destination[0] = (int16_t)(((int16_t)rawData[1] << 8) | rawData[0]);  // Turn the MSB and LSB into a signed 16-bit value
-			destination[1] = (int16_t)(((int16_t)rawData[3] << 8) | rawData[2]) ;  // Data stored as little Endian
-			destination[2] = (int16_t)(((int16_t)rawData[5] << 8) | rawData[4]) ; 
+			*Mag_x = (int16_t)(((int16_t)rawData[1] << 8) | rawData[0]);  // Turn the MSB and LSB into a signed 16-bit value
+			*Mag_y = (int16_t)(((int16_t)rawData[3] << 8) | rawData[2]) ;  // Data stored as little Endian
+			*Mag_z = (int16_t)(((int16_t)rawData[5] << 8) | rawData[4]) ; 
 		}
 	}
+	return 0;
 }
 
 int8_t ch9250RegisterValueCheck(void){

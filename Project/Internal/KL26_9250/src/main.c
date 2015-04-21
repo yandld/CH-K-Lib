@@ -4,6 +4,11 @@
 #include "scope.h"
 #include "i2c.h"
 #include "CHZT02.h"
+#include "imu.h"
+double testRoll,testPitch,testYaw;
+extern imu_io_install_t  			ch9250_imu_io_install_t;
+extern imu_float_euler_angle_t		ch9250_imu_float_euler_angle_t;   
+extern imu_raw_data_t				ch9250_imu_raw_data_t;	
 
 /* i2c bus scan */
 static void I2C_Scan(uint32_t instance)
@@ -21,12 +26,13 @@ static void I2C_Scan(uint32_t instance)
 }
 
 
+
 int main(void)
 {
 	uint32_t instance, clock;
 	int16_t i = 0;
 
-    DelayInit();    
+	DelayInit();    
     GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);    
     UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);    
     printf("HelloWorld\r\n");
@@ -43,9 +49,18 @@ int main(void)
     while(1)
     {
 //		scopeDrawLine(i++,0,0);
-			CHZT02_Running();
+		CHZT02_Running();
+		testPitch = ch9250_imu_float_euler_angle_t.imu_pitch;
+		testRoll = ch9250_imu_float_euler_angle_t.imu_roll;
+		testYaw = ch9250_imu_float_euler_angle_t.imu_yaw;
+		printf("\f");
+		printf("Pitch = %f\r\n",testPitch);
+		printf("Roll = %f\r\n",testRoll);
+		printf("Yaw = %f\r\n",testYaw);
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(50);
+
+		
     }
 }
 

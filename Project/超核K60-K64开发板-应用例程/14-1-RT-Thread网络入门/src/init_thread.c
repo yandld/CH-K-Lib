@@ -42,8 +42,6 @@ void init_thread_entry(void* parameter)
     /* tcp server demp */
     tcpserv();
 
-    /* init the webet webserer */
-    webnet_init();
     
     tid = rt_thread_self();
     rt_thread_delete(tid); 

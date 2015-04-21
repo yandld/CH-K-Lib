@@ -5,6 +5,8 @@
 #include "i2c.h"
 #include "CHZT02.h"
 #include "imu.h"
+#include "mpu9250.h"
+
 double testRoll,testPitch,testYaw;
 extern imu_io_install_t  			ch9250_imu_io_install_t;
 extern imu_float_euler_angle_t		ch9250_imu_float_euler_angle_t;   
@@ -31,7 +33,8 @@ int main(void)
 {
 	uint32_t instance, clock;
 	int16_t i = 0;
-
+    struct mpu_config config;
+    
 	DelayInit();    
     GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);    
     UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);    
@@ -41,10 +44,30 @@ int main(void)
     CLOCK_GetClockFrequency(kBusClock, &clock);
     printf("kBusClock:%dHz\r\n", clock);
 
+    /* driver init */
+    I2C_QuickInit(I2C0_SCL_PB00_SDA_PB01, 100*1000);
+    GPIO_QuickInit(HW_GPIOD, 7, kGPIO_Mode_OPP);
+	GPIO_WriteBit(HW_GPIOD, 7, 0);
+    DelayMs(10);
+    
+    /* sensor init */
+    mpu9250_init(0);
+    
+    config.afs = AFS_4G;
+    config.gfs = GFS_250DPS;
+    config.mfs = MFS_14BITS;
+    
+    config.enable_aself_test = false;
+
+    
+    mpu9250_config(&config);
+        
+    while(1);
+    
 	CHZT02_Init();
 
 
-	scopeInit();
+	//scopeInit();
 
     while(1)
     {

@@ -428,11 +428,6 @@
               <FilePath>..\src\main.c</FilePath>
             </File>
             <File>
-              <FileName>config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\config.c</FilePath>
-            </File>
-            <File>
               <FileName>CH9250.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\CH9250.c</FilePath>
@@ -597,11 +592,6 @@
               <FileName>imu.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\imu\imu.c</FilePath>
-            </File>
-            <File>
-              <FileName>imu_rev.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\imu\imu_rev.c</FilePath>
             </File>
           </Files>
         </Group>

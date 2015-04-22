@@ -50,7 +50,6 @@ int main(void)
     
     config.enable_aself_test = false;
 
-    
     mpu9250_config(&config);
         
     while(1);

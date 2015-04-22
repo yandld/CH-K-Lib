@@ -7,17 +7,19 @@
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
+  
+#include <string.h>
 #include "mpu9250.h"
 #include "i2c.h"
 
 #define MPU9250_DEBUG		1
 #if ( MPU9250_DEBUG == 1 )
+#include <stdio.h>
 #define MPU9250_TRACE	printf
 #else
 #define MPU9250_TRACE(...)
 #endif
 
-	
 #define MPU9250_ID			0x71		
 
 #define	MPU9250_SELF_TEST_X_GYRO		0x00		/***/
@@ -144,9 +146,10 @@
 
 struct mpu_device 
 {
-    uint8_t     addr;
-    uint32_t    instance;
-    void        *user_data;
+    uint8_t             addr;
+    uint32_t            instance;
+    void                *user_data;
+    struct mpu_config   user_config;
 };
 
 uint8_t Ascale = AFS_2G;      // AFS_2G, AFS_4G, AFS_8G, AFS_16G
@@ -172,6 +175,9 @@ static uint8_t read_reg(uint8_t addr)
 
 int mpu9250_config(struct mpu_config *config)
 {
+    
+    memcpy(&mpu_dev.user_config, config, sizeof(struct mpu_config));
+
     switch(config->afs)
     {
         case AFS_2G:
@@ -183,19 +189,28 @@ int mpu9250_config(struct mpu_config *config)
         case AFS_16G:
             break;
     }
+    
+    switch(config->mfs)
+    {
+        case MFS_14BITS:
+            break;
+        case MFS_16BITS:
+            break;
+    }
+    
+    switch(config->gfs)
+    {
+        case GFS_250DPS:
+            break;
+        case GFS_500DPS:
+            break;
+        case GFS_1000DPS:
+            break;
+        case GFS_2000DPS:
+            break;
+    }
+    return 0;
 }
-
-#if 0
-
-	
-
-
-
-
-
-
-#endif
-
 
 int mpu9250_init(uint32_t instance)
 {
@@ -214,18 +229,22 @@ int mpu9250_init(uint32_t instance)
             /* init sequence */
             write_reg(MPU9250_PWR_MGMT_1, 0x00); /* wake up device */
             DelayMs(100);
+            
             /** get stable time source*/
             /**Set clock source to be PLL with x-axis gyroscope reference, bits 2:0 = 001*/
             /**Auto selects the best available clock source – PLL if ready, else use the Internal oscillator*/
             write_reg(MPU9250_PWR_MGMT_1, 0x01);
+            
             /**Configure Gyro and Accelerometer*/
             /**Disable FSYNC and set accelerometer and gyro bandwidth to 44 and 42 Hz, respectively;*/ 
             /**DLPF_CFG = bits 2:0 = 010; this sets the sample rate at 1 kHz for both*/
             /**Maximum delay is 4.9 ms which is just over a 200 Hz maximum rate	*/
             write_reg(MPU9250_PWR_MGMT_1, 0x03);
+            
             /**Set sample rate = gyroscope output rate/(1 + SMPLRT_DIV)*/
             /**Use a 200 Hz rate; the same rate set in CONFIG above*/
             write_reg(MPU9250_SMPLRT_DIV, 0x04);
+            
             /**Set gyroscope full scale range */
             /**Range selects FS_SEL and AFS_SEL are 0 - 3, so 2-bit values are left-shifted into positions 4:3 */
             uint8_t r;
@@ -241,11 +260,14 @@ int mpu9250_init(uint32_t instance)
             write_reg(MPU9250_ACCEL_CONFIG2, r & ~0x0FU); /** Clear accel_fchoice_b (bit 3) and A_DLPFG (bits [2:0])*/  
             write_reg(MPU9250_ACCEL_CONFIG2, r | 0x03U); /** Set accelerometer rate to 1 kHz and bandwidth to 41 Hz*/	
             
-            // The accelerometer, gyro, and thermometer are set to 1 kHz sample rates, 
-            // but all these rates are further reduced by a factor of 5 to 200 Hz because of the SMPLRT_DIV setting
-            // Configure Interrupts and Bypass Enable
-            // Set interrupt pin active high, push-pull, and clear on read of INT_STATUS, enable I2C_BYPASS_EN so additional chips 
-            // can join the I2C bus and all can be controlled by the Kinetis as master
+            /*
+            The accelerometer, gyro, and thermometer are set to 1 kHz sample rates, 
+             but all these rates are further reduced by a factor of 5 to 200 Hz because of the SMPLRT_DIV setting
+             Configure Interrupts and Bypass Enable
+             Set interrupt pin active high, push-pull, and clear on read of INT_STATUS, enable I2C_BYPASS_EN so additional chips 
+             can join the I2C bus and all can be controlled by the Kinetis as master
+             */
+             
             write_reg(MPU9250_INT_PIN_CFG, 0x22U);    
             write_reg(MPU9250_INT_ENABLE, 0x01U);  // Enable data ready (bit 0) interrupt
             
@@ -262,7 +284,7 @@ int mpu9250_init(uint32_t instance)
 
 
 
-int mpu9250_read_accel(int16_t* x, int16_t* y, int16_t* z)
+int mpu9250_read_accel_raw(int16_t* x, int16_t* y, int16_t* z)
 {
     uint8_t err;
     uint8_t buf[6];
@@ -275,7 +297,7 @@ int mpu9250_read_accel(int16_t* x, int16_t* y, int16_t* z)
     return err;    
 }
 
-int mpu9250_read_gyro(int16_t* x, int16_t* y, int16_t* z)
+int mpu9250_read_gyro_raw(int16_t* x, int16_t* y, int16_t* z)
 {
     uint8_t err;
     uint8_t buf[6];
@@ -289,7 +311,7 @@ int mpu9250_read_gyro(int16_t* x, int16_t* y, int16_t* z)
 }
 
     
-int mpu9250_read_mag(int16_t* x, int16_t* y, int16_t* z)
+int mpu9250_read_mag_raw(int16_t* x, int16_t* y, int16_t* z)
 {
     uint8_t err;
     uint8_t buf[7];
@@ -303,4 +325,13 @@ int mpu9250_read_mag(int16_t* x, int16_t* y, int16_t* z)
     return err;
 }
 
+int mpu9250_read_temp_raw(int16_t *val)
+{
+    uint8_t err;
+    uint8_t buf[2];
 
+    err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, MPU9250_TEMP_OUT_H, 1, buf, 2);
+    *val = (int16_t)(((int16_t)buf[0]) << 8 | buf[1]);
+    
+    return err;
+}

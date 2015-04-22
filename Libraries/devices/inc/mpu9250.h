@@ -51,8 +51,9 @@ struct mpu_config
 
 //!< API function
 int mpu9250_init(uint32_t instance);
-//int mpu6050_read_accel(int16_t* x, int16_t* y, int16_t* z);
-//int mpu6050_read_gyro(int16_t* x, int16_t* y, int16_t* z);
+int mpu9250_read_accel(int16_t* x, int16_t* y, int16_t* z);
+int mpu9250_read_gyro(int16_t* x, int16_t* y, int16_t* z);
+int mpu9250_read_mag(int16_t* x, int16_t* y, int16_t* z);
 int mpu9250_config(struct mpu_config *config);
 
 

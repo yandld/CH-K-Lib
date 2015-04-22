@@ -262,5 +262,45 @@ int mpu9250_init(uint32_t instance)
 
 
 
+int mpu9250_read_accel(int16_t* x, int16_t* y, int16_t* z)
+{
+    uint8_t err;
+    uint8_t buf[6];
+    
+    err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, MPU9250_ACCEL_XOUT_H, 1, buf, 6);
+    
+    *x=(int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
+    *y=(int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
+    *z=(int16_t)(((uint16_t)buf[4]<<8)+buf[5]); 
+    return err;    
+}
+
+int mpu9250_read_gyro(int16_t* x, int16_t* y, int16_t* z)
+{
+    uint8_t err;
+    uint8_t buf[6];
+    
+    err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, MPU9250_GYRO_XOUT_H, 1, buf, 6);
+    
+    *x=(int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
+    *y=(int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
+    *z=(int16_t)(((uint16_t)buf[4]<<8)+buf[5]); 
+    return err;    
+}
+
+    
+int mpu9250_read_mag(int16_t* x, int16_t* y, int16_t* z)
+{
+    uint8_t err;
+    uint8_t buf[7];
+    
+    /* Read the six raw data and ST2 registers sequentially into data array */
+    err = I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, buf, 7);  
+    
+    *x = (int16_t)(((int16_t)buf[1] << 8) | buf[0]);
+    *y = (int16_t)(((int16_t)buf[3] << 8) | buf[2]) ;
+    *z = (int16_t)(((int16_t)buf[5] << 8) | buf[4]) ;	
+    return err;
+}
 
 

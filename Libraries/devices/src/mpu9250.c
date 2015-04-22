@@ -269,9 +269,9 @@ int mpu9250_read_accel(int16_t* x, int16_t* y, int16_t* z)
     
     err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, MPU9250_ACCEL_XOUT_H, 1, buf, 6);
     
-    *x=(int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
-    *y=(int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
-    *z=(int16_t)(((uint16_t)buf[4]<<8)+buf[5]); 
+    *x=(int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
+    *y=(int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
+    *z=(int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
     return err;    
 }
 
@@ -282,9 +282,9 @@ int mpu9250_read_gyro(int16_t* x, int16_t* y, int16_t* z)
     
     err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, MPU9250_GYRO_XOUT_H, 1, buf, 6);
     
-    *x=(int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
-    *y=(int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
-    *z=(int16_t)(((uint16_t)buf[4]<<8)+buf[5]); 
+    *x=(int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
+    *y=(int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
+    *z=(int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
     return err;    
 }
 

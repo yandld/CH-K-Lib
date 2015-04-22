@@ -16,14 +16,26 @@ extern imu_raw_data_t				ch9250_imu_raw_data_t;
 
 void mpu9250_test(void)
 {
+    uint8_t err;
     int16_t ax,ay,az,gx,gy,gz,mx,my,mz;
     
+    err = 0;
+    
+    err += mpu9250_read_accel_raw(&ax, &ay, &az);
+    err += mpu9250_read_gyro_raw(&gx, &gy, &gz);
+    err += mpu9250_read_mag_raw(&mx, &my, &mz);
+    
+    if(err)
+    {
+        printf("!err:%d\r\n", err);
+        while(1);
+    }
+    printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d    \r", ax ,ay, az, gx, gy, gz, mx, my, mz);
 }
 
 int main(void)
 {
 	uint32_t instance, clock;
-	int16_t i = 0;
     struct mpu_config config;
     
 	DelayInit();    
@@ -44,24 +56,17 @@ int main(void)
     /* sensor init */
     mpu9250_init(0);
     
-    config.afs = AFS_4G;
+    config.afs = AFS_16G;
     config.gfs = GFS_250DPS;
-    config.mfs = MFS_14BITS;
     
     config.enable_aself_test = false;
 
     mpu9250_config(&config);
         
-    while(1);
-    
-	CHZT02_Init();
-
-
-	//scopeInit();
 
     while(1)
     {
-        printf("ax:%04d ay:%04d az:%04d gx:%04d gy:%04d gz:%04d mx:%04d my:%04d mz:%04d\r", 0 ,0, 0, 0, 0, 0, 0, 0, 0);
+        mpu9250_test();
         
 ////		scopeDrawLine(i++,0,0);
 //		CHZT02_Running();
@@ -69,12 +74,12 @@ int main(void)
 //		testRoll = ch9250_imu_float_euler_angle_t.imu_roll;
 //		testYaw = ch9250_imu_float_euler_angle_t.imu_yaw;
 //		scopeDrawLine((int16_t)testPitch,(int16_t)testRoll,(int16_t)testYaw);
-////		printf("\f");
-////		printf("Pitch = %f\r\n",testPitch);
-////		printf("Roll = %f\r\n",testRoll);
-////		printf("Yaw = %f\r\n",testYaw);
+//		printf("\f");
+//		printf("Pitch = %f\r\n",testPitch);
+//		printf("Roll = %f\r\n",testRoll);
+//		printf("Yaw = %f\r\n",testYaw);
 		GPIO_ToggleBit(HW_GPIOC, 3);
-        DelayMs(50);
+        DelayMs(10);
 
 		
     }

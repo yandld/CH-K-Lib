@@ -20,8 +20,8 @@
 #define MPU9250_TRACE(...)
 #endif
 
-#define MPU9250_ID			0x71		
 
+#define MPU9250_ID			0x71		
 #define	MPU9250_SELF_TEST_X_GYRO		0x00		/***/
 #define	MPU9250_SELF_TEST_Y_GYRO		0x01		/***/
 #define	MPU9250_SELF_TEST_Z_GYRO		0x02		/***/
@@ -36,8 +36,13 @@
 #define	MPU9250_ZG_OFFSET_L			0x18		/***/
 #define	MPU9250_SMPLRT_DIV				0x19		/***/
 #define	MPU9250_CONFIG					0x1A		/***/
-#define	MPU9250_GYRO_CONFIG			0x1B		/***/
-#define	MPU9250_ACCEL_CONFIG			0x1C		/***/
+#define	MPU9250_GYRO_CONFIG			0x1B
+
+#define	MPU9250_ACCEL_CONFIG                        0x1C
+#define MPU9250_ACCEL_CONFIG_FS_MASK                0x18u
+#define MPU9250_ACCEL_CONFIG_FS_SHIFT               3
+#define MPU9250_ACCEL_CONFIG_FS(x)                  (((uint32_t)(((uint32_t)(x))<<MPU9250_ACCEL_CONFIG_FS_SHIFT))&MPU9250_ACCEL_CONFIG_FS_MASK)
+
 #define	MPU9250_ACCEL_CONFIG2 			0x1D		/***/
 #define	MPU9250_LP_ACCEL_ODR			0x1E		/***/
 #define	MPU9250_WOM_THR				0x1F		/***/
@@ -154,7 +159,6 @@ struct mpu_device
 
 uint8_t Ascale = AFS_2G;      // AFS_2G, AFS_4G, AFS_8G, AFS_16G
 uint8_t Gscale = GFS_250DPS;  // GFS_250DPS, GFS_500DPS, GFS_1000DPS, GFS_2000DPS
-uint8_t Mscale = MFS_16BITS;  // MFS_14BITS or MFS_16BITS, 14-bit or 16-bit magnetometer resolution
 uint8_t Mmode  = 0x06;        // Either 8 Hz 0x02) or 100 Hz (0x06) magnetometer data ODR  
 
 static struct mpu_device mpu_dev;
@@ -166,6 +170,11 @@ static int write_reg(uint8_t addr, uint8_t val)
     return I2C_WriteSingleRegister(mpu_dev.instance, mpu_dev.addr, addr, val);
 }
 
+static int ak8963_write_reg(uint8_t addr, uint8_t val)
+{
+    return I2C_WriteSingleRegister(mpu_dev.instance, AK8963_ADDRESS, addr, val);
+}
+
 static uint8_t read_reg(uint8_t addr)
 {
     uint8_t val;
@@ -175,28 +184,13 @@ static uint8_t read_reg(uint8_t addr)
 
 int mpu9250_config(struct mpu_config *config)
 {
-    
+    uint8_t val;
     memcpy(&mpu_dev.user_config, config, sizeof(struct mpu_config));
 
-    switch(config->afs)
-    {
-        case AFS_2G:
-            break;
-        case AFS_4G:
-            break;
-        case AFS_8G:
-            break;
-        case AFS_16G:
-            break;
-    }
-    
-    switch(config->mfs)
-    {
-        case MFS_14BITS:
-            break;
-        case MFS_16BITS:
-            break;
-    }
+    val = read_reg(MPU9250_ACCEL_CONFIG);
+    val &= ~MPU9250_ACCEL_CONFIG_FS_MASK;
+    val |= MPU9250_ACCEL_CONFIG_FS(config->afs);
+    write_reg(MPU9250_ACCEL_CONFIG, val);
     
     switch(config->gfs)
     {
@@ -274,6 +268,7 @@ int mpu9250_init(uint32_t instance)
             /* AK8963 */
             if(!I2C_ReadSingleRegister(instance, AK8963_ADDRESS, AK8963_WHO_AM_I, &id) && (id == 0x48))
             {
+                ak8963_write_reg(AK8963_CNTL, 0x06|0x10);
                 MPU9250_TRACE("found!addr:0x%X AK8963_WHO_AM_I:0x%X\r\n", mpu_dev.addr, id);
                 return 0;
             }
@@ -291,9 +286,9 @@ int mpu9250_read_accel_raw(int16_t* x, int16_t* y, int16_t* z)
     
     err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, MPU9250_ACCEL_XOUT_H, 1, buf, 6);
     
-    *x=(int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
-    *y=(int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
-    *z=(int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
+    *x = (int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
+    *y = (int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
+    *z = (int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
     return err;    
 }
 
@@ -304,9 +299,9 @@ int mpu9250_read_gyro_raw(int16_t* x, int16_t* y, int16_t* z)
     
     err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, MPU9250_GYRO_XOUT_H, 1, buf, 6);
     
-    *x=(int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
-    *y=(int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
-    *z=(int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
+    *x = (int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
+    *y = (int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
+    *z = (int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
     return err;    
 }
 

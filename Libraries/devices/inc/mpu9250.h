@@ -29,17 +29,12 @@ enum gyro_scale
     GFS_2000DPS
 };
 
-enum meg_scale
-{
-    MFS_14BITS = 0, // 0.6 mG per LSB
-    MFS_16BITS      // 0.15 mG per LSB
-};
+
 
 struct mpu_config
 {
     enum accel_scale        afs;
     enum gyro_scale         gfs;
-    enum meg_scale          mfs;
     bool                    enable_aself_test;
 };
 

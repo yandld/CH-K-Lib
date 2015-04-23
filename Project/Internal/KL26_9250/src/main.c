@@ -7,12 +7,26 @@
 #include "imu.h"
 #include "mpu9250.h"
 
-double testRoll,testPitch,testYaw;
-extern imu_io_install_t  			ch9250_imu_io_install_t;
-extern imu_float_euler_angle_t		ch9250_imu_float_euler_angle_t;   
-extern imu_raw_data_t				ch9250_imu_raw_data_t;	
 
+void imu_test(void)
+{
+    imu_io_install_t IOInstallStruct;
+    imu_float_euler_angle_t angle;
+    imu_raw_data_t raw;
+    
+    IOInstallStruct.imu_get_accel = mpu9250_read_accel_raw;
+    IOInstallStruct.imu_get_gyro =  mpu9250_read_gyro_raw;
+    IOInstallStruct.imu_get_mag = mpu9250_read_mag_raw;
+    
+    imu_io_install(&IOInstallStruct); 
 
+    while(1)
+    {
+        imu_get_euler_angle(&angle, &raw);
+        printf("P:%04d R:%04d Y:%04d  \r", angle.imu_pitch, angle.imu_roll, angle.imu_yaw);
+        DelayMs(2);
+    }
+}
 
 void mpu9250_test(void)
 {
@@ -35,7 +49,7 @@ void mpu9250_test(void)
 
 int main(void)
 {
-	uint32_t instance, clock;
+	uint32_t clock;
     struct mpu_config config;
     
 	DelayInit();    
@@ -56,32 +70,17 @@ int main(void)
     /* sensor init */
     mpu9250_init(0);
     
-    config.afs = AFS_16G;
+    config.afs = AFS_2G;
     config.gfs = GFS_250DPS;
-    
-    config.enable_aself_test = false;
-
+    config.aenable_self_test = false;
+    config.genable_self_test = false;
     mpu9250_config(&config);
         
-
     while(1)
     {
         mpu9250_test();
-        
-////		scopeDrawLine(i++,0,0);
-//		CHZT02_Running();
-//		testPitch = ch9250_imu_float_euler_angle_t.imu_pitch;
-//		testRoll = ch9250_imu_float_euler_angle_t.imu_roll;
-//		testYaw = ch9250_imu_float_euler_angle_t.imu_yaw;
-//		scopeDrawLine((int16_t)testPitch,(int16_t)testRoll,(int16_t)testYaw);
-//		printf("\f");
-//		printf("Pitch = %f\r\n",testPitch);
-//		printf("Roll = %f\r\n",testRoll);
-//		printf("Yaw = %f\r\n",testYaw);
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(10);
-
-		
     }
 }
 

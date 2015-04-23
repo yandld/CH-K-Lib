@@ -10,6 +10,7 @@
   
 #include <string.h>
 #include "mpu9250.h"
+#include "common.h"
 #include "i2c.h"
 
 #define MPU9250_DEBUG		1
@@ -36,7 +37,11 @@
 #define	MPU9250_ZG_OFFSET_L			0x18		/***/
 #define	MPU9250_SMPLRT_DIV				0x19		/***/
 #define	MPU9250_CONFIG					0x1A		/***/
-#define	MPU9250_GYRO_CONFIG			0x1B
+
+#define	MPU9250_GYRO_CONFIG                         0x1B
+#define MPU9250_GYRO_CONFIG_FS_MASK                 0x18u
+#define MPU9250_GYRO_CONFIG_FS_SHIFT                3
+#define MPU9250_GYRO_CONFIG_FS(x)                  (((uint32_t)(((uint32_t)(x))<<MPU9250_GYRO_CONFIG_FS_SHIFT))&MPU9250_GYRO_CONFIG_FS_MASK)
 
 #define	MPU9250_ACCEL_CONFIG                        0x1C
 #define MPU9250_ACCEL_CONFIG_FS_MASK                0x18u
@@ -128,7 +133,6 @@
 #define	MPU9250_ZA_OFFSET_H				0x7D		/***/
 #define	MPU9250_ZA_OFFSET_L			0x7E		/***/
 
-
 #define AK8963_ADDRESS   (0x0C)
 //Magnetometer Registers
 #define AK8963_WHO_AM_I  0x00 // should return 0x48
@@ -154,12 +158,11 @@ struct mpu_device
     uint8_t             addr;
     uint32_t            instance;
     void                *user_data;
+    float               mag_adj[3];
     struct mpu_config   user_config;
 };
 
-uint8_t Ascale = AFS_2G;      // AFS_2G, AFS_4G, AFS_8G, AFS_16G
 uint8_t Gscale = GFS_250DPS;  // GFS_250DPS, GFS_500DPS, GFS_1000DPS, GFS_2000DPS
-uint8_t Mmode  = 0x06;        // Either 8 Hz 0x02) or 100 Hz (0x06) magnetometer data ODR  
 
 static struct mpu_device mpu_dev;
 
@@ -173,6 +176,13 @@ static int write_reg(uint8_t addr, uint8_t val)
 static int ak8963_write_reg(uint8_t addr, uint8_t val)
 {
     return I2C_WriteSingleRegister(mpu_dev.instance, AK8963_ADDRESS, addr, val);
+}
+
+static uint8_t ak8963_read_reg(uint8_t addr)
+{
+    uint8_t val;
+    I2C_ReadSingleRegister(mpu_dev.instance, AK8963_ADDRESS, addr, &val);
+    return val;
 }
 
 static uint8_t read_reg(uint8_t addr)
@@ -192,18 +202,32 @@ int mpu9250_config(struct mpu_config *config)
     val |= MPU9250_ACCEL_CONFIG_FS(config->afs);
     write_reg(MPU9250_ACCEL_CONFIG, val);
     
-    switch(config->gfs)
-    {
-        case GFS_250DPS:
-            break;
-        case GFS_500DPS:
-            break;
-        case GFS_1000DPS:
-            break;
-        case GFS_2000DPS:
-            break;
-    }
+    val = read_reg(MPU9250_GYRO_CONFIG);
+    val &= ~MPU9250_GYRO_CONFIG_FS_MASK;
+    val |= MPU9250_GYRO_CONFIG_FS(config->afs);
+    write_reg(MPU9250_GYRO_CONFIG, val);
+    
     return 0;
+}
+
+static int _ak8963_init(void)
+{
+    uint8_t buf[3], err;
+    
+    err = ak8963_write_reg(AK8963_CNTL, 0x00);
+    DelayMs(10);
+    err += ak8963_write_reg(AK8963_CNTL, 0x0F);  /* Enter Fuse ROM access mode */
+    DelayMs(10);
+    err += I2C_BurstRead(0, AK8963_ADDRESS, AK8963_ASAX, 1, buf, 3);
+    mpu_dev.mag_adj[0] = (float)(buf[0] - 128)/256.0f + 1.0f;
+    mpu_dev.mag_adj[1] = (float)(buf[1] - 128)/256.0f + 1.0f;
+    mpu_dev.mag_adj[2] = (float)(buf[2] - 128)/256.0f + 1.0f;
+    err += ak8963_write_reg(AK8963_CNTL, 0x00);
+	DelayMs(10);
+    /* 100Hz 14bit mode */
+    err += ak8963_write_reg(AK8963_CNTL, 0x06|0x10);
+    
+    return err;
 }
 
 int mpu9250_init(uint32_t instance)
@@ -222,7 +246,7 @@ int mpu9250_init(uint32_t instance)
 
             /* init sequence */
             write_reg(MPU9250_PWR_MGMT_1, 0x00); /* wake up device */
-            DelayMs(100);
+            DelayMs(10);
             
             /** get stable time source*/
             /**Set clock source to be PLL with x-axis gyroscope reference, bits 2:0 = 001*/
@@ -266,10 +290,11 @@ int mpu9250_init(uint32_t instance)
             write_reg(MPU9250_INT_ENABLE, 0x01U);  // Enable data ready (bit 0) interrupt
             
             /* AK8963 */
-            if(!I2C_ReadSingleRegister(instance, AK8963_ADDRESS, AK8963_WHO_AM_I, &id) && (id == 0x48))
+            id = ak8963_read_reg(AK8963_WHO_AM_I);
+            if(id == 0x48)
             {
-                ak8963_write_reg(AK8963_CNTL, 0x06|0x10);
                 MPU9250_TRACE("found!addr:0x%X AK8963_WHO_AM_I:0x%X\r\n", mpu_dev.addr, id);
+                _ak8963_init();
                 return 0;
             }
         }
@@ -314,9 +339,9 @@ int mpu9250_read_mag_raw(int16_t* x, int16_t* y, int16_t* z)
     /* Read the six raw data and ST2 registers sequentially into data array */
     err = I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, buf, 7);  
     
-    *x = (int16_t)(((int16_t)buf[1] << 8) | buf[0]);
-    *y = (int16_t)(((int16_t)buf[3] << 8) | buf[2]) ;
-    *z = (int16_t)(((int16_t)buf[5] << 8) | buf[4]) ;	
+    *x = (int16_t)(mpu_dev.mag_adj[0]*(float)(((int16_t)buf[1] << 8) | buf[0]));
+    *y = (int16_t)(mpu_dev.mag_adj[1]*(float)(((int16_t)buf[3] << 8) | buf[2])) ;
+    *z = (int16_t)(mpu_dev.mag_adj[2]*(float)(((int16_t)buf[5] << 8) | buf[4])) ;	
     return err;
 }
 

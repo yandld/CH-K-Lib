@@ -35,7 +35,9 @@ struct mpu_config
 {
     enum accel_scale        afs;
     enum gyro_scale         gfs;
-    bool                    enable_aself_test;
+    bool                    aenable_self_test;
+    bool                    genable_self_test;
+    bool                    gbypass_blpf;
 };
 
 

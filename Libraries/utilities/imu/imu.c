@@ -6,8 +6,8 @@
  * Defination
  ******************************************************************************/
 #define PI             3.1415926f
-#define Kp             10.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
-#define Ki             0.005f     /* integral gain governs rate of convergence of gyroscope biases */
+#define Kp             20.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
+#define Ki             0.001f     /* integral gain governs rate of convergence of gyroscope biases */
 #define halfT          0.002f
 #define Gyro_G         0.0610351f
 #define Gyro_Gr        0.0010653f
@@ -115,7 +115,7 @@ static uint32_t imu_format_data(imu_raw_data_t * raw_data, imu_float_data_t * fl
 }
 
 //!< the mx my mz order are related to PCB layout!!
-static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double mz,double my, imu_float_euler_angle_t * angle)
+static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double my,double mz, imu_float_euler_angle_t * angle)
 {
     double norm = 0;
     double hx = 0, hy = 0, hz = 0, bx = 0, bz = 0;			

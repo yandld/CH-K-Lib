@@ -222,6 +222,7 @@ static int _ak8963_init(void)
     mpu_dev.mag_adj[0] = (float)(buf[0] - 128)/256.0f + 1.0f;
     mpu_dev.mag_adj[1] = (float)(buf[1] - 128)/256.0f + 1.0f;
     mpu_dev.mag_adj[2] = (float)(buf[2] - 128)/256.0f + 1.0f;
+    MPU9250_TRACE("mag_adj:%f  %f  %f  \r\n", mpu_dev.mag_adj[0], mpu_dev.mag_adj[1], mpu_dev.mag_adj[2]);
     err += ak8963_write_reg(AK8963_CNTL, 0x00);
 	DelayMs(10);
     /* 100Hz 14bit mode */
@@ -291,6 +292,7 @@ int mpu9250_init(uint32_t instance)
             
             /* AK8963 */
             id = ak8963_read_reg(AK8963_WHO_AM_I);
+            MPU9250_TRACE("AK8963 ID:0x%X\r\n", id);
             if(id == 0x48)
             {
                 MPU9250_TRACE("found!addr:0x%X AK8963_WHO_AM_I:0x%X\r\n", mpu_dev.addr, id);
@@ -338,10 +340,13 @@ int mpu9250_read_mag_raw(int16_t* x, int16_t* y, int16_t* z)
     
     /* Read the six raw data and ST2 registers sequentially into data array */
     err = I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, buf, 7);  
-    
-    *x = (int16_t)(mpu_dev.mag_adj[0]*(float)(((int16_t)buf[1] << 8) | buf[0]));
-    *y = (int16_t)(mpu_dev.mag_adj[1]*(float)(((int16_t)buf[3] << 8) | buf[2])) ;
-    *z = (int16_t)(mpu_dev.mag_adj[2]*(float)(((int16_t)buf[5] << 8) | buf[4])) ;	
+
+    *x = (int16_t)((((int16_t)buf[1] << 8) | buf[0]));
+    *y = (int16_t)((((int16_t)buf[3] << 8) | buf[2]));
+    *z = (int16_t)((((int16_t)buf[5] << 8) | buf[4]));	
+    *x = mpu_dev.mag_adj[0]*(*x);
+    *y = mpu_dev.mag_adj[1]*(*y);
+    *z = mpu_dev.mag_adj[2]*(*z);
     return err;
 }
 

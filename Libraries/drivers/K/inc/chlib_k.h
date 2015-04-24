@@ -35,7 +35,7 @@
 #include "wdog.h"
 
 /* T90FS Flash */
-#include "FlashOS.H"
+#include "flash.h"
 
 /* DSP lib */
 #define ARM_MATH_CM4

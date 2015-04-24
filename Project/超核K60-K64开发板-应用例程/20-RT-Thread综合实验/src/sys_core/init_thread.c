@@ -44,13 +44,24 @@ void init_thread_entry(void* parameter)
     rt_hw_spi_init();
     rt_hw_sd_init();
     rt_hw_rtc_init();
+    rt_hw_dflash_init();
+    
+//    if(dfs_mount("dflash0", "/", "elm", 0, 0))
+//    {
+//        rt_kprintf("format root file system!...\r\n");
+//        dfs_mkfs("elm", "dflash0");
+//        dfs_mount("dflash0", "/", "elm", 0, 0);
+//    }
     
     touch_ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
     
-    if(dfs_mount("sf0", "/SF", "elm", 0, 0))
+    if(dfs_mount("sf0", "/", "elm", 0, 0))
+    {
         dfs_mkfs("elm", "sf0");
-    
+        dfs_mount("sf0", "/", "elm", 0, 0);
+    }
+        
     if(dfs_mount("sd0", "/SD", "elm", 0, 0))
         rt_kprintf("sd mount on /SD failed\r\n");
 

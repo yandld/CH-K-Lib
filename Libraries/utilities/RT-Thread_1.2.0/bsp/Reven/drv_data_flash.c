@@ -8,8 +8,11 @@
 #define FLASH_SIZE          (1024*1024)
 #endif
 
-#define FLASH_OFFSET        (200*1024)   /* UDisk start offset */
+extern int Image$$ER_IROM1$$RO$$Limit;
+
+#define FLASH_OFFSET        ((uint32_t)&Image$$ER_IROM1$$RO$$Limit)   /* UDisk start offset */
 #define UDISK_SIZE          (FLASH_SIZE - FLASH_OFFSET)
+
 
 static struct rt_device dflash_device;
 static int SectorCnt;
@@ -19,7 +22,7 @@ static rt_err_t rt_dflash_init (rt_device_t dev)
     FLASH_Init();
     
     SectorCnt = FLASH_GetSectorSize();
-    rt_kprintf("dflash sector size:%d\r\n", SectorCnt);
+    rt_kprintf("dflash sector size:%d 0ffset:0x%X\r\n", SectorCnt, FLASH_OFFSET);
     
     return RT_EOK;
 }

@@ -21,8 +21,6 @@
 #define SETRAM    0x81  /* set flexram function */
 #define NORMAL_LEVEL 0x0
 
-
-
 /* function return type */
 #define FLASH_OK                    0x00
 #define FLASH_OVERFLOW              0x01
@@ -54,8 +52,6 @@
 #endif
 
 
-
-
 static uint8_t _CommandLaunch(void)
 {
     /* Clear command result flags */
@@ -79,7 +75,6 @@ uint32_t FLASH_GetSectorSize(void)
 {
     return SECTOR_SIZE;
 }
-
 
 
 void FLASH_Init(void)
@@ -153,15 +148,14 @@ uint8_t FLASH_WriteSector(uint32_t addr, uint8_t *buf, uint32_t len)
 		FTF->FCCOB6 = buf[1];
 		FTF->FCCOB7 = buf[0];
         
-        FTF->FCCOB8 = buf[7];
-        FTF->FCCOB9 = buf[6];
-        FTF->FCCOBA = buf[5];
-        FTF->FCCOBB = buf[4];
-        FTF->FCCOB4 = buf[3];
-        FTF->FCCOB5 = buf[2];
-        FTF->FCCOB6 = buf[1];
-        FTF->FCCOB7 = buf[0];
-        
+        if(step == 8)
+        {
+            FTF->FCCOB8 = buf[7];
+            FTF->FCCOB9 = buf[6];
+            FTF->FCCOBA = buf[5];
+            FTF->FCCOBB = buf[4];
+        }
+
 		dest.word += step; buf += step;
 
 		if(FLASH_OK != _CommandLaunch()) 

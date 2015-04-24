@@ -62,8 +62,7 @@ int main(void)
     DelayInit();
     
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    PIT_QuickInit(HW_PIT_CH0, 1000*1000);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     
     printf("flash demo\r\n");
     

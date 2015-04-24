@@ -33,43 +33,59 @@
 #define FLASH_CONTENTERR            0x11
 
 
-
 /* disable interrupt before lunch command */
 #define CCIF    (1<<7)
 #define ACCERR  (1<<5)
 #define FPVIOL  (1<<4)
 #define MGSTAT0 (1<<0)
 
-
 #if defined(FTFL)
-#define FTFA    FTFL
+#define FTF    FTFL
+#define SECTOR_SIZE     (2048)
+#define PROGRAM_CMD      PGM4
 #elif defined(FTFE)
-#define FTFA    FTFE
+#define FTF    FTFE
+#define SECTOR_SIZE     (4096)
+#define PROGRAM_CMD      PGM8
+#elif defined(FTFA)
+#define SECTOR_SIZE     (1024)
+#define PROGRAM_CMD      PGM4
+#define FTF    FTFA
 #endif
+
+
+
 
 static uint8_t _CommandLaunch(void)
 {
     /* Clear command result flags */
-    FTFA->FSTAT = ACCERR | FPVIOL;
+    FTF->FSTAT = ACCERR | FPVIOL;
 
     /* Launch Command */
-    FTFA->FSTAT = CCIF;
+    FTF->FSTAT = CCIF;
 
     /* wait command end */
-    while(!(FTFA->FSTAT & CCIF));
+    while(!(FTF->FSTAT & CCIF));
 
     /*check for errors*/
-    if(FTFA->FSTAT & (ACCERR | FPVIOL | MGSTAT0)) return FLASH_ERROR;
+    if(FTF->FSTAT & (ACCERR | FPVIOL | MGSTAT0)) return FLASH_ERROR;
 
     /*No errors retur OK*/
     return FLASH_OK;
 
 }
 
+uint32_t FLASH_GetSectorSize(void)
+{
+    return SECTOR_SIZE;
+}
+
+
+
 void FLASH_Init(void)
 {
-  /* Clear status */
-  FTFA->FSTAT = ACCERR | FPVIOL;
+    /* Clear status */
+    FTF->FSTAT = ACCERR | FPVIOL;
 }
 
 
@@ -83,10 +99,10 @@ uint8_t FLASH_EraseSector(uint32_t addr)
 	dest.word = (uint32_t)addr;
 
     /* set cmd */
-	FTFA->FCCOB0 = ERSSCR; 
-	FTFA->FCCOB1 = dest.byte[2];
-	FTFA->FCCOB2 = dest.byte[1];
-	FTFA->FCCOB3 = dest.byte[0];
+	FTF->FCCOB0 = ERSSCR; 
+	FTF->FCCOB1 = dest.byte[2];
+	FTF->FCCOB2 = dest.byte[1];
+	FTF->FCCOB3 = dest.byte[0];
 		
 	if(FLASH_OK == _CommandLaunch())
 	{
@@ -98,40 +114,10 @@ uint8_t FLASH_EraseSector(uint32_t addr)
 	}
 }
 
-#if 0 
-uint8_t FLASH_ProgramWord(uint32_t sectorNo, uint8_t *buf)
-{
-	union
-	{
-		uint32_t  word;
-		uint8_t   byte[4];
-	} dest;
-	dest.word = (uint32_t)(sectorNo*(DEFAULT_SECTOR_SIZE));
-
-	FTFA->FCCOB0 = PGM4;
-
-    /* set address */
-    FTFA->FCCOB1 = dest.byte[2];
-    FTFA->FCCOB2 = dest.byte[1];
-    FTFA->FCCOB3 = dest.byte[0];
-
-    FTFA->FCCOB4 = buf[3];
-    FTFA->FCCOB5 = buf[2];
-    FTFA->FCCOB6 = buf[1];
-    FTFA->FCCOB7 = buf[0];
-    dest.word += 4; buf += 4;
-
-    if(FLASH_OK != _CommandLaunch())
-    {
-        return FLASH_ERROR;
-    }
-    return FLASH_OK;
-}
-#endif
-
 uint8_t FLASH_WriteSector(uint32_t addr, uint8_t *buf, uint32_t len)
 {
 	uint16_t i;
+    uint16_t step;
 	union
 	{
 		uint32_t  word;
@@ -139,30 +125,44 @@ uint8_t FLASH_WriteSector(uint32_t addr, uint8_t *buf, uint32_t len)
 	} dest;
 	dest.word = (uint32_t)addr;
 
-	FTFA->FCCOB0 = PGM4;
-
-	for(i=0; i<len; i+=4)
+	FTF->FCCOB0 = PROGRAM_CMD;
+    
+    switch(PROGRAM_CMD)
+    {
+        case PGM4:
+            step = 4;
+            break;
+        case PGM8:
+            step = 8;
+            break;
+        default:
+            LIB_TRACE("FLASH: no program cmd found!\r\n");
+            step = 4;
+            break;
+    }
+    
+	for(i=0; i<len; i+=step)
 	{
         /* set address */
-		FTFA->FCCOB1 = dest.byte[2];
-		FTFA->FCCOB2 = dest.byte[1];
-		FTFA->FCCOB3 = dest.byte[0];
+		FTF->FCCOB1 = dest.byte[2];
+		FTF->FCCOB2 = dest.byte[1];
+		FTF->FCCOB3 = dest.byte[0];
 
-		FTFA->FCCOB4 = buf[3];
-		FTFA->FCCOB5 = buf[2];
-		FTFA->FCCOB6 = buf[1];
-		FTFA->FCCOB7 = buf[0];
+		FTF->FCCOB4 = buf[3];
+		FTF->FCCOB5 = buf[2];
+		FTF->FCCOB6 = buf[1];
+		FTF->FCCOB7 = buf[0];
         
-        FTFA->FCCOB8 = buf[7];
-        FTFA->FCCOB9 = buf[6];
-        FTFA->FCCOBA = buf[5];
-        FTFA->FCCOBB = buf[4];
-        FTFA->FCCOB4 = buf[3];
-        FTFA->FCCOB5 = buf[2];
-        FTFA->FCCOB6 = buf[1];
-        FTFA->FCCOB7 = buf[0];
+        FTF->FCCOB8 = buf[7];
+        FTF->FCCOB9 = buf[6];
+        FTF->FCCOBA = buf[5];
+        FTF->FCCOBB = buf[4];
+        FTF->FCCOB4 = buf[3];
+        FTF->FCCOB5 = buf[2];
+        FTF->FCCOB6 = buf[1];
+        FTF->FCCOB7 = buf[0];
         
-		dest.word += 4; buf += 4;
+		dest.word += step; buf += step;
 
 		if(FLASH_OK != _CommandLaunch()) 
         {

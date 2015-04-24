@@ -634,40 +634,6 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>ssd_lib</GroupName>
-          <Files>
-            <File>
-              <FileName>MK_P1M0.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\flash\lib\MK_P1M0.lib</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds/>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>MK_P512.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\flash\lib\MK_P512.lib</FilePath>
-            </File>
-          </Files>
-        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1337,40 +1303,6 @@
                     </VariousControls>
                   </Cads>
                 </FileArmAds>
-              </FileOption>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ssd_lib</GroupName>
-          <Files>
-            <File>
-              <FileName>MK_P1M0.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\flash\lib\MK_P1M0.lib</FilePath>
-            </File>
-            <File>
-              <FileName>MK_P512.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\flash\lib\MK_P512.lib</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds/>
               </FileOption>
             </File>
           </Files>

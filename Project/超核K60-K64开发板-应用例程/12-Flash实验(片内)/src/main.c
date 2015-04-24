@@ -6,37 +6,38 @@
 #include "flash.h"
 
 /* chip's Flash size and sector size can be found in RM */
-#define SECTOR_SIZE         (0x000400)
-#define DEV_SIZE            (0x100000)
+#define DEV_SIZE            (0x80000)
 
 
 static void FlashTest(void)
 {
-    int addr, i,err,secNo;
+    int addr, i, err, secNo, sector_size;
     uint8_t *p;
-    static uint8_t buf[SECTOR_SIZE];
+    static uint8_t buf[4096];
       
-    for(i=0;i<SECTOR_SIZE;i++)
+    sector_size = FLASH_GetSectorSize();
+    printf("flash sector size:%d\r\n", sector_size);
+    
+    for(i=0;i<sector_size;i++)
     {
         buf[i] = i % 0xFF;
     }
     
-    for (secNo = 20; secNo < (DEV_SIZE/SECTOR_SIZE); secNo++)
+    for (secNo = 20; secNo < (DEV_SIZE/sector_size); secNo++)
     {
-        addr = secNo*SECTOR_SIZE;
+        addr = secNo*sector_size;
         printf("program addr:0x%X ", addr);
         err = 0;
         err += FLASH_EraseSector(addr);
-        err += FLASH_WriteSector(addr, buf, SECTOR_SIZE);
+        err += FLASH_WriteSector(addr, buf, sector_size);
         if(err)
         {
             printf("issue command failed %d\r\n", err);
             while(1);
-            return;
         }
         p = (uint8_t*)(addr);
         
-        for(i=0;i<SECTOR_SIZE;i++)
+        for(i=0;i<sector_size;i++)
         {
             if(*p++ != (i%0xFF))
             {
@@ -58,13 +59,13 @@ static void FlashTest(void)
 int main(void)
 {
     uint32_t i;
-    uint32_t ticks;
-    uint32_t r;
     DelayInit();
     
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     PIT_QuickInit(HW_PIT_CH0, 1000*1000);
+    
+    printf("flash demo\r\n");
     
     FlashTest();
     

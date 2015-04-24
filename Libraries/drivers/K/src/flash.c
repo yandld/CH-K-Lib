@@ -109,7 +109,7 @@ uint8_t FLASH_EraseSector(uint32_t addr)
 	}
 }
 
-uint8_t FLASH_WriteSector(uint32_t addr, uint8_t *buf, uint32_t len)
+uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
 {
 	uint16_t i;
     uint16_t step;

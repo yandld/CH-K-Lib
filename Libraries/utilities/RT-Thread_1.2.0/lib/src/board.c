@@ -109,9 +109,9 @@ void _init_entry(void* parameter)
     
     rt_system_comonent_init();
     
-    #if defined(RT_USING_DFS_NFS) 
-    dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
-    #endif
+//    #if defined(RT_USING_DFS_ROMFS) 
+//    dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
+//    #endif
     
     /* init thread */
     tid = rt_thread_create("init", init_thread_entry, RT_NULL, 1024, 0x20, 20);                       

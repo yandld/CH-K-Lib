@@ -7,8 +7,8 @@
 
 
 void rt_hw_ksz8041_init(void);
+void rt_hw_dflash_init(void);
 void rt_hw_sd_init(void);
-
 
 
 void init_thread_entry(void* parameter)
@@ -31,8 +31,18 @@ void init_thread_entry(void* parameter)
     finsh_system_init();
     
     rt_hw_sd_init();
+    rt_hw_dflash_init();
     
-    if(dfs_mount("sd0", "/SD", "elm", 0, 0))
+    if(dfs_mount("dflash0", "/", "elm", 0, 0))
+    {
+        rt_kprintf("format root file system!...\r\n");
+        dfs_mkfs("elm", "dflash0");
+        dfs_mount("dflash0", "/", "elm", 0, 0);
+    }
+    
+    mkdir("/dev");
+    mkdir("/dev/SD", 0x777);
+    if(dfs_mount("sd0", "/dev/SD", "elm", 0, 0))
         rt_kprintf("sd mount on /SD failed\r\n");
 
     rt_hw_ksz8041_init();
@@ -42,7 +52,6 @@ void init_thread_entry(void* parameter)
     /* tcp server demp */
     tcpserv();
 
-    
     tid = rt_thread_self();
     rt_thread_delete(tid); 
 }

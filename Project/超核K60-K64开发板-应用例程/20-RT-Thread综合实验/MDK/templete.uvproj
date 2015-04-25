@@ -220,7 +220,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <RoSelD>3</RoSelD>
@@ -779,6 +779,11 @@
               <FileName>drv_data_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_data_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ram_disk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ram_disk.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2404,6 +2409,11 @@
               <FileName>drv_data_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_data_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ram_disk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ram_disk.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4053,6 +4063,11 @@
               <FileName>drv_data_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_data_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ram_disk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ram_disk.c</FilePath>
             </File>
           </Files>
         </Group>

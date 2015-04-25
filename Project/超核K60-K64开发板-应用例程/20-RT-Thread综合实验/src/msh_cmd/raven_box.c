@@ -46,8 +46,6 @@ int kill(int argc, char ** argv)
 MSH_CMD_EXPORT(kill, kill a thread);
 
 
-
-
 int mountnfs(const char * host)
 {
     int r;
@@ -64,6 +62,30 @@ int mountnfs(const char * host)
 
 FINSH_FUNCTION_EXPORT(mountnfs, eg:mountnfs("192.168.1.101:/"))
 
+
+static int mount(int argc, char** argv)
+{
+    int ret;
+    char *device, *fs, *path;
+    
+    fs = argv[1];
+    device = argv[2];
+    path = argv[3];
+    
+    if(argc < 4)
+        return 1;
+
+    ret = dfs_mount(device, path, fs, 0, argv[4]);
+
+    if(ret)
+        printf("%s mount on %s fail!%d\r\n", device, path, ret);
+    else
+        printf("%s mount on %s ok!\r\n", device, path);
+    
+    return ret;
+}
+
+MSH_CMD_EXPORT(mount, mount elm sd0 /dev/sd);
 
 static int cpufreq(int argc, char** argv)
 {

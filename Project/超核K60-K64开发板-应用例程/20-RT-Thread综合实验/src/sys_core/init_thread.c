@@ -12,7 +12,8 @@ void rt_hw_spi_init(void);
 void rt_hw_sd_init(void);
 void rt_hw_rtc_init(void);
 void rt_hw_dflash_init(void);
-
+void rt_hw_dram_init(void);
+    
 void usb_thread_entry(void* parameter);
 void sd_thread_entry(void* parameter);
 int ui_startup(int argc, char** argv);
@@ -43,26 +44,27 @@ void init_thread_entry(void* parameter)
     rt_hw_sd_init();
     rt_hw_rtc_init();
     rt_hw_dflash_init();
+    rt_hw_dram_init();
     
     ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
-    
+
     if(dfs_mount("sf0", "/", "elm", 0, 0))
     {
         dfs_mkfs("elm", "sf0");
         dfs_mount("sf0", "/", "elm", 0, 0);
     }
         
-    if(dfs_mount("sd0", "/SD", "elm", 0, 0))
-        rt_kprintf("sd mount on /SD failed\r\n");
-
+//    if(dfs_mount("sd0", "/", "elm", 0, 0))
+//        rt_kprintf("sd mount failed\r\n");
+    
     at24cxx_init("at24c02", "i2c0");
 
     #ifndef FRDM
     ui_startup(RT_NULL, RT_NULL);
     #endif
     
-    tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, (1024*2), 0x15, 20);                                                      
+    tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, (1024*1), 0x15, 20);                                                      
     rt_thread_startup(tid);	
 
     

@@ -1,7 +1,6 @@
 
 #include "gui_appdef.h"
 
-
 rt_mq_t guimq;
 
 void gui_thread_entry(void* parameter)

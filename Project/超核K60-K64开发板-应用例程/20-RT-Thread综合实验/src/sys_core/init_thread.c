@@ -7,20 +7,18 @@
 #include "drv_spi.h"
 #include "drv_uart.h"
 
-void led_thread_entry(void* parameter);
-void usb_thread_entry(void* parameter);
-void sd_thread_entry(void* parameter);
-int ui_startup(int argc, char** argv);
-
-void key_thread_entry(void* parameter);
-
 void rt_hw_ksz8041_init(void);
 void rt_hw_spi_init(void);
 void rt_hw_sd_init(void);
 void rt_hw_rtc_init(void);
+void rt_hw_dflash_init(void);
 
-rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
+void usb_thread_entry(void* parameter);
+void sd_thread_entry(void* parameter);
+int ui_startup(int argc, char** argv);
 
+
+rt_err_t ads7843_init(const char * name, const char * spi_device_name);
 
 void init_thread_entry(void* parameter)
 {
@@ -46,14 +44,7 @@ void init_thread_entry(void* parameter)
     rt_hw_rtc_init();
     rt_hw_dflash_init();
     
-//    if(dfs_mount("dflash0", "/", "elm", 0, 0))
-//    {
-//        rt_kprintf("format root file system!...\r\n");
-//        dfs_mkfs("elm", "dflash0");
-//        dfs_mount("dflash0", "/", "elm", 0, 0);
-//    }
-    
-    touch_ads7843_init("ads7843", "spi20");
+    ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
     
     if(dfs_mount("sf0", "/", "elm", 0, 0))
@@ -69,15 +60,13 @@ void init_thread_entry(void* parameter)
 
     #ifndef FRDM
     ui_startup(RT_NULL, RT_NULL);
-  //  tid = rt_thread_create("key", key_thread_entry, RT_NULL, 512, 0x14, 20);
-  //  if (tid != RT_NULL) rt_thread_startup(tid);
     #endif
     
-    rt_hw_ksz8041_init();
+    tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, (1024*4), 0x15, 20);                                                      
+    rt_thread_startup(tid);	
+
     
-    usbd_init();                          /* USB Device Initialization          */
-    usbd_connect(__TRUE);                 /* USB Device Connect                 */
-    //while (!usbd_configured ());          /* Wait for device to configure        */
+    rt_hw_ksz8041_init();
     
     tid = rt_thread_self();
     rt_thread_delete(tid); 

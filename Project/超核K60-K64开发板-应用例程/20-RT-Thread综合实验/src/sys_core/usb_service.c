@@ -1,127 +1,110 @@
 #include <rtthread.h>
 #include <rthw.h>
+#include "rl_usb.h"
 
-#include "gpio.h"
-#include "gui.h"
-#include "board.h"
-
-
-#include "usb.h"
-#include "usb_msc.h"
-
-
-static rt_device_t device = RT_NULL;
-    
-
-static void USB_App_Callback(uint8_t controller_ID, uint8_t event_type, void* val)
+typedef struct
 {
-    if((event_type == USB_APP_BUS_RESET) || (event_type == USB_APP_CONFIG_CHANGED))
-    {
-        
-    }
-    else if(event_type == USB_APP_ENUM_COMPLETE)
-    {
-        rt_kprintf("usb app enum OK.\r\n");
-    }
+    uint8_t dir;
+    int cmd;
+    U32 block;
+    U8 *buf;
+    U32 num_of_blocks;
+}msd_msg_t;
+
+static rt_device_t dev;
+static rt_mq_t msd_mq;
     
+/* init */
+void usbd_msc_init ()
+{
+    rt_thread_t tid;
+    
+    msd_mq = rt_mq_create("msd_mq", sizeof(msd_msg_t), 60, RT_IPC_FLAG_FIFO);
+
+    USBD_MSC_MemorySize = 2*1024*1024;
+    USBD_MSC_BlockSize  = 4096;
+    USBD_MSC_BlockGroup = 1;
+    USBD_MSC_BlockCount = USBD_MSC_MemorySize / USBD_MSC_BlockSize;
+    USBD_MSC_BlockBuf   = rt_malloc(4096);
+
+    USBD_MSC_MediaReady = __TRUE;
+
 }
 
-static void MSD_Event_Callback(uint_8 controller_ID, 
-		uint_8 event_type, 
-		void* val) 
+void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
 {
-    PTR_DEVICE_LBA_INFO_STRUCT device_lba_info_ptr;
-    PTR_LBA_APP_STRUCT lba_data_ptr;
-    struct rt_device_blk_geometry geometry;
-    switch(event_type)
-	{
-        case USB_MSC_DEVICE_GET_INFO:
-            rt_kprintf("usb msc get info\r\n");
-            device_lba_info_ptr = (PTR_DEVICE_LBA_INFO_STRUCT)val;
-            rt_device_control(device, RT_DEVICE_CTRL_BLK_GETGEOME, &geometry);
-            device_lba_info_ptr->total_lba_device_supports = geometry.sector_count;	
-            device_lba_info_ptr->length_of_each_lba_of_device = 512;
-            device_lba_info_ptr->num_lun_supported = 1;
-            break;
-        case USB_MSC_DEVICE_READ_REQUEST: 
-            lba_data_ptr = (PTR_LBA_APP_STRUCT)val;
-            rt_device_read(device, lba_data_ptr->offset/512, lba_data_ptr->buff_ptr, 1);
-            break;
-        case USB_APP_SEND_COMPLETE:
-            //rt_kprintf("usb app send complete\r\n");
-            break;
-        case USB_MSC_DEVICE_WRITE_REQUEST: 
-            lba_data_ptr = (PTR_LBA_APP_STRUCT)val;
-            rt_device_write(device, lba_data_ptr->offset/512, lba_data_ptr->buff_ptr, 1);
-            break;
-        case USB_MSC_DEVICE_REMOVAL_REQUEST:
-            rt_kprintf("usb app removel request\r\n");
-            break;
-        default:
-            rt_kprintf("Unknown event type:%X\r\n", event_type);
-            break;
-    }
+    msd_msg_t msg;
+    
+    msg.block = block;
+    msg.buf = buf;
+    msg.num_of_blocks = num_of_blocks;
+    msg.dir = 0;
+    
+   // rt_mq_send(msd_mq, &msg, sizeof(msg));
+    
+    USBD_MSC_MediaReady =__FALSE;
+    
+  //  volatile uint32_t i;
+  //  for(i=0;i<600000;i++);
+ //   rt_kprintf("!\r\n");
+ //   rt_interrupt_enter();
+    rt_device_read(dev, block, buf, num_of_blocks);
+ //   rt_thread_delay(1);
+ //   rt_interrupt_leave();
+    USBD_MSC_MediaReady =__TRUE;
 }
 
-
+void usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
+{
+    msd_msg_t msg;
+    
+    msg.block = block;
+    msg.buf = buf;
+    msg.num_of_blocks = num_of_blocks;
+    msg.dir = 1;
+    
+    USBD_MSC_MediaReady =__FALSE;
+   // rt_mq_send(msd_mq, &msg, sizeof(msg));
+    rt_device_write(dev, block, buf, num_of_blocks);
+    USBD_MSC_MediaReady =__TRUE;
+}
 
 void usb_thread_entry(void* parameter)
 {
     int i;
+    rt_thread_t tid;
+    msd_msg_t msg;
     
-    device = rt_device_find(parameter);
-    
-    if( device == RT_NULL)
+    dev = rt_device_find("sf0");
+    if(!dev)
     {
-        rt_kprintf("device %s: not found!\r\n", parameter);
-        return;
+        rt_kprintf("no device found!\r\n");
+        tid = rt_thread_self();
+        rt_thread_delete(tid); 
     }
     
-    rt_device_open(device, RT_DEVICE_OFLAG_RDWR);
-    if(USB_Init())
-    {
-        rt_kprintf("USB  Init failed, clock must be 96M or 48M\r\n");
-        return;
-    }
+    usbd_init();                          /* USB Device Initialization          */
+    usbd_connect(__TRUE);                 /* USB Device Connect                 */
+    while (!usbd_configured ());          /* Wait for device to configure        */
     
-    USB_Class_MSC_Init(0, USB_App_Callback, NULL, MSD_Event_Callback);
-    NVIC_EnableIRQ(USB0_IRQn);
+    rt_kprintf("usb enum complete\r\n");
     
     while(1)
     {
-        USB_MSC_Periodic_Task();
-        rt_thread_delay(1);
+        if(rt_mq_recv(msd_mq, &msg, sizeof(msd_msg_t), 1) == RT_EOK)
+        {
+            if(msg.dir == 0)
+            {
+                //USBD_MSC_MediaReady =__FALSE;
+                //rt_kprintf("read!\r\n");
+                rt_device_read(dev, msg.block, msg.buf, msg.num_of_blocks);
+                //USBD_MSC_MediaReady = __TRUE;
+            }
+            else
+            {
+                rt_device_write(dev, msg.block, msg.buf, msg.num_of_blocks);
+            }
+        }
     }
 }
-
-
-#ifdef FINSH_USING_MSH
-#include "finsh.h"
-
-int usb_startup(int argc, char** argv)
-{
-    rt_thread_t tid;
-    
-    if(argc != 2)
-    {
-        rt_kprintf("error param\r\n");
-        return -1;
-    }
-    
-    /* this task can not be single */
-    tid = rt_thread_find("usb_exe");
-    if(tid != RT_NULL) return -1;
-    
-    static char arg[32];
-    rt_memcpy(arg, argv[1], rt_strlen(argv[1]));
-
-    tid = rt_thread_create("usb_exe", usb_thread_entry, arg, 1024, 30, 20);
-    if (tid != RT_NULL) rt_thread_startup(tid);
-
-    return 0;
-}
-
-MSH_CMD_EXPORT(usb_startup, eg:usb_startup sd0);
-
-#endif
 

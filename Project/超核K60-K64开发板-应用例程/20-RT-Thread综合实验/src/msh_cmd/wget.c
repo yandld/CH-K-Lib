@@ -8,15 +8,9 @@
 #include <lwip/sockets.h>
 
 
-
-
-
-
 #define  URL_LEN  128
 #define  FILENAME_LEN  128
 #define  PATH_LEN      128
-
-
 
 
 int Connect(int fd, struct sockaddr *addr, socklen_t len)

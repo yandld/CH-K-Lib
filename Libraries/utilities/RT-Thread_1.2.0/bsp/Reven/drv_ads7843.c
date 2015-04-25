@@ -4,10 +4,11 @@
 
 static struct rt_device  ads7843_device;
 struct rt_spi_device * rt_spi_device;
+
 #define ADS7843_CMD_READ_X   (0xD0)
 #define ADS7843_CMD_READ_Y   (0X90)
 
-static rt_size_t touch_ads7843_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size)
+static rt_size_t ads7843_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_size_t size)
 {
     rt_uint8_t send_buffer[1];
     if(pos == 0)
@@ -23,7 +24,7 @@ static rt_size_t touch_ads7843_read(rt_device_t dev, rt_off_t pos, void *buffer,
 }
 
 
-rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name)
+rt_err_t ads7843_init(const char * name, const char * spi_device_name)
 {
 
     rt_spi_device = (struct rt_spi_device *)rt_device_find(spi_device_name);
@@ -47,7 +48,7 @@ rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name)
     ads7843_device.init    = RT_NULL;
     ads7843_device.open    = RT_NULL;
     ads7843_device.close   = RT_NULL;
-    ads7843_device.read    = touch_ads7843_read;
+    ads7843_device.read    = ads7843_read;
     ads7843_device.write   = RT_NULL;
     ads7843_device.control = RT_NULL;
     /* no private */

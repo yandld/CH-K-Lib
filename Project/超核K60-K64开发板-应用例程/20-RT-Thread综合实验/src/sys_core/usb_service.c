@@ -2,6 +2,8 @@
 #include <rthw.h>
 #include "rl_usb.h"
 
+#include <stdbool.h>
+
 typedef struct
 {
     uint8_t dir;
@@ -13,13 +15,13 @@ typedef struct
 
 static rt_device_t dev;
 static rt_mq_t msd_mq;
-    
+
 /* init */
 void usbd_msc_init ()
 {
     rt_thread_t tid;
     
-    msd_mq = rt_mq_create("msd_mq", sizeof(msd_msg_t), 60, RT_IPC_FLAG_FIFO);
+    msd_mq = rt_mq_create("msd_mq", sizeof(msd_msg_t), 20, RT_IPC_FLAG_FIFO);
 
     USBD_MSC_MemorySize = 2*1024*1024;
     USBD_MSC_BlockSize  = 4096;
@@ -33,7 +35,7 @@ void usbd_msc_init ()
 
 void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
 {
-    msd_msg_t msg;
+    static msd_msg_t msg;
     
     msg.block = block;
     msg.buf = buf;
@@ -41,17 +43,9 @@ void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
     msg.dir = 0;
     
    // rt_mq_send(msd_mq, &msg, sizeof(msg));
-    
-    USBD_MSC_MediaReady =__FALSE;
-    
-  //  volatile uint32_t i;
-  //  for(i=0;i<600000;i++);
- //   rt_kprintf("!\r\n");
- //   rt_interrupt_enter();
+    __disable_irq();
     rt_device_read(dev, block, buf, num_of_blocks);
- //   rt_thread_delay(1);
- //   rt_interrupt_leave();
-    USBD_MSC_MediaReady =__TRUE;
+    __enable_irq();
 }
 
 void usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
@@ -63,10 +57,9 @@ void usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
     msg.num_of_blocks = num_of_blocks;
     msg.dir = 1;
     
-    USBD_MSC_MediaReady =__FALSE;
-   // rt_mq_send(msd_mq, &msg, sizeof(msg));
+    __disable_irq();
     rt_device_write(dev, block, buf, num_of_blocks);
-    USBD_MSC_MediaReady =__TRUE;
+    __enable_irq();
 }
 
 void usb_thread_entry(void* parameter)
@@ -85,24 +78,24 @@ void usb_thread_entry(void* parameter)
     
     usbd_init();                          /* USB Device Initialization          */
     usbd_connect(__TRUE);                 /* USB Device Connect                 */
-    while (!usbd_configured ());          /* Wait for device to configure        */
+    while (!usbd_configured ())
+    {
+        rt_thread_delay(10);
+    }
     
     rt_kprintf("usb enum complete\r\n");
     
     while(1)
     {
-        if(rt_mq_recv(msd_mq, &msg, sizeof(msd_msg_t), 1) == RT_EOK)
+        if(rt_mq_recv(msd_mq, &msg, sizeof(msd_msg_t), RT_WAITING_FOREVER) == RT_EOK)
         {
             if(msg.dir == 0)
             {
-                //USBD_MSC_MediaReady =__FALSE;
-                //rt_kprintf("read!\r\n");
-                rt_device_read(dev, msg.block, msg.buf, msg.num_of_blocks);
-                //USBD_MSC_MediaReady = __TRUE;
+          //      rt_device_read(dev, msg.block, msg.buf, msg.num_of_blocks);
             }
             else
             {
-                rt_device_write(dev, msg.block, msg.buf, msg.num_of_blocks);
+          //      rt_device_write(dev, msg.block, msg.buf, msg.num_of_blocks);
             }
         }
     }

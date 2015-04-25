@@ -62,7 +62,7 @@ void init_thread_entry(void* parameter)
     ui_startup(RT_NULL, RT_NULL);
     #endif
     
-    tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, (1024*4), 0x15, 20);                                                      
+    tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, (1024*2), 0x15, 20);                                                      
     rt_thread_startup(tid);	
 
     

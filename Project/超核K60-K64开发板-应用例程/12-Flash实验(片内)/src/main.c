@@ -2,7 +2,6 @@
 #include "common.h"
 #include "uart.h"
 #include "pit.h"
-#include "FlashOS.H"
 #include "flash.h"
 
 /* chip's Flash size and sector size can be found in RM */

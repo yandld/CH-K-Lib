@@ -70,7 +70,8 @@
 #define ADC1_SE23           (0x00B80001U)
 #define ADC1_SE10_PB04      (0X00504809U)
 #define ADC1_SE11_PB05      (0X00584A09U)
-
+#define ADC1_SE12_PB06      (0X00604C09U)
+#define ADC1_SE13_PB07      (0X00684E09U)
 //!< ADC 转换时钟分频因子,控制转换速度
 typedef enum
 {

@@ -14,7 +14,8 @@ typedef struct
 }msd_msg_t;
 
 static rt_device_t dev;
-static rt_mq_t msd_mq;
+
+rt_mq_t msd_mq;
 
 /* init */
 void usbd_msc_init ()
@@ -35,31 +36,12 @@ void usbd_msc_init ()
 
 void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
 {
-    static msd_msg_t msg;
-    
-    msg.block = block;
-    msg.buf = buf;
-    msg.num_of_blocks = num_of_blocks;
-    msg.dir = 0;
-    
-   // rt_mq_send(msd_mq, &msg, sizeof(msg));
-    __disable_irq();
     rt_device_read(dev, block, buf, num_of_blocks);
-    __enable_irq();
 }
 
 void usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
 {
-    msd_msg_t msg;
-    
-    msg.block = block;
-    msg.buf = buf;
-    msg.num_of_blocks = num_of_blocks;
-    msg.dir = 1;
-    
-    __disable_irq();
     rt_device_write(dev, block, buf, num_of_blocks);
-    __enable_irq();
 }
 
 void usb_thread_entry(void* parameter)
@@ -91,11 +73,11 @@ void usb_thread_entry(void* parameter)
         {
             if(msg.dir == 0)
             {
-          //      rt_device_read(dev, msg.block, msg.buf, msg.num_of_blocks);
+                USBD_MSC_EP_BULKOUT_Event(0);
             }
             else
             {
-          //      rt_device_write(dev, msg.block, msg.buf, msg.num_of_blocks);
+                USBD_MSC_EP_BULKIN_Event (0);
             }
         }
     }

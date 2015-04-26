@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MKL26Z4,USE_MPU9250,USE_AK8963</Define>
+              <Define>MKL26Z4 MOTION_DRIVER_TARGET_MSP430 MPU9250</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\imu;..\src\eMPL</IncludePath>
             </VariousControls>

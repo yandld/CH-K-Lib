@@ -4,33 +4,40 @@
 #include "i2c.h"
 #include "mpu9250.h"
 #include "protocol.h"
+#include "inv_mpu_dmp_motion_driver.h"
+#include "inv_mpu.h"
 
+#include <math.h>
 
+#define DEFAULT_MPU_HZ  (100)
+#define  Pitch_error  0
+#define  Roll_error   0
+#define  Yaw_error    0
+#define q30  1073741824.0f
 
-void mpu9250_test(void)
-{
-    uint8_t err;
-    int16_t ax,ay,az,gx,gy,gz,mx,my,mz;
-    
-    err = 0;
-    
-    err += mpu9250_read_accel_raw(&ax, &ay, &az);
-    err += mpu9250_read_gyro_raw(&gx, &gy, &gz);
-    err += mpu9250_read_mag_raw(&mx, &my, &mz);
-    
-    if(err)
-    {
-        printf("!err:%d\r\n", err);
-        while(1);
-    }
-    while(1)
-    {
-        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%d my:%d mz:%d    \r", ax ,ay, az, gx, gy, gz, mx, my, mz);  
-		GPIO_ToggleBit(HW_GPIOC, 3);
-        DelayMs(10);
-    }
+//void mpu9250_test(void)
+//{
+//    uint8_t err;
+//    int16_t ax,ay,az,gx,gy,gz,mx,my,mz;
+//    while(1)
+//    {
+//        err = 0;
+//    
+//        err += mpu9250_read_accel_raw(&ax, &ay, &az);
+//        err += mpu9250_read_gyro_raw(&gx, &gy, &gz);
+//        err += mpu9250_read_mag_raw(&mx, &my, &mz);
+//    
+//        if(err)
+//        {
+//            printf("!err:%d\r\n", err);
+//            while(1);
+//        }
 
-}
+//        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%d my:%d mz:%d    \r", ax ,ay, az, gx, gy, gz, mx, my, mz);  
+//		GPIO_ToggleBit(HW_GPIOC, 3);
+//        DelayMs(10);
+//    }
+//}
 
 
 static signed char gyro_orientation[9] = {-1, 0, 0,
@@ -104,7 +111,7 @@ static void run_self_test(void)
         accel[0] *= accel_sens;
         accel[1] *= accel_sens;
         accel[2] *= accel_sens;
-        dmp_set_accel_bias(accel);
+     //   dmp_set_accel_bias(accel);
 		printf("setting bias succesfully ......\n");
     }
 	else
@@ -115,91 +122,55 @@ static void run_self_test(void)
 }
 
 
+
+
 void dmp_test(void)
 {
-#include "inv_mpu_dmp_motion_driver.h"
-#include "inv_mpu.h"
-#define DEFAULT_MPU_HZ  (100)
+    static unsigned long sensor_timestamp;
+    static short gyro[3], accel[3], sensors;
+    static unsigned char more;
+    static long quat[4];
+    static float q0=1.0f,q1=0.0f,q2=0.0f,q3=0.0f;
+    static float Pitch,Roll,Yaw;
 
-    
+
+    uint32_t len;
+    uint8_t buf[64];
+    uint8_t *p;
     int ret;
     
-    ret = mpu_init();
-    if(ret)
-    {  
-        printf("mpu9250 init failed!\r\n");
-    }
+    ret = mpu_init(NULL);
+    printf("mpu9250 init %d\r\n", ret);
     
     ret = mpu_set_sensors(INV_XYZ_GYRO | INV_XYZ_ACCEL|INV_XYZ_COMPASS);
-    if(ret)
-    {  
-        printf("mpu9250 mpu_set_sensor failed!\r\n");
-    }
+    printf("mpu9250 mpu_set_sensor%d\r\n", ret);
     
     ret = mpu_configure_fifo(INV_XYZ_GYRO | INV_XYZ_ACCEL|INV_XYZ_COMPASS);
-    if(ret)
-    {  
-        printf("mpu9250 mpu_configure_fifo failed!\r\n");
-    }
+    printf("mpu9250 mpu_configure_fifo%d\r\n", ret);
     
     ret = mpu_set_sample_rate(DEFAULT_MPU_HZ);
-    if(ret)
-    {  
-        printf("mpu9250 mpu_set_sample_rate failed!\r\n");
-    }
+    printf("mpu9250 mpu_set_sample_rate%d\r\n", ret);
     
     ret = dmp_load_motion_driver_firmware();
-    if(ret)
-    {  
-        printf("mpu9250 dmp_load_motion_driver_firmware failed!\r\n");
-    }
+    printf("mpu9250 dmp_load_motion_driver_firmware%d\r\n", ret);
     
     ret = dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation));
-    if(ret)
-    {  
-        printf("mpu9250 dmp_set_orientation failed!\r\n");
-    }
+    printf("mpu9250 dmp_set_orientation%d\r\n", ret);
     
-    ret = dmp_enable_feature(DMP_FEATURE_6X_LP_QUAT | DMP_FEATURE_TAP |
+    ret = dmp_enable_feature(DMP_FEATURE_6X_LP_QUAT  |
             DMP_FEATURE_ANDROID_ORIENT | DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_CAL_GYRO |
             DMP_FEATURE_GYRO_CAL);
-    if(ret)
-    {  
-        printf("mpu9250 dmp_enable_feature failed!\r\n");
-    }
+    printf("mpu9250 dmp_enable_feature%d\r\n", ret);
     
     ret = dmp_set_fifo_rate(DEFAULT_MPU_HZ);
-    if(ret)
-    {  
-        printf("mpu9250 dmp_set_fifo_rate failed!\r\n");
-    }
+    printf("mpu9250 dmp_set_fifo_rate%d\r\n", ret);
     
     run_self_test();
     
     ret = mpu_set_dmp_state(1);
-    if(ret)
-    {  
-        printf("mpu9250 mpu_set_dmp_state failed!\r\n");
-    }
-
     
     printf("dmp init complete\r\n");
     
-    unsigned long sensor_timestamp;
-    short gyro[3], accel[3], sensors;
-    unsigned char more;
-    long quat[4];
-float q0=1.0f,q1=0.0f,q2=0.0f,q3=0.0f;
-float Pitch,Roll,Yaw;
-#define  Pitch_error  0
-#define  Roll_error   0
-#define  Yaw_error    0
-#define q30  1073741824.0f
-    uint32_t len;
-    uint8_t buf[64];
-    uint8_t *p;
-        
-        
     while(1)
     {
         dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors, &more);	
@@ -215,9 +186,11 @@ float Pitch,Roll,Yaw;
             Yaw = atan2(2*(q1*q2 + q0*q3),q0*q0+q1*q1-q2*q2-q3*q3) * 57.3 + Yaw_error;
             
             transmit_user_data send_data;
+            
             send_data.trans_pitch = (int16_t)(Pitch*100);
             send_data.trans_roll = (int16_t)(Roll*100);
             send_data.trans_yaw = (int16_t)(Yaw*10);
+            
             /* set buffer */
             len = user_data2buffer(&send_data, buf);
             GPIO_ToggleBit(HW_GPIOC, 3);
@@ -233,7 +206,9 @@ int main(void)
 	uint32_t clock;
     struct mpu_config config;
     
-	DelayInit();    
+	DelayInit();   
+    DelayMs(1);
+    
     GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);    
     UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);    
     printf("HelloWorld\r\n");
@@ -246,9 +221,12 @@ int main(void)
     I2C_QuickInit(I2C0_SCL_PB00_SDA_PB01, 100*1000);
     GPIO_QuickInit(HW_GPIOD, 7, kGPIO_Mode_OPP);
 	GPIO_WriteBit(HW_GPIOD, 7, 0);
-    DelayMs(10);
     
+    extern void UART_RX_ISR(uint16_t data);
+    UART_CallbackRxInstall(HW_UART0, UART_RX_ISR);
 
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
+    
     /* sensor init */
     mpu9250_init(0);
     
@@ -259,20 +237,51 @@ int main(void)
     config.genable_self_test = false;
     mpu9250_config(&config);
 
+    dmp_test();
+    //mpu9250_test();
+    
     while(1)
     {
-         //dmp_test();
-
-        mpu9250_test();
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(10);
     }
 }
 
-void HardFault_Handler(void)
+
+void UART_RX_ISR(uint16_t data)
 {
-    printf("HardFault_Handler\r\n");
-    while(1);
+//    uint8_t ret;
+//    mpu_set_dmp_state(0);
+//    
+//    ret = mpu_init(NULL);
+//    printf("mpu9250 init %d\r\n", ret);
+//    
+//    ret = mpu_set_sensors(INV_XYZ_GYRO | INV_XYZ_ACCEL|INV_XYZ_COMPASS);
+//    printf("mpu9250 mpu_set_sensor%d\r\n", ret);
+//    
+//    ret = mpu_configure_fifo(INV_XYZ_GYRO | INV_XYZ_ACCEL|INV_XYZ_COMPASS);
+//    printf("mpu9250 mpu_configure_fifo%d\r\n", ret);
+//    
+//    ret = mpu_set_sample_rate(DEFAULT_MPU_HZ);
+//    printf("mpu9250 mpu_set_sample_rate%d\r\n", ret);
+//    
+//    ret = dmp_load_motion_driver_firmware();
+//    printf("mpu9250 dmp_load_motion_driver_firmware%d\r\n", ret);
+//    
+//    ret = dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation));
+//    printf("mpu9250 dmp_set_orientation%d\r\n", ret);
+//    
+//    ret = dmp_enable_feature(DMP_FEATURE_6X_LP_QUAT  |
+//            DMP_FEATURE_ANDROID_ORIENT | DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_CAL_GYRO |
+//            DMP_FEATURE_GYRO_CAL);
+//    printf("mpu9250 dmp_enable_feature%d\r\n", ret);
+//    
+//    ret = dmp_set_fifo_rate(DEFAULT_MPU_HZ);
+//    printf("mpu9250 dmp_set_fifo_rate%d\r\n", ret);
+//    
+//    run_self_test();
+//    
+//    
+//    mpu_set_dmp_state(1);
+//    printf("data!\r\n");
 }
-
-

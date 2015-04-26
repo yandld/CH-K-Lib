@@ -330,6 +330,7 @@ static int _mpu9250_init_seq(void)
      
     write_reg(MPU9250_INT_PIN_CFG, 0x22U);    
     write_reg(MPU9250_INT_ENABLE, 0x01U);  // Enable data ready (bit 0) interrupt
+    return 0;
 }
 
 int mpu9250_init(uint32_t instance)

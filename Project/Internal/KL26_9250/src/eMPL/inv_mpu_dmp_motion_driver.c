@@ -26,7 +26,6 @@
 #include "dmpmap.h"
 #include "Time.h"
 
-#define  MOTION_DRIVER_TARGET_MSP430
 /* The following functions must be defined for this platform:
  * i2c_write(unsigned char slave_addr, unsigned char reg_addr,
  *      unsigned char length, unsigned char const *data)
@@ -487,22 +486,15 @@ struct dmp_s {
     unsigned char packet_length;
 };
 
-//static struct dmp_s dmp = {
-//    .tap_cb = NULL,
-//    .android_orient_cb = NULL,
-//    .orient = 0,
-//    .feature_mask = 0,
-//    .fifo_rate = 0,
-//    .packet_length = 0
-//};
-static struct dmp_s dmp={
-  NULL,
-  NULL,
-  0,
-  0,
-  0,
-  0
+static struct dmp_s dmp = {
+    .tap_cb = NULL,
+    .android_orient_cb = NULL,
+    .orient = 0,
+    .feature_mask = 0,
+    .fifo_rate = 0,
+    .packet_length = 0
 };
+
 /**
  *  @brief  Load the DMP with this image.
  *  @return 0 if successful.
@@ -636,7 +628,7 @@ int dmp_set_accel_bias(long *bias)
 
     mpu_get_accel_sens(&accel_sens);
     accel_sf = (long long)accel_sens << 15;
-    //__no_operation();
+   // __no_operation();
 
     accel_bias_body[0] = bias[dmp.orient & 3];
     if (dmp.orient & 4)

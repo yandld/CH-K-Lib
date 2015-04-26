@@ -145,7 +145,12 @@
 #define AK8963_ZOUT_L    0x07
 #define AK8963_ZOUT_H    0x08
 #define AK8963_ST2       0x09  // Data overflow bit 3 and data read error status bit 2
-#define AK8963_CNTL      0x0A  // Power down (0000), single-measurement (0001), self-test (1000) and Fuse ROM (1111) modes on bits 3:0
+
+#define AK8963_CNTL                                 0x0A  // Power down (0000), single-measurement (0001), self-test (1000) and Fuse ROM (1111) modes on bits 3:0
+#define AK8963_CNTL_BIT_MASK                        0x10
+#define AK8963_CNTL_BIT_SHIFT                       4
+#define AK8963_CNTL_BIT(x)                          (((uint32_t)(((uint32_t)(x))<<AK8963_CNTL_BIT_SHIFT))&AK8963_CNTL_BIT_MASK)
+
 #define AK8963_ASTC      0x0C  // Self test control
 #define AK8963_I2CDIS    0x0F  // I2C disable
 #define AK8963_ASAX      0x10  // Fuse ROM x-axis sensitivity adjustment value
@@ -157,12 +162,13 @@ struct mpu_device
 {
     uint8_t             addr;
     uint32_t            instance;
-    void                *user_data;
     float               mag_adj[3];
     struct mpu_config   user_config;
+    float               aRes;           /* scale resolutions per LSB for the sensors */
+    float               gRes;
+    float               mRes;
 };
 
-uint8_t Gscale = GFS_250DPS;  // GFS_250DPS, GFS_500DPS, GFS_1000DPS, GFS_2000DPS
 
 static struct mpu_device mpu_dev;
 
@@ -197,20 +203,67 @@ int mpu9250_config(struct mpu_config *config)
     uint8_t val;
     memcpy(&mpu_dev.user_config, config, sizeof(struct mpu_config));
 
+    /* accel */
     val = read_reg(MPU9250_ACCEL_CONFIG);
     val &= ~MPU9250_ACCEL_CONFIG_FS_MASK;
     val |= MPU9250_ACCEL_CONFIG_FS(config->afs);
     write_reg(MPU9250_ACCEL_CONFIG, val);
+    switch(config->afs)
+    {
+        case AFS_2G:
+            mpu_dev.aRes = 2.0/32768.0;
+            break;
+        case AFS_4G:
+            mpu_dev.aRes = 4.0/32768.0;
+            break;
+        case AFS_8G:
+            mpu_dev.aRes = 8.0/32768.0;
+            break;
+        case AFS_16G:
+            mpu_dev.aRes = 16.0/32768.0;
+            break;        
+    }
     
+    /* gyro */
     val = read_reg(MPU9250_GYRO_CONFIG);
     val &= ~MPU9250_GYRO_CONFIG_FS_MASK;
-    val |= MPU9250_GYRO_CONFIG_FS(config->afs);
+    val |= MPU9250_GYRO_CONFIG_FS(config->gfs);
     write_reg(MPU9250_GYRO_CONFIG, val);
+    switch(config->gfs)
+    {
+        case GFS_250DPS:
+            mpu_dev.gRes = 250.0/32768.0;
+            break;      
+        case GFS_500DPS:
+            mpu_dev.gRes = 500.0/32768.0;
+            break;  
+        case GFS_1000DPS:
+            mpu_dev.gRes = 1000.0/32768.0;
+            break; 
+        case GFS_2000DPS:
+            mpu_dev.gRes = 2000.0/32768.0;
+            break;  
+    }
     
+    /* mag */
+    val = ak8963_read_reg(AK8963_CNTL);
+    val &= ~AK8963_CNTL_BIT_MASK;
+    val |= AK8963_CNTL_BIT(config->mfs);
+    ak8963_write_reg(AK8963_CNTL, val);
+    switch(config->mfs)
+    {
+        case MFS_14BITS:
+            mpu_dev.mRes = 10.0*4219.0/8190.0; // Proper scale to return milliGauss
+            break;
+        case MFS_16BITS:
+            mpu_dev.mRes = 10.0*4219.0/32760.0; // Proper scale to return milliGauss
+            break;
+    }
+    MPU9250_TRACE("aRes:%f  gRes:%f  mRes:%f  \r\n", mpu_dev.aRes, mpu_dev.gRes, mpu_dev.mRes);
     return 0;
 }
 
-static int _ak8963_init(void)
+static int _ak8963_init_seq(void)
 {
     uint8_t buf[3], err;
     
@@ -225,10 +278,58 @@ static int _ak8963_init(void)
     MPU9250_TRACE("mag_adj:%f  %f  %f  \r\n", mpu_dev.mag_adj[0], mpu_dev.mag_adj[1], mpu_dev.mag_adj[2]);
     err += ak8963_write_reg(AK8963_CNTL, 0x00);
 	DelayMs(10);
-    /* 100Hz 14bit mode */
+    /* 100Hz 16bit mode */
     err += ak8963_write_reg(AK8963_CNTL, 0x06|0x10);
     
     return err;
+}
+
+static int _mpu9250_init_seq(void)
+{
+    /* init sequence */
+    write_reg(MPU9250_PWR_MGMT_1, 0x00); /* wake up device */
+    DelayMs(10); 
+    
+    /** get stable time source*/
+    /**Set clock source to be PLL with x-axis gyroscope reference, bits 2:0 = 001*/
+    /**Auto selects the best available clock source – PLL if ready, else use the Internal oscillator*/
+    write_reg(MPU9250_PWR_MGMT_1, 0x01);
+    
+    /**Configure Gyro and Accelerometer*/
+    /**Disable FSYNC and set accelerometer and gyro bandwidth to 44 and 42 Hz, respectively;*/ 
+    /**DLPF_CFG = bits 2:0 = 010; this sets the sample rate at 1 kHz for both*/
+    /**Maximum delay is 4.9 ms which is just over a 200 Hz maximum rate	*/
+    write_reg(MPU9250_PWR_MGMT_1, 0x03);
+    
+    /**Set sample rate = gyroscope output rate/(1 + SMPLRT_DIV)*/
+    /**Use a 200 Hz rate; the same rate set in CONFIG above*/
+    write_reg(MPU9250_SMPLRT_DIV, 0x04);
+    
+    /**Set gyroscope full scale range */
+    /**Range selects FS_SEL and AFS_SEL are 0 - 3, so 2-bit values are left-shifted into positions 4:3 */
+    uint8_t r;
+    r = read_reg(MPU9250_GYRO_CONFIG);/**get status of register*/
+    write_reg(MPU9250_GYRO_CONFIG, r &~ 0xE0U);/** Clear self-test bits [7:5]*/
+    write_reg(MPU9250_GYRO_CONFIG, r &~ 0x18U);/**Clear AFS bits [4:3]*/	
+    write_reg(MPU9250_GYRO_CONFIG, r | (0 << 3U));/**Set full scale range for the accelerometer */	
+    
+    /** Set accelerometer sample rate configuration */
+    /** It is possible to get a 4 kHz sample rate from the accelerometer by choosing 1 for */
+    /** accel_fchoice_b bit [3]; in this case the bandwidth is 1.13 kHz */
+    r = read_reg(MPU9250_ACCEL_CONFIG2);
+    write_reg(MPU9250_ACCEL_CONFIG2, r & ~0x0FU); /** Clear accel_fchoice_b (bit 3) and A_DLPFG (bits [2:0])*/  
+    write_reg(MPU9250_ACCEL_CONFIG2, r | 0x03U); /** Set accelerometer rate to 1 kHz and bandwidth to 41 Hz*/	
+    
+    /*
+    The accelerometer, gyro, and thermometer are set to 1 kHz sample rates, 
+     but all these rates are further reduced by a factor of 5 to 200 Hz because of the SMPLRT_DIV setting
+     Configure Interrupts and Bypass Enable
+     Set interrupt pin active high, push-pull, and clear on read of INT_STATUS, enable I2C_BYPASS_EN so additional chips 
+     can join the I2C bus and all can be controlled by the Kinetis as master
+     */
+     
+    write_reg(MPU9250_INT_PIN_CFG, 0x22U);    
+    write_reg(MPU9250_INT_ENABLE, 0x01U);  // Enable data ready (bit 0) interrupt
 }
 
 int mpu9250_init(uint32_t instance)
@@ -243,60 +344,15 @@ int mpu9250_init(uint32_t instance)
         if(!I2C_ReadSingleRegister(instance, mpu_addr[i], MPU9250_WHO_AM_I, &id) && (id == MPU9250_ID))
         {
             mpu_dev.addr = mpu_addr[i];
-            /** Initialize MPU9250 device*/
-
-            /* init sequence */
-            write_reg(MPU9250_PWR_MGMT_1, 0x00); /* wake up device */
-            DelayMs(10);
+    
+            mpu9250_reset();
+            _mpu9250_init_seq();
             
-            /** get stable time source*/
-            /**Set clock source to be PLL with x-axis gyroscope reference, bits 2:0 = 001*/
-            /**Auto selects the best available clock source – PLL if ready, else use the Internal oscillator*/
-            write_reg(MPU9250_PWR_MGMT_1, 0x01);
-            
-            /**Configure Gyro and Accelerometer*/
-            /**Disable FSYNC and set accelerometer and gyro bandwidth to 44 and 42 Hz, respectively;*/ 
-            /**DLPF_CFG = bits 2:0 = 010; this sets the sample rate at 1 kHz for both*/
-            /**Maximum delay is 4.9 ms which is just over a 200 Hz maximum rate	*/
-            write_reg(MPU9250_PWR_MGMT_1, 0x03);
-            
-            /**Set sample rate = gyroscope output rate/(1 + SMPLRT_DIV)*/
-            /**Use a 200 Hz rate; the same rate set in CONFIG above*/
-            write_reg(MPU9250_SMPLRT_DIV, 0x04);
-            
-            /**Set gyroscope full scale range */
-            /**Range selects FS_SEL and AFS_SEL are 0 - 3, so 2-bit values are left-shifted into positions 4:3 */
-            uint8_t r;
-            r = read_reg(MPU9250_GYRO_CONFIG);/**get status of register*/
-            write_reg(MPU9250_GYRO_CONFIG, r &~ 0xE0U);/** Clear self-test bits [7:5]*/
-            write_reg(MPU9250_GYRO_CONFIG, r &~ 0x18U);/**Clear AFS bits [4:3]*/	
-            write_reg(MPU9250_GYRO_CONFIG, r | (Gscale << 3U));/**Set full scale range for the accelerometer */	
-            
-            /** Set accelerometer sample rate configuration */
-            /** It is possible to get a 4 kHz sample rate from the accelerometer by choosing 1 for */
-            /** accel_fchoice_b bit [3]; in this case the bandwidth is 1.13 kHz */
-            r = read_reg(MPU9250_ACCEL_CONFIG2);
-            write_reg(MPU9250_ACCEL_CONFIG2, r & ~0x0FU); /** Clear accel_fchoice_b (bit 3) and A_DLPFG (bits [2:0])*/  
-            write_reg(MPU9250_ACCEL_CONFIG2, r | 0x03U); /** Set accelerometer rate to 1 kHz and bandwidth to 41 Hz*/	
-            
-            /*
-            The accelerometer, gyro, and thermometer are set to 1 kHz sample rates, 
-             but all these rates are further reduced by a factor of 5 to 200 Hz because of the SMPLRT_DIV setting
-             Configure Interrupts and Bypass Enable
-             Set interrupt pin active high, push-pull, and clear on read of INT_STATUS, enable I2C_BYPASS_EN so additional chips 
-             can join the I2C bus and all can be controlled by the Kinetis as master
-             */
-             
-            write_reg(MPU9250_INT_PIN_CFG, 0x22U);    
-            write_reg(MPU9250_INT_ENABLE, 0x01U);  // Enable data ready (bit 0) interrupt
-            
-            /* AK8963 */
             id = ak8963_read_reg(AK8963_WHO_AM_I);
-            MPU9250_TRACE("AK8963 ID:0x%X\r\n", id);
             if(id == 0x48)
             {
                 MPU9250_TRACE("found!addr:0x%X AK8963_WHO_AM_I:0x%X\r\n", mpu_dev.addr, id);
-                _ak8963_init();
+                _ak8963_init_seq();
                 return 0;
             }
         }
@@ -304,6 +360,27 @@ int mpu9250_init(uint32_t instance)
     return 1;
 }
 
+/* reset all register to default value */
+void mpu9250_reset(void)
+{
+    write_reg(MPU9250_PWR_MGMT_1, 0x80);
+    DelayMs(10);
+}
+
+float mpu9250_get_ares(void)
+{
+    return mpu_dev.aRes;
+}
+
+float mpu9250_get_gres(void)
+{
+    return mpu_dev.gRes;
+}
+
+float mpu9250_get_mres(void)
+{
+    return mpu_dev.mRes;
+}
 
 
 int mpu9250_read_accel_raw(int16_t* x, int16_t* y, int16_t* z)
@@ -335,18 +412,26 @@ int mpu9250_read_gyro_raw(int16_t* x, int16_t* y, int16_t* z)
     
 int mpu9250_read_mag_raw(int16_t* x, int16_t* y, int16_t* z)
 {
-    uint8_t err;
+    uint8_t err,c;
+    uint8_t val;
     uint8_t buf[7];
     
-    /* Read the six raw data and ST2 registers sequentially into data array */
-    err = I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, buf, 7);  
-
-    *x = (int16_t)((((int16_t)buf[1] << 8) | buf[0]));
-    *y = (int16_t)((((int16_t)buf[3] << 8) | buf[2]));
-    *z = (int16_t)((((int16_t)buf[5] << 8) | buf[4]));	
-    *x = mpu_dev.mag_adj[0]*(*x);
-    *y = mpu_dev.mag_adj[1]*(*y);
-    *z = mpu_dev.mag_adj[2]*(*z);
+    val = ak8963_read_reg(AK8963_ST1);
+    val &= 0x01;
+    {
+        /* Read the six raw data and ST2 registers sequentially into data array */
+        err = I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, buf, 7);  
+        c = buf[6];
+        if(!(c & 0x08))// Check if magnetic sensor overflow set, if not then report data
+        {  
+            *x = (int16_t)((((int16_t)buf[1] << 8) | buf[0]));
+            *y = (int16_t)((((int16_t)buf[3] << 8) | buf[2]));
+            *z = (int16_t)((((int16_t)buf[5] << 8) | buf[4]));	
+            *x = mpu_dev.mag_adj[0]*(*x);
+            *y = mpu_dev.mag_adj[1]*(*y);
+            *z = mpu_dev.mag_adj[2]*(*z);
+        }
+    }
     return err;
 }
 

@@ -66,7 +66,7 @@
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
          Reference clock source for MCG module is the slow internal clock source 32.768kHz
-         Core clock = 96MHz, BusClock = 32MHz
+         Core clock = 48MHz, BusClock = 24MHz
    1 ... Multipurpose Clock Generator (MCG) in PLL Engaged External (PEE) mode
          Reference clock source for MCG module is an external crystal 8MHz
          Core clock = 48MHz, BusClock = 24MHz
@@ -82,7 +82,7 @@
     #define CPU_XTAL_CLK_HZ                 8000000u /* Value of the external crystal or oscillator clock frequency in Hz */
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
     #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
-    #define DEFAULT_SYSTEM_CLOCK            96000000u /* Default System clock value */
+    #define DEFAULT_SYSTEM_CLOCK            48000000u /* Default System clock value */
 #elif (CLOCK_SETUP == 1)
     #define CPU_XTAL_CLK_HZ                 8000000u /* Value of the external crystal or oscillator clock frequency in Hz */
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
@@ -114,14 +114,14 @@ void SystemInit (void) {
 #endif /* (DISABLE_WDOG) */
 #if (CLOCK_SETUP == 0)
   /* SIM->CLKDIV1: OUTDIV1=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,OUTDIV4=2,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0 */
-  SIM->CLKDIV1 = (uint32_t)0x00020000UL; /* Update system prescalers */
+  SIM->CLKDIV1 = (uint32_t)0x00010000UL; /* Update system prescalers */
   /* Switch to FEI Mode */
   /* MCG->C1: CLKS=0,FRDIV=0,IREFS=1,IRCLKEN=1,IREFSTEN=0 */
   MCG->C1 = (uint8_t)0x06U;
   /* MCG_C2: LOCRE0=0,RANGE0=0,HGO0=0,EREFS0=0,LP=0,IRCS=0 */
   MCG->C2 &= (uint8_t)~(uint8_t)0xBFU;
   /* MCG->C4: DMX32=0,DRST_DRS=1 */
-  MCG->C4 = MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS(3);
+  MCG->C4 = MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS(1);
   //MCG->C4 = (uint8_t)((MCG->C4 & (uint8_t)~(uint8_t)0xC0U) | (uint8_t)0x20U);
   /* OSC0->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=0,SC4P=0,SC8P=0,SC16P=0 */
   OSC0->CR = (uint8_t)0x80U;

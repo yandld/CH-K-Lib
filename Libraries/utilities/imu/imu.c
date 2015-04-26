@@ -6,11 +6,11 @@
  * Defination
  ******************************************************************************/
 #define PI             3.1415926f
-#define Kp             20.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
-#define Ki             0.001f     /* integral gain governs rate of convergence of gyroscope biases */
+#define Kp             10.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
+#define Ki             0.010f     /* integral gain governs rate of convergence of gyroscope biases */
 #define halfT          0.002f
 #define Gyro_G         0.0610351f
-#define Gyro_Gr        0.0010653f
+#define Gyro_Gr        0.00050653f
    
 
 typedef struct 
@@ -114,6 +114,7 @@ static uint32_t imu_format_data(imu_raw_data_t * raw_data, imu_float_data_t * fl
     return 0;
 }
 
+
 //!< the mx my mz order are related to PCB layout!!
 static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double my,double mz, imu_float_euler_angle_t * angle)
 {
@@ -198,7 +199,7 @@ static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double 
     q3 = q3 / norm;
     
     /* output data */
-    angle->imu_yaw = atan2(2 * q1 * q2 + 2 * q0 * q3, -2 * q2*q2 - 2 * q3* q3 + 1)* 57.3; 
+    angle->imu_yaw = atan2(2 * q1 * q2 + 2 * q0 * q3, q0*q0+q1*q1-q2*q2-q3*q3)* 57.3; 
     angle->imu_pitch = asin(-2 * q1 * q3 + 2 * q0* q2)* 57.3;																			// pitcho???
     angle->imu_roll = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* 57.3;
 }
@@ -228,7 +229,8 @@ uint32_t imu_get_euler_angle(imu_float_euler_angle_t * angle, imu_raw_data_t * r
     raw_data->mz = mz;
 
     /* I need rawdata I give you filtered data */
-    imu_sliding_filter(*raw_data, &filter_data);
+//    imu_sliding_filter(*raw_data, &filter_data);
+    filter_data = *raw_data;
 
     /* I need filtered data I give you float data */
     imu_format_data(&filter_data, &float_data);

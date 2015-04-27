@@ -1246,11 +1246,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
             </File>
             <File>
-              <FileName>wget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\msh_cmd\wget.c</FilePath>
-            </File>
-            <File>
               <FileName>raven_box.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\msh_cmd\raven_box.c</FilePath>
@@ -2702,11 +2697,6 @@
               <FileName>msh_cmd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
-            </File>
-            <File>
-              <FileName>wget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\msh_cmd\wget.c</FilePath>
             </File>
             <File>
               <FileName>raven_box.c</FileName>
@@ -4366,11 +4356,6 @@
               <FileName>msh_cmd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
-            </File>
-            <File>
-              <FileName>wget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\msh_cmd\wget.c</FilePath>
             </File>
             <File>
               <FileName>raven_box.c</FileName>

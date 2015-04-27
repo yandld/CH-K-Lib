@@ -17,21 +17,9 @@ static rt_device_t dev;
 rt_mq_t msd_mq;
 
 /* init */
-void usbd_msc_init ()
+void usbd_msc_init (void)
 {
-    rt_thread_t tid;
-    struct rt_device_blk_geometry geometry;
-    
-    msd_mq = rt_mq_create("msd_mq", sizeof(msd_msg_t), 20, RT_IPC_FLAG_FIFO);
 
-    rt_device_control(dev, RT_DEVICE_CTRL_BLK_GETGEOME, &geometry);
-    
-    USBD_MSC_MemorySize = geometry.block_size*geometry.sector_count;
-    USBD_MSC_BlockSize  = geometry.block_size;
-    USBD_MSC_BlockGroup = 1;
-    USBD_MSC_BlockCount = geometry.sector_count;
-    USBD_MSC_BlockBuf   = rt_malloc(geometry.block_size);
-    USBD_MSC_MediaReady = __TRUE;
 }
 
 void inline usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
@@ -46,26 +34,10 @@ void inline usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
 
 void usb_thread_entry(void* parameter)
 {
-    int i;
-    rt_thread_t tid;
     msd_msg_t msg;
     
-    dev = rt_device_find((char*)parameter);
-    
-    if(!dev)
-    {
-        rt_kprintf("no %s device found!\r\n", (char*)parameter);
-        tid = rt_thread_self();
-        rt_thread_delete(tid);
-        return ;
-    }
-    
-    rt_device_init(dev);
-    rt_device_open(dev, RT_DEVICE_OFLAG_RDWR);
-    
-    usbd_init();                          /* USB Device Initialization          */
-    usbd_connect(__TRUE);                 /* USB Device Connect                 */
-
+    usbd_init();
+    msd_mq = rt_mq_create("msd_mq", sizeof(msd_msg_t), 20, RT_IPC_FLAG_FIFO);
     while(1)
     {
         if(rt_mq_recv(msd_mq, &msg, sizeof(msd_msg_t), RT_WAITING_FOREVER) == RT_EOK)
@@ -78,19 +50,51 @@ void usb_thread_entry(void* parameter)
 #include "finsh.h"
 static int udisk(int argc, char** argv)
 {
-    rt_thread_t tid;
-    char * name;
+    rt_err_t err;
+    rt_thread_t tid;;
     
     if((argc != 2) || (argv[1] == RT_NULL))
     {
         return 1;
     }
     
-    name = rt_malloc(rt_strlen(argv[1]));
-    strcpy(name, argv[1]);
+    dev = rt_device_find((char*)argv[1]);
     
-    tid = rt_thread_create("usb", usb_thread_entry, name, (1024*1), 0x06, 20);                                                      
-    rt_thread_startup(tid);
+    if(!dev)
+    {
+        rt_kprintf("no %s device found!\r\n", (char*)argv[1]);
+        return 1;
+    }
+    
+    err = 0;
+    err += rt_device_init(dev);
+    err += rt_device_open(dev, RT_DEVICE_OFLAG_RDWR);
+    
+    if(err && (err != -RT_EBUSY))
+    {
+        rt_kprintf("init device failed:%d\r\n", err);
+        return 1;
+    }
+    
+    struct rt_device_blk_geometry geometry;
+    rt_device_control(dev, RT_DEVICE_CTRL_BLK_GETGEOME, &geometry);
+    
+    USBD_MSC_MemorySize = geometry.block_size*geometry.sector_count;
+    USBD_MSC_BlockSize  = geometry.block_size;
+    USBD_MSC_BlockGroup = 1;
+    USBD_MSC_BlockCount = geometry.sector_count;
+    USBD_MSC_BlockBuf   = rt_malloc(geometry.block_size);
+    USBD_MSC_MediaReady = __TRUE;
+    
+    if(usbd_configured())
+    {
+        usbd_connect(__FALSE);
+        rt_thread_delay(1);
+    }
+    
+    usbd_reset_core();
+    usbd_connect(__TRUE);
+    
     return 0;
 }
 

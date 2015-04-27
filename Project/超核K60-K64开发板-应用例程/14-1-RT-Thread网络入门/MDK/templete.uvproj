@@ -603,24 +603,9 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ksz8041.c</FilePath>
             </File>
             <File>
-              <FileName>drv_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_rtc.c</FilePath>
-            </File>
-            <File>
               <FileName>drv_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_led.c</FilePath>
             </File>
             <File>
               <FileName>sram.c</FileName>
@@ -1423,24 +1408,9 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ksz8041.c</FilePath>
             </File>
             <File>
-              <FileName>drv_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_rtc.c</FilePath>
-            </File>
-            <File>
               <FileName>drv_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_led.c</FilePath>
             </File>
             <File>
               <FileName>sram.c</FileName>
@@ -2286,24 +2256,9 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ksz8041.c</FilePath>
             </File>
             <File>
-              <FileName>drv_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_rtc.c</FilePath>
-            </File>
-            <File>
               <FileName>drv_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_led.c</FilePath>
             </File>
             <File>
               <FileName>sram.c</FileName>

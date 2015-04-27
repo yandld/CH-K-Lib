@@ -7,11 +7,7 @@
 
 
 void rt_hw_ksz8041_init(void);
-void rt_hw_spi_init(void);
-void rt_hw_sd_init(void);
-void rt_hw_rtc_init(void);
 void rt_hw_dflash_init(void);
-void rt_hw_dram_init(void);
 
 void init_thread_entry(void* parameter)
 {
@@ -33,9 +29,7 @@ void init_thread_entry(void* parameter)
     
     finsh_system_init();
     
-    rt_hw_sd_init();
     rt_hw_dflash_init();
-    rt_hw_rtc_init();
     
     if(dfs_mount("sf0", "/", "elm", 0, 0))
     {

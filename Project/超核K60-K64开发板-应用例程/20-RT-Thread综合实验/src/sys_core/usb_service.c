@@ -4,7 +4,6 @@
 
 #include <stdbool.h>
 
-#define MOUNT_DEVICE        "sf0"
 
 typedef struct
 {
@@ -53,13 +52,14 @@ void usb_thread_entry(void* parameter)
     rt_thread_t tid;
     msd_msg_t msg;
     
-    dev = rt_device_find(MOUNT_DEVICE);
+    dev = rt_device_find((char*)parameter);
     
     if(!dev)
     {
-        rt_kprintf("no %s device found!\r\n", MOUNT_DEVICE);
+        rt_kprintf("no %s device found!\r\n", (char*)parameter);
         tid = rt_thread_self();
-        rt_thread_delete(tid); 
+        rt_thread_delete(tid);
+        return ;
     }
     
     rt_device_init(dev);
@@ -83,4 +83,24 @@ void usb_thread_entry(void* parameter)
         }
     }
 }
+
+#include "finsh.h"
+static int udisk(int argc, char** argv)
+{
+    rt_thread_t tid;
+    char * name;
+    
+    if((argc != 2) || (argv[1] == RT_NULL))
+    {
+        return 1;
+    }
+    
+    name = rt_malloc(rt_strlen(argv[1]));
+    strcpy(name, argv[1]);
+    
+    tid = rt_thread_create("usb", usb_thread_entry, name, (1024*1), 0x15, 20);                                                      
+    rt_thread_startup(tid);
+    return 0;
+}
+MSH_CMD_EXPORT(udisk, udisk sd0);
 

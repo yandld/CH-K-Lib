@@ -24,6 +24,7 @@ rt_err_t ads7843_init(const char * name, const char * spi_device_name);
 void init_thread_entry(void* parameter)
 {
     rt_thread_t tid;
+    rt_err_t err;
     
     #ifndef FRDM
     SRAM_Init();
@@ -52,8 +53,18 @@ void init_thread_entry(void* parameter)
     if(dfs_mount("sf0", "/", "elm", 0, 0))
     {
         dfs_mkfs("elm", "sf0");
-        dfs_mount("sf0", "/", "elm", 0, 0);
+        err = dfs_mount("sf0", "/", "elm", 0, 0);
     }
+    
+    if(err)
+    {
+        if(dfs_mount("dflash0", "/", "elm", 0, 0))
+        {
+            dfs_mkfs("elm", "dflash0");
+            dfs_mount("dflash0", "/", "elm", 0, 0);
+        }
+    }
+    
         
 //    if(dfs_mount("sd0", "/", "elm", 0, 0))
 //        rt_kprintf("sd mount failed\r\n");
@@ -64,8 +75,8 @@ void init_thread_entry(void* parameter)
     ui_startup(RT_NULL, RT_NULL);
     #endif
     
-    tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, (1024*1), 0x15, 20);                                                      
-    rt_thread_startup(tid);	
+//    tid = rt_thread_create("usb", usb_thread_entry, "sd0", (1024*1), 0x15, 20);                                                      
+//    rt_thread_startup(tid);	
 
     
     rt_hw_ksz8041_init();

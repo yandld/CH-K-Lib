@@ -7,12 +7,15 @@
 
 
 void rt_hw_ksz8041_init(void);
-void rt_hw_dflash_init(void);
+void rt_hw_spi_init(void);
 void rt_hw_sd_init(void);
-
+void rt_hw_rtc_init(void);
+void rt_hw_dflash_init(void);
+void rt_hw_dram_init(void);
 
 void init_thread_entry(void* parameter)
 {
+    rt_err_t err;
     rt_thread_t tid;
     
     #ifndef FRDM
@@ -32,18 +35,22 @@ void init_thread_entry(void* parameter)
     
     rt_hw_sd_init();
     rt_hw_dflash_init();
+    rt_hw_rtc_init();
     
-    if(dfs_mount("dflash0", "/", "elm", 0, 0))
+    if(dfs_mount("sf0", "/", "elm", 0, 0))
     {
-        rt_kprintf("format root file system!...\r\n");
-        dfs_mkfs("elm", "dflash0");
-        dfs_mount("dflash0", "/", "elm", 0, 0);
+        dfs_mkfs("elm", "sf0");
+        err = dfs_mount("sf0", "/", "elm", 0, 0);
     }
     
-    mkdir("/dev");
-    mkdir("/dev/SD", 0x777);
-    if(dfs_mount("sd0", "/dev/SD", "elm", 0, 0))
-        rt_kprintf("sd mount on /SD failed\r\n");
+    if(err)
+    {
+        if(dfs_mount("dflash0", "/", "elm", 0, 0))
+        {
+            dfs_mkfs("elm", "dflash0");
+            dfs_mount("dflash0", "/", "elm", 0, 0);
+        }
+    }
 
     rt_hw_ksz8041_init();
     

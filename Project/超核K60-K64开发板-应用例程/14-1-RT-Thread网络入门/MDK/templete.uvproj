@@ -722,6 +722,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\sntp.c</FilePath>
             </File>
+            <File>
+              <FileName>wget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\wget.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -732,20 +737,10 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>test</GroupName>
-          <Files>
             <File>
-              <FileName>dfs_elm.c</FileName>
+              <FileName>raven_box.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\elmfat\dfs_elm.c</FilePath>
-            </File>
-            <File>
-              <FileName>ff.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\elmfat\ff.c</FilePath>
+              <FilePath>..\src\raven_box.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1590,6 +1585,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\sntp.c</FilePath>
             </File>
+            <File>
+              <FileName>wget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\wget.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1600,20 +1600,10 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>test</GroupName>
-          <Files>
             <File>
-              <FileName>dfs_elm.c</FileName>
+              <FileName>raven_box.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\elmfat\dfs_elm.c</FilePath>
-            </File>
-            <File>
-              <FileName>ff.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\elmfat\ff.c</FilePath>
+              <FilePath>..\src\raven_box.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2458,6 +2448,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.3.2\apps\sntp.c</FilePath>
             </File>
+            <File>
+              <FileName>wget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\network\wget.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2468,20 +2463,10 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>test</GroupName>
-          <Files>
             <File>
-              <FileName>dfs_elm.c</FileName>
+              <FileName>raven_box.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\elmfat\dfs_elm.c</FilePath>
-            </File>
-            <File>
-              <FileName>ff.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\elmfat\ff.c</FilePath>
+              <FilePath>..\src\raven_box.c</FilePath>
             </File>
           </Files>
         </Group>

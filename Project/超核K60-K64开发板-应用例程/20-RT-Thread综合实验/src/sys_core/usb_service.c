@@ -7,11 +7,9 @@
 
 typedef struct
 {
-    uint8_t dir;
-    int cmd;
-    U32 block;
-    U8 *buf;
-    U32 num_of_blocks;
+    uint8_t flag;
+    uint8_t ep;
+    void (*exec)(uint8_t flag);
 }msd_msg_t;
 
 static rt_device_t dev;
@@ -36,12 +34,12 @@ void usbd_msc_init ()
     USBD_MSC_MediaReady = __TRUE;
 }
 
-void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
+void inline usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
 {
     rt_device_read(dev, block, buf, num_of_blocks);
 }
 
-void usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
+void inline usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
 {
     rt_device_write(dev, block, buf, num_of_blocks);
 }
@@ -67,19 +65,12 @@ void usb_thread_entry(void* parameter)
     
     usbd_init();                          /* USB Device Initialization          */
     usbd_connect(__TRUE);                 /* USB Device Connect                 */
-    while (!usbd_configured ())
-    {
-        rt_thread_delay(10);
-    }
-    
-    rt_kprintf("usb enum complete\r\n");
-    
+
     while(1)
     {
         if(rt_mq_recv(msd_mq, &msg, sizeof(msd_msg_t), RT_WAITING_FOREVER) == RT_EOK)
         {
-            if(msg.dir == 0) USBD_MSC_EP_BULKOUT_Event(0);
-                else USBD_MSC_EP_BULKIN_Event (0);
+            msg.exec(msg.flag);
         }
     }
 }
@@ -98,9 +89,10 @@ static int udisk(int argc, char** argv)
     name = rt_malloc(rt_strlen(argv[1]));
     strcpy(name, argv[1]);
     
-    tid = rt_thread_create("usb", usb_thread_entry, name, (1024*1), 0x15, 20);                                                      
+    tid = rt_thread_create("usb", usb_thread_entry, name, (1024*1), 0x06, 20);                                                      
     rt_thread_startup(tid);
     return 0;
 }
+
 MSH_CMD_EXPORT(udisk, udisk sd0);
 

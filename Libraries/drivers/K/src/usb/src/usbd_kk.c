@@ -40,7 +40,14 @@ typedef struct __BUF_DESC {
   uint32_t   buf_addr;
 }BUF_DESC;
 
+#ifdef __CC_ARM
 BUF_DESC __align(512) BD[(USBD_EP_NUM + 1) * 2 * 2];
+#elif __ICCARM__
+#pragma data_alignment=512
+BUF_DESC  BD[(USBD_EP_NUM + 1) * 2 * 2];
+#endif
+
+
 uint8_t EPBuf[(USBD_EP_NUM + 1)* 2 * 2][64];
 uint8_t OutEpSize[USBD_EP_NUM + 1];
 
@@ -64,9 +71,15 @@ uint32_t Data1  = 0x55555555;
 #define OUT_TOKEN      0x01
 #define TOK_PID(idx)   ((BD[idx].stat >> 2) & 0x0F)
 
+#ifdef __CC_ARM
 __inline static void protected_and (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) & val),addr)); }
 __inline static void protected_or  (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) | val),addr)); }
 __inline static void protected_xor (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) ^ val),addr)); }
+#elif __ICCARM__
+inline static void protected_and (uint32_t *addr, uint32_t val) { *addr = (*addr)|val; }
+inline static void protected_or  (uint32_t *addr, uint32_t val) { *addr = (*addr)|val; }
+inline static void protected_xor (uint32_t *addr, uint32_t val) { *addr = (*addr)^val; }
+#endif
 
 /*
  *  USB Device Interrupt enable
@@ -87,7 +100,7 @@ void          USBD_IntrEna (void) {
 static int USB_SetClockDiv(uint32_t srcClock)
 {
     uint8_t frac,div;
-    
+#ifdef SIM_CLKDIV2_USBDIV
     /* clear all divivder */
     SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBDIV_MASK;
     SIM->CLKDIV2 &= ~SIM_CLKDIV2_USBFRAC_MASK;
@@ -105,6 +118,9 @@ static int USB_SetClockDiv(uint32_t srcClock)
             }
         }
     }
+#else
+    return 0;
+#endif
     return 1;
 }
 
@@ -155,7 +171,9 @@ void USBD_Init (void) {
     SIM->SCGC4   |=   SIM_SCGC4_USBOTG_MASK;      
     
     /* disable memory protection */
+#ifdef MPU
     MPU->CESR=0;
+#endif
     
     USBD_IntrEna ();
 

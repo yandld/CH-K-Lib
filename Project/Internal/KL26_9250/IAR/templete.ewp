@@ -29,7 +29,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -39,20 +39,20 @@
         <option>
           <name>Input variant</name>
           <version>3</version>
-          <state>0</state>
+          <state>7</state>
         </option>
         <option>
           <name>Input description</name>
-          <state>Automatic choice of formatter.</state>
+          <state>No specifier n, no float nor long long, no scan set, no assignment suppressing, without multibyte support.</state>
         </option>
         <option>
           <name>Output variant</name>
           <version>2</version>
-          <state>0</state>
+          <state>7</state>
         </option>
         <option>
           <name>Output description</name>
-          <state>Automatic choice of formatter.</state>
+          <state>No specifier a, A, no specifier n, no float nor long long, no flags.</state>
         </option>
         <option>
           <name>GOutputBinary</name>
@@ -60,7 +60,7 @@
         </option>
         <option>
           <name>FPU</name>
-          <version>2</version>
+          <version>5</version>
           <state>0</state>
         </option>
         <option>
@@ -87,7 +87,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.2.7418</state>
+          <state>7.40.2.8567</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -137,12 +137,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -230,7 +230,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>00000000</state>
+          <state>11111110</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
@@ -302,6 +302,8 @@
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\CoreSupport</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport\IAR-ARM</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport</state>
+          <state>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\usb\inc</state>
+          <state>$PROJ_DIR$\..\iar_src</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -321,7 +323,7 @@
         </option>
         <option>
           <name>CCOptLevel</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CCOptStrategy</name>
@@ -330,7 +332,7 @@
         </option>
         <option>
           <name>CCOptLevelSlave</name>
-          <state>1</state>
+          <state>3</state>
         </option>
         <option>
           <name>CompilerMisraRules98</name>
@@ -588,8 +590,8 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
-          <state>2</state>
+          <version>3</version>
+          <state>3</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -615,6 +617,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -687,7 +690,7 @@
         </option>
         <option>
           <name>IlinkMapFile</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IlinkLogFile</name>
@@ -715,7 +718,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$TOOLKIT_DIR$\config\linker\Freescale\MK60xN512_10.icf</state>
+          <state>$TOOLKIT_DIR$\config\linker\Freescale\MKL26Z64xxx4.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -948,9 +951,63 @@
     </settings>
   </configuration>
   <group>
+    <name>core</name>
+    <excluded>
+      <configuration>mkl26z4</configuration>
+    </excluded>
+    <group>
+      <name>mpl</name>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\accel_auto_cal.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\compass_vec_cal.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\fast_no_motion.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\fusion_9axis.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\gyro_tc.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\heading_from_gyro.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\inv_math.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\invensense_adv.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\libmpllib.a</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\mag_disturb.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\motion_no_motion.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\no_gyro_fusion.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\iar_src\mpl\quaternion_supervisor.h</name>
+      </file>
+    </group>
+  </group>
+  <group>
     <name>drivers</name>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\common.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\flash.c</name>
+      <excluded>
+        <configuration>mkl26z4</configuration>
+      </excluded>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\gpio.c</name>
@@ -975,9 +1032,33 @@
     </file>
   </group>
   <group>
+    <name>USBStack</name>
+    <excluded>
+      <configuration>mkl26z4</configuration>
+    </excluded>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_msc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_kk.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_msc.c</name>
+    </file>
+  </group>
+  <group>
     <name>user</name>
     <file>
-      <name>$PROJ_DIR$\..\src\main.c</name>
+      <name>$PROJ_DIR$\..\iar_src\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\iar_src\usb_lib.c</name>
+      <excluded>
+        <configuration>mkl26z4</configuration>
+      </excluded>
     </file>
   </group>
 </project>

@@ -22,7 +22,7 @@ static rt_err_t rt_dflash_init (rt_device_t dev)
     FLASH_Init();
     
     SectorSize = FLASH_GetSectorSize();
-    StartAddr = RT_ALIGN(((uint32_t)&Image$$ER_IROM1$$RO$$Limit), SectorSize);
+    StartAddr = RT_ALIGN(((uint32_t)&Image$$ER_IROM1$$RO$$Limit + SectorSize), SectorSize);
     DiskSize = FLASH_SIZE - StartAddr;
     rt_kprintf("dflash sector size:%d 0ffset:0x%X\r\n", SectorSize, StartAddr);
     
@@ -41,7 +41,6 @@ static rt_err_t rt_dflash_close(rt_device_t dev)
 
 static rt_err_t rt_dflash_indicate(rt_device_t dev, rt_size_t size)
 {
-    //rt_kprintf("I need indicate\r\n"); 
     return RT_EOK;
 }
 
@@ -53,7 +52,6 @@ static rt_size_t rt_dflash_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_
     uint8_t i;
 
     p = (uint8_t*)(StartAddr + pos * SectorSize);
-    //rt_kprintf("r pos:%d size:%d\r\n", pos, size);
     rt_memcpy(buffer, p, size * SectorSize);
 
 	return size;
@@ -65,7 +63,6 @@ static rt_size_t rt_dflash_write (rt_device_t dev, rt_off_t pos, const void* buf
     uint8_t *p;
     
     p = (uint8_t*)(StartAddr + pos * SectorSize);
-    //rt_kprintf("w pos:%d size:%d\r\n", pos, size);
     for(i=0;i<size;i++)
     {
         __disable_irq();

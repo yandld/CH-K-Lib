@@ -51,7 +51,6 @@ void usb_thread_entry(void* parameter)
 static int udisk(int argc, char** argv)
 {
     rt_err_t err;
-    rt_thread_t tid;;
     
     if((argc != 2) || (argv[1] == RT_NULL))
     {

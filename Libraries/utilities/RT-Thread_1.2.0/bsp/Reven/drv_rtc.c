@@ -53,9 +53,6 @@ int rt_hw_rtc_init(void)
     rtc.user_data = RT_NULL;
     rt_device_register(&rtc, "rtc", RT_DEVICE_FLAG_RDWR);
     
-    /* provent ignore linking from lib */
-    extern void list_date(void);
-    list_date();
     return 0;
 }
 

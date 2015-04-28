@@ -13,6 +13,8 @@ void rt_hw_sd_init(void);
 void rt_hw_rtc_init(void);
 void rt_hw_dflash_init(void);
 void rt_hw_dram_init(void);
+void rt_hw_pin_init(void);
+    
     
 void usb_thread_entry(void* parameter);
 void sd_thread_entry(void* parameter);
@@ -47,6 +49,10 @@ void init_thread_entry(void* parameter)
     rt_hw_dflash_init();
     rt_hw_dram_init();
     
+    /* start usbd core thread */
+    tid = rt_thread_create("usbd", usb_thread_entry, RT_NULL, (1024*1), 0x15, 20);                                                      
+    rt_thread_startup(tid);	
+    
     ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
 
@@ -65,9 +71,6 @@ void init_thread_entry(void* parameter)
         }
     }
     
-        
-//    if(dfs_mount("sd0", "/", "elm", 0, 0))
-//        rt_kprintf("sd mount failed\r\n");
     
     at24cxx_init("at24c02", "i2c0");
 
@@ -75,11 +78,10 @@ void init_thread_entry(void* parameter)
     ui_startup(RT_NULL, RT_NULL);
     #endif
     
-    tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, (1024*1), 0x15, 20);                                                      
-    rt_thread_startup(tid);	
-
-    
     rt_hw_ksz8041_init();
+    
+  //  int            dns_local_removehost(const char *hostname, const ip_addr_t *addr);
+//err_t          dns_local_addhost(const char *hostname, const ip_addr_t *addr);
     
     tid = rt_thread_self();
     rt_thread_delete(tid); 

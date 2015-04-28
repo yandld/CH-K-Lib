@@ -69,16 +69,16 @@ void GUI_X_ExecIdle (void)
 }
 
 
-static rt_mutex_t gui_x_mutex = RT_NULL;
+//static rt_mutex_t gui_x_mutex = RT_NULL;
 
 void  GUI_X_InitOS (void)
 { 
-    gui_x_mutex = rt_mutex_create("gui_x_mutex", RT_IPC_FLAG_FIFO);
-    if (gui_x_mutex == RT_NULL)
-    {
-        rt_kprintf("gui_x_mutex create failed\r\n");
-        return;
-    }
+//    gui_x_mutex = rt_mutex_create("gui_x_mutex", RT_IPC_FLAG_FIFO);
+//    if (gui_x_mutex == RT_NULL)
+//    {
+//        rt_kprintf("gui_x_mutex create failed\r\n");
+//        return;
+//    }
 }
 
 static U32 i;

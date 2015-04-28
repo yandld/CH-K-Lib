@@ -12,6 +12,14 @@ static int reboot(int argc, char** argv)
 }
 MSH_CMD_EXPORT(reboot, reboot);
 
+static int date(int argc, char** argv)
+{
+    extern void list_date(void);
+    list_date();
+    return 0;
+}
+MSH_CMD_EXPORT(date, date);
+
 
 extern struct rt_object_information rt_object_container[];
 
@@ -32,7 +40,6 @@ static long _kill(char *name)
     }
     return 0;
 }
-
 
 int kill(int argc, char ** argv)
 {
@@ -62,7 +69,6 @@ int mountnfs(const char * host)
 
 FINSH_FUNCTION_EXPORT(mountnfs, eg:mountnfs("192.168.1.101:/"))
 
-
 static int mount(int argc, char** argv)
 {
     int ret;
@@ -85,7 +91,7 @@ static int mount(int argc, char** argv)
     return ret;
 }
 
-MSH_CMD_EXPORT(mount, mount elm sd0 /dev/sd);
+MSH_CMD_EXPORT(mount, mount nfs d0 /dev/nfs 192.168.1.101:/);
 
 static int cpufreq(int argc, char** argv)
 {

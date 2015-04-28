@@ -304,6 +304,7 @@
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\drivers\K\src\usb\inc</state>
           <state>$PROJ_DIR$\..\iar_src</state>
+          <state>$PROJ_DIR$\..\..\..\..\Libraries\devices\inc</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -997,6 +998,12 @@
         <name>$PROJ_DIR$\..\iar_src\mpl\quaternion_supervisor.h</name>
       </file>
     </group>
+  </group>
+  <group>
+    <name>device</name>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\mpu9250.c</name>
+    </file>
   </group>
   <group>
     <name>drivers</name>

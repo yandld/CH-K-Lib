@@ -1,6 +1,7 @@
 #include <rtthread.h>
 #include "board.h"
 #include "components.h"
+#include "dfs_posix.h"
 #include "spi_flash_w25qxx.h"
 #include "chlib_k.h"
 #include "sram.h"
@@ -80,8 +81,18 @@ void init_thread_entry(void* parameter)
     
     rt_hw_ksz8041_init();
     
-  //  int            dns_local_removehost(const char *hostname, const ip_addr_t *addr);
-//err_t          dns_local_addhost(const char *hostname, const ip_addr_t *addr);
+    
+    /* ceate default index.html*/
+    int fd;
+    char buf[64] = "Hello Webnet!";
+    
+    mkdir("/www", 0x777);
+    fd = open("/www/index.htm", O_RDWR|O_CREAT, 0);
+    write(fd, buf, sizeof(buf));
+    close(fd);
+    
+    /* init webnet server root is /www */
+    webnet_init();
     
     tid = rt_thread_self();
     rt_thread_delete(tid); 

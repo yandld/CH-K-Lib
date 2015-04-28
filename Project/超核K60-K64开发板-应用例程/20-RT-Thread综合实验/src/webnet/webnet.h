@@ -26,10 +26,10 @@
 #define MAX_SERV                 32			/* Maximum number of webnet services. Don't need too many */
 
 #define WEBNET_THREAD_NAME      "webnet"	/* webnet thread name */
-#define WEBNET_PRIORITY         21			/* webnet thread priority */
+#define WEBNET_PRIORITY         22			/* webnet thread priority */
 #define WEBNET_THREAD_STACKSIZE 1024		/* webnet thread stack size */
 #define WEBNET_PORT				80			/* webnet server listen port */
-#define WEBNET_ROOT				"/SD/webnet"	/* webnet server root directory */
+#define WEBNET_ROOT				"/www/"	        /* webnet server root directory */
 #define WEBNET_SERVER			"Server: webnet (RT-Thread)\r\n"
 #define WEBNET_PATH_MAX			256			/* maxiaml path length in webnet */
 

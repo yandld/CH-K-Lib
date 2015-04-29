@@ -12,7 +12,7 @@
 
 void led_thread_entry(void* parameter);
 
-rt_err_t touch_ads7843_init(const char * name, const char * spi_device_name);
+rt_err_t ads7843_init(const char * name, const char * spi_device_name);
 
 void init_thread_entry(void* parameter)
 {
@@ -48,7 +48,7 @@ void init_thread_entry(void* parameter)
         rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", &spi_cs_0);
     }
     
-    touch_ads7843_init("ads7843", "spi20");
+    ads7843_init("ads7843", "spi20");
     
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);

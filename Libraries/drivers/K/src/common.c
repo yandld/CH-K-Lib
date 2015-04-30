@@ -66,6 +66,23 @@ int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* Frequenct
     return 0;
 }
 
+void EnterSTOPMode(bool enSleepOnExit)
+{
+    /* Set the SLEEPDEEP bit to enable deep sleep mode (STOP) */
+    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+    if (enSleepOnExit)
+    {
+        SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;
+    }
+    else
+    {
+        SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
+    }
+    
+    /* WFI instruction will start entry into STOP mode */
+    __ASM("WFI");
+}
+
  /**
  * @brief  编码快速初始化结构 用户不需调用
  *

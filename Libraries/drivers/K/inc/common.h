@@ -162,7 +162,7 @@ void DelayInit(void);
 int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
 uint32_t QuickInitEncode(QuickInit_Type * type);
 void QuickInitDecode(uint32_t map, QuickInit_Type* type);
-
+void EnterSTOPMode(bool enSleepOnExit);
 
 
 #endif

@@ -6,7 +6,6 @@
 #include "ads7843.h"
 #include "spi.h"
 //#include "types.h"
-struct spi_bus bus; 
 
 extern int Image$$RW_IRAM1$$ZI$$Limit;
 extern int Image$$RW_IRAM1$$RW$$Limit;

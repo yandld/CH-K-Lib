@@ -13,7 +13,7 @@
 #define  Pitch_error  0
 #define  Roll_error   0
 #define  Yaw_error    0
-#define q30  1073741824.0f
+
 
 //void mpu9250_test(void)
 //{
@@ -83,7 +83,6 @@ static  unsigned short inv_orientation_matrix_to_scalar(const signed char *mtx)
     scalar |= inv_row_2_scale(mtx + 3) << 3;
     scalar |= inv_row_2_scale(mtx + 6) << 6;
 
-
     return scalar;
 }
 
@@ -121,22 +120,43 @@ static void run_self_test(void)
     
 }
 
+#define q30  1073741824.0f
+static int _quat2angle(long *quat, float *angle)
+{
+    static float q0=1.0f,q1=0.0f,q2=0.0f,q3=0.0f;
+    q0 = quat[0] / q30;
+    q1 = quat[1] / q30;
+    q2 = quat[2] / q30;
+    q3 = quat[3] / q30;
+            
+    angle[0]  = asin(-2 * q1 * q3 + 2 * q0* q2)* 57.3 + Pitch_error; // pitch
+    angle[1]  = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* 57.3 + Roll_error; // roll
+    angle[2]  = atan2(2*(q1*q2 + q0*q3),q0*q0+q1*q1-q2*q2-q3*q3) * 57.3 + Yaw_error;
+    return 0;
+}
 
-
+static int _transmit_data(uint8_t *buf, uint32_t len)
+{
+    uint8_t *p;
+    
+    p = buf;
+    while(len--)
+    {
+        UART_WriteByte(HW_UART0, *p++);
+    }
+    return 0;
+}
 
 void dmp_test(void)
 {
-    static unsigned long sensor_timestamp;
-    static short gyro[3], accel[3], sensors;
+    unsigned long sensor_timestamp;
+    short gyro[3], accel[3], mag[3], sensors;
     static unsigned char more;
-    static long quat[4];
-    static float q0=1.0f,q1=0.0f,q2=0.0f,q3=0.0f;
-    static float Pitch,Roll,Yaw;
-
-
+    long quat[4];
+    float angle[3];
+    transmit_user_data send_data;
     uint32_t len;
-    uint8_t buf[64];
-    uint8_t *p;
+    static uint8_t buf[64];
     int ret;
     
     ret = mpu_init(NULL);
@@ -176,30 +196,38 @@ void dmp_test(void)
         dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors, &more);	
         if (sensors & INV_WXYZ_QUAT )
         {
-            q0 = quat[0] / q30;
-            q1 = quat[1] / q30;
-            q2 = quat[2] / q30;
-            q3 = quat[3] / q30;
+            _quat2angle(quat, angle);
+
+            mpu_get_compass_reg(mag, NULL);
             
-            Pitch  = asin(-2 * q1 * q3 + 2 * q0* q2)* 57.3 + Pitch_error; // pitch
-            Roll = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* 57.3 + Roll_error; // roll
-            Yaw = atan2(2*(q1*q2 + q0*q3),q0*q0+q1*q1-q2*q2-q3*q3) * 57.3 + Yaw_error;
+            send_data.trans_gyro[0] = gyro[0];
+            send_data.trans_gyro[1] = gyro[1];
+            send_data.trans_gyro[2] = gyro[2];
             
-            transmit_user_data send_data;
+            send_data.trans_accel[0] = accel[0];
+            send_data.trans_accel[1] = accel[1];
+            send_data.trans_accel[2] = accel[2];
             
-            send_data.trans_pitch = (int16_t)(Pitch*100);
-            send_data.trans_roll = (int16_t)(Roll*100);
-            send_data.trans_yaw = (int16_t)(Yaw*10);
+            send_data.trans_mag[0] = mag[0];
+            send_data.trans_mag[1] = mag[1];
+            send_data.trans_mag[2] = mag[2];
+            
+            send_data.trans_pitch = (int16_t)(angle[0]*100);
+            send_data.trans_roll = (int16_t)(angle[1]*100);
+            send_data.trans_yaw = (int16_t)(angle[2]*10);
             
             /* set buffer */
             len = user_data2buffer(&send_data, buf);
+            
+            _transmit_data(buf, len);
+
             GPIO_ToggleBit(HW_GPIOC, 3);
-            p = buf;
-            while(len--)
-                UART_WriteByte(HW_UART0, *p++);
+     
         }
     }
 }
+
+extern void UART_RX_ISR(uint16_t data);
 
 int main(void)
 {
@@ -221,22 +249,23 @@ int main(void)
     I2C_QuickInit(I2C0_SCL_PB00_SDA_PB01, 100*1000);
     GPIO_QuickInit(HW_GPIOD, 7, kGPIO_Mode_OPP);
 	GPIO_WriteBit(HW_GPIOD, 7, 0);
+    DelayMs(10);
     
-    extern void UART_RX_ISR(uint16_t data);
     UART_CallbackRxInstall(HW_UART0, UART_RX_ISR);
 
     UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     
-    /* sensor init */
-    mpu9250_init(0);
-    
-    config.afs = AFS_16G;
-    config.gfs = GFS_2000DPS;
-    config.mfs = MFS_16BITS;
-    config.aenable_self_test = false;
-    config.genable_self_test = false;
-    mpu9250_config(&config);
+//    /* sensor init */
+//    mpu9250_init(0);
+//    
+//    config.afs = AFS_16G;
+//    config.gfs = GFS_2000DPS;
+//    config.mfs = MFS_16BITS;
+//    config.aenable_self_test = false;
+//    config.genable_self_test = false;
+//    mpu9250_config(&config);
 
+    
     dmp_test();
     //mpu9250_test();
     

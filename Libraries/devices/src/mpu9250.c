@@ -358,6 +358,7 @@ int mpu9250_init(uint32_t instance)
             }
         }
     }
+    MPU9250_TRACE("MPU9250 init failed\r\n");
     return 1;
 }
 

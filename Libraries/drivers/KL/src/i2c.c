@@ -21,7 +21,7 @@
 #define SDA_L()             do {GPIO_WriteBit(i2c.instace, i2c.sda_pin, 0);}while(0)
 #define SCL_H()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 1);}while(0)
 #define SCL_L()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 0);}while(0)
-#define I2C_DELAY()         DelayUs(1)
+#define I2C_DELAY()         __NOP();
 
 typedef struct
 {

@@ -232,7 +232,7 @@ extern void UART_RX_ISR(uint16_t data);
 int main(void)
 {
 	uint32_t clock;
-    struct mpu_config config;
+//    struct mpu_config config;
     
 	DelayInit();   
     DelayMs(1);

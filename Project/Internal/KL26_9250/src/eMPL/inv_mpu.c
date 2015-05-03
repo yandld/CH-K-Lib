@@ -23,6 +23,7 @@
 #include <string.h>
 #include <math.h>
 #include "inv_mpu.h"
+#include "common.h"
 #include "i2c.h"
 /* The following functions must be defined for this platform:
  * i2c_write(unsigned char slave_addr, unsigned char reg_addr,
@@ -54,6 +55,7 @@ int8_t i2cread(uint8_t addr, uint8_t reg, uint8_t len, uint8_t *buf)
 {
     return I2C_BurstRead(0, addr, reg, 1, buf, len);
 }
+
 
 #define i2c_write   i2cwrite
 #define i2c_read    i2cread
@@ -710,7 +712,7 @@ int mpu_read_reg(unsigned char reg, unsigned char *data)
 
 int mpu_init(struct int_param_s *int_param)
 {
-    unsigned char data[6],rev;
+    unsigned char data[6];
 
     /* Reset device. */
     data[0] = BIT_RESET;

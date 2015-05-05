@@ -37,6 +37,61 @@ struct calibration_data
 };
 
 
+void MagnetometerCalibration(struct calibration_data * cal)
+{
+    uint32_t i;
+    int r;
+    int16_t x,y,z;
+    int16_t xmax, xmin, ymax, ymin, zmax, zmin;
+    xmax = 0;
+    xmin = 0xFFFF;
+    ymax = 0;
+    ymin = 0xFFFF;
+    zmax = 0;
+    zmin = 0xFFFF;
+    printf("start calibration, read flash...\r\n");
+
+
+    for(i=0;i<1000;i++)
+    {
+        r = hmc5883_read_data(&x, &y, &z);
+        if(!r)
+        {
+            if(xmax < x) xmax = x;
+            if(xmin > x) xmin = x;
+            if(ymax < y) ymax = y;
+            if(ymin > y) ymin = y;
+            if(zmax < z) zmax = z;
+            if(zmin > z) zmin = z; 
+        }
+        DelayMs(10);
+        printf("time:%04d xmax:%04d xmin:%04d ymax:%04d ymin%04d zmax:%04d zmin:%04d\r", i,xmax,xmin,ymax,ymin,zmax,zmin);
+    }
+    cal->meg_x_off = (xmax + xmin) / 2;
+    cal->meg_x_gain=1;
+    cal->meg_y_off = (ymax + ymin) / 2;
+    cal->meg_y_gain= (float)(xmax - xmin) / (float)(ymax -ymin);
+    cal->meg_z_off = (zmax + zmin) / 2;
+    cal->meg_z_gain= (float)(xmax - xmin) / (float)(zmax -zmin);
+    /* see if we get data correct */
+    if((xmax < 300) || (ymax < 300) || (zmax < 300) || (cal->meg_y_gain < 0.8) || (cal->meg_z_gain < 0.8))
+    {
+        printf("cal failed, setting to default param\r\n");
+        /* inject with default data */
+        cal->meg_x_off = 0;
+        cal->meg_y_off = 0;
+        cal->meg_z_off = 0;
+        cal->meg_x_gain = 1;
+        cal->meg_y_gain = 1;
+        cal->meg_z_gain = 1;
+    }
+    printf("Gain X:%f Y:%f Z:%f\r\n", cal->meg_x_gain, cal->meg_y_gain, cal->meg_z_gain);
+    printf("Off X:%d Y:%d Z:%d\r\n", cal->meg_x_off, cal->meg_y_off, cal->meg_z_off);
+    cal->flag = 0x5A;
+
+}
+
+
 static struct calibration_data cal_data;
 
 static imu_float_euler_angle_t angle;
@@ -68,7 +123,7 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 {
     .imu_get_accel = mpu6050_read_accel,
     .imu_get_gyro = mpu6050_read_gyro,
-    .imu_get_mag = hmc5883_read_data,
+    .imu_get_mag = hmc5883_read_data2,
 };
 
 
@@ -140,7 +195,7 @@ int main(void)
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);  
     uart_instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, 115200);
-    
+    printf("PS!\r\n");
     /* force I2C bus to unlock */
     GPIO_QuickInit(HW_GPIOE, 18, kGPIO_Mode_OPP);
     GPIO_QuickInit(HW_GPIOE, 19, kGPIO_Mode_OPP);
@@ -160,6 +215,8 @@ int main(void)
 
     init_sensor();
 
+    MagnetometerCalibration(&cal_data);
+    
     trans_init(HW_DMA_CH1, uart_instance);
     imu_io_install(&IMU_IOInstallStruct1);
     
@@ -184,11 +241,9 @@ int main(void)
         time = PIT_GetCounterValue(HW_PIT_CH2);
         ret = imu_get_euler_angle(&angle, &raw_data);
         time -= PIT_GetCounterValue(HW_PIT_CH2);
-        
         time /= fac_us;
       //  printf("time:%d \r\n", time);
-        
-
+        halfT = ((float)time)/1000/2000;
         EnableInterrupts();
         if(g2401Avalable)
         {

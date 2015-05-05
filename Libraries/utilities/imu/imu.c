@@ -8,10 +8,11 @@
 #define PI             3.1415926f
 #define Kp             15.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
 #define Ki             0.002f     /* integral gain governs rate of convergence of gyroscope biases */
-#define halfT          (0.00314/2)
 
-#define Gyro_Gr        (0.00050653/2)
+
+#define Gyro_Gr        (0.00052653/2)
    
+float halfT = 0.002f;
 
 typedef struct 
 {
@@ -224,9 +225,9 @@ uint32_t imu_get_euler_angle(imu_float_euler_angle_t * angle, imu_raw_data_t * r
     raw_data->gx = gx;
     raw_data->gy = gy;
     raw_data->gz = gz;
-    raw_data->mx = mx/10.3;
-    raw_data->my = my/10.3;
-    raw_data->mz = mz/10.3;
+    raw_data->mx = mx;
+    raw_data->my = my;
+    raw_data->mz = mz;
 
     /* I need rawdata I give you filtered data */
 //    imu_sliding_filter(*raw_data, &filter_data);

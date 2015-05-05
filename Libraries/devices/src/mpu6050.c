@@ -201,7 +201,7 @@ int mpu6050_init(uint32_t instance)
                 write_reg(SMPLRT_DIV, 0x0A);
                 write_reg(CONFIG, 0x00);
                 write_reg(AUX_VDDIO,0x80);
-                write_reg(GYRO_CONFIG, 0x18);
+                write_reg(GYRO_CONFIG, 0x08);
                 write_reg(ACCEL_CONFIG, 0x00);
                 write_reg(I2C_MST_CTRL, 0x00);
                 write_reg(INT_PIN_CFG, 0x02);

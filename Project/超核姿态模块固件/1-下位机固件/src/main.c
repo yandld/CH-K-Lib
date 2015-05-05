@@ -68,7 +68,7 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 {
     .imu_get_accel = mpu6050_read_accel,
     .imu_get_gyro = mpu6050_read_gyro,
-    .imu_get_mag = hmc5883_read_data2,
+    .imu_get_mag = hmc5883_read_data,
 };
 
 
@@ -103,30 +103,6 @@ static void PIT_CH1_ISR(void)
 }
 
 
-
-int init_2401(void)
-{
-    int r,i;
-    QuickInit_Type pq;
-    QuickInitDecode(SPI0_SCK_PC05_SOUT_PC06_SIN_PC07, &pq);
-    SPI_QuickInit(BOARD_SPI_MAP, kSPI_CPOL0_CPHA0, 1000*1000);
-
-
-    
-    PORT_PinMuxConfig(BOARD_SPI_CS_PORT, BOARD_SPI_CS_PIN, kPinAlt2);
-    GPIO_QuickInit(HW_GPIOB, 0, kGPIO_Mode_OPP);
-    
-    /* init 2401 */
-    r = nrf24l01_init(HW_SPI0, BOARD_SPI_CS);
-    r = nrf24l01_probe();
-    g2401Avalable = true;
-    if(r)
-    {
-        g2401Avalable = false;
-    }
-    printf("2401 init:%d\r\n", r);
-    return r;
-}
 
 int init_sensor(void)
 {
@@ -183,7 +159,6 @@ int main(void)
     
 
     init_sensor();
-    init_2401();
 
     trans_init(HW_DMA_CH1, uart_instance);
     imu_io_install(&IMU_IOInstallStruct1);

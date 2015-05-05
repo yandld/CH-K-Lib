@@ -9,8 +9,8 @@
 #define Kp             15.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
 #define Ki             0.002f     /* integral gain governs rate of convergence of gyroscope biases */
 #define halfT          (0.00314/2)
-#define Gyro_G         0.0610351f
-#define Gyro_Gr        0.00050653f
+
+#define Gyro_Gr        (0.00050653/2)
    
 
 typedef struct 
@@ -116,7 +116,7 @@ static uint32_t imu_format_data(imu_raw_data_t * raw_data, imu_float_data_t * fl
 
 
 //!< the mx my mz order are related to PCB layout!!
-static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double my,double mz, imu_float_euler_angle_t * angle)
+static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double mz,double my, imu_float_euler_angle_t * angle)
 {
     double norm = 0;
     double hx = 0, hy = 0, hz = 0, bx = 0, bz = 0;			
@@ -224,9 +224,9 @@ uint32_t imu_get_euler_angle(imu_float_euler_angle_t * angle, imu_raw_data_t * r
     raw_data->gx = gx;
     raw_data->gy = gy;
     raw_data->gz = gz;
-    raw_data->mx = mx;
-    raw_data->my = my;
-    raw_data->mz = mz;
+    raw_data->mx = mx/10.3;
+    raw_data->my = my/10.3;
+    raw_data->mz = mz/10.3;
 
     /* I need rawdata I give you filtered data */
 //    imu_sliding_filter(*raw_data, &filter_data);

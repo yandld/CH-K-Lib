@@ -68,7 +68,7 @@ static imu_io_install_t IMU_IOInstallStruct1 =
 {
     .imu_get_accel = mpu6050_read_accel,
     .imu_get_gyro = mpu6050_read_gyro,
-    .imu_get_mag = hmc5883_read_data,
+    .imu_get_mag = hmc5883_read_data2,
 };
 
 
@@ -152,79 +152,12 @@ int init_sensor(void)
     return ret;
 }
 
-# if 0
-void MagnetometerCalibration(struct calibration_data * cal)
-{
-    uint32_t i;
-    int r;
-    int16_t x,y,z;
-    int16_t xmax, xmin, ymax, ymin, zmax, zmin;
-    xmax = 0;
-    xmin = 0xFFFF;
-    ymax = 0;
-    ymin = 0xFFFF;
-    zmax = 0;
-    zmin = 0xFFFF;
-    printf("start calibration, read flash...\r\n");
-    SSD_Read(cal, sizeof(struct calibration_data));
-    if(cal->flag == 0x5A)
-    {
-        printf("flash data read succ\r\n");
-        printf("Gain X:%f Y:%f Z:%f\r\n", cal->meg_x_gain, cal->meg_y_gain, cal->meg_z_gain);
-        printf("Off X:%d Y:%d Z:%d\r\n", cal->meg_x_off, cal->meg_y_off, cal->meg_z_off);
-        return;
-    }
-    for(i=0;i<1000;i++)
-    {
-        r = hmc5883_read_data(&x, &y, &z);
-        if(!r)
-        {
-            if(xmax < x) xmax = x;
-            if(xmin > x) xmin = x;
-            if(ymax < y) ymax = y;
-            if(ymin > y) ymin = y;
-            if(zmax < z) zmax = z;
-            if(zmin > z) zmin = z; 
-        }
-        DelayMs(10);
-        printf("time:%04d xmax:%04d xmin:%04d ymax:%04d ymin%04d zmax:%04d zmin:%04d\r", i,xmax,xmin,ymax,ymin,zmax,zmin);
-    }
-    cal->meg_x_off = (xmax + xmin) / 2;
-    cal->meg_x_gain=1;
-    cal->meg_y_off = (ymax + ymin) / 2;
-    cal->meg_y_gain= (float)(xmax - xmin) / (float)(ymax -ymin);
-    cal->meg_z_off = (zmax + zmin) / 2;
-    cal->meg_z_gain= (float)(xmax - xmin) / (float)(zmax -zmin);
-    /* see if we get data correct */
-    if((xmax < 300) || (ymax < 300) || (zmax < 300) || (cal->meg_y_gain < 0.8) || (cal->meg_z_gain < 0.8))
-    {
-        printf("cal failed, setting to default param\r\n");
-        /* inject with default data */
-        cal->meg_x_off = 0;
-        cal->meg_y_off = 0;
-        cal->meg_z_off = 0;
-        cal->meg_x_gain = 1;
-        cal->meg_y_gain = 1;
-        cal->meg_z_gain = 1;
-    }
-    printf("Gain X:%f Y:%f Z:%f\r\n", cal->meg_x_gain, cal->meg_y_gain, cal->meg_z_gain);
-    printf("Off X:%d Y:%d Z:%d\r\n", cal->meg_x_off, cal->meg_y_off, cal->meg_z_off);
-    cal->flag = 0x5A;
-    SSD_Write(cal, sizeof(struct calibration_data));
-}
-#endif
 
-#define BMP_STATUS_T_START          (0x00)
-#define BMP_STATUS_T_COMPLETE       (0x01)
-#define BMP_STATUS_P_START          (0x02)
-#define BMP_STATUS_P_COMPLETE       (0x03)
-#define BMP_STATUS_T_WAIT           (0x04)
-#define BMP_STATUS_P_WAIT           (0x05)
 
 int main(void)
 {
     int i;
-    static int bmpStatus = BMP_STATUS_T_START;
+
     uint32_t ret;
     uint32_t uart_instance;
     /* basic hardware */
@@ -248,20 +181,12 @@ int main(void)
         DelayMs(30);
     }
     
-    /* flash operation */
-   // SSDInit();
-    
-    /* init sensor&2401 */
+
     init_sensor();
     init_2401();
-    /* init transfer */
+
     trans_init(HW_DMA_CH1, uart_instance);
-    nrf24l01_set_tx_mode();
-    /* install imu raw date callback */
     imu_io_install(&IMU_IOInstallStruct1);
-    
-    /* read meg cal data */
-//    MagnetometerCalibration(&cal_data);
     
     WDOG_QuickInit(100);
     
@@ -269,11 +194,26 @@ int main(void)
     PIT_CallbackInstall(HW_PIT_CH1, PIT_CH1_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF, true);
     
+    PIT_QuickInit(HW_PIT_CH2, 1000*1000);
+    
+    static int time;
+    int fac_us,fac_ms;
+    CLOCK_GetClockFrequency(kBusClock, &fac_us);
+    fac_us /= 1000000;
+    
     while(1)
     {
         //获取欧拉角 获取原始角度
         DisableInterrupts();
+        PIT_ResetCounter(HW_PIT_CH2);
+        time = PIT_GetCounterValue(HW_PIT_CH2);
         ret = imu_get_euler_angle(&angle, &raw_data);
+        time -= PIT_GetCounterValue(HW_PIT_CH2);
+        
+        time /= fac_us;
+      //  printf("time:%d \r\n", time);
+        
+
         EnableInterrupts();
         if(g2401Avalable)
         {
@@ -285,40 +225,7 @@ int main(void)
             printf("imu module fail!\r\n");
             while(1);
         }
-        /* sample temperature and pressure */
-        switch(bmpStatus)
-        {
-            case BMP_STATUS_T_START:
-                bmp180_start_conversion(BMP180_T_MEASURE);
-                bmpStatus = BMP_STATUS_T_WAIT;
-                break;
-            case BMP_STATUS_T_WAIT:
-                if(!is_conversion_busy())
-                {
-                    bmpStatus = BMP_STATUS_T_COMPLETE;
-                }
-                break;
-            case BMP_STATUS_T_COMPLETE:
-                bmp180_read_temperature(&temperature);
-                bmpStatus = BMP_STATUS_P_START;
-                break;
-            case BMP_STATUS_P_START:
-                bmp180_start_conversion(BMP180_P3_MEASURE);
-                bmpStatus = BMP_STATUS_P_WAIT;
-                break;
-            case BMP_STATUS_P_WAIT:
-                if(!is_conversion_busy())
-                {
-                    bmpStatus = BMP_STATUS_P_COMPLETE;
-                }
-                break;
-            case BMP_STATUS_P_COMPLETE:
-                bmp180_read_pressure(&pressure);
-                bmpStatus = BMP_STATUS_T_START;
-                break;
-            default:
-                break;
-        }
+
     }
 }
 

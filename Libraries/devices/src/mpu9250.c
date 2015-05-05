@@ -151,6 +151,7 @@
 #define AK8963_CNTL_BIT_SHIFT                       4
 #define AK8963_CNTL_BIT(x)                          (((uint32_t)(((uint32_t)(x))<<AK8963_CNTL_BIT_SHIFT))&AK8963_CNTL_BIT_MASK)
 
+#define AK8963_CNTL2     0x0B
 #define AK8963_ASTC      0x0C  // Self test control
 #define AK8963_I2CDIS    0x0F  // I2C disable
 #define AK8963_ASAX      0x10  // Fuse ROM x-axis sensitivity adjustment value
@@ -267,10 +268,14 @@ static int _ak8963_init_seq(void)
 {
     uint8_t buf[3], err;
     
+    err = ak8963_write_reg(AK8963_CNTL2, 0x01);
+    DelayMs(5);
+    
     err = ak8963_write_reg(AK8963_CNTL, 0x00);
-    DelayMs(10);
+    
+    DelayMs(5);
     err += ak8963_write_reg(AK8963_CNTL, 0x0F);  /* Enter Fuse ROM access mode */
-    DelayMs(10);
+    DelayMs(5);
     err += I2C_BurstRead(0, AK8963_ADDRESS, AK8963_ASAX, 1, buf, 3);
     mpu_dev.mag_adj[0] = (float)(buf[0] - 128)/256.0f + 1.0f;
     mpu_dev.mag_adj[1] = (float)(buf[1] - 128)/256.0f + 1.0f;

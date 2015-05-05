@@ -2,223 +2,104 @@
 #include "common.h"
 #include "uart.h"
 #include "i2c.h"
+#include "pit.h"
+#include "dma.h"
 #include "mpu9250.h"
 #include "protocol.h"
 #include "inv_mpu_dmp_motion_driver.h"
 #include "inv_mpu.h"
+#include "dmp.h"
 
 #include <math.h>
 
-#define DEFAULT_MPU_HZ      (100)
-#define  Pitch_error        (0.000)
-#define  Roll_error         (0.000)
-#define  Yaw_error          (0.000)
-
 static bool reset_flag = false;
+static uint32_t frame_cnt = 0;
+
+void mpu9250_test(void)
+{
+    mpu9250_init(0);
+    struct mpu_config config;
     
-//void mpu9250_test(void)
-//{
-//    uint8_t err;
-//    int16_t ax,ay,az,gx,gy,gz,mx,my,mz;
-//    while(1)
-//    {
-//        err = 0;
-//    
-//        err += mpu9250_read_accel_raw(&ax, &ay, &az);
-//        err += mpu9250_read_gyro_raw(&gx, &gy, &gz);
-//        err += mpu9250_read_mag_raw(&mx, &my, &mz);
-//    
-//        if(err)
-//        {
-//            printf("!err:%d\r\n", err);
-//            while(1);
-//        }
-
-//        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%d my:%d mz:%d    \r", ax ,ay, az, gx, gy, gz, mx, my, mz);  
-//		GPIO_ToggleBit(HW_GPIOC, 3);
-//        DelayMs(10);
-//    }
-//}
-
-
-static signed char gyro_orientation[9] = {-1, 0, 0,
-                                           0,-1, 0,
-                                           0, 0, 1};
-
-static  unsigned short inv_row_2_scale(const signed char *row)
-{
-    unsigned short b;
-
-    if (row[0] > 0)
-        b = 0;
-    else if (row[0] < 0)
-        b = 4;
-    else if (row[1] > 0)
-        b = 1;
-    else if (row[1] < 0)
-        b = 5;
-    else if (row[2] > 0)
-        b = 2;
-    else if (row[2] < 0)
-        b = 6;
-    else
-        b = 7;      // error
-    return b;
-}
-
-
-static  unsigned short inv_orientation_matrix_to_scalar(const signed char *mtx)
-{
-    unsigned short scalar;
-
-    /*
-       XYZ  010_001_000 Identity Matrix
-       XZY  001_010_000
-       YXZ  010_000_001
-       YZX  000_010_001
-       ZXY  001_000_010
-       ZYX  000_001_010
-     */
-
-    scalar = inv_row_2_scale(mtx);
-    scalar |= inv_row_2_scale(mtx + 3) << 3;
-    scalar |= inv_row_2_scale(mtx + 6) << 6;
-
-    return scalar;
-}
-
- /*自检函数*/
-static void run_self_test(void)
-{
-    int result;
-
-    long gyro[3], accel[3];
-
-    result = mpu_run_self_test(gyro, accel);
-    if (result == 0x7) 
+    config.afs = AFS_16G;
+    config.gfs = GFS_2000DPS;
+    config.mfs = MFS_16BITS;
+    config.aenable_self_test = false;
+    config.genable_self_test = false;
+    mpu9250_config(&config);
+    
+    uint8_t err;
+    int16_t ax,ay,az,gx,gy,gz,mx,my,mz;
+    
+    static int16_t mmx,mmy,mmz;
+    while(1)
     {
-        /* Test passed. We can trust the gyro data here, so let's push it down
-         * to the DMP.
-         */
-        float sens;
-        unsigned short accel_sens;
-        mpu_get_gyro_sens(&sens);
-        gyro[0] = (long)(gyro[0] * sens);
-        gyro[1] = (long)(gyro[1] * sens);
-        gyro[2] = (long)(gyro[2] * sens);
-        dmp_set_gyro_bias(gyro);
-        mpu_get_accel_sens(&accel_sens);
-        accel[0] *= accel_sens;
-        accel[1] *= accel_sens;
-        accel[2] *= accel_sens;
-     //   dmp_set_accel_bias(accel);
-		printf("setting bias succesfully ......\n");
-    }
-	else
-	{
-		printf("bias has not been modified ......\n");
-	}
+        err = 0;
     
+        err += mpu9250_read_accel_raw(&ax, &ay, &az);
+        err += mpu9250_read_gyro_raw(&gx, &gy, &gz);
+        err += mpu9250_read_mag_raw(&mx, &my, &mz);
+    
+        mmx = 0.9*mmx + 0.1*mx;
+        mmy = 0.9*mmy + 0.1*my;
+        mmz = 0.9*mmz + 0.1*mz;
+        
+        float angle;
+         angle = atan2(mmy, mmx)*57.3;
+        if(err)
+        {
+            printf("!err:%d\r\n", err);
+            while(1);
+        }
+
+        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d %f   \r", ax ,ay, az, gx, gy, gz, mx, my, mz, angle);  
+		GPIO_ToggleBit(HW_GPIOC, 3);
+        DelayMs(5);
+    }
 }
 
-float init_ax, init_ay, init_az, init_gx, init_gy, init_gz, init_mx, init_my, init_mz;
-#define q30  1073741824.0f
-static int _quat2angle(long *quat, float *angle)
+static int transmit_data_init(void)
 {
-    float Pitch, Roll, Yaw;
-    static float q0=1.0f,q1=0.0f,q2=0.0f,q3=0.0f;
-    q0 = quat[0] / q30;
-    q1 = quat[1] / q30;
-    q2 = quat[2] / q30;
-    q3 = quat[3] / q30;
-            
-    angle[0]  = asin(-2 * q1 * q3 + 2 * q0* q2)* 57.3 + Pitch_error; // pitch
-    angle[1]  = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* 57.3 + Roll_error; // roll
-    angle[2]  = atan2(2*(q1*q2 + q0*q3),q0*q0+q1*q1-q2*q2-q3*q3) * 57.3 + Yaw_error;
+    DMA_InitTypeDef DMAInitStruct;
 
-  float init_Yaw, init_Pitch, init_Roll;
-  signed short int accel[3], mag[3];
-     unsigned long timestamp;
-    
-    Pitch = angle[0];
-    Roll  = angle[1];
-    
-    init_Roll = 0;
-    init_Pitch = 0;
-   // Yaw  =  angle[2];
-    
-     //   mpu_set_bypass(1);                     //开启bypass，必须有这句代码
-        mpu_get_compass_reg(mag, &timestamp);  //读取compass数据
-        //进行x y轴的校准，未对z轴进行校准，参考MEMSense的校准方法 
-        init_mx =((float)mag[1]) - 8;						
-        init_my =((float)mag[0]) * 1.046632 - 1.569948;
-        init_mz =(float)-mag[2];
-   //     mpu_set_bypass(0);						//关闭bypass，必须有这句代码
-    
-angle[2] = atan2(init_mx*cos(init_Roll) + init_my*sin(init_Roll)*sin(init_Pitch) + init_mz*sin(init_Roll)*cos(init_Pitch),
-                   init_my*cos(init_Pitch) - init_mz*sin(init_Pitch));//类似于atan2(my, mx)，其中的init_Roll和init_Pitch是弧度
+    DMAInitStruct.chl = HW_DMA_CH0;
+    DMAInitStruct.chlTriggerSource = UART0_TRAN_DMAREQ;
+    DMAInitStruct.triggerSourceMode = kDMA_TriggerSource_Normal;
 
-angle[2]*=57.3;
+    DMAInitStruct.sAddr = 0;
+    DMAInitStruct.sAddrIsInc = true;
+    DMAInitStruct.sDataWidth = kDMA_DataWidthBit_8;
+    DMAInitStruct.sMod = kDMA_ModuloDisable;
 
-    return 0;
+    DMAInitStruct.dAddr = (uint32_t)&UART0->D;
+    DMAInitStruct.dAddrIsInc = false;
+    DMAInitStruct.dDataWidth = kDMA_DataWidthBit_8;
+    DMAInitStruct.dMod = kDMA_ModuloDisable;
+    DMA_Init(&DMAInitStruct);
+    
+    //DMA_EnableAutoDisableRequest(HW_DMA_CH0, false);
+    DMA_EnableCycleSteal(HW_DMA_CH0, true);
+     UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx, true);
 }
 
 static int _transmit_data(uint8_t *buf, uint32_t len)
 {
-    uint8_t *p;
-    
-    p = buf;
-    while(len--)
-    {
-        UART_WriteByte(HW_UART0, *p++);
-    }
+    DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE_MASK;
+
+    DMA_SetSourceAddress(HW_DMA_CH0, (uint32_t)buf);
+    DMA_SetTransferByteCnt(HW_DMA_CH0, len);
+    DMA_EnableRequest(HW_DMA_CH0);
+
     return 0;
 }
 
-void dmp_init_seq(void)
-{
-    int ret;
-    
-    ret = mpu_init(NULL);
-    printf("mpu9250 init %d\r\n", ret);
-    
-    ret = mpu_set_sensors(INV_XYZ_GYRO | INV_XYZ_ACCEL|INV_XYZ_COMPASS);
-    printf("mpu9250 mpu_set_sensor%d\r\n", ret);
-    
-    ret = mpu_configure_fifo(INV_XYZ_GYRO | INV_XYZ_ACCEL|INV_XYZ_COMPASS);
-    printf("mpu9250 mpu_configure_fifo%d\r\n", ret);
-    
-    ret = mpu_set_sample_rate(DEFAULT_MPU_HZ);
-    printf("mpu9250 mpu_set_sample_rate%d\r\n", ret);
-    
-    ret = dmp_load_motion_driver_firmware();
-    printf("mpu9250 dmp_load_motion_driver_firmware%d\r\n", ret);
-    
-    ret = dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation));
-    printf("mpu9250 dmp_set_orientation%d\r\n", ret);
-    
-    ret = dmp_enable_feature(DMP_FEATURE_6X_LP_QUAT  |
-            DMP_FEATURE_ANDROID_ORIENT | DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_CAL_GYRO |
-            DMP_FEATURE_GYRO_CAL);
-    printf("mpu9250 dmp_enable_feature%d\r\n", ret);
-    
-    ret = dmp_set_fifo_rate(DEFAULT_MPU_HZ);
-    printf("mpu9250 dmp_set_fifo_rate%d\r\n", ret);
-    
-    run_self_test();
-    
-    ret = mpu_set_dmp_state(1);
-}
 
-
-
+extern void PIT_ISR(void);
 extern void UART_RX_ISR(uint16_t data);
 
 int main(void)
 {
 	uint32_t clock;
-//    struct mpu_config config;
-    
+
 	DelayInit();   
     DelayMs(1);
     
@@ -230,6 +111,11 @@ int main(void)
     CLOCK_GetClockFrequency(kBusClock, &clock);
     printf("kBusClock:%dHz\r\n", clock);
 
+
+    PIT_QuickInit(HW_PIT_CH0, 1000*1000);
+    PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
+//   PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
+
     /* MCU driver init */
     I2C_QuickInit(I2C0_SCL_PB00_SDA_PB01, 100*1000);
     GPIO_QuickInit(HW_GPIOD, 7, kGPIO_Mode_OPP);
@@ -237,21 +123,14 @@ int main(void)
     DelayMs(10);
     
     UART_CallbackRxInstall(HW_UART0, UART_RX_ISR);
-
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
+ //   UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     
 //    /* sensor init */
-//    mpu9250_init(0);
-//    
-//    config.afs = AFS_16G;
-//    config.gfs = GFS_2000DPS;
-//    config.mfs = MFS_16BITS;
-//    config.aenable_self_test = false;
-//    config.genable_self_test = false;
-//    mpu9250_config(&config);
+
 
     
-    //mpu9250_test();
+   // mpu9250_test();
+    
     unsigned long sensor_timestamp;
     short gyro[3], accel[3], mag[3], sensors;
     static unsigned char more;
@@ -260,25 +139,26 @@ int main(void)
     transmit_user_data send_data;
     uint32_t len;
     static uint8_t buf[64];
-
-
-    dmp_init_seq();
+    
+    dmp_init();
 
     printf("dmp init complete\r\n");
+    
+    transmit_data_init();
     
    while(1)
     {
         if(reset_flag)
         {
-            int ret;
             printf("reseting...\r\n");
-            dmp_init_seq();
+            dmp_init();
             reset_flag = false;
         }
+        
         dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors, &more);	
         if (sensors & INV_WXYZ_QUAT )
         {
-            _quat2angle(quat, angle);
+            quat2angle(quat, angle);
 
             mpu_get_compass_reg(mag, NULL);
             
@@ -304,7 +184,7 @@ int main(void)
             _transmit_data(buf, len);
 
             GPIO_ToggleBit(HW_GPIOC, 3);
-     
+            frame_cnt++;
         }
     }
 }
@@ -314,6 +194,13 @@ void UART_RX_ISR(uint16_t data)
 {
     if(data == 'H')
     {
-   //     reset_flag = true;
+        reset_flag = true;
     }
+}
+
+
+void PIT_ISR(void)
+{
+   // printf("frame_count:%d\r\n", frame_cnt);
+    frame_cnt = 0;
 }

@@ -141,6 +141,6 @@ int quat2angle(long *quat, float *angle)
     angle[1]  = -asin(-2 * q1 * q3 + 2 * q0* q2)* 57.3; // pitch
     angle[0]  = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* 57.3; // roll
     angle[2]  = atan2(2*(q1*q2 + q0*q3),q0*q0+q1*q1-q2*q2-q3*q3) * 57.3;
-
+    
     return 0;
 }

@@ -76,8 +76,7 @@ static int transmit_data_init(void)
     DMAInitStruct.dMod = kDMA_ModuloDisable;
     DMA_Init(&DMAInitStruct);
     
-    //DMA_EnableAutoDisableRequest(HW_DMA_CH0, false);
-    DMA_EnableCycleSteal(HW_DMA_CH0, true);
+    DMA_EnableAutoDisableRequest(HW_DMA_CH0, true);
     UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx, true);
     return 0;
 }
@@ -172,6 +171,9 @@ int main(void)
             send_data.trans_mag[0] = mag[0];
             send_data.trans_mag[1] = mag[1];
             send_data.trans_mag[2] = mag[2];
+            
+            
+            angle[2] = atan2(mag[1], mag[0])*57.3;
             
             send_data.trans_pitch = (int16_t)(angle[0]*100);
             send_data.trans_roll = (int16_t)(angle[1]*100);

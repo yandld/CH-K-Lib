@@ -140,7 +140,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name></Name>
+          <Name>/</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -158,7 +158,24 @@
           <Name>-S0 -C0 -P0 -FD1FFFF800 -FC2000 -FN1 -FF0MK_P64_48MHZ -FS00 -FL010000 -FP0($$Device:MKL25Z64xxx4$Flash\MK_P64_48MHZ.FLM))</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>281</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>1928</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>C:\Users\Yandld\Desktop\CH-K-Lib\Project\Internal\KL26_9250\src\main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\templete\../src/main.c\281</Expression>
+        </Bp>
+      </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -230,8 +247,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>9</TopLine>
-      <CurrentLine>24</CurrentLine>
+      <TopLine>243</TopLine>
+      <CurrentLine>247</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MKL26Z4.s</PathWithFileName>
       <FilenameWithoutPath>startup_MKL26Z4.s</FilenameWithoutPath>
@@ -252,10 +269,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>4</ColumnNumber>
+      <ColumnNumber>15</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>228</TopLine>
-      <CurrentLine>239</CurrentLine>
+      <TopLine>150</TopLine>
+      <CurrentLine>161</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -270,7 +287,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
+      <TopLine>4</TopLine>
       <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\mpu9250.c</PathWithFileName>
@@ -302,8 +319,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>40</TopLine>
-      <CurrentLine>44</CurrentLine>
+      <TopLine>1406</TopLine>
+      <CurrentLine>1414</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\eMPL\inv_mpu.c</PathWithFileName>
       <FilenameWithoutPath>inv_mpu.c</FilenameWithoutPath>
@@ -316,10 +333,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>19</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>25</TopLine>
-      <CurrentLine>32</CurrentLine>
+      <TopLine>1101</TopLine>
+      <CurrentLine>1104</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\eMPL\inv_mpu_dmp_motion_driver.c</PathWithFileName>
       <FilenameWithoutPath>inv_mpu_dmp_motion_driver.c</FilenameWithoutPath>
@@ -342,8 +359,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>123</TopLine>
-      <CurrentLine>151</CurrentLine>
+      <TopLine>122</TopLine>
+      <CurrentLine>123</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\KL\src\common.c</PathWithFileName>
       <FilenameWithoutPath>common.c</FilenameWithoutPath>
@@ -374,8 +391,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>110</TopLine>
-      <CurrentLine>141</CurrentLine>
+      <TopLine>125</TopLine>
+      <CurrentLine>139</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\KL\src\systick.c</PathWithFileName>
       <FilenameWithoutPath>systick.c</FilenameWithoutPath>
@@ -388,10 +405,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>10</ColumnNumber>
+      <ColumnNumber>26</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>384</TopLine>
-      <CurrentLine>385</CurrentLine>
+      <TopLine>390</TopLine>
+      <CurrentLine>399</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\KL\src\uart.c</PathWithFileName>
       <FilenameWithoutPath>uart.c</FilenameWithoutPath>
@@ -422,7 +439,7 @@
       <Focus>0</Focus>
       <ColumnNumber>36</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>21</TopLine>
+      <TopLine>23</TopLine>
       <CurrentLine>24</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\KL\src\i2c.c</PathWithFileName>

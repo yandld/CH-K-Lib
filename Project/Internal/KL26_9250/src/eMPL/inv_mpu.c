@@ -718,7 +718,7 @@ int mpu_init(struct int_param_s *int_param)
     data[0] = BIT_RESET;
     if (i2c_write(st.hw->addr, st.reg->pwr_mgmt_1, 1, data))
         return -1;
-    delay_ms(100);
+    delay_ms(10);
 
     /* Wake up chip. */
     data[0] = 0x00;
@@ -1992,7 +1992,7 @@ static int get_st_biases(long *gyro, long *accel, unsigned char hw_test)
     data[1] = 0;
     if (i2c_write(st.hw->addr, st.reg->pwr_mgmt_1, 2, data))
         return -1;
-    delay_ms(200);
+    delay_ms(20);
     data[0] = 0;
     if (i2c_write(st.hw->addr, st.reg->int_enable, 1, data))
         return -1;
@@ -2028,7 +2028,7 @@ static int get_st_biases(long *gyro, long *accel, unsigned char hw_test)
     if (i2c_write(st.hw->addr, st.reg->accel_cfg, 1, data))
         return -1;
     if (hw_test)
-        delay_ms(200);
+        delay_ms(20);
 
     /* Fill FIFO for test.wait_ms milliseconds. */
     data[0] = BIT_FIFO_EN;

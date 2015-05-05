@@ -78,17 +78,16 @@ static int transmit_data_init(void)
     
     //DMA_EnableAutoDisableRequest(HW_DMA_CH0, false);
     DMA_EnableCycleSteal(HW_DMA_CH0, true);
-     UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx, true);
+    UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx, true);
+    return 0;
 }
 
 static int _transmit_data(uint8_t *buf, uint32_t len)
 {
-    DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE_MASK;
-
+    DMA_CancelTransfer(HW_DMA_CH0);
     DMA_SetSourceAddress(HW_DMA_CH0, (uint32_t)buf);
     DMA_SetTransferByteCnt(HW_DMA_CH0, len);
     DMA_EnableRequest(HW_DMA_CH0);
-
     return 0;
 }
 

@@ -28,12 +28,12 @@ int g2401Avalable;
 struct calibration_data
 {
     int  flag;
-    float meg_x_gain;
-    float meg_y_gain;
-    float meg_z_gain;
-    int   meg_x_off;
-    int   meg_y_off;
-    int   meg_z_off;
+    float xg;       /* x gain */
+    float yg;
+    float zg;
+    int   xo;
+    int   yo;
+    int   zo;       /* *z offset */
 };
 
 
@@ -67,26 +67,26 @@ void MagnetometerCalibration(struct calibration_data * cal)
         DelayMs(10);
         printf("time:%04d xmax:%04d xmin:%04d ymax:%04d ymin%04d zmax:%04d zmin:%04d\r", i,xmax,xmin,ymax,ymin,zmax,zmin);
     }
-    cal->meg_x_off = (xmax + xmin) / 2;
-    cal->meg_x_gain=1;
-    cal->meg_y_off = (ymax + ymin) / 2;
-    cal->meg_y_gain= (float)(xmax - xmin) / (float)(ymax -ymin);
-    cal->meg_z_off = (zmax + zmin) / 2;
-    cal->meg_z_gain= (float)(xmax - xmin) / (float)(zmax -zmin);
+    cal->xo = (xmax + xmin) / 2;
+    cal->xg=1;
+    cal->yo = (ymax + ymin) / 2;
+    cal->yg= (float)(ymax - ymin) / (float)(xmax -xmin);
+    cal->zo = (zmax + zmin) / 2;
+    cal->zg= (float)(zmax - zmin) / (float)(xmax -xmin);
     /* see if we get data correct */
-    if((xmax < 300) || (ymax < 300) || (zmax < 300) || (cal->meg_y_gain < 0.8) || (cal->meg_z_gain < 0.8))
+    if((xmax < 300) || (ymax < 300) || (zmax < 300) || (cal->yg < 0.8) || (cal->zg < 0.8))
     {
         printf("cal failed, setting to default param\r\n");
         /* inject with default data */
-        cal->meg_x_off = 0;
-        cal->meg_y_off = 0;
-        cal->meg_z_off = 0;
-        cal->meg_x_gain = 1;
-        cal->meg_y_gain = 1;
-        cal->meg_z_gain = 1;
+        cal->xo = 0;
+        cal->yo = 0;
+        cal->zo = 0;
+        cal->xg = 1;
+        cal->yg = 1;
+        cal->zg = 1;
     }
-    printf("Gain X:%f Y:%f Z:%f\r\n", cal->meg_x_gain, cal->meg_y_gain, cal->meg_z_gain);
-    printf("Off X:%d Y:%d Z:%d\r\n", cal->meg_x_off, cal->meg_y_off, cal->meg_z_off);
+    printf("Gain X:%f Y:%f Z:%f\r\n", cal->xg, cal->yg, cal->zg);
+    printf("Off X:%d Y:%d Z:%d\r\n", cal->xo, cal->yo, cal->zo);
     cal->flag = 0x5A;
 
 }
@@ -108,9 +108,9 @@ int hmc5883_read_data2(int16_t* x, int16_t* y, int16_t* z)
     r = hmc5883_read_data(&xraw, &yraw, &zraw);
     if(!r)
     {
-        *x = cal_data.meg_x_gain  *(xraw - cal_data.meg_x_off);
-        *y = cal_data.meg_y_gain *(yraw - cal_data.meg_y_off);
-        *z = cal_data.meg_z_gain *(zraw - cal_data.meg_z_off);
+        *x = cal_data.xg  *(xraw - cal_data.xo);
+        *y = cal_data.yg *(yraw - cal_data.yo);
+        *z = cal_data.zg *(zraw - cal_data.zo);
         xraw = *x;
         yraw = *y;
         zraw = *z;

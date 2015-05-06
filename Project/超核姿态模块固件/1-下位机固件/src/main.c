@@ -27,13 +27,21 @@ int g2401Avalable;
 
 struct calibration_data
 {
-    int  flag;
-    float xg;       /* x gain */
+    int  magic;
+    float xg;       /* mag x gain */
     float yg;
     float zg;
     int   xo;
     int   yo;
-    int   zo;       /* *z offset */
+    int   zo;       /* mag z offset */
+    
+    int axo;
+    int ayo;
+    int azo; 
+    
+    int gxo;
+    int gyo;
+    int gzo; 
 };
 
 
@@ -87,7 +95,7 @@ void MagnetometerCalibration(struct calibration_data * cal)
     }
     printf("Gain X:%f Y:%f Z:%f\r\n", cal->xg, cal->yg, cal->zg);
     printf("Off X:%d Y:%d Z:%d\r\n", cal->xo, cal->yo, cal->zo);
-    cal->flag = 0x5A;
+    cal->magic = 0x5ACB;
 
 }
 

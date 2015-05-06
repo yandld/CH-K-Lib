@@ -10,7 +10,7 @@
 #define Ki             0.002f     /* integral gain governs rate of convergence of gyroscope biases */
 
 
-#define Gyro_Gr        (0.00052653*2)
+#define Gyro_Gr        (0.00052653/2)
    
 float halfT = 0.002f;
 

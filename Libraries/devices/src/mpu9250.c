@@ -413,33 +413,55 @@ int mpu9250_read_gyro_raw(int16_t* x, int16_t* y, int16_t* z)
     *x = (int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
     *y = (int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
     *z = (int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
+    *x -= 130;
+    *y +=20;
+    *z-=30;
     return err;    
 }
 
-    
+#define AVR_CNT     1
 int mpu9250_read_mag_raw(int16_t* x, int16_t* y, int16_t* z)
 {
     uint8_t err,c;
     uint8_t val;
     uint8_t buf[7];
+    uint8_t cnt;
+    int32_t sumx,sumy,sumz;
+    cnt = 0;
+    sumx=0;sumy=0;sumz=0;
     
-    val = ak8963_read_reg(AK8963_ST1);
-    val &= 0x01;
+    while(1)
     {
-        /* Read the six raw data and ST2 registers sequentially into data array */
-        err = I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, buf, 7);  
-        c = buf[6];
-        if(!(c & 0x08))// Check if magnetic sensor overflow set, if not then report data
-        {  
-            *x = (int16_t)((((int16_t)buf[1] << 8) | buf[0]));
-            *y = (int16_t)((((int16_t)buf[3] << 8) | buf[2]));
-            *z = (int16_t)((((int16_t)buf[5] << 8) | buf[4]));	
-            *x = mpu_dev.mag_adj[0]*(*x);
-            *y = mpu_dev.mag_adj[1]*(*y);
-            *z = mpu_dev.mag_adj[2]*(*z);
+        val = ak8963_read_reg(AK8963_ST1) & 0x01;
+        if(val)
+        {
+            /* Read the six raw data and ST2 registers sequentially into data array */
+            err = I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, buf, 7);  
+            c = buf[6];
+            if(!(c & 0x08))// Check if magnetic sensor overflow set, if not then report data
+            {  
+                *x = (int16_t)((((int16_t)buf[1] << 8) | buf[0]));
+                *y = (int16_t)((((int16_t)buf[3] << 8) | buf[2]));
+                *z = (int16_t)((((int16_t)buf[5] << 8) | buf[4]));	
+                *x = mpu_dev.mag_adj[0]*(*x);
+                *y = mpu_dev.mag_adj[1]*(*y);
+                *z = mpu_dev.mag_adj[2]*(*z);
+                sumx += *x; sumy += *y; sumz += *z;
+                cnt++;
+            }
+            if(err)
+            {
+                return err;
+            }
+        }
+        if(cnt == AVR_CNT)
+        {
+            *x = sumx/AVR_CNT;
+            *y = sumy/AVR_CNT;
+            *z = sumz/AVR_CNT;
+            return 0;
         }
     }
-    return err;
 }
 
 int mpu9250_read_temp_raw(int16_t *val)

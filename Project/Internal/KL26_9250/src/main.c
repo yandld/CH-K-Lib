@@ -10,6 +10,8 @@
 #include "inv_mpu.h"
 #include "dmp.h"
 
+#include "imu.h"
+
 #include <math.h>
 
 static bool reset_flag = false;
@@ -51,7 +53,7 @@ void mpu9250_test(void)
             while(1);
         }
 
-        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d %f   \r", ax ,ay, az, gx, gy, gz, mx, my, mz, angle);  
+        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d %f   \r", ax ,ay, az, gx, gy, gz, mmx, mmy, mmz, angle);  
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(5);
     }
@@ -94,10 +96,35 @@ static int _transmit_data(uint8_t *buf, uint32_t len)
 extern void PIT_ISR(void);
 extern void UART_RX_ISR(uint16_t data);
 
+int mpu9250_read_mag_raw2(int16_t* x, int16_t* y, int16_t* z)
+{
+    static int16_t mmx,mmy,mmz;
+    int r;
+    int16_t rmx, rmy,rmz;
+    r = mpu9250_read_mag_raw(&rmx, &rmy, &rmz);
+    
+    mmx = 0.9*mmx + 0.1*rmx;
+    mmy = 0.9*mmy + 0.1*rmy;
+    mmz = 0.9*mmz + 0.1*rmz;
+    
+    *x = mmx;
+    *y = mmy;
+    *z = mmz;
+    return r;
+}
+
+static imu_io_install_t IMU_IOInstallStruct1 = 
+{
+    .imu_get_accel = mpu9250_read_accel_raw,
+    .imu_get_gyro = mpu9250_read_gyro_raw,
+    .imu_get_mag = mpu9250_read_mag_raw2,
+};
+
+
 int main(void)
 {
 	uint32_t clock;
-
+    uint32_t ret;
 	DelayInit();   
     DelayMs(1);
     
@@ -123,70 +150,128 @@ int main(void)
     UART_CallbackRxInstall(HW_UART0, UART_RX_ISR);
  //   UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     
-//    /* sensor init */
-
-
+    mpu9250_init(0);
+    struct mpu_config config;
     
-   // mpu9250_test();
+    config.afs = AFS_2G;
+    config.gfs = GFS_2000DPS;
+    config.mfs = MFS_14BITS;
+    config.aenable_self_test = false;
+    config.genable_self_test = false;
+    mpu9250_config(&config);
+
+    //mpu9250_test();
     
     unsigned long sensor_timestamp;
     short gyro[3], accel[3], mag[3], sensors;
     static unsigned char more;
     long quat[4];
-    float angle[3];
+ //   float angle[3];
     transmit_user_data send_data;
     uint32_t len;
     static uint8_t buf[64];
-    
-    dmp_init();
+//    
+//    dmp_init();
 
+    PIT_QuickInit(HW_PIT_CH1, 1000*1000);
+    
     printf("dmp init complete\r\n");
     
     transmit_data_init();
-    
+    imu_io_install(&IMU_IOInstallStruct1);
+    static int time, last_time,load_val;
+    int fac_us,fac_ms;
+    CLOCK_GetClockFrequency(kBusClock, &fac_us);
+    fac_us /= 1000000;
+static imu_float_euler_angle_t angle;
+static imu_raw_data_t raw_data;
+
+
    while(1)
     {
-        if(reset_flag)
-        {
-            printf("reseting...\r\n");
-            dmp_init();
-            reset_flag = false;
-        }
+        time = PIT_GetCounterValue(HW_PIT_CH1);
+        time = load_val - time;
         
-        dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors, &more);	
-        if (sensors & INV_WXYZ_QUAT )
-        {
-            quat2angle(quat, angle);
-
-            mpu_get_compass_reg(mag, NULL);
+        PIT_ResetCounter(HW_PIT_CH1);
+        load_val = PIT_GetCounterValue(HW_PIT_CH1);
+        
+     //   DisableInterrupts();
+        
+        ret = imu_get_euler_angle(&angle, &raw_data);
+        time /= fac_us;
+      //  printf("time:%d \r\n", time);
+        halfT = ((float)time)/1000/2000;
+      //  EnableInterrupts(); 
+        
+       // printf("ax:%0f ay:%0f az:%05f   \r", angle.imu_pitch, angle.imu_roll, angle.imu_yaw);  
+       
+            send_data.trans_gyro[0] = raw_data.gx;
+            send_data.trans_gyro[1] = raw_data.gy;
+            send_data.trans_gyro[2] = raw_data.gz;
             
-            send_data.trans_gyro[0] = gyro[0];
-            send_data.trans_gyro[1] = gyro[1];
-            send_data.trans_gyro[2] = gyro[2];
+            send_data.trans_accel[0] = raw_data.ax;
+            send_data.trans_accel[1] = raw_data.ay;
+            send_data.trans_accel[2] = raw_data.az;
             
-            send_data.trans_accel[0] = accel[0];
-            send_data.trans_accel[1] = accel[1];
-            send_data.trans_accel[2] = accel[2];
-            
-            send_data.trans_mag[0] = mag[0];
-            send_data.trans_mag[1] = mag[1];
-            send_data.trans_mag[2] = mag[2];
+            send_data.trans_mag[0] = raw_data.mx;
+            send_data.trans_mag[1] = raw_data.my;
+            send_data.trans_mag[2] = raw_data.mz;
             
             
-            angle[2] = atan2(mag[1], mag[0])*57.3;
+          //  angle[2] = atan2(mag[1], mag[0])*57.3;
             
-            send_data.trans_pitch = (int16_t)(angle[0]*100);
-            send_data.trans_roll = (int16_t)(angle[1]*100);
-            send_data.trans_yaw = (int16_t)(angle[2]*10);
+            send_data.trans_pitch = (int16_t)(angle.imu_pitch*100);
+            send_data.trans_roll = (int16_t)(angle.imu_roll*100);
+            send_data.trans_yaw = (int16_t)(angle.imu_yaw*10);
             
             /* set buffer */
             len = user_data2buffer(&send_data, buf);
             
             _transmit_data(buf, len);
+        
+        DelayMs(2);
 
-            GPIO_ToggleBit(HW_GPIOC, 3);
-            frame_cnt++;
-        }
+//        if(reset_flag)
+//        {
+//            printf("reseting...\r\n");
+//            dmp_init();
+//            reset_flag = false;
+//        }
+//        
+//        dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors, &more);	
+//        if (sensors & INV_WXYZ_QUAT )
+//        {
+//            quat2angle(quat, angle);
+
+//            mpu_get_compass_reg(mag, NULL);
+//            
+//            send_data.trans_gyro[0] = gyro[0];
+//            send_data.trans_gyro[1] = gyro[1];
+//            send_data.trans_gyro[2] = gyro[2];
+//            
+//            send_data.trans_accel[0] = accel[0];
+//            send_data.trans_accel[1] = accel[1];
+//            send_data.trans_accel[2] = accel[2];
+//            
+//            send_data.trans_mag[0] = mag[0];
+//            send_data.trans_mag[1] = mag[1];
+//            send_data.trans_mag[2] = mag[2];
+//            
+//            
+//          //  angle[2] = atan2(mag[1], mag[0])*57.3;
+//            
+//            send_data.trans_pitch = (int16_t)(angle[0]*100);
+//            send_data.trans_roll = (int16_t)(angle[1]*100);
+//            send_data.trans_yaw = (int16_t)(angle[2]*10);
+//            
+//            /* set buffer */
+//            len = user_data2buffer(&send_data, buf);
+//            
+//            _transmit_data(buf, len);
+
+//            GPIO_ToggleBit(HW_GPIOC, 3);
+//            frame_cnt++;
+//        }
     }
 }
 

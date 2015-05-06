@@ -10,7 +10,7 @@
 #define Ki             0.002f     /* integral gain governs rate of convergence of gyroscope biases */
 
 
-#define Gyro_Gr        (0.00052653/2)
+#define Gyro_Gr        (0.00052653*2)
    
 float halfT = 0.002f;
 
@@ -115,9 +115,20 @@ static uint32_t imu_format_data(imu_raw_data_t * raw_data, imu_float_data_t * fl
     return 0;
 }
 
+static inline float invSqrt(float x) 
+{
+	float halfx = 0.5f * x;
+	float y = x;
+	long i = *(long*)&y;
+	i = 0x5f3759df - (i>>1);
+	y = *(float*)&i;
+	y = y * (1.5f - (halfx * y * y));
+	return y;
+}
+
 
 //!< the mx my mz order are related to PCB layout!!
-static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double mz,double my, imu_float_euler_angle_t * angle)
+static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double my,double mz, imu_float_euler_angle_t * angle)
 {
     double norm = 0;
     double hx = 0, hy = 0, hz = 0, bx = 0, bz = 0;			
@@ -145,15 +156,16 @@ static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double 
         return;    
     }
 		
-    norm = sqrt(ax*ax + ay*ay + az*az);
-    ax = ax / norm;
-    ay = ay / norm;
-    az = az / norm;
+    
+    norm = invSqrt(ax*ax + ay*ay + az*az);
+    ax = ax * norm;
+    ay = ay * norm;
+    az = az * norm;
 
-    norm = sqrt(mx*mx + my*my + mz*mz);
-    mx = mx / norm;
-    my = my / norm;
-    mz = mz / norm;
+    norm = invSqrt(mx*mx + my*my + mz*mz);
+    mx = mx * norm;
+    my = my * norm;
+    mz = mz * norm;
 	
     /* compute reference direction of flux */
     hx = 2*mx*(0.5f - q2q2 - q3q3) + 2*my*(q1q2 - q0q3) + 2*mz*(q1q3 + q0q2);

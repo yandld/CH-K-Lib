@@ -668,11 +668,6 @@
               <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
             </File>
             <File>
-              <FileName>spi_bus_ops.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\spi_bus_ops.c</FilePath>
-            </File>
-            <File>
               <FileName>ads7843.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
@@ -1346,11 +1341,6 @@
               <FileName>sram.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi_bus_ops.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\spi_bus_ops.c</FilePath>
             </File>
             <File>
               <FileName>ads7843.c</FileName>

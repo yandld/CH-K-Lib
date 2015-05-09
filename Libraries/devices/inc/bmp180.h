@@ -22,7 +22,6 @@
 
 //!< API functions
 int bmp180_init(uint32_t instance);
-int bmp180_probe(void);
 int bmp180_read_temperature(int32_t * temperature);
 int bmp180_start_conversion(uint8_t cmd);
 int bmp180_read_pressure(int32_t * pressure);

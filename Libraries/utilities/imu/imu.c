@@ -40,6 +40,7 @@ uint32_t imu_io_install(imu_io_install_t * IOInstallStruct)
 }
 
 /* sliding filter */
+#if 0
 static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * filter_data)
 {
     int32_t sum_accel_x = 0;
@@ -96,7 +97,7 @@ static uint32_t imu_sliding_filter(imu_raw_data_t raw_data, imu_raw_data_t * fil
     filter_data->mz = raw_data.mz; 
     return 0;
 }
-
+#endif
 
 //!< format data into float value
 static uint32_t imu_format_data(imu_raw_data_t * raw_data, imu_float_data_t * float_data)
@@ -128,7 +129,7 @@ static inline float invSqrt(float x)
 
 
 //!< the mx my mz order are related to PCB layout!!
-static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double my,double mz, imu_float_euler_angle_t * angle)
+static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double mz,double my, imu_float_euler_angle_t * angle)
 {
     double norm = 0;
     double hx = 0, hy = 0, hz = 0, bx = 0, bz = 0;			
@@ -205,11 +206,11 @@ static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double 
     q3 = q3 + (q0*gz + q1*gy - q2*gx)*halfT;
 
     /* normalise quaternion */
-    norm = sqrt(q0*q0 + q1*q1 + q2*q2 + q3*q3);
-    q0 = q0 / norm;
-    q1 = q1 / norm;
-    q2 = q2 / norm;
-    q3 = q3 / norm;
+    norm = invSqrt(q0*q0 + q1*q1 + q2*q2 + q3*q3);
+    q0 = q0 * norm;
+    q1 = q1 * norm;
+    q2 = q2 * norm;
+    q3 = q3 * norm;
     
     /* output data */
     angle->imu_yaw = atan2(2 * q1 * q2 + 2 * q0 * q3, q0*q0+q1*q1-q2*q2-q3*q3)* 57.3; 

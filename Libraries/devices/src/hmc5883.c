@@ -58,7 +58,7 @@ int hmc5883_init(uint32_t instance)
                 
                 /* init sequence */
                 write_reg(HMC_CFG1, 0x78);
-                write_reg(HMC_CFG2, 0x00);
+                write_reg(HMC_CFG2, 0x80);
                 write_reg(HMC_MOD, 0x00);  
                 return 0;     
             }

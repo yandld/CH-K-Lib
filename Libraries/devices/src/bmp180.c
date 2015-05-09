@@ -140,6 +140,7 @@ int bmp180_init(uint32_t instance)
             if(id == 0x55)
             {
                 bmp_dev.addr = bmp_addr[i];
+                LIB_TRACE("BMP180 addr:0x%X\r\n", bmp_dev.addr);
                 dump_calibration_data();
                 return 0;     
             }

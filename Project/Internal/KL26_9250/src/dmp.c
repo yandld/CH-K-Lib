@@ -7,7 +7,7 @@
 #include "dmp.h"
 
 
-#define DEFAULT_MPU_HZ      (200)
+#define DEFAULT_MPU_HZ      (100)
 #define q30  1073741824.0f
 
 #ifndef NULL

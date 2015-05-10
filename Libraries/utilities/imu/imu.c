@@ -129,8 +129,9 @@ static inline float invSqrt(float x)
 
 
 //!< the mx my mz order are related to PCB layout!!
-static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double mx,double mz,double my, imu_float_euler_angle_t * angle)
+static void updateAHRS(double gx,double gy,double gz,double ax,double ay,double az,double my,double mx,double mz, imu_float_euler_angle_t * angle)
 {
+    mz = -mz;
     double norm = 0;
     double hx = 0, hy = 0, hz = 0, bx = 0, bz = 0;			
     double vx = 0, vy = 0, vz = 0, wx = 0, wy = 0, wz = 0;		
@@ -242,8 +243,6 @@ uint32_t imu_get_euler_angle(imu_float_euler_angle_t * angle, imu_raw_data_t * r
     raw_data->my = my;
     raw_data->mz = mz;
 
-    /* I need rawdata I give you filtered data */
-//    imu_sliding_filter(*raw_data, &filter_data);
     filter_data = *raw_data;
 
     /* I need filtered data I give you float data */

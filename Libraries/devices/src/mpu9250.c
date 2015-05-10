@@ -413,9 +413,6 @@ int mpu9250_read_gyro_raw(int16_t* x, int16_t* y, int16_t* z)
     *x = (int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
     *y = (int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
     *z = (int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
-    *x -= 130;
-    *y +=20;
-    *z-=30;
     return err;    
 }
 

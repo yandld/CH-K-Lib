@@ -5,13 +5,9 @@
 #include "spi_flash_w25qxx.h"
 #include "chlib_k.h"
 #include "sram.h"
-#include "drv_spi.h"
-#include "drv_uart.h"
+#include "rtt_drv.h"
 
-void rt_hw_ksz8041_init(void);
-void rt_hw_spi_init(void);
-void rt_hw_sd_init(void);
-void rt_hw_rtc_init(void);
+
 void rt_hw_dflash_init(void);
 void rt_hw_dram_init(void);
 void rt_hw_pin_init(void);

@@ -4,7 +4,7 @@
 #include <time.h>
 #include <rtdevice.h>
 #include <drivers/rtc.h>
-
+#include "rtt_drv.h"
 
 static struct rt_device rtc;
 

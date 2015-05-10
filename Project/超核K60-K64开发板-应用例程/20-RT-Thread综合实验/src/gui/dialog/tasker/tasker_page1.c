@@ -1,5 +1,5 @@
 #include "gui_appdef.h"
-#include "drv_ksz8041.h"
+#include "rtt_drv.h"
 #include "tasker.h"
 
 void cpu_usage_get(rt_uint8_t *major, rt_uint8_t *minor);

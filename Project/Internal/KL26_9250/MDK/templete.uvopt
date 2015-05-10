@@ -237,7 +237,7 @@
       <Focus>0</Focus>
       <ColumnNumber>35</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>73</TopLine>
+      <TopLine>5</TopLine>
       <CurrentLine>6</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\system_MKL26Z4.c</PathWithFileName>
@@ -253,7 +253,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>243</TopLine>
+      <TopLine>246</TopLine>
       <CurrentLine>247</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MKL26Z4.s</PathWithFileName>
@@ -275,10 +275,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>32</ColumnNumber>
+      <ColumnNumber>22</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>53</TopLine>
-      <CurrentLine>302</CurrentLine>
+      <TopLine>255</TopLine>
+      <CurrentLine>266</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -291,10 +291,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>4</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>392</TopLine>
+      <CurrentLine>393</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\mpu9250.c</PathWithFileName>
       <FilenameWithoutPath>mpu9250.c</FilenameWithoutPath>
@@ -325,7 +325,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>2484</TopLine>
+      <TopLine>2490</TopLine>
       <CurrentLine>2491</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\eMPL\inv_mpu.c</PathWithFileName>
@@ -357,7 +357,7 @@
       <Focus>0</Focus>
       <ColumnNumber>32</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
+      <TopLine>9</TopLine>
       <CurrentLine>10</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\dmp.c</PathWithFileName>
@@ -459,10 +459,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1972092</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\KL\src\i2c.c</PathWithFileName>
       <FilenameWithoutPath>i2c.c</FilenameWithoutPath>
@@ -531,10 +531,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>11</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>211</TopLine>
-      <CurrentLine>132</CurrentLine>
+      <TopLine>122</TopLine>
+      <CurrentLine>131</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\imu\imu.c</PathWithFileName>
       <FilenameWithoutPath>imu.c</FilenameWithoutPath>

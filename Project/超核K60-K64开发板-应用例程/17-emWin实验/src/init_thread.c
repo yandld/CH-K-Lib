@@ -3,13 +3,11 @@
 
 #include "board.h"
 #include "components.h"
-#include "drv_ksz8041.h"
 #include "spi_flash_w25qxx.h"
 #include "gpio.h"
 #include "spi.h"
 #include "sram.h"
-#include "drv_spi.h"
-
+#include "rtt_drv.h"
 void led_thread_entry(void* parameter);
 
 rt_err_t ads7843_init(const char * name, const char * spi_device_name);
@@ -24,7 +22,7 @@ void init_thread_entry(void* parameter)
     rt_thread_t tid;
    
     
-    rt_hw_spi_bus_init(HW_SPI2, "spi2");
+    rt_hw_spi_bus_init();
 
     PORT_PinMuxConfig(HW_GPIOD, 14, kPinAlt2); 
     PORT_PinMuxConfig(HW_GPIOD, 13, kPinAlt2); 

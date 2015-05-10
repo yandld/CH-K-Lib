@@ -6,7 +6,6 @@
 
 void gui_thread_entry(void* parameter)
 {
-    U32 i;
 
     GUI_Init();
     GUI_DispString("gui system actived!\r\n");

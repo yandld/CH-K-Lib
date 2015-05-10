@@ -29,11 +29,13 @@
 
 #include <rthw.h>
 #include <rtthread.h>
+#include <rtdevice.h>
+
 #include "uart.h"
 #include "gpio.h"
 #include "board.h"
-#include "drv_uart.h"
-#include <rtdevice.h>
+#include "rtt_drv.h"
+
 
 static struct rt_serial_device serial;
 

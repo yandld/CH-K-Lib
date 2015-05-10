@@ -19,7 +19,6 @@
 #include <stdlib.h>
 
 
-
 static imu_float_euler_angle_t imu_angle;
 static imu_raw_data_t raw_data;
 static struct calibration_data cal_data;
@@ -81,10 +80,15 @@ void MagnetometerCalibration(struct calibration_data * cal)
         cal->mxg = 1;
         cal->myg = 1;
         cal->mzg = 1;
+        cal->magic = 0x00;
+        return;
+    }
+    else
+    {
+        cal->magic = 0x5ACB;
     }
     printf("g X:%f Y:%f Z:%f\r\n", cal->mxg, cal->myg, cal->mzg);
     printf("o X:%d Y:%d Z:%d\r\n", cal->mxo, cal->myo, cal->mzo);
-    cal->magic = 0x5ACB;
 }
 
 
@@ -176,29 +180,33 @@ int mpu9250_read_mag_raw2(int16_t* x, int16_t* y, int16_t* z)
 {
     static int16_t mmx,mmy,mmz;
     
-    mmx = 0.9*mmx+0.1* mag[0];
-    mmy = 0.9*mmy+0.1* mag[1];
-    mmz = 0.9*mmz+0.1* mag[2];
+//    mmx = 0.9*mmx+0.1* mag[0];
+//    mmy = 0.9*mmy+0.1* mag[1];
+//    mmz = 0.9*mmz+0.1* mag[2];
+    mpu9250_read_mag_raw(&mmx, &mmy, &mmz);
     
-    *x = mmx; 
-    *y = mmy; 
-    *z = mmz; 
+    *x = cal_data.mxg  *(mmx - cal_data.mxo);
+    *y = cal_data.myg *(mmy - cal_data.myo);
+    *z = cal_data.mzg *(mmz - cal_data.mzo);
+    
     return 0;
 }
 
 int mpu9250_read_accel_raw2(int16_t* x, int16_t* y, int16_t* z)
 {
-    *x = accel[0]; 
-    *y = accel[1]; 
-    *z = accel[2]; 
+    mpu9250_read_accel_raw(x, y, z);
+    //*x = accel[0]; 
+   // *y = accel[1]; 
+   // *z = accel[2]; 
     return 0;
 }
 
 int mpu9250_read_gyro_raw2(int16_t* x, int16_t* y, int16_t* z)
 {
-    *x = gyro[0]; 
-    *y = gyro[1]; 
-    *z = gyro[2]; 
+    mpu9250_read_gyro_raw(x, y, z);
+    //*x = gyro[0]; 
+   // *y = gyro[1]; 
+   // *z = gyro[2]; 
     return 0; 
 }
 
@@ -238,7 +246,7 @@ int main(void)
 	uint32_t clock;
     uint32_t ret;
     static imu_float_euler_angle_t angle;
-//    struct mpu_config config;
+    struct mpu_config config;
     
 	DelayInit();   
     DelayMs(1);
@@ -255,12 +263,12 @@ int main(void)
     
     mpu9250_init(0);
     
-//    config.afs = AFS_2G;
-//    config.gfs = GFS_500DPS;
-//    config.mfs = MFS_14BITS;
-//    config.aenable_self_test = false;
-//    config.genable_self_test = false;
-//    mpu9250_config(&config);
+    config.afs = AFS_8G;
+    config.gfs = GFS_500DPS;
+    config.mfs = MFS_14BITS;
+    config.aenable_self_test = false;
+    config.genable_self_test = false;
+    mpu9250_config(&config);
 
     memcpy(&cal_data, (void*)FLASH_DATA_ADDR, sizeof(cal_data));
     if(cal_data.magic ==  0x5ACB)
@@ -277,7 +285,7 @@ int main(void)
     }
 
     //mpu9250_test();
-    dmp_init();
+    //dmp_init();
 
     PIT_QuickInit(HW_PIT_CH1, 1000*1000);
     
@@ -305,18 +313,18 @@ int main(void)
 
         imu_get_euler_angle(&imu_angle, &raw_data);
 
-        mpu_get_compass_reg(mag, NULL);
-        dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors, &more);	
-        if (sensors & INV_WXYZ_QUAT )
+//        mpu_get_compass_reg(mag, NULL);
+//        dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors, &more);	
+//        if (sensors & INV_WXYZ_QUAT )
         {
-            quat2angle(quat, dmp_angle);
+       //     quat2angle(quat, dmp_angle);
             angle.imu_roll = dmp_angle[0];
             angle.imu_pitch = dmp_angle[1];
             angle.imu_yaw = dmp_angle[2];
             
-//            angle.imu_pitch = imu_angle.imu_pitch;
-//            angle.imu_roll = imu_angle.imu_roll;
-//            angle.imu_yaw = imu_angle.imu_yaw;
+            angle.imu_pitch = imu_angle.imu_pitch;
+            angle.imu_roll = imu_angle.imu_roll;
+            angle.imu_yaw = imu_angle.imu_yaw;
         }
         
         halfT = ((float)time)/1000/2000;        
@@ -324,7 +332,5 @@ int main(void)
         GPIO_ToggleBit(HW_GPIOC, 3);
     }
 }
-
-
 
 

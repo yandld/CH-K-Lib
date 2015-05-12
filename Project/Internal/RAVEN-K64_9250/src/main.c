@@ -4,20 +4,11 @@
 #include "i2c.h"
 #include "mpu9250.h"
 
+#include <math.h>
 
-static void I2C_Scan(uint32_t instance)
-{
-    uint8_t i;
-    uint8_t ret;
-    for(i = 1; i < 127; i++)
-    {
-        ret = I2C_BurstWrite(instance , i, 0, 0, NULL, 0);
-        if(!ret)
-        {
-            printf("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
-        }
-    }
-}
+#include "mltypes.h"
+
+
 
 void mpu9250_test(void)
 {
@@ -43,42 +34,56 @@ void mpu9250_test(void)
         err += mpu9250_read_gyro_raw(&gx, &gy, &gz);
         err += mpu9250_read_mag_raw(&mx, &my, &mz);
     
-        mmx = 0.9*mmx + 0.1*mx;
-        mmy = 0.9*mmy + 0.1*my;
-        mmz = 0.9*mmz + 0.1*mz;
+        mmx = 9*mmx + 1*mx;
+        mmy = 9*mmy + 1*my;
+        mmz = 9*mmz + 1*mz;
+        mmx /= 10;
+        mmy /= 10;
+        mmz /= 10;
         
-        float angle;
-         angle = atan2(mmy, mmx)*57.3;
         if(err)
         {
             printf("!err:%d\r\n", err);
             while(1);
         }
 
-        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d %f   \r", ax ,ay, az, gx, gy, gz, mx, my, mz, angle);  
+        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d %f   \r", ax ,ay, az, gx, gy, gz, mx, my, mz, 0);  
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(5);
     }
 }
 
+
+int _MLPrintLog (int priority, const char* tag, const char* fmt, ...)
+{
+    printf("_MLPrintLog\r\n");
+}
+
 int main(void)
 {
-    uint32_t instance;
+    inv_error_t result;
+
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     
     
     printf("i2c bus test\r\n");
     /* init i2c */
-    instance = I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
+    I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
     
-    mpu9250_test();
+  //  mpu9250_test();
     
   //  I2C_Scan(instance);
     
-    
+  result = inv_init_mpl();
+  if (result) {
+      printf("Could not initialize MPL.\n");
+  }
+  
+   // inv_enable_quaternion();
+    //inv_enable_9x_sensor_fusion();
+  
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

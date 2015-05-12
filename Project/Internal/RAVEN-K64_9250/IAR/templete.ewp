@@ -959,6 +959,9 @@
   </configuration>
   <group>
     <name>core</name>
+    <excluded>
+      <configuration>mk64f12</configuration>
+    </excluded>
     <group>
       <name>drivers</name>
     </group>
@@ -1171,6 +1174,9 @@
     <name>user</name>
     <file>
       <name>$PROJ_DIR$\..\src\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\parse_cmd.c</name>
     </file>
   </group>
 </project>

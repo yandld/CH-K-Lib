@@ -45,7 +45,7 @@ void mpu9250_test(void)
             while(1);
         }
 
-        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d %f   \r", ax ,ay, az, gx, gy, gz, mx, my, mz, 0);  
+        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d %f   \r", ax ,ay, az, gx, gy, gz, mx, my, mz, 0.00);  
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(5);
     }
@@ -55,20 +55,30 @@ void mpu9250_test(void)
 int _MLPrintLog (int priority, const char* tag, const char* fmt, ...)
 {
     printf("_MLPrintLog\r\n");
+    return 0;
 }
 
 unsigned char *mpl_key = (unsigned char*)"eMPL 5.1";
 
+static void UART_ISR(uint16_t byteReceived)
+{
+    /* hander imu receive */
+    printf("0x%X ", byteReceived);
+   // cmd_parse_handler(byteReceived);
+  //  imu_rev_process((char)byteReceived, IMU_REV_Interrupt);
+}
+
 int main(void)
 {
-    inv_error_t result;
+   // inv_error_t result;
 
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
+    UART_CallbackRxInstall(HW_UART0, UART_ISR);
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     
-    
-    printf("i2c bus test\r\n");
+    printf("MPU9250 test\r\n");
     /* init i2c */
     I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
     
@@ -76,19 +86,19 @@ int main(void)
     
   //  I2C_Scan(instance);
     
-  result = inv_init_mpl();
-  if (result) {
-      printf("Could not initialize MPL.\n");
-  }
-  
-    inv_enable_quaternion();
-    inv_enable_9x_sensor_fusion();
-    inv_enable_fast_nomot();
+//  result = inv_init_mpl();
+//  if (result) {
+//      printf("Could not initialize MPL.\n");
+//  }
+//  
+//    inv_enable_quaternion();
+//    inv_enable_9x_sensor_fusion();
+//    inv_enable_fast_nomot();
     /* inv_enable_motion_no_motion(); */
     /* inv_set_no_motion_time(1000); */
 
     /* Update gyro biases when temperature changes. */
-    inv_enable_gyro_tc();
+//    inv_enable_gyro_tc();
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

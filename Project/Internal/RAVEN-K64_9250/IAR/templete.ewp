@@ -172,6 +172,7 @@
           <state>DEBUG</state>
           <state>MPU9250</state>
           <state>EMPL_TARGET_STM32F4</state>
+          <state>MOTION_DRIVER_TARGET_MSP430 </state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -309,6 +310,7 @@
           <state>$PROJ_DIR$\..\src\core\mllite</state>
           <state>$PROJ_DIR$\..\src\core\eMPL-hal</state>
           <state>$PROJ_DIR$\..\src\core\driver\include</state>
+          <state>$PROJ_DIR$\..\src\core\driver\eMPL</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -959,6 +961,27 @@
     <name>core</name>
     <group>
       <name>drivers</name>
+    </group>
+    <group>
+      <name>eMPL</name>
+      <file>
+        <name>$PROJ_DIR$\..\src\core\driver\eMPL\dmpKey.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\core\driver\eMPL\dmpmap.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\core\driver\eMPL\inv_mpu.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\core\driver\eMPL\inv_mpu.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\core\driver\eMPL\inv_mpu_dmp_motion_driver.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\src\core\driver\eMPL\inv_mpu_dmp_motion_driver.h</name>
+      </file>
     </group>
     <group>
       <name>mlite</name>

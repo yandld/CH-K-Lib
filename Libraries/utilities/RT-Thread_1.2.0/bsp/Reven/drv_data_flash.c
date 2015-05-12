@@ -10,7 +10,7 @@
 
 extern int Image$$ER_IROM1$$RO$$Limit;
 
-
+static  rt_mutex_t mutex;
 
 static struct rt_device dflash_device;
 static uint32_t SectorSize;
@@ -25,6 +25,8 @@ static rt_err_t rt_dflash_init (rt_device_t dev)
     StartAddr = RT_ALIGN(((uint32_t)&Image$$ER_IROM1$$RO$$Limit + SectorSize), SectorSize);
     DiskSize = FLASH_SIZE - StartAddr;
     rt_kprintf("dflash sector size:%d 0ffset:0x%X\r\n", SectorSize, StartAddr);
+    
+    mutex = rt_mutex_create("_mu", RT_IPC_FLAG_FIFO);
     
     return RT_EOK;
 }
@@ -51,9 +53,13 @@ static rt_size_t rt_dflash_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_
     uint8_t *p;
     uint8_t i;
 
+    rt_mutex_take(mutex, RT_WAITING_FOREVER);
+
     p = (uint8_t*)(StartAddr + pos * SectorSize);
     rt_memcpy(buffer, p, size * SectorSize);
 
+    rt_mutex_release(mutex);
+    
 	return size;
 }
 
@@ -62,6 +68,8 @@ static rt_size_t rt_dflash_write (rt_device_t dev, rt_off_t pos, const void* buf
     int i;
     uint8_t *p;
     
+    rt_mutex_take(mutex, RT_WAITING_FOREVER);
+
     p = (uint8_t*)(StartAddr + pos * SectorSize);
     for(i=0;i<size;i++)
     {
@@ -71,7 +79,9 @@ static rt_size_t rt_dflash_write (rt_device_t dev, rt_off_t pos, const void* buf
         __enable_irq();
         p += SectorSize;
     }
-        
+       
+    rt_mutex_release(mutex);
+    
     return size;
 }
 

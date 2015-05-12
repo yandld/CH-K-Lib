@@ -8,8 +8,6 @@
 
 #include "mltypes.h"
 
-
-
 void mpu9250_test(void)
 {
     mpu9250_init(0);
@@ -59,6 +57,8 @@ int _MLPrintLog (int priority, const char* tag, const char* fmt, ...)
     printf("_MLPrintLog\r\n");
 }
 
+unsigned char *mpl_key = (unsigned char*)"eMPL 5.1";
+
 int main(void)
 {
     inv_error_t result;
@@ -81,9 +81,14 @@ int main(void)
       printf("Could not initialize MPL.\n");
   }
   
-   // inv_enable_quaternion();
-    //inv_enable_9x_sensor_fusion();
-  
+    inv_enable_quaternion();
+    inv_enable_9x_sensor_fusion();
+    inv_enable_fast_nomot();
+    /* inv_enable_motion_no_motion(); */
+    /* inv_set_no_motion_time(1000); */
+
+    /* Update gyro biases when temperature changes. */
+    inv_enable_gyro_tc();
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

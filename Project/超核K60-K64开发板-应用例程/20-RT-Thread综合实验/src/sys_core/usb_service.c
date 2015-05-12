@@ -58,10 +58,10 @@ static int udisk(int argc, char** argv)
     }
     
     dev = rt_device_find((char*)argv[1]);
-    
-    if(!dev)
+
+    if((!dev) || (dev->type != RT_Device_Class_Block))
     {
-        rt_kprintf("no %s device found!\r\n", (char*)argv[1]);
+        rt_kprintf("bad device:%s\r\n", (char*)argv[1]);
         return 1;
     }
     
@@ -84,6 +84,7 @@ static int udisk(int argc, char** argv)
     USBD_MSC_BlockCount = geometry.sector_count;
     USBD_MSC_BlockBuf   = rt_malloc(geometry.block_size);
     USBD_MSC_MediaReady = __TRUE;
+    
     
     if(usbd_configured())
     {

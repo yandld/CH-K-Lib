@@ -46,23 +46,6 @@ int kill(int argc, char ** argv)
 MSH_CMD_EXPORT(kill, kill a thread);
 
 
-int mountnfs(const char * host)
-{
-    int r;
-    if(!(netif_list->flags & NETIF_FLAG_UP)) 
-    {
-        rt_kprintf("no network\r\n");
-        return -1;
-    }
-
-    r = dfs_mount("e0", "/NFS", "nfs", 0, host);
-    (!r)?(rt_kprintf("mount OK\r\n")):(rt_kprintf("mount failed\r\n"));
-    return 0;
-}
-
-FINSH_FUNCTION_EXPORT(mountnfs, eg:mountnfs("192.168.1.101:/"))
-
-
 static int mount(int argc, char** argv)
 {
     int ret;
@@ -85,7 +68,7 @@ static int mount(int argc, char** argv)
     return ret;
 }
 
-MSH_CMD_EXPORT(mount, mount elm sd0 /dev/sd);
+MSH_CMD_EXPORT(mount, mount nfs e0 /nfs 192.168.1.100:/);
 
 static int cpufreq(int argc, char** argv)
 {
@@ -102,6 +85,8 @@ static int cpufreq(int argc, char** argv)
 MSH_CMD_EXPORT(cpufreq, cpufreq);
 
 #endif
+
+
 
 
 //    rt_kprintf("NETWORK\r\n");

@@ -466,8 +466,7 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout)
     tick = rt_tick_get();
 
     if(timeout == 0)
-        //t = RT_WAITING_FOREVER;
-        t = 500;
+        t = RT_WAITING_FOREVER;
     else
     {
         /* convirt msecond to os tick */

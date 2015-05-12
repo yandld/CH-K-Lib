@@ -3,10 +3,8 @@
 #include "components.h"
 #include "chlib_k.h"
 #include "sram.h"
-#include "drv_uart.h"
+#include "rtt_drv.h"
 
-
-void rt_hw_ksz8041_init(void);
 void rt_hw_dflash_init(void);
 
 void init_thread_entry(void* parameter)

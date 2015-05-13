@@ -667,8 +667,8 @@ static uint8_t SWJ_WaitUntilHalted(void)
             return 0;
         }
     }
+    return DAP_TRANSFER_ERROR;
     printf("SWJ_WaitUntilHalted reach max\r\n");
-    return 1;
 }
 
 uint8_t SWJ_SetTargetState(TARGET_RESET_STATE state)
@@ -688,9 +688,9 @@ uint8_t SWJ_SetTargetState(TARGET_RESET_STATE state)
            // Use hardware reset (HW RESET)
             // First reset
             TRST_LOW();
-            DelayMs(2);
+            DelayMs(20);
             TRST_HIGH();
-            DelayMs(2);
+            DelayMs(20);
 
             SWJ_InitDebug();
         
@@ -702,7 +702,7 @@ uint8_t SWJ_SetTargetState(TARGET_RESET_STATE state)
         
             // Reset again
             TRST_LOW();
-            DelayMs(2);
+            DelayMs(20);
             TRST_HIGH();
         
             break;

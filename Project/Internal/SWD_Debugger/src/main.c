@@ -12,8 +12,8 @@
 #include "target_image.h"
 
 
-uint8_t buf[4*1024];
-
+uint8_t buf[1024];
+uint8_t buf2[1024];
 
 static int ShowID(void)
 {
@@ -25,7 +25,7 @@ static int ShowID(void)
     printf("AHB_AP_IDR:0x%X\r\n", id);
 
     printf("MEMID:0x%X\r\n", TFlashGetMemID());
-    printf("SDID:0x%X\r\n", TFlashGetSDID());
+  //  printf("SDID:0x%X\r\n", TFlashGetSDID());
     
     return 0;
 }
@@ -87,8 +87,26 @@ int main(void)
     err = TFlash_Init(&flash);
     printf("TFlash_Init %d\r\n", err);
 
-    err = target_flash_program_page(&flash, 0x00000200, (uint8_t*)flash.image, 512);
-    printf("target_flash_program_page %d\r\n", err);
+    uint8_t *p;
+    
+    p = 0x00000000;
+    
+    for(i=0;i<10;i++)
+    {
+        err = target_flash_program_page(&flash, 0x00000000+(uint32_t)p, FileArray, sizeof(buf));
+        printf("target_flash_program_page %d\r\n", err);
+        p+=sizeof(buf);
+    }
+
+    
+    memset(buf2, 0, sizeof(buf2));
+    SWJ_ReadMem(0x00000000, buf2, sizeof(buf2));
+
+    
+    for(i=0;i<sizeof(buf);i++)
+    {
+        printf("0x%X 0x%X \r\n", buf[i], buf2[i]);
+    }
     
     while(1)
     {

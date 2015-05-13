@@ -73,7 +73,7 @@ const TARGET_FLASH flash = {
         0x20000800  // initial stack pointer
     },
 
-    0x20000a00, // program_buffer, any valid RAM location with +512 bytes of headroom
+    0x20000A00, // program_buffer, any valid RAM location with +512 bytes of headroom
     0x20000000, // algo_start, start of RAM
     sizeof(KL46Z_FLM), // algo_size, size of array above
     KL46Z_FLM,  // image, flash algo instruction array

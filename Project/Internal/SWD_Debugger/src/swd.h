@@ -11,6 +11,7 @@
 #define DAP_TRANSFER_FAULT              (1<<2)
 #define DAP_TRANSFER_ERROR              (1<<3)
 #define DAP_TRANSFER_MISMATCH           (1<<4)
+#define DAP_TRANSFER_TIMEOUT            (1<<5)
 
 // Debug Port Register Addresses
 #define DP_IDCODE                       0x00    // IDCODE Register (SW Read only)
@@ -86,7 +87,6 @@ uint8_t swd_read_memory(uint32_t address, uint8_t *data, uint32_t size);
 uint8_t swd_write_memory(uint32_t address, uint8_t *data, uint32_t size);
 uint8_t SWJ_ReadMem(uint32_t addr, uint8_t *buf, uint32_t len);
 uint8_t SWJ_WriteMem(uint32_t addr, uint8_t *buf, uint32_t len);
-
 uint8_t SWJ_SetTargetState(TARGET_RESET_STATE state);
 uint8_t swd_flash_syscall_exec(const FLASH_SYSCALL *sysCallParam, uint32_t entry, uint32_t arg1, uint32_t arg2, uint32_t arg3, uint32_t arg4);
 

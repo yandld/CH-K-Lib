@@ -35,7 +35,7 @@ extern const TARGET_FLASH flash;
     
 int main(void)
 {   
-    uint32_t i, err;
+    uint32_t i, err,val;
     
     DelayInit();
     GPIO_QuickInit(HW_GPIOC, 10, kGPIO_Mode_OPP);
@@ -49,64 +49,63 @@ int main(void)
     printf("program for Manley\r\n");
 
     swd_io_init();
-
+    
     SWJ_InitDebug();
-    
-    SWJ_SetTargetState(RESET_HOLD);
-    
+    printf("ShowID\r\n");
     ShowID();
+    
     for(i=0;i<sizeof(buf);i++)
     {
         buf[i] = i & 0xFF;
     }
-    
-    SWJ_WriteMem(0x20000000, buf, sizeof(buf));
-    memset(buf, 0, sizeof(buf));
-    SWJ_ReadMem(0x20000000, buf, sizeof(buf));
 
-    for(i=0;i<sizeof(buf);i++)
+    ShowID();
+    
+
+    for(i=0;i<30;i++)
     {
-        if(buf[i] != (i & 0xFF))
-        {
-            printf("error buf[%d]:%d should be:%d\r\n", i, buf[i], i);
-        }
+        TFlash_UnlockSequence();
     }
     
-    printf("mem teset complete\r\n");
+    DelayMs(500);
     
-    
+    SWJ_WriteAP(0x01000004, 0x00);
+
+    SWJ_SetTargetState(RESET_RUN);
     SWJ_SetTargetState(RESET_PROGRAM);
     
-    err =  TFlash_UnlockSequence();
-    printf("TFlash_UnlockSequence %d\r\n", err);
+    SWJ_ReadAP(0x01000000, &val);
+    
+    while(val & (1<<2))
+    {
+        printf("system in sec!\r\n");
+        while(1);
+    }
     
     
-    
-    SWJ_SetTargetState(RESET_PROGRAM);
     
     err = TFlash_Init(&flash);
     printf("TFlash_Init %d\r\n", err);
 
-    uint8_t *p;
+    uint32_t offset;
+    offset = 0;
     
-    p = 0x00000000;
-    
-    for(i=0;i<10;i++)
+    for(i=0;i<7;i++)
     {
-        err = target_flash_program_page(&flash, 0x00000000+(uint32_t)p, FileArray, sizeof(buf));
-        printf("target_flash_program_page %d\r\n", err);
-        p+=sizeof(buf);
+        printf("0x%X\r\n", offset);
+        err = target_flash_program_page(&flash, 0x00000000+offset, FileArray, sizeof(buf));
+        offset += sizeof(buf);
+        if(err)
+        {
+            printf("target_flash_program_page %d\r\n", err);
+        }
     }
 
-    
-    memset(buf2, 0, sizeof(buf2));
-    SWJ_ReadMem(0x00000000, buf2, sizeof(buf2));
-
-    
-    for(i=0;i<sizeof(buf);i++)
-    {
-        printf("0x%X 0x%X \r\n", buf[i], buf2[i]);
-    }
+    /* release core */
+    SWJ_WriteAP(0x01000004, 0x00);
+    val = 0;
+    SWJ_WriteMem(DBG_EMCR, (uint8_t*)&val, sizeof(val));
+    SWJ_SetTargetState(RESET_RUN);
     
     while(1)
     {

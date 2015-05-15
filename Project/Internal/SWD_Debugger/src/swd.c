@@ -160,108 +160,6 @@ uint8_t SWD_Transfer (uint32_t request, uint32_t *data)
 
 
 
-//uint8_t target_unlock_sequence(void) {
-//    uint32_t val;
-
-//    // read the device ID
-//    if (!swd_read_ap(MDM_IDR, &val)) {
-//        return 0;
-//    }
-//    // verify the result
-//    if (val != MCU_ID) {
-//        return 0;
-//    }
-
-//    if (!swd_read_ap(MDM_STATUS, &val)) {
-//        return 0;
-//    }
-
-//    // flash in secured mode
-//    if (val & (1 << 2)) {
-//        // hold the device in reset
-//    //    target_set_state(RESET_HOLD);
-//        // write the mass-erase enable bit
-//        if (!swd_write_ap(MDM_CTRL, 1)) {
-//            return 0;
-//        }
-//        while (1) {
-//            // wait until mass erase is started
-//            if (!swd_read_ap(MDM_STATUS, &val)) {
-//                return 0;
-//            }
-
-//            if (val & 1) {
-//                break;
-//            }
-//        }
-//        // mass erase in progress
-//        while (1) {            
-//            // keep reading until procedure is complete
-//            if (!swd_read_ap(MDM_CTRL, &val)) {
-//                return 0;
-//            }
-
-//            if (val == 0) {
-//                break;
-//            }
-//        }
-//    }
-
-//    return 1;
-//}
-
-// uint8_t swd_init_debug(void) {
-//    uint32_t tmp = 0;
-
-//    // call a target dependant function
-//    // this function can do several stuff before really
-//    // initing the debug
-//   // target_before_init_debug();
-
-//    if (!JTAG2SWD()) {
-//        return 0;
-//    }
-
-//    if (!swd_write_dp(DP_ABORT, STKCMPCLR | STKERRCLR | WDERRCLR | ORUNERRCLR)) {
-//        return 0;
-//    }
-
-//    // Ensure CTRL/STAT register selected in DPBANKSEL
-//    if (!swd_write_dp(DP_SELECT, 0)) {
-//        return 0;
-//    }
-
-//    // Power up
-//    if (!swd_write_dp(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ)) {
-//        return 0;
-//    }
-
-//    do {
-//        if (!swd_read_dp(DP_CTRL_STAT, &tmp)) {
-//            return 0;
-//        }
-//    } while ((tmp & (CDBGPWRUPACK | CSYSPWRUPACK)) != (CDBGPWRUPACK | CSYSPWRUPACK));
-
-//    if (!swd_write_dp(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ | TRNNORMAL | MASKLANE)) {
-//        return 0;
-//    }
-
-//    // call a target dependant function:
-//    // some target can enter in a lock state
-//    // this function can unlock these targets
-//    target_unlock_sequence();
-
-//    if (!swd_write_dp(DP_SELECT, 0)) {
-//        return 0;
-//    }
-
-//    return 1;
-//}
-// 
-
-
-
-
 /********************************************************************************************/
 
 #define PULSE()             \
@@ -293,7 +191,7 @@ static void SWJ_SendData(uint16_t data)
     }
 }
 
-static uint8_t SWJ_JTAG2SWD(void)
+uint8_t SWJ_JTAG2SWD(void)
 {
     SWJ_SendClock(51, 1);
     SWJ_SendData(0xE79E);
@@ -308,8 +206,6 @@ uint8_t SWJ_ReadDP(uint8_t adr, uint32_t *val)
     uint8_t ack;
     uint8_t err;
 
-    //SWJ_SendClock(8, 0);
-    
     tmp_in = SWD_REG_DP | SWD_REG_R | SWD_REG_ADR(adr);
     ack = SWD_Transfer(tmp_in, val);
 
@@ -415,7 +311,7 @@ static uint8_t SWJ_WriteMem8(uint32_t addr, uint8_t val)
     return err;
 }
 
-static uint8_t SWJ_WriteMem32(uint32_t addr, uint32_t val)
+uint8_t SWJ_WriteMem32(uint32_t addr, uint32_t val)
 {
     uint8_t err;
     
@@ -680,9 +576,9 @@ uint8_t SWJ_SetTargetState(TARGET_RESET_STATE state)
             break;
         case RESET_RUN:
             TRST_LOW();
-            DelayMs(2);
+            DelayMs(20);
             TRST_HIGH();
-            DelayMs(2);
+            DelayMs(20);
             break;
         case RESET_PROGRAM:
            // Use hardware reset (HW RESET)
@@ -847,11 +743,8 @@ uint8_t SWJ_InitDebug(void)
     uint32_t val;
     
     SWJ_JTAG2SWD();
-    
     if(SWJ_ReadDP(DP_IDCODE, &val))
-    {
         return 1;
-    }
     
     SWJ_WriteDP(DP_ABORT, STKCMPCLR | STKERRCLR | WDERRCLR | ORUNERRCLR);
 
@@ -870,6 +763,7 @@ uint8_t SWJ_InitDebug(void)
     } while ((tmp & (CDBGPWRUPACK | CSYSPWRUPACK)) != (CDBGPWRUPACK | CSYSPWRUPACK));
 
     SWJ_WriteDP(DP_CTRL_STAT, CSYSPWRUPREQ | CDBGPWRUPREQ | TRNNORMAL | MASKLANE);
+
     return 0;
 }
 

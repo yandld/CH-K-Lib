@@ -10,8 +10,6 @@
 
 #define FLASH_SECTOR_SIZE                  (1024)
 
-#define TARGET_AUTO_INCREMENT_PAGE_SIZE    (0x400)
-
 uint32_t TFlashGetMemID(void)
 {
     uint32_t id;
@@ -26,60 +24,61 @@ uint32_t TFlashGetSDID(void)
     return id;
 }
 
+int ResetTarget(void)
+{
+    SWJ_WriteAP(MDM_CTRL, 0x08);
+    DelayMs(10);
+    SWJ_SetTargetState(RESET_RUN);
+    DelayMs(10);
+}
+
 uint8_t TFlash_UnlockSequence(void)
 {
-    uint32_t val;
-
-    /* read the device ID */
-    if(SWJ_ReadAP(MDM_IDR, &val))
-    {
-        printf("readID failed:0x%08X\r\n", val);
-        return 1;
-    }
-
+    uint32_t val, i;
+    
     /* verify the result */
+    SWJ_ReadAP(MDM_IDR, &val);
     if ((val != KINETIS_KK_MCU_ID) && (val != KINETIS_KL_MCU_ID))
     {
         printf("MCU_ID does not match!0x%X\r\n", val);
         return 1;
     }
 
-    if(SWJ_ReadAP(MDM_STATUS, &val))
-    {
-        printf("read mem_status error\r\n");
-        return 3;
-    }
-
-    printf("MEMSTATUS:0x%X\r\n", val);
+    SWJ_ReadAP(MDM_STATUS, &val);
     
     /* flash in secured mode */
-   // if (val & (1 << 2))
+    if (val & (1 << 2))
     {
         printf("system is secured mode\r\n");
-        
+
         /* hold the device in reset */
-        //SWJ_SetTargetState(RESET_PROGRAM);
         SWJ_SetTargetState(RESET_HOLD);
+        
+//        SWJ_WriteAP(MDM_CTRL, 0x08);
+//        DelayMs(20);
+//        SWJ_SetTargetState(RESET_RUN);
+ //       SWJ_InitDebug();
+//        SWJ_SetTargetState(RESET_HOLD);
+        
         /* write the mass-erase enable bit */
         if(SWJ_WriteAP(MDM_CTRL, 1))
         {
-            printf("write enable failed\r\n");
+            printf("write mass erase enable failed\r\n");
             return 1;
         }
+        SWJ_ReadAP(MDM_CTRL, &val);
+        printf("MDM_CTRL:0x%X\r\n", MDM_CTRL);
         
         while (1)
         {
-            //SWJ_WriteAP(MDM_CTRL, 1);
             /* wait until mass erase is started */
             if(SWJ_ReadAP(MDM_STATUS, &val))
             {
                 printf("read satatus failed\r\n");
                 return 2;
             }
-            
             if (val & 1) break;
         }
-        
         /* mass erase in progress */
         while (1)
         {            

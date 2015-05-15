@@ -17,9 +17,9 @@
 #if (!defined(CAN_BASES))
 
 #ifdef CAN0
-    CAN_BASES {CAN0}
+#define CAN_BASES   {CAN0}
 #elif  CAN1
-    CAN_BASES {CAN0, CAN1}
+#define CAN_BASES   {CAN0, CAN1}
 #endif
 
 #endif

@@ -16,6 +16,8 @@
 
 #ifdef MK10D5
 #include "MK10D5.h"
+#elif MK10D7
+#include "MK10D7.h"
 #elif MK20D5
 #include "MK20D5.h"
 #elif MK10D10

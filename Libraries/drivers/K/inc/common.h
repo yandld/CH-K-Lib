@@ -10,6 +10,10 @@
 #ifndef __CH_LIB_COMMON_H__
 #define __CH_LIB_COMMON_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -166,5 +170,8 @@ uint32_t QuickInitEncode(QuickInit_Type * type);
 void QuickInitDecode(uint32_t map, QuickInit_Type* type);
 void EnterSTOPMode(bool enSleepOnExit);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -78,5 +78,8 @@ void CAN_SetReceiveMB(uint32_t instance, uint32_t mb, uint32_t id);
 void CAN_CallbackInstall(uint32_t instance, CAN_CallBackType AppCBFun);
 void CAN_Init(CAN_InitTypeDef* CAN_InitStruct);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

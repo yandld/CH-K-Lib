@@ -42,7 +42,7 @@ static void _print_cal_data(struct calibration_data * cal)
     printf("mag gain:%f %f %f \r\n",    cal->mg[0], cal->mg[1], cal->mg[2]);
 }
 
-void MagnetometerCalibration(struct calibration_data * cal)
+void calibrate_magnetometer(struct calibration_data * cal)
 {
     uint32_t i;
     int r;
@@ -96,8 +96,6 @@ void MagnetometerCalibration(struct calibration_data * cal)
         cal->magic = 0x5ACB;
     }
 }
-
-
 
 static void send_data_process(imu_float_euler_angle_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata)
 {
@@ -192,7 +190,8 @@ static void ShowInfo(void)
 int main(void)
 {
     int i, led_flag;
-
+    int16_t adata[3], gdata[3], mdata[3];
+    static float fadata[3], fgdata[3], fmdata[3];
     static int bmpStatus = BMP_STATUS_T_START;
     uint32_t ret;
     uint32_t uart_instance;
@@ -207,21 +206,14 @@ int main(void)
    // GPIO_QuickInit(HW_GPIOE, 1, kGPIO_Mode_OPP);
     
     init_sensor();
-
     veep_read((uint8_t*)&cal_data, sizeof(cal_data));
-
-    if(cal_data.magic ==  0x5ACB)
-    {
-        printf("read cal data from flash succ\r\n");
-        _print_cal_data(&cal_data);
-    }
-    else
+    if(cal_data.magic !=  0x5ACB)
     {
         printf("read cal data from flash err!\r\n");
-        MagnetometerCalibration(&cal_data);
+        calibrate_magnetometer(&cal_data);
         veep_write((uint8_t*)&cal_data, sizeof(cal_data));
     }
-    
+    _print_cal_data(&cal_data);
     
     PIT_QuickInit(HW_PIT_CH2, 1000*1000);
     
@@ -233,8 +225,7 @@ int main(void)
  
     uart_dma_init(HW_DMA_CH1, uart_instance);
     
-    int16_t adata[3], gdata[3], mdata[3];
-    static float fadata[3], fgdata[3], fmdata[3];
+
     while(1)
     {
         mpu9250_read_accel_raw(adata);

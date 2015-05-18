@@ -361,7 +361,7 @@
               <MiscControls></MiscControls>
               <Define>MK64F12 CLOCK_SETUP=0</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\imu;..\src\Math</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\imu;..\..\..\..\Libraries\drivers\K\src\usb\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -522,7 +522,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Math</GroupName>
+          <GroupName>USBStack</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -585,49 +585,19 @@
           </GroupOption>
           <Files>
             <File>
-              <FileName>ANO_Filter.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\src\Math\ANO_Filter.cpp</FilePath>
+              <FileName>usbd_cdc_acm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_cdc_acm.c</FilePath>
             </File>
             <File>
-              <FileName>ANO_Filter.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\Math\ANO_Filter.h</FilePath>
+              <FileName>usbd_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core.c</FilePath>
             </File>
             <File>
-              <FileName>ANO_Math.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\src\Math\ANO_Math.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ANO_Math.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\Math\ANO_Math.h</FilePath>
-            </File>
-            <File>
-              <FileName>ANO_Quaternion.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\src\Math\ANO_Quaternion.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ANO_Quaternion.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\Math\ANO_Quaternion.h</FilePath>
-            </File>
-            <File>
-              <FileName>ANO_Rotations.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\Math\ANO_Rotations.h</FilePath>
-            </File>
-            <File>
-              <FileName>ANO_Vector3.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\src\Math\ANO_Vector3.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ANO_Vector3.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\Math\ANO_Vector3.h</FilePath>
+              <FileName>usbd_core_cdc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_cdc.c</FilePath>
             </File>
           </Files>
         </Group>

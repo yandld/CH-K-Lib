@@ -5,8 +5,7 @@
 
 
 
-int trans_init(uint8_t dmaChl, uint32_t uartInstance);
-int trans_start_send_data(uint8_t* buf, uint32_t size);
-int trans_is_transmission_complete(void);
+int uart_dma_init(uint8_t dmaChl, uint32_t uartInstance);
+int uart_dma_send(uint8_t* buf, uint32_t size);
 
 #endif

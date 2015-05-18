@@ -209,6 +209,7 @@ int mpu9250_config(struct mpu_config *config)
     val &= ~MPU9250_ACCEL_CONFIG_FS_MASK;
     val |= MPU9250_ACCEL_CONFIG_FS(config->afs);
     write_reg(MPU9250_ACCEL_CONFIG, val);
+    write_reg(MPU9250_ACCEL_CONFIG2, 0x02); // Set accelerometer rate to 1 kHz and bandwidth to 92 Hz
     switch(config->afs)
     {
         case AFS_2G:
@@ -228,7 +229,7 @@ int mpu9250_config(struct mpu_config *config)
     /* gyro */
     val = read_reg(MPU9250_GYRO_CONFIG);
     val &= ~MPU9250_GYRO_CONFIG_FS_MASK;
-    val |= MPU9250_GYRO_CONFIG_FS(config->gfs);
+    val |= MPU9250_GYRO_CONFIG_FS(config->gfs) | 0x03;
     write_reg(MPU9250_GYRO_CONFIG, val);
     switch(config->gfs)
     {
@@ -260,6 +261,11 @@ int mpu9250_config(struct mpu_config *config)
             mpu_dev.mRes = 10.0*4219.0/32760.0; // Proper scale to return milliGauss
             break;
     }
+    
+    /* Set gyro sample rate to 1 kHz and DLPF to 92 Hz */
+    write_reg(MPU9250_CONFIG, 0x02);
+    
+    
     MPU9250_TRACE("aRes:%f  gRes:%f  mRes:%f  \r\n", mpu_dev.aRes, mpu_dev.gRes, mpu_dev.mRes);
     return 0;
 }
@@ -390,35 +396,58 @@ float mpu9250_get_mres(void)
 }
 
 
-int mpu9250_read_accel_raw(int16_t* x, int16_t* y, int16_t* z)
+int mpu9250_read_accel_raw(int16_t *adata)
 {
     uint8_t err;
     uint8_t buf[6];
     
     err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, MPU9250_ACCEL_XOUT_H, 1, buf, 6);
     
-    *x = (int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
-    *y = (int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
-    *z = (int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
+    adata[0] = (int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
+    adata[1] = (int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
+    adata[2] = (int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
     return err;    
 }
 
-int mpu9250_read_gyro_raw(int16_t* x, int16_t* y, int16_t* z)
+int mpu9250_read_gyro_raw(int16_t *gdata)
 {
     uint8_t err;
     uint8_t buf[6];
     
     err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, MPU9250_GYRO_XOUT_H, 1, buf, 6);
     
-    *x = (int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
-    *y = (int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
-    *z = (int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
+    gdata[0] = (int16_t)(((uint16_t)buf[0]<<8) | buf[1]); 	    
+    gdata[1] = (int16_t)(((uint16_t)buf[2]<<8) | buf[3]); 	    
+    gdata[2] = (int16_t)(((uint16_t)buf[4]<<8) | buf[5]); 
 
     return err;    
 }
 
+int mpu9250_set_gyro_bias(int16_t* bias)
+{
+    unsigned char data[6] = {0, 0, 0, 0, 0, 0};
+    int err, i;
+
+    for(i=0;i<3;i++)
+    {
+        bias[i]= (-bias[i]);
+    }
+    data[0] = (bias[0] >> 8) & 0xff;
+    data[1] = (bias[0]) & 0xff;
+    data[2] = (bias[1] >> 8) & 0xff;
+    data[3] = (bias[1]) & 0xff;
+    data[4] = (bias[2] >> 8) & 0xff;
+    data[5] = (bias[2]) & 0xff;
+
+    err = I2C_BurstWrite(mpu_dev.instance, mpu_dev.addr, MPU9250_XG_OFFSET_H, 1, &data[0], 2);  
+    err = I2C_BurstWrite(mpu_dev.instance, mpu_dev.addr, MPU9250_YG_OFFSET_H, 1, &data[2], 2);  
+    err = I2C_BurstWrite(mpu_dev.instance, mpu_dev.addr, MPU9250_ZG_OFFSET_H, 1, &data[4], 2); 
+    return err;
+}
+
+
 #define AVR_CNT     1
-int mpu9250_read_mag_raw(int16_t* x, int16_t* y, int16_t* z)
+int mpu9250_read_mag_raw(int16_t *mdata)
 {
     uint8_t err,c;
     uint8_t val;
@@ -438,13 +467,13 @@ int mpu9250_read_mag_raw(int16_t* x, int16_t* y, int16_t* z)
             c = buf[6];
             if(!(c & 0x08))// Check if magnetic sensor overflow set, if not then report data
             {  
-                *x = (int16_t)((((int16_t)buf[1] << 8) | buf[0]));
-                *y = (int16_t)((((int16_t)buf[3] << 8) | buf[2]));
-                *z = (int16_t)((((int16_t)buf[5] << 8) | buf[4]));	
-                *x = mpu_dev.mag_adj[0]*(*x);
-                *y = mpu_dev.mag_adj[1]*(*y);
-                *z = mpu_dev.mag_adj[2]*(*z);
-                sumx += *x; sumy += *y; sumz += *z;
+                mdata[0] = (int16_t)((((int16_t)buf[1] << 8) | buf[0]));
+                mdata[1] = (int16_t)((((int16_t)buf[3] << 8) | buf[2]));
+                mdata[2] = (int16_t)((((int16_t)buf[5] << 8) | buf[4]));	
+                mdata[0] = mpu_dev.mag_adj[0]*(mdata[0]);
+                mdata[1] = mpu_dev.mag_adj[1]*(mdata[1]);
+                mdata[2] = mpu_dev.mag_adj[2]*(mdata[2]);
+                sumx += mdata[0]; sumy += mdata[1]; sumz += mdata[2];
                 cnt++;
             }
             if(err)
@@ -454,9 +483,9 @@ int mpu9250_read_mag_raw(int16_t* x, int16_t* y, int16_t* z)
         }
         if(cnt == AVR_CNT)
         {
-            *x = sumx/AVR_CNT;
-            *y = sumy/AVR_CNT;
-            *z = sumz/AVR_CNT;
+            mdata[0] = sumx/AVR_CNT;
+            mdata[1] = sumy/AVR_CNT;
+            mdata[2] = sumz/AVR_CNT;
             return 0;
         }
     }

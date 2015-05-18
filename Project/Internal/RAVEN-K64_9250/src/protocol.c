@@ -18,7 +18,7 @@ typedef __packed struct
     uint8_t sum;
 }trans_packet_t;
 
-uint32_t user_data2buffer(transmit_user_data* data, uint8_t* buf)
+uint32_t ano_encode(transmit_user_data* data, uint8_t* buf)
 {
     int i;
     uint8_t sum = 0;

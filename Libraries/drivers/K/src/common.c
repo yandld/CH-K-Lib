@@ -66,6 +66,12 @@ int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* Frequenct
     return 0;
 }
 
+ /**
+ * @brief  进入低功耗模式
+ * @param  enSleepOnExit:在系统唤醒时候 是否继续进入低功耗
+ * @retval 0: 成功 非0: 错误
+ * @note  任何中断 都可以唤醒CPU
+ */
 void EnterSTOPMode(bool enSleepOnExit)
 {
     /* Set the SLEEPDEEP bit to enable deep sleep mode (STOP) */

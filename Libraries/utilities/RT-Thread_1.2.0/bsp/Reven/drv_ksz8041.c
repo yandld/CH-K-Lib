@@ -165,7 +165,7 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
     return RT_EOK;
 }
 
-/* enetPhyAddr: enet phy chip hardware addr, normally, it's 0 or 1 */
+
 int rt_hw_ksz8041_init(void)
 {
     device.parent.init       = rt_ksz8041_init;

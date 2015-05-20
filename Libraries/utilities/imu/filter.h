@@ -17,6 +17,5 @@
 float lpf_1st_factor_cal(float time, float f_cut);
 float lpf_1st(float old_data, float new_data, float factor);
 
-
 #endif
 

@@ -5,18 +5,16 @@
   * @version V2.5
   * @date    2015.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    dymalic caliberation impletmentation
   ******************************************************************************
   */
-#ifndef _CALIBERATION_H_
-#define _CALIBERATION_H_
+
+#ifndef _DCALIBERATION_H_
+#define _DCALIBERATION_H_
 
 #include <stdint.h>
 
 
-
-void veep_init(void);
-void veep_write(uint8_t *buf, uint32_t len);
-void veep_read(uint8_t *buf, uint32_t len);
 
 
 #endif

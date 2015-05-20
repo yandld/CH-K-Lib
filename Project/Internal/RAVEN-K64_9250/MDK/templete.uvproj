@@ -442,6 +442,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\veep\virtual_eep.c</FilePath>
             </File>
+            <File>
+              <FileName>calibration.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\calibration.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -18,7 +18,8 @@ typedef __packed struct
 
 
 //!< API
-uint32_t user_data2buffer(transmit_user_data* data, uint8_t* buf);
+
+uint32_t ano_encode(transmit_user_data* data, uint8_t* buf);
 
 #endif
 

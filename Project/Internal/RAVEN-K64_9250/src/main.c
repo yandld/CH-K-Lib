@@ -3,49 +3,50 @@
 #include "chlib_k.h"
 
 #include "protocol.h"
-
+#include "chlib_k.h"
 #include "mpu9250.h"
 #include "hmc5883.h"
 #include "bmp180.h"
+#include "virtual_eep.h"
 #include "imu.h"
 #include "trans.h"
+#include "filter.h"
+
 
 #define FLASH_DATA_ADDR  (0xA000 - 1024)
+
+float IMULoopTime;
+static struct calibration_data cal_data;
+static imu_float_euler_angle_t angle;
+
+static int32_t temperature;
+static int32_t pressure;
 
 struct calibration_data
 {
     int  magic;
-    float mxg;       /* mag x gain */
-    float myg;
-    float mzg;
-    int   mxo;
-    int   myo;
-    int   mzo;       /* mag z offset */
-    
-    int axo;
-    int ayo;
-    int azo; 
-    
-    int gxo;
-    int gyo;
-    int gzo; 
+    float mg[3];        /* mag x gain */
+    int16_t mo[3];      /* mag z offset */ 
+    int16_t ao[3];
+    int16_t go[3];
 };
 
 static void _print_cal_data(struct calibration_data * cal)
 {
-    printf("cal data:\r\n");
-    printf("axo:%04d ayo:%04d azo:%04d\r\n", cal->axo, cal->ayo, cal->azo);
-    printf("gxo:%04d gyo:%04d gzo:%04d\r\n", cal->gxo, cal->gyo, cal->gzo);
-    printf("mxo:%04d myo:%04d mzo:%04d\r\n", cal->mxo, cal->myo, cal->mzo);
-    printf("mxg:%04f myg:%04f mzg:%0fd\r\n", cal->mxg, cal->myg, cal->mzg);
     
+    printf("cal data:\r\n");
+    
+    printf("gyro offset:%d %d %d \r\n", cal->go[0], cal->go[1], cal->go[2]);
+    printf("acce offset:%d %d %d \r\n", cal->ao[0], cal->ao[1], cal->ao[2]);
+    printf("magn offset:%d %d %d \r\n", cal->mo[0], cal->mo[1], cal->mo[2]);
+    printf("mag gain:%f %f %f \r\n",    cal->mg[0], cal->mg[1], cal->mg[2]);
 }
 
-void MagnetometerCalibration(struct calibration_data * cal)
+void calibrate_magnetometer(struct calibration_data * cal)
 {
     uint32_t i;
     int r;
-    int16_t x,y,z;
+    int16_t mdata[3];
     int16_t xmax, xmin, ymax, ymin, zmax, zmin;
     xmax = 0;
     xmin = 0xFFFF;
@@ -57,36 +58,36 @@ void MagnetometerCalibration(struct calibration_data * cal)
 
     for(i=0;i<1000;i++)
     {
-        r = mpu9250_read_mag_raw(&x, &y, &z);
+        r = mpu9250_read_mag_raw(mdata);
         if(!r)
         {
-            if(xmax < x) xmax = x;
-            if(xmin > x) xmin = x;
-            if(ymax < y) ymax = y;
-            if(ymin > y) ymin = y;
-            if(zmax < z) zmax = z;
-            if(zmin > z) zmin = z; 
+            if(xmax < mdata[0]) xmax = mdata[0];
+            if(xmin > mdata[0]) xmin = mdata[0];
+            if(ymax < mdata[1]) ymax = mdata[1];
+            if(ymin > mdata[1]) ymin = mdata[1];
+            if(zmax < mdata[2]) zmax = mdata[2];
+            if(zmin > mdata[2]) zmin = mdata[2]; 
         }
         DelayMs(10);
         printf("time:%04d xmax:%04d xmin:%04d ymax:%04d ymin%04d zmax:%04d zmin:%04d\r", i,xmax,xmin,ymax,ymin,zmax,zmin);
     }
-    cal->mxo = (xmax + xmin) / 2;
-    cal->mxg=1;
-    cal->myo = (ymax + ymin) / 2;
-    cal->myg= (float)(ymax - ymin) / (float)(xmax -xmin);
-    cal->mzo = (zmax + zmin) / 2;
-    cal->mzg= (float)(zmax - zmin) / (float)(xmax -xmin);
+    cal->mo[0] = (xmax + xmin) / 2;
+    cal->mg[0]=1;
+    cal->mo[1] = (ymax + ymin) / 2;
+    cal->mg[1]= (float)(ymax - ymin) / (float)(xmax -xmin);
+    cal->mo[2] = (zmax + zmin) / 2;
+    cal->mg[2]= (float)(zmax - zmin) / (float)(xmax -xmin);
     /* see if we get data correct */
-    if((cal->myg < 0.8) || (cal->mzg < 0.8))
+    if((cal->mg[1] < 0.8) || (cal->mg[2] < 0.8))
     {
         printf("cal failed, setting to default param\r\n");
         /* inject with default data */
-        cal->mxo = 0;
-        cal->myo = 0;
-        cal->mzo = 0;
-        cal->mxg = 1;
-        cal->myg = 1;
-        cal->mzg = 1;
+        cal->mo[0] = 0;
+        cal->mo[1] = 0;
+        cal->mo[2] = 0;
+        cal->mg[0] = 1;
+        cal->mg[1] = 1;
+        cal->mg[2] = 1;
         cal->magic = 0x00;
         return;
     }
@@ -94,70 +95,29 @@ void MagnetometerCalibration(struct calibration_data * cal)
     {
         cal->magic = 0x5ACB;
     }
-    printf("g X:%f Y:%f Z:%f\r\n", cal->mxg, cal->myg, cal->mzg);
-    printf("o X:%d Y:%d Z:%d\r\n", cal->mxo, cal->myo, cal->mzo);
 }
 
-
-
-static struct calibration_data cal_data;
-static imu_float_euler_angle_t angle;
-static imu_raw_data_t raw_data;
-static int32_t temperature;
-static int32_t pressure;
-
-int mpu9250_read_mag_raw2(int16_t* x, int16_t* y, int16_t* z)
+static void send_data_process(imu_float_euler_angle_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata)
 {
-    static int16_t mmx,mmy,mmz;
-
-    mpu9250_read_mag_raw(x, y, z);
-    
-    mmx = 0.8*mmx+0.2* (*x);
-    mmy = 0.8*mmy+0.2* (*y);
-    mmz = 0.8*mmz+0.2* (*z);
-
-    
-    *x = cal_data.mxg  *(mmx - cal_data.mxo);
-    *y = cal_data.myg *(mmy - cal_data.myo);
-    *z = cal_data.mzg *(mmz - cal_data.mzo);
-    
-//    *x = 0;
-//    *y = 0;
-//    *z = 0;
-    
-    return 0;
-}
-
-static imu_io_install_t IMU_IOInstallStruct1 = 
-{
-    .imu_get_accel = mpu9250_read_accel_raw,
-    .imu_get_gyro = mpu9250_read_gyro_raw,
-    .imu_get_mag = mpu9250_read_mag_raw2,
-};
- 
-
-static void send_data_process(void)
-{
+    int i;
     static uint8_t buf[64];
     uint32_t len;
     static transmit_user_data data;
-    data.trans_accel[0] = raw_data.ax;
-    data.trans_accel[1] = raw_data.ay;
-    data.trans_accel[2] = raw_data.az;
-    data.trans_gyro[0] = raw_data.gx;
-    data.trans_gyro[1] = raw_data.gy;
-    data.trans_gyro[2] = raw_data.gz;
-    data.trans_mag[0] = raw_data.mx;
-    data.trans_mag[1] = raw_data.my;
-    data.trans_mag[2] = raw_data.mz;
-    data.trans_pitch = (int16_t)(angle.imu_pitch*100);
-    data.trans_roll = (int16_t)(angle.imu_roll*100);
-    data.trans_yaw = 1800 + (int16_t)(angle.imu_yaw*10);
+    
+    for(i=0;i<3;i++)
+    {
+        data.trans_accel[i] = adata[i];
+        data.trans_gyro[i] = gdata[i];
+        data.trans_mag[i] = mdata[i];
+    }
+    data.trans_pitch = (int16_t)(angle->P*100);
+    data.trans_roll = (int16_t)(angle->R*100);
+    data.trans_yaw = 1800 + (int16_t)(angle->Y*10);
     data.trans_pressure = pressure;
     
     /* set buffer */
-    len = user_data2buffer(&data, buf);
-    trans_start_send_data(buf, len);
+    len = ano_encode(&data, buf);
+    uart_dma_send(buf, len);
 
 }
 
@@ -174,23 +134,16 @@ void mpu9250_test(void)
     mpu9250_config(&config);
     
     uint8_t err;
-    int16_t ax,ay,az,gx,gy,gz,mx,my,mz;
-    
-    static int16_t mmx,mmy,mmz;
+    int16_t mdata[3], gdata[3], adata[3];
     while(1)
     {
         err = 0;
     
-        err += mpu9250_read_accel_raw(&ax, &ay, &az);
-        err += mpu9250_read_gyro_raw(&gx, &gy, &gz);
-        err += mpu9250_read_mag_raw(&mx, &my, &mz);
+        err += mpu9250_read_accel_raw(adata);
+        err += mpu9250_read_gyro_raw(gdata);
+        err += mpu9250_read_mag_raw(mdata);
     
-        mmx = 0.9*mmx + 0.1*mx;
-        mmy = 0.9*mmy + 0.1*my;
-        mmz = 0.9*mmz + 0.1*mz;
-       
-
-        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d    \r", ax ,ay, az, gx, gy, gz, mmx, mmy, mmz);  
+        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d    \r", adata[0] ,adata[1], adata[2], gdata[0], gdata[1], gdata[2], mdata[0], mdata[1], mdata[2]);  
 		GPIO_ToggleBit(HW_GPIOC, 3);
         DelayMs(5);
     }
@@ -202,7 +155,7 @@ int init_sensor(void)
 
     I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
     
-    DelayMs(5);
+    DelayMs(50);
     ret = mpu9250_init(0);
     printf("mpu9250 init:%d\r\n", ret);
     
@@ -210,12 +163,21 @@ int init_sensor(void)
     
     config.afs = AFS_8G;
     config.gfs = GFS_1000DPS;
-    config.mfs = MFS_14BITS;
+    config.mfs = MFS_16BITS;
     config.aenable_self_test = false;
     config.genable_self_test = false;
     mpu9250_config(&config);
     
     return ret;
+}
+
+static void ShowInfo(void)
+{
+    uint32_t clock;
+    printf("%s\r\n", "URANUS2 V1.00");
+    CLOCK_GetClockFrequency(kCoreClock, &clock);
+    printf("CoreClock:%dHz\r\n", clock);
+    
 }
 
 #define BMP_STATUS_T_START          (0x00)
@@ -227,64 +189,75 @@ int init_sensor(void)
 
 int main(void)
 {
-    int i;
-    uint32_t sector_size;
-    uint32_t led_flag;
+    int i, led_flag;
+    int16_t adata[3], gdata[3], mdata[3];
+    static float fadata[3], fgdata[3], fmdata[3];
     static int bmpStatus = BMP_STATUS_T_START;
     uint32_t ret;
     uint32_t uart_instance;
     
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);
-    
     uart_instance = UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    printf("PS!\r\n");
     
+    ShowInfo();
+    veep_init();
    // GPIO_QuickInit(HW_GPIOE, 0, kGPIO_Mode_OPP);
    // GPIO_QuickInit(HW_GPIOE, 1, kGPIO_Mode_OPP);
     
     init_sensor();
-
-   // sector_size = FLASH_GetSectorSize();
-    memcpy(&cal_data, (void*)FLASH_DATA_ADDR, sizeof(cal_data));
-    if(cal_data.magic ==  0x5ACB)
-    {
-        printf("read cal data from flash succ\r\n");
-        _print_cal_data(&cal_data);
-    }
-    else
+    veep_read((uint8_t*)&cal_data, sizeof(cal_data));
+    if(cal_data.magic !=  0x5ACB)
     {
         printf("read cal data from flash err!\r\n");
-        MagnetometerCalibration(&cal_data);
-        FLASH_EraseSector(FLASH_DATA_ADDR);
-        FLASH_WriteSector(FLASH_DATA_ADDR, (const uint8_t*)&cal_data, sizeof(cal_data));
+        calibrate_magnetometer(&cal_data);
+        veep_write((uint8_t*)&cal_data, sizeof(cal_data));
     }
-    
-    
-    imu_io_install(&IMU_IOInstallStruct1);
+    _print_cal_data(&cal_data);
     
     PIT_QuickInit(HW_PIT_CH2, 1000*1000);
     
     static uint32_t time, load_val, fac_us;
     CLOCK_GetClockFrequency(kBusClock, &fac_us);
     fac_us /= 1000000;
+   
+   // mpu9250_test();
+ 
+    uart_dma_init(HW_DMA_CH1, uart_instance);
     
-    //mpu9250_test();
-    
-    trans_init(HW_DMA_CH1, uart_instance);
-    
+
     while(1)
     {
+        mpu9250_read_accel_raw(adata);
+        mpu9250_read_gyro_raw(gdata);
+        mpu9250_read_mag_raw(mdata);
+        
+        for(i=0;i<3;i++)
+        {
+            mdata[i] = cal_data.mg[i]*(mdata[i] - cal_data.mo[i]);
+        }
+    
         time = PIT_GetCounterValue(HW_PIT_CH2);
         PIT_ResetCounter(HW_PIT_CH2);
         load_val = PIT_GetCounterValue(HW_PIT_CH2);
         time = load_val - time;
         time /= fac_us;
 
-        ret = imu_get_euler_angle(&angle, &raw_data);
+        float factor[3];
+        factor[0] = lpf_1st_factor_cal(IMULoopTime, 92);
+        factor[1] = lpf_1st_factor_cal(IMULoopTime, 92);
+        factor[2] = lpf_1st_factor_cal(IMULoopTime, 5);
+        for(i=0;i<3;i++)
+        {
+            fadata[i] = lpf_1st(fadata[i], (float)adata[i], factor[0]);
+            fgdata[i] = lpf_1st(fgdata[i], (float)gdata[i], factor[1]);
+            fmdata[i] = lpf_1st(fmdata[i], (float)mdata[i], factor[2]);
+        }
 
+        ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
+        
         halfT = ((float)time)/1000/2000;
-
+        IMULoopTime = halfT*2;
 //        switch(bmpStatus)
 //        {
 //            case BMP_STATUS_T_START:
@@ -319,7 +292,8 @@ int main(void)
 //                break;
 //        }
         
-        send_data_process();
+        send_data_process(&angle, adata, gdata, mdata);
+        
         led_flag++; led_flag %= 10;
         if(!led_flag)
         {

@@ -28,7 +28,7 @@ static uint32_t DMA_UART_DataRegisterAddrTable[] =
 
 //安装回调函数
 
-int trans_init(uint8_t dmaChl, uint32_t uartInstance)
+int uart_dma_init(uint8_t dmaChl, uint32_t uartInstance)
 {
     DMA_InitTypeDef DMA_InitStruct1= {0};
     DMA_InitStruct1.chl = dmaChl;
@@ -55,7 +55,7 @@ int trans_init(uint8_t dmaChl, uint32_t uartInstance)
     return 0;
 }
 
-int trans_start_send_data(uint8_t* buf, uint32_t size)
+int uart_dma_send(uint8_t* buf, uint32_t size)
 {
     if(DMA_IsMajorLoopComplete(trans_hander.dmaChl) == 0)
     {

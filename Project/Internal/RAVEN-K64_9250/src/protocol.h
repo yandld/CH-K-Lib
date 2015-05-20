@@ -7,13 +7,14 @@
 
 typedef __packed struct
 {
-    int16_t trans_accel[3];
-    int16_t trans_gyro[3];
-    int16_t trans_mag[3];
-    int16_t trans_roll;
-    int16_t trans_pitch;
-    int16_t trans_yaw;
-    int32_t trans_pressure;
+    
+    int16_t acc[3];
+    int16_t gyo[3];
+    int16_t mag[3];
+    int16_t R;
+    int16_t P;
+    int16_t Y;
+    int32_t pressure; /* pressure */
 }payload_t;
 
 

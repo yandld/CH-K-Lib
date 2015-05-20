@@ -12,6 +12,7 @@
 
 #define     VERSION_MAJOR       (2)
 #define     VERSION_MINOR       (0)
+#define     CAL_MAGIC           (0x5ACB)
 
 struct calibration_t
 {
@@ -90,7 +91,7 @@ void calibrate_magnetometer(struct calibration_t * cal)
     }
     else
     {
-        cal->magic = 0x5ACB;
+        cal->magic = CAL_MAGIC;
     }
 }
 
@@ -103,14 +104,14 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
     
     for(i=0;i<3;i++)
     {
-        payload.trans_accel[i] = adata[i];
-        payload.trans_gyro[i] = gdata[i];
-        payload.trans_mag[i] = mdata[i];
+        payload.acc[i] = adata[i];
+        payload.gyo[i] = gdata[i];
+        payload.mag[i] = mdata[i];
     }
-    payload.trans_pitch = (int16_t)(angle->P*100);
-    payload.trans_roll = (int16_t)(angle->R*100);
-    payload.trans_yaw = 1800 + (int16_t)(angle->Y*10);
-    payload.trans_pressure = pressure;
+    payload.P = (int16_t)(angle->P*100);
+    payload.R = (int16_t)(angle->R*100);
+    payload.Y = 1800 + (int16_t)(angle->Y*10);
+    payload.pressure = pressure;
     
     /* set buffer */
     len = ano_encode(&payload, buf);
@@ -118,33 +119,7 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
 
 }
 
-void mpu9250_test(void)
-{
-    mpu9250_init(0);
-    struct mpu_config config;
-    
-    config.afs = AFS_8G;
-    config.gfs = GFS_1000DPS;
-    config.mfs = MFS_14BITS;
-    config.aenable_self_test = false;
-    config.genable_self_test = false;
-    mpu9250_config(&config);
-    
-    uint8_t err;
-    int16_t mdata[3], gdata[3], adata[3];
-    while(1)
-    {
-        err = 0;
-    
-        err += mpu9250_read_accel_raw(adata);
-        err += mpu9250_read_gyro_raw(gdata);
-        err += mpu9250_read_mag_raw(mdata);
-    
-        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d    \r", adata[0] ,adata[1], adata[2], gdata[0], gdata[1], gdata[2], mdata[0], mdata[1], mdata[2]);  
-		GPIO_ToggleBit(HW_GPIOC, 3);
-        DelayMs(5);
-    }
-}
+
 
 int init_sensor(void)
 {
@@ -209,7 +184,7 @@ int main(void)
     
     init_sensor();
     veep_read((uint8_t*)&cal_data, sizeof(cal_data));
-    if(cal_data.magic !=  0x5ACB)
+    if(cal_data.magic !=  CAL_MAGIC)
     {
         printf("read cal data from flash err!\r\n");
         calibrate_magnetometer(&cal_data);
@@ -307,4 +282,30 @@ int main(void)
     }
 }
 
-
+//void mpu9250_test(void)
+//{
+//    mpu9250_init(0);
+//    struct mpu_config config;
+//    
+//    config.afs = AFS_8G;
+//    config.gfs = GFS_1000DPS;
+//    config.mfs = MFS_14BITS;
+//    config.aenable_self_test = false;
+//    config.genable_self_test = false;
+//    mpu9250_config(&config);
+//    
+//    uint8_t err;
+//    int16_t mdata[3], gdata[3], adata[3];
+//    while(1)
+//    {
+//        err = 0;
+//    
+//        err += mpu9250_read_accel_raw(adata);
+//        err += mpu9250_read_gyro_raw(gdata);
+//        err += mpu9250_read_mag_raw(mdata);
+//    
+//        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d    \r", adata[0] ,adata[1], adata[2], gdata[0], gdata[1], gdata[2], mdata[0], mdata[1], mdata[2]);  
+//		GPIO_ToggleBit(HW_GPIOC, 3);
+//        DelayMs(5);
+//    }
+//}

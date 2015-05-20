@@ -89,7 +89,7 @@ static inline float invSqrt(float x)
 
 
 //!< the mx my mz order are related to PCB layout!!
-static void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float my,float mx,float mz, imu_float_euler_angle_t * angle)
+static void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float my,float mx,float mz, attitude_t * angle)
 {
     mz = -mz;
     float norm = 0;
@@ -181,13 +181,8 @@ static void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,flo
 
 //!< this functino must be called about every 2ms to get accurate eular angles
 
-uint32_t imu_get_euler_angle(float *adata, float *gdata, float *mdata, imu_float_euler_angle_t *angle)
+uint32_t imu_get_euler_angle(float *adata, float *gdata, float *mdata, attitude_t *angle)
 {
-    uint8_t ret = 0;
-    if(ret >0)
-    {
-      return ret;
-    }
 
     updateAHRS( (float)gdata[0] * Gyro_Gr,
                 (float)gdata[1] * Gyro_Gr,

@@ -12,17 +12,10 @@
 #include "trans.h"
 #include "filter.h"
 
+#define     VERSION_MAJOR       (2)
+#define     VERSION_MINOR       (0)
 
-#define FLASH_DATA_ADDR  (0xA000 - 1024)
-
-float IMULoopTime;
-static struct calibration_data cal_data;
-static imu_float_euler_angle_t angle;
-
-static int32_t temperature;
-static int32_t pressure;
-
-struct calibration_data
+struct calibration_t
 {
     int  magic;
     float mg[3];        /* mag x gain */
@@ -31,9 +24,15 @@ struct calibration_data
     int16_t go[3];
 };
 
-static void _print_cal_data(struct calibration_data * cal)
+static struct calibration_t cal_data;
+static attitude_t angle;
+
+static int32_t temperature;
+static int32_t pressure;
+
+
+static void _print_cal_data(struct calibration_t * cal)
 {
-    
     printf("cal data:\r\n");
     
     printf("gyro offset:%d %d %d \r\n", cal->go[0], cal->go[1], cal->go[2]);
@@ -42,7 +41,7 @@ static void _print_cal_data(struct calibration_data * cal)
     printf("mag gain:%f %f %f \r\n",    cal->mg[0], cal->mg[1], cal->mg[2]);
 }
 
-void calibrate_magnetometer(struct calibration_data * cal)
+void calibrate_magnetometer(struct calibration_t * cal)
 {
     uint32_t i;
     int r;
@@ -97,7 +96,7 @@ void calibrate_magnetometer(struct calibration_data * cal)
     }
 }
 
-static void send_data_process(imu_float_euler_angle_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata)
+static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata)
 {
     int i;
     static uint8_t buf[64];
@@ -154,10 +153,16 @@ int init_sensor(void)
     uint32_t ret;
 
     I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
-    
     DelayMs(50);
     ret = mpu9250_init(0);
-    printf("mpu9250 init:%d\r\n", ret);
+    if(ret)
+    {
+        printf("mpu9250 init:%d\r\n", ret);
+        printf("restarting...\r\n");
+        DelayMs(200);
+        SystemSoftReset();
+    }
+    
     
     struct mpu_config config;
     
@@ -174,10 +179,9 @@ int init_sensor(void)
 static void ShowInfo(void)
 {
     uint32_t clock;
-    printf("%s\r\n", "URANUS2 V1.00");
+    printf("URANUS V%d.%d\r\n", VERSION_MAJOR, VERSION_MINOR);
     CLOCK_GetClockFrequency(kCoreClock, &clock);
     printf("CoreClock:%dHz\r\n", clock);
-    
 }
 
 #define BMP_STATUS_T_START          (0x00)
@@ -228,6 +232,7 @@ int main(void)
 
     while(1)
     {
+        /* raw data and offset balance */
         mpu9250_read_accel_raw(adata);
         mpu9250_read_gyro_raw(gdata);
         mpu9250_read_mag_raw(mdata);
@@ -237,16 +242,18 @@ int main(void)
             mdata[i] = cal_data.mg[i]*(mdata[i] - cal_data.mo[i]);
         }
     
+        /* set timer */
         time = PIT_GetCounterValue(HW_PIT_CH2);
         PIT_ResetCounter(HW_PIT_CH2);
         load_val = PIT_GetCounterValue(HW_PIT_CH2);
         time = load_val - time;
         time /= fac_us;
 
+        /* low pass filter */
         float factor[3];
-        factor[0] = lpf_1st_factor_cal(IMULoopTime, 92);
-        factor[1] = lpf_1st_factor_cal(IMULoopTime, 92);
-        factor[2] = lpf_1st_factor_cal(IMULoopTime, 5);
+        factor[0] = lpf_1st_factor_cal(halfT*2, 92);
+        factor[1] = lpf_1st_factor_cal(halfT*2, 92);
+        factor[2] = lpf_1st_factor_cal(halfT*2, 5);
         for(i=0;i<3;i++)
         {
             fadata[i] = lpf_1st(fadata[i], (float)adata[i], factor[0]);
@@ -254,10 +261,10 @@ int main(void)
             fmdata[i] = lpf_1st(fmdata[i], (float)mdata[i], factor[2]);
         }
 
+        /* IMU ipdate */
         ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
         
         halfT = ((float)time)/1000/2000;
-        IMULoopTime = halfT*2;
 //        switch(bmpStatus)
 //        {
 //            case BMP_STATUS_T_START:
@@ -299,7 +306,6 @@ int main(void)
         {
             GPIO_ToggleBit(HW_GPIOA, 1);
         }
-        
     }
 }
 

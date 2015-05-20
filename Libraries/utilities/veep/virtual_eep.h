@@ -1,35 +1,24 @@
 /**
   ******************************************************************************
-  * @file    imu.h
+  * @file    veep.h
   * @author  YANDLD
   * @version V2.5
   * @date    2015.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    
+  * @note    virtual EEPORM implemntation
   ******************************************************************************
   */
-#ifndef _IMU_H_
-#define _IMU_H_
+#ifndef _VEEP_H_
+#define _VEEP_H_
 
-#include <math.h>
 #include <stdint.h>
 
 
-//#define SLIDING_FILTER_DEEP     (3)
+
+void veep_init(void);
+void veep_write(uint8_t *buf, uint32_t len);
+void veep_read(uint8_t *buf, uint32_t len);
 
 
-
-typedef struct 
-{
-    float P;
-    float R;
-    float Y;
-}attitude_t;
-
-
-
-
-//!< API functions
-uint32_t imu_get_euler_angle(float *adata, float *gdata, float *mdata, attitude_t *angle);
-extern float halfT;
 #endif
+

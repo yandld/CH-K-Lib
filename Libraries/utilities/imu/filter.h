@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    imu.h
+  * @file    filter.h
   * @author  YANDLD
   * @version V2.5
   * @date    2015.3.26
@@ -8,28 +8,15 @@
   * @note    
   ******************************************************************************
   */
-#ifndef _IMU_H_
-#define _IMU_H_
+#ifndef _FILTER_H_
+#define _FILTER_H_
 
-#include <math.h>
 #include <stdint.h>
 
 
-//#define SLIDING_FILTER_DEEP     (3)
+float lpf_1st_factor_cal(float time, float f_cut);
+float lpf_1st(float old_data, float new_data, float factor);
 
 
-
-typedef struct 
-{
-    float P;
-    float R;
-    float Y;
-}attitude_t;
-
-
-
-
-//!< API functions
-uint32_t imu_get_euler_angle(float *adata, float *gdata, float *mdata, attitude_t *angle);
-extern float halfT;
 #endif
+

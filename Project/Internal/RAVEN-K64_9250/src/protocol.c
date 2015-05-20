@@ -14,11 +14,11 @@
 typedef __packed struct
 {
     uint8_t trans_header[3];
-    transmit_user_data user_data;
+    payload_t user_data;
     uint8_t sum;
 }trans_packet_t;
 
-uint32_t ano_encode(transmit_user_data* data, uint8_t* buf)
+uint32_t ano_encode(payload_t* data, uint8_t* buf)
 {
     int i;
     uint8_t sum = 0;
@@ -34,7 +34,7 @@ uint32_t ano_encode(transmit_user_data* data, uint8_t* buf)
     data->trans_pitch = BSWAP_16(data->trans_pitch);
     data->trans_roll = BSWAP_16(data->trans_roll);
     data->trans_pressure = (data->trans_pressure);
-    memcpy(&packet->user_data, data, sizeof(transmit_user_data));
+    memcpy(&packet->user_data, data, sizeof(payload_t));
     packet->trans_header[0] = 0x88;
     packet->trans_header[1] = 0xAF;
     packet->trans_header[2] = 0x1C;

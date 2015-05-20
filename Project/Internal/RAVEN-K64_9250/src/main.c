@@ -3,9 +3,7 @@
 #include "chlib_k.h"
 
 #include "protocol.h"
-#include "chlib_k.h"
 #include "mpu9250.h"
-#include "hmc5883.h"
 #include "bmp180.h"
 #include "virtual_eep.h"
 #include "imu.h"
@@ -101,21 +99,21 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
     int i;
     static uint8_t buf[64];
     uint32_t len;
-    static transmit_user_data data;
+    static payload_t payload;
     
     for(i=0;i<3;i++)
     {
-        data.trans_accel[i] = adata[i];
-        data.trans_gyro[i] = gdata[i];
-        data.trans_mag[i] = mdata[i];
+        payload.trans_accel[i] = adata[i];
+        payload.trans_gyro[i] = gdata[i];
+        payload.trans_mag[i] = mdata[i];
     }
-    data.trans_pitch = (int16_t)(angle->P*100);
-    data.trans_roll = (int16_t)(angle->R*100);
-    data.trans_yaw = 1800 + (int16_t)(angle->Y*10);
-    data.trans_pressure = pressure;
+    payload.trans_pitch = (int16_t)(angle->P*100);
+    payload.trans_roll = (int16_t)(angle->R*100);
+    payload.trans_yaw = 1800 + (int16_t)(angle->Y*10);
+    payload.trans_pressure = pressure;
     
     /* set buffer */
-    len = ano_encode(&data, buf);
+    len = ano_encode(&payload, buf);
     uart_dma_send(buf, len);
 
 }

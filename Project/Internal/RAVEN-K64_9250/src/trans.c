@@ -1,7 +1,6 @@
 #include "trans.h"
 #include <string.h>
 #include "dma.h"
-#include "nrf24l01.h"
 #include "uart.h"
 #include "common.h"
 

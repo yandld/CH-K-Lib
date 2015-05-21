@@ -15,23 +15,11 @@
 #define     VERSION_MINOR       (0)
 
 
-
+static bool FLAG_10MS;
 static attitude_t angle;
 static int32_t temperature;
 static int32_t pressure;
 struct dcal_t dcal;
-
-static void _print_cal_data(struct dcal_t * dc)
-{
-    printf("calibrartion data:\r\n");
-
-    printf("gyro offset:%d %d %d \r\n", dc->go[0], dc->go[1], dc->go[2]);
-    printf("acce offset:%d %d %d \r\n", dc->ao[0], dc->ao[1], dc->ao[2]);
-    printf("magn offset:%d %d %d \r\n", dc->mo[0], dc->mo[1], dc->mo[2]);
-    printf("mag gain:%f %f %f \r\n",    dc->mg[0], dc->mg[1], dc->mg[2]);
-    printf("mag max:%d %d %d \r\n",     dc->m_max[0], dc->m_max[1], dc->m_max[2]);
-    printf("mag min:%d %d %d \r\n",     dc->m_min[0], dc->m_min[1], dc->m_min[2]);
-}
 
 
 static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata)
@@ -102,8 +90,6 @@ static void ShowInfo(void)
 
 
 
-static bool FLAG_10MS;
-
 void PIT_10MS_ISR(void)
 {
     FLAG_10MS = true;
@@ -134,7 +120,7 @@ int main(void)
     sensor_init();
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
 
-    PIT_QuickInit(HW_PIT_CH1, 50*1000);
+    PIT_QuickInit(HW_PIT_CH1, 100*1000);
     PIT_CallbackInstall(HW_PIT_CH1, PIT_10MS_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF, true);
     
@@ -147,7 +133,7 @@ int main(void)
    // mpu9250_test();
  
     dcal_init(&dcal);
-    _print_cal_data(&dcal);
+    dcal_print(&dcal);
     
     uart_dma_init(HW_DMA_CH1, uart_instance);
 
@@ -194,7 +180,12 @@ int main(void)
         if(FLAG_10MS)
         {
             dcal_input(cp_mdata);
+
             dcal_output(&dcal);
+            if(dcal.need_update)
+            {
+                veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+            }
             
             int32_t l_presure;
             ret = bmp180_conversion_process(&l_presure, &temperature);
@@ -220,7 +211,7 @@ void UART_ISR(uint16_t data)
         if(rd.buf[0] == 0xAA)
         {
             printf("write calibration data!...\r\n");
-            veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+          //  veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
         }
     }
 }

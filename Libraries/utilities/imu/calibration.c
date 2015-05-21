@@ -78,7 +78,7 @@ void dcal_init(struct dcal_t *dc)
 }
 
 /* this function must be called every 100 ms */
-void dcal_input(int16_t *mdata)
+void dcal_minput(int16_t *mdata)
 {
     int i;
     static float last_gain;

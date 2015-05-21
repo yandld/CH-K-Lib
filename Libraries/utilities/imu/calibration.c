@@ -31,30 +31,37 @@ static int is_mval_ok(int16_t data)
     return 0;
 }
     
-static void reset_dcal_data(void)
+static void reset_dcal_data(struct dcal_t *dc)
 {
     int i;
     for(i=0;i<3;i++)
     {
-        dcal.m_min[i] = 100;
-        dcal.m_max[i] = -100;
-        dcal.mg[i] = 1.000;
-        dcal.mo[i] = 0;
+        dc->m_min[i] = 0;
+        dc->m_max[i] = 0;
+        dc->mg[i] = 1.000;
+        dc->mo[i] = 0;
     } 
 }
 
 void dcal_init(struct dcal_t *dc)
 {
+    int i;
 
     if((dc) && (dc->magic == CAL_MAGIC))
     {
+        for(i=0;i<3;i++)
+        {
+            dc->m_min[i] -=10;
+            dc->m_max[i] +=10;  
+        }
         memcpy(&dcal, dc, sizeof(struct dcal_t));
         printf("load dcal value!\r\n");
     }
     else
     {
-        printf("no initial dcal value\r\n");
-        reset_dcal_data();
+        printf("no initial dcal value\r\n");  
+        reset_dcal_data(dc);
+        reset_dcal_data(&dcal);
     }
 }
 
@@ -68,12 +75,6 @@ void dcal_input(int16_t *mdata)
     {
         if(is_mval_ok(mdata[i]))
         {
-            /* strong mangetic distornation found */
-            for(i=0;i<3;i++)
-            {
-                dcal.m_max[i] = (dcal.m_max[i]*4)/5;
-                dcal.m_min[i] = (dcal.m_min[i]*4)/5;
-            }
             printf("data of out rangle!\r\n");
             return;
         }
@@ -108,6 +109,7 @@ void dcal_input(int16_t *mdata)
 
 void dcal_output(struct dcal_t *dc)
 {
+    dcal.magic = CAL_MAGIC;
     memcpy(dc, &dcal, sizeof(struct dcal_t));
 }
 

@@ -19,6 +19,7 @@ typedef __packed struct
 }packet_t;
 
 
+
 uint32_t ano_encode(payload_t* payload, uint8_t* buf)
 {
     int i;
@@ -47,5 +48,51 @@ uint32_t ano_encode(payload_t* payload, uint8_t* buf)
     return sizeof(packet_t);
 }
 
+enum ano_status
+{
+    ANO_IDLE,
+    ANO_SOF,
+    ANO_LEN,
+    ANO_DATA,
+};
+
+int ano_rec(uint8_t ch, rev_data_t *rd)
+{
+    int ret;
+    static int i;
+    static enum ano_status states = ANO_IDLE;
+    
+    ret = 1;
+    
+    switch(states)
+    {
+        case ANO_IDLE:
+            if((uint8_t)ch == 0x8A)
+            {
+                states = ANO_SOF;
+            }
+            break;
+        case ANO_SOF:
+            if((uint8_t)ch == 0x8B)
+            {
+                states = ANO_LEN;
+            }
+            break;
+        case ANO_LEN:
+            rd->len = ch;
+            states = ANO_DATA;
+            i = 0;
+            break;
+        case ANO_DATA:
+            if(i == rd->len)
+            {
+                states = ANO_IDLE;
+                ret = 0;
+            }
+            rd->buf[i++] = ch;
+            break;
+    }
+    return ret;
+}
 
 

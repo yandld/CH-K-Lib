@@ -33,8 +33,10 @@ void veep_init(void)
 
 void veep_write(uint8_t* buf, uint32_t len)
 {
+    __disable_irq();
     FLASH_EraseSector(StartAddr);
     FLASH_WriteSector(StartAddr, buf, len);
+    __enable_irq();
 }
 
 void veep_read(uint8_t *buf, uint32_t len)

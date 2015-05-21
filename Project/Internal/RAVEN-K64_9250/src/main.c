@@ -17,10 +17,9 @@
 
 
 static attitude_t angle;
-
 static int32_t temperature;
 static int32_t pressure;
-
+struct dcal_t dcal;
 
 static void _print_cal_data(struct dcal_t * dc)
 {
@@ -30,6 +29,8 @@ static void _print_cal_data(struct dcal_t * dc)
     printf("acce offset:%d %d %d \r\n", dc->ao[0], dc->ao[1], dc->ao[2]);
     printf("magn offset:%d %d %d \r\n", dc->mo[0], dc->mo[1], dc->mo[2]);
     printf("mag gain:%f %f %f \r\n",    dc->mg[0], dc->mg[1], dc->mg[2]);
+    printf("mag max:%d %d %d \r\n",     dc->m_max[0], dc->m_max[1], dc->m_max[2]);
+    printf("mag min:%d %d %d \r\n",     dc->m_min[0], dc->m_min[1], dc->m_min[2]);
 }
 
 
@@ -108,18 +109,22 @@ void PIT_10MS_ISR(void)
     FLAG_10MS = true;
 }
 
+extern void UART_ISR(uint16_t data);
+
 int main(void)
 {
     int i;
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
     static float fadata[3], fgdata[3], fmdata[3];
-    struct dcal_t dcal;
     uint32_t ret;
     uint32_t uart_instance;
     
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);
     uart_instance = UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_CallbackRxInstall(uart_instance, UART_ISR);
+    UART_ITDMAConfig(uart_instance, kUART_IT_Rx, true);
+    
     
     ShowInfo();
     veep_init();
@@ -128,11 +133,8 @@ int main(void)
     
     sensor_init();
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
-    
-    _print_cal_data(&dcal);
-    
-    
-    PIT_QuickInit(HW_PIT_CH1, 100*1000);
+
+    PIT_QuickInit(HW_PIT_CH1, 50*1000);
     PIT_CallbackInstall(HW_PIT_CH1, PIT_10MS_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF, true);
     
@@ -145,8 +147,9 @@ int main(void)
    // mpu9250_test();
  
     dcal_init(&dcal);
+    _print_cal_data(&dcal);
     
-   // uart_dma_init(HW_DMA_CH1, uart_instance);
+    uart_dma_init(HW_DMA_CH1, uart_instance);
 
     while(1)
     {
@@ -157,6 +160,12 @@ int main(void)
         cp_mdata[0] = mdata[0];
         cp_mdata[1] = mdata[1];
         cp_mdata[2] = mdata[2];
+        
+        for(i=0;i<3;i++)
+        {
+            mdata[i] = dcal.mg[i]*(mdata[i] - dcal.mo[i]);
+        }
+
         
         /* set timer */
         time = PIT_GetCounterValue(HW_PIT_CH2);
@@ -186,15 +195,6 @@ int main(void)
         {
             dcal_input(cp_mdata);
             dcal_output(&dcal);
-            if(dcal.need_update)
-            {
-                printf("%f %f %f\r\n", dcal.mg[0], dcal.mg[1], dcal.mg[2]);
-                for(i=0;i<3;i++)
-                {
-                    mdata[i] = dcal.mg[i]*(mdata[i] - dcal.mo[i]);
-                }
-                veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
-            }
             
             int32_t l_presure;
             ret = bmp180_conversion_process(&l_presure, &temperature);
@@ -207,7 +207,21 @@ int main(void)
             FLAG_10MS = false;
         }
         
-     //   send_data_process(&angle, adata, gdata, mdata);
+        send_data_process(&angle, adata, gdata, cp_mdata);
+    }
+}
+
+void UART_ISR(uint16_t data)
+{
+    static rev_data_t rd;
+
+    if(!ano_rec((uint8_t)data, &rd))
+    {
+        if(rd.buf[0] == 0xAA)
+        {
+            printf("write calibration data!...\r\n");
+            veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+        }
     }
 }
 

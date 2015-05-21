@@ -22,15 +22,15 @@ static int32_t temperature;
 static int32_t pressure;
 
 
-//static void _print_cal_data(struct calibration_t * cal)
-//{
-//    printf("cal data:\r\n");
-//    
-//    printf("gyro offset:%d %d %d \r\n", cal->go[0], cal->go[1], cal->go[2]);
-//    printf("acce offset:%d %d %d \r\n", cal->ao[0], cal->ao[1], cal->ao[2]);
-//    printf("magn offset:%d %d %d \r\n", cal->mo[0], cal->mo[1], cal->mo[2]);
-//    printf("mag gain:%f %f %f \r\n",    cal->mg[0], cal->mg[1], cal->mg[2]);
-//}
+static void _print_cal_data(struct dcal_t * dc)
+{
+    printf("calibrartion data:\r\n");
+
+    printf("gyro offset:%d %d %d \r\n", dc->go[0], dc->go[1], dc->go[2]);
+    printf("acce offset:%d %d %d \r\n", dc->ao[0], dc->ao[1], dc->ao[2]);
+    printf("magn offset:%d %d %d \r\n", dc->mo[0], dc->mo[1], dc->mo[2]);
+    printf("mag gain:%f %f %f \r\n",    dc->mg[0], dc->mg[1], dc->mg[2]);
+}
 
 
 static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata)
@@ -50,7 +50,6 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
     payload.R = (int16_t)(angle->R*100);
     payload.Y = 1800 + (int16_t)(angle->Y*10);
     payload.pressure = pressure;
-    
     /* set buffer */
     len = ano_encode(&payload, buf);
     uart_dma_send(buf, len);
@@ -59,7 +58,7 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
 
 
 
-int init_sensor(void)
+int sensor_init(void)
 {
     uint32_t ret;
 
@@ -74,6 +73,11 @@ int init_sensor(void)
         SystemSoftReset();
     }
     
+    ret = bmp180_init(0);
+    if(ret)
+    {
+        printf("bmp 180 init failed:%d\r\n", ret);
+    }
     
     struct mpu_config config;
     
@@ -90,17 +94,12 @@ int init_sensor(void)
 static void ShowInfo(void)
 {
     uint32_t clock;
-    printf("URANUS V%d.%d\r\n", VERSION_MAJOR, VERSION_MINOR);
+    printf("VERSION%d.%d\r\n", VERSION_MAJOR, VERSION_MINOR);
     CLOCK_GetClockFrequency(kCoreClock, &clock);
     printf("CoreClock:%dHz\r\n", clock);
 }
 
-#define BMP_STATUS_T_START          (0x00)
-#define BMP_STATUS_T_COMPLETE       (0x01)
-#define BMP_STATUS_P_START          (0x02)
-#define BMP_STATUS_P_COMPLETE       (0x03)
-#define BMP_STATUS_T_WAIT           (0x04)
-#define BMP_STATUS_P_WAIT           (0x05)
+
 
 static bool FLAG_10MS;
 
@@ -114,7 +113,7 @@ int main(void)
     int i;
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
     static float fadata[3], fgdata[3], fmdata[3];
-    static int bmpStatus = BMP_STATUS_T_START;
+    struct dcal_t dcal;
     uint32_t ret;
     uint32_t uart_instance;
     
@@ -127,15 +126,10 @@ int main(void)
    // GPIO_QuickInit(HW_GPIOE, 0, kGPIO_Mode_OPP);
    // GPIO_QuickInit(HW_GPIOE, 1, kGPIO_Mode_OPP);
     
-    init_sensor();
-//    veep_read((uint8_t*)&cal_data, sizeof(cal_data));
-//    if(cal_data.magic !=  CAL_MAGIC)
-//    {
-//        printf("read cal data from flash err!\r\n");
-//   //     calibrate_magnetometer(&cal_data);
-//        veep_write((uint8_t*)&cal_data, sizeof(cal_data));
-//    }
-//    _print_cal_data(&cal_data);
+    sensor_init();
+    veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
+    
+    _print_cal_data(&dcal);
     
     
     PIT_QuickInit(HW_PIT_CH1, 100*1000);
@@ -150,8 +144,7 @@ int main(void)
    
    // mpu9250_test();
  
-    struct dcal_t dcal;
-    dcal_init(NULL);
+    dcal_init(&dcal);
     
    // uart_dma_init(HW_DMA_CH1, uart_instance);
 
@@ -164,17 +157,6 @@ int main(void)
         cp_mdata[0] = mdata[0];
         cp_mdata[1] = mdata[1];
         cp_mdata[2] = mdata[2];
-        
-        dcal_output(&dcal);
-        if(dcal.need_update)
-        {
-            printf("%f %f %f\r\n", dcal.mg[0], dcal.mg[1], dcal.mg[2]);
-            for(i=0;i<3;i++)
-            {
-                mdata[i] = dcal.mg[i]*(mdata[i] - dcal.mo[i]);
-            }
-        }
-        
         
         /* set timer */
         time = PIT_GetCounterValue(HW_PIT_CH2);
@@ -197,50 +179,35 @@ int main(void)
 
         /* IMU ipdate */
         ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
-        
         halfT = ((float)time)/1000/2000;
-//        switch(bmpStatus)
-//        {
-//            case BMP_STATUS_T_START:
-//                bmp180_start_conversion(BMP180_T_MEASURE);
-//                bmpStatus = BMP_STATUS_T_WAIT;
-//                break;
-//            case BMP_STATUS_T_WAIT:
-//                if(!is_conversion_busy())
-//                {
-//                    bmpStatus = BMP_STATUS_T_COMPLETE;
-//                }
-//                break;
-//            case BMP_STATUS_T_COMPLETE:
-//                bmp180_read_temperature(&temperature);
-//                bmpStatus = BMP_STATUS_P_START;
-//                break;
-//            case BMP_STATUS_P_START:
-//                bmp180_start_conversion(BMP180_P3_MEASURE);
-//                bmpStatus = BMP_STATUS_P_WAIT;
-//                break;
-//            case BMP_STATUS_P_WAIT:
-//                if(!is_conversion_busy())
-//                {
-//                    bmpStatus = BMP_STATUS_P_COMPLETE;
-//                }
-//                break;
-//            case BMP_STATUS_P_COMPLETE:
-//                bmp180_read_pressure(&pressure);
-//                bmpStatus = BMP_STATUS_T_START;
-//                break;
-//            default:
-//                break;
-//        }
-        
-     //   send_data_process(&angle, adata, gdata, mdata);
-     
+
+        /* 10ms task */
         if(FLAG_10MS)
         {
             dcal_input(cp_mdata);
+            dcal_output(&dcal);
+            if(dcal.need_update)
+            {
+                printf("%f %f %f\r\n", dcal.mg[0], dcal.mg[1], dcal.mg[2]);
+                for(i=0;i<3;i++)
+                {
+                    mdata[i] = dcal.mg[i]*(mdata[i] - dcal.mo[i]);
+                }
+                veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+            }
+            
+            int32_t l_presure;
+            ret = bmp180_conversion_process(&l_presure, &temperature);
+            if(!ret)
+            {
+                pressure = l_presure;
+            }
+            
             GPIO_ToggleBit(HW_GPIOA, 1);
             FLAG_10MS = false;
         }
+        
+     //   send_data_process(&angle, adata, gdata, mdata);
     }
 }
 

@@ -36,8 +36,8 @@ static void reset_dcal_data(void)
     int i;
     for(i=0;i<3;i++)
     {
-        dcal.m_min[i] = 1000;
-        dcal.m_max[i] = -1000;
+        dcal.m_min[i] = 100;
+        dcal.m_max[i] = -100;
         dcal.mg[i] = 1.000;
         dcal.mo[i] = 0;
     } 
@@ -68,7 +68,12 @@ void dcal_input(int16_t *mdata)
     {
         if(is_mval_ok(mdata[i]))
         {
-            reset_dcal_data();
+            /* strong mangetic distornation found */
+            for(i=0;i<3;i++)
+            {
+                dcal.m_max[i] = (dcal.m_max[i]*4)/5;
+                dcal.m_min[i] = (dcal.m_min[i]*4)/5;
+            }
             printf("data of out rangle!\r\n");
             return;
         }
@@ -93,7 +98,7 @@ void dcal_input(int16_t *mdata)
     /* constant val */
     if(dcal.mg[1] != last_gain)
     {
-        if((dcal.mg[1] < 1.050) && (dcal.mg[1] > 0.950) && (dcal.mg[2] < 1.05) && (dcal.mg[2] > 0.950) && (dcal.mg[1] != last_gain))
+        if((dcal.mg[1] < 1.1) && (dcal.mg[1] > 0.9) && (dcal.mg[2] < 1.1) && (dcal.mg[2] > 0.9) && (dcal.mg[1] != last_gain))
         {
             dcal.need_update = true;
         }

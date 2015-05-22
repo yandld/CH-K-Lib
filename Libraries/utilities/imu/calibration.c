@@ -15,12 +15,12 @@
 
 #include "calibration.h"
 
-#define M_MAX       (500)
-#define M_MIN       (-500)
+#define M_MAX           (500)
+#define M_MIN           (-500)
+#define CAL_MAGIC       (0x5ACB)
 
 static struct dcal_t dcal;
 
-#define     CAL_MAGIC           (0x5ACB)
 
 static int is_mval_ok(int16_t data)
 {

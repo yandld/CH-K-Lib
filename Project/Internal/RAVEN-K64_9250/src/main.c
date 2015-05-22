@@ -15,14 +15,10 @@
 #define     VERSION_MINOR       (0)
 
 
-static bool FLAG_10MS;
-static attitude_t angle;
-static int32_t temperature;
-static int32_t pressure;
-struct dcal_t dcal;
+static bool FLAG_TIMER;
 
 
-static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata)
+static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata, int32_t pressure)
 {
     int i;
     static uint8_t buf[64];
@@ -44,8 +40,6 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
     uart_dma_send(buf, len);
 
 }
-
-
 
 int sensor_init(void)
 {
@@ -90,9 +84,9 @@ static void ShowInfo(void)
 
 
 
-void PIT_10MS_ISR(void)
+void PIT_ISR(void)
 {
-    FLAG_10MS = true;
+    FLAG_TIMER = true;
 }
 
 extern void UART_ISR(uint16_t data);
@@ -102,8 +96,11 @@ int main(void)
     int i;
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
     static float fadata[3], fgdata[3], fmdata[3];
+    attitude_t angle;
+    struct dcal_t dcal;
     uint32_t ret;
     uint32_t uart_instance;
+    int32_t pressure, dummy, temperature;
     
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);
@@ -121,7 +118,7 @@ int main(void)
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
 
     PIT_QuickInit(HW_PIT_CH1, 100*1000);
-    PIT_CallbackInstall(HW_PIT_CH1, PIT_10MS_ISR);
+    PIT_CallbackInstall(HW_PIT_CH1, PIT_ISR);
     PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF, true);
     
     PIT_QuickInit(HW_PIT_CH2, 1000*1000);
@@ -130,8 +127,6 @@ int main(void)
     CLOCK_GetClockFrequency(kBusClock, &fac_us);
     fac_us /= 1000000;
    
-   // mpu9250_test();
- 
     dcal_init(&dcal);
     dcal_print(&dcal);
     
@@ -176,29 +171,28 @@ int main(void)
         ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
         halfT = ((float)time)/1000/2000;
 
-        /* 10ms task */
-        if(FLAG_10MS)
+        /* timer task */
+        if(FLAG_TIMER)
         {
-            dcal_input(cp_mdata);
-
+            /* dcal process */
+            dcal_minput(cp_mdata);
             dcal_output(&dcal);
             if(dcal.need_update)
             {
                 veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
             }
             
-            int32_t l_presure;
-            ret = bmp180_conversion_process(&l_presure, &temperature);
+            /* bmp read */
+            ret = bmp180_conversion_process(&dummy, &temperature);
             if(!ret)
             {
-                pressure = l_presure;
+                pressure = dummy;
             }
             
             GPIO_ToggleBit(HW_GPIOA, 1);
-            FLAG_10MS = false;
+            FLAG_TIMER = false;
         }
-        
-        send_data_process(&angle, adata, gdata, cp_mdata);
+        send_data_process(&angle, adata, gdata, cp_mdata, pressure);
     }
 }
 

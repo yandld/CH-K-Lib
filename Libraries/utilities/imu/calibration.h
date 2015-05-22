@@ -22,8 +22,8 @@ struct dcal_t
     int16_t     m_max[3];
     int16_t     mo[3];
     float       mg[3];
-    int16_t ao[3];
-    int16_t go[3];
+    int16_t     ao[3];
+    int16_t     go[3];
     
     bool        need_update;
 };
@@ -31,6 +31,7 @@ struct dcal_t
 
 void dcal_init(struct dcal_t *dc);
 void dcal_minput(int16_t *mdata);
+void dcal_ginput(int16_t *gdata);
 void dcal_output(struct dcal_t *dc);
 void dcal_print(struct dcal_t * dc);
 

@@ -17,10 +17,20 @@
 
 #define M_MAX           (500)
 #define M_MIN           (-500)
+#define G_MAX           (500)
+#define G_MIN           (-500)
 #define CAL_MAGIC       (0x5ACB)
 
 static struct dcal_t dcal;
 
+static int is_gval_ok(int16_t data)
+{
+    if((data > G_MAX) || (data < G_MIN))
+    {
+        return 1;
+    }
+    return 0; 
+}
 
 static int is_mval_ok(int16_t data)
 {
@@ -74,6 +84,32 @@ void dcal_init(struct dcal_t *dc)
         printf("no initial dcal value\r\n");  
         reset_dcal_data(dc);
         reset_dcal_data(&dcal);
+    }
+}
+
+void dcal_ginput(int16_t *gdata)
+{
+    int i;
+    
+    for(i=0;i<3;i++)
+    {
+        if(is_mval_ok(gdata[i]))
+        {
+            printf("data of out rangle!\r\n");
+            return;
+        }
+    }
+    
+    for(i=0;i<3;i++)
+    {
+        if(gdata[i] > 50)
+        {
+            dcal.go[i]++;
+        }
+        if(gdata[i] < -50)
+        {
+            dcal.go[i]--;
+        }
     }
 }
 

@@ -69,15 +69,15 @@ int hmc5883_init(uint32_t instance)
 
 
 
-int hmc5883_read_data(int16_t* x, int16_t* y, int16_t* z)
+int hmc5883_read_data(int16_t *mdata)
 {
     uint8_t err;
     uint8_t buf[7];
     
     err = I2C_BurstRead(hmc_dev.instance, hmc_dev.addr, HMC_DX_MSB, 1, buf, 7);
     
-    *x=(int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
-    *y=(int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
-    *z=(int16_t)(((uint16_t)buf[4]<<8)+buf[5]); 
+    mdata[0] = (int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
+    mdata[1] = (int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
+    mdata[2] = (int16_t)(((uint16_t)buf[4]<<8)+buf[5]); 
     return err;    
 }

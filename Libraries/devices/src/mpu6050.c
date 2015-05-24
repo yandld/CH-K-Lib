@@ -285,32 +285,32 @@ int mpu6050_config(struct mpu_config *config)
     return 0;
 }
 
-int mpu6050_read_accel(int16_t* x, int16_t* y, int16_t* z)
+int mpu6050_read_accel(int16_t* adata)
 {
     uint8_t err;
     uint8_t buf[6];
     
     err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, ACCEL_XOUT_H, 1, buf, 6);
     
-    *x=(int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
-    *y=(int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
-    *z=(int16_t)(((uint16_t)buf[4]<<8)+buf[5]); 
+    adata[0] = (int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
+    adata[1] = (int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
+    adata[2] = (int16_t)(((uint16_t)buf[4]<<8)+buf[5]); 
     
     
     return err;    
 }
 
 //!< read gyro data
-int mpu6050_read_gyro(int16_t* x, int16_t* y, int16_t* z)
+int mpu6050_read_gyro(int16_t *gdata)
 {
     uint8_t err;
     uint8_t buf[6];
     
     err = I2C_BurstRead(mpu_dev.instance, mpu_dev.addr, GYRO_XOUT_H, 1, buf, 6);
     
-    *x=(int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
-    *y=(int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
-    *z=(int16_t)(((uint16_t)buf[4]<<8)+buf[5]);
+    gdata[0] = (int16_t)(((uint16_t)buf[0]<<8)+buf[1]); 	    
+    gdata[1] = (int16_t)(((uint16_t)buf[2]<<8)+buf[3]); 	    
+    gdata[2] = (int16_t)(((uint16_t)buf[4]<<8)+buf[5]);
     
     return err;    
 }

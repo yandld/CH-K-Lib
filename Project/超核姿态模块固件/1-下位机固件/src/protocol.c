@@ -14,37 +14,85 @@
 typedef __packed struct
 {
     uint8_t trans_header[3];
-    transmit_user_data user_data;
+    payload_t patload;
     uint8_t sum;
-}trans_packet_t;
+}packet_t;
 
-uint32_t user_data2buffer(transmit_user_data* data, uint8_t* buf)
+
+
+uint32_t ano_encode(payload_t* payload, uint8_t* buf)
 {
     int i;
     uint8_t sum = 0;
-    trans_packet_t *packet = (trans_packet_t*)buf;
+    packet_t *packet = (packet_t*)buf;
     uint8_t *p = buf;
     for(i=0;i<3;i++)
     {
-        data->trans_accel[i] = BSWAP_16(data->trans_accel[i]);
-        data->trans_gyro[i] = BSWAP_16(data->trans_gyro[i]);
-        data->trans_mag[i] = BSWAP_16(data->trans_mag[i]);
+        payload->acc[i] = BSWAP_16(payload->acc[i]);
+        payload->gyo[i] = BSWAP_16(payload->gyo[i]);
+        payload->mag[i] = BSWAP_16(payload->mag[i]);
     }
-    data->trans_yaw = BSWAP_16(data->trans_yaw);
-    data->trans_pitch = BSWAP_16(data->trans_pitch);
-    data->trans_roll = BSWAP_16(data->trans_roll);
-    data->trans_pressure = (data->trans_pressure);
-    memcpy(&packet->user_data, data, sizeof(transmit_user_data));
+    payload->Y = BSWAP_16(payload->Y);
+    payload->P = BSWAP_16(payload->P);
+    payload->R = BSWAP_16(payload->R);
+    payload->pressure = (payload->pressure);
+    memcpy(&packet->patload, payload, sizeof(payload_t));
     packet->trans_header[0] = 0x88;
     packet->trans_header[1] = 0xAF;
     packet->trans_header[2] = 0x1C;
-    for(i = 0; i < sizeof(trans_packet_t) - 1;i++)
+    for(i = 0; i < sizeof(packet_t)-1;i++)
     {
       sum += *p++;
     }
     packet->sum = sum;
-    return sizeof(trans_packet_t);
+    return sizeof(packet_t);
 }
 
+enum ano_status
+{
+    ANO_IDLE,
+    ANO_SOF,
+    ANO_LEN,
+    ANO_DATA,
+};
+
+int ano_rec(uint8_t ch, rev_data_t *rd)
+{
+    int ret;
+    static int i;
+    static enum ano_status states = ANO_IDLE;
+    
+    ret = 1;
+    
+    switch(states)
+    {
+        case ANO_IDLE:
+            if((uint8_t)ch == 0x8A)
+            {
+                states = ANO_SOF;
+            }
+            break;
+        case ANO_SOF:
+            if((uint8_t)ch == 0x8B)
+            {
+                states = ANO_LEN;
+            }
+            break;
+        case ANO_LEN:
+            rd->len = ch;
+            states = ANO_DATA;
+            i = 0;
+            break;
+        case ANO_DATA:
+            if(i == rd->len)
+            {
+                states = ANO_IDLE;
+                ret = 0;
+            }
+            rd->buf[i++] = ch;
+            break;
+    }
+    return ret;
+}
 
 

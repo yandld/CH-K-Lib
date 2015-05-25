@@ -16,7 +16,7 @@
 #define     VERSION_MAJOR       (2)
 #define     VERSION_MINOR       (0)
 
-
+    struct dcal_t dcal;
 static bool FLAG_TIMER;
 
 static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata, int32_t pressure)
@@ -94,13 +94,27 @@ void PIT_ISR(void)
     FLAG_TIMER = true;
 }
 
+void UART_ISR(uint16_t data)
+{
+    static rev_data_t rd;
+
+    if(!ano_rec((uint8_t)data, &rd))
+    {
+        if(rd.buf[0] == 0xAA)
+        {
+      //      printf("write calibration data!...\r\n");
+            veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+        }
+    }
+}
+
 int main(void)
 {
     int i;
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
     static float fadata[3], fgdata[3], fmdata[3];
     attitude_t angle;
-    struct dcal_t dcal;
+
     uint32_t ret;
     uint32_t uart_instance;
     int32_t pressure, dummy, temperature;
@@ -108,8 +122,8 @@ int main(void)
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);
     uart_instance = UART_QuickInit(UART1_RX_PC03_TX_PC04, 115200);
-  //  UART_CallbackRxInstall(uart_instance, UART_ISR);
- //   UART_ITDMAConfig(uart_instance, kUART_IT_Rx, true);
+    UART_CallbackRxInstall(uart_instance, UART_ISR);
+    UART_ITDMAConfig(uart_instance, kUART_IT_Rx, true);
     ShowInfo();
     veep_init();
    // GPIO_QuickInit(HW_GPIOE, 0, kGPIO_Mode_OPP);
@@ -180,7 +194,7 @@ int main(void)
             dcal_output(&dcal);
             if(dcal.need_update)
             {
-                veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+         //       veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
             }
             
             /* bmp read */

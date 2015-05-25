@@ -73,8 +73,8 @@ void dcal_init(struct dcal_t *dc)
     {
         for(i=0;i<3;i++)
         {
-            dc->m_min[i] -=10;
-            dc->m_max[i] +=10;  
+            dc->m_min[i] +=10;
+            dc->m_max[i] -=10;  
         }
         memcpy(&dcal, dc, sizeof(struct dcal_t));
         printf("load dcal value!\r\n");

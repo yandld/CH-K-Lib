@@ -76,7 +76,7 @@ __inline static void protected_and (uint32_t *addr, uint32_t val) { while(__stre
 __inline static void protected_or  (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) | val),addr)); }
 __inline static void protected_xor (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) ^ val),addr)); }
 #elif __ICCARM__
-inline static void protected_and (uint32_t *addr, uint32_t val) { *addr = (*addr)|val; }
+inline static void protected_and (uint32_t *addr, uint32_t val) { *addr = (*addr)&val; }
 inline static void protected_or  (uint32_t *addr, uint32_t val) { *addr = (*addr)|val; }
 inline static void protected_xor (uint32_t *addr, uint32_t val) { *addr = (*addr)^val; }
 #endif

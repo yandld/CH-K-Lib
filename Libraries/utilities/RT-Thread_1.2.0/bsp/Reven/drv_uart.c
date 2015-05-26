@@ -37,82 +37,7 @@
 #include "rtt_drv.h"
 
 
-//static struct rt_serial_device serial;
 
-//static uint16_t *gRevCh = RT_NULL;
-//static void UART_ISR(uint16_t byteReceived)
-//{
-//    static uint16_t ch;
-//    rt_interrupt_enter();
-//    ch = byteReceived;
-//    gRevCh = &ch;
-//  //  rt_hw_serial_isr(&serial, RT_SERIAL_EVENT_RX_IND);
-//    rt_interrupt_leave();
-//}
-
-//static rt_err_t _configure(struct rt_serial_device *serial, struct serial_configure *cfg)
-//{
-//	return RT_EOK;
-//}
-
-//static rt_err_t _control(struct rt_serial_device *serial, int cmd, void *arg)
-//{
-//    switch (cmd)
-//    {
-//        case RT_DEVICE_CTRL_SET_INT:
-//            UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, true);
-//            break;
-//        case RT_DEVICE_CTRL_CLR_INT:
-//            UART_ITDMAConfig(serial->config.reserved, kUART_IT_Rx, false);
-//            break;
-//    }
-//    return RT_EOK;
-//}
-
-//static int _putc(struct rt_serial_device *serial, char c)
-//{
-//    UART_WriteByte(serial->config.reserved, c);
-//    return 1;
-//}
-
-//static int _getc(struct rt_serial_device *serial)
-//{
-//    int c;
-//    c = -1;
-//    
-//    if(gRevCh != RT_NULL)
-//    {
-//        c = *gRevCh;
-//        gRevCh = RT_NULL;
-//    }
-//    return c;
-//}
-
-//static const struct rt_uart_ops _ops =
-//{
-//    _configure,
-//    _control,
-//    _putc,
-//    _getc,
-//};
-
-//void rt_hw_uart_init(void)
-//{
-//    uint32_t instance;
-//    instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
-//    
-//    struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT;
-//    config.reserved  = instance;
-//    serial.config = config;
-//    serial.ops    = &_ops;
-//    
-//    /* »Øµ÷º¯Êý */
-//    UART_CallbackRxInstall(instance, UART_ISR);
-//    rt_hw_serial_register(&serial, "uart0",
-//                          RT_DEVICE_FLAG_RDWR  | RT_DEVICE_FLAG_STREAM,
-//                          (void*)0);
-
-//}
 
 static struct rt_device uart_device;
 static char ch;
@@ -135,7 +60,7 @@ static rt_err_t rt_uart_close(rt_device_t dev)
 
 static rt_err_t rt_uart_init (rt_device_t dev)
 {
-    UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, BOARD_UART_BAUDRATE);
     UART_CallbackRxInstall(HW_UART0, UART_ISR);
     UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     return RT_EOK;
@@ -158,12 +83,20 @@ static rt_size_t rt_uart_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_si
 
 static rt_size_t rt_uart_write(rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
-    uint8_t *p;
+    volatile uint8_t *p;
     
     p = (uint8_t*)buffer;
     
     while(size--)
     {
+        /*
+         * to be polite with serial console add a line feed
+         * to the carriage return character
+         */
+        if (*p == '\n' && (dev->open_flag & RT_DEVICE_FLAG_STREAM))
+        {
+            UART_WriteByte(HW_UART0, '\r');
+        }
         UART_WriteByte(HW_UART0, *p++);
     }
     return size;
@@ -171,7 +104,6 @@ static rt_size_t rt_uart_write(rt_device_t dev, rt_off_t pos, const void* buffer
 
 static rt_err_t rt_uart_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
-  //  printf("rt_uart_control\r\n");
     return RT_EOK; 
 }
 

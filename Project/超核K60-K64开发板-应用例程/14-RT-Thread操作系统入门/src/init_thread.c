@@ -1,6 +1,6 @@
 #include <rtthread.h>
 #include "chlib_k.h"
-#include "drv_uart.h"
+#include "rtt_drv.h"
 #include "shell.h"
 
 /* 线程1 入口 */

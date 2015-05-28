@@ -36,7 +36,7 @@ float lpf_1st_factor_cal(float time, float f_cut)
  * @param  factor:   滤波系数
  * @retval 结果
  */
-float lpf_1st(float old_data, float new_data, float factor)
+float inline lpf_1st(float old_data, float new_data, float factor)
 {
 	return old_data * (1 - factor) + new_data * factor; 
 }

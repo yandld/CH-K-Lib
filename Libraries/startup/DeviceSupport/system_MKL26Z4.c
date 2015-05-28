@@ -82,7 +82,7 @@
     #define CPU_XTAL_CLK_HZ                 8000000u /* Value of the external crystal or oscillator clock frequency in Hz */
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
     #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
-    #define DEFAULT_SYSTEM_CLOCK            96000000u /* Default System clock value */
+    #define DEFAULT_SYSTEM_CLOCK            48000000u /* Default System clock value */
 #elif (CLOCK_SETUP == 1)
     #define CPU_XTAL_CLK_HZ                 8000000u /* Value of the external crystal or oscillator clock frequency in Hz */
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
@@ -121,7 +121,7 @@ void SystemInit (void) {
   /* MCG_C2: LOCRE0=0,RANGE0=0,HGO0=0,EREFS0=0,LP=0,IRCS=0 */
   MCG->C2 &= (uint8_t)~(uint8_t)0xBFU;
   /* MCG->C4: DMX32=0,DRST_DRS=1 */
-  MCG->C4 = MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS(3);
+  MCG->C4 = MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS(1);
   //MCG->C4 = (uint8_t)((MCG->C4 & (uint8_t)~(uint8_t)0xC0U) | (uint8_t)0x20U);
   /* OSC0->CR: ERCLKEN=1,??=0,EREFSTEN=0,??=0,SC2P=0,SC4P=0,SC8P=0,SC16P=0 */
   OSC0->CR = (uint8_t)0x80U;

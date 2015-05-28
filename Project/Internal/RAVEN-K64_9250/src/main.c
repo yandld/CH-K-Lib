@@ -1,6 +1,12 @@
 #include <string.h>
 
-#include "chlib_k.h"
+#include "common.h"
+#include "dma.h"
+#include "pit.h"
+#include "gpio.h"
+#include "uart.h"
+#include "i2c.h"
+#include "flash.h"
 
 #include "protocol.h"
 #include "mpu9250.h"
@@ -10,6 +16,8 @@
 #include "trans.h"
 #include "filter.h"
 #include "calibration.h"
+
+#include "rl_usb.h"
 
 #define     VERSION_MAJOR       (2)
 #define     VERSION_MINOR       (0)
@@ -53,7 +61,7 @@ int sensor_init(void)
         printf("mpu9250 init:%d\r\n", ret);
         printf("restarting...\r\n");
         DelayMs(200);
-        SystemSoftReset();
+    //    SystemSoftReset();
     }
     
     ret = bmp180_init(0);
@@ -91,6 +99,63 @@ void PIT_ISR(void)
 
 extern void UART_ISR(uint16_t data);
 
+
+
+#define UDISK_SIZE          (64*1024)
+#define FLASH_OFFSET        (50*1024)   /* UDisk start offset */
+
+U8 BlockBuf[1024];
+
+/* init */
+void usbd_msc_init ()
+{
+  USBD_MSC_MemorySize = UDISK_SIZE;
+  USBD_MSC_BlockSize  = FLASH_GetSectorSize();
+  USBD_MSC_BlockGroup = 1;
+  USBD_MSC_BlockCount = USBD_MSC_MemorySize / USBD_MSC_BlockSize;
+  USBD_MSC_BlockBuf   = BlockBuf;
+
+  USBD_MSC_MediaReady = __TRUE;
+
+}
+
+/* read */
+void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
+{
+    uint8_t *p;
+    uint8_t i;
+    
+    p = (uint8_t*)(FLASH_OFFSET + block * USBD_MSC_BlockSize);
+    
+    if (USBD_MSC_MediaReady)
+    {
+        for(i=0;i<num_of_blocks;i++)
+        {
+            memcpy(buf, p, num_of_blocks * USBD_MSC_BlockSize);
+            p += USBD_MSC_BlockSize;
+        }
+    }
+}
+
+/* write */
+void usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
+{
+    int i,j;
+    uint8_t *p;
+    
+    p = (uint8_t*)(FLASH_OFFSET + block * USBD_MSC_BlockSize);
+    
+    if (USBD_MSC_MediaReady)
+    {
+        for(i=0;i<num_of_blocks;i++)
+        {
+            FLASH_EraseSector((uint32_t)p);
+            FLASH_WriteSector((uint32_t)p, buf, FLASH_GetSectorSize());
+        }
+    }
+}
+
+
 int main(void)
 {
     int i;
@@ -104,34 +169,38 @@ int main(void)
     
     DelayInit();
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);
-    uart_instance = UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    uart_instance = UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);
     UART_CallbackRxInstall(uart_instance, UART_ISR);
     UART_ITDMAConfig(uart_instance, kUART_IT_Rx, true);
     
     
     ShowInfo();
-    veep_init();
-   // GPIO_QuickInit(HW_GPIOE, 0, kGPIO_Mode_OPP);
-   // GPIO_QuickInit(HW_GPIOE, 1, kGPIO_Mode_OPP);
-    
-    sensor_init();
-    veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
+//    veep_init();
+//   // GPIO_QuickInit(HW_GPIOE, 0, kGPIO_Mode_OPP);
+//   // GPIO_QuickInit(HW_GPIOE, 1, kGPIO_Mode_OPP);
+//    
+//    sensor_init();
+//    veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
 
-    PIT_QuickInit(HW_PIT_CH1, 100*1000);
-    PIT_CallbackInstall(HW_PIT_CH1, PIT_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH1, kPIT_IT_TOF, true);
-    
-    PIT_QuickInit(HW_PIT_CH2, 1000*1000);
-    
+//    PIT_QuickInit(HW_PIT_CH0, 100*1000);
+//    PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
+//    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
+//    
+//    PIT_QuickInit(HW_PIT_CH1, 1000*1000);
+//    
     static uint32_t time, load_val, fac_us;
     CLOCK_GetClockFrequency(kBusClock, &fac_us);
     fac_us /= 1000000;
-   
-    dcal_init(&dcal);
-    dcal_print(&dcal);
+//   
+//    dcal_init(&dcal);
+//    dcal_print(&dcal);
+//    
+//    uart_dma_init(HW_DMA_CH1, uart_instance);
     
-    uart_dma_init(HW_DMA_CH1, uart_instance);
-
+    usbd_init();                          /* USB Device Initialization          */
+    usbd_connect(__TRUE);                 /* USB Device Connect                 */
+    while (!usbd_configured ());          /* Wait for device to configure        */
+    
     while(1)
     {
         /* raw data and offset balance */
@@ -149,9 +218,9 @@ int main(void)
 
         
         /* set timer */
-        time = PIT_GetCounterValue(HW_PIT_CH2);
-        PIT_ResetCounter(HW_PIT_CH2);
-        load_val = PIT_GetCounterValue(HW_PIT_CH2);
+        time = PIT_GetCounterValue(HW_PIT_CH1);
+        PIT_ResetCounter(HW_PIT_CH1);
+        load_val = PIT_GetCounterValue(HW_PIT_CH1);
         time = load_val - time;
         time /= fac_us;
 

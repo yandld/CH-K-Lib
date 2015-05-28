@@ -5,74 +5,47 @@
 #include "common.h"
 
 
-struct 
-{
-    uint32_t dmaChl;
-    uint32_t uartInstance;
-}trans_hander;
-
-static uint32_t DMA_UART_TxRequestSourceTable[] = 
-{
-    UART0_TRAN_DMAREQ,
-    UART1_TRAN_DMAREQ,
-    UART2_TRAN_DMAREQ,
-};
-
-static uint32_t DMA_UART_DataRegisterAddrTable[] = 
-{
-    (uint32_t)&UART0->D,
-    (uint32_t)&UART1->D,
-    (uint32_t)&UART2->D,
-};
-
-//安装回调函数
 
 int uart_dma_init(uint8_t dmaChl, uint32_t uartInstance)
 {
-    DMA_InitTypeDef DMA_InitStruct1= {0};
-    DMA_InitStruct1.chl = dmaChl;
-    DMA_InitStruct1.chlTriggerSource = DMA_UART_TxRequestSourceTable[uartInstance];
-    DMA_InitStruct1.triggerSourceMode = kDMA_TriggerSource_Normal;
-    DMA_InitStruct1.majorLoopCnt = 0;
-    DMA_InitStruct1.minorLoopByteCnt = 1;
-    DMA_InitStruct1.sAddr = NULL;
-    DMA_InitStruct1.sLastAddrAdj = 0;
-    DMA_InitStruct1.sAddrOffset = 1;
-    DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
-    DMA_InitStruct1.sMod = kDMA_ModuloDisable;
-        
-    DMA_InitStruct1.dAddr = DMA_UART_DataRegisterAddrTable[uartInstance];
-    DMA_InitStruct1.dLastAddrAdj = 0;
-    DMA_InitStruct1.dAddrOffset = 0;
-    DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;
-    DMA_InitStruct1.dMod = kDMA_ModuloDisable;
-    DMA_Init(&DMA_InitStruct1);
-    UART_ITDMAConfig(uartInstance, kUART_DMA_Tx, true);
+    DMA_InitTypeDef DMAInitStruct;
+
+    DMAInitStruct.chl = HW_DMA_CH0;
+    DMAInitStruct.chlTriggerSource = UART0_TRAN_DMAREQ;
+    DMAInitStruct.triggerSourceMode = kDMA_TriggerSource_Normal;
+
+    DMAInitStruct.sAddr = 0;
+    DMAInitStruct.sAddrIsInc = true;
+    DMAInitStruct.sDataWidth = kDMA_DataWidthBit_8;
+    DMAInitStruct.sMod = kDMA_ModuloDisable;
+
+    DMAInitStruct.dAddr = (uint32_t)&UART0->D;
+    DMAInitStruct.dAddrIsInc = false;
+    DMAInitStruct.dDataWidth = kDMA_DataWidthBit_8;
+    DMAInitStruct.dMod = kDMA_ModuloDisable;
+    DMA_Init(&DMAInitStruct);
     
-    trans_hander.dmaChl = dmaChl;
-    trans_hander.uartInstance = uartInstance;
+    DMA_EnableAutoDisableRequest(HW_DMA_CH0, true);
+    UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx, true);
     return 0;
 }
 
-int uart_dma_send(uint8_t* buf, uint32_t size)
+int uart_dma_send(uint8_t* buf, uint32_t len)
 {
-    if(DMA_IsMajorLoopComplete(trans_hander.dmaChl) == 0)
+    uint32_t remain;
+    
+    remain = DMA_GetTransferByteCnt(HW_DMA_CH0);
+    if(remain)
     {
-        DMA_SetSourceAddress(trans_hander.dmaChl, (uint32_t)buf);
-        DMA_SetMajorLoopCounter(trans_hander.dmaChl, size);
-        DMA_EnableRequest(trans_hander.dmaChl); 
-        return 0;
+        return 1;
     }
-    return 1;
+    
+    DMA_CancelTransfer(HW_DMA_CH0);
+    DMA_SetSourceAddress(HW_DMA_CH0, (uint32_t)buf);
+    DMA_SetTransferByteCnt(HW_DMA_CH0, len);
+    DMA_EnableRequest(HW_DMA_CH0);
+    return 0;
 }
 
-int trans_is_transmission_complete(void)
-{
-    if(DMA_IsMajorLoopComplete(trans_hander.dmaChl) == 0)
-    {
-        return 0;
-    }        
-    return 1;
-}
 
 

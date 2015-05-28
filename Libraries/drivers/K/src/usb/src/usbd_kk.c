@@ -71,15 +71,11 @@ uint32_t Data1  = 0x55555555;
 #define OUT_TOKEN      0x01
 #define TOK_PID(idx)   ((BD[idx].stat >> 2) & 0x0F)
 
-#ifdef __CC_ARM
-__inline static void protected_and (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) & val),addr)); }
-__inline static void protected_or  (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) | val),addr)); }
-__inline static void protected_xor (uint32_t *addr, uint32_t val) { while(__strex((__ldrex(addr) ^ val),addr)); }
-#elif __ICCARM__
+
 inline static void protected_and (uint32_t *addr, uint32_t val) { *addr = (*addr)&val; }
 inline static void protected_or  (uint32_t *addr, uint32_t val) { *addr = (*addr)|val; }
 inline static void protected_xor (uint32_t *addr, uint32_t val) { *addr = (*addr)^val; }
-#endif
+
 
 /*
  *  USB Device Interrupt enable

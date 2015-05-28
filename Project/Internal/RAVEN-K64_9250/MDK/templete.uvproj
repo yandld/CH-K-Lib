@@ -7,19 +7,19 @@
 
   <Targets>
     <Target>
-      <TargetName>mk64f12</TargetName>
+      <TargetName>mkl26z4</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
-          <Device>MK64FN1M0xxx12</Device>
-          <Vendor>Freescale Semiconductor</Vendor>
-          <Cpu>IROM(0x00000000,0x100000) IRAM(0x20000000,0x30000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(120000000) ELITTLE</Cpu>
+          <Device>MKL26Z128xxx4</Device>
+          <Vendor>Freescale</Vendor>
+          <Cpu>IROM(0x00000000,0x20000) IRAM(0x1FFFF000,0x4000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0MK_P1M0 -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM))</FlashDriverDll>
-          <DeviceId>7425</DeviceId>
-          <RegisterFile>$$Device:MK64FN1M0xxx12$Device\Include\MK64F12.h</RegisterFile>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD1FFFF000 -FC4000 -FN1 -FF0MK_P128_48MHZ -FS00 -FL020000 -FP0($$Device:MKL26Z128xxx4$Flash\MK_P128_48MHZ.FLM))</FlashDriverDll>
+          <DeviceId>6835</DeviceId>
+          <RegisterFile>$$Device:MKL26Z128xxx4$Device\Include\MKL26Z4.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -29,7 +29,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:MK64FN1M0xxx12$SVD\MK64F12.svd</SFDFile>
+          <SFDFile>$$Device:MKL26Z128xxx4$SVD\MKL26Z4.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -72,6 +72,8 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopB1X>0</nStopB1X>
+            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
@@ -102,13 +104,13 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments> </SimDllArguments>
-          <SimDlgDll>DCM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
+          <SimDllArguments></SimDllArguments>
+          <SimDlgDll>DARMCM1.DLL</SimDlgDll>
+          <SimDlgDllArguments>-pCM0+</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments></TargetDllArguments>
-          <TargetDlgDll>TCM.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
+          <TargetDlgDll>TARMCM1.DLL</TargetDlgDll>
+          <TargetDlgDllArguments>-pCM0+</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -128,6 +130,7 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -139,8 +142,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
+            <UsePdscDebugDescription>1</UsePdscDebugDescription>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -207,7 +210,7 @@
             <AdsLsxf>1</AdsLsxf>
             <RvctClst>0</RvctClst>
             <GenPPlst>0</GenPPlst>
-            <AdsCpuType>"Cortex-M4"</AdsCpuType>
+            <AdsCpuType>"Cortex-M0+"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
             <mOS>0</mOS>
             <uocRom>0</uocRom>
@@ -216,8 +219,8 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>1</RvdsVP>
-            <hadIRAM2>1</hadIRAM2>
+            <RvdsVP>0</RvdsVP>
+            <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
             <useUlib>1</useUlib>
@@ -275,13 +278,13 @@
               </Ocm6>
               <IRAM>
                 <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
-                <Size>0x30000</Size>
+                <StartAddress>0x1ffff000</StartAddress>
+                <Size>0x4000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x100000</Size>
+                <Size>0x20000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -306,7 +309,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x100000</Size>
+                <Size>0x20000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -330,13 +333,13 @@
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
-                <Size>0x30000</Size>
+                <StartAddress>0x1ffff000</StartAddress>
+                <Size>0x4000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
-                <StartAddress>0x1fff0000</StartAddress>
-                <Size>0x10000</Size>
+                <StartAddress>0x0</StartAddress>
+                <Size>0x0</Size>
               </OCR_RVCT10>
             </OnChipMemories>
             <RvctStartVector></RvctStartVector>
@@ -359,9 +362,9 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>MK64F12 CLOCK_SETUP=0 RAVEN</Define>
+              <Define>MKL26Z4 CLOCK_SETUP=0 FRDM URANUS2</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\imu;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\utilities\veep</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\imu;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\utilities\veep;..\src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -402,17 +405,17 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>startup_mk64f12</GroupName>
+          <GroupName>startup_mkl26z4</GroupName>
           <Files>
             <File>
-              <FileName>system_MK64F12.c</FileName>
+              <FileName>system_MKL26Z4.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\system_MK64F12.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\system_MKL26Z4.c</FilePath>
             </File>
             <File>
-              <FileName>startup_MK64F12.s</FileName>
+              <FileName>startup_MKL26Z4.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK64F12.s</FilePath>
+              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MKL26Z4.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -439,98 +442,55 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\veep\virtual_eep.c</FilePath>
             </File>
+            <File>
+              <FileName>usb_lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\usb_lib.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>drivers</GroupName>
           <Files>
             <File>
-              <FileName>gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\gpio.c</FilePath>
-            </File>
-            <File>
               <FileName>common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
-            </File>
-            <File>
-              <FileName>systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>wdog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\wdog.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\common.c</FilePath>
             </File>
             <File>
               <FileName>dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
-            </File>
-            <File>
-              <FileName>pit.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\pit.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\dma.c</FilePath>
             </File>
             <File>
               <FileName>flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\flash.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>9</RVCTCodeConst>
-                  <RVCTZI>4</RVCTZI>
-                  <RVCTOtherData>4</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>2</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>pit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\pit.c</FilePath>
+            </File>
+            <File>
+              <FileName>systick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\systick.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -578,7 +538,7 @@
               <RVCTZI>0</RVCTZI>
               <RVCTOtherData>0</RVCTOtherData>
               <ModuleSelection>0</ModuleSelection>
-              <IncludeInBuild>0</IncludeInBuild>
+              <IncludeInBuild>2</IncludeInBuild>
               <AlwaysBuild>2</AlwaysBuild>
               <GenerateAssemblyFile>2</GenerateAssemblyFile>
               <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -633,19 +593,24 @@
           </GroupOption>
           <Files>
             <File>
-              <FileName>usbd_cdc_acm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_cdc_acm.c</FilePath>
-            </File>
-            <File>
               <FileName>usbd_core.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core.c</FilePath>
             </File>
             <File>
-              <FileName>usbd_core_cdc.c</FileName>
+              <FileName>usbd_core_msc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_cdc.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_msc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_kk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_kk.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_msc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_msc.c</FilePath>
             </File>
           </Files>
         </Group>

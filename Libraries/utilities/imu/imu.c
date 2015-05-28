@@ -100,9 +100,9 @@ static inline float invSqrt(float x)
 
 //!< the mx my mz order are related to PCB layout!!
 #ifdef URANUS2
-static void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float my,float mx,float mz, attitude_t * angle)
+static inline void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float my,float mx,float mz, attitude_t * angle)
 #elif URANUS
-static void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float mx,float mz,float my, attitude_t * angle)
+static inline void updateAHRS(float gx,float gy,float gz,float ax,float ay,float az,float mx,float mz,float my, attitude_t * angle)
 #endif
 {
     #ifdef URANUS2

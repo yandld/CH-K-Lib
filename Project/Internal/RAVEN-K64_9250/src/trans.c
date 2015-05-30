@@ -34,11 +34,11 @@ int uart_dma_send(uint8_t* buf, uint32_t len)
 {
     uint32_t remain;
     
-    remain = DMA_GetTransferByteCnt(HW_DMA_CH0);
-    if(remain)
-    {
-        return 1;
-    }
+//    remain = DMA_GetTransferByteCnt(HW_DMA_CH0);
+//    if(remain)
+//    {
+//        return 1;
+//    }
     
     DMA_CancelTransfer(HW_DMA_CH0);
     DMA_SetSourceAddress(HW_DMA_CH0, (uint32_t)buf);

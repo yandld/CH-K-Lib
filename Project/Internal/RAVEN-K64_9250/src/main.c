@@ -24,7 +24,7 @@
 
 
 static bool FLAG_TIMER;
-
+struct dcal_t dcal;
 
 static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata, int32_t pressure)
 {
@@ -45,6 +45,12 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
     payload.pressure = pressure;
     /* set buffer */
     len = ano_encode(&payload, buf);
+    uint8_t*p;
+    p = buf;
+//    while(len--)
+//    {
+//        UART_WriteByte(HW_UART0, *p++);
+//    }
     uart_dma_send(buf, len);
 
 }
@@ -53,7 +59,7 @@ int sensor_init(void)
 {
     uint32_t ret;
 
-    I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
+    I2C_QuickInit(I2C0_SCL_PB00_SDA_PB01, 100*1000);
     DelayMs(50);
     ret = mpu9250_init(0);
     if(ret)
@@ -101,105 +107,44 @@ extern void UART_ISR(uint16_t data);
 
 
 
-#define UDISK_SIZE          (64*1024)
-#define FLASH_OFFSET        (50*1024)   /* UDisk start offset */
-
-U8 BlockBuf[1024];
-
-/* init */
-void usbd_msc_init ()
-{
-  USBD_MSC_MemorySize = UDISK_SIZE;
-  USBD_MSC_BlockSize  = FLASH_GetSectorSize();
-  USBD_MSC_BlockGroup = 1;
-  USBD_MSC_BlockCount = USBD_MSC_MemorySize / USBD_MSC_BlockSize;
-  USBD_MSC_BlockBuf   = BlockBuf;
-
-  USBD_MSC_MediaReady = __TRUE;
-
-}
-
-/* read */
-void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
-{
-    uint8_t *p;
-    uint8_t i;
-    
-    p = (uint8_t*)(FLASH_OFFSET + block * USBD_MSC_BlockSize);
-    
-    if (USBD_MSC_MediaReady)
-    {
-        for(i=0;i<num_of_blocks;i++)
-        {
-            memcpy(buf, p, num_of_blocks * USBD_MSC_BlockSize);
-            p += USBD_MSC_BlockSize;
-        }
-    }
-}
-
-/* write */
-void usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
-{
-    int i,j;
-    uint8_t *p;
-    
-    p = (uint8_t*)(FLASH_OFFSET + block * USBD_MSC_BlockSize);
-    
-    if (USBD_MSC_MediaReady)
-    {
-        for(i=0;i<num_of_blocks;i++)
-        {
-            FLASH_EraseSector((uint32_t)p);
-            FLASH_WriteSector((uint32_t)p, buf, FLASH_GetSectorSize());
-        }
-    }
-}
-
-
 int main(void)
 {
     int i;
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
     static float fadata[3], fgdata[3], fmdata[3];
     attitude_t angle;
-    struct dcal_t dcal;
     uint32_t ret;
     uint32_t uart_instance;
     int32_t pressure, dummy, temperature;
     
     DelayInit();
-    GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);
     uart_instance = UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);
     UART_CallbackRxInstall(uart_instance, UART_ISR);
     UART_ITDMAConfig(uart_instance, kUART_IT_Rx, true);
     
     
     ShowInfo();
-//    veep_init();
-//   // GPIO_QuickInit(HW_GPIOE, 0, kGPIO_Mode_OPP);
-//   // GPIO_QuickInit(HW_GPIOE, 1, kGPIO_Mode_OPP);
-//    
-//    sensor_init();
-//    veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
+    veep_init();
+    
+    sensor_init();
+    veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
 
-//    PIT_QuickInit(HW_PIT_CH0, 100*1000);
-//    PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
-//    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
-//    
-//    PIT_QuickInit(HW_PIT_CH1, 1000*1000);
-//    
+    PIT_QuickInit(HW_PIT_CH0, 100*1000);
+    PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
+    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
+    
+    PIT_QuickInit(HW_PIT_CH1, 1000*1000);
+
     static uint32_t time, load_val, fac_us;
     CLOCK_GetClockFrequency(kBusClock, &fac_us);
     fac_us /= 1000000;
-//   
-//    dcal_init(&dcal);
-//    dcal_print(&dcal);
-//    
-//    uart_dma_init(HW_DMA_CH1, uart_instance);
+   
+    dcal_init(&dcal);
+    dcal_print(&dcal);
     
-    usbd_init();                          /* USB Device Initialization          */
-    usbd_connect(__TRUE);                 /* USB Device Connect                 */
-    while (!usbd_configured ());          /* Wait for device to configure        */
+    uart_dma_init(HW_DMA_CH0, uart_instance);
+    
     
     while(1)
     {
@@ -216,7 +161,6 @@ int main(void)
             mdata[i] = dcal.mg[i]*(mdata[i] - dcal.mo[i]);
         }
 
-        
         /* set timer */
         time = PIT_GetCounterValue(HW_PIT_CH1);
         PIT_ResetCounter(HW_PIT_CH1);
@@ -258,9 +202,10 @@ int main(void)
                 pressure = dummy;
             }
             
-            GPIO_ToggleBit(HW_GPIOA, 1);
+            GPIO_ToggleBit(HW_GPIOC, 3);
             FLAG_TIMER = false;
         }
+
         send_data_process(&angle, adata, gdata, cp_mdata, pressure);
     }
 }
@@ -274,7 +219,7 @@ void UART_ISR(uint16_t data)
         if(rd.buf[0] == 0xAA)
         {
             printf("write calibration data!...\r\n");
-          //  veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+            veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
         }
     }
 }

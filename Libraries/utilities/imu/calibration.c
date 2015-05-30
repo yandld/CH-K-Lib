@@ -95,7 +95,7 @@ void dcal_ginput(int16_t *gdata)
     {
         if(is_mval_ok(gdata[i]))
         {
-            printf("data of out rangle!\r\n");
+         //   printf("data of out rangle!\r\n");
             return;
         }
     }
@@ -123,7 +123,7 @@ void dcal_minput(int16_t *mdata)
     {
         if(is_mval_ok(mdata[i]))
         {
-            printf("data of out rangle!\r\n");
+        //    printf("data of out rangle!\r\n");
             return;
         }
         

@@ -1,21 +1,29 @@
 #include "chlib_k.h"
 
-#define UDISK_SIZE          (400*1024)
-#define FLASH_OFFSET        (32*1024)   /* UDisk start offset */
+extern int Image$$ER_IROM1$$RO$$Limit;
+
+#ifndef RT_ALIGN
+#define RT_ALIGN(size, align)           (((size) + (align) - 1) & ~((align) - 1))
+#endif
+
+static uint32_t StartAddr;
+
+#define UDISK_SIZE          (100*1024)
+
 
 U8 BlockBuf[4096];
 
 /* init */
 void usbd_msc_init ()
 {
-  USBD_MSC_MemorySize = UDISK_SIZE;
-  USBD_MSC_BlockSize  = FLASH_GetSectorSize();
-  USBD_MSC_BlockGroup = 1;
-  USBD_MSC_BlockCount = USBD_MSC_MemorySize / USBD_MSC_BlockSize;
-  USBD_MSC_BlockBuf   = BlockBuf;
+    USBD_MSC_MemorySize = UDISK_SIZE;
+    USBD_MSC_BlockSize  = FLASH_GetSectorSize();
+    USBD_MSC_BlockGroup = 1;
+    USBD_MSC_BlockCount = USBD_MSC_MemorySize / USBD_MSC_BlockSize;
+    USBD_MSC_BlockBuf   = BlockBuf;
 
-  USBD_MSC_MediaReady = __TRUE;
-
+    USBD_MSC_MediaReady = __TRUE;
+    StartAddr = RT_ALIGN(((uint32_t)&Image$$ER_IROM1$$RO$$Limit + USBD_MSC_BlockSize), USBD_MSC_BlockSize);
 }
 
 /* read */
@@ -24,7 +32,7 @@ void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
     uint8_t *p;
     uint8_t i;
     
-    p = (uint8_t*)(FLASH_OFFSET + block * USBD_MSC_BlockSize);
+    p = (uint8_t*)(StartAddr + block * USBD_MSC_BlockSize);
     
     if (USBD_MSC_MediaReady)
     {
@@ -39,10 +47,10 @@ void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
 /* write */
 void usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
 {
-    int i,j;
+    int i;
     uint8_t *p;
     
-    p = (uint8_t*)(FLASH_OFFSET + block * USBD_MSC_BlockSize);
+    p = (uint8_t*)(StartAddr + block * USBD_MSC_BlockSize);
     
     if (USBD_MSC_MediaReady)
     {

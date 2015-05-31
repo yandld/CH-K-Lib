@@ -1,4 +1,6 @@
 #include <string.h>
+#include <math.h>
+#include <stdlib.h>
 
 #include "common.h"
 #include "dma.h"
@@ -45,14 +47,7 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
     payload.pressure = pressure;
     /* set buffer */
     len = ano_encode(&payload, buf);
-    uint8_t*p;
-    p = buf;
-//    while(len--)
-//    {
-//        UART_WriteByte(HW_UART0, *p++);
-//    }
     uart_dma_send(buf, len);
-
 }
 
 int sensor_init(void)
@@ -66,8 +61,8 @@ int sensor_init(void)
     {
         printf("mpu9250 init:%d\r\n", ret);
         printf("restarting...\r\n");
-        DelayMs(200);
-    //    SystemSoftReset();
+        DelayMs(500);
+        SystemSoftReset();
     }
     
     ret = bmp180_init(0);
@@ -112,13 +107,14 @@ int main(void)
     int i;
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
     static float fadata[3], fgdata[3], fmdata[3];
-    attitude_t angle;
+    static attitude_t angle;
     uint32_t ret;
     uint32_t uart_instance;
     int32_t pressure, dummy, temperature;
     
     DelayInit();
     GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);
+
     uart_instance = UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);
     UART_CallbackRxInstall(uart_instance, UART_ISR);
     UART_ITDMAConfig(uart_instance, kUART_IT_Rx, true);
@@ -130,7 +126,7 @@ int main(void)
     sensor_init();
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
 
-    PIT_QuickInit(HW_PIT_CH0, 100*1000);
+    PIT_QuickInit(HW_PIT_CH0, 50*1000);
     PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
     PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
     
@@ -144,21 +140,21 @@ int main(void)
     dcal_print(&dcal);
     
     uart_dma_init(HW_DMA_CH0, uart_instance);
-    
-    
+
     while(1)
     {
         /* raw data and offset balance */
         mpu9250_read_accel_raw(adata);
         mpu9250_read_gyro_raw(gdata);
         mpu9250_read_mag_raw(mdata);
+        
         cp_mdata[0] = mdata[0];
         cp_mdata[1] = mdata[1];
         cp_mdata[2] = mdata[2];
-        
+
         for(i=0;i<3;i++)
         {
-            mdata[i] = dcal.mg[i]*(mdata[i] - dcal.mo[i]);
+            mdata[i] = (mdata[i] - dcal.mo[i])/dcal.mg[i];
         }
 
         /* set timer */
@@ -180,15 +176,22 @@ int main(void)
             fmdata[i] = lpf_1st(fmdata[i], (float)mdata[i], factor[2]);
         }
 
-        /* IMU ipdate */
         ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
         halfT = ((float)time)/1000/2000;
-
+       
         /* timer task */
         if(FLAG_TIMER)
         {
             /* dcal process */
-            dcal_minput(cp_mdata);
+            if((abs(cp_mdata[0]) > 1200) || (abs(cp_mdata[1]) > 1200) || (abs(cp_mdata[2]) > 1200))
+            {
+            
+            }
+            else
+            {
+                dcal_minput(cp_mdata);
+            }
+            
             dcal_output(&dcal);
             if(dcal.need_update)
             {
@@ -205,7 +208,6 @@ int main(void)
             GPIO_ToggleBit(HW_GPIOC, 3);
             FLAG_TIMER = false;
         }
-
         send_data_process(&angle, adata, gdata, cp_mdata, pressure);
     }
 }
@@ -218,7 +220,6 @@ void UART_ISR(uint16_t data)
     {
         if(rd.buf[0] == 0xAA)
         {
-            printf("write calibration data!...\r\n");
             veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
         }
     }

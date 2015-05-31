@@ -15,13 +15,14 @@
 
 #include "calibration.h"
 
-#define M_MAX           (500)
-#define M_MIN           (-500)
-#define G_MAX           (500)
-#define G_MIN           (-500)
+#define M_MAX           (1200)
+#define M_MIN           (-1200)
+#define G_MAX           (900)
+#define G_MIN           (-900)
 #define CAL_MAGIC       (0x5ACB)
 
 static struct dcal_t dcal;
+static struct dcal_t inital_dcal;
 
 static int is_gval_ok(int16_t data)
 {
@@ -71,19 +72,16 @@ void dcal_init(struct dcal_t *dc)
 
     if((dc) && (dc->magic == CAL_MAGIC))
     {
-        for(i=0;i<3;i++)
-        {
-         //   dc->m_min[i] +=10;
-         //   dc->m_max[i] -=10;  
-        }
         memcpy(&dcal, dc, sizeof(struct dcal_t));
+        memcpy(&inital_dcal, dc, sizeof(struct dcal_t));
         printf("load dcal value!\r\n");
     }
     else
     {
-        printf("no initial dcal value\r\n");  
         reset_dcal_data(dc);
         reset_dcal_data(&dcal);
+        reset_dcal_data(&inital_dcal);
+        printf("no initial dcal value\r\n");  
     }
 }
 
@@ -100,17 +98,17 @@ void dcal_ginput(int16_t *gdata)
         }
     }
     
-    for(i=0;i<3;i++)
-    {
-        if(gdata[i] > 50)
-        {
-            dcal.go[i]++;
-        }
-        if(gdata[i] < -50)
-        {
-            dcal.go[i]--;
-        }
-    }
+//    for(i=0;i<3;i++)
+//    {
+//        if(gdata[i] > 50)
+//        {
+//            dcal.go[i]++;
+//        }
+//        if(gdata[i] < -50)
+//        {
+//            dcal.go[i]--;
+//        }
+//    }
 }
 
 /* this function must be called every 100 ms */
@@ -123,7 +121,7 @@ void dcal_minput(int16_t *mdata)
     {
         if(is_mval_ok(mdata[i]))
         {
-        //    printf("data of out rangle!\r\n");
+            memcpy(&dcal, &inital_dcal, sizeof(struct dcal_t));
             return;
         }
         

@@ -13,6 +13,7 @@ int uart_dma_init(uint8_t dmaChl, uint32_t uartInstance)
     DMAInitStruct.chl = HW_DMA_CH0;
     DMAInitStruct.chlTriggerSource = UART0_TRAN_DMAREQ;
     DMAInitStruct.triggerSourceMode = kDMA_TriggerSource_Normal;
+    DMAInitStruct.transferByteCnt = 0;
 
     DMAInitStruct.sAddr = 0;
     DMAInitStruct.sAddrIsInc = true;
@@ -34,11 +35,11 @@ int uart_dma_send(uint8_t* buf, uint32_t len)
 {
     uint32_t remain;
     
-//    remain = DMA_GetTransferByteCnt(HW_DMA_CH0);
-//    if(remain)
-//    {
-//        return 1;
-//    }
+    remain = DMA_GetTransferByteCnt(HW_DMA_CH0);
+    if(remain)
+    {
+        return 1;
+    }
     
     DMA_CancelTransfer(HW_DMA_CH0);
     DMA_SetSourceAddress(HW_DMA_CH0, (uint32_t)buf);

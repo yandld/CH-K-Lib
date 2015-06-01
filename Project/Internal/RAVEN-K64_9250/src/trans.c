@@ -13,6 +13,7 @@ int uart_dma_init(uint8_t dmaChl, uint32_t uartInstance)
     DMAInitStruct.chl = HW_DMA_CH0;
     DMAInitStruct.chlTriggerSource = UART0_TRAN_DMAREQ;
     DMAInitStruct.triggerSourceMode = kDMA_TriggerSource_Normal;
+    DMAInitStruct.transferByteCnt = 0;
 
     DMAInitStruct.sAddr = 0;
     DMAInitStruct.sAddrIsInc = true;

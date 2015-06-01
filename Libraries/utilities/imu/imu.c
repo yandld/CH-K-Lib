@@ -16,7 +16,7 @@
  * Defination
  ******************************************************************************/
 #define PI             3.1415926f
-#define Kp             2.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
+#define Kp             3.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
 #define Ki             0.002f     /* integral gain governs rate of convergence of gyroscope biases */
 
 
@@ -150,7 +150,7 @@ static inline void updateAHRS(float gx,float gy,float gz,float ax,float ay,float
     hy = 2*mx*(q1q2 + q0q3) + 2*my*(0.5f - q1q1 - q3q3) + 2*mz*(q2q3 - q0q1);
     hz = 2*mx*(q1q3 - q0q2) + 2*my*(q2q3 + q0q1) + 2*mz*(0.5f - q1q1 - q2q2);         
 
-    bx = sqrt((hx*hx) + (hy*hy));
+    bx = 1/invSqrt((hx*hx) + (hy*hy));
     bz = hz; 
 	
     /* estimated direction of gravity and flux (v and w) */

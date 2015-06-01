@@ -262,9 +262,6 @@ void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool stat
             NVIC_EnableIRQ(UART_IRQnTable[instance]);
             break;
         case kUART_DMA_Tx:
-            (status)?
-            (UARTx->C2 |= UART_C2_TIE_MASK):
-            (UARTx->C2 &= ~UART_C2_TIE_MASK);
             if(instance == HW_UART0)
             {
                 (status)?

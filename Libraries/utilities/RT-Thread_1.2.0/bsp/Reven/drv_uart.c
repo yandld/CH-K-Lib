@@ -35,15 +35,18 @@
 #include "gpio.h"
 #include "board.h"
 #include "rtt_drv.h"
+#include "board.h"
 
 
 
 
 static struct rt_device uart_device;
 static char ch;
+static bool _rev_flag;
 
 static void UART_ISR(uint16_t byteReceived)
 {
+    _rev_flag = true;
     ch = (uint8_t)byteReceived;
     uart_device.rx_indicate(&uart_device, 1);
 }
@@ -60,9 +63,12 @@ static rt_err_t rt_uart_close(rt_device_t dev)
 
 static rt_err_t rt_uart_init (rt_device_t dev)
 {
-    UART_QuickInit(UART0_RX_PB16_TX_PB17, BOARD_UART_BAUDRATE);
-    UART_CallbackRxInstall(HW_UART0, UART_ISR);
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
+    uint32_t instance;
+    instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+    UART_CallbackRxInstall(instance, UART_ISR);
+    UART_ITDMAConfig(instance, kUART_IT_Rx, true);
+    dev->user_data = (void*)instance;
+    
     return RT_EOK;
 }
 
@@ -72,10 +78,10 @@ static rt_size_t rt_uart_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_si
     int ret;
     
     p = buffer;
-    if(ch)
+    if(_rev_flag)
     {
         p[0] = ch;
-        ch = 0;
+        _rev_flag = false;
         return 1;
     }
     return 0;
@@ -95,9 +101,9 @@ static rt_size_t rt_uart_write(rt_device_t dev, rt_off_t pos, const void* buffer
          */
         if (*p == '\n' && (dev->open_flag & RT_DEVICE_FLAG_STREAM))
         {
-            UART_WriteByte(HW_UART0, '\r');
+            UART_WriteByte((uint32_t)dev->user_data, '\r');
         }
-        UART_WriteByte(HW_UART0, *p++);
+        UART_WriteByte((uint32_t)dev->user_data, *p++);
     }
     return size;
 }

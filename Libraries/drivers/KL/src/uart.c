@@ -1,13 +1,3 @@
-/**
-  ******************************************************************************
-  * @file    uart.c
-  * @author  YANDLD
-  * @version V2.5
-  * @date    2014.3.26
-  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  ******************************************************************************
-  */
-  
 #include "uart.h"
 #include "gpio.h"
 #include "common.h"
@@ -21,14 +11,9 @@
 #endif
 
 
-#define UARTN_BASES {(void*)UART0, (void*)UART1, (void*)UART2}
-/* gloabl const table defination */
-const void* UART_InstanceTable[] = UARTN_BASES;
-static UART_CallBackTxType UART_CallBackTxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
-static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
-/* special use for printf */
-static uint8_t UART_DebugInstance;
-
+#ifdef MKL26Z4_H_
+#undef  UART_BASES
+#define UART_BASES  {UART0, UART1, UART2}
 static const struct reg_ops SIM_UARTClockGateTable[] =
 {
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
@@ -42,6 +27,28 @@ static const IRQn_Type UART_IRQnTable[] =
     UART1_IRQn,
     UART2_IRQn,
 };
+#endif
+
+#ifdef MKL27Z4_H_
+static const struct reg_ops SIM_UARTClockGateTable[] =
+{
+  //  {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
+  //  {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
+  //  {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
+};
+
+static const IRQn_Type UART_IRQnTable[] = 
+{
+    UART0_FLEXIO_IRQn,
+};
+#endif
+
+/* gloabl const table defination */
+const void* UART_InstanceTable[] = UART_BASES;
+static UART_CallBackTxType UART_CallBackTxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
+static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
+/* special use for printf */
+static uint8_t UART_DebugInstance;
 
 #ifdef UART_USE_STDIO
 #ifdef __CC_ARM // MDK Support

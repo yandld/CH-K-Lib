@@ -40,10 +40,10 @@ typedef enum
 
 typedef enum
 {
-    kGPIO_Mode_IFT = 0x00,       //浮空输入
-    kGPIO_Mode_IPD = 0x01,       //下拉输入
-    kGPIO_Mode_IPU = 0x02,       //上拉输入
-    kGPIO_Mode_OPP = 0x04,       //推挽输出
+    kGPIO_Mode_IFT = 0x00,       /* Input floating  */
+    kGPIO_Mode_IPD = 0x01,       /* Pull down input */
+    kGPIO_Mode_IPU = 0x02,       /* Pull up input    */
+    kGPIO_Mode_OPP = 0x04,       /* Push pull output */
 }GPIO_Mode_Type;
 
 /* 端口输入输出模式选择 */
@@ -53,7 +53,7 @@ typedef enum
     kOutput,
 }GPIO_PinConfig_Type;
 
-/* 端口中断及DMA配置选择 */
+/*!< Interrupts and DMA */
 typedef enum
 {
     kGPIO_DMA_RisingEdge,	      //上升沿触发DMA
@@ -66,7 +66,7 @@ typedef enum
     kGPIO_IT_High,                //高电平触发中断
 }GPIO_ITDMAConfig_Type;
 
-/* 端口初始化结构体 */
+
 typedef struct
 {
     uint8_t                instance;    //引脚端口HW_GPIOA~HW_GPIOF

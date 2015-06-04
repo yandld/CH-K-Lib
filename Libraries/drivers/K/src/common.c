@@ -220,12 +220,14 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
     printf("HardFault_Handler\r\n");
+      __asm("BKPT #0x03"); 
     while(1);
 }
 
 void BusFault_Handler(void)
 {
     printf("BusFault_Handler\r\n");
+      __asm("BKPT #0x03"); 
     while(1);
 }
 

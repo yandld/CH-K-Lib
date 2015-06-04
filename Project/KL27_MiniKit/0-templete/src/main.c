@@ -17,11 +17,14 @@ int main(void)
 {
     DelayInit();
     
+    /* LED */
     GPIO_QuickInit(LED0_PORT, LED0_PIN, kGPIO_Mode_OPP);
     GPIO_QuickInit(LED1_PORT, LED1_PIN, kGPIO_Mode_OPP);
     GPIO_QuickInit(LED2_PORT, LED2_PIN, kGPIO_Mode_OPP);
     GPIO_QuickInit(LED3_PORT, LED3_PIN, kGPIO_Mode_OPP);
-    
+    /* KEY */
+    GPIO_QuickInit(HW_GPIOB, 0, kGPIO_Mode_IPU);
+    /* UART */
     LPUART_QuickInit(LPUART0_RX_D06_TX_D07, 115200);
 
     printf("HelloWorld!\r\n");

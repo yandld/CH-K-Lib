@@ -39,7 +39,7 @@ typedef struct
 #define I2C1_SCL_PC10_SDA_PC11  (0X00009491U)
 #define I2C0_SCL_PD08_SDA_PD09  (0X00009098U)
 #define I2C0_SCL_PE24_SDA_PE25  (0X0000B160U)
-
+#define I2C1_SCL_PC01_SDA_PC02  (0X00008291U)
 typedef enum
 {
     kI2C_Read,                  //!< I2C Master Read Data

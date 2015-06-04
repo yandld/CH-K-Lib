@@ -75,6 +75,9 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
         case I2C0_SCL_PE24_SDA_PE25:
             i2c.scl_pin = 24;i2c.sda_pin = 25;
             break;
+        case I2C1_SCL_PC01_SDA_PC02:
+            i2c.scl_pin = 1;i2c.sda_pin = 2;
+            break;
         default:
             break;
     }

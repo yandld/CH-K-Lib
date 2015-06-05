@@ -12,9 +12,7 @@
 #include "common.h"
 
 
-#if __ICCARM__
-#include <yfuns.h>
-#endif
+
 
 
 
@@ -111,6 +109,8 @@ __weak int fgetc(FILE *f)
 
 
 #elif __ICCARM__ /* IAR support */
+#include <yfuns.h>
+
 __weak size_t __write(int handle, const unsigned char * buffer, size_t size)
 {
     size_t nChars = 0;

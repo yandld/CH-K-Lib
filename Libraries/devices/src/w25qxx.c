@@ -55,11 +55,13 @@ static const struct w25qxx_attr_t w25qxx_tbl[] =
     {"W25Q32",   4096*1024, 0xEF15, 256, 4096, (64*1024)},
     {"W25Q64",   8192*1024, 0xEF16, 256, 4096, (64*1024)},
     {"W25Q128", 16384*1024, 0xEF17, 256, 4096, (64*1024)}, 
+    {"W25P80",   1024*1024, 0x5114, 256, 4096, (64*1024)}, 
 };
 
 struct w25qxx_device 
 {
     const char              *name;
+    uint8_t (*xfer)(uint8_t data, uint8_t cs_state);
     uint32_t                spi_instance;
     uint8_t                 spi_cs;
     struct w25qxx_attr_t    attr;
@@ -68,9 +70,13 @@ struct w25qxx_device
 
 static struct w25qxx_device w25_dev;
 
-static inline uint8_t spi_xfer(uint8_t data, SPI_PCS_Type csStatus)
+static inline uint8_t spi_xfer(uint8_t data, uint8_t csStatus)
 {
-    return (uint8_t)SPI_ReadWriteByte(w25_dev.spi_instance , HW_CTAR0, (uint8_t)data, w25_dev.spi_cs, csStatus);
+    if(w25_dev.xfer)
+    {
+        return w25_dev.xfer(data, csStatus);
+    }
+    return 0;
 }
 
 
@@ -78,7 +84,7 @@ static inline uint8_t spi_xfer(uint8_t data, SPI_PCS_Type csStatus)
 static int w25qxx_power_up(void)
 {
     volatile uint32_t i;
-    spi_xfer(W25X_ReleasePowerDown, kSPI_PCS_ReturnInactive);
+    spi_xfer(W25X_ReleasePowerDown, W25QXX_CS_HIGH);
     
     /* delay 3us */
     for(i=0;i<1000*5;i++);
@@ -90,8 +96,8 @@ static uint8_t w25qxx_read_sr2(void)
 {
     uint8_t sr;
     
-    spi_xfer(W25X_ReadStatusReg2, kSPI_PCS_KeepAsserted);
-    sr = spi_xfer(0x00, kSPI_PCS_ReturnInactive);
+    spi_xfer(W25X_ReadStatusReg2, W25QXX_CS_LOW);
+    sr = spi_xfer(0x00, W25QXX_CS_HIGH);
     
     return sr;
 }
@@ -100,8 +106,8 @@ static uint8_t w25qxx_read_sr(void)
 {
     uint8_t sr;
     
-    spi_xfer(W25X_ReadStatusReg, kSPI_PCS_KeepAsserted);
-    sr = spi_xfer(0x00, kSPI_PCS_ReturnInactive);
+    spi_xfer(W25X_ReadStatusReg, W25QXX_CS_LOW);
+    sr = spi_xfer(0x00, W25QXX_CS_HIGH);
     
     return sr;
 }
@@ -109,7 +115,7 @@ static uint8_t w25qxx_read_sr(void)
 //芯片写使能
 static int w25qxx_write_enable(void)
 {
-    spi_xfer(W25X_WriteEnable, kSPI_PCS_ReturnInactive);
+    spi_xfer(W25X_WriteEnable, W25QXX_CS_HIGH);
     return 0;
 }
 
@@ -117,8 +123,8 @@ static int w25qxx_write_enable(void)
 static int w25qxx_write_sr(uint8_t value)
 {
     w25qxx_write_enable();
-    spi_xfer(W25X_WriteStatusReg, kSPI_PCS_KeepAsserted);
-    spi_xfer(value, kSPI_PCS_ReturnInactive);
+    spi_xfer(W25X_WriteStatusReg, W25QXX_CS_LOW);
+    spi_xfer(value, W25QXX_CS_HIGH);
     return 0;
 }
 
@@ -130,12 +136,12 @@ static int w25qxx_probe(void)
     uint8_t buf[2];
 
     /* read id */
-    spi_xfer(W25X_ManufactDeviceID, kSPI_PCS_KeepAsserted);
-    spi_xfer(0, kSPI_PCS_KeepAsserted);
-    spi_xfer(0, kSPI_PCS_KeepAsserted);
-    spi_xfer(0, kSPI_PCS_KeepAsserted);
-    buf[0] = spi_xfer(0, kSPI_PCS_KeepAsserted);
-    buf[1] = spi_xfer(0, kSPI_PCS_ReturnInactive);
+    spi_xfer(W25X_ManufactDeviceID, W25QXX_CS_LOW);
+    spi_xfer(0, W25QXX_CS_LOW);
+    spi_xfer(0, W25QXX_CS_LOW);
+    spi_xfer(0, W25QXX_CS_LOW);
+    buf[0] = spi_xfer(0, W25QXX_CS_LOW);
+    buf[1] = spi_xfer(0, W25QXX_CS_HIGH);
     id = ((buf[0]<<8) + buf[1]);
     W25QXX_TRACE("ID:0x%X\r\n", id);
     //see if we find a match
@@ -168,17 +174,17 @@ int w25qxx_get_attr(struct w25qxx_attr_t* attr)
 int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len)
 {
     /* send addr */
-    spi_xfer(W25X_ReadData, kSPI_PCS_KeepAsserted);
-    spi_xfer((uint8_t)((addr)>>16), kSPI_PCS_KeepAsserted);
-    spi_xfer((uint8_t)((addr)>>8), kSPI_PCS_KeepAsserted);
-    spi_xfer((uint8_t)addr, kSPI_PCS_KeepAsserted);
+    spi_xfer(W25X_ReadData, W25QXX_CS_LOW);
+    spi_xfer((uint8_t)((addr)>>16), W25QXX_CS_LOW);
+    spi_xfer((uint8_t)((addr)>>8), W25QXX_CS_LOW);
+    spi_xfer((uint8_t)addr, W25QXX_CS_LOW);
    
     while(len--)
     {
         if(len)
-            *buf++ = spi_xfer(0x00, kSPI_PCS_KeepAsserted);
+            *buf++ = spi_xfer(0x00, W25QXX_CS_LOW);
         else
-            *buf++ = spi_xfer(0x00, kSPI_PCS_ReturnInactive);
+            *buf++ = spi_xfer(0x00, W25QXX_CS_HIGH);
     }
     return 0;
 }
@@ -189,17 +195,17 @@ int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
     w25qxx_write_enable();
 
     /* send addr */
-    spi_xfer(W25X_PageProgram, kSPI_PCS_KeepAsserted);
-    spi_xfer((uint8_t)((addr)>>16), kSPI_PCS_KeepAsserted);
-    spi_xfer((uint8_t)((addr)>>8), kSPI_PCS_KeepAsserted);
-    spi_xfer((uint8_t)addr, kSPI_PCS_KeepAsserted);
+    spi_xfer(W25X_PageProgram, W25QXX_CS_LOW);
+    spi_xfer((uint8_t)((addr)>>16), W25QXX_CS_LOW);
+    spi_xfer((uint8_t)((addr)>>8), W25QXX_CS_LOW);
+    spi_xfer((uint8_t)addr, W25QXX_CS_LOW);
     
     while(len--)
     {
         if(len)
-            spi_xfer(*buf, kSPI_PCS_KeepAsserted);
+            spi_xfer(*buf, W25QXX_CS_LOW);
         else
-            spi_xfer(*buf, kSPI_PCS_ReturnInactive);
+            spi_xfer(*buf, W25QXX_CS_HIGH);
         buf++;
     }
     
@@ -245,10 +251,10 @@ int w25qxx_erase_sector(uint32_t addr)
     w25qxx_write_enable();
     while((w25qxx_read_sr() & 0x01) == 0x01);
     
-    spi_xfer(W25X_SectorErase, kSPI_PCS_KeepAsserted);
-    spi_xfer((uint8_t)((addr)>>16), kSPI_PCS_KeepAsserted);
-    spi_xfer((uint8_t)((addr)>>8), kSPI_PCS_KeepAsserted);
-    spi_xfer((uint8_t)addr, kSPI_PCS_ReturnInactive);
+    spi_xfer(W25X_SectorErase, W25QXX_CS_LOW);
+    spi_xfer((uint8_t)((addr)>>16), W25QXX_CS_LOW);
+    spi_xfer((uint8_t)((addr)>>8), W25QXX_CS_LOW);
+    spi_xfer((uint8_t)addr, W25QXX_CS_HIGH);
     
     while((w25qxx_read_sr() & 0x01) == 0x01);
     return 0;
@@ -260,7 +266,7 @@ int w25qxx_erase_chip(void)
     w25qxx_write_enable();
     while((w25qxx_read_sr() & 0x01) == 0x01);
     
-    spi_xfer(W25X_ChipErase, kSPI_PCS_ReturnInactive);
+    spi_xfer(W25X_ChipErase, W25QXX_CS_HIGH);
 
     while((w25qxx_read_sr() & 0x01) == 0x01);
     return 0;
@@ -317,12 +323,9 @@ int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
 }
 
 //芯片初始化
-int w25qxx_init(uint32_t instance, uint32_t cs)
+int w25qxx_init(uint32_t instance, uint8_t (*xfer)(uint8_t data, uint8_t cs_state))
 {
-    w25_dev.spi_instance = instance;
-    w25_dev.spi_cs = cs; 
-    SPI_CTARConfig(instance, HW_CTAR0, kSPI_CPOL0_CPHA0, 8, kSPI_MSB, 30*1000*1000);
-    
+    w25_dev.xfer = xfer;
     return w25qxx_probe();
 }
 

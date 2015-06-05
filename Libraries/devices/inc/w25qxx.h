@@ -23,6 +23,9 @@
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 #endif
 
+#define W25QXX_CS_LOW       0
+#define W25QXX_CS_HIGH      1
+
 struct w25qxx_attr_t
 {
     const char* name;
@@ -34,7 +37,7 @@ struct w25qxx_attr_t
 };
 
 //!< API functions
-int w25qxx_init(uint32_t instance, uint32_t cs);
+int w25qxx_init(uint32_t instance, uint8_t (*xfer)(uint8_t data, uint8_t cs_state));
 int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len);
 int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len);
 int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len);

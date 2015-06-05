@@ -185,6 +185,7 @@ uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t 
     /* init pinmux and  open drain and pull up */
     for(i = 0; i < pq->io_offset; i++)
     {
+        //printf("%d %d %d\r\n", pq->io_instance, pq->io_base + i, pq->mux);
         PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type)pq->mux);
     }
     /* init moudle */

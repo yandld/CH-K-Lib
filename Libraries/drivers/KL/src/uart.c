@@ -256,54 +256,54 @@ void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool stat
     *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
     UART_Type * UARTx = (UART_Type*)UART_InstanceTable[instance];
     
-//    switch(config)
-//    {
-//        case kUART_IT_Tx:
-//            (status)?
-//            (UARTx->C2 |= UART_C2_TIE_MASK):
-//            (UARTx->C2 &= ~UART_C2_TIE_MASK);
-//            NVIC_EnableIRQ(UART_IRQnTable[instance]);
-//            break; 
-//        case kUART_IT_Rx:
-//            (status)?
-//            (UARTx->C2 |= UART_C2_RIE_MASK):
-//            (UARTx->C2 &= ~UART_C2_RIE_MASK);
-//            NVIC_EnableIRQ(UART_IRQnTable[instance]);
-//            break;
-//        case kUART_DMA_Tx:
-//            if(instance == HW_UART0)
-//            {
-//                (status)?
-//                (UART0->C5 |= UART0_C5_TDMAE_MASK):
-//                (UART0->C5 &= ~UART0_C5_TDMAE_MASK);
-//            }
-//            else
-//            {
-//                (status)?
-//                (UARTx->C4 |= UART_C4_TDMAS_MASK):
-//                (UARTx->C4 &= ~UART_C4_TDMAS_MASK);
-//            }
-//            break;
-//        case kUART_DMA_Rx:
-//            (status)?
-//            (UARTx->C2 |= UART_C2_RIE_MASK):
-//            (UARTx->C2 &= ~UART_C2_RIE_MASK);
-//            if(instance == HW_UART0)
-//            {
-//                (status)?
-//                (UART0->C5 |= UART0_C5_RDMAE_MASK):
-//                (UART0->C5 &= ~UART0_C5_RDMAE_MASK);
-//            }
-//            else
-//            {
-//                (status)?
-//                (UARTx->C4 |= UART_C4_RDMAS_MASK):
-//                (UARTx->C4 &= ~UART_C4_RDMAS_MASK); 
-//            }
-//            break;
-//        default:
-//            break;
-//    }
+    switch(config)
+    {
+        case kUART_IT_Tx:
+            (status)?
+            (UARTx->C2 |= UART_C2_TIE_MASK):
+            (UARTx->C2 &= ~UART_C2_TIE_MASK);
+            NVIC_EnableIRQ(UART_IRQnTable[instance]);
+            break; 
+        case kUART_IT_Rx:
+            (status)?
+            (UARTx->C2 |= UART_C2_RIE_MASK):
+            (UARTx->C2 &= ~UART_C2_RIE_MASK);
+            NVIC_EnableIRQ(UART_IRQnTable[instance]);
+            break;
+        case kUART_DMA_Tx:
+            if(instance == HW_UART0)
+            {
+                (status)?
+                (UART0->C5 |= UART0_C5_TDMAE_MASK):
+                (UART0->C5 &= ~UART0_C5_TDMAE_MASK);
+            }
+            else
+            {
+                (status)?
+                (UARTx->C4 |= UART_C4_TDMAS_MASK):
+                (UARTx->C4 &= ~UART_C4_TDMAS_MASK);
+            }
+            break;
+        case kUART_DMA_Rx:
+            (status)?
+            (UARTx->C2 |= UART_C2_RIE_MASK):
+            (UARTx->C2 &= ~UART_C2_RIE_MASK);
+            if(instance == HW_UART0)
+            {
+                (status)?
+                (UART0->C5 |= UART0_C5_RDMAE_MASK):
+                (UART0->C5 &= ~UART0_C5_RDMAE_MASK);
+            }
+            else
+            {
+                (status)?
+                (UARTx->C4 |= UART_C4_RDMAS_MASK):
+                (UARTx->C4 &= ~UART_C4_RDMAS_MASK); 
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 /**

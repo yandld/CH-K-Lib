@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "gpio.h"
 #include "common.h"
 #include "uart.h"
@@ -6,6 +8,8 @@
 
 int main(void)
 {
+    float fdata[3];
+    float angle[3];
     short x,y,z;
     short ax, ay, az;
     uint32_t ret;
@@ -29,8 +33,14 @@ int main(void)
     {
         if(!adxl345_readXYZ(&x, &y, &z))
         {
-            adxl345_convert_angle(x, y, z, &ax, &ay, &az);
-            printf("X:%3d Y:%3d Z:%3d AX:%3d AY:%3d AZ:%3d  \r", x, y, z, ax, ay ,az); 
+            fdata[0] = (float)x;
+            fdata[1] = (float)y;
+            fdata[2] = (float)z;
+            angle[0] = atan2f(-fdata[0],fdata[2])*57.3;
+            angle[1] = atan2f(-fdata[1],fdata[2])*57.3;
+            
+            printf("X:%3d Y:%3d Z:%3d AngleX:%0.4fC AngleY:%0.4fC  \r", x, y, z, angle[0], angle[1]);
+            
         }
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(20);

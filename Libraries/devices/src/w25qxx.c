@@ -58,13 +58,13 @@ static const struct w25qxx_attr_t w25qxx_tbl[] =
     {"W25P80",   1024*1024, 0x5114, 256, 4096, (64*1024)}, 
 };
 
+
+
 struct w25qxx_device 
 {
     const char              *name;
-    uint8_t (*xfer)(uint8_t data, uint8_t cs_state);
-    uint32_t                spi_instance;
-    uint8_t                 spi_cs;
     struct w25qxx_attr_t    attr;
+    struct w25qxx_init_t    ops;
     void                    *user_data;
 };
 
@@ -72,11 +72,11 @@ static struct w25qxx_device w25_dev;
 
 static inline uint8_t spi_xfer(uint8_t data, uint8_t csStatus)
 {
-    if(w25_dev.xfer)
-    {
-        return w25_dev.xfer(data, csStatus);
-    }
-    return 0;
+    
+    uint8_t data_in;
+    w25_dev.ops.xfer(&data_in, &data, 1, csStatus);
+    while(w25_dev.ops.get_reamin() != 0);
+    return data_in;
 }
 
 
@@ -322,10 +322,12 @@ int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len)
     return 0;
 }
 
+
+
 //Ğ¾Æ¬³õÊ¼»¯
-int w25qxx_init(uint32_t instance, uint8_t (*xfer)(uint8_t data, uint8_t cs_state))
+int w25qxx_init(struct w25qxx_init_t* init)
 {
-    w25_dev.xfer = xfer;
+    memcpy(&w25_dev.ops, init, sizeof(struct w25qxx_init_t));
     return w25qxx_probe();
 }
 

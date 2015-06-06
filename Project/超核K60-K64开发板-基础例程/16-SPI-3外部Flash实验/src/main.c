@@ -56,6 +56,34 @@ static int w25qxx_test(void)
     return 0;
 }
 
+static uint32_t _get_reamin(void)
+{
+    return 0;
+}
+
+static uint32_t xfer(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs_state)
+{
+    uint8_t dummy_in;
+    if(!buf_in)
+        buf_in = &dummy_in;
+    
+    while(len--)
+    {
+        if(len == 0)
+        {
+            *buf_in = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, *buf_out, 1, !cs_state); 
+        }
+        else
+        {
+            *buf_in = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, *buf_out, 1, kSPI_PCS_KeepAsserted); 
+        }
+        if(!buf_out)
+            buf_out++;
+        if(buf_in != &dummy_in)
+            buf_in++;
+    }
+}
+
 int main(void)
 {
     DelayInit();
@@ -71,8 +99,13 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); /* SPI2_PCS1 */
     
     /* 获取SPI-Flash的信息 */
+    struct w25qxx_init_t init;
     
-    if(w25qxx_init(HW_SPI2, HW_SPI_CS1))
+    init.delayms = DelayMs;
+    init.get_reamin = _get_reamin;
+    init.xfer = xfer;
+    
+    if(w25qxx_init(&init))
     {
         printf("w25qxx device no found!\r\n");
     }

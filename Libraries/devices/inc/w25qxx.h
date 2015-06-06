@@ -36,8 +36,15 @@ struct w25qxx_attr_t
     uint32_t block_size;
 };
 
+struct w25qxx_init_t
+{
+    uint32_t (*xfer)(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs_state);
+    uint32_t (*get_reamin)(void);
+    void     (*delayms)(uint32_t ms);
+};
+
 //!< API functions
-int w25qxx_init(uint32_t instance, uint8_t (*xfer)(uint8_t data, uint8_t cs_state));
+int w25qxx_init(struct w25qxx_init_t* init);
 int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len);
 int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len);
 int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len);

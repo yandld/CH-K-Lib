@@ -10,7 +10,6 @@
 
 #include <string.h>
 
-#include "spi.h"
 #include "w25qxx.h"
 
 //Ð¾Æ¬WQ25Ö¸Áî
@@ -179,13 +178,12 @@ int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len)
     spi_xfer((uint8_t)((addr)>>8), W25QXX_CS_LOW);
     spi_xfer((uint8_t)addr, W25QXX_CS_LOW);
    
-    while(len--)
+    w25_dev.ops.xfer(buf, NULL, len, W25QXX_CS_HIGH);
+    while(w25_dev.ops.get_reamin() != 0)
     {
-        if(len)
-            *buf++ = spi_xfer(0x00, W25QXX_CS_LOW);
-        else
-            *buf++ = spi_xfer(0x00, W25QXX_CS_HIGH);
+        w25_dev.ops.delayms(10);
     }
+    
     return 0;
 }
 
@@ -200,14 +198,19 @@ int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
     spi_xfer((uint8_t)((addr)>>8), W25QXX_CS_LOW);
     spi_xfer((uint8_t)addr, W25QXX_CS_LOW);
     
-    while(len--)
+    w25_dev.ops.xfer(NULL, buf, len, W25QXX_CS_HIGH);
+    while(w25_dev.ops.get_reamin() != 0)
     {
-        if(len)
-            spi_xfer(*buf, W25QXX_CS_LOW);
-        else
-            spi_xfer(*buf, W25QXX_CS_HIGH);
-        buf++;
+        w25_dev.ops.delayms(10);
     }
+//    while(len--)
+//    {
+//        if(len)
+//            spi_xfer(*buf, W25QXX_CS_LOW);
+//        else
+//            spi_xfer(*buf, W25QXX_CS_HIGH);
+//        buf++;
+//    }
     
     /* wait busy */
     while((w25qxx_read_sr() & 0x01) == 0x01);

@@ -11,7 +11,7 @@
 #ifndef __W25QXX_H__
 #define __W25QXX_H__
 
-#include "spi.h"
+#include <stdint.h>
 
 //基本概念
 // page :256byte 写入的最小单位 并且必须保证 写入前全部是0xFF

@@ -64,6 +64,7 @@ static uint32_t _get_reamin(void)
 static uint32_t xfer(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs_state)
 {
     uint8_t dummy_in;
+    
     if(!buf_in)
         buf_in = &dummy_in;
     
@@ -77,7 +78,7 @@ static uint32_t xfer(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs
         {
             *buf_in = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, *buf_out, 1, kSPI_PCS_KeepAsserted); 
         }
-        if(!buf_out)
+        if(buf_out)
             buf_out++;
         if(buf_in != &dummy_in)
             buf_in++;

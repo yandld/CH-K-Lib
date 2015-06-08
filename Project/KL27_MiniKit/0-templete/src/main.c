@@ -173,7 +173,7 @@ int main(void)
     GPIO_QuickInit(HW_GPIOB, 0, kGPIO_Mode_IPU);
     /* UART */
     LPUART_QuickInit(LPUART0_RX_D06_TX_D07, 115200);
-
+    LPUART_ITDMAConfig(HW_LPUART0, kUART_IT_Rx, true);
     printf("HelloWorld!\r\n");
 
 
@@ -192,4 +192,11 @@ int main(void)
     }
 }
 
+void LPUART0_IRQHandler(void)
+{
+    uint8_t ch;
+    LPUART_ReadByte(HW_LPUART0, &ch);
+
+    printf("%c \r\n", ch);
+}
 

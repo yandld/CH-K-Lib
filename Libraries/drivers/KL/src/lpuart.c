@@ -25,6 +25,15 @@ static const struct reg_ops SIM_LPUARTClockGateTable[] =
 #endif
 };
 
+static const IRQn_Type LPUART_IRQnTable[] = 
+{
+    LPUART0_IRQn,
+#ifdef LPUART1
+    LPUART1_IRQn,
+#endif
+};
+
+
 /* special use for printf */
 static uint8_t UART_DebugInstance;
 
@@ -152,7 +161,7 @@ void LPUART_WriteByte(uint32_t instance, char ch)
     LPUART_InstanceTable[instance]->DATA = (ch & 0xFF);
 }
 
-uint8_t UART_ReadByte(uint32_t instance, uint8_t *ch)
+uint8_t LPUART_ReadByte(uint32_t instance, uint8_t *ch)
 {    
     if(LPUART_InstanceTable[instance]->STAT & LPUART_STAT_RDRF_MASK)
     {
@@ -162,6 +171,65 @@ uint8_t UART_ReadByte(uint32_t instance, uint8_t *ch)
     return 1;
 }
 
+
+/**
+ * @brief  配置UART模块的中断或DMA属性
+ * @code
+ *      //配置UART0模块开启接收中断功能
+ *      UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
+ * @endcode
+ * @param  instance      :芯片串口端口
+ *         @arg HW_UART0 :芯片的UART0端口
+ *         @arg HW_UART1 :芯片的UART1端口
+ *         @arg HW_UART2 :芯片的UART2端口
+ *         @arg HW_UART3 :芯片的UART3端口
+ *         @arg HW_UART4 :芯片的UART4端口
+ *         @arg HW_UART5 :芯片的UART5端口
+ * @param  status      :开关
+ * @param  config: 工作模式选择
+ *         @arg kUART_IT_Tx:
+ *         @arg kUART_DMA_Tx:
+ *         @arg kUART_IT_Rx:
+ *         @arg kUART_DMA_Rx:
+ * @retval None
+ */
+void LPUART_ITDMAConfig(uint32_t instance, LPUART_ITDMAConfig_Type config, bool status)
+{
+    LPUART_Type *LPUARTx;
+    /* enable clock gate */
+    *((uint32_t*) SIM_LPUARTClockGateTable[instance].addr) |= SIM_LPUARTClockGateTable[instance].mask;
+
+    LPUARTx = LPUART_InstanceTable[instance];
+    
+    switch(config)
+    {
+        case kUART_IT_Tx:
+            (status)?
+            (LPUARTx->CTRL |= LPUART_CTRL_TIE_MASK):
+            (LPUARTx->CTRL &= ~LPUART_CTRL_TIE_MASK);
+            NVIC_EnableIRQ(LPUART_IRQnTable[instance]);
+            break; 
+        case kUART_IT_Rx:
+            (status)?
+            (LPUARTx->CTRL |= LPUART_CTRL_RIE_MASK):
+            (LPUARTx->CTRL &= ~LPUART_CTRL_RIE_MASK);
+            NVIC_EnableIRQ(LPUART_IRQnTable[instance]);
+            break;
+        case kUART_DMA_Tx:
+            (status)?
+            (LPUARTx->BAUD |= LPUART_BAUD_TDMAE_MASK):
+            (LPUARTx->BAUD &= ~LPUART_BAUD_TDMAE_MASK);
+            break;
+        case kUART_DMA_Rx:
+            (status)?
+            (LPUARTx->BAUD |= LPUART_BAUD_RDMAE_MASK):
+            (LPUARTx->BAUD &= ~LPUART_BAUD_RDMAE_MASK);
+            break;
+        default:
+            break;
+    }
+    
+}
 
 #ifdef __CC_ARM // MDK Support
 struct __FILE 
@@ -183,7 +251,7 @@ __weak int fputc(int ch,FILE *f)
 __weak int fgetc(FILE *f)
 {
     uint8_t ch;
-    while(UART_ReadByte(UART_DebugInstance, &ch));
+    while(LPUART_ReadByte(UART_DebugInstance, &ch));
     return (ch & 0xFF);
 }
 

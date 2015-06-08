@@ -44,7 +44,7 @@ typedef enum
     kUART_DMA_Tx,               // 开启每发送一帧传输完成触发DMA 
     kUART_IT_Rx,                // 开启每接收一帧传输完成中断 
     kUART_DMA_Rx,               // 开启每接收一帧传输完成触发DMA 
-}UART_ITDMAConfig_Type;
+}LPUART_ITDMAConfig_Type;
 
 
 typedef struct
@@ -60,8 +60,8 @@ typedef struct
 uint32_t LPUART_QuickInit(uint32_t MAP, uint32_t baudrate);
 void LPUART_Init(LPUART_InitTypeDef * UART_InitStruct);
 void LPUART_WriteByte(uint32_t instance, char ch);
-uint8_t UART_ReadByte(uint32_t instance, uint8_t *ch);
-
+uint8_t LPUART_ReadByte(uint32_t instance, uint8_t *ch);
+void LPUART_ITDMAConfig(uint32_t instance, LPUART_ITDMAConfig_Type config, bool status);
 
 #ifdef __cplusplus
 }

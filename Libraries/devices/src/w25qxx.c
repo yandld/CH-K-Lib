@@ -203,17 +203,13 @@ int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len)
     {
         w25_dev.ops.delayms(10);
     }
-//    while(len--)
-//    {
-//        if(len)
-//            spi_xfer(*buf, W25QXX_CS_LOW);
-//        else
-//            spi_xfer(*buf, W25QXX_CS_HIGH);
-//        buf++;
-//    }
+
     
     /* wait busy */
-    while((w25qxx_read_sr() & 0x01) == 0x01);
+    while((w25qxx_read_sr() & 0x01) == 0x01)
+    {
+        w25_dev.ops.delayms(1);
+    }
     return 0;
 }
 
@@ -259,7 +255,10 @@ int w25qxx_erase_sector(uint32_t addr)
     spi_xfer((uint8_t)((addr)>>8), W25QXX_CS_LOW);
     spi_xfer((uint8_t)addr, W25QXX_CS_HIGH);
     
-    while((w25qxx_read_sr() & 0x01) == 0x01);
+    while((w25qxx_read_sr() & 0x01) == 0x01)
+    {
+        w25_dev.ops.delayms(10);
+    }
     return 0;
 }
 
@@ -271,7 +270,10 @@ int w25qxx_erase_chip(void)
     
     spi_xfer(W25X_ChipErase, W25QXX_CS_HIGH);
 
-    while((w25qxx_read_sr() & 0x01) == 0x01);
+    while((w25qxx_read_sr() & 0x01) == 0x01)
+    {
+        w25_dev.ops.delayms(10);
+    }
     return 0;
 }
 

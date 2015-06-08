@@ -21,7 +21,7 @@ void init_thread_entry(void* parameter)
     
     rt_thread_delay(1);
     
-    rt_hw_uart_init();
+    rt_hw_uart_init("uart0", 0);
     rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
     rt_kprintf("rt-thread system start!\r\n");
     

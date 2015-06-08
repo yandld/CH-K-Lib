@@ -37,18 +37,36 @@
 #include "rtt_drv.h"
 #include "board.h"
 
+struct uart_device
+{
+    struct rt_device                rtdev;
+    struct rt_mutex                 lock;
+    char                            rx_buf[32];
+    uint32_t                        rx_len;
+    uint32_t                        hw_instance;
+};
 
+static void _lock(struct uart_device * dev)
+{
+    rt_mutex_take(&dev->lock, RT_WAITING_FOREVER);
+}
 
-
-static struct rt_device uart_device;
-static char ch;
-static bool _rev_flag;
+static void _unlock(struct uart_device * dev)
+{
+    rt_mutex_release(&dev->lock);
+}
 
 static void UART_ISR(uint16_t byteReceived)
 {
-    _rev_flag = true;
-    ch = (uint8_t)byteReceived;
-    uart_device.rx_indicate(&uart_device, 1);
+    struct uart_device *dev;
+
+    dev = (struct uart_device *)rt_device_find("uart0");
+    if(dev)
+    {
+        dev->rx_len = 1;
+        dev->rx_buf[0] = byteReceived;
+        dev->rtdev.rx_indicate((rt_device_t)dev, 1);
+    }
 }
 
 static rt_err_t rt_uart_open(rt_device_t dev, rt_uint16_t oflag)
@@ -67,30 +85,34 @@ static rt_err_t rt_uart_init (rt_device_t dev)
     instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
     UART_CallbackRxInstall(instance, UART_ISR);
     UART_ITDMAConfig(instance, kUART_IT_Rx, true);
-    dev->user_data = (void*)instance;
-    
+
     return RT_EOK;
 }
 
 static rt_size_t rt_uart_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
-    uint8_t *p;
-    int ret;
+    int len;
+    struct uart_device * uart_dev;
+    _unlock((struct uart_device *)dev);
     
-    p = buffer;
-    if(_rev_flag)
-    {
-        p[0] = ch;
-        _rev_flag = false;
-        return 1;
-    }
-    return 0;
+    uart_dev = (struct uart_device*)dev;
+    
+    len = uart_dev->rx_len;
+    rt_memcpy(buffer, uart_dev->rx_buf, len);
+    uart_dev->rx_len = 0;
+    
+    _lock((struct uart_device *)dev);
+    return len;
 }
 
 static rt_size_t rt_uart_write(rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
     volatile uint8_t *p;
+    struct uart_device * uart_dev;
     
+    _lock((struct uart_device *)dev);
+    
+    uart_dev = (struct uart_device*)dev;
     p = (uint8_t*)buffer;
     
     while(size--)
@@ -101,10 +123,13 @@ static rt_size_t rt_uart_write(rt_device_t dev, rt_off_t pos, const void* buffer
          */
         if (*p == '\n' && (dev->open_flag & RT_DEVICE_FLAG_STREAM))
         {
-            UART_WriteByte((uint32_t)dev->user_data, '\r');
+            UART_WriteByte(uart_dev->hw_instance, '\r');
         }
-        UART_WriteByte((uint32_t)dev->user_data, *p++);
+        UART_WriteByte(uart_dev->hw_instance, *p++);
     }
+    
+    _unlock((struct uart_device *)dev);
+    
     return size;
 }
 
@@ -113,20 +138,43 @@ static rt_err_t rt_uart_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     return RT_EOK; 
 }
 
-void rt_hw_uart_init(void)
+int rt_hw_uart_init(const char *name, uint32_t instance)
 {
-
-	uart_device.type 		= RT_Device_Class_Char;
-	uart_device.rx_indicate = RT_NULL;
-	uart_device.tx_complete = RT_NULL;
-	uart_device.init 		= rt_uart_init;
-	uart_device.open		= rt_uart_open;
-	uart_device.close		= rt_uart_close;
-	uart_device.read 		= rt_uart_read;
-	uart_device.write       = rt_uart_write;
-	uart_device.control 	= rt_uart_control;
-	uart_device.user_data	= RT_NULL;
-
-    rt_device_register(&uart_device, "uart0", RT_DEVICE_FLAG_RDWR);
+    struct uart_device *dev;
+    
+    if(rt_device_find(name))
+    {
+        return -RT_EIO;
+    }
+    
+    dev = rt_malloc(sizeof(struct uart_device));
+    if(!dev)
+    {
+        RT_ENOMEM;
+    }
+    
+	dev->rtdev.type 		= RT_Device_Class_Char;
+	dev->rtdev.rx_indicate = RT_NULL;
+	dev->rtdev.tx_complete = RT_NULL;
+	dev->rtdev.init 		= rt_uart_init;
+	dev->rtdev.open		= rt_uart_open;
+	dev->rtdev.close		= rt_uart_close;
+	dev->rtdev.read 		= rt_uart_read;
+	dev->rtdev.write       = rt_uart_write;
+	dev->rtdev.control 	= rt_uart_control;
+	dev->rtdev.user_data	= RT_NULL;
+    dev->hw_instance = instance;
+    
+    /* initialize mutex */
+    if (rt_mutex_init(&dev->lock, name, RT_IPC_FLAG_FIFO) != RT_EOK)
+    {
+        rt_kprintf("init sd lock mutex failed\n");
+        return -RT_ENOSYS;
+    }
+    
+    rt_device_register(&dev->rtdev, name, RT_DEVICE_FLAG_RDWR);
+    return RT_EOK;
 }
+
+
 INIT_BOARD_EXPORT(rt_hw_uart_init);

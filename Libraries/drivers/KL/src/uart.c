@@ -11,10 +11,15 @@
 #endif
 
 
+#define IP_CLK_ENABLE(x)        (*((uint32_t*) CLKTBL[x].addr) |= CLKTBL[x].mask)
+#define IP_CLK_DISABLE(x)       (*((uint32_t*) CLKTBL[x].addr) &= ~CLKTBL[x].mask)
+
+
 #ifdef MKL26Z4_H_
 #undef  UART_BASES
 #define UART_BASES  {UART0, UART1, UART2}
-static const struct reg_ops SIM_UARTClockGateTable[] =
+
+static const struct reg_ops CLKTBL[] =
 {
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
@@ -30,7 +35,7 @@ static const IRQn_Type UART_IRQnTable[] =
 #endif
 
 #ifdef MKL27Z4_H_
-static const struct reg_ops SIM_UARTClockGateTable[] =
+static const struct reg_ops CLKTBL[] =
 {
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
 };
@@ -183,10 +188,10 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
     uint32_t clock;
-    UART_InitTypeDef UART_InitStruct1;
+    UART_InitTypeDef Init;
     QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
-    UART_InitStruct1.baudrate = baudrate;
-    UART_InitStruct1.instance = pq->ip_instance;
+    Init.baudrate = baudrate;
+    Init.instance = pq->ip_instance;
     
     /* clock source */
     if(pq->ip_instance == HW_UART0)
@@ -215,7 +220,7 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     {
         CLOCK_GetClockFrequency(kBusClock, &clock);
     }
-    UART_InitStruct1.srcClock = clock;
+    Init.srcClock = clock;
     
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
@@ -224,7 +229,7 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     }
     
     /* init UART */
-    UART_Init(&UART_InitStruct1);
+    UART_Init(&Init);
     
     return pq->ip_instance;
 }
@@ -252,8 +257,8 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
  */
 void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool status)
 {
-    /* enable clock gate */
-    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
+    IP_CLK_ENABLE(instance);
+    
     UART_Type * UARTx = (UART_Type*)UART_InstanceTable[instance];
     
     switch(config)
@@ -322,7 +327,7 @@ void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool stat
 void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 {
     /* enable clock gate */
-    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
+    *((uint32_t*) CLKTBL[instance].addr) |= CLKTBL[instance].mask;
     if(AppCBFun != NULL)
     {
         UART_CallBackRxTable[instance] = AppCBFun;
@@ -345,22 +350,21 @@ void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
 {
     /* enable clock gate */
-    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
+    *((uint32_t*) CLKTBL[instance].addr) |= CLKTBL[instance].mask;
     if(AppCBFun != NULL)
     {
         UART_CallBackTxTable[instance] = AppCBFun;
     }
 }
 
-void UART_Init(UART_InitTypeDef* UART_InitStruct)
+void UART_Init(UART_InitTypeDef* Init)
 {
     uint16_t sbr;
     static bool is_fitst_init = true;
     
-    /* enable clock gate */
-    *((uint32_t*) SIM_UARTClockGateTable[UART_InitStruct->instance].addr) |= SIM_UARTClockGateTable[UART_InitStruct->instance].mask;
+    IP_CLK_ENABLE(Init->instance);
     
-    UART_Type * UARTx = (UART_Type*)UART_InstanceTable[UART_InitStruct->instance];
+    UART_Type * UARTx = (UART_Type*)UART_InstanceTable[Init->instance];
     
     /* disable Tx Rx first */
     UARTx->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
@@ -369,7 +373,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     UARTx->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     
     /* config baudrate */
-    sbr = UART_InitStruct->srcClock/((UART_InitStruct->baudrate)*16);
+    sbr = Init->srcClock/((Init->baudrate)*16);
     UARTx->BDH &= ~(UART_BDH_SBR_MASK);
     UARTx->BDH |= (sbr>>8) & UART_BDH_SBR_MASK;
     UARTx->BDL = (sbr & UART_BDL_SBR_MASK);
@@ -381,7 +385,7 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     /* if it's first initalized ,link getc and putc to it */
     if(is_fitst_init)
     {
-        UART_DebugInstance = UART_InitStruct->instance;
+        UART_DebugInstance = Init->instance;
     }
     is_fitst_init = false;
 }

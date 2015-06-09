@@ -8,7 +8,7 @@
   * @note    此文件为芯片GPIO模块的底层功能函数
   ******************************************************************************
   */
-
+#include "common.h"
 #include "gpio.h"
 
 /* leagacy support for Kineis Z version(inital version) */
@@ -139,10 +139,10 @@ void PORT_PinPullConfig(uint32_t instance, uint8_t pin, PORT_Pull_Type pull)
  *         @arg DISABLE  :关闭功能
  * @retval None
  */
-void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pin, FunctionalState newState)
+void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pin, bool status)
 {
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_ODE_MASK);
+    (status) ? (PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_ODE_MASK):(PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_ODE_MASK);
 }
 
 /**
@@ -163,10 +163,10 @@ void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pin, FunctionalState new
  *         @arg DISABLE  :关闭功能
  * @retval None
  */
-void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pin, FunctionalState newState)
+void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pin, bool status)
 {
     SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
-    (newState == ENABLE) ? (PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_PFE_MASK):(PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_PFE_MASK);
+    (status) ? (PORT_InstanceTable[instance]->PCR[pin] |= PORT_PCR_PFE_MASK):(PORT_InstanceTable[instance]->PCR[pin] &= ~PORT_PCR_PFE_MASK);
 }
 
  /**

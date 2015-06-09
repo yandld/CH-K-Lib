@@ -8,10 +8,12 @@
   * @note    此文件为芯片FTM模块的底层功能函数
   ******************************************************************************
   */
+
+#include <math.h>
+  
 #include "ftm.h"
 #include "common.h"
 #include "gpio.h"
-#include <math.h>
 
 /* leagacy support for Kineis Z Version(inital version) */
 #if (!defined(FTM_BASES))

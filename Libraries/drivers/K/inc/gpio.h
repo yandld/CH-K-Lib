@@ -14,9 +14,9 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-	 
-#include "common.h"
+
 #include <stdint.h>
+#include <stdbool.h>
 
 /* GPIO¶Ë¿Ú¶¨Òå */
 #define HW_GPIOA  (0x00U)   /* hardware GPIOA */
@@ -131,8 +131,8 @@ void GPIO_PinConfig(uint32_t instance, uint8_t pin, GPIO_PinConfig_Type mode);
 void PORT_PinMuxConfig(uint32_t instance, uint8_t pin, PORT_PinMux_Type pinMux);
 uint32_t GPIO_ReadPort(uint32_t instance);
 void GPIO_WritePort(uint32_t instance, uint32_t data);
-void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pin, FunctionalState newState);
-void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pin, FunctionalState newState);
+void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pin, bool status);
+void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pin, bool status);
     
 #ifdef __cplusplus
 }

@@ -7,14 +7,10 @@
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
+
+#include "common.h"
 #include "uart.h"
 #include "gpio.h"
-#include "common.h"
-
-
-
-
-
 
 #if (!defined(UART_BASES))
 #ifdef  UART2
@@ -31,15 +27,15 @@
 #endif
 
 /* gloabl const table defination */
-static UART_Type * const UART_InstanceTable[] = UART_BASES;
+static UART_Type * const UARTBase[] = UART_BASES;
 /* callback function slot */
-static UART_CallBackTxType UART_CallBackTxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
-static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
+static UART_CallBackTxType UART_CallBackTxTable[ARRAY_SIZE(UARTBase)] = {NULL};
+static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UARTBase)] = {NULL};
 /* special use for printf */
 static uint8_t UART_DebugInstance;
 /* instance clock gate table */
 
-static const struct reg_ops SIM_UARTClockGateTable[] =
+static const struct reg_ops ClkTbl[] =
 {
     
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
@@ -252,39 +248,38 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(UART_InitStruct->instance));
     
-    /* enable clock gate */
-    *((uint32_t*) SIM_UARTClockGateTable[UART_InitStruct->instance].addr) |= SIM_UARTClockGateTable[UART_InitStruct->instance].mask;
+    IP_CLK_ENABLE(UART_InitStruct->instance);
     
     /* disable Tx Rx first */
-    UART_InstanceTable[UART_InitStruct->instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    UARTBase[UART_InitStruct->instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     
     /* baud rate generation */
     sbr = (uint16_t)((UART_InitStruct->srcClock)/((UART_InitStruct->baudrate)*16));
     brfa = ((32*UART_InitStruct->srcClock)/((UART_InitStruct->baudrate)*16)) - 32*sbr;
     
     /* config baudrate */
-    UART_InstanceTable[UART_InitStruct->instance]->BDH &= ~UART_BDH_SBR_MASK;
-    UART_InstanceTable[UART_InitStruct->instance]->BDL &= ~UART_BDL_SBR_MASK;
-    UART_InstanceTable[UART_InitStruct->instance]->C4 &= ~UART_C4_BRFA_MASK;
+    UARTBase[UART_InitStruct->instance]->BDH &= ~UART_BDH_SBR_MASK;
+    UARTBase[UART_InitStruct->instance]->BDL &= ~UART_BDL_SBR_MASK;
+    UARTBase[UART_InitStruct->instance]->C4 &= ~UART_C4_BRFA_MASK;
     
-    UART_InstanceTable[UART_InitStruct->instance]->BDH |= UART_BDH_SBR(sbr>>8); 
-    UART_InstanceTable[UART_InitStruct->instance]->BDL = UART_BDL_SBR(sbr); 
-    UART_InstanceTable[UART_InitStruct->instance]->C4 |= UART_C4_BRFA(brfa);
+    UARTBase[UART_InitStruct->instance]->BDH |= UART_BDH_SBR(sbr>>8); 
+    UARTBase[UART_InitStruct->instance]->BDL = UART_BDL_SBR(sbr); 
+    UARTBase[UART_InitStruct->instance]->C4 |= UART_C4_BRFA(brfa);
     
     /* parity */
     switch(UART_InitStruct->parityMode)
     {
         case kUART_ParityDisabled: /* standard N 8 N 1*/
-            UART_InstanceTable[UART_InitStruct->instance]->C1 &= ~UART_C1_PE_MASK;
-            UART_InstanceTable[UART_InitStruct->instance]->C1 &= ~UART_C1_M_MASK;
+            UARTBase[UART_InitStruct->instance]->C1 &= ~UART_C1_PE_MASK;
+            UARTBase[UART_InitStruct->instance]->C1 &= ~UART_C1_M_MASK;
             break;
         case kUART_ParityEven:/* 8 bit data + 1bit parity */
-            UART_InstanceTable[UART_InitStruct->instance]->C1 |= UART_C1_PE_MASK;
-            UART_InstanceTable[UART_InitStruct->instance]->C1 &= ~UART_C1_PT_MASK;
+            UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_PE_MASK;
+            UARTBase[UART_InitStruct->instance]->C1 &= ~UART_C1_PT_MASK;
             break;
         case kUART_ParityOdd:
-            UART_InstanceTable[UART_InitStruct->instance]->C1 |= UART_C1_PE_MASK;
-            UART_InstanceTable[UART_InitStruct->instance]->C1 |= UART_C1_PT_MASK;
+            UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_PE_MASK;
+            UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_PT_MASK;
             break;
         default:
             break;
@@ -295,38 +290,38 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     switch(UART_InitStruct->bitPerChar)
     {
         case kUART_8BitsPerChar:
-            if(UART_InstanceTable[UART_InitStruct->instance]->C1 & UART_C1_PE_MASK)
+            if(UARTBase[UART_InitStruct->instance]->C1 & UART_C1_PE_MASK)
             {
                 /* parity is enabled it's actually 9bit*/
-                UART_InstanceTable[UART_InitStruct->instance]->C1 |= UART_C1_M_MASK;
-                UART_InstanceTable[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;    
+                UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_M_MASK;
+                UARTBase[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;    
             }
             else
             {
-                UART_InstanceTable[UART_InitStruct->instance]->C1 &= ~UART_C1_M_MASK;
-                UART_InstanceTable[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;    
+                UARTBase[UART_InitStruct->instance]->C1 &= ~UART_C1_M_MASK;
+                UARTBase[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;    
             }
             break;
         case kUART_9BitsPerChar:
-            if(UART_InstanceTable[UART_InitStruct->instance]->C1 & UART_C1_PE_MASK)
+            if(UARTBase[UART_InitStruct->instance]->C1 & UART_C1_PE_MASK)
             {
                 /* parity is enabled it's actually 10 bit*/
-                UART_InstanceTable[UART_InitStruct->instance]->C1 |= UART_C1_M_MASK;
-                UART_InstanceTable[UART_InitStruct->instance]->C4 |= UART_C4_M10_MASK;  
+                UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_M_MASK;
+                UARTBase[UART_InitStruct->instance]->C4 |= UART_C4_M10_MASK;  
             } 
             else
             {
-                UART_InstanceTable[UART_InitStruct->instance]->C1 |= UART_C1_M_MASK;
-                UART_InstanceTable[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;      
+                UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_M_MASK;
+                UARTBase[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;      
             }
             break;
         default:
             break;
     }
-    UART_InstanceTable[UART_InitStruct->instance]->S2 &= ~UART_S2_MSBF_MASK; /* LSB */
+    UARTBase[UART_InitStruct->instance]->S2 &= ~UART_S2_MSBF_MASK; /* LSB */
     
     /* enable Tx Rx */
-    UART_InstanceTable[UART_InitStruct->instance]->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    UARTBase[UART_InitStruct->instance]->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     
     /* link debug instance */
     /* if it's first initalized ,link getc and putc to it */
@@ -340,13 +335,13 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
 void UART_DeInit(uint32_t instance)
 {
     /* waitting sending complete */
-    while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
+    while(!(UARTBase[instance]->S1 & UART_S1_TDRE_MASK));
 	
     /* disable Tx Rx */
-    UART_InstanceTable[instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    UARTBase[instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     
-    /* disable clock gate */
-    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
+    
+    IP_CLK_DISABLE(instance);
 }
 
 #pragma weak UART_SelectDebugInstance
@@ -354,55 +349,52 @@ void UART_SelectDebugInstance(uint32_t instance)
 {
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
-    if(*((uint32_t*) SIM_UARTClockGateTable[instance].addr) & SIM_UARTClockGateTable[instance].mask)
-    {
-        UART_DebugInstance = instance;
-    }
+    UART_DebugInstance = instance;
 }
 
 void UART_EnableTxFIFO(uint32_t instance, bool status)
 {
     /* waitting for all data has been shifted out */
-    //while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
+    //while(!(UARTBase[instance]->S1 & UART_S1_TDRE_MASK));
     
     (status)?
-    (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_TXFE_MASK):
-    (UART_InstanceTable[instance]->PFIFO &= ~UART_PFIFO_TXFE_MASK);
+    (UARTBase[instance]->PFIFO |= UART_PFIFO_TXFE_MASK):
+    (UARTBase[instance]->PFIFO &= ~UART_PFIFO_TXFE_MASK);
     
 }
 
 void UART_EnableRxFIFO(uint32_t instance, bool status)
 {
     (status)?
-    (UART_InstanceTable[instance]->PFIFO |= UART_PFIFO_RXFE_MASK):
-    (UART_InstanceTable[instance]->PFIFO &= ~UART_PFIFO_RXFE_MASK);
+    (UARTBase[instance]->PFIFO |= UART_PFIFO_RXFE_MASK):
+    (UARTBase[instance]->PFIFO &= ~UART_PFIFO_RXFE_MASK);
 }
 
 uint32_t UART_GetTxFIFOSize(uint32_t instance)
 {
-    return UART_TIFOSizeTable[(UART_InstanceTable[instance]->PFIFO  \
+    return UART_TIFOSizeTable[(UARTBase[instance]->PFIFO  \
     & UART_PFIFO_TXFIFOSIZE_MASK) >> UART_PFIFO_TXFIFOSIZE_SHIFT];
 }
 
 uint32_t UART_GetRxFIFOSize(uint32_t instance)
 {
-    return UART_TIFOSizeTable[(UART_InstanceTable[instance]->PFIFO  \
+    return UART_TIFOSizeTable[(UARTBase[instance]->PFIFO  \
     & UART_PFIFO_RXFIFOSIZE_MASK) >> UART_PFIFO_RXFIFOSIZE_SHIFT];
 }
 
 void UART_SetTxFIFOWatermark(uint32_t instance, uint32_t size)
 {
     /* disable transmiter and renable it */
-    UART_InstanceTable[instance]->C2 &= ~UART_C2_TE_MASK;
-    UART_InstanceTable[instance]->TWFIFO = size;
-    UART_InstanceTable[instance]->C2 |= UART_C2_TE_MASK;
+    UARTBase[instance]->C2 &= ~UART_C2_TE_MASK;
+    UARTBase[instance]->TWFIFO = size;
+    UARTBase[instance]->C2 |= UART_C2_TE_MASK;
 }
 
 void UART_SetRxFIFOWatermark(uint32_t instance, uint32_t size)
 {
-    UART_InstanceTable[instance]->C2 &= ~UART_C2_RE_MASK;
-    UART_InstanceTable[instance]->RWFIFO = size;
-    UART_InstanceTable[instance]->C2 |= UART_C2_RE_MASK;
+    UARTBase[instance]->C2 &= ~UART_C2_RE_MASK;
+    UARTBase[instance]->RWFIFO = size;
+    UARTBase[instance]->C2 |= UART_C2_RE_MASK;
 }
 
 /**
@@ -427,22 +419,22 @@ void UART_WriteByte(uint32_t instance, uint16_t ch)
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
 
-    if(UART_InstanceTable[instance]->PFIFO & UART_PFIFO_TXFE_MASK)
+    if(UARTBase[instance]->PFIFO & UART_PFIFO_TXFE_MASK)
     {
         /* buffer is used */
-        while(UART_InstanceTable[instance]->TCFIFO >= UART_GetTxFIFOSize(instance));
+        while(UARTBase[instance]->TCFIFO >= UART_GetTxFIFOSize(instance));
     }
     else
     {
         /* no buffer is used */
-        while(!(UART_InstanceTable[instance]->S1 & UART_S1_TDRE_MASK));
+        while(!(UARTBase[instance]->S1 & UART_S1_TDRE_MASK));
     }
     
-    UART_InstanceTable[instance]->D = (uint8_t)(ch & 0xFF);
+    UARTBase[instance]->D = (uint8_t)(ch & 0xFF);
     
     /* config ninth bit */
     uint8_t ninth_bit = (ch >> 8) & 0x01U;
-    (ninth_bit)?(UART_InstanceTable[instance]->C3 |= UART_C3_T8_MASK):(UART_InstanceTable[instance]->C3 &= ~UART_C3_T8_MASK);
+    (ninth_bit)?(UARTBase[instance]->C3 |= UART_C3_T8_MASK):(UARTBase[instance]->C3 &= ~UART_C3_T8_MASK);
 }
 
 
@@ -469,12 +461,12 @@ uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
     uint8_t temp = 0;
-    if((UART_InstanceTable[instance]->S1 & UART_S1_RDRF_MASK) != 0)
+    if((UARTBase[instance]->S1 & UART_S1_RDRF_MASK) != 0)
     {
         /* get ninth bit */
-        temp = (UART_InstanceTable[instance]->C3 & UART_C3_R8_MASK) >> UART_C3_R8_SHIFT;
+        temp = (UARTBase[instance]->C3 & UART_C3_R8_MASK) >> UART_C3_R8_SHIFT;
         *ch = temp << 8;
-        *ch |= (uint8_t)(UART_InstanceTable[instance]->D);	
+        *ch |= (uint8_t)(UARTBase[instance]->D);	
         return 0; 		  
     }
     return 1;
@@ -503,37 +495,36 @@ uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
  */
 void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool status)
 {
-    /* enable clock gate */
-    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
+    IP_CLK_ENABLE(instance);
     switch(config)
     {
         case kUART_IT_Tx:
             (status)?
-            (UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK):
-            (UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK);
+            (UARTBase[instance]->C2 |= UART_C2_TIE_MASK):
+            (UARTBase[instance]->C2 &= ~UART_C2_TIE_MASK);
             NVIC_EnableIRQ(UART_IRQnTable[instance]);
             break; 
         case kUART_IT_Rx:
             (status)?
-            (UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK):
-            (UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK);
+            (UARTBase[instance]->C2 |= UART_C2_RIE_MASK):
+            (UARTBase[instance]->C2 &= ~UART_C2_RIE_MASK);
             NVIC_EnableIRQ(UART_IRQnTable[instance]);
             break;
         case kUART_DMA_Tx:
             (status)?
-            (UART_InstanceTable[instance]->C2 |= UART_C2_TIE_MASK):
-            (UART_InstanceTable[instance]->C2 &= ~UART_C2_TIE_MASK);
+            (UARTBase[instance]->C2 |= UART_C2_TIE_MASK):
+            (UARTBase[instance]->C2 &= ~UART_C2_TIE_MASK);
             (status)?
-            (UART_InstanceTable[instance]->C5 |= UART_C5_TDMAS_MASK):
-            (UART_InstanceTable[instance]->C5 &= ~UART_C5_TDMAS_MASK);
+            (UARTBase[instance]->C5 |= UART_C5_TDMAS_MASK):
+            (UARTBase[instance]->C5 &= ~UART_C5_TDMAS_MASK);
             break;
         case kUART_DMA_Rx:
             (status)?
-            (UART_InstanceTable[instance]->C2 |= UART_C2_RIE_MASK):
-            (UART_InstanceTable[instance]->C2 &= ~UART_C2_RIE_MASK);
+            (UARTBase[instance]->C2 |= UART_C2_RIE_MASK):
+            (UARTBase[instance]->C2 &= ~UART_C2_RIE_MASK);
             (status)?
-            (UART_InstanceTable[instance]->C5 |= UART_C5_RDMAS_MASK):
-            (UART_InstanceTable[instance]->C5 &= ~UART_C5_RDMAS_MASK);
+            (UARTBase[instance]->C5 |= UART_C5_RDMAS_MASK):
+            (UARTBase[instance]->C5 &= ~UART_C5_RDMAS_MASK);
             break;
         default:
             break;
@@ -558,8 +549,7 @@ void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
     
-    /* enable clock gate */
-    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
+    IP_CLK_ENABLE(instance);
     if(AppCBFun != NULL)
     {
         UART_CallBackTxTable[instance] = AppCBFun;
@@ -584,8 +574,8 @@ void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 	/* param check */
     assert_param(IS_UART_ALL_INSTANCE(instance));
     
-    /* enable clock gate */
-    *((uint32_t*) SIM_UARTClockGateTable[instance].addr) |= SIM_UARTClockGateTable[instance].mask;
+    IP_CLK_ENABLE(instance);
+    
     if(AppCBFun != NULL)
     {
         UART_CallBackRxTable[instance] = AppCBFun;
@@ -607,12 +597,12 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
     uint32_t clock;
-    UART_InitTypeDef UART_InitStruct1;
+    UART_InitTypeDef Init;
     QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
-    UART_InitStruct1.baudrate = baudrate;
-    UART_InitStruct1.instance = pq->ip_instance;
-    UART_InitStruct1.parityMode = kUART_ParityDisabled;
-    UART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
+    Init.baudrate = baudrate;
+    Init.instance = pq->ip_instance;
+    Init.parityMode = kUART_ParityDisabled;
+    Init.bitPerChar = kUART_8BitsPerChar;
     
     /* src clock */
     CLOCK_GetClockFrequency(kBusClock, &clock);
@@ -620,7 +610,7 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     {
         CLOCK_GetClockFrequency(kCoreClock, &clock); /* UART0 UART1 are use core clock */
     }
-    UART_InitStruct1.srcClock = clock;
+    Init.srcClock = clock;
     
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
@@ -629,7 +619,7 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     }
     
     /* init UART */
-    UART_Init(&UART_InitStruct1);
+    UART_Init(&Init);
     
     /* default: disable hardware buffer */
     UART_EnableTxFIFO(pq->ip_instance, false);
@@ -656,18 +646,18 @@ void UART0_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
     /* Tx */
-    if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_TIE_MASK))
+    if((UARTBase[HW_UART0]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART0]->C2 & UART_C2_TIE_MASK))
     {
         if(UART_CallBackTxTable[HW_UART0])
         {
             UART_CallBackTxTable[HW_UART0](&ch);
         }
-        UART_InstanceTable[HW_UART0]->D = (uint8_t)ch;
+        UARTBase[HW_UART0]->D = (uint8_t)ch;
     }
     /* Rx */
-    if((UART_InstanceTable[HW_UART0]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART0]->C2 & UART_C2_RIE_MASK))
+    if((UARTBase[HW_UART0]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART0]->C2 & UART_C2_RIE_MASK))
     {
-        ch = (uint8_t)UART_InstanceTable[HW_UART0]->D;
+        ch = (uint8_t)UARTBase[HW_UART0]->D;
         if(UART_CallBackRxTable[HW_UART0])
         {
             UART_CallBackRxTable[HW_UART0](ch);
@@ -679,18 +669,18 @@ void UART1_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
     /* Tx */
-    if((UART_InstanceTable[HW_UART1]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART1]->C2 & UART_C2_TIE_MASK))
+    if((UARTBase[HW_UART1]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART1]->C2 & UART_C2_TIE_MASK))
     {
         if(UART_CallBackTxTable[HW_UART1])
         {
             UART_CallBackTxTable[HW_UART1](&ch);
         }
-        UART_InstanceTable[HW_UART1]->D = (uint8_t)ch;
+        UARTBase[HW_UART1]->D = (uint8_t)ch;
     }
     /* Rx */
-    if((UART_InstanceTable[HW_UART1]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART1]->C2 & UART_C2_RIE_MASK))
+    if((UARTBase[HW_UART1]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART1]->C2 & UART_C2_RIE_MASK))
     {
-        ch = (uint8_t)UART_InstanceTable[HW_UART1]->D;
+        ch = (uint8_t)UARTBase[HW_UART1]->D;
         if(UART_CallBackRxTable[HW_UART1])
         {
             UART_CallBackRxTable[HW_UART1](ch);
@@ -703,18 +693,18 @@ void UART2_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
     /* Tx */
-    if((UART_InstanceTable[HW_UART2]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART2]->C2 & UART_C2_TIE_MASK))
+    if((UARTBase[HW_UART2]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART2]->C2 & UART_C2_TIE_MASK))
     {
         if(UART_CallBackTxTable[HW_UART2])
         {
             UART_CallBackTxTable[HW_UART2](&ch);
         }
-        UART_InstanceTable[HW_UART2]->D = (uint8_t)ch;
+        UARTBase[HW_UART2]->D = (uint8_t)ch;
     }
     /* Rx */
-    if((UART_InstanceTable[HW_UART2]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART2]->C2 & UART_C2_RIE_MASK))
+    if((UARTBase[HW_UART2]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART2]->C2 & UART_C2_RIE_MASK))
     {
-        ch = (uint8_t)UART_InstanceTable[HW_UART2]->D;
+        ch = (uint8_t)UARTBase[HW_UART2]->D;
         if(UART_CallBackRxTable[HW_UART2])
         {
             UART_CallBackRxTable[HW_UART2](ch);
@@ -728,18 +718,18 @@ void UART3_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
     /* Tx */
-    if((UART_InstanceTable[HW_UART3]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART3]->C2 & UART_C2_TIE_MASK))
+    if((UARTBase[HW_UART3]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART3]->C2 & UART_C2_TIE_MASK))
     {
         if(UART_CallBackTxTable[HW_UART3])
         {
             UART_CallBackTxTable[HW_UART3](&ch);
         }
-        UART_InstanceTable[HW_UART3]->D = (uint8_t)ch;
+        UARTBase[HW_UART3]->D = (uint8_t)ch;
     }
     /* Rx */
-    if((UART_InstanceTable[HW_UART3]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART3]->C2 & UART_C2_RIE_MASK))
+    if((UARTBase[HW_UART3]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART3]->C2 & UART_C2_RIE_MASK))
     {
-        ch = (uint8_t)UART_InstanceTable[HW_UART3]->D;
+        ch = (uint8_t)UARTBase[HW_UART3]->D;
         if(UART_CallBackRxTable[HW_UART3])
         {
             UART_CallBackRxTable[HW_UART3](ch);
@@ -753,18 +743,18 @@ void UART4_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
     /* Tx */
-    if((UART_InstanceTable[HW_UART4]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART4]->C2 & UART_C2_TIE_MASK))
+    if((UARTBase[HW_UART4]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART4]->C2 & UART_C2_TIE_MASK))
     {
         if(UART_CallBackTxTable[HW_UART4])
         {
             UART_CallBackTxTable[HW_UART4](&ch);
         }
-        UART_InstanceTable[HW_UART4]->D = (uint8_t)ch;
+        UARTBase[HW_UART4]->D = (uint8_t)ch;
     }
     /* Rx */
-    if((UART_InstanceTable[HW_UART4]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART4]->C2 & UART_C2_RIE_MASK))
+    if((UARTBase[HW_UART4]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART4]->C2 & UART_C2_RIE_MASK))
     {
-        ch = (uint8_t)UART_InstanceTable[HW_UART4]->D;
+        ch = (uint8_t)UARTBase[HW_UART4]->D;
         if(UART_CallBackRxTable[HW_UART4])
         {
             UART_CallBackRxTable[HW_UART4](ch);
@@ -778,18 +768,18 @@ void UART5_RX_TX_IRQHandler(void)
 {
     uint16_t ch;
     /* Tx */
-    if((UART_InstanceTable[HW_UART5]->S1 & UART_S1_TDRE_MASK) && (UART_InstanceTable[HW_UART5]->C2 & UART_C2_TIE_MASK))
+    if((UARTBase[HW_UART5]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART5]->C2 & UART_C2_TIE_MASK))
     {
         if(UART_CallBackTxTable[HW_UART5])
         {
             UART_CallBackTxTable[HW_UART5](&ch);
         }
-        UART_InstanceTable[HW_UART5]->D = (uint8_t)ch;
+        UARTBase[HW_UART5]->D = (uint8_t)ch;
     }
     /* Rx */
-    if((UART_InstanceTable[HW_UART5]->S1 & UART_S1_RDRF_MASK) && (UART_InstanceTable[HW_UART5]->C2 & UART_C2_RIE_MASK))
+    if((UARTBase[HW_UART5]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART5]->C2 & UART_C2_RIE_MASK))
     {
-        ch = (uint8_t)UART_InstanceTable[HW_UART5]->D;
+        ch = (uint8_t)UARTBase[HW_UART5]->D;
         if(UART_CallBackRxTable[HW_UART5])
         {
             UART_CallBackRxTable[HW_UART5](ch);

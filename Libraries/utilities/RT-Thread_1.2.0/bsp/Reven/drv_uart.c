@@ -27,13 +27,11 @@
  *                             the size of ring buffer.
  */
 
-#include <rthw.h>
 #include <rtthread.h>
 #include <rtdevice.h>
 
 #include "uart.h"
 #include "gpio.h"
-#include "board.h"
 #include "rtt_drv.h"
 #include "board.h"
 
@@ -44,6 +42,7 @@ struct uart_device
     char                            rx_buf[32];
     uint32_t                        rx_len;
     uint32_t                        hw_instance;
+    void (*hw_isr)(uint16_t data);
 };
 
 static void _lock(struct uart_device * dev)
@@ -56,16 +55,68 @@ static void _unlock(struct uart_device * dev)
     rt_mutex_release(&dev->lock);
 }
 
-static void UART_ISR(uint16_t byteReceived)
+static void UART0_ISR(uint16_t byteReceived)
 {
     struct uart_device *dev;
 
     dev = (struct uart_device *)rt_device_find("uart0");
     if(dev)
     {
-        dev->rx_len = 1;
-        dev->rx_buf[0] = byteReceived;
-        dev->rtdev.rx_indicate((rt_device_t)dev, 1);
+        dev->rx_len++;
+        dev->rx_buf[(dev->rx_len)-1] = byteReceived;
+        dev->rtdev.rx_indicate((rt_device_t)dev, dev->rx_len);
+    }
+}
+
+static void UART1_ISR(uint16_t byteReceived)
+{
+    struct uart_device *dev;
+
+    dev = (struct uart_device *)rt_device_find("uart1");
+    if(dev)
+    {
+        dev->rx_len++;
+        dev->rx_buf[dev->rx_len-1] = byteReceived;
+        dev->rtdev.rx_indicate((rt_device_t)dev, dev->rx_len);
+    }
+}
+
+static void UART2_ISR(uint16_t byteReceived)
+{
+    struct uart_device *dev;
+
+    dev = (struct uart_device *)rt_device_find("uart2");
+    if(dev)
+    {
+        dev->rx_len++;
+        dev->rx_buf[dev->rx_len-1] = byteReceived;
+        dev->rtdev.rx_indicate((rt_device_t)dev, dev->rx_len);
+    }
+}
+
+static void UART3_ISR(uint16_t byteReceived)
+{
+    struct uart_device *dev;
+
+    dev = (struct uart_device *)rt_device_find("uart3");
+    if(dev)
+    {
+        dev->rx_len++;
+        dev->rx_buf[dev->rx_len-1] = byteReceived;
+        dev->rtdev.rx_indicate((rt_device_t)dev, dev->rx_len);
+    }
+}
+
+static void UART4_ISR(uint16_t byteReceived)
+{
+    struct uart_device *dev;
+
+    dev = (struct uart_device *)rt_device_find("uart4");
+    if(dev)
+    {
+        dev->rx_len++;
+        dev->rx_buf[dev->rx_len-1] = byteReceived;
+        dev->rtdev.rx_indicate((rt_device_t)dev, dev->rx_len);
     }
 }
 
@@ -81,11 +132,35 @@ static rt_err_t rt_uart_close(rt_device_t dev)
 
 static rt_err_t rt_uart_init (rt_device_t dev)
 {
-    uint32_t instance;
-    instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
-    UART_CallbackRxInstall(instance, UART_ISR);
-    UART_ITDMAConfig(instance, kUART_IT_Rx, true);
+    struct uart_device * uart_dev;
+    uart_dev = (struct uart_device*)dev;
+    
+    UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+    UART_CallbackRxInstall(HW_UART0, UART0_ISR);
+    UART_CallbackRxInstall(HW_UART1, UART1_ISR);
+    UART_CallbackRxInstall(HW_UART2, UART2_ISR);
+    UART_CallbackRxInstall(HW_UART3, UART3_ISR);
+    UART_CallbackRxInstall(HW_UART4, UART4_ISR);
+    UART_ITDMAConfig(uart_dev->hw_instance, kUART_IT_Rx, true);
 
+    switch(uart_dev->hw_instance)
+    {
+        case 0:
+            uart_dev->hw_isr = UART0_ISR;
+            break;
+        case 1:
+            uart_dev->hw_isr = UART1_ISR;
+            break; 
+        case 2:
+            uart_dev->hw_isr = UART2_ISR;
+            break;   
+        case 3:
+            uart_dev->hw_isr = UART2_ISR;
+            break; 
+        case 4:
+            uart_dev->hw_isr = UART2_ISR;
+            break; 
+    }
     return RT_EOK;
 }
 
@@ -150,25 +225,25 @@ int rt_hw_uart_init(const char *name, uint32_t instance)
     dev = rt_malloc(sizeof(struct uart_device));
     if(!dev)
     {
-        RT_ENOMEM;
+        return RT_ENOMEM;
     }
     
 	dev->rtdev.type 		= RT_Device_Class_Char;
-	dev->rtdev.rx_indicate = RT_NULL;
-	dev->rtdev.tx_complete = RT_NULL;
+	dev->rtdev.rx_indicate  = RT_NULL;
+	dev->rtdev.tx_complete  = RT_NULL;
 	dev->rtdev.init 		= rt_uart_init;
-	dev->rtdev.open		= rt_uart_open;
+	dev->rtdev.open         = rt_uart_open;
 	dev->rtdev.close		= rt_uart_close;
 	dev->rtdev.read 		= rt_uart_read;
-	dev->rtdev.write       = rt_uart_write;
-	dev->rtdev.control 	= rt_uart_control;
+	dev->rtdev.write        = rt_uart_write;
+	dev->rtdev.control      = rt_uart_control;
 	dev->rtdev.user_data	= RT_NULL;
     dev->hw_instance = instance;
+    dev->rx_len = 0;
     
     /* initialize mutex */
     if (rt_mutex_init(&dev->lock, name, RT_IPC_FLAG_FIFO) != RT_EOK)
     {
-        rt_kprintf("init sd lock mutex failed\n");
         return -RT_ENOSYS;
     }
     

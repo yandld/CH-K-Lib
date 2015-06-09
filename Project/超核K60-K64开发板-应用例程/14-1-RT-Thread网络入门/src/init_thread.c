@@ -5,7 +5,6 @@
 #include "sram.h"
 #include "rtt_drv.h"
 
-void rt_hw_dflash_init(void);
 
 void init_thread_entry(void* parameter)
 {
@@ -22,12 +21,12 @@ void init_thread_entry(void* parameter)
     rt_thread_delay(1);
     
     rt_hw_uart_init("uart0", 0);
-    rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
+    rt_console_set_device("uart0");
     rt_kprintf("rt-thread system start!\r\n");
     
     finsh_system_init();
     
-    rt_hw_dflash_init();
+    rt_hw_dflash_init("dflash0");
     
     if(dfs_mount("sf0", "/", "elm", 0, 0))
     {

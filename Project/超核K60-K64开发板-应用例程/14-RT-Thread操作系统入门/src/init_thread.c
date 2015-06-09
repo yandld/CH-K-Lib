@@ -44,7 +44,7 @@ void init_thread_entry(void* parameter)
    
     /* 启动shell 控制台系统 可选 */
 
-    rt_hw_uart_init();
+    rt_hw_uart_init("uart0", HW_UART0);
     rt_console_set_device("uart0");
     
     rt_kprintf("hello rt-thread!\r\n");

@@ -10,7 +10,6 @@
   
 #include <string.h>
 #include "mpu9250.h"
-#include "common.h"
 #include "i2c.h"
 
 #define MPU9250_DEBUG		1

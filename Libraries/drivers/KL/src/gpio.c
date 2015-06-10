@@ -5,14 +5,16 @@
 static GPIO_Type * const GPIO_InstanceTable[] = GPIO_BASES;
 static PORT_Type * const PORT_InstanceTable[] = PORT_BASES;
 static GPIO_CallBackType GPIO_CallBackTable[ARRAY_SIZE(PORT_InstanceTable)] = {NULL};
-static const uint32_t SIM_GPIOClockGateTable[] =
+
+static const struct reg_ops CLKTbl[] =
 {
-    SIM_SCGC5_PORTA_MASK,
-    SIM_SCGC5_PORTB_MASK,
-    SIM_SCGC5_PORTC_MASK,
-    SIM_SCGC5_PORTD_MASK,
-    SIM_SCGC5_PORTE_MASK,
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTA_MASK},
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTB_MASK},
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTC_MASK},
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTD_MASK},
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTE_MASK},
 };
+
 
 static const IRQn_Type GPIO_IRQnTable[] = 
 {
@@ -57,8 +59,8 @@ static const IRQn_Type GPIO_IRQnTable[] =
  */
 void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux)
 {
-    /* param check */
-    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
+
+    IP_CLK_ENABLE(instance);
     PORT_InstanceTable[instance]->PCR[pinIndex] &= ~(PORT_PCR_MUX_MASK);
     PORT_InstanceTable[instance]->PCR[pinIndex] |=  PORT_PCR_MUX(pinMux);
 }
@@ -83,8 +85,7 @@ void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pin
  */
 void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull)
 {
-    /* param check */
-    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
+    IP_CLK_ENABLE(instance);
     switch(pull)
     {
         case kPullDisabled:
@@ -125,7 +126,7 @@ void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull
  */
 void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode)
 {
-    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
+    IP_CLK_ENABLE(instance);
     (mode == kOutput) ? (GPIO_InstanceTable[instance]->PDDR |= (1 << pinIndex)):(GPIO_InstanceTable[instance]->PDDR &= ~(1 << pinIndex));
 }
 
@@ -342,8 +343,7 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
  */
 void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status)
 {
-    /* init moudle */
-    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
+    IP_CLK_ENABLE(instance);
     PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
     
     if(!status)
@@ -401,8 +401,7 @@ void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type
  */
 void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun)
 {
-    /* init moudle */
-    SIM->SCGC5 |= SIM_GPIOClockGateTable[instance];
+    IP_CLK_ENABLE(instance);
     if(AppCBFun != NULL)
     {
         GPIO_CallBackTable[instance] = AppCBFun;

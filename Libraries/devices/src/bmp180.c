@@ -11,6 +11,7 @@
   
 #include <string.h>
 #include <math.h>
+
 #include "bmp180.h"
 #include "common.h"
 #include "i2c.h"
@@ -237,12 +238,12 @@ static int is_conversion_busy(void)
  * @param pointer of the bmp180 device struct
  * @param pointer of temperature, in 10x, eg:156 = 15.6C
  */
-static int bmp180_read_temperature(int32_t * temperature)
+static int bmp180_read_temperature(int32_t * t)
 {
-    int32_t raw_temperature;
+    int32_t rt;
     int32_t x1, x2;
 
-    if(read_raw_temperature(&raw_temperature))
+    if(read_raw_temperature(&rt))
     {
         return 2;
     }
@@ -251,13 +252,15 @@ static int bmp180_read_temperature(int32_t * temperature)
     LIB_TRACE("ac6 = %d\n\r",cal.AC6);
     LIB_TRACE("ac5 = %d\n\r",cal.AC5);
     LIB_TRACE("ac5/32768 = %f\n\r",((float)cal.AC5)/32768);
-    LIB_TRACE("raw_t-ac6 = %d\n\r",(raw_temperature - cal.AC6));
+    LIB_TRACE("raw_t-ac6 = %d\n\r",(rt - cal.AC6));
 
-    x1 = (int32_t)((raw_temperature - cal.AC6) * (int32_t)cal.AC5) >> 15;
+    
+    x1 = (int32_t)((rt - cal.AC6) * (int32_t)cal.AC5) >> 15;
     x2 = (int32_t)(cal.MC <<11) / (x1 + cal.MD);
     cal.B5 = x1 + x2;
-    *temperature = (cal.B5 + (int32_t)8) >> 4;
-
+    *t = (cal.B5 + (int32_t)8) >> 4;
+    *t /= 10;
+    
     return 0;
 }
 
@@ -269,12 +272,12 @@ static int bmp180_read_temperature(int32_t * temperature)
  * @param pointer of the bmp180 device struct
  * @param pointer of pressure, in pa
  */
-static int bmp180_read_pressure(int32_t * pressure)
+static int bmp180_read_pressure(int32_t * p)
 {
-    int32_t raw_pressure;
+    int32_t rp;
     uint8_t oss;
     /* read raw pressure */
-    if(read_raw_pressure(&raw_pressure, &oss))
+    if(read_raw_pressure(&rp, &oss))
     {
         return 2;
     }
@@ -293,7 +296,7 @@ static int bmp180_read_pressure(int32_t * pressure)
     x2 = (cal.B1 * (b6 * b6 >> 12)) >> 16;
     x3 = (x1 + x2 + 2) >> 2;
     b4 = (cal.AC4 * (uint32_t)(x3 + 32768)) >> 15;
-    b7 = (uint32_t)(raw_pressure - b3) * (50000 >> oss);
+    b7 = (uint32_t)(rp - b3) * (50000 >> oss);
 
     if (b7 < 0x80000000)
     {
@@ -308,16 +311,16 @@ static int bmp180_read_pressure(int32_t * pressure)
     x2 = (-7357 * result) >> 16;
     result += ((x1 + x2 + 3791) >> 4);
 		
-    *pressure = result;
+    *p = result;
     return 0;
 }
 
-int bmp180_pressure2altitude(int32_t pressure, int32_t *altitude)
+float bmp180_get_altitude(int32_t p)
 {
-    float fpressure;
-    fpressure = (float)pressure;
-	*altitude =44330 * (1.0 - pow(pressure /(float)101500,0.1903));
-	return 0;
+    float fp, fa;
+    fp = (float)p;
+	fa =(float)44330 * (1.0 - pow((fp /(float)101325),0.190295));
+    return fa;
 }
 
 
@@ -328,13 +331,12 @@ int bmp180_pressure2altitude(int32_t pressure, int32_t *altitude)
 #define T_WAIT           (1<<4)
 #define P_WAIT           (1<<5)
 
-int bmp180_conversion_process(int32_t *pressure, int32_t *temperature)
+int bmp180_conversion_process(float *pressure, float *temperature)
 {
-    int ret;
+    int ret, p, t;
     static int states = T_START;
-    
     ret = 1;
-    
+     
     switch(states)
     {
         case T_START:
@@ -348,7 +350,8 @@ int bmp180_conversion_process(int32_t *pressure, int32_t *temperature)
             }
             break;
         case T_COMPLETE:
-            bmp180_read_temperature(temperature);
+            bmp180_read_temperature(&t);
+            *temperature = (float)t;
             states = P_START;
             break;
         case P_START:
@@ -362,7 +365,8 @@ int bmp180_conversion_process(int32_t *pressure, int32_t *temperature)
             }
             break;
         case P_COMPLETE:
-            bmp180_read_pressure(pressure);
+            bmp180_read_pressure(&p);
+            *pressure = (float)p;
             states = T_START;
             ret = 0;
             break; 

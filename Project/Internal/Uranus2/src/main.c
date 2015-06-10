@@ -110,7 +110,7 @@ int main(void)
     static attitude_t angle;
     uint32_t ret;
     uint32_t uart_instance;
-    int32_t pressure, dummy, temperature;
+    float pressure, dummy, temperature;
     
     DelayInit();
     GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);
@@ -208,7 +208,7 @@ int main(void)
             GPIO_ToggleBit(HW_GPIOC, 3);
             FLAG_TIMER = false;
         }
-        send_data_process(&angle, adata, gdata, cp_mdata, pressure);
+        send_data_process(&angle, adata, gdata, cp_mdata, (int32_t)pressure);
     }
 }
 

@@ -59,7 +59,7 @@
 #define DISABLE_WDOG    1
 
 #ifndef CLOCK_SETUP
-#define CLOCK_SETUP     0
+#define CLOCK_SETUP     5
 #endif
 /* Predefined clock setups
    0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
@@ -86,7 +86,7 @@
          Core clock = 120MHz, BusClock = 60MHz
    5 ... Multipurpose Clock Generator (MCG) in Bypassed Low Power External (PEE) mode
          Core clock/Bus clock derived directly from an external clock 50MHz
-         Core clock = 200MHz, BusClock = 100MHz
+         Core clock = 180MHz, BusClock = 80MHz
 */
 
 /*----------------------------------------------------------------------------
@@ -127,7 +127,7 @@
     #define CPU_XTAL32k_CLK_HZ              32768u   /* Value of the external 32k crystal or oscillator clock frequency in Hz */
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
     #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
-    #define DEFAULT_SYSTEM_CLOCK            200000000u /* Default System clock value */
+    #define DEFAULT_SYSTEM_CLOCK            180000000u /* Default System clock value */
 #endif /* (CLOCK_SETUP == 5) */
 
 
@@ -352,8 +352,8 @@ void SystemInit (void) {
     while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL参考时钟是内部参考时钟 */
     while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL参考时钟是内部参考时钟 */
     while((MCG->S & 0x0Cu) != 0x08u);                   /* 等待 FBE 被选择 */
-    MCG->C5 = (uint8_t)MCG_C5_PRDIV0(12);               /* 50/13 */
-    MCG->C6 = (uint8_t)(0x40u|MCG_C6_VDIV0(28));        /* 50/13*52 = 200 */
+    MCG->C5 = (uint8_t)MCG_C5_PRDIV0(14);               /* 50/15 */
+    MCG->C6 = (uint8_t)(0x40u|MCG_C6_VDIV0(54-24));        /* 50/15*60 = 200 */
     SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(7));	
     while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待PLLS 时钟源转到 PLL */
     while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待锁定 */

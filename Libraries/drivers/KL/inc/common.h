@@ -33,29 +33,13 @@
 
 /* version information */
 #define CHK_VERSION                   2L              //!< major version number
-#define CHK_SUBVERSION                5L              //!< minor version number
+#define CHK_SUBVERSION                6L              //!< minor version number
 #define CHK_REVISION                  0L              //!< revise version number
 
 /* CH_Kinetis version */
 #define FW_VERSION                ((CHK_VERSION * 10000) + \
                                   (CHK_SUBVERSION * 100) + CHK_REVISION)
 
-
-#if defined(LIB_DEBUG)
-
-/**
-  * @brief  The assert_param macro is used for function's parameters check.
-  * @param  expr: If expr is false, it calls assert_failed function which reports 
-  *         the name of the source file and the source line number of the call 
-  *         that failed. If expr is true, it returns no value.
-  * @retval None
-  */
-  #define assert_param(expr) ((expr) ? (void)0 : assert_failed((char *)__FILE__, __LINE__))
-/* Exported functions ------------------------------------------------------- */
-  void assert_failed(char * file, uint32_t line);
-#else
-  #define assert_param(expr) ((void)0)
-#endif
   
 #if defined(LIB_DEBUG)
 #define LIB_TRACE	printf
@@ -108,6 +92,9 @@ struct reg_ops
     void *      addr;
     uint32_t    mask;
 };
+
+#define IP_CLK_ENABLE(x)        (*((uint32_t*) CLKTbl[x].addr) |= CLKTbl[x].mask)
+#define IP_CLK_DISABLE(x)       (*((uint32_t*) CLKTbl[x].addr) &= ~CLKTbl[x].mask)
 
 
 //!< API functions

@@ -16,7 +16,6 @@ namespace serial
             InitializeComponent();
           //  LoadPanelForm(panel1, new frm_help());
             LoadPanelForm(panel2, new frm_download());
-            LoadPanelForm(panel1, new frm_help());
             conDialog frm_conDialog = new conDialog();
             frm_conDialog.ShowDialog();
         }

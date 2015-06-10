@@ -15,7 +15,7 @@
 
 //!< API functions
 int bmp180_init(uint32_t instance);
-int bmp180_pressure2altitude(int32_t pressure, int32_t *altitude);
-int bmp180_conversion_process(int32_t *pressure, int32_t *temperature);
+float bmp180_get_altitude(int32_t pressure);
+int bmp180_conversion_process(float *pressure, float *temperature);
 #endif
 

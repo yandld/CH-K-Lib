@@ -11,15 +11,14 @@
 #endif
 
 
-#define IP_CLK_ENABLE(x)        (*((uint32_t*) CLKTBL[x].addr) |= CLKTBL[x].mask)
-#define IP_CLK_DISABLE(x)       (*((uint32_t*) CLKTBL[x].addr) &= ~CLKTBL[x].mask)
+
 
 
 #ifdef MKL26Z4_H_
 #undef  UART_BASES
 #define UART_BASES  {UART0, UART1, UART2}
 
-static const struct reg_ops CLKTBL[] =
+static const struct reg_ops CLKTbl[] =
 {
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
@@ -35,7 +34,7 @@ static const IRQn_Type UART_IRQnTable[] =
 #endif
 
 #ifdef MKL27Z4_H_
-static const struct reg_ops CLKTBL[] =
+static const struct reg_ops CLKTbl[] =
 {
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
 };
@@ -327,7 +326,7 @@ void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool stat
 void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 {
     /* enable clock gate */
-    *((uint32_t*) CLKTBL[instance].addr) |= CLKTBL[instance].mask;
+    *((uint32_t*) CLKTbl[instance].addr) |= CLKTbl[instance].mask;
     if(AppCBFun != NULL)
     {
         UART_CallBackRxTable[instance] = AppCBFun;
@@ -350,7 +349,7 @@ void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
 {
     /* enable clock gate */
-    *((uint32_t*) CLKTBL[instance].addr) |= CLKTBL[instance].mask;
+    *((uint32_t*) CLKTbl[instance].addr) |= CLKTbl[instance].mask;
     if(AppCBFun != NULL)
     {
         UART_CallBackTxTable[instance] = AppCBFun;

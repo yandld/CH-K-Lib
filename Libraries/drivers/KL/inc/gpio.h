@@ -79,7 +79,7 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 
 
 //!< API functions
-void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct);
+void GPIO_Init(GPIO_InitTypeDef * Init);
 uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode);
 void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data);
 uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex);

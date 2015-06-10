@@ -144,32 +144,32 @@ void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mod
            GPIO_InitStruct.instance   :¶Ë¿ÚºÅ HW_GPIOA ~ HW_GPIOE
  * @retval None
  */
-void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
+void GPIO_Init(GPIO_InitTypeDef * Init)
 {
     /* config state */
-    switch(GPIO_InitStruct->mode)
+    switch(Init->mode)
     {
         case kGPIO_Mode_IFT:
-            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled);
-            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInput);
+            PORT_PinPullConfig(Init->instance, Init->pinx, kPullDisabled);
+            GPIO_PinConfig(Init->instance, Init->pinx, kInput);
             break;
         case kGPIO_Mode_IPD:
-            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDown);
-            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInput);
+            PORT_PinPullConfig(Init->instance, Init->pinx, kPullDown);
+            GPIO_PinConfig(Init->instance, Init->pinx, kInput);
             break;
         case kGPIO_Mode_IPU:
-            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullUp);
-            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kInput);
+            PORT_PinPullConfig(Init->instance, Init->pinx, kPullUp);
+            GPIO_PinConfig(Init->instance, Init->pinx, kInput);
             break;
         case kGPIO_Mode_OPP:
-            PORT_PinPullConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPullDisabled);
-            GPIO_PinConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kOutput);
+            PORT_PinPullConfig(Init->instance, Init->pinx, kPullDisabled);
+            GPIO_PinConfig(Init->instance, Init->pinx, kOutput);
             break;
         default:
             break;					
     }
     /* config pinMux */
-    PORT_PinMuxConfig(GPIO_InitStruct->instance, GPIO_InitStruct->pinx, kPinAlt1);
+    PORT_PinMuxConfig(Init->instance, Init->pinx, kPinAlt1);
 }
 
  /**

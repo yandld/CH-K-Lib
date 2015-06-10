@@ -1,5 +1,6 @@
 #include <rtthread.h>
 #include "gpio.h"
+#include "common.h"
 #include <rtdevice.h>
 #include <drivers/i2c.h>
 #include "board.h"

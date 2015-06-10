@@ -1,7 +1,7 @@
 #include "ili9320.h"
 #include "gpio.h"
 #include "flexbus.h"
-
+#include "common.h"
 
 #define ILI9320_DEBUG		1
 #if ( ILI9320_DEBUG == 1 )
@@ -242,7 +242,7 @@ void ili9320_init(void)
     FLEXBUS_InitStruct.dataWidth = kFLEXBUS_PortSize_16Bit;
     FLEXBUS_InitStruct.baseAddress = ILI9320_BASE;
     FLEXBUS_InitStruct.ByteEnableMode = kFLEXBUS_BE_AssertedWrite;
-    FLEXBUS_InitStruct.div = 2;
+    FLEXBUS_InitStruct.div = 3;
     FLEXBUS_Init(&FLEXBUS_InitStruct);
 
     FLEXBUS_PortMuxConfig(kFLEXBUS_CSPMCR_Group3, kFLEXBUS_CSPMCR_GROUP3_BE_23_16);
@@ -255,7 +255,7 @@ void ili9320_init(void)
     config.kFLEXBUS_ASET = 1;
     config.kFLEXBUS_RDAH = 1;
     config.kFLEXBUS_WRAH = 1;
-    config.kFLEXBUS_WS = 6;
+    config.kFLEXBUS_WS = 5;
     FLEXBUS_AdvancedConfig(FLEXBUS_InitStruct.CSn, &config);
     
     /* Back light */

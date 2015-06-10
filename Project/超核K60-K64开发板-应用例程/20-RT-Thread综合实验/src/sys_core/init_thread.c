@@ -8,9 +8,6 @@
 #include "rtt_drv.h"
 
 
-void rt_hw_dflash_init(void);
-void rt_hw_dram_init(void);
-void rt_hw_pin_init(void);
     
     
 void usb_thread_entry(void* parameter);
@@ -34,7 +31,7 @@ void init_thread_entry(void* parameter)
     
     rt_thread_delay(1);
     
-    rt_hw_uart_init();
+    rt_hw_uart_init("uart0", 0);
     rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
     rt_kprintf("rt-thread system start!\r\n");
     
@@ -43,7 +40,7 @@ void init_thread_entry(void* parameter)
     rt_hw_spi_init();
     rt_hw_sd_init();
     rt_hw_rtc_init();
-    rt_hw_dflash_init();
+    rt_hw_dflash_init("dflash0");
     rt_hw_dram_init();
     
     /* start usbd core thread */

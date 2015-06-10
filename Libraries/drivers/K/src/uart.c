@@ -245,8 +245,6 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     uint8_t brfa; 
     static bool is_fitst_init = true;
     
-	/* param check */
-    assert_param(IS_UART_ALL_INSTANCE(UART_InitStruct->instance));
     
     IP_CLK_ENABLE(UART_InitStruct->instance);
     
@@ -347,8 +345,6 @@ void UART_DeInit(uint32_t instance)
 #pragma weak UART_SelectDebugInstance
 void UART_SelectDebugInstance(uint32_t instance)
 {
-	/* param check */
-    assert_param(IS_UART_ALL_INSTANCE(instance));
     UART_DebugInstance = instance;
 }
 
@@ -416,8 +412,6 @@ void UART_SetRxFIFOWatermark(uint32_t instance, uint32_t size)
  */
 void UART_WriteByte(uint32_t instance, uint16_t ch)
 {
-	/* param check */
-    assert_param(IS_UART_ALL_INSTANCE(instance));
 
     if(UARTBase[instance]->PFIFO & UART_PFIFO_TXFE_MASK)
     {
@@ -458,8 +452,6 @@ void UART_WriteByte(uint32_t instance, uint16_t ch)
  */
 uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
 {
-	/* param check */
-    assert_param(IS_UART_ALL_INSTANCE(instance));
     uint8_t temp = 0;
     if((UARTBase[instance]->S1 & UART_S1_RDRF_MASK) != 0)
     {
@@ -546,8 +538,6 @@ void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool stat
  */
 void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
 {
-	/* param check */
-    assert_param(IS_UART_ALL_INSTANCE(instance));
     
     IP_CLK_ENABLE(instance);
     if(AppCBFun != NULL)
@@ -571,8 +561,6 @@ void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
  */
 void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 {
-	/* param check */
-    assert_param(IS_UART_ALL_INSTANCE(instance));
     
     IP_CLK_ENABLE(instance);
     

@@ -177,11 +177,11 @@ void CAN_SetReceiveMask(uint32_t instance, uint32_t mb, uint32_t mask)
 	while(!(CAN_MCR_FRZACK_MASK & (CAN_InstanceTable[instance]->MCR))) {}; 
     if(mask > 0x7FF)
     {	 
-        CAN_InstanceTable[instance]->RXIMR[mb] = CAN_ID_EXT(mask); 
+        //CAN_InstanceTable[instance]->RXIMR[mb] = CAN_ID_EXT(mask); 
     }
     else
     {
-        CAN_InstanceTable[instance]->RXIMR[mb] = CAN_ID_STD(mask); 
+        //CAN_InstanceTable[instance]->RXIMR[mb] = CAN_ID_STD(mask); 
     } 
     /* enable module */
     CAN_InstanceTable[instance]->MCR &= ~(CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
@@ -260,7 +260,7 @@ void CAN_Init(CAN_InitTypeDef* CAN_InitStruct)
 		CANx->MB[i].WORD0 = 0x00000000;
 		CANx->MB[i].WORD1 = 0x00000000;
         /* indviual mask*/
-        CANx->RXIMR[i] = CAN_ID_EXT(CAN_RXIMR_MI_MASK);
+        CANx->RXIMR[i] = 0xFFFFFFFF;
 	}
 	/* set all masks */
 	//CANx->RXMGMASK = CAN_ID_EXT(CAN_RXMGMASK_MG_MASK); 

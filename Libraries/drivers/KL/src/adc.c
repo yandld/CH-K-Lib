@@ -5,7 +5,7 @@
 ADC_Type * const ADC_InstanceTable[] = ADC_BASES;
 static ADC_CallBackType ADC_CallBackTable[ARRAY_SIZE(ADC_InstanceTable)] = {NULL};
 
-static const struct reg_ops SIM_ADCClockGateTable[] =
+static const struct reg_ops CLKTbl[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC0_MASK},
 };
@@ -247,53 +247,60 @@ static int32_t ADC_Calibration(uint32_t instance)
  */
 void ADC_Init(ADC_InitTypeDef* Init)
 {
-    /* enable clock gate */
-    *(uint32_t*)SIM_ADCClockGateTable[Init->instance].addr |= SIM_ADCClockGateTable[Init->instance].mask;
+    IP_CLK_ENABLE(Init->instance);
+    
+    ADC_Type *ADCx;
+    
+    ADCx = ADC_InstanceTable[Init->instance];
     
     /* do calibration */
     ADC_Calibration(Init->instance);
     
+    /* select ADACK */
+    ADCx->CFG1 &= ~ADC_CFG1_ADICLK_MASK;
+    ADCx->CFG1 |=  ADC_CFG1_ADICLK(3); 
+    
 	/* set clock configuration */
-	ADC_InstanceTable[Init->instance]->CFG1 &= ~ADC_CFG1_ADIV_MASK;
-	ADC_InstanceTable[Init->instance]->CFG1 |=  ADC_CFG1_ADIV(Init->clockDiv); 
+	ADCx->CFG1 &= ~ADC_CFG1_ADIV_MASK;
+	ADCx->CFG1 |=  ADC_CFG1_ADIV(Init->clockDiv); 
     
     /* voltage reference */
-    ADC_InstanceTable[Init->instance]->SC2 &= ~ADC_SC2_REFSEL_MASK;
-    ADC_InstanceTable[Init->instance]->SC2 |= ADC_SC2_REFSEL(Init->vref);
+    ADCx->SC2 &= ~ADC_SC2_REFSEL_MASK;
+    ADCx->SC2 |= ADC_SC2_REFSEL(Init->vref);
     
     /* resolutionMode */
-	ADC_InstanceTable[Init->instance]->CFG1 &= ~(ADC_CFG1_MODE_MASK); 
-	ADC_InstanceTable[Init->instance]->CFG1 |= ADC_CFG1_MODE(Init->resolutionMode);
+	ADCx->CFG1 &= ~(ADC_CFG1_MODE_MASK); 
+	ADCx->CFG1 |= ADC_CFG1_MODE(Init->resolutionMode);
     
     /* trigger mode */
-    (kADC_TriggerHardware == Init->triggerMode)?(ADC_InstanceTable[Init->instance]->SC2 |=  ADC_SC2_ADTRG_MASK):(ADC_InstanceTable[Init->instance]->SC2 &=  ADC_SC2_ADTRG_MASK);
+    (kADC_TriggerHardware == Init->triggerMode)?(ADCx->SC2 |=  ADC_SC2_ADTRG_MASK):(ADCx->SC2 &=  ADC_SC2_ADTRG_MASK);
     
     /* if continues conversion */
-    (kADC_ContinueConversionEnable == Init->continueMode)?(ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_ADCO_MASK):(ADC_InstanceTable[Init->instance]->SC3 &= ~ADC_SC3_ADCO_MASK);
+    (kADC_ContinueConversionEnable == Init->continueMode)?(ADCx->SC3 |= ADC_SC3_ADCO_MASK):(ADCx->SC3 &= ~ADC_SC3_ADCO_MASK);
     
     /* if hardware average enabled */
-    ADC_InstanceTable[Init->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
+    ADCx->SC3 &= ~ADC_SC3_AVGS_MASK;
     
     switch(Init->hardwareAveMode)
     {
         case kADC_HardwareAverageDisable:
-            ADC_InstanceTable[Init->instance]->SC3 &= ~ADC_SC3_AVGE_MASK;
+            ADCx->SC3 &= ~ADC_SC3_AVGE_MASK;
             break;
         case kADC_HardwareAverage_4:
-            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGE_MASK;
-            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGS(0);
+            ADCx->SC3 |= ADC_SC3_AVGE_MASK;
+            ADCx->SC3 |= ADC_SC3_AVGS(0);
             break;
         case kADC_HardwareAverage_8:
-            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGE_MASK;
-            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGS(1);
+            ADCx->SC3 |= ADC_SC3_AVGE_MASK;
+            ADCx->SC3 |= ADC_SC3_AVGS(1);
             break;
         case kADC_HardwareAverage_16:
-            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGE_MASK;
-            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGS(2);
+            ADCx->SC3 |= ADC_SC3_AVGE_MASK;
+            ADCx->SC3 |= ADC_SC3_AVGS(2);
             break;
         case kADC_HardwareAverage_32:
-            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGE_MASK;
-            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGS(3);
+            ADCx->SC3 |= ADC_SC3_AVGE_MASK;
+            ADCx->SC3 |= ADC_SC3_AVGS(3);
             break;
         default:
             break;

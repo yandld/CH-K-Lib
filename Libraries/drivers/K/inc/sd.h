@@ -38,18 +38,18 @@ typedef struct
 //SD卡命令结构
 typedef struct 
 {
-  uint32_t COMMAND;           //命令定义
-  uint32_t ARGUMENT;          //参数
-  uint32_t BLOCKS;            //块数
-  uint32_t BLOCKSIZE;         //块大小
-  uint32_t RESPONSE[4];       //命令回应信息
-}SD_CommandTypeDef;
+  uint32_t cmd;
+  uint32_t arg;
+  uint32_t blkSize;
+  uint32_t blkCount;
+  uint32_t resp[4];
+}SDHC_Cmd_t;
 
 //SD构件通讯错误代码
 #define ESDHC_OK                             (0)
 #define ESDHC_ERROR_INIT_FAILED              (1)
-#define ESDHC_ERROR_COMMAND_FAILED           (2)
-#define ESDHC_ERROR_COMMAND_TIMEOUT          (3)
+#define ESDHC_ERROR_cmd_FAILED           (2)
+#define ESDHC_ERROR_cmd_TIMEOUT          (3)
 #define ESDHC_ERROR_DATA_TRANSFER            (4)
 #define ESDHC_ERROR_INVALID_BUS_WIDTH        (5)
 

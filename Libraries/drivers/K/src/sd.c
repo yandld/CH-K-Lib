@@ -15,6 +15,15 @@
 
 #if defined(SDHC)
 
+static const struct reg_ops ClkTbl[] =
+{
+#ifdef SIM_SCGC3_SDHC_MASK
+    {(void*)&(SIM->SCGC3), SIM_SCGC3_SDHC_MASK},
+#else
+    {(void*)&(SIM->SCGC3), SIM_SCGC3_ESDHC_MASK},
+#endif
+};
+
 
 //DATA线位宽定义
 #define ESDHC_BUS_WIDTH_1BIT                 (0x00)
@@ -86,7 +95,7 @@
 #define ESDHC_PROCTL_DTW_4BIT                (0x01) //4位宽度
 #define ESDHC_PROCTL_DTW_8BIT                (0x10) //8位宽度
 
-static uint32_t SD_SendCommand(SD_CommandTypeDef* Command);
+static uint32_t SDHC_WriteCmd(SDHC_Cmd_t* Command);
 
 //SD卡信息
 struct sd_card_handler
@@ -106,20 +115,10 @@ static struct sd_card_handler sdh;
  * @param  baudrate  单位Hz
  * @retval None
  */                                                            
-static void SD_SetBaudRate(uint32_t baudrate)
+static void SD_SetBaudRate(uint32_t clock, uint32_t baudrate)
 {
 	uint32_t pres, div, min, minpres = 0x80, mindiv = 0x0F;
 	int  val;
-    uint32_t clock;
-    #ifdef SIM_SOPT2_ESDHCSRC_MASK
-    
-    SIM->SOPT2 &= ~SIM_SOPT2_ESDHCSRC_MASK;
-    SIM->SOPT2 |= SIM_SOPT2_ESDHCSRC(0);
-    #else
-    SIM->SOPT2 &= ~SIM_SOPT2_SDHCSRC_MASK;
-    SIM->SOPT2 |= SIM_SOPT2_SDHCSRC(0);
-    #endif
-    CLOCK_GetClockFrequency(kCoreClock, &clock);
     
     /* Find closest setting */
     min = (uint32_t)-1;
@@ -162,8 +161,8 @@ static void SD_SetBaudRate(uint32_t baudrate)
  */       
 uint32_t SD_QuickInit(uint32_t baudrate)
 {
-    SD_InitTypeDef SD_InitStruct1;
-    SD_InitStruct1.baudrate = baudrate;
+    SD_InitTypeDef Init;
+    Init.baudrate = baudrate;
     /* init pinmux */
     PORT_PinMuxConfig(HW_GPIOE, 0, kPinAlt4); /* ESDHC.D1  */
     PORT_PinMuxConfig(HW_GPIOE, 1, kPinAlt4); /* ESDHC.D0  */
@@ -180,7 +179,7 @@ uint32_t SD_QuickInit(uint32_t baudrate)
     PORT_PinPullConfig(HW_GPIOE, 4, kPullUp);
     PORT_PinPullConfig(HW_GPIOE, 5, kPullUp);
     
-    SD_Init(&SD_InitStruct1);
+    SD_Init(&Init);
     return SD_InitCard();
 }
 
@@ -191,7 +190,7 @@ uint8_t SD_InitCard(void)
 	uint8_t result;  
 	uint32_t i = 0;
 	uint8_t hc = 0;     
-    SD_CommandTypeDef SD_CommandStruct1;
+    SDHC_Cmd_t cmd;
 	/* initalize 80 clock */
 	SDHC->SYSCTL |= SDHC_SYSCTL_INITA_MASK;
 	while (SDHC->SYSCTL & SDHC_SYSCTL_INITA_MASK){}; //等待初始化完成
@@ -203,21 +202,21 @@ uint8_t SD_InitCard(void)
 	//---------------------------正式开始------------------------------  now Let's begin !
 
     /* now let's begin */
-	SD_CommandStruct1.COMMAND = ESDHC_CMD0;
-	SD_CommandStruct1.ARGUMENT = 0;
-	SD_CommandStruct1.BLOCKS = 0;
-    SD_CommandStruct1.BLOCKSIZE = 512;
-	result = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD0;
+	cmd.arg = 0;
+	cmd.blkCount = 0;
+    cmd.blkSize = 512;
+	result = SDHC_WriteCmd(&cmd);
 	if(result != ESDHC_OK) 
     {
         LIB_TRACE("CMD0 error\r\n");
         return ESDHC_ERROR_INIT_FAILED;
     }
 	//CMD8  判断是V1.0还是V2.0的卡
-	SD_CommandStruct1.COMMAND = ESDHC_CMD8;
-	SD_CommandStruct1.ARGUMENT =0x000001AA;
-	SD_CommandStruct1.BLOCKS = 0;
-	result = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD8;
+	cmd.arg =0x000001AA;
+	cmd.blkCount = 0;
+	result = SDHC_WriteCmd(&cmd);
 	if (result > 0)  //CMD8无响应  错误或者普通卡
 	{
 		result = ESDHC_ERROR_INIT_FAILED;
@@ -232,22 +231,22 @@ uint8_t SD_InitCard(void)
 	{								 
 		for(delay_cnt=0;delay_cnt<1000;delay_cnt++);
 		i++;   
-		SD_CommandStruct1.COMMAND = ESDHC_CMD55;
-		SD_CommandStruct1.ARGUMENT =0;
-        SD_CommandStruct1.BLOCKS = 0;
-        result = SD_SendCommand(&SD_CommandStruct1);
+		cmd.cmd = ESDHC_CMD55;
+		cmd.arg =0;
+        cmd.blkCount = 0;
+        result = SDHC_WriteCmd(&cmd);
 		
-		SD_CommandStruct1.COMMAND = ESDHC_ACMD41;
+		cmd.cmd = ESDHC_ACMD41;
 		if(hc)
 		{
-			SD_CommandStruct1.ARGUMENT = 0x40300000;
+			cmd.arg = 0x40300000;
 		}
 		else
 		{
-			SD_CommandStruct1.ARGUMENT = 0x00300000;
+			cmd.arg = 0x00300000;
 		}
-		result = SD_SendCommand(&SD_CommandStruct1);
-	}while ((0 == (SD_CommandStruct1.RESPONSE[0] & 0x80000000)) && (i < 300));
+		result = SDHC_WriteCmd(&cmd);
+	}while ((0 == (cmd.resp[0] & 0x80000000)) && (i < 300));
     if(i == 300)
     {
         LIB_TRACE("Timeout\r\n");
@@ -255,61 +254,61 @@ uint8_t SD_InitCard(void)
     }
     
 	//CMD2 取CID
-	SD_CommandStruct1.COMMAND = ESDHC_CMD2;
-	SD_CommandStruct1.ARGUMENT = 0;
-	SD_CommandStruct1.BLOCKS = 0;
-	result = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD2;
+	cmd.arg = 0;
+	cmd.blkCount = 0;
+	result = SDHC_WriteCmd(&cmd);
 	if(result != ESDHC_OK) return ESDHC_ERROR_INIT_FAILED;    
-	sdh.CID[0] = SD_CommandStruct1.RESPONSE[0];
-	sdh.CID[1] = SD_CommandStruct1.RESPONSE[1];
-	sdh.CID[2] = SD_CommandStruct1.RESPONSE[2];
-	sdh.CID[3] = SD_CommandStruct1.RESPONSE[3];
+	sdh.CID[0] = cmd.resp[0];
+	sdh.CID[1] = cmd.resp[1];
+	sdh.CID[2] = cmd.resp[2];
+	sdh.CID[3] = cmd.resp[3];
 	LIB_TRACE("CID[0]:0x%X\r\n", sdh.CID[0]);
     LIB_TRACE("CID[1]:0x%X\r\n", sdh.CID[1]);
     LIB_TRACE("CID[2]:0x%X\r\n", sdh.CID[2]);
     LIB_TRACE("CID[3]:0x%X\r\n", sdh.CID[3]);
 	//CMD3 取RCA
-	SD_CommandStruct1.COMMAND = ESDHC_CMD3;
-	SD_CommandStruct1.ARGUMENT = 0;
-	SD_CommandStruct1.BLOCKS = 0;
-	result = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD3;
+	cmd.arg = 0;
+	cmd.blkCount = 0;
+	result = SDHC_WriteCmd(&cmd);
 	if(result != ESDHC_OK) return ESDHC_ERROR_INIT_FAILED;   
-    sdh.RCA = SD_CommandStruct1.RESPONSE[0]>>16;
+    sdh.RCA = cmd.resp[0]>>16;
 	//CMD9 取CSD
-	SD_CommandStruct1.COMMAND = ESDHC_CMD9;
-	SD_CommandStruct1.ARGUMENT = sdh.RCA<<16;
-	SD_CommandStruct1.BLOCKS = 0;
-	result = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD9;
+	cmd.arg = sdh.RCA<<16;
+	cmd.blkCount = 0;
+	result = SDHC_WriteCmd(&cmd);
 	if(result != ESDHC_OK) return ESDHC_ERROR_INIT_FAILED;  
-	sdh.CSD[0] = SD_CommandStruct1.RESPONSE[0];
-	sdh.CSD[1] = SD_CommandStruct1.RESPONSE[1];
-	sdh.CSD[2] = SD_CommandStruct1.RESPONSE[2];
-	sdh.CSD[3] = SD_CommandStruct1.RESPONSE[3];
+	sdh.CSD[0] = cmd.resp[0];
+	sdh.CSD[1] = cmd.resp[1];
+	sdh.CSD[2] = cmd.resp[2];
+	sdh.CSD[3] = cmd.resp[3];
 	
 	//CMD7 选中卡
-	SD_CommandStruct1.COMMAND = ESDHC_CMD7;
-	SD_CommandStruct1.ARGUMENT = sdh.RCA<<16;
-	SD_CommandStruct1.BLOCKS = 0;
-	result = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD7;
+	cmd.arg = sdh.RCA<<16;
+	cmd.blkCount = 0;
+	result = SDHC_WriteCmd(&cmd);
 	if(result != ESDHC_OK) return ESDHC_ERROR_INIT_FAILED;  
 	//CMD16 设置块大小
-	SD_CommandStruct1.COMMAND = ESDHC_CMD16;
-	SD_CommandStruct1.ARGUMENT = 512;
-	SD_CommandStruct1.BLOCKS = 0;
-	result = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD16;
+	cmd.arg = 512;
+	cmd.blkCount = 0;
+	result = SDHC_WriteCmd(&cmd);
 	if(result != ESDHC_OK) return ESDHC_ERROR_INIT_FAILED;  
 	
 	//CMD55 使用ACMD命令
-	SD_CommandStruct1.COMMAND = ESDHC_CMD55;
-	SD_CommandStruct1.ARGUMENT = sdh.RCA<<16;
-	SD_CommandStruct1.BLOCKS = 0;
-	result = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD55;
+	cmd.arg = sdh.RCA<<16;
+	cmd.blkCount = 0;
+	result = SDHC_WriteCmd(&cmd);
 	if(result != ESDHC_OK) return ESDHC_ERROR_INIT_FAILED;  
 	//ACMD6 修改SD卡通讯位宽
-	SD_CommandStruct1.COMMAND = ESDHC_ACMD6;
-	SD_CommandStruct1.ARGUMENT = 2;
-	SD_CommandStruct1.BLOCKS = 0;
-	result = SD_SendCommand(&SD_CommandStruct1);//修改SD卡位4位通讯位宽	
+	cmd.cmd = ESDHC_ACMD6;
+	cmd.arg = 2;
+	cmd.blkCount = 0;
+	result = SDHC_WriteCmd(&cmd);//修改SD卡位4位通讯位宽	
 	if(result != ESDHC_OK) return ESDHC_ERROR_INIT_FAILED;  
 	 //设置 Kinetis的 SDIO模块位4线模式
 	SDHC->PROCTL &= (~SDHC_PROCTL_DTW_MASK);
@@ -333,14 +332,12 @@ uint8_t SD_InitCard(void)
  * @param  SD_InitStruct  :SD模块设置结构体
  * @retval ESDHC_OK:正常  ESDHC_ERROR_INIT_FAILED:未完成初始化
  */   
-uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct)
+uint8_t SD_Init(SD_InitTypeDef* Init)
 {
-    /* enable clock gate */
-    #ifdef SIM_SCGC3_SDHC_MASK
-	SIM->SCGC3 |= SIM_SCGC3_SDHC_MASK;
-	#else
-	SIM->SCGC3 |= SIM_SCGC3_ESDHC_MASK;
-    #endif
+    uint32_t clock;
+    
+    IP_CLK_ENABLE(0);
+    
     /* reset module */
 	SDHC->SYSCTL = SDHC_SYSCTL_RSTA_MASK | SDHC_SYSCTL_SDCLKFS(0x80);
 	while(SDHC->SYSCTL & SDHC_SYSCTL_RSTA_MASK){};
@@ -351,8 +348,19 @@ uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct)
     /* set watermark */
 	SDHC->WML = SDHC_WML_RDWML(1) | SDHC_WML_WRWML(1);
 
+        
+    /* select core clock */
+    #ifdef SIM_SOPT2_ESDHCSRC_MASK
+    SIM->SOPT2 &= ~SIM_SOPT2_ESDHCSRC_MASK;
+    SIM->SOPT2 |= SIM_SOPT2_ESDHCSRC(0);
+    #else
+    SIM->SOPT2 &= ~SIM_SOPT2_SDHCSRC_MASK;
+    SIM->SOPT2 |= SIM_SOPT2_SDHCSRC(0);
+    #endif
+    CLOCK_GetClockFrequency(kCoreClock, &clock);
+        
     /* set baudrate */
-	SD_SetBaudRate(SD_InitStruct->baudrate);
+	SD_SetBaudRate(clock, Init->baudrate);
         
     /* clear all IT pending bit */
 	SDHC->IRQSTAT = 0xFFFFFFFF;
@@ -375,17 +383,17 @@ uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buffer)
     uint16_t results;
     uint32_t	j;
     uint32_t	*p = (uint32_t*)buffer;
-	SD_CommandTypeDef SD_CommandStruct1;
+	SDHC_Cmd_t cmd;
 	if(sdh.card_type == SD_CARD_TYPE_SD)
 	{
 		sector = sector<<9;
 	}
     
-    SD_CommandStruct1.COMMAND = ESDHC_CMD17;
-    SD_CommandStruct1.ARGUMENT = sector;
-    SD_CommandStruct1.BLOCKS = 1;
-    SD_CommandStruct1.BLOCKSIZE = 512;
-    results = SD_SendCommand(&SD_CommandStruct1);
+    cmd.cmd = ESDHC_CMD17;
+    cmd.arg = sector;
+    cmd.blkCount = 1;
+    cmd.blkSize = 512;
+    results = SDHC_WriteCmd(&cmd);
     if(results != ESDHC_OK)
     {
         return ESDHC_ERROR_DATA_TRANSFER; 
@@ -419,17 +427,17 @@ uint8_t SD_WriteSingleBlock(uint32_t sector, const uint8_t *buffer)
 	uint16_t results;
 	uint32_t	j;
     uint32_t	*p = (uint32_t*)buffer;
-	SD_CommandTypeDef SD_CommandStruct1;
+	SDHC_Cmd_t cmd;
 	if(sdh.card_type == SD_CARD_TYPE_SD)
 	{
 		sector = sector<<9;
 	}
 
-    SD_CommandStruct1.COMMAND = ESDHC_CMD24;
-    SD_CommandStruct1.ARGUMENT = sector;
-    SD_CommandStruct1.BLOCKS = 1;
-    SD_CommandStruct1.BLOCKSIZE = 512;
-    results = SD_SendCommand(&SD_CommandStruct1);
+    cmd.cmd = ESDHC_CMD24;
+    cmd.arg = sector;
+    cmd.blkCount = 1;
+    cmd.blkSize = 512;
+    results = SDHC_WriteCmd(&cmd);
     if(results != ESDHC_OK) 
     {
         return ESDHC_ERROR_DATA_TRANSFER; 
@@ -521,11 +529,11 @@ uint32_t SD_StatusWait (uint32_t  mask)
 
 static void SDHC_WaitCommandLineIdle(void)
 {
-    volatile uint32_t tm = 0;
+    volatile uint32_t timeout = 0;
     while (SDHC->PRSSTAT & (SDHC_PRSSTAT_CIHB_MASK | SDHC_PRSSTAT_CDIHB_MASK))
     {
-        tm++;
-        if(tm > 50000) break;
+        timeout++;
+        if(timeout > 50000) break;
     }
 }
 /**
@@ -533,11 +541,29 @@ static void SDHC_WaitCommandLineIdle(void)
  * @param  Command  :SD卡命令结构参数
  * @retval 0:正常  其它:错误
  */ 	
-uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
+#if 0
+void SDHC_HAL_SendCmd(SDHC_Type * base, const sdhc_hal_cmd_req_t* cmdReq)
+{
+    assert(base);
+    assert(cmdReq);
+    SDHC_BWR_BLKATTR_BLKSIZE(base, cmdReq->dataBlkSize);
+    SDHC_BWR_BLKATTR_BLKCNT(base, cmdReq->dataBlkCount);
+    SDHC_WR_CMDARG(base, cmdReq->arg);
+    SDHC_WR_XFERTYP(base, ((cmdReq->index << SDHC_XFERTYP_CMDINX_SHIFT) & SDHC_XFERTYP_CMDINX_MASK)
+            | (cmdReq->flags & ( SDHC_XFERTYP_DMAEN_MASK | SDHC_XFERTYP_MSBSEL_MASK | SDHC_XFERTYP_DPSEL_MASK
+                | SDHC_XFERTYP_CMDTYP_MASK | SDHC_XFERTYP_BCEN_MASK | SDHC_XFERTYP_CICEN_MASK
+                | SDHC_XFERTYP_CCCEN_MASK | SDHC_XFERTYP_RSPTYP_MASK | SDHC_XFERTYP_DTDSEL_MASK
+                | SDHC_XFERTYP_AC12EN_MASK)));
+}
+#endif
+
+uint32_t SDHC_WriteCmd(SDHC_Cmd_t *cmd)
 {
     uint32_t xfertyp;
     uint32_t blkattr;
-    xfertyp = Command->COMMAND;
+    xfertyp = cmd->cmd;
+    
+    SDHC_WaitCommandLineIdle();
     
     /* resume cmd must set DPSEL */
     if (ESDHC_XFERTYP_CMDTYP_RESUME == ((xfertyp & SDHC_XFERTYP_CMDTYP_MASK) >> SDHC_XFERTYP_CMDTYP_SHIFT))
@@ -546,17 +572,15 @@ uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
     }
     
     /* set block size and block cnt */
-    blkattr = SDHC_BLKATTR_BLKSIZE(Command->BLOCKSIZE) | SDHC_BLKATTR_BLKCNT(Command->BLOCKS);
+    blkattr = SDHC_BLKATTR_BLKSIZE(cmd->blkSize) | SDHC_BLKATTR_BLKCNT(cmd->blkCount);
     
-    if (Command->BLOCKS > 1)
+    if (cmd->blkCount > 1)
     {
         xfertyp |= SDHC_XFERTYP_DPSEL_MASK;
         xfertyp |= SDHC_XFERTYP_BCEN_MASK;
         xfertyp |= SDHC_XFERTYP_MSBSEL_MASK;
     }
     
-    SDHC_WaitCommandLineIdle();
-        
     /* clear status */
     SDHC->IRQSTAT |= SDHC_IRQSTAT_CIE_MASK |
                     SDHC_IRQSTAT_CEBE_MASK | 
@@ -566,7 +590,7 @@ uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
                     SDHC_IRQSTAT_CRM_MASK;
         
     /* issue cmd */
-    SDHC->CMDARG = Command->ARGUMENT;
+    SDHC->CMDARG = cmd->arg;
     SDHC->BLKATTR = blkattr;
     SDHC->DSADDR = 0;
     SDHC->XFERTYP = xfertyp;
@@ -575,16 +599,16 @@ uint32_t SD_SendCommand(SD_CommandTypeDef* Command)
     if(SD_StatusWait (SDHC_IRQSTAT_CIE_MASK | SDHC_IRQSTAT_CEBE_MASK | SDHC_IRQSTAT_CCE_MASK | SDHC_IRQSTAT_CC_MASK) != SDHC_IRQSTAT_CC_MASK)
     {
         SDHC->IRQSTAT |= SDHC_IRQSTAT_CTOE_MASK | SDHC_IRQSTAT_CIE_MASK | SDHC_IRQSTAT_CEBE_MASK | SDHC_IRQSTAT_CCE_MASK | SDHC_IRQSTAT_CC_MASK;
-        return ESDHC_ERROR_COMMAND_FAILED;
+        return ESDHC_ERROR_cmd_FAILED;
     }
     
     /* get respond data */
     if ((xfertyp & SDHC_XFERTYP_RSPTYP_MASK) != SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_NO))
     {
-        Command->RESPONSE[0] = SDHC->CMDRSP[0];
-        Command->RESPONSE[1] = SDHC->CMDRSP[1];
-        Command->RESPONSE[2] = SDHC->CMDRSP[2];
-        Command->RESPONSE[3] = SDHC->CMDRSP[3];
+        cmd->resp[0] = SDHC->CMDRSP[0];
+        cmd->resp[1] = SDHC->CMDRSP[1];
+        cmd->resp[2] = SDHC->CMDRSP[2];
+        cmd->resp[3] = SDHC->CMDRSP[3];
     }
     return ESDHC_OK;
 }
@@ -602,20 +626,20 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t blockCnt)
 	uint32_t i,j;
 	uint16_t results;
     uint32_t *p = (uint32_t*)buf;
-	SD_CommandTypeDef SD_CommandStruct1;
+	SDHC_Cmd_t cmd;
     
 	if(sdh.card_type  == SD_CARD_TYPE_SD) //如果是普通SD卡 把块地址转换成字节地址
 	{
 		sector = sector<<9;
 	}
-	SD_CommandStruct1.COMMAND = ESDHC_CMD18;
-	SD_CommandStruct1.BLOCKS = blockCnt;
-	SD_CommandStruct1.BLOCKSIZE = 512;
-	SD_CommandStruct1.ARGUMENT = sector;
-	results = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD18;
+	cmd.blkCount = blockCnt;
+	cmd.blkSize = 512;
+	cmd.arg = sector;
+	results = SDHC_WriteCmd(&cmd);
 	if(results != ESDHC_OK)
     {
-        return ESDHC_ERROR_COMMAND_FAILED; 
+        return ESDHC_ERROR_cmd_FAILED; 
     }
         
     /* read data */
@@ -642,22 +666,22 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t blockCnt)
 	/* waitting for card is OK */
 	do
 	{
-			SD_CommandStruct1.COMMAND = ESDHC_CMD13;
-			SD_CommandStruct1.ARGUMENT = sdh.RCA<<16;
-			SD_CommandStruct1.BLOCKS = 0;
-			results = SD_SendCommand(&SD_CommandStruct1);
+			cmd.cmd = ESDHC_CMD13;
+			cmd.arg = sdh.RCA<<16;
+			cmd.blkCount = 0;
+			results = SDHC_WriteCmd(&cmd);
 			if(results != ESDHC_OK)
             {
                 LIB_TRACE("ESDHC_CMD13 error\r\n");
                 continue;  
             }
-			if (SD_CommandStruct1.RESPONSE[0] & 0xFFD98008)
+			if (cmd.resp[0] & 0xFFD98008)
 			{
 					blockCnt = 0; /* necessary to get real number of written blocks */
 					break;
 			}
 
-	} while (0x000000900 != (SD_CommandStruct1.RESPONSE[0] & 0x00001F00));
+	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
 	return ESDHC_OK;
 }
 
@@ -673,7 +697,7 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t blockCn
     uint32_t i,j;
 	uint16_t results;
     uint32_t *p = (uint32_t*)buf;
-	SD_CommandTypeDef SD_CommandStruct1;
+	SDHC_Cmd_t cmd;
     
 	if(sdh.card_type  == SD_CARD_TYPE_SD)
 	{
@@ -681,11 +705,11 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t blockCn
 	}
     
     /* issue cmd */
-	SD_CommandStruct1.COMMAND = ESDHC_CMD25;
-	SD_CommandStruct1.BLOCKS = blockCnt;
-	SD_CommandStruct1.BLOCKSIZE = 512;
-	SD_CommandStruct1.ARGUMENT = sector;
-	results = SD_SendCommand(&SD_CommandStruct1);
+	cmd.cmd = ESDHC_CMD25;
+	cmd.blkCount = blockCnt;
+	cmd.blkSize = 512;
+	cmd.arg = sector;
+	results = SDHC_WriteCmd(&cmd);
 	if(results != ESDHC_OK) 
 	{
 		return ESDHC_ERROR_DATA_TRANSFER;  
@@ -712,22 +736,22 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t blockCn
 	/* waitting for card is OK */
 	do
 	{
-			SD_CommandStruct1.COMMAND = ESDHC_CMD13;
-			SD_CommandStruct1.ARGUMENT = sdh.RCA<<16;
-			SD_CommandStruct1.BLOCKS = 0;
-			results = SD_SendCommand(&SD_CommandStruct1);
+			cmd.cmd = ESDHC_CMD13;
+			cmd.arg = sdh.RCA<<16;
+			cmd.blkCount = 0;
+			results = SDHC_WriteCmd(&cmd);
 			if(results != ESDHC_OK) 
             {
                 LIB_TRACE("ESDHC_CMD13 error\r\n");
                 continue;  
             }
-			if (SD_CommandStruct1.RESPONSE[0] & 0xFFD98008)
+			if (cmd.resp[0] & 0xFFD98008)
 			{
 					blockCnt = 0; // necessary to get real number of written blocks 
 					break;
 			}
 
-	} while (0x000000900 != (SD_CommandStruct1.RESPONSE[0] & 0x00001F00));
+	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
     
 	return ESDHC_OK;
 }

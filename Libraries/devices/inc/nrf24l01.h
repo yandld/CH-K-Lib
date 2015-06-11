@@ -13,8 +13,7 @@
 
 #include <stdint.h>
 #include "spi.h"
-#include "gpio.h"
-
+#include "common.h"
 
 #ifdef RAVEN
 #define NRF24L01_CE_HIGH()     do {PEout(0) = 1;} while(0)

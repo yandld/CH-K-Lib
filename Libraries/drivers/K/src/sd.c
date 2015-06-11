@@ -6,12 +6,12 @@
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   * @note    此文件为芯片SD模块的底层功能函数
-              只支持SD及SDHC卡 不支持MMC！
   ******************************************************************************
   */
   
 #include "sd.h"
 #include "gpio.h"
+#include "common.h"
 
 #if defined(SDHC)
 
@@ -23,6 +23,22 @@ static const struct reg_ops ClkTbl[] =
     {(void*)&(SIM->SCGC3), SIM_SCGC3_ESDHC_MASK},
 #endif
 };
+
+typedef struct SdhcHalAdma2Descriptor
+{
+    uint32_t attribute;
+    uint32_t *address;
+} sdhc_hal_adma2_descriptor_t;
+
+//SD卡命令结构
+typedef struct 
+{
+  uint32_t cmd;
+  uint32_t arg;
+  uint32_t blkSize;
+  uint32_t blkCount;
+  uint32_t resp[4];
+}SDHC_Cmd_t;
 
 
 //DATA线位宽定义
@@ -95,7 +111,7 @@ static const struct reg_ops ClkTbl[] =
 #define ESDHC_PROCTL_DTW_4BIT                (0x01) //4位宽度
 #define ESDHC_PROCTL_DTW_8BIT                (0x10) //8位宽度
 
-static uint32_t SDHC_WriteCmd(SDHC_Cmd_t* Command);
+static uint32_t SDHC_WriteCmd(SDHC_Cmd_t* cmd);
 
 //SD卡信息
 struct sd_card_handler
@@ -109,6 +125,21 @@ struct sd_card_handler
 };     
 
 static struct sd_card_handler sdh;
+
+
+#define SDHC_HAL_ADMA2_DESC_LEN_MASK             (0xFFFFU)
+#define SDHC_HAL_ADMA2_DESC_MAX_LEN_PER_ENTRY    (SDHC_HAL_ADMA2_DESC_LEN_MASK)
+#define SDHC_HAL_ADMA2_DESC_LEN_SHIFT            (16)
+static void SDHC_DRV_SetAdma2Descriptor(uint32_t *table,
+                                        uint32_t *buffer,
+                                        uint32_t length,
+                                        uint32_t flags)
+{
+
+
+    ((sdhc_hal_adma2_descriptor_t *)table)->address = buffer;
+    ((sdhc_hal_adma2_descriptor_t *)table)->attribute = ((SDHC_HAL_ADMA2_DESC_LEN_MASK & length) << SDHC_HAL_ADMA2_DESC_LEN_SHIFT) | flags;
+}
 
 /**
  * @brief 设置SD卡模块的通信速度
@@ -139,19 +170,11 @@ static void SD_SetBaudRate(uint32_t clock, uint32_t baudrate)
         }
    }
     
-	/* disable SDHC */
 	SDHC->SYSCTL &= (~ SDHC_SYSCTL_SDCLKEN_MASK);
-   
-	/* set prescaler */
-	div = SDHC->SYSCTL & (~ (SDHC_SYSCTL_DTOCV_MASK | SDHC_SYSCTL_SDCLKFS_MASK | SDHC_SYSCTL_DVS_MASK));
+    SDHC->SYSCTL &= ~(SDHC_SYSCTL_DTOCV_MASK | SDHC_SYSCTL_SDCLKFS_MASK | SDHC_SYSCTL_DVS_MASK);
 	SDHC->SYSCTL = div | (SDHC_SYSCTL_DTOCV(0x0E) | SDHC_SYSCTL_SDCLKFS(minpres >> 1) | SDHC_SYSCTL_DVS(mindiv - 1));
-   
-	/* waitting for stabile */
 	while (0 == (SDHC->PRSSTAT & SDHC_PRSSTAT_SDSTB_MASK));
-   
-	/* enable module */
 	SDHC->SYSCTL |= SDHC_SYSCTL_SDCLKEN_MASK;
-	SDHC->IRQSTAT |= SDHC_IRQSTAT_DTOE_MASK;
 } 
 
 /**
@@ -163,6 +186,7 @@ uint32_t SD_QuickInit(uint32_t baudrate)
 {
     SD_InitTypeDef Init;
     Init.baudrate = baudrate;
+    
     /* init pinmux */
     PORT_PinMuxConfig(HW_GPIOE, 0, kPinAlt4); /* ESDHC.D1  */
     PORT_PinMuxConfig(HW_GPIOE, 1, kPinAlt4); /* ESDHC.D0  */
@@ -171,7 +195,6 @@ uint32_t SD_QuickInit(uint32_t baudrate)
     PORT_PinMuxConfig(HW_GPIOE, 4, kPinAlt4); /* ESDHC.D3  */
     PORT_PinMuxConfig(HW_GPIOE, 5, kPinAlt4); /* ESDHC.D2  */
     
-
     PORT_PinPullConfig(HW_GPIOE, 0, kPullUp);
     PORT_PinPullConfig(HW_GPIOE, 1, kPullUp);
     PORT_PinPullConfig(HW_GPIOE, 2, kPullUp);
@@ -340,15 +363,13 @@ uint8_t SD_Init(SD_InitTypeDef* Init)
     
     /* reset module */
 	SDHC->SYSCTL = SDHC_SYSCTL_RSTA_MASK | SDHC_SYSCTL_SDCLKFS(0x80);
-	while(SDHC->SYSCTL & SDHC_SYSCTL_RSTA_MASK){};
+	while(SDHC->SYSCTL & SDHC_SYSCTL_RSTA_MASK);
 
-	SDHC->VENDOR = 0;
-	SDHC->PROCTL = SDHC_PROCTL_EMODE(2)|SDHC_PROCTL_D3CD_MASK; 
+	SDHC->PROCTL = SDHC_PROCTL_EMODE(2); 
         
     /* set watermark */
-	SDHC->WML = SDHC_WML_RDWML(1) | SDHC_WML_WRWML(1);
+	SDHC->WML = SDHC_WML_RDWML(0x80) | SDHC_WML_WRWML(0x80);
 
-        
     /* select core clock */
     #ifdef SIM_SOPT2_ESDHCSRC_MASK
     SIM->SOPT2 &= ~SIM_SOPT2_ESDHCSRC_MASK;
@@ -370,14 +391,7 @@ uint8_t SD_Init(SD_InitTypeDef* Init)
 
 	return ESDHC_OK;
 }
-
-/**
- * @brief 读SD卡的一个扇区
- * @note  一个扇区至少为512字节
- * @param  sector  :要读取的SD卡扇区号
- * @param  buffer  :数据存储地址
- * @retval ESDHC_OK:正常  其它:读取错误
- */   															  
+														  
 uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buffer)
 {
     uint16_t results;
@@ -398,30 +412,14 @@ uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buffer)
     {
         return ESDHC_ERROR_DATA_TRANSFER; 
     }
-    
-    /* read data */
+    while((SDHC->PRSSTAT & SDHC_PRSSTAT_BREN_MASK) == 0);
     for (j = (512+3)>>2;j!= 0;j--)
     {
-        if (SDHC->IRQSTAT & (SDHC_IRQSTAT_DEBE_MASK | SDHC_IRQSTAT_DCE_MASK | SDHC_IRQSTAT_DTOE_MASK))
-        {
-            SDHC->IRQSTAT |= SDHC_IRQSTAT_DEBE_MASK | SDHC_IRQSTAT_DCE_MASK | SDHC_IRQSTAT_DTOE_MASK | SDHC_IRQSTAT_BRR_MASK; 
-            return 1;
-        }
-        
-        /* waiitting for host side buffer have empty space */
-        while (0 == (SDHC->PRSSTAT & SDHC_PRSSTAT_BREN_MASK)) {};
-            
         *p++ = SDHC->DATPORT;			
-    }
+    } 
     return ESDHC_OK;
 }
-
-/**
- * @brief 写SD卡的一个扇区
- * @param  sector  :要写入的SD卡扇区号
- * @param  buffer  :数据存储地址
- * @retval ESDHC_OK:正常  其它:读取错误
- */ 													  
+													  
 uint8_t SD_WriteSingleBlock(uint32_t sector, const uint8_t *buffer)
 {
 	uint16_t results;
@@ -442,22 +440,11 @@ uint8_t SD_WriteSingleBlock(uint32_t sector, const uint8_t *buffer)
     {
         return ESDHC_ERROR_DATA_TRANSFER; 
     }
-    
-    /* write data */
+    while((SDHC->PRSSTAT & SDHC_PRSSTAT_BWEN_MASK) == 0);
     for (j = (512)>>2;j!= 0;j--)
     {
-        if (SDHC->IRQSTAT & (SDHC_IRQSTAT_DEBE_MASK | SDHC_IRQSTAT_DCE_MASK | SDHC_IRQSTAT_DTOE_MASK))
-        {
-            SDHC->IRQSTAT |= SDHC_IRQSTAT_DEBE_MASK | SDHC_IRQSTAT_DCE_MASK | SDHC_IRQSTAT_DTOE_MASK | SDHC_IRQSTAT_BWR_MASK; 
-            return 1;
-        }
-        
-        /* waiitting for host side buffer have empty space */
-        while (0 == (SDHC->PRSSTAT & SDHC_PRSSTAT_BWEN_MASK)){};
-            
         SDHC->DATPORT = *p++;
     }
-	
 	return ESDHC_OK;
 }
 
@@ -496,13 +483,13 @@ uint32_t SD_GetSizeInMB(void)
         Muti=(sdh.CSD[1]>>7)&0x7;
         Muti=2<<(Muti+1);
         //计算块数
-        BlockBumber =((sdh.CSD[2]>>0)&0x03);
-        BlockBumber=(BlockBumber<<10)+((sdh.CSD[1]>>22)&0x0FFF);
+        BlockBumber = ((sdh.CSD[2]>>0)&0x03);
+        BlockBumber = (BlockBumber<<10) + ((sdh.CSD[1]>>22)&0x0FFF);
         BlockBumber++;
-        BlockBumber=BlockBumber*Muti;   //得到快数
+        BlockBumber=BlockBumber * Muti;   //得到快数
         BlockLen = (sdh.CSD[2]>>8)&0x0F;//得到每块大小
         BlockLen = 2<<(BlockLen-1);
-        Capacity=BlockBumber*BlockLen;  //计算容量 单位Byte
+        Capacity=BlockBumber * BlockLen;  //计算容量 单位Byte
         Capacity=Capacity/1024/1024;    //单位MB	
         return Capacity;
 	}
@@ -541,22 +528,6 @@ static void SDHC_WaitCommandLineIdle(void)
  * @param  Command  :SD卡命令结构参数
  * @retval 0:正常  其它:错误
  */ 	
-#if 0
-void SDHC_HAL_SendCmd(SDHC_Type * base, const sdhc_hal_cmd_req_t* cmdReq)
-{
-    assert(base);
-    assert(cmdReq);
-    SDHC_BWR_BLKATTR_BLKSIZE(base, cmdReq->dataBlkSize);
-    SDHC_BWR_BLKATTR_BLKCNT(base, cmdReq->dataBlkCount);
-    SDHC_WR_CMDARG(base, cmdReq->arg);
-    SDHC_WR_XFERTYP(base, ((cmdReq->index << SDHC_XFERTYP_CMDINX_SHIFT) & SDHC_XFERTYP_CMDINX_MASK)
-            | (cmdReq->flags & ( SDHC_XFERTYP_DMAEN_MASK | SDHC_XFERTYP_MSBSEL_MASK | SDHC_XFERTYP_DPSEL_MASK
-                | SDHC_XFERTYP_CMDTYP_MASK | SDHC_XFERTYP_BCEN_MASK | SDHC_XFERTYP_CICEN_MASK
-                | SDHC_XFERTYP_CCCEN_MASK | SDHC_XFERTYP_RSPTYP_MASK | SDHC_XFERTYP_DTDSEL_MASK
-                | SDHC_XFERTYP_AC12EN_MASK)));
-}
-#endif
-
 uint32_t SDHC_WriteCmd(SDHC_Cmd_t *cmd)
 {
     uint32_t xfertyp;
@@ -592,7 +563,6 @@ uint32_t SDHC_WriteCmd(SDHC_Cmd_t *cmd)
     /* issue cmd */
     SDHC->CMDARG = cmd->arg;
     SDHC->BLKATTR = blkattr;
-    SDHC->DSADDR = 0;
     SDHC->XFERTYP = xfertyp;
 
     /* waitting for respond */
@@ -645,43 +615,34 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t blockCnt)
     /* read data */
 	for(i = 0; i < blockCnt; i++)
 	{
-		if (((uint32_t)buf & 0x03) == 0)
-		{
+        while((SDHC->PRSSTAT & SDHC_PRSSTAT_BREN_MASK) == 0);
+        if (((uint32_t)buf & 0x03) == 0)
+        {
             for (j = (512+3)>>2;j!= 0;j--)
-			{
-                if (SDHC->IRQSTAT & (SDHC_IRQSTAT_DEBE_MASK | SDHC_IRQSTAT_DCE_MASK | SDHC_IRQSTAT_DTOE_MASK))
-                {
-                    SDHC->IRQSTAT |= SDHC_IRQSTAT_DEBE_MASK | SDHC_IRQSTAT_DCE_MASK | SDHC_IRQSTAT_DTOE_MASK | SDHC_IRQSTAT_BRR_MASK; 
-                    return ESDHC_ERROR_DATA_TRANSFER;
-                }
-        
-                /* waiitting for host side buffer have empty space */
-                while (0 == (SDHC->PRSSTAT & SDHC_PRSSTAT_BREN_MASK)) {};
-            
-                *p++ = SDHC->DATPORT;		
-			}
-		}
-	}
-	
-	/* waitting for card is OK */
-	do
-	{
-			cmd.cmd = ESDHC_CMD13;
-			cmd.arg = sdh.RCA<<16;
-			cmd.blkCount = 0;
-			results = SDHC_WriteCmd(&cmd);
-			if(results != ESDHC_OK)
             {
-                LIB_TRACE("ESDHC_CMD13 error\r\n");
-                continue;  
+                *p++ = SDHC->DATPORT;		
             }
-			if (cmd.resp[0] & 0xFFD98008)
-			{
-					blockCnt = 0; /* necessary to get real number of written blocks */
-					break;
-			}
+        }
+	}
+	/* waitting for card is OK */
+//	do
+//	{
+//			cmd.cmd = ESDHC_CMD13;
+//			cmd.arg = sdh.RCA<<16;
+//			cmd.blkCount = 0;
+//			results = SDHC_WriteCmd(&cmd);
+//			if(results != ESDHC_OK)
+//            {
+//                LIB_TRACE("ESDHC_CMD13 error\r\n");
+//                continue;  
+//            }
+//			if (cmd.resp[0] & 0xFFD98008)
+//			{
+//					blockCnt = 0; /* necessary to get real number of written blocks */
+//					break;
+//			}
 
-	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
+//	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
 	return ESDHC_OK;
 }
 
@@ -718,40 +679,32 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t blockCn
     /* write data */
 	for(i = 0; i < blockCnt; i++)
 	{
+        while ((SDHC->PRSSTAT & SDHC_PRSSTAT_BWEN_MASK) == 0);
         for (j = (512)>>2; j != 0; j--)
         {
-            if (SDHC->IRQSTAT & (SDHC_IRQSTAT_DEBE_MASK | SDHC_IRQSTAT_DCE_MASK | SDHC_IRQSTAT_DTOE_MASK))
-            {
-                SDHC->IRQSTAT |= SDHC_IRQSTAT_DEBE_MASK | SDHC_IRQSTAT_DCE_MASK | SDHC_IRQSTAT_DTOE_MASK | SDHC_IRQSTAT_BWR_MASK; 
-                return 1;
-            }
-        
-            /* waiitting for host side buffer have empty space */
-            while (0 == (SDHC->PRSSTAT & SDHC_PRSSTAT_BWEN_MASK)){};
-            
             SDHC->DATPORT = *p++;
         }
 	}
     
-	/* waitting for card is OK */
-	do
-	{
-			cmd.cmd = ESDHC_CMD13;
-			cmd.arg = sdh.RCA<<16;
-			cmd.blkCount = 0;
-			results = SDHC_WriteCmd(&cmd);
-			if(results != ESDHC_OK) 
-            {
-                LIB_TRACE("ESDHC_CMD13 error\r\n");
-                continue;  
-            }
-			if (cmd.resp[0] & 0xFFD98008)
-			{
-					blockCnt = 0; // necessary to get real number of written blocks 
-					break;
-			}
+//	/* waitting for card is OK */
+//	do
+//	{
+//			cmd.cmd = ESDHC_CMD13;
+//			cmd.arg = sdh.RCA<<16;
+//			cmd.blkCount = 0;
+//			results = SDHC_WriteCmd(&cmd);
+//			if(results != ESDHC_OK) 
+//            {
+//                LIB_TRACE("ESDHC_CMD13 error\r\n");
+//                continue;  
+//            }
+//			if (cmd.resp[0] & 0xFFD98008)
+//			{
+//					blockCnt = 0; // necessary to get real number of written blocks 
+//					break;
+//			}
 
-	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
+//	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
     
 	return ESDHC_OK;
 }

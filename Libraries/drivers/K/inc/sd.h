@@ -6,7 +6,6 @@
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   * @note    此文件为芯片SD模块的底层功能函数
-              只支持SD及SDHC卡 不支持MMC！
   ******************************************************************************
   */
   
@@ -15,7 +14,6 @@
 
 
 #include <stdint.h>
-#include <common.h>
 
 
 //SD卡类型定义
@@ -35,24 +33,15 @@ typedef struct
     uint32_t baudrate; //通信速度
 }SD_InitTypeDef;
 
-//SD卡命令结构
-typedef struct 
-{
-  uint32_t cmd;
-  uint32_t arg;
-  uint32_t blkSize;
-  uint32_t blkCount;
-  uint32_t resp[4];
-}SDHC_Cmd_t;
+
 
 //SD构件通讯错误代码
-#define ESDHC_OK                             (0)
-#define ESDHC_ERROR_INIT_FAILED              (1)
-#define ESDHC_ERROR_cmd_FAILED           (2)
-#define ESDHC_ERROR_cmd_TIMEOUT          (3)
-#define ESDHC_ERROR_DATA_TRANSFER            (4)
-#define ESDHC_ERROR_INVALID_BUS_WIDTH        (5)
-
+#define ESDHC_OK                            (0)
+#define ESDHC_ERROR_INIT_FAILED             (1)
+#define ESDHC_ERROR_cmd_FAILED              (2)
+#define ESDHC_ERROR_cmd_TIMEOUT             (3)
+#define ESDHC_ERROR_DATA_TRANSFER           (4)
+#define ESDHC_ERROR_INVALID_BUS_WIDTH       (5)
 
 
 //!< API funtctions

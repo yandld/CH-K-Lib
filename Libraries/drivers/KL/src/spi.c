@@ -266,7 +266,7 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
 
 void SPI0_IRQHandler(void)
 {
-    uint8_t dummy;
+    volatile uint8_t dummy;
     dummy = dummy;
     if((SPI_InstanceTable[HW_SPI0]->C1 & SPI_C1_SPIE_MASK) && (SPI_InstanceTable[HW_SPI0]->S & SPI_S_SPRF_MASK))
     {
@@ -291,7 +291,7 @@ void SPI0_IRQHandler(void)
 void SPI1_IRQHandler(void)
 {
     uint8_t dummy;
-    dummy = dummy;
+    dummy = 0;
     if((SPI_InstanceTable[HW_SPI1]->C1 & SPI_C1_SPIE_MASK) && (SPI_InstanceTable[HW_SPI1]->S & SPI_S_SPRF_MASK))
     {
         if(SPI_CallBackTable[HW_SPI1])

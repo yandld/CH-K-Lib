@@ -1,13 +1,3 @@
-/**
-  ******************************************************************************
-  * @file    adc.h
-  * @author  YANDLD
-  * @version V2.5
-  * @date    2014.3.25
-  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片ADC模块的底层功能函数
-  ******************************************************************************
-  */
 #ifndef __CH_LIB_ADC_H__
 #define __CH_LIB_ADC_H__
 
@@ -18,9 +8,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-//!< ADC外设模块号
-#define HW_ADC0  (0) //ADC0模块
-
+/* ADC instance */
+#define HW_ADC0  (0)
+#define HW_ADC1  (1)
 
 #define ADC0_SE1A_PE16      (0x00086020U)
 #define ADC0_SE5A_PE17      (0x00286220U)
@@ -43,7 +33,7 @@
 #define ADC0_SE6B_PD05      (0x01304A18U)
 #define ADC0_SE7B_PD06      (0x01384C18U)
 
-//!< ADC 转换时钟分频因子,控制转换速度
+
 typedef enum
 {
     kADC_ClockDiv1,  
@@ -92,18 +82,18 @@ typedef enum
 //!< 模拟电压参考源
 typedef enum
 {
-    kADC_VoltageVREF,  /* 使用外部引脚VREFH VREFL 作为参考电源 */
-    kADC_VoltageVALT,  /* 可选的第二电压参考源 不同的型号可能连接到不同的模块上 K60DN512Vxxx 连接到 VREF模块 */
+    kADC_VoltageVREF,
+    kADC_VoltageVALT,
 }ADC_VoltageRef_Type;
 
 //!< 硬件平均
 typedef enum
 {
-    kADC_HardwareAverageDisable,  //关闭硬件平均
-    kADC_HardwareAverage_4,       //4均值
-    kADC_HardwareAverage_8,       //8均值
+    kADC_HardwareAverageDisable,
+    kADC_HardwareAverage_4,
+    kADC_HardwareAverage_8,
     kADC_HardwareAverage_16,
-    kADC_HardwareAverage_32,      //32均值
+    kADC_HardwareAverage_32,
 }ADC_HardwareAveMode_Type;
 
 //!< ADC中断及DMA配置选择

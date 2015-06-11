@@ -299,10 +299,12 @@
         <option>
           <name>CCIncludePath2</name>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\inc</state>
+          <state>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\usb\inc</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\devices\inc</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\CoreSupport</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport\IAR-ARM</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport</state>
+          <state>$PROJ_DIR$\..\src</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -961,10 +963,16 @@
   <group>
     <name>drivers</name>
     <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\adc.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\common.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\dma.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\flash.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\gpio.c</name>
@@ -992,9 +1000,48 @@
     </file>
   </group>
   <group>
+    <name>USBStack</name>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\usb\src\usbd_core.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\usb\src\usbd_core_msc.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\usb\src\usbd_kk.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\drivers\KL\src\usb\src\usbd_msc.c</name>
+    </file>
+  </group>
+  <group>
     <name>user</name>
     <file>
+      <name>$PROJ_DIR$\..\src\adc_test.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\dma_test.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\gpio_test.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\i2c_test.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\src\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\spi_test.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\usb_config.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\usb_lib.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\usb_test.c</name>
     </file>
   </group>
 </project>

@@ -1,13 +1,3 @@
-/**
-  ******************************************************************************
-  * @file    adc.c
-  * @author  YANDLD
-  * @version V2.5
-  * @date    2014.3.25
-  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  ******************************************************************************
-  */
-  
 #include "adc.h"
 #include "gpio.h"
 
@@ -45,15 +35,15 @@ uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
 {
     uint8_t i;
     QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
-    ADC_InitTypeDef AD_InitStruct1;
-    AD_InitStruct1.instance = pq->ip_instance;
-    AD_InitStruct1.clockDiv = kADC_ClockDiv2;
-    AD_InitStruct1.resolutionMode = resolutionMode;
-    AD_InitStruct1.triggerMode = kADC_TriggerSoftware;
-    AD_InitStruct1.singleOrDiffMode = kADC_Single;
-    AD_InitStruct1.continueMode = kADC_ContinueConversionDisable;
-    AD_InitStruct1.hardwareAveMode = kADC_HardwareAverageDisable;
-    AD_InitStruct1.vref = kADC_VoltageVREF;
+    ADC_InitTypeDef Init;
+    Init.instance = pq->ip_instance;
+    Init.clockDiv = kADC_ClockDiv2;
+    Init.resolutionMode = resolutionMode;
+    Init.triggerMode = kADC_TriggerSoftware;
+    Init.singleOrDiffMode = kADC_Single;
+    Init.continueMode = kADC_ContinueConversionDisable;
+    Init.hardwareAveMode = kADC_HardwareAverageDisable;
+    Init.vref = kADC_VoltageVREF;
     
     /* init pinmux */
     for(i = 0; i < pq->io_offset; i++)
@@ -62,7 +52,7 @@ uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
         PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullDisabled); 
     }
     /* init moudle */
-    ADC_Init(&AD_InitStruct1);
+    ADC_Init(&Init);
     
     /* init adc chlmux */
     ADC_ChlMuxConfig(pq->ip_instance, pq->reserved);
@@ -255,53 +245,55 @@ static int32_t ADC_Calibration(uint32_t instance)
  * @param  ADC_InitStruct: ADC初始化结构体，内容详见注释
  * @retval None
  */
-void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
+void ADC_Init(ADC_InitTypeDef* Init)
 {
     /* enable clock gate */
-    *(uint32_t*)SIM_ADCClockGateTable[ADC_InitStruct->instance].addr |= SIM_ADCClockGateTable[ADC_InitStruct->instance].mask;
+    *(uint32_t*)SIM_ADCClockGateTable[Init->instance].addr |= SIM_ADCClockGateTable[Init->instance].mask;
     
     /* do calibration */
-    ADC_Calibration(ADC_InitStruct->instance);
+    ADC_Calibration(Init->instance);
     
 	/* set clock configuration */
-	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~ADC_CFG1_ADIV_MASK;
-	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |=  ADC_CFG1_ADIV(ADC_InitStruct->clockDiv); 
+	ADC_InstanceTable[Init->instance]->CFG1 &= ~ADC_CFG1_ADIV_MASK;
+	ADC_InstanceTable[Init->instance]->CFG1 |=  ADC_CFG1_ADIV(Init->clockDiv); 
     
     /* voltage reference */
-    ADC_InstanceTable[ADC_InitStruct->instance]->SC2 &= ~ADC_SC2_REFSEL_MASK;
-    ADC_InstanceTable[ADC_InitStruct->instance]->SC2 |= ADC_SC2_REFSEL(ADC_InitStruct->vref);
+    ADC_InstanceTable[Init->instance]->SC2 &= ~ADC_SC2_REFSEL_MASK;
+    ADC_InstanceTable[Init->instance]->SC2 |= ADC_SC2_REFSEL(Init->vref);
     
     /* resolutionMode */
-	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 &= ~(ADC_CFG1_MODE_MASK); 
-	ADC_InstanceTable[ADC_InitStruct->instance]->CFG1 |= ADC_CFG1_MODE(ADC_InitStruct->resolutionMode);
+	ADC_InstanceTable[Init->instance]->CFG1 &= ~(ADC_CFG1_MODE_MASK); 
+	ADC_InstanceTable[Init->instance]->CFG1 |= ADC_CFG1_MODE(Init->resolutionMode);
     
     /* trigger mode */
-    (kADC_TriggerHardware == ADC_InitStruct->triggerMode)?(ADC_InstanceTable[ADC_InitStruct->instance]->SC2 |=  ADC_SC2_ADTRG_MASK):(ADC_InstanceTable[ADC_InitStruct->instance]->SC2 &=  ADC_SC2_ADTRG_MASK);
+    (kADC_TriggerHardware == Init->triggerMode)?(ADC_InstanceTable[Init->instance]->SC2 |=  ADC_SC2_ADTRG_MASK):(ADC_InstanceTable[Init->instance]->SC2 &=  ADC_SC2_ADTRG_MASK);
     
     /* if continues conversion */
-    (kADC_ContinueConversionEnable == ADC_InitStruct->continueMode)?(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_ADCO_MASK):(ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_ADCO_MASK);
+    (kADC_ContinueConversionEnable == Init->continueMode)?(ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_ADCO_MASK):(ADC_InstanceTable[Init->instance]->SC3 &= ~ADC_SC3_ADCO_MASK);
     
     /* if hardware average enabled */
-    switch(ADC_InitStruct->hardwareAveMode)
+    ADC_InstanceTable[Init->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
+    
+    switch(Init->hardwareAveMode)
     {
         case kADC_HardwareAverageDisable:
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
+            ADC_InstanceTable[Init->instance]->SC3 &= ~ADC_SC3_AVGE_MASK;
             break;
         case kADC_HardwareAverage_4:
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(0);
+            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGE_MASK;
+            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGS(0);
             break;
         case kADC_HardwareAverage_8:
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(1);
+            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGE_MASK;
+            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGS(1);
             break;
         case kADC_HardwareAverage_16:
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(2);
+            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGE_MASK;
+            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGS(2);
             break;
         case kADC_HardwareAverage_32:
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 &= ~ADC_SC3_AVGS_MASK;
-            ADC_InstanceTable[ADC_InitStruct->instance]->SC3 |= ADC_SC3_AVGS(3);
+            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGE_MASK;
+            ADC_InstanceTable[Init->instance]->SC3 |= ADC_SC3_AVGS(3);
             break;
         default:
             break;

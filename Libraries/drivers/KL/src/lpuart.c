@@ -290,7 +290,7 @@ __weak size_t __write(int handle, const unsigned char * buffer, size_t size)
 __weak size_t __read(int handle, unsigned char * buffer, size_t size)
 {
     size_t nChars = 0;
-    uint16_t ch = 0;
+    uint8_t ch = 0;
     if (buffer == 0)
     {
         /* This means that we should flush internal buffers.  Since we*/

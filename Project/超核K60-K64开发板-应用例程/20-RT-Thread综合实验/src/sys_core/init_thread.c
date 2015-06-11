@@ -40,7 +40,7 @@ void init_thread_entry(void* parameter)
     rt_hw_spi_init();
     rt_hw_rtc_init();
     rt_hw_dflash_init("dflash0");
-    
+    rt_hw_sd_init();
     /* start usbd core thread */
     tid = rt_thread_create("usbd", usb_thread_entry, RT_NULL, (1024*1), 0x15, 20);                                                      
     rt_thread_startup(tid);	

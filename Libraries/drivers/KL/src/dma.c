@@ -29,54 +29,54 @@ static const IRQn_Type DMA_IRQnTable[] =
  * @param  DMA_InitStruct :DMA初始化配置结构体，详见dma.h
  * @retval None
  */
-void DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
+void DMA_Init(DMA_InitTypeDef *Init)
 {
 	/* enable DMA and DMAMUX clock */
 	SIM->SCGC6 |= SIM_SCGC6_DMAMUX_MASK;    
 	SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;
     
     /* disable chl first */
-    DMA0->DMA[DMA_InitStruct->chl].DCR &= ~DMA_DCR_ERQ_MASK;
+    DMA0->DMA[Init->chl].DCR &= ~DMA_DCR_ERQ_MASK;
     
     /* dma chl source config */
-    DMAMUX0->CHCFG[DMA_InitStruct->chl] = DMAMUX_CHCFG_SOURCE(DMA_InitStruct->chlTriggerSource);
+    DMAMUX0->CHCFG[Init->chl] = DMAMUX_CHCFG_SOURCE(Init->chlTriggerSource);
     
     /* trigger mode */
-    switch(DMA_InitStruct->triggerSourceMode)
+    switch(Init->triggerSourceMode)
     {
         case kDMA_TriggerSource_Normal:
-            DMAMUX0->CHCFG[DMA_InitStruct->chl] &= ~DMAMUX_CHCFG_TRIG_MASK;
+            DMAMUX0->CHCFG[Init->chl] &= ~DMAMUX_CHCFG_TRIG_MASK;
             break;
         case kDMA_TriggerSource_Periodic:
-            DMAMUX0->CHCFG[DMA_InitStruct->chl] |= DMAMUX_CHCFG_TRIG_MASK;
+            DMAMUX0->CHCFG[Init->chl] |= DMAMUX_CHCFG_TRIG_MASK;
             break;
         default:
             break;
     }
     
     /* transfer bytes cnt */
-    DMA0->DMA[DMA_InitStruct->chl].DSR_BCR = DMA_DSR_BCR_BCR(DMA_InitStruct->transferByteCnt);
+    DMA0->DMA[Init->chl].DSR_BCR = DMA_DSR_BCR_BCR(Init->transferByteCnt);
     
     /* source config */
-    DMA0->DMA[DMA_InitStruct->chl].SAR  = DMA_InitStruct->sAddr;
-    DMA0->DMA[DMA_InitStruct->chl].DCR |= DMA_DCR_SSIZE(DMA_InitStruct->sDataWidth);
-    (DMA_InitStruct->sAddrIsInc)?(DMA0->DMA[DMA_InitStruct->chl].DCR |= DMA_DCR_SINC_MASK):(DMA0->DMA[DMA_InitStruct->chl].DCR &= ~DMA_DCR_SINC_MASK);
-    DMA0->DMA[DMA_InitStruct->chl].DCR |= DMA_DCR_SMOD(DMA_InitStruct->sMod);
+    DMA0->DMA[Init->chl].SAR  = Init->sAddr;
+    DMA0->DMA[Init->chl].DCR |= DMA_DCR_SSIZE(Init->sDataWidth);
+    (Init->sAddrIsInc)?(DMA0->DMA[Init->chl].DCR |= DMA_DCR_SINC_MASK):(DMA0->DMA[Init->chl].DCR &= ~DMA_DCR_SINC_MASK);
+    DMA0->DMA[Init->chl].DCR |= DMA_DCR_SMOD(Init->sMod);
     
     /* dest config */
-    DMA0->DMA[DMA_InitStruct->chl].DAR  = DMA_InitStruct->dAddr;
-    DMA0->DMA[DMA_InitStruct->chl].DCR |= DMA_DCR_DSIZE(DMA_InitStruct->sDataWidth);
-    (DMA_InitStruct->dAddrIsInc)?(DMA0->DMA[DMA_InitStruct->chl].DCR |= DMA_DCR_DINC_MASK):(DMA0->DMA[DMA_InitStruct->chl].DCR &= ~DMA_DCR_DINC_MASK);
-    DMA0->DMA[DMA_InitStruct->chl].DCR |= DMA_DCR_DMOD(DMA_InitStruct->dMod);
+    DMA0->DMA[Init->chl].DAR  = Init->dAddr;
+    DMA0->DMA[Init->chl].DCR |= DMA_DCR_DSIZE(Init->sDataWidth);
+    (Init->dAddrIsInc)?(DMA0->DMA[Init->chl].DCR |= DMA_DCR_DINC_MASK):(DMA0->DMA[Init->chl].DCR &= ~DMA_DCR_DINC_MASK);
+    DMA0->DMA[Init->chl].DCR |= DMA_DCR_DMOD(Init->dMod);
     
     /* defaut: cycle steal */
-    DMA0->DMA[DMA_InitStruct->chl].DCR |= DMA_DCR_CS_MASK;
+    DMA0->DMA[Init->chl].DCR |= DMA_DCR_CS_MASK;
     
     /* defaut: enable auto disable req */
-    DMA0->DMA[DMA_InitStruct->chl].DCR |= DMA_DCR_D_REQ_MASK;
+    DMA0->DMA[Init->chl].DCR |= DMA_DCR_D_REQ_MASK;
     
     /* enable chl */
-    DMAMUX0->CHCFG[DMA_InitStruct->chl] |= DMAMUX_CHCFG_ENBL_MASK;
+    DMAMUX0->CHCFG[Init->chl] |= DMAMUX_CHCFG_ENBL_MASK;
 }
 
 /**

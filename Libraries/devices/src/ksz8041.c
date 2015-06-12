@@ -164,8 +164,8 @@ int ksz8041_init(void)
     KSZ8041_TRACE("PHY_ICS:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_PHYC1, &usData );
     KSZ8041_TRACE("PHY_PHYC1:0x%X\r\n",usData);
-    ENET_MII_Read(gChipAddr, PHY_PHYC1, &usData );
-    KSZ8041_TRACE("PHY_PHYC1:0x%X\r\n",usData);
+    ENET_MII_Read(gChipAddr, PHY_PHYC2, &usData );
+    KSZ8041_TRACE("PHY_PHYC2:0x%X\r\n",usData);
     
     /* start auto-negotiation */
     ENET_MII_Write(gChipAddr, PHY_BMCR, (PHY_BMCR_AN_RESTART | PHY_BMCR_AN_ENABLE ));

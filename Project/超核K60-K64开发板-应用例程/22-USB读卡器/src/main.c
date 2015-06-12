@@ -2,7 +2,7 @@
 
 #define SECTER_SIZE         (512)
 
-U8 BlockBuf[SECTER_SIZE];
+U8 BlockBuf[SECTER_SIZE*32];
 
 
 /* init */
@@ -10,7 +10,7 @@ void usbd_msc_init (void)
 {
     USBD_MSC_MemorySize = SD_GetSizeInMB()*1024*1024;
     USBD_MSC_BlockSize  = SECTER_SIZE;
-    USBD_MSC_BlockGroup = 1;
+    USBD_MSC_BlockGroup = sizeof(BlockBuf)/SECTER_SIZE;
     USBD_MSC_BlockCount = USBD_MSC_MemorySize / USBD_MSC_BlockSize;
     USBD_MSC_BlockBuf   = BlockBuf;
     

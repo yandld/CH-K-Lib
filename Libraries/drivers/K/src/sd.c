@@ -409,10 +409,9 @@ uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buffer)
     cmd.blkSize = 512;
     results = SDHC_WriteCmd(&cmd);
     if(results != ESDHC_OK)
-    {
         return ESDHC_ERROR_DATA_TRANSFER; 
-    }
     while((SDHC->PRSSTAT & SDHC_PRSSTAT_BREN_MASK) == 0);
+    
     for (j = (512+3)>>2;j!= 0;j--)
     {
         *p++ = SDHC->DATPORT;			
@@ -437,9 +436,8 @@ uint8_t SD_WriteSingleBlock(uint32_t sector, const uint8_t *buffer)
     cmd.blkSize = 512;
     results = SDHC_WriteCmd(&cmd);
     if(results != ESDHC_OK) 
-    {
         return ESDHC_ERROR_DATA_TRANSFER; 
-    }
+    
     while((SDHC->PRSSTAT & SDHC_PRSSTAT_BWEN_MASK) == 0);
     for (j = (512)>>2;j!= 0;j--)
     {
@@ -608,41 +606,42 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t blockCnt)
 	cmd.arg = sector;
 	results = SDHC_WriteCmd(&cmd);
 	if(results != ESDHC_OK)
-    {
         return ESDHC_ERROR_cmd_FAILED; 
-    }
         
-    /* read data */
 	for(i = 0; i < blockCnt; i++)
 	{
-        while((SDHC->PRSSTAT & SDHC_PRSSTAT_BREN_MASK) == 0);
         if (((uint32_t)buf & 0x03) == 0)
         {
+            while((SDHC->PRSSTAT & SDHC_PRSSTAT_BREN_MASK) == 0);
             for (j = (512+3)>>2;j!= 0;j--)
             {
                 *p++ = SDHC->DATPORT;		
             }
         }
 	}
-	/* waitting for card is OK */
-	do
-	{
-			cmd.cmd = ESDHC_CMD13;
-			cmd.arg = sdh.RCA<<16;
-			cmd.blkCount = 0;
-			results = SDHC_WriteCmd(&cmd);
-			if(results != ESDHC_OK)
-            {
-                LIB_TRACE("ESDHC_CMD13 error\r\n");
-                continue;  
-            }
-			if (cmd.resp[0] & 0xFFD98008)
-			{
-					blockCnt = 0; /* necessary to get real number of written blocks */
-					break;
-			}
+    
+    SD_StatusWait(SDHC_IRQSTAT_TC_MASK);
+    SDHC->IRQSTAT |= SDHC_IRQSTAT_TC_MASK;
+    
+//	/* waitting for card is OK */
+//	do
+//	{
+//			cmd.cmd = ESDHC_CMD13;
+//			cmd.arg = sdh.RCA<<16;
+//			cmd.blkCount = 0;
+//			results = SDHC_WriteCmd(&cmd);
+//			if(results != ESDHC_OK)
+//            {
+//                LIB_TRACE("ESDHC_CMD13 error\r\n");
+//                continue;  
+//            }
+//			if (cmd.resp[0] & 0xFFD98008)
+//			{
+//					blockCnt = 0; /* necessary to get real number of written blocks */
+//					break;
+//			}
 
-	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
+//	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
 	return ESDHC_OK;
 }
 
@@ -671,12 +670,10 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t blockCn
 	cmd.blkSize = 512;
 	cmd.arg = sector;
 	results = SDHC_WriteCmd(&cmd);
-	if(results != ESDHC_OK) 
-	{
-		return ESDHC_ERROR_DATA_TRANSFER;  
-	}
     
-    /* write data */
+	if(results != ESDHC_OK) 
+		return ESDHC_ERROR_DATA_TRANSFER;  
+
 	for(i = 0; i < blockCnt; i++)
 	{
         while ((SDHC->PRSSTAT & SDHC_PRSSTAT_BWEN_MASK) == 0);
@@ -686,25 +683,28 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, const uint8_t *buf, uint16_t blockCn
         }
 	}
     
-	/* waitting for card is OK */
-	do
-	{
-			cmd.cmd = ESDHC_CMD13;
-			cmd.arg = sdh.RCA<<16;
-			cmd.blkCount = 0;
-			results = SDHC_WriteCmd(&cmd);
-			if(results != ESDHC_OK) 
-            {
-                LIB_TRACE("ESDHC_CMD13 error\r\n");
-                continue;  
-            }
-			if (cmd.resp[0] & 0xFFD98008)
-			{
-					blockCnt = 0; // necessary to get real number of written blocks 
-					break;
-			}
+    SD_StatusWait(SDHC_IRQSTAT_TC_MASK);
+    SDHC->IRQSTAT |= SDHC_IRQSTAT_TC_MASK;
+    
+//	/* waitting for card is OK */
+//	do
+//	{
+//			cmd.cmd = ESDHC_CMD13;
+//			cmd.arg = sdh.RCA<<16;
+//			cmd.blkCount = 0;
+//			results = SDHC_WriteCmd(&cmd);
+//			if(results != ESDHC_OK) 
+//            {
+//                LIB_TRACE("ESDHC_CMD13 error\r\n");
+//                continue;  
+//            }
+//			if (cmd.resp[0] & 0xFFD98008)
+//			{
+//					blockCnt = 0; // necessary to get real number of written blocks 
+//					break;
+//			}
 
-	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
+//	} while (0x000000900 != (cmd.resp[0] & 0x00001F00));
     
 	return ESDHC_OK;
 }

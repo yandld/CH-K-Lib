@@ -80,9 +80,9 @@ static int udisk(int argc, char** argv)
     
     USBD_MSC_MemorySize = geometry.block_size*geometry.sector_count;
     USBD_MSC_BlockSize  = geometry.block_size;
-    USBD_MSC_BlockGroup = 1;
+    USBD_MSC_BlockGroup = 8;
     USBD_MSC_BlockCount = geometry.sector_count;
-    USBD_MSC_BlockBuf   = rt_malloc(geometry.block_size);
+    USBD_MSC_BlockBuf   = rt_malloc(geometry.block_size*8);
     USBD_MSC_MediaReady = __TRUE;
     
     

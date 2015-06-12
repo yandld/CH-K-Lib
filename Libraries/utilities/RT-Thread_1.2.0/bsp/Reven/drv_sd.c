@@ -17,7 +17,7 @@ static rt_err_t rt_sd_open(rt_device_t dev, rt_uint16_t oflag)
 {
     int r;
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
-    if(SD_QuickInit(10*1000*1000))
+    if(SD_QuickInit(20*1000*1000))
     {
         return RT_EIO;
     }

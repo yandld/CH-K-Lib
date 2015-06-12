@@ -192,11 +192,11 @@ int main(void)
                 dcal_minput(cp_mdata);
             }
             
-            dcal_output(&dcal);
-            if(dcal.need_update)
-            {
-                veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
-            }
+//            dcal_output(&dcal);
+//            if(dcal.need_update)
+//            {
+//                //veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+//            }
             
             /* bmp read */
             ret = bmp180_conversion_process(&dummy, &temperature);
@@ -225,30 +225,4 @@ void UART_ISR(uint16_t data)
     }
 }
 
-//void mpu9250_test(void)
-//{
-//    mpu9250_init(0);
-//    struct mpu_config config;
-//    
-//    config.afs = AFS_8G;
-//    config.gfs = GFS_1000DPS;
-//    config.mfs = MFS_14BITS;
-//    config.aenable_self_test = false;
-//    config.genable_self_test = false;
-//    mpu9250_config(&config);
-//    
-//    uint8_t err;
-//    int16_t mdata[3], gdata[3], adata[3];
-//    while(1)
-//    {
-//        err = 0;
-//    
-//        err += mpu9250_read_accel_raw(adata);
-//        err += mpu9250_read_gyro_raw(gdata);
-//        err += mpu9250_read_mag_raw(mdata);
-//    
-//        printf("ax:%05d ay:%05d az:%05d gx:%05d gy:%05d gz:%05d mx:%05d my:%05d mz:%05d    \r", adata[0] ,adata[1], adata[2], gdata[0], gdata[1], gdata[2], mdata[0], mdata[1], mdata[2]);  
-//		GPIO_ToggleBit(HW_GPIOC, 3);
-//        DelayMs(5);
-//    }
-//}
+

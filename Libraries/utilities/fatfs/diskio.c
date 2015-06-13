@@ -104,7 +104,7 @@ DRESULT disk_write (
     {
 	case SD_CARD :
 		// translate the arguments here
-        SD_WriteMultiBlock(sector, buff, count);
+        SD_WriteMultiBlock(sector, (uint8_t*)buff, count);
         res = RES_OK;
 		return res;
 

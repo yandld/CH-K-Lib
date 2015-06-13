@@ -5,13 +5,11 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    此文件为芯片SD模块的底层功能函数
   ******************************************************************************
   */
   
 #ifndef __CH_LIB_SD_H__
 #define __CH_LIB_SD_H__
-
 
 #include <stdint.h>
 
@@ -34,8 +32,6 @@ typedef struct
 }SD_InitTypeDef;
 
 
-
-//SD构件通讯错误代码
 #define ESDHC_OK                            (0)
 #define ESDHC_ERROR_INIT_FAILED             (1)
 #define ESDHC_ERROR_cmd_FAILED              (2)
@@ -48,11 +44,10 @@ typedef struct
 uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct);
 uint32_t SD_GetSizeInMB(void);
 uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buf);
-uint8_t SD_WriteSingleBlock(uint32_t sector, const uint8_t *buf);
-uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t blockCnt);
-uint8_t SD_WriteMultiBlock(uint32_t sector,const uint8_t *buf, uint16_t blockCnt);
+uint8_t SD_WriteSingleBlock(uint32_t sector,  uint8_t *buf);
+uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len);
+uint8_t SD_WriteMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len);
 uint32_t SD_QuickInit(uint32_t baudrate);
-uint8_t SD_InitCard(void);
 
 
 #endif

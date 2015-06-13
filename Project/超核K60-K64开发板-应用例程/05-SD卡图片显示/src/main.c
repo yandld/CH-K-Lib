@@ -78,14 +78,14 @@ static FRESULT scan_files(char* path)
 #endif
             if (fno.fattrib & AM_DIR)
             {                    /* It is a directory */
-                //printf("%s <DIR>\r\n", fn);
+                printf("%s <DIR>\r\n", fn);
                 res = scan_files(fn);
                 if (res != FR_OK) break;
             }
             else
             {
                 /* It is a file. */
-                //printf("File:%s\r\n", fn);
+                printf("File:%s\r\n", fn);
                 if(!strncmp((const char *)(uint32_t)fn + strlen(fn)-3 , "BMP", 3))
                 {
                     sprintf(full_path, "%s/%s", path, fn);

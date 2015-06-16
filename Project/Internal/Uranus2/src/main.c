@@ -100,12 +100,25 @@ void PIT_ISR(void)
 
 extern void UART_ISR(uint16_t data);
 
+#define FALL_LIMIT      100
+uint32_t FallDetection(int16_t *adata)
+{
+    uint32_t ret;
+    
+    ret = 0;
+    if((adata[0] < FALL_LIMIT) && (adata[1] < FALL_LIMIT) && (adata[2] < FALL_LIMIT))
+    {
+        ret = 1;
+    }
+    return ret;
+}
 
 
 int main(void)
 {
     int i;
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
+    uint32_t fall;
     static float fadata[3], fgdata[3], fmdata[3];
     static attitude_t angle;
     uint32_t ret;
@@ -147,7 +160,7 @@ int main(void)
         mpu9250_read_accel_raw(adata);
         mpu9250_read_gyro_raw(gdata);
         mpu9250_read_mag_raw(mdata);
-        
+        fall = FallDetection(adata);
         cp_mdata[0] = mdata[0];
         cp_mdata[1] = mdata[1];
         cp_mdata[2] = mdata[2];
@@ -206,6 +219,7 @@ int main(void)
             }
             
             GPIO_ToggleBit(HW_GPIOC, 3);
+            
             FLAG_TIMER = false;
         }
         send_data_process(&angle, adata, gdata, cp_mdata, (int32_t)pressure);

@@ -14,18 +14,18 @@ int cmd_gpio(int argc, char * const argv[])
 {
     int i;
     /* LED */
-    GPIO_QuickInit(LED0_PORT, LED0_PIN, kGPIO_Mode_OPP);
-    GPIO_QuickInit(LED1_PORT, LED1_PIN, kGPIO_Mode_OPP);
-    GPIO_QuickInit(LED2_PORT, LED2_PIN, kGPIO_Mode_OPP);
-    GPIO_QuickInit(LED3_PORT, LED3_PIN, kGPIO_Mode_OPP);
+    GPIO_Init(LED0_PORT, LED0_PIN, kGPIO_Mode_OPP);
+    GPIO_Init(LED1_PORT, LED1_PIN, kGPIO_Mode_OPP);
+    GPIO_Init(LED2_PORT, LED2_PIN, kGPIO_Mode_OPP);
+    GPIO_Init(LED3_PORT, LED3_PIN, kGPIO_Mode_OPP);
     /* KEY */
-    GPIO_QuickInit(HW_GPIOB, 0, kGPIO_Mode_IPU);
+    GPIO_Init(HW_GPIOB, 0, kGPIO_Mode_IPU);
 
     for(i=0;i<10;i++)
     {
-        GPIO_ToggleBit(LED0_PORT, LED0_PIN);
-        GPIO_ToggleBit(LED2_PORT, LED2_PIN);
-        GPIO_ToggleBit(LED3_PORT, LED3_PIN);
+        GPIO_PinToggle(LED0_PORT, LED0_PIN);
+        GPIO_PinToggle(LED2_PORT, LED2_PIN);
+        GPIO_PinToggle(LED3_PORT, LED3_PIN);
         DelayMs(50);  
     }
     return 0;

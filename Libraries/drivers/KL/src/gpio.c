@@ -61,49 +61,6 @@ void GPIO_SetPinDir(uint32_t instance, uint32_t pin, uint32_t dir)
 }
 
  /**
- * @brief  GPIO初始化配置
- * @code
- *    //初始化配置PORTB端口的10引脚为推挽输出引脚
- *    GPIO_InitTypeDef GPIO_InitStruct1;      //申请一个结构变量
- *    GPIO_InitStruct1.instance = HW_GPIOB;   //选择PORTB端口
- *    GPIO_InitStruct1.mode = kGPIO_Mode_OPP; //推挽输出
- *    GPIO_InitStruct1.pinx = 10;             //选择10引脚
- *    //调用初始化GPIO函数 
- *    GPIO_Init(&GPIO_InitStruct1);
- * @endcode
- * @param  GPIO_InitStruct: GPIO初始化结构体，包含了引脚状态参数  
-           GPIO_InitStruct.instance   :端口号 HW_GPIOA ~ HW_GPIOE
- * @retval None
- */
-void GPIO_Init(GPIO_InitTypeDef * Init)
-{
-    /* config state */
-    switch(Init->mode)
-    {
-        case kGPIO_Mode_IFT:
-            SetPinPull(Init->instance, Init->pinx, 0xFF);
-            GPIO_SetPinDir(Init->instance, Init->pinx, 0);
-            break;
-        case kGPIO_Mode_IPD:
-            SetPinPull(Init->instance, Init->pinx, 0);
-            GPIO_SetPinDir(Init->instance, Init->pinx, 0);
-            break;
-        case kGPIO_Mode_IPU:
-            SetPinPull(Init->instance, Init->pinx, 1);
-            GPIO_SetPinDir(Init->instance, Init->pinx, 0);
-            break;
-        case kGPIO_Mode_OPP:
-            SetPinPull(Init->instance, Init->pinx, 0xFF);
-            GPIO_SetPinDir(Init->instance, Init->pinx, 1);
-            break;
-        default:
-            break;					
-    }
-    /* config pinMux */
-    SetPinMux(Init->instance, Init->pinx, kPinAlt1);
-}
-
- /**
  * @brief  快速初始化一个GPIO引脚 实际上是GPIO_Init的最简单配置
  * @code
  *      //初始化配置PORTB端口的10引脚为推挽输出引脚
@@ -124,15 +81,78 @@ void GPIO_Init(GPIO_InitTypeDef * Init)
  *         @arg kGPIO_Mode_OPP :推挽输出
  * @retval None
  */
-uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
+uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode)
 {
-    GPIO_InitTypeDef GPIO_InitStruct1;
-    GPIO_InitStruct1.instance = instance;
-    GPIO_InitStruct1.mode = mode;
-    GPIO_InitStruct1.pinx = pinx;
-    GPIO_Init(&GPIO_InitStruct1);
-    return  instance;
+    int i;
+    if(pin < 32)
+    {
+        switch(mode)
+        {
+            case kGPIO_Mode_IFT:
+                SetPinPull(instance, pin, 0xFF);
+                GPIO_SetPinDir(instance, pin, 0);
+                break;
+            case kGPIO_Mode_IPD:
+                SetPinPull(instance, pin, 0);
+                GPIO_SetPinDir(instance, pin, 0);
+                break;
+            case kGPIO_Mode_IPU:
+                SetPinPull(instance, pin, 1);
+                GPIO_SetPinDir(instance, pin, 0);
+                break;
+            case kGPIO_Mode_OPP:
+                SetPinPull(instance, pin, 0xFF);
+                GPIO_SetPinDir(instance, pin, 1);
+                break;
+            default:
+                break;					
+        }
+        /* config pinMux */
+        SetPinMux(instance, pin, 1);
+    }
+    else
+    {
+        for(i=0; i<31; i++)
+        {
+            if(pin & (1<<i))
+            {
+        switch(mode)
+        {
+            case kGPIO_Mode_IFT:
+                SetPinPull(instance, pin, 0xFF);
+                GPIO_SetPinDir(instance, pin, 0);
+                break;
+            case kGPIO_Mode_IPD:
+                SetPinPull(instance, pin, 0);
+                GPIO_SetPinDir(instance, pin, 0);
+                break;
+            case kGPIO_Mode_IPU:
+                SetPinPull(instance, pin, 1);
+                GPIO_SetPinDir(instance, pin, 0);
+                break;
+            case kGPIO_Mode_OPP:
+                SetPinPull(instance, pin, 0xFF);
+                GPIO_SetPinDir(instance, pin, 1);
+                break;
+            default:
+                break;					
+        }
+            }
+        }
+     //   printf("0x%X\r\n", pin);
+    }
+    return instance;
 }
+
+//uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
+//{
+//    GPIO_InitTypeDef GPIO_InitStruct1;
+//    GPIO_InitStruct1.instance = instance;
+//    GPIO_InitStruct1.mode = mode;
+//    GPIO_InitStruct1.pinx = pinx;
+//    GPIO_Init(&GPIO_InitStruct1);
+//    return  instance;
+//}
 
  /**
  * @brief  设置指定引脚输出高电平或者低电平
@@ -153,9 +173,10 @@ uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
  *         @arg 1 : 高电平
  * @retval None
  */
-void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data)
+void GPIO_PinWrite(uint32_t instance, uint32_t pin, uint8_t data)
 {
-    (data) ? (GPIOCLKTbl[instance]->PSOR |= (1 << pinIndex)):(GPIOCLKTbl[instance]->PCOR |= (1 << pinIndex));
+    (data) ? (GPIOCLKTbl[instance]->PSOR |= (1 << pin)):
+    (GPIOCLKTbl[instance]->PCOR |= (1 << pin));
 }
  /**
  * @brief  读取一个引脚上的电平状态
@@ -175,17 +196,9 @@ void GPIO_WriteBit(uint32_t instance, uint8_t pinIndex, uint8_t data)
  *         @arg 0 : 低电平
  *         @arg 1 : 高电平
  */
-uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex)
+uint32_t GPIO_PinRead(uint32_t instance, uint32_t pin)
 {
-    /* input or output */
-    if(((GPIOCLKTbl[instance]->PDDR) >> pinIndex) & 0x01)
-    {
-        return ((GPIOCLKTbl[instance]->PDOR >> pinIndex) & 0x01);
-    }
-    else
-    {
-        return ((GPIOCLKTbl[instance]->PDIR >> pinIndex) & 0x01);
-    }
+    return ((GPIOCLKTbl[instance]->PDIR >> pin) & 0x01);
 }
 
  /**
@@ -203,9 +216,9 @@ uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex)
  * @param  pinIndex  :端口上的引脚号 0~31
  * @retval None
  */
-void GPIO_ToggleBit(uint32_t instance, uint8_t pinIndex)
+void GPIO_PinToggle(uint32_t instance, uint8_t pin)
 {
-    GPIOCLKTbl[instance]->PTOR |= (1 << pinIndex);
+    GPIOCLKTbl[instance]->PTOR |= (1 << pin);
 }
 
 /**

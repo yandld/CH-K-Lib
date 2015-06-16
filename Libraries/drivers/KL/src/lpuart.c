@@ -41,15 +41,15 @@ uint32_t LPUART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
     LPUART_InitTypeDef LPUART_InitStruct1;
-    map_t * pq = (map_t*)&(MAP);
+    map_t * map = (map_t*)&(MAP);
     LPUART_InitStruct1.baudrate = baudrate;
-    LPUART_InitStruct1.instance = pq->ip;
+    LPUART_InitStruct1.instance = map->ip;
     LPUART_InitStruct1.parityMode = kUART_ParityDisabled;
     LPUART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
     LPUART_InitStruct1.srcClock = 48*1000*1000;
     
     /* clock config use IRC48M */
-    switch(pq->ip)
+    switch(map->ip)
     {
         case HW_LPUART0:
             SIM->SOPT2 &= ~SIM_SOPT2_LPUART0SRC_MASK;
@@ -61,14 +61,14 @@ uint32_t LPUART_QuickInit(uint32_t MAP, uint32_t baudrate)
             break; 
     }
     
-    for(i = 0; i < pq->pin_count; i++)
+    for(i = 0; i < map->pin_count; i++)
     {
-        SetPinMux(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux); 
+        SetPinMux(map->io, map->pin_start + i, map->mux); 
     }
     
     LPUART_Init(&LPUART_InitStruct1);
     
-    return pq->ip;
+    return map->ip;
 }
 
 void LPUART_Init(LPUART_InitTypeDef* UART_InitStruct)

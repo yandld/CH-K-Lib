@@ -47,7 +47,7 @@ void SetPinMux(uint32_t instance, uint32_t pin, uint32_t mux)
 {
     CLK_EN(PORTCLKTbl, instance);
     PORT_IPTbl[instance]->PCR[pin] &= ~PORT_PCR_MUX_MASK;
-    PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_MUX(pin);
+    PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_MUX(mux);
 }
 
 /* 0 pull down, 1 pull up, other no floating */

@@ -50,12 +50,14 @@ struct cmd_t
 int main(void)
 {
     int i, ret;
-    GPIO_QuickInit(LED0_PORT, LED0_PIN, kGPIO_Mode_OPP);
+    
+    GPIO_Init(HW_GPIOA, PIN1|PIN2, kGPIO_Mode_OPP);
+    
     /* UART */
     LPUART_QuickInit(LPUART0_RX_D06_TX_D07, 115200);
     LPUART_ITDMAConfig(HW_LPUART0, kUART_IT_Rx, true);
-
     
+
     printf("core clock:%dHz\r\n", GetClock(kCoreClock));
     printf("bus clock:%dHz\r\n", GetClock(kBusClock));   
 //    /* do test */
@@ -84,6 +86,10 @@ int main(void)
     
     while(1)
     {
+        GPIO_PinToggle(LED0_PORT, LED0_PIN);
+        GPIO_PinToggle(LED1_PORT, LED1_PIN);
+        GPIO_PinToggle(LED2_PORT, LED2_PIN);
+        GPIO_PinToggle(LED3_PORT, LED3_PIN);
         printf("!!!\r\n");
         DelayMs(500);
     }

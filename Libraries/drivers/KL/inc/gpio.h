@@ -5,8 +5,9 @@
  extern "C" {
 #endif
 	 
-#include "common.h"
+
 #include <stdint.h>
+#include <stdbool.h>
 
 /* GPIO instance define */
 #define HW_GPIOA  (0x00U)
@@ -46,12 +47,6 @@ typedef enum
     kGPIO_Mode_OPP = 0x04,       /* Push pull output */
 }GPIO_Mode_Type;
 
-/* 端口输入输出模式选择 */
-typedef enum
-{
-    kInput,
-    kOutput,
-}GPIO_PinConfig_Type;
 
 /*!< Interrupts and DMA */
 typedef enum
@@ -86,13 +81,12 @@ uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pinIndex);
 void GPIO_ToggleBit(uint32_t instance, uint8_t pinIndex);
 void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status);
 void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun);
-//!< low level functions
-void PORT_PinPullConfig(uint32_t instance, uint8_t pinIndex, PORT_Pull_Type pull);
-void GPIO_PinConfig(uint32_t instance, uint8_t pinIndex, GPIO_PinConfig_Type mode);
-void PORT_PinMuxConfig(uint32_t instance, uint8_t pinIndex, PORT_PinMux_Type pinMux);
 uint32_t GPIO_ReadPort(uint32_t instance);
 void GPIO_WritePort(uint32_t instance, uint32_t data);
-    
+void GPIO_SetPinDir(uint32_t instance, uint32_t pin, uint32_t dir);
+
+
+
 #ifdef __cplusplus
 }
 #endif

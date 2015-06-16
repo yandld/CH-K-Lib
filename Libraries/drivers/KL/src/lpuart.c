@@ -15,7 +15,7 @@
 
 LPUART_Type * const LPUART_InstanceTable[] = LPUART_BASES;
 
-static const struct reg_ops SIM_LPUARTClockGateTable[] =
+static const Reg_t SIM_LPUARTClockGateTable[] =
 {
 #ifdef LPUART0
     {(void*)&(SIM->SCGC5), SIM_SCGC5_LPUART0_MASK},
@@ -41,15 +41,15 @@ uint32_t LPUART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
     LPUART_InitTypeDef LPUART_InitStruct1;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     LPUART_InitStruct1.baudrate = baudrate;
-    LPUART_InitStruct1.instance = pq->ip_instance;
+    LPUART_InitStruct1.instance = pq->ip;
     LPUART_InitStruct1.parityMode = kUART_ParityDisabled;
     LPUART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
     LPUART_InitStruct1.srcClock = 48*1000*1000;
     
     /* clock config use IRC48M */
-    switch(pq->ip_instance)
+    switch(pq->ip)
     {
         case HW_LPUART0:
             SIM->SOPT2 &= ~SIM_SOPT2_LPUART0SRC_MASK;
@@ -61,14 +61,14 @@ uint32_t LPUART_QuickInit(uint32_t MAP, uint32_t baudrate)
             break; 
     }
     
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_count; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        SetPinMux(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux); 
     }
     
     LPUART_Init(&LPUART_InitStruct1);
     
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 void LPUART_Init(LPUART_InitTypeDef* UART_InitStruct)

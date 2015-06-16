@@ -1,71 +1,87 @@
 #include <string.h>
 #include "common.h"
-#include "systick.h"
 
+volatile static uint32_t fac_us = DEFAULT_SYSTEM_CLOCK/1000000;
+volatile static uint32_t fac_ms = DEFAULT_SYSTEM_CLOCK/1000;
 
-#define MCGOUT_TO_CORE_DIVIDER           (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
-#define MCGOUT_TO_SYSTEM_DIVIDER         (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)
-#define MCGOUT_TO_BUS_DIVIDER            (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)
-#define MCGOUT_TO_PERIPHERAL_DIVIDER     (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT) + 1)
-#define MCGOUT_TO_FLASH_DIVIDER          (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)
+static const Reg_t CLKTbl[] =
+{ 
+    {(void*)&(SIM->CLKDIV1), SIM_CLKDIV1_OUTDIV1_MASK, SIM_CLKDIV1_OUTDIV1_SHIFT},
+    {(void*)&(SIM->CLKDIV1), SIM_CLKDIV1_OUTDIV4_MASK, SIM_CLKDIV1_OUTDIV4_SHIFT}, 
+    {(void*)&(SIM->CLKDIV1), SIM_CLKDIV1_OUTDIV4_MASK, SIM_CLKDIV1_OUTDIV4_SHIFT}, 
+    {0,0},
+};
+
+static const Reg_t PORTCLKTbl[] =
+{
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTA_MASK, SIM_SCGC5_PORTA_SHIFT},
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTB_MASK, SIM_SCGC5_PORTB_SHIFT},
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTC_MASK, SIM_SCGC5_PORTC_SHIFT},
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTD_MASK, SIM_SCGC5_PORTD_SHIFT},
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTE_MASK, SIM_SCGC5_PORTE_SHIFT},
+};
+
+static PORT_Type * const PORT_IPTbl[] = PORT_BASES;
+
 
  /**
  * @brief  获得系统各个总线时钟的频率
- * @code
- *         //获得总线时钟频率
- *         uint32_t BusClock;
- *         CLOCK_GetClockFrequency(kBusClock, &BusClock);
- *         //将总线时钟频率显示出来
- *         printf("BusClock:%dHz\r\n", BusClock);
- * @endcode
  * @param  clockName:时钟名称
  *         @arg kCoreClock    :内核时钟
- *         @arg kSystemClock  :系统时钟 = 内核时钟
  *         @arg kBusClock     :总线时钟
  *         @arg kFlexBusClock :Flexbus总线时钟
  *         @arg kFlashClock   :Flash总线时钟
- * @param  FrequenctInHz: 获得频率数据的指针 单位Hz
- * @retval 0: 成功 非0: 错误
+ * @retval the clock
  */
-int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz)
+uint32_t GetClock(Clock_t clock)
 {
-    uint32_t MCGOutClock = 0;
+    uint32_t val;
+    
     /* calualte MCGOutClock system_MKxxx.c must not modified */
-    MCGOutClock = SystemCoreClock * MCGOUT_TO_CORE_DIVIDER;
-    switch (clockName)
+    val = SystemCoreClock * (REG_GET(CLKTbl, kCoreClock)+1);
+    val = val/(REG_GET(CLKTbl, clock)+1);
+    return val;
+}
+
+void SetPinMux(uint32_t instance, uint32_t pin, uint32_t mux)
+{
+    CLK_EN(PORTCLKTbl, instance);
+    PORT_IPTbl[instance]->PCR[pin] &= ~PORT_PCR_MUX_MASK;
+    PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_MUX(pin);
+}
+
+/* 0 pull down, 1 pull up, other no floating */
+void SetPinPull(uint32_t instance, uint32_t pin, uint32_t val)
+{
+    CLK_EN(PORTCLKTbl, instance);
+    switch(val)
     {
-        case kCoreClock:
-            *FrequenctInHz = MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
+        case 0:
+            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_PE_MASK;
+            PORT_IPTbl[instance]->PCR[pin] &= ~PORT_PCR_PS_MASK;
             break;
-        case kSystemClock:
-            *FrequenctInHz = MCGOutClock / MCGOUT_TO_SYSTEM_DIVIDER;
-            break;	
-        case kBusClock:
-            *FrequenctInHz = SystemCoreClock / MCGOUT_TO_BUS_DIVIDER;
-            break;
-        case kFlashClock:
-            *FrequenctInHz = SystemCoreClock / MCGOUT_TO_FLASH_DIVIDER;	
-            break;
-        case kMCGOutClock:
-            *FrequenctInHz = MCGOutClock;
+        case 1:
+            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_PE_MASK;
+            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_PS_MASK;
             break;
         default:
-            return 1;
+            PORT_IPTbl[instance]->PCR[pin] &= ~PORT_PCR_PE_MASK;
+            break;
     }
-    return 0;
 }
 
 
-uint32_t QuickInitEncode(QuickInit_Type * type)
+
+uint32_t EncodeMAP(map_t * type)
 {
     return *(uint32_t*)type;
 }
 
 
-void QuickInitDecode(uint32_t map, QuickInit_Type * type)
+void DecodeMAP(uint32_t map, map_t * type)
 {
-    QuickInit_Type * pMap = (QuickInit_Type*)&(map);
-    memcpy(type, pMap, sizeof(QuickInit_Type));  
+    map_t * pMap = (map_t*)&(map);
+    memcpy(type, pMap, sizeof(map_t));  
 }
 
 /**
@@ -81,7 +97,11 @@ void QuickInitDecode(uint32_t map, QuickInit_Type * type)
 #pragma weak DelayInit
 void DelayInit(void)
 {
-    SYSTICK_DelayInit();
+    SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; 
+    fac_us = GetClock(kCoreClock);
+    fac_us /= 1000000;
+    fac_ms = fac_us * 1000;
+    SysTick->LOAD = SysTick_LOAD_RELOAD_Msk;
 }
 
 /**
@@ -97,7 +117,19 @@ void DelayInit(void)
 #pragma weak DelayMs
 void DelayMs(uint32_t ms)
 {
-    SYSTICK_DelayMs(ms);
+    uint32_t temp;
+    uint32_t i;
+    SysTick->LOAD = fac_ms;
+    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk | SysTick_CTRL_CLKSOURCE_Msk;
+    for(i = 0; i < ms; i++)
+	{
+		SysTick->VAL = 0;
+		do
+		{
+			temp = SysTick->CTRL;
+		}
+        while((temp & SysTick_CTRL_ENABLE_Msk) && !(temp & SysTick_CTRL_COUNTFLAG_Msk));
+	}
 }
 
 /**
@@ -112,18 +144,22 @@ void DelayMs(uint32_t ms)
 #pragma weak DelayUs
 void DelayUs(uint32_t us)
 {
-    SYSTICK_DelayUs(us);
+    uint32_t temp;
+    SysTick->LOAD = us * fac_us;
+    SysTick->VAL = 0;
+    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk | SysTick_CTRL_CLKSOURCE_Msk;
+    do
+    {
+        temp = SysTick->CTRL;
+    }
+    while((temp & SysTick_CTRL_ENABLE_Msk) && !(temp & SysTick_CTRL_COUNTFLAG_Msk));
 }
 
-
-
-#if (defined(LIB_DEBUG))
-void assert_failed(char * file, uint32_t line)
+void SystemSoftReset(void)
 {
-	/* failed */
-	while(1);
+    NVIC_SystemReset();
 }
-#endif
+
 
 void NMI_Handler(void)
 {

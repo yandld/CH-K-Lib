@@ -1,4 +1,5 @@
 #include "gpio.h"
+#include "common.h"
 
 #define LED0_PORT   HW_GPIOC
 #define LED0_PIN    3

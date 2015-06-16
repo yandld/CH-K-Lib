@@ -18,11 +18,18 @@
 #define HW_GPIOF        (0x05U)
 
 
-#define PIN0      (0x80000000+(1<<0))
-#define PIN1      (0x80000000+(1<<1))
-#define PIN2      (0x80000000+(1<<2))
-#define PIN3      (0x80000000+(1<<3))  
-     
+#define PIN0        (0x8000000+(1<<0))
+#define PIN1        (0x8000000+(1<<1))
+#define PIN2        (0x8000000+(1<<2))
+#define PIN3        (0x8000000+(1<<3))
+#define PIN4        (0x8000000+(1<<4))
+#define PIN5        (0x8000000+(1<<5))
+#define PIN6        (0x8000000+(1<<6))
+#define PIN31       (0x8000000+(1<<31))
+
+
+
+
 typedef enum
 {
     kGPIO_Mode_IFT = 0x00,       /* Input floating  */
@@ -30,7 +37,6 @@ typedef enum
     kGPIO_Mode_IPU = 0x02,       /* Pull up input    */
     kGPIO_Mode_OPP = 0x04,       /* Push pull output */
 }GPIO_Mode_t;
-
 
 /*!< Interrupts and DMA */
 typedef enum
@@ -45,6 +51,13 @@ typedef enum
     kGPIO_IT_High,                //高电平触发中断
 }GPIO_ITDMAConfig_Type;
 
+typedef enum
+{
+    kGPIO_Int_RE,
+    kGPIO_Int_FE,
+    kGPIO_Int_EE,
+}GPIO_Int_t;
+
 
 /* 端口中断回调函数定义 */
 typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
@@ -53,8 +66,12 @@ typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 //!< API functions
 uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode);
 void GPIO_SetPinDir(uint32_t instance, uint32_t pin, uint32_t dir);
-void GPIO_Send(uint32_t instance, uint32_t data);
-uint32_t GPIO_Get(uint32_t instance);
+void GPIO_SendData(uint32_t instance, uint32_t data);
+uint32_t GPIO_GetData(uint32_t instance);
+void GPIO_PinToggle(uint32_t instance, uint8_t pin);
+void GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config);
+void GPIO_PinWrite(uint32_t instance, uint32_t pin, uint8_t data);
+uint32_t GPIO_PinRead(uint32_t instance, uint32_t pin);
 
 
 #ifdef __cplusplus

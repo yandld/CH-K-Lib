@@ -18,19 +18,17 @@ LPUART_Type * const LPUART_InstanceTable[] = LPUART_BASES;
 static const Reg_t SIM_LPUARTClockGateTable[] =
 {
 #ifdef LPUART0
-    {(void*)&(SIM->SCGC5), SIM_SCGC5_LPUART0_MASK},
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_LPUART0_MASK, SIM_SCGC5_LPUART0_SHIFT},
 #endif
 #ifdef LPUART1
-    {(void*)&(SIM->SCGC5), SIM_SCGC5_LPUART1_MASK}, 
+    {(void*)&(SIM->SCGC5), SIM_SCGC5_LPUART1_MASK, SIM_SCGC5_LPUART1_SHIFT}, 
 #endif
 };
 
 static const IRQn_Type LPUART_IRQnTable[] = 
 {
-    LPUART0_IRQn,
-#ifdef LPUART1
-    LPUART1_IRQn,
-#endif
+    (IRQn_Type)(LPUART0_IRQn+0),
+    (IRQn_Type)(LPUART1_IRQn+1),
 };
 
 

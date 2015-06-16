@@ -144,15 +144,6 @@ uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode)
     return instance;
 }
 
-//uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
-//{
-//    GPIO_InitTypeDef GPIO_InitStruct1;
-//    GPIO_InitStruct1.instance = instance;
-//    GPIO_InitStruct1.mode = mode;
-//    GPIO_InitStruct1.pinx = pinx;
-//    GPIO_Init(&GPIO_InitStruct1);
-//    return  instance;
-//}
 
  /**
  * @brief  设置指定引脚输出高电平或者低电平
@@ -236,7 +227,7 @@ void GPIO_PinToggle(uint32_t instance, uint8_t pin)
  *         @arg HW_GPIOE :芯片的PORTE端口
  * @retval 端口的32位数据
  */
-uint32_t GPIO_Get(uint32_t instance)
+uint32_t GPIO_GetData(uint32_t instance)
 {
     return (GPIOCLKTbl[instance]->PDIR);
 }
@@ -255,7 +246,7 @@ uint32_t GPIO_Get(uint32_t instance)
  * @param  data  :32位数据
  * @retval None
  */
-void GPIO_Send(uint32_t instance, uint32_t data)
+void GPIO_SendData(uint32_t instance, uint32_t data)
 {
     GPIOCLKTbl[instance]->PDOR = data;
 }
@@ -284,6 +275,17 @@ void GPIO_Send(uint32_t instance, uint32_t data)
  *         @arg kGPIO_IT_High 高电平触发中断
  * @retval None
  */
+
+void GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config)
+{
+    CLK_EN(CLKTbl, instance);
+    if(!config)
+    {
+        NVIC_DisableIRQ(GPIO_IrqTbl[instance]);
+        return;
+    }
+    
+}
 void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status)
 {
     CLK_EN(CLKTbl, instance);

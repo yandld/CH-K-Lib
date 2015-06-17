@@ -25,9 +25,12 @@
 #define PIN4        (0x8000000+(1<<4))
 #define PIN5        (0x8000000+(1<<5))
 #define PIN6        (0x8000000+(1<<6))
+#define PIN7        (0x8000000+(1<<7))
+#define PIN8        (0x8000000+(1<<8))
+#define PIN9        (0x8000000+(1<<9))
+#define PIN10       (0x8000000+(1<<10))
+#define PIN11       (0x8000000+(1<<11))
 #define PIN31       (0x8000000+(1<<31))
-
-
 
 
 typedef enum
@@ -53,9 +56,9 @@ typedef enum
 
 typedef enum
 {
-    kGPIO_Int_RE,
-    kGPIO_Int_FE,
-    kGPIO_Int_EE,
+    kGPIO_Int_RE, /* raising edge */
+    kGPIO_Int_FE, /* falling edge */
+    kGPIO_Int_EE, /* falling edge & raising edge */
 }GPIO_Int_t;
 
 

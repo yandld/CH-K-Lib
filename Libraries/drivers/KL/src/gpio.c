@@ -3,6 +3,7 @@
 
 /* gloabl vars */
 static GPIO_Type * const GPIOCLKTbl[] = GPIO_BASES;
+static PORT_Type * const PORT_IPTbl[] = PORT_BASES;
 static GPIO_CallBackType GPIO_CallBackTable[ARRAY_SIZE(GPIOCLKTbl)] = {NULL};
 
 static const Reg_t CLKTbl[] =
@@ -116,30 +117,30 @@ uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode)
         {
             if(pin & (1<<i))
             {
-        switch(mode)
-        {
-            case kGPIO_Mode_IFT:
-                SetPinPull(instance, pin, 0xFF);
-                GPIO_SetPinDir(instance, pin, 0);
-                break;
-            case kGPIO_Mode_IPD:
-                SetPinPull(instance, pin, 0);
-                GPIO_SetPinDir(instance, pin, 0);
-                break;
-            case kGPIO_Mode_IPU:
-                SetPinPull(instance, pin, 1);
-                GPIO_SetPinDir(instance, pin, 0);
-                break;
-            case kGPIO_Mode_OPP:
-                SetPinPull(instance, pin, 0xFF);
-                GPIO_SetPinDir(instance, pin, 1);
-                break;
-            default:
-                break;					
-        }
+                switch(mode)
+                {
+                    case kGPIO_Mode_IFT:
+                        SetPinPull(instance, i, 0xFF);
+                        GPIO_SetPinDir(instance, i, 0);
+                        break;
+                    case kGPIO_Mode_IPD:
+                        SetPinPull(instance, i, 0);
+                        GPIO_SetPinDir(instance, i, 0);
+                        break;
+                    case kGPIO_Mode_IPU:
+                        SetPinPull(instance, i, 1);
+                        GPIO_SetPinDir(instance, i, 0);
+                        break;
+                    case kGPIO_Mode_OPP:
+                        SetPinPull(instance, i, 0xFF);
+                        GPIO_SetPinDir(instance, i, 1);
+                        break;
+                    default:
+                        break;					
+                }
             }
+        SetPinMux(instance, i, 1);
         }
-     //   printf("0x%X\r\n", pin);
     }
     return instance;
 }
@@ -285,7 +286,22 @@ void GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config)
         return;
     }
     
+    PORT_IPTbl[instance]->PCR[pin] &= ~PORT_PCR_IRQC_MASK;
+    
+    switch(config)
+    {
+        case kGPIO_Int_RE:
+            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(1);
+            break;
+        case kGPIO_Int_FE:
+            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(2);
+            break;
+        case kGPIO_Int_EE:
+            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(3);
+            break;
+    }
 }
+
 void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status)
 {
     CLK_EN(CLKTbl, instance);

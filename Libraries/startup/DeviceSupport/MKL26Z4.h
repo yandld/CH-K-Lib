@@ -824,7 +824,7 @@ typedef struct {
 /** Peripheral FPTE base pointer */
 #define FPTE                                     ((FGPIO_Type *)FPTE_BASE)
 /** Array initializer of FGPIO peripheral base pointers */
-#define FGPIO_BASES                              { FPTA, FPTB, FPTC, FPTD, FPTE }
+#define FGPpin_startS                              { FPTA, FPTB, FPTC, FPTD, FPTE }
 
 /*!
  * @}
@@ -1073,7 +1073,7 @@ typedef struct {
 /** Peripheral PTE base pointer */
 #define PTE                                      ((GPIO_Type *)PTE_BASE)
 /** Array initializer of GPIO peripheral base pointers */
-#define GPIO_BASES                               { PTA, PTB, PTC, PTD, PTE }
+#define GPpin_startS                               { PTA, PTB, PTC, PTD, PTE }
 
 /*!
  * @}

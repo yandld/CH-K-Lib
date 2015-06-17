@@ -78,6 +78,7 @@ typedef enum
     kBusClock,
     kFlashClock,
     kFlexBusClock,
+    kMCGOutClock,
 }Clock_t; 
 
 typedef struct

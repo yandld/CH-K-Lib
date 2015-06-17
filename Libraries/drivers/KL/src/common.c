@@ -1,6 +1,10 @@
 #include <string.h>
 #include "common.h"
 
+#ifndef DEFAULT_SYSTEM_CLOCK
+#define DEFAULT_SYSTEM_CLOCK    (48000000)
+#endif
+
 volatile static uint32_t fac_us = DEFAULT_SYSTEM_CLOCK/1000000;
 volatile static uint32_t fac_ms = DEFAULT_SYSTEM_CLOCK/1000;
 
@@ -39,6 +43,10 @@ uint32_t GetClock(Clock_t clock)
     
     /* calualte MCGOutClock system_MKxxx.c must not modified */
     val = SystemCoreClock * (REG_GET(CLKTbl, kCoreClock)+1);
+    if(clock == kMCGOutClock)
+    {
+        return val;
+    }
     val = val/(REG_GET(CLKTbl, clock)+1);
     return val;
 }

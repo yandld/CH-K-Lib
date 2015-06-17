@@ -18,11 +18,11 @@
 #undef  UART_BASES
 #define UART_BASES  {UART0, UART1, UART2}
 
-static const struct reg_ops CLKTbl[] =
+static const Reg_t CLKTbl[] =
 {
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK},
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK, SIM_SCGC4_UART0_SHIFT},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART1_MASK, SIM_SCGC4_UART1_SHIFT},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK, SIM_SCGC4_UART2_SHIFT},
 };
 
 static const IRQn_Type UART_IRQnTable[] = 
@@ -52,7 +52,8 @@ static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] 
 /* special use for printf */
 static uint8_t UART_DebugInstance;
 
-#ifdef UART_USE_STDIO
+
+#include <stdio.h>
 #ifdef __CC_ARM // MDK Support
 struct __FILE 
 { 
@@ -132,7 +133,6 @@ size_t __read(int handle, unsigned char * buffer, size_t size)
 
 #endif /* comiler support */
 
-#else /* DO NOT USE STDIO */
 static void UART_putstr(uint32_t instance, const char *str)
 {
     while(*str != '\0')
@@ -181,21 +181,21 @@ _loop:
     goto _loop;
     return 0;
 }
-#endif /*end of UART_USE_STDIO */
+
 
 uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
     uint32_t clock;
     UART_InitTypeDef Init;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     Init.baudrate = baudrate;
-    Init.instance = pq->ip_instance;
+    Init.instance = pq->ip;
     
     /* clock source */
-    if(pq->ip_instance == HW_UART0)
+    if(pq->ip == HW_UART0)
     {
-        CLOCK_GetClockFrequency(kMCGOutClock, &clock);
+        clock = GetClock(kMCGOutClock);
         
         #ifdef SIM_SOPT2_UART0SRC_MASK
         /* use PLL/2 or FLL */
@@ -217,20 +217,16 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     }
     else
     {
-        CLOCK_GetClockFrequency(kBusClock, &clock);
+        clock = GetClock(kBusClock);
     }
     Init.srcClock = clock;
-    
-    /* init pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_count; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        SetPinMux(pq->io, pq->pin_start + i,pq->mux); 
     }
-    
-    /* init UART */
     UART_Init(&Init);
     
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 /**
@@ -256,7 +252,7 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
  */
 void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool status)
 {
-    IP_CLK_ENABLE(instance);
+    CLK_EN(CLKTbl, instance);
     
     UART_Type * UARTx = (UART_Type*)UART_InstanceTable[instance];
     
@@ -361,7 +357,7 @@ void UART_Init(UART_InitTypeDef* Init)
     uint16_t sbr;
     static bool is_fitst_init = true;
     
-    IP_CLK_ENABLE(Init->instance);
+    CLK_EN(CLKTbl, Init->instance);
     
     UART_Type * UARTx = (UART_Type*)UART_InstanceTable[Init->instance];
     

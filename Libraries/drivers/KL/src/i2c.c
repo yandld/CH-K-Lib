@@ -10,17 +10,18 @@
   */
 #include "i2c.h"
 #include "gpio.h"
+#include "common.h"
 
 #define I2C_GPIO_SIM  1
 
 #if I2C_GPIO_SIM
 
-#define SDA_DDR_OUT()       do {GPIO_PinConfig(i2c.instace, i2c.sda_pin, kOutput);}while(0)
-#define SDA_DDR_IN()        do {GPIO_PinConfig(i2c.instace, i2c.sda_pin, kInput);}while(0)
-#define SDA_H()             do {GPIO_WriteBit(i2c.instace, i2c.sda_pin, 1);}while(0)
-#define SDA_L()             do {GPIO_WriteBit(i2c.instace, i2c.sda_pin, 0);}while(0)
-#define SCL_H()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 1);}while(0)
-#define SCL_L()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 0);}while(0)
+#define SDA_DDR_OUT()       do {GPIO_SetPinDir(i2c.instace, i2c.sda_pin, 1);}while(0)
+#define SDA_DDR_IN()        do {GPIO_SetPinDir(i2c.instace, i2c.sda_pin, 0);}while(0)
+#define SDA_H()             do {GPIO_PinWrite(i2c.instace, i2c.sda_pin, 1);}while(0)
+#define SDA_L()             do {GPIO_PinWrite(i2c.instace, i2c.sda_pin, 0);}while(0)
+#define SCL_H()             do {GPIO_PinWrite(i2c.instace, i2c.scl_pin, 1);}while(0)
+#define SCL_L()             do {GPIO_PinWrite(i2c.instace, i2c.scl_pin, 0);}while(0)
 #define I2C_DELAY()         DelayUs(1)
 
 typedef struct
@@ -35,19 +36,19 @@ static i2c_gpio i2c;
 uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     
     /* open drain and pull up */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_count; i++)
     {
-        GPIO_QuickInit(pq->io_instance, pq->io_base + i, kGPIO_Mode_OPP);
-        GPIO_QuickInit(pq->io_instance, pq->io_base + i, kGPIO_Mode_OPP);
-        GPIO_WriteBit(pq->io_instance, pq->io_base + i, 1);
-        PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullUp);
+        GPIO_Init(pq->io, pq->pin_start + i, kGPIO_Mode_OPP);
+        GPIO_Init(pq->io, pq->pin_start + i, kGPIO_Mode_OPP);
+        GPIO_PinWrite(pq->io, pq->pin_start + i, 1);
+        SetPinPull(pq->io, pq->pin_start + i, 1);
     }
 
     /* i2c_gpio struct setup */
-    i2c.instace = pq->io_instance;
+    i2c.instace = pq->io;
     
     switch(MAP)
     {
@@ -81,7 +82,7 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
         default:
             break;
     }
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
@@ -91,7 +92,7 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 
 static inline uint8_t SDA_IN(void)
 {
-    return GPIO_ReadBit(i2c.instace, i2c.sda_pin);
+    return GPIO_PinRead(i2c.instace, i2c.sda_pin);
 }
 
 static bool I2C_Start(void)
@@ -580,11 +581,11 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
     I2C_InitStruct1.instance = pq->ip_instance;
     
     /* init pinmux and  open drain and pull up */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_count; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type)pq->mux);
-        PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullUp); 
-        PORT_PinOpenDrainConfig(pq->io_instance, pq->io_base + i, ENABLE);
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type)pq->mux);
+        PORT_PinPullConfig(pq->io, pq->pin_start + i, kPullUp); 
+        PORT_PinOpenDrainConfig(pq->io, pq->pin_start + i, ENABLE);
     }
     
     /* init moudle */
@@ -1247,7 +1248,7 @@ void I2C_Scan(uint32_t MAP)
         ret = I2C_Probe(instance , i);
         if(!ret)
         {
-            LIB_TRACE("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
+            printf("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
         }
     }
 }

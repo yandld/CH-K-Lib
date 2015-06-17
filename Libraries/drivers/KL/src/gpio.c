@@ -2,7 +2,7 @@
 #include "gpio.h"
 
 /* gloabl vars */
-static GPIO_Type * const GPIO_IPTbl[] = GPIO_BASES;
+static GPIO_Type * const GPIO_IPTbl[] = GPpin_startS;
 static PORT_Type * const PORT_IPTbl[] = PORT_BASES;
 
 static const Reg_t CLKTbl[] =

@@ -1,5 +1,6 @@
 #include <string.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "common.h"
@@ -85,10 +86,8 @@ int sensor_init(void)
 
 static void ShowInfo(void)
 {
-    uint32_t clock;
     printf("VERSION%d.%d\r\n", VERSION_MAJOR, VERSION_MINOR);
-    CLOCK_GetClockFrequency(kCoreClock, &clock);
-    printf("CoreClock:%dHz\r\n", clock);
+    printf("CoreClock:%dHz\r\n", GetClock(kCoreClock));
 }
 
 
@@ -124,15 +123,14 @@ int main(void)
     uint32_t ret;
     uint32_t uart_instance;
     float pressure, dummy, temperature;
-    
-    DelayInit();
-    GPIO_QuickInit(HW_GPIOC, 3, kGPIO_Mode_OPP);
 
-    uart_instance = UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);
-    UART_CallbackRxInstall(uart_instance, UART_ISR);
-    UART_ITDMAConfig(uart_instance, kUART_IT_Rx, true);
-    
-    
+    DelayInit();
+    GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
+
+    UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);
+    UART_CallbackRxInstall(HW_UART0, UART_ISR);
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
+
     ShowInfo();
     veep_init();
     
@@ -146,7 +144,7 @@ int main(void)
     PIT_QuickInit(HW_PIT_CH1, 1000*1000);
 
     static uint32_t time, load_val, fac_us;
-    CLOCK_GetClockFrequency(kBusClock, &fac_us);
+    fac_us = GetClock(kBusClock);
     fac_us /= 1000000;
    
     dcal_init(&dcal);
@@ -218,7 +216,7 @@ int main(void)
                 pressure = dummy;
             }
             
-            GPIO_ToggleBit(HW_GPIOC, 3);
+            GPIO_PinToggle(HW_GPIOC, 3);
             
             FLAG_TIMER = false;
         }

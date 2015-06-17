@@ -43,7 +43,7 @@ void PIT_Init(PIT_InitTypeDef* PIT_InitStruct)
 {
     SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;
     /* get clock */
-    CLOCK_GetClockFrequency(kBusClock, &fac_us);
+    fac_us = GetClock(kBusClock);
     fac_us /= 1000000;
     PIT->CHANNEL[PIT_InitStruct->chl].LDVAL = fac_us * PIT_InitStruct->timeInUs;
     PIT->CHANNEL[PIT_InitStruct->chl].TCTRL |= (PIT_TCTRL_TEN_MASK);

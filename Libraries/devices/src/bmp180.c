@@ -23,6 +23,14 @@
 #define BMP180_P2_MEASURE               0xB4 /* pressure measurement (OSS=2, 13.5ms) */
 #define BMP180_P3_MEASURE               0xF4 /* pressure measurement (OSS=3, 25.5ms) */
 
+#define BMP180_DEBUG		1
+#if ( BMP180_DEBUG == 1 )
+#include <stdio.h>
+#define BMP180_TRACE	printf
+#else
+#define BMP180_TRACE(...)
+#endif
+
 
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
@@ -107,18 +115,18 @@ static int dump_calibration_data(void)
     cal.MB = SWAP16(cal.MB);
     cal.MC = SWAP16(cal.MC);
     cal.MD = SWAP16(cal.MD);
-    LIB_TRACE("AC1:%d\r\n", cal.AC1);
-    LIB_TRACE("AC2:%d\r\n", cal.AC2);
-    LIB_TRACE("AC3:%d\r\n", cal.AC3);
-    LIB_TRACE("AC4:%d\r\n", cal.AC4); 
-    LIB_TRACE("AC5:%d\r\n", cal.AC5);
-    LIB_TRACE("B5:%d\r\n", cal.AC6);
-    LIB_TRACE("B1:%d\r\n", cal.B1);
-    LIB_TRACE("B2:%d\r\n", cal.B2);
-    LIB_TRACE("B5:%d\r\n", cal.B5);
-    LIB_TRACE("MB:%d\r\n", cal.MB);
-    LIB_TRACE("MC:%d\r\n", cal.MC);
-    LIB_TRACE("MD:%d\r\n", cal.MD);
+    BMP180_TRACE("AC1:%d\r\n", cal.AC1);
+    BMP180_TRACE("AC2:%d\r\n", cal.AC2);
+    BMP180_TRACE("AC3:%d\r\n", cal.AC3);
+    BMP180_TRACE("AC4:%d\r\n", cal.AC4); 
+    BMP180_TRACE("AC5:%d\r\n", cal.AC5);
+    BMP180_TRACE("B5:%d\r\n", cal.AC6);
+    BMP180_TRACE("B1:%d\r\n", cal.B1);
+    BMP180_TRACE("B2:%d\r\n", cal.B2);
+    BMP180_TRACE("B5:%d\r\n", cal.B5);
+    BMP180_TRACE("MB:%d\r\n", cal.MB);
+    BMP180_TRACE("MC:%d\r\n", cal.MC);
+    BMP180_TRACE("MD:%d\r\n", cal.MD);
     return 0;
 }
 
@@ -146,7 +154,7 @@ int bmp180_init(uint32_t instance)
             if(id == 0x55)
             {
                 bmp_dev.addr = bmp_addr[i];
-                LIB_TRACE("BMP180 addr:0x%X\r\n", bmp_dev.addr);
+                BMP180_TRACE("BMP180 addr:0x%X\r\n", bmp_dev.addr);
                 dump_calibration_data();
                 return 0;     
             }
@@ -248,11 +256,10 @@ static int bmp180_read_temperature(int32_t * t)
         return 2;
     }
 
-    LIB_TRACE("raw_t = %d\n\r",raw_temperature);
-    LIB_TRACE("ac6 = %d\n\r",cal.AC6);
-    LIB_TRACE("ac5 = %d\n\r",cal.AC5);
-    LIB_TRACE("ac5/32768 = %f\n\r",((float)cal.AC5)/32768);
-    LIB_TRACE("raw_t-ac6 = %d\n\r",(rt - cal.AC6));
+    BMP180_TRACE("ac6 = %d\n\r",cal.AC6);
+    BMP180_TRACE("ac5 = %d\n\r",cal.AC5);
+    BMP180_TRACE("ac5/32768 = %f\n\r",((float)cal.AC5)/32768);
+    BMP180_TRACE("raw_t-ac6 = %d\n\r",(rt - cal.AC6));
 
     
     x1 = (int32_t)((rt - cal.AC6) * (int32_t)cal.AC5) >> 15;

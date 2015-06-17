@@ -87,6 +87,40 @@ typedef struct
     uint32_t    shift;
 }Reg_t;
 
+/* BME engine */
+#define BME_AND_MASK  (1<<26)
+#define BME_OR_MASK   (1<<27)
+#define BME_XOR_MASK  (3<<26)
+#define BME_BFI_MASK(BIT,WIDTH)   (1<<28) | (BIT<<23) | ((WIDTH-1)<<19)
+#define BME_UBFX_MASK(BIT,WIDTH)  (1<<28) | (BIT<<23) | ((WIDTH-1)<<19)
+
+/* Decorated Store: Logical AND */
+#define BME_AND8(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_AND_MASK) = wdata)
+#define BME_AND16(addr, wdata) (*(volatile uint16_t*)((uint32_t)addr | BME_AND_MASK) = wdata)
+#define BME_AND32(addr, wdata) (*(volatile uint32_t*)((uint32_t)addr | BME_AND_MASK) = wdata)
+
+/* Decorated Store: Logical OR */
+#define BME_OR8(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_OR_MASK) = wdata)
+#define BME_OR16(addr, wdata) (*(volatile uint16_t*)((uint32_t)addr | BME_OR_MASK) = wdata)
+#define BME_OR32(addr, wdata) (*(volatile uint32_t*)((uint32_t)addr | BME_OR_MASK) = wdata)
+
+/* Decorated Store: Logical XOR */
+#define BME_XOR8(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_XOR_MASK) = wdata)
+#define BME_XOR16(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_XOR_MASK) = wdata)
+#define BME_XOR32(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_XOR_MASK) = wdata)
+
+/* Decorated Store: Bit Field Insert */
+#define BME_BFI8(addr, wdata, bit, width) (*(volatile uint8_t*)((uint32_t)addr | BME_BFI_MASK(bit,width)) = wdata)
+#define BME_BFI16(addr, wdata, bit, width) (*(volatile uint16_t*)((uint32_t)addr | BME_BFI_MASK(bit,width)) = wdata)
+#define BME_BFI32(addr, wdata, bit, width) (*(volatile uint32_t*)((uint32_t)addr | BME_BFI_MASK(bit,width)) = wdata)
+
+/* Decorated Load: Unsigned Bit Field Extract */
+#define BME_UBFX8(addr, bit, width) (*(volatile uint8_t*)((uint32_t)addr | BME_UBFX_MASK(bit,width)))
+#define BME_UBFX16(addr, bit, width) (*(volatile uint16_t*)((uint32_t)addr | BME_UBFX_MASK(bit,width)))
+#define BME_UBFX32(addr, bit, width) (*(volatile uint32_t*)((uint32_t)addr | BME_UBFX_MASK(bit,width)))
+
+
+
 #define CLK_EN(t, x)               (*((uint32_t*) t[x].addr) |= t[x].mask)
 #define CLK_DIS(t, x)              (*((uint32_t*) t[x].addr) &= ~t[x].mask)
 #define REG_GET(t, x)              ((*(uint32_t*) t[x].addr & t[x].mask)>>t[x].shift)

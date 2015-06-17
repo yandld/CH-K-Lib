@@ -12,9 +12,6 @@
 
 #include <stdint.h>
 
-#ifndef ARRAY_SIZE
-#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
-#endif
 
 //API funtctions
 int at24cxx_init(uint32_t instance);

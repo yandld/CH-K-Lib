@@ -12,6 +12,10 @@
 #include "at24cxx.h"
 #include "i2c.h"
 
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
+#endif
+
 /**
   ******************************************************************************
   * @supported chip    AT24C01

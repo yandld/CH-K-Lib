@@ -33,6 +33,7 @@
 #define PIN31       (0x8000000+(1<<31))
 
 
+
 typedef enum
 {
     kGPIO_Mode_IFT = 0x00,       /* Input floating  */

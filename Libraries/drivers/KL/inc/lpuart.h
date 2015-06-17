@@ -22,17 +22,17 @@
 /*!< parity  */
 typedef enum
 {
-    kUART_ParityDisabled = 0x0,
-    kUART_ParityEven     = 0x2,
-    kUART_ParityOdd      = 0x3,
-} UART_ParityMode_Type;
+    kLPUART_ParityDisabled = 0x0,
+    kLPUART_ParityEven     = 0x2,
+    kLPUART_ParityOdd      = 0x3,
+} LPUART_ParityMode_t;
 
 /*!< bit count */
 typedef enum 
 {
-    kUART_8BitsPerChar  = 0,
-    kUART_9BitsPerChar  = 1,
-} UART_BitPerChar_Type;
+    kLPUART_8BitsPerChar  = 0,
+    kLPUART_9BitsPerChar  = 1,
+} LPUART_BitPerChar_t;
 
 
 typedef void (*LPUART_CallBackTxType)(void* pram);
@@ -52,8 +52,8 @@ typedef struct
     uint32_t                srcClock;
     uint8_t                 instance;
     uint32_t                baudrate;
-    UART_ParityMode_Type    parityMode;
-    UART_BitPerChar_Type    bitPerChar;
+    LPUART_ParityMode_t     parityMode;
+    LPUART_BitPerChar_t     bitPerChar;
 }LPUART_InitTypeDef;
      
 /*!< API functions */
@@ -62,6 +62,10 @@ void LPUART_Init(LPUART_InitTypeDef * UART_InitStruct);
 void LPUART_WriteByte(uint32_t instance, char ch);
 uint8_t LPUART_ReadByte(uint32_t instance, uint8_t *ch);
 void LPUART_ITDMAConfig(uint32_t instance, LPUART_ITDMAConfig_Type config, bool status);
+//void LPUART_SendByte()
+//uint32_t LPUART_GetByte()
+//void LPUART_AdvConfig
+//void LPUART_IntConfig
 
 #ifdef __cplusplus
 }

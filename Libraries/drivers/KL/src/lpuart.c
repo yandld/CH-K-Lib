@@ -15,7 +15,7 @@
 
 LPUART_Type * const LPUART_InstanceTable[] = LPUART_BASES;
 
-static const Reg_t SIM_LPUARTClockGateTable[] =
+static const Reg_t LPUARTCLKTbl[] =
 {
 #ifdef LPUART0
     {(void*)&(SIM->SCGC5), SIM_SCGC5_LPUART0_MASK, SIM_SCGC5_LPUART0_SHIFT},
@@ -25,7 +25,7 @@ static const Reg_t SIM_LPUARTClockGateTable[] =
 #endif
 };
 
-static const IRQn_Type LPUART_IRQnTable[] = 
+static const IRQn_Type LPUART_IrqTbl[] = 
 {
     (IRQn_Type)(LPUART0_IRQn+0),
     (IRQn_Type)(LPUART1_IRQn+1),
@@ -42,8 +42,8 @@ uint32_t LPUART_QuickInit(uint32_t MAP, uint32_t baudrate)
     map_t * map = (map_t*)&(MAP);
     LPUART_InitStruct1.baudrate = baudrate;
     LPUART_InitStruct1.instance = map->ip;
-    LPUART_InitStruct1.parityMode = kUART_ParityDisabled;
-    LPUART_InitStruct1.bitPerChar = kUART_8BitsPerChar;
+    LPUART_InitStruct1.parityMode = kLPUART_ParityDisabled;
+    LPUART_InitStruct1.bitPerChar = kLPUART_8BitsPerChar;
     LPUART_InitStruct1.srcClock = 48*1000*1000;
     
     /* clock config use IRC48M */
@@ -79,7 +79,7 @@ void LPUART_Init(LPUART_InitTypeDef* UART_InitStruct)
     LPUARTx = LPUART_InstanceTable[UART_InitStruct->instance];
     
     /* enable clock gate */
-    *((uint32_t*) SIM_LPUARTClockGateTable[UART_InitStruct->instance].addr) |= SIM_LPUARTClockGateTable[UART_InitStruct->instance].mask;
+    *((uint32_t*) LPUARTCLKTbl[UART_InitStruct->instance].addr) |= LPUARTCLKTbl[UART_InitStruct->instance].mask;
 
     /* disable Tx Rx first */
     LPUARTx->CTRL &= ~(LPUART_CTRL_RE_MASK | LPUART_CTRL_TE_MASK);
@@ -126,14 +126,14 @@ void LPUART_Init(LPUART_InitTypeDef* UART_InitStruct)
     /* parity */
     switch(UART_InitStruct->parityMode)
     {
-        case kUART_ParityDisabled:
+        case kLPUART_ParityDisabled:
             LPUARTx->CTRL &= ~LPUART_CTRL_PE_MASK;
             break;
-        case kUART_ParityEven:
+        case kLPUART_ParityEven:
             LPUARTx->CTRL |= LPUART_CTRL_PE_MASK;
             LPUARTx->CTRL &= ~LPUART_CTRL_PT_MASK;
             break;
-        case kUART_ParityOdd:
+        case kLPUART_ParityOdd:
             LPUARTx->CTRL |= LPUART_CTRL_PE_MASK;
             LPUARTx->CTRL |= LPUART_CTRL_PT_MASK;
             break;
@@ -195,7 +195,7 @@ void LPUART_ITDMAConfig(uint32_t instance, LPUART_ITDMAConfig_Type config, bool 
 {
     LPUART_Type *LPUARTx;
     /* enable clock gate */
-    *((uint32_t*) SIM_LPUARTClockGateTable[instance].addr) |= SIM_LPUARTClockGateTable[instance].mask;
+    *((uint32_t*) LPUARTCLKTbl[instance].addr) |= LPUARTCLKTbl[instance].mask;
 
     LPUARTx = LPUART_InstanceTable[instance];
     
@@ -205,13 +205,13 @@ void LPUART_ITDMAConfig(uint32_t instance, LPUART_ITDMAConfig_Type config, bool 
             (status)?
             (LPUARTx->CTRL |= LPUART_CTRL_TIE_MASK):
             (LPUARTx->CTRL &= ~LPUART_CTRL_TIE_MASK);
-            NVIC_EnableIRQ(LPUART_IRQnTable[instance]);
+            NVIC_EnableIRQ(LPUART_IrqTbl[instance]);
             break; 
         case kUART_IT_Rx:
             (status)?
             (LPUARTx->CTRL |= LPUART_CTRL_RIE_MASK):
             (LPUARTx->CTRL &= ~LPUART_CTRL_RIE_MASK);
-            NVIC_EnableIRQ(LPUART_IRQnTable[instance]);
+            NVIC_EnableIRQ(LPUART_IrqTbl[instance]);
             break;
         case kUART_DMA_Tx:
             (status)?

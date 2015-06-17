@@ -4,7 +4,6 @@
 /* gloabl vars */
 static GPIO_Type * const GPIOCLKTbl[] = GPIO_BASES;
 static PORT_Type * const PORT_IPTbl[] = PORT_BASES;
-static GPIO_CallBackType GPIO_CallBackTable[ARRAY_SIZE(GPIOCLKTbl)] = {NULL};
 
 static const Reg_t CLKTbl[] =
 {
@@ -15,6 +14,15 @@ static const Reg_t CLKTbl[] =
     {(void*)&(SIM->SCGC5), SIM_SCGC5_PORTE_MASK, SIM_SCGC5_PORTE_SHIFT},
 };
 
+#if defined(MKL27Z4)
+static const IRQn_Type GPIO_IrqTbl[] = 
+{
+    (IRQn_Type)PORTA_IRQn,
+    (IRQn_Type)0,
+    (IRQn_Type)PORTCD_IRQn,
+    (IRQn_Type)PORTCD_IRQn,
+};
+#else
 static const IRQn_Type GPIO_IrqTbl[] = 
 {
     (IRQn_Type)(PORTA_IRQn+0),
@@ -23,7 +31,7 @@ static const IRQn_Type GPIO_IrqTbl[] =
     (IRQn_Type)(PORTA_IRQn+3),
     (IRQn_Type)(PORTA_IRQn+4),
 };
-
+#endif
 
 
 //! @defgroup CHKinetis
@@ -228,7 +236,7 @@ void GPIO_PinToggle(uint32_t instance, uint8_t pin)
  *         @arg HW_GPIOE :芯片的PORTE端口
  * @retval 端口的32位数据
  */
-uint32_t GPIO_GetData(uint32_t instance)
+uint32_t GPIO_GetPort(uint32_t instance)
 {
     return (GPIOCLKTbl[instance]->PDIR);
 }
@@ -247,47 +255,27 @@ uint32_t GPIO_GetData(uint32_t instance)
  * @param  data  :32位数据
  * @retval None
  */
-void GPIO_SendData(uint32_t instance, uint32_t data)
+void GPIO_SendPort(uint32_t instance, uint32_t data)
 {
     GPIOCLKTbl[instance]->PDOR = data;
 }
 
 /**
  * @brief  设置GPIO引脚中断类型或者DMA功能
- * @code
- *      //设置PORTB端口的10引脚为下降沿触发中断
- *      GPIO_ITDMAConfig(HW_GPIOB, 10, kGPIO_IT_FallingEdge, true); 
- * @endcode
- * @param  instance: GPIO模块号
- *         @arg HW_GPIOA :芯片的PORTA端口
- *         @arg HW_GPIOB :芯片的PORTB端口
- *         @arg HW_GPIOC :芯片的PORTC端口
- *         @arg HW_GPIOD :芯片的PORTD端口
- *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
- * @param config: 配置模式
- *         @arg kGPIO_DMA_RisingEdge DMA上升沿触发
- *         @arg kGPIO_DMA_FallingEdge DMA下降沿触发
- *         @arg kGPIO_DMA_RisingFallingEdge DMA上升和下降沿都触发
- *         @arg kGPIO_IT_Low 低电平触发中断
- *         @arg kGPIO_IT_RisingEdge 上升沿触发中断
- *         @arg kGPIO_IT_FallingEdge 下降沿触发中断
- *         @arg kGPIO_IT_RisingFallingEdge 上升和下降沿都触发中断
- *         @arg kGPIO_IT_High 高电平触发中断
  * @retval None
  */
-
-void GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config)
+int GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config)
 {
     CLK_EN(CLKTbl, instance);
     if(!config)
     {
+        if(GPIO_IrqTbl[instance] == 0)
+        {
+            return 1;
+        }
         NVIC_DisableIRQ(GPIO_IrqTbl[instance]);
-        return;
     }
-    
     PORT_IPTbl[instance]->PCR[pin] &= ~PORT_PCR_IRQC_MASK;
-    
     switch(config)
     {
         case kGPIO_Int_RE:
@@ -300,92 +288,55 @@ void GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config)
             PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(3);
             break;
     }
+    return 0;
 }
 
-void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status)
-{
-    CLK_EN(CLKTbl, instance);
-//    PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
-    
-    if(!status)
-    {
-        NVIC_DisableIRQ(GPIO_IrqTbl[instance]);
-        return;
-    }
-    
-    switch(config)
-    {
-        case kGPIO_DMA_RisingEdge:
-           // PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(1);
-            break;
-        case kGPIO_DMA_FallingEdge:
-          //  PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(2);
-            break;
-        case kGPIO_DMA_RisingFallingEdge:
-          //  PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(3);
-            break;
-        case kGPIO_IT_Low:
-          //  PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(8);
-            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-            break;
-        case kGPIO_IT_RisingEdge:
-         //   PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(9);
-            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-            break;
-        case kGPIO_IT_FallingEdge:
-        //    PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(10);
-            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-            break;
-        case kGPIO_IT_RisingFallingEdge:
-         //   PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(11);
-            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-            break;
-        case kGPIO_IT_High:
-        //    PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(12);
-            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-            break;
-        default:
-            break;
-    }
-}
-/**
- * @brief  注册中断回调函数
- * @param  instance: GPIO模块中断入口号
- *         @arg HW_GPIOA :芯片的PORTA端口中断入口
- *         @arg HW_GPIOB :芯片的PORTB端口中断入口
- *         @arg HW_GPIOC :芯片的PORTC端口中断入口
- *         @arg HW_GPIOD :芯片的PORTD端口中断入口
- *         @arg HW_GPIOE :芯片的PORTE端口中断入口
- * @param AppCBFun: 回调函数指针入口
- * @retval None
- * @note 对于此函数的具体应用请查阅应用实例
- */
-void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun)
-{
-    CLK_EN(CLKTbl, instance);
-    if(AppCBFun != NULL)
-    {
-        GPIO_CallBackTable[instance] = AppCBFun;
-    }
-}
-
-//! @}
-
-
-void PORTA_IRQHandler(void)
-{
-    uint32_t ISFR;
-    /* safe copy */
-   // ISFR = PORT_InstanceTable[HW_GPIOA]->ISFR;
-    /* clear IT pending bit */
-  //  PORT_Inst/ceTable[HW_GPIOA]->ISFR = 0xFFFFFFFF;
-    if(GPIO_CallBackTable[HW_GPIOA])
-    {
-        GPIO_CallBackTable[HW_GPIOA](ISFR);
-    }	
-}
-
-
+//void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status)
+//{
+//    CLK_EN(CLKTbl, instance);
+////    PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
+//    
+//    if(!status)
+//    {
+//        NVIC_DisableIRQ(GPIO_IrqTbl[instance]);
+//        return;
+//    }
+//    
+//    switch(config)
+//    {
+//        case kGPIO_DMA_RisingEdge:
+//           // PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(1);
+//            break;
+//        case kGPIO_DMA_FallingEdge:
+//          //  PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(2);
+//            break;
+//        case kGPIO_DMA_RisingFallingEdge:
+//          //  PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(3);
+//            break;
+//        case kGPIO_IT_Low:
+//          //  PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(8);
+//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
+//            break;
+//        case kGPIO_IT_RisingEdge:
+//         //   PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(9);
+//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
+//            break;
+//        case kGPIO_IT_FallingEdge:
+//        //    PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(10);
+//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
+//            break;
+//        case kGPIO_IT_RisingFallingEdge:
+//         //   PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(11);
+//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
+//            break;
+//        case kGPIO_IT_High:
+//        //    PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(12);
+//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
+//            break;
+//        default:
+//            break;
+//    }
+//}
 
 
 //! @}

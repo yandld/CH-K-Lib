@@ -41,18 +41,6 @@ typedef enum
     kGPIO_Mode_OPP = 0x04,       /* Push pull output */
 }GPIO_Mode_t;
 
-/*!< Interrupts and DMA */
-typedef enum
-{
-    kGPIO_DMA_RisingEdge,	      //上升沿触发DMA
-    kGPIO_DMA_FallingEdge,        //下降沿触发DMA
-    kGPIO_DMA_RisingFallingEdge,  //上升沿和下降沿触发DMA
-    kGPIO_IT_Low,                 //低电平出发中断
-    kGPIO_IT_RisingEdge,          //上升沿触发中断
-    kGPIO_IT_FallingEdge,         //下降沿触发中断
-    kGPIO_IT_RisingFallingEdge,   //上升沿和下降沿触发中断
-    kGPIO_IT_High,                //高电平触发中断
-}GPIO_ITDMAConfig_Type;
 
 typedef enum
 {
@@ -62,20 +50,15 @@ typedef enum
 }GPIO_Int_t;
 
 
-/* 端口中断回调函数定义 */
-typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
-
-
 //!< API functions
 uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode);
 void GPIO_SetPinDir(uint32_t instance, uint32_t pin, uint32_t dir);
-void GPIO_SendData(uint32_t instance, uint32_t data);
-uint32_t GPIO_GetData(uint32_t instance);
-void GPIO_PinToggle(uint32_t instance, uint8_t pin);
-void GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config);
+int GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config);
 void GPIO_PinWrite(uint32_t instance, uint32_t pin, uint8_t data);
+void GPIO_PinToggle(uint32_t instance, uint8_t pin);
 uint32_t GPIO_PinRead(uint32_t instance, uint32_t pin);
-
+void GPIO_SendPort(uint32_t instance, uint32_t data);
+uint32_t GPIO_GetPort(uint32_t instance);
 
 #ifdef __cplusplus
 }

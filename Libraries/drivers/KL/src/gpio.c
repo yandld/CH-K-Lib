@@ -2,7 +2,7 @@
 #include "gpio.h"
 
 /* gloabl vars */
-static GPIO_Type * const GPIOCLKTbl[] = GPIO_BASES;
+static GPIO_Type * const GPIO_IPTbl[] = GPIO_BASES;
 static PORT_Type * const PORT_IPTbl[] = PORT_BASES;
 
 static const Reg_t CLKTbl[] =
@@ -65,8 +65,8 @@ static const IRQn_Type GPIO_IrqTbl[] =
 void GPIO_SetPinDir(uint32_t instance, uint32_t pin, uint32_t dir)
 {
     CLK_EN(CLKTbl, instance);
-    (dir == 1) ? (GPIOCLKTbl[instance]->PDDR |= (1 << pin)):
-    (GPIOCLKTbl[instance]->PDDR &= ~(1 << pin));
+    (dir == 1) ? (GPIO_IPTbl[instance]->PDDR |= (1 << pin)):
+    (GPIO_IPTbl[instance]->PDDR &= ~(1 << pin));
 }
 
  /**
@@ -175,8 +175,8 @@ uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode)
  */
 void GPIO_PinWrite(uint32_t instance, uint32_t pin, uint8_t data)
 {
-    (data) ? (GPIOCLKTbl[instance]->PSOR |= (1 << pin)):
-    (GPIOCLKTbl[instance]->PCOR |= (1 << pin));
+    (data) ? (GPIO_IPTbl[instance]->PSOR |= (1 << pin)):
+    (GPIO_IPTbl[instance]->PCOR |= (1 << pin));
 }
  /**
  * @brief  读取一个引脚上的电平状态
@@ -198,7 +198,7 @@ void GPIO_PinWrite(uint32_t instance, uint32_t pin, uint8_t data)
  */
 uint32_t GPIO_PinRead(uint32_t instance, uint32_t pin)
 {
-    return ((GPIOCLKTbl[instance]->PDIR >> pin) & 0x01);
+    return ((GPIO_IPTbl[instance]->PDIR >> pin) & 0x01);
 }
 
  /**
@@ -218,7 +218,7 @@ uint32_t GPIO_PinRead(uint32_t instance, uint32_t pin)
  */
 void GPIO_PinToggle(uint32_t instance, uint8_t pin)
 {
-    GPIOCLKTbl[instance]->PTOR |= (1 << pin);
+    GPIO_IPTbl[instance]->PTOR |= (1 << pin);
 }
 
 /**
@@ -238,7 +238,7 @@ void GPIO_PinToggle(uint32_t instance, uint8_t pin)
  */
 uint32_t GPIO_GetPort(uint32_t instance)
 {
-    return (GPIOCLKTbl[instance]->PDIR);
+    return (GPIO_IPTbl[instance]->PDIR);
 }
 /**
  * @brief  向一个端口写入32位数据
@@ -257,7 +257,7 @@ uint32_t GPIO_GetPort(uint32_t instance)
  */
 void GPIO_SendPort(uint32_t instance, uint32_t data)
 {
-    GPIOCLKTbl[instance]->PDOR = data;
+    GPIO_IPTbl[instance]->PDOR = data;
 }
 
 /**

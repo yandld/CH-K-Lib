@@ -13,7 +13,7 @@
 #endif
 #endif
 
-LPUART_Type * const LPUART_InstanceTable[] = LPUART_BASES;
+LPUART_Type * const LPUART_IPTbl[] = LPUART_BASES;
 
 static const Reg_t LPUARTCLKTbl[] =
 {
@@ -76,7 +76,7 @@ void LPUART_Init(LPUART_InitTypeDef* UART_InitStruct)
     static bool is_fitst_init = true;
     LPUART_Type *LPUARTx;
     
-    LPUARTx = LPUART_InstanceTable[UART_InitStruct->instance];
+    LPUARTx = LPUART_IPTbl[UART_InitStruct->instance];
     
     /* enable clock gate */
     *((uint32_t*) LPUARTCLKTbl[UART_InitStruct->instance].addr) |= LPUARTCLKTbl[UART_InitStruct->instance].mask;
@@ -155,15 +155,15 @@ void LPUART_Init(LPUART_InitTypeDef* UART_InitStruct)
 
 void LPUART_WriteByte(uint32_t instance, char ch)
 {
-    while(!(LPUART_InstanceTable[instance]->STAT & LPUART_STAT_TDRE_MASK));
-    LPUART_InstanceTable[instance]->DATA = (ch & 0xFF);
+    while(!(LPUART_IPTbl[instance]->STAT & LPUART_STAT_TDRE_MASK));
+    LPUART_IPTbl[instance]->DATA = (ch & 0xFF);
 }
 
 uint8_t LPUART_ReadByte(uint32_t instance, uint8_t *ch)
 {    
-    if(LPUART_InstanceTable[instance]->STAT & LPUART_STAT_RDRF_MASK)
+    if(LPUART_IPTbl[instance]->STAT & LPUART_STAT_RDRF_MASK)
     {
-        *ch = (uint8_t)(LPUART_InstanceTable[instance]->DATA);	
+        *ch = (uint8_t)(LPUART_IPTbl[instance]->DATA);	
         return 0; 		  
     }
     return 1;
@@ -197,7 +197,7 @@ void LPUART_ITDMAConfig(uint32_t instance, LPUART_ITDMAConfig_Type config, bool 
     /* enable clock gate */
     *((uint32_t*) LPUARTCLKTbl[instance].addr) |= LPUARTCLKTbl[instance].mask;
 
-    LPUARTx = LPUART_InstanceTable[instance];
+    LPUARTx = LPUART_IPTbl[instance];
     
     switch(config)
     {

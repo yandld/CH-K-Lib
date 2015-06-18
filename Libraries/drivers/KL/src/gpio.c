@@ -2,6 +2,10 @@
 #include "gpio.h"
 
 /* gloabl vars */
+#ifndef GPIO_BASES
+#define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
+#endif
+
 static GPIO_Type * const GPIO_IPTbl[] = GPIO_BASES;
 static PORT_Type * const PORT_IPTbl[] = PORT_BASES;
 

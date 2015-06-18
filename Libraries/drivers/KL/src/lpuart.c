@@ -38,13 +38,13 @@ static uint8_t UART_DebugInstance;
 uint32_t LPUART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
-    LPUART_InitTypeDef LPUART_InitStruct1;
+    LPUART_InitTypeDef Init;
     map_t * map = (map_t*)&(MAP);
-    LPUART_InitStruct1.baudrate = baudrate;
-    LPUART_InitStruct1.instance = map->ip;
-    LPUART_InitStruct1.parityMode = kLPUART_ParityDisabled;
-    LPUART_InitStruct1.bitPerChar = kLPUART_8BitsPerChar;
-    LPUART_InitStruct1.srcClock = 48*1000*1000;
+    Init.baudrate = baudrate;
+    Init.instance = map->ip;
+    Init.parityMode = kLPUART_ParityDisabled;
+    Init.bitPerChar = kLPUART_8BitsPerChar;
+    Init.srcClock = 48*1000*1000;
     
     /* clock config use IRC48M */
     switch(map->ip)
@@ -64,7 +64,7 @@ uint32_t LPUART_QuickInit(uint32_t MAP, uint32_t baudrate)
         SetPinMux(map->io, map->pin_start + i, map->mux); 
     }
     
-    LPUART_Init(&LPUART_InitStruct1);
+    LPUART_Init(&Init);
     
     return map->ip;
 }

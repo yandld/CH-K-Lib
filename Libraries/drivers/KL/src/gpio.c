@@ -2,7 +2,7 @@
 #include "gpio.h"
 
 /* gloabl vars */
-static GPIO_Type * const GPIO_IPTbl[] = GPpin_startS;
+static GPIO_Type * const GPIO_IPTbl[] = GPIO_BASES;
 static PORT_Type * const PORT_IPTbl[] = PORT_BASES;
 
 static const Reg_t CLKTbl[] =
@@ -236,7 +236,7 @@ void GPIO_PinToggle(uint32_t instance, uint8_t pin)
  *         @arg HW_GPIOE :芯片的PORTE端口
  * @retval 端口的32位数据
  */
-uint32_t GPIO_GetPort(uint32_t instance)
+uint32_t GPIO_ReadPort(uint32_t instance)
 {
     return (GPIO_IPTbl[instance]->PDIR);
 }
@@ -255,7 +255,7 @@ uint32_t GPIO_GetPort(uint32_t instance)
  * @param  data  :32位数据
  * @retval None
  */
-void GPIO_SendPort(uint32_t instance, uint32_t data)
+void GPIO_WritePort(uint32_t instance, uint32_t data)
 {
     GPIO_IPTbl[instance]->PDOR = data;
 }

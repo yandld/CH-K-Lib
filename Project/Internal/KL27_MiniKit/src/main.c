@@ -51,7 +51,7 @@ int main(void)
 {
     int i, ret;
     
-    GPIO_Init(HW_GPIOA, PIN1|PIN2|PIN3|PIN4|PIN5|PIN31, kGPIO_Mode_OPP);
+    GPIO_Init(HW_GPIOA, PIN1|PIN2|PIN3|PIN4|PIN31, kGPIO_Mode_OPP);
     
     /* UART */
     LPUART_QuickInit(LPUART0_RX_D06_TX_D07, 115200);

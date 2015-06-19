@@ -137,23 +137,23 @@ static struct sd_card_handler sdh;
 
 uint32_t SD_StatusWait (uint32_t mask);
 
-static void SetADMA2Table(uint32_t dir, uint32_t *buffer, uint32_t length)
-{
-    static uint32_t RAdmaTableAddr[sizeof(adma2_t)];
-    static uint32_t WAdmaTableAddr[sizeof(adma2_t)];
-    if(dir == 0)
-    {
-        ((adma2_t *)RAdmaTableAddr)->address = buffer;
-        ((adma2_t *)RAdmaTableAddr)->attribute = ((SDHC_HAL_ADMA2_DESC_LEN_MASK & length) << SDHC_HAL_ADMA2_DESC_LEN_SHIFT) | SDHC_HAL_ADMA2_DESC_TYPE_TRAN | SDHC_HAL_ADMA2_DESC_END_MASK; 
-        SDHC->ADSADDR = (uint32_t)RAdmaTableAddr;
-    }
-    else
-    {
-        ((adma2_t *)WAdmaTableAddr)->address = buffer;
-        ((adma2_t *)WAdmaTableAddr)->attribute = ((SDHC_HAL_ADMA2_DESC_LEN_MASK & length) << SDHC_HAL_ADMA2_DESC_LEN_SHIFT) | SDHC_HAL_ADMA2_DESC_TYPE_TRAN | SDHC_HAL_ADMA2_DESC_END_MASK; 
-        SDHC->ADSADDR = (uint32_t)WAdmaTableAddr; 
-    }
-}
+//static void SetADMA2Table(uint32_t dir, uint32_t *buffer, uint32_t length)
+//{
+//    static uint32_t RAdmaTableAddr[sizeof(adma2_t)];
+//    static uint32_t WAdmaTableAddr[sizeof(adma2_t)];
+//    if(dir == 0)
+//    {
+//        ((adma2_t *)RAdmaTableAddr)->address = buffer;
+//        ((adma2_t *)RAdmaTableAddr)->attribute = ((SDHC_HAL_ADMA2_DESC_LEN_MASK & length) << SDHC_HAL_ADMA2_DESC_LEN_SHIFT) | SDHC_HAL_ADMA2_DESC_TYPE_TRAN | SDHC_HAL_ADMA2_DESC_END_MASK; 
+//        SDHC->ADSADDR = (uint32_t)RAdmaTableAddr;
+//    }
+//    else
+//    {
+//        ((adma2_t *)WAdmaTableAddr)->address = buffer;
+//        ((adma2_t *)WAdmaTableAddr)->attribute = ((SDHC_HAL_ADMA2_DESC_LEN_MASK & length) << SDHC_HAL_ADMA2_DESC_LEN_SHIFT) | SDHC_HAL_ADMA2_DESC_TYPE_TRAN | SDHC_HAL_ADMA2_DESC_END_MASK; 
+//        SDHC->ADSADDR = (uint32_t)WAdmaTableAddr; 
+//    }
+//}
 
 static void SDHC_WaitCommandLineIdle(void)
 {

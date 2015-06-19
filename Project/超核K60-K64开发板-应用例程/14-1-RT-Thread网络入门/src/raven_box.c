@@ -19,7 +19,6 @@ static long _kill(char *name)
 {
     struct rt_thread *thread;
     struct rt_list_node *node;
-    rt_uint8_t *ptr;
     struct rt_list_node *list = &rt_object_container[RT_Object_Class_Thread].object_list;
     for (node = list->next; node != list; node = node->next)
     {

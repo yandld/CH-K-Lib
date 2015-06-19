@@ -219,7 +219,7 @@ void USB_EP0_OUT_Handler(SETUP_PACKET *packet)
 						USB_DEBUG_LOG(USB_DEBUG_EP0, ("standrd request: get status\r\n"));
 						break;
                     default:
-						USB_DEBUG_LOG(USB_DEBUG_EP0, ("standrd request: unknown\r\n"));
+						USB_DEBUG_LOG(USB_DEBUG_EP0, ("standrd request: unknown %d\r\n", packet->bRequest));
 						break;
 				}
 				break;
@@ -259,10 +259,10 @@ void USB_EP0_OUT_Handler(SETUP_PACKET *packet)
 						USB_DEBUG_LOG(USB_DEBUG_EP0, ("set standrd request: set desc\r\n"));
 						break;
 					case SET_INTERFACE:
-						USB_DEBUG_LOG(USB_DEBUG_EP0, ("set standrd request: set interface\r\n"));
+						USB_DEBUG_LOG(USB_DEBUG_MIN, ("set standrd request: set interface\r\n"));
 						break;
 					default:
-                        USB_DEBUG_LOG(USB_DEBUG_EP0, ("set standrd request: unknown\r\n"));
+                        USB_DEBUG_LOG(USB_DEBUG_EP0, ("set standrd request: unknown! %d\r\n", packet->bRequest));
 					break;
 				}
 				break;
@@ -419,6 +419,8 @@ static  MessageType_t m_Msg;
 
 void USB_EPCallback(uint8_t ep, uint8_t dir)
 {
+     printf("EP%d DIR%d\r\n", ep, dir);
+
     if((ep == 2) && (dir == kUSB_IN))
     {
         m_Msg.m_Command = USB_DEVICE_CLASS;
@@ -474,9 +476,12 @@ void USB_TokenDone(void)
 			USB_EP0_OUT_Handler(&device.setup_pkt);
 		}
 	}
-    
-    /* other ep callback */
-    USB_EPCallback(num, dir);
+    else
+    {
+        /* other ep callback */
+        USB_EPCallback(num, dir);
+    }
+
 }
 
 
@@ -486,21 +491,18 @@ void USB0_IRQHandler(void)
 
     istr  = USB0->ISTAT;
     stat  = USB0->STAT;
-   // USB0->ISTAT = istr;
     istr &= USB0->INTEN;
     
     if(istr & USB_ISTAT_USBRST_MASK)
     {
         USB_BusResetHandler();
     }
-
-	if(istr & USB_ISTAT_SOFTOK_MASK) 
+	else if(istr & USB_ISTAT_SOFTOK_MASK) 
 	{
         USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb sof\r\n"));
 		USB0->ISTAT |= USB_ISTAT_SOFTOK_MASK;   
 	}
-	
-	if(istr & USB_ISTAT_STALL_MASK)
+	else if(istr & USB_ISTAT_STALL_MASK)
 	{
 		USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb stall\r\n"));
         
@@ -511,20 +513,17 @@ void USB0_IRQHandler(void)
     
         USB0->ISTAT |= USB_ISTAT_STALL_MASK;
 	}
-
-	if(istr & USB_ISTAT_TOKDNE_MASK) 
+	else if(istr & USB_ISTAT_TOKDNE_MASK) 
 	{
 		USB_TokenDone();
         USB0->ISTAT |= USB_ISTAT_TOKDNE_MASK;
 	}
-
-	if(istr & USB_ISTAT_SLEEP_MASK) 
+	else if(istr & USB_ISTAT_SLEEP_MASK) 
 	{
 		USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb sleep\r\n"));
         USB0->ISTAT |= USB_ISTAT_SLEEP_MASK;      
 	}
-
-	if(istr & USB_ISTAT_ERROR_MASK)
+	else if(istr & USB_ISTAT_ERROR_MASK)
 	{
         uint8_t err = USB0->ERRSTAT;
         USB_DEBUG_LOG(USB_DEBUG_MIN, ("usb error:%0x%X\r\n", err));
@@ -532,5 +531,9 @@ void USB0_IRQHandler(void)
         USB0->ISTAT |= USB_ISTAT_ERROR_MASK;
         USB0->ERRSTAT = 0xFF;
 	}
+    else
+    {
+        USB_DEBUG_LOG(USB_DEBUG_MIN, ("Unknown USB interrupt\r\n"));
+    }
 }
 

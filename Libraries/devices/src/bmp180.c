@@ -23,7 +23,7 @@
 #define BMP180_P2_MEASURE               0xB4 /* pressure measurement (OSS=2, 13.5ms) */
 #define BMP180_P3_MEASURE               0xF4 /* pressure measurement (OSS=3, 25.5ms) */
 
-#define BMP180_DEBUG		1
+#define BMP180_DEBUG		0
 #if ( BMP180_DEBUG == 1 )
 #include <stdio.h>
 #define BMP180_TRACE	printf

@@ -12,6 +12,14 @@
 #include "gpio.h"
 #include "common.h"
 
+#define LIB_DEBUG		0
+#if ( LIB_DEBUG == 1 )
+#include <stdio.h>
+#define LIB_TRACE	printf
+#else
+#define LIB_TRACE(...)
+#endif
+
 #define I2C_GPIO_SIM  1
 
 #if I2C_GPIO_SIM
@@ -1248,7 +1256,7 @@ void I2C_Scan(uint32_t MAP)
         ret = I2C_Probe(instance , i);
         if(!ret)
         {
-            printf("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
+            LIB_TRACE("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
         }
     }
 }

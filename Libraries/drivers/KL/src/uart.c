@@ -53,136 +53,6 @@ static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] 
 static uint8_t UART_DebugInstance;
 
 
-#include <stdio.h>
-#ifdef __CC_ARM // MDK Support
-struct __FILE 
-{ 
-	int handle;
-	/* Whatever you require here. If the only file you are using is */ 
-	/* standard output using printf() for debugging, no file handling */ 
-	/* is required. */ 
-}; 
-/* FILE is typedef¡¯ d in stdio.h. */ 
-FILE __stdout;
-FILE __stdin;
-int fputc(int ch,FILE *f)
-{
-	UART_WriteByte(UART_DebugInstance, ch);
-	return ch;
-}
-
-int fgetc(FILE *f)
-{
-    uint16_t ch;
-    while(UART_ReadByte(UART_DebugInstance, &ch));
-    return (ch & 0xFF);
-}
-#elif __ICCARM__ /* IAR support */
-size_t __write(int handle, const unsigned char * buffer, size_t size)
-{
-    size_t nChars = 0;
-    if (buffer == 0)
-    {
-        /* This means that we should flush internal buffers.  Since we*/
-        /* don't we just return.  (Remember, "handle" == -1 means that all*/
-        /* handles should be flushed.)*/
-        return 0;
-    }
-    /* This function only writes to "standard out" and "standard err",*/
-    /* for all other file handles it returns failure.*/
-    if ((handle != _LLIO_STDOUT) && (handle != _LLIO_STDERR))
-    {
-        return _LLIO_ERROR;
-    }
-    /* Send data.*/
-    while (size--)
-    {
-        UART_WriteByte(UART_DebugInstance, *buffer++);
-        ++nChars;
-    }
-    return nChars;
-}
-
-size_t __read(int handle, unsigned char * buffer, size_t size)
-{
-    size_t nChars = 0;
-    uint16_t ch = 0;
-    if (buffer == 0)
-    {
-        /* This means that we should flush internal buffers.  Since we*/
-        /* don't we just return.  (Remember, "handle" == -1 means that all*/
-        /* handles should be flushed.)*/
-        return 0;
-    }
-    /* This function only writes to "standard out" and "standard err",*/
-    /* for all other file handles it returns failure.*/
-    if ((handle != _LLIO_STDIN) && (handle != _LLIO_STDERR))
-    {
-        return _LLIO_ERROR;
-    }
-    /* read data.*/
-    while (size--)
-    {
-        while(UART_ReadByte(UART_DebugInstance, &ch));
-        *buffer++ = (char)ch & 0xFF;
-        ++nChars;
-    }
-    return nChars;
-}
-
-
-#endif /* comiler support */
-
-static void UART_putstr(uint32_t instance, const char *str)
-{
-    while(*str != '\0')
-    {
-        UART_WriteByte(instance, *str++);
-    }
-}
-
-static void printn(unsigned int n, unsigned int b)
-{
-    static char *ntab = "0123456789ABCDEF";
-    unsigned int a, m;
-    if (n / b)
-    {
-        a = n / b;
-        printn(a, b);  
-    }
-    m = n % b;
-    UART_WriteByte(UART_DebugInstance, ntab[m]);
-}
-
-int UART_printf(const char *fmt, ...)
-{
-    char c;
-    unsigned int *adx = (unsigned int*)(void*)&fmt + 1;
-_loop:
-    while((c = *fmt++) != '%')
-    {
-        if (c == '\0') return 0;
-        UART_WriteByte(UART_DebugInstance, c);
-    }
-    c = *fmt++;
-    if (c == 'd' || c == 'l')
-    {
-        printn(*adx, 10);
-    }
-    if (c == 'o' || c == 'x')
-    {
-        printn(*adx, c=='o'? 8:16 );
-    }
-    if (c == 's')
-    {
-        UART_putstr(UART_DebugInstance, (char*)*adx);
-    }
-    adx++;
-    goto _loop;
-    return 0;
-}
-
-
 uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
@@ -352,6 +222,19 @@ void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
     }
 }
 
+static int _getc(void)
+{
+    uint16_t ch;
+    while(UART_ReadByte(UART_DebugInstance, &ch));
+    return ch;
+}
+
+static int _putc(uint8_t ch)
+{
+    UART_WriteByte(UART_DebugInstance, ch);
+    return ch;
+}
+
 void UART_Init(UART_InitTypeDef* Init)
 {
     uint16_t sbr;
@@ -381,6 +264,7 @@ void UART_Init(UART_InitTypeDef* Init)
     if(is_fitst_init)
     {
         UART_DebugInstance = Init->instance;
+        SetConsole(_putc, _getc);
     }
     is_fitst_init = false;
 }

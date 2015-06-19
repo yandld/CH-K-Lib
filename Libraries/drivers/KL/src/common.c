@@ -5,8 +5,17 @@
 #define DEFAULT_SYSTEM_CLOCK    (48000000)
 #endif
 
+typedef struct
+{
+    int (*putc)(uint8_t ch);
+    int (*getc)(void);
+}Console_t;
+
 volatile static uint32_t fac_us = DEFAULT_SYSTEM_CLOCK/1000000;
 volatile static uint32_t fac_ms = DEFAULT_SYSTEM_CLOCK/1000;
+volatile static Console_t Console;
+
+
 
 static const Reg_t CLKTbl[] =
 { 
@@ -162,6 +171,96 @@ void DelayUs(uint32_t us)
     }
     while((temp & SysTick_CTRL_ENABLE_Msk) && !(temp & SysTick_CTRL_COUNTFLAG_Msk));
 }
+
+void SetConsole(int (*putc)(uint8_t ch), int (*getc)(void))
+{
+    Console.getc = getc;
+    Console.putc = putc;
+}
+
+#include <stdio.h>
+#ifdef __CC_ARM // MDK Support
+struct __FILE 
+{ 
+	int handle;
+	/* Whatever you require here. If the only file you are using is */ 
+	/* standard output using printf() for debugging, no file handling */ 
+	/* is required. */ 
+}; 
+/* FILE is typedef¡¯ d in stdio.h. */ 
+FILE __stdout;
+FILE __stdin;
+int fputc(int ch,FILE *f)
+{
+    if(Console.putc)
+    {
+        Console.putc((uint8_t)ch);
+    }
+	return ch;
+}
+
+int fgetc(FILE *f)
+{
+    if(Console.getc)
+    {
+        return (Console.getc() & 0xFF);
+    }
+    return 0;
+}
+
+#elif __ICCARM__ /* IAR support */
+size_t __write(int handle, const unsigned char * buffer, size_t size)
+{
+    size_t nChars = 0;
+    if (buffer == 0)
+    {
+        /* This means that we should flush internal buffers.  Since we*/
+        /* don't we just return.  (Remember, "handle" == -1 means that all*/
+        /* handles should be flushed.)*/
+        return 0;
+    }
+    /* This function only writes to "standard out" and "standard err",*/
+    /* for all other file handles it returns failure.*/
+    if ((handle != _LLIO_STDOUT) && (handle != _LLIO_STDERR))
+    {
+        return _LLIO_ERROR;
+    }
+    /* Send data.*/
+    while (size--)
+    {
+        UART_WriteByte(UART_DebugInstance, *buffer++);
+        ++nChars;
+    }
+    return nChars;
+}
+
+size_t __read(int handle, unsigned char * buffer, size_t size)
+{
+    size_t nChars = 0;
+    uint16_t ch = 0;
+    if (buffer == 0)
+    {
+        /* This means that we should flush internal buffers.  Since we*/
+        /* don't we just return.  (Remember, "handle" == -1 means that all*/
+        /* handles should be flushed.)*/
+        return 0;
+    }
+    /* This function only writes to "standard out" and "standard err",*/
+    /* for all other file handles it returns failure.*/
+    if ((handle != _LLIO_STDIN) && (handle != _LLIO_STDERR))
+    {
+        return _LLIO_ERROR;
+    }
+    /* read data.*/
+    while (size--)
+    {
+        while(UART_ReadByte(UART_DebugInstance, &ch));
+        *buffer++ = (char)ch & 0xFF;
+        ++nChars;
+    }
+    return nChars;
+}
+#endif /* comiler support */
 
 void SystemSoftReset(void)
 {

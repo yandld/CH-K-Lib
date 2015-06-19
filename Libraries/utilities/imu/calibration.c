@@ -68,8 +68,6 @@ static void reset_dcal_data(struct dcal_t *dc)
 
 void dcal_init(struct dcal_t *dc)
 {
-    int i;
-
     if((dc) && (dc->magic == CAL_MAGIC))
     {
         memcpy(&dcal, dc, sizeof(struct dcal_t));

@@ -51,6 +51,14 @@
 #define FTF    FTFA
 #endif
 
+#define LIB_DEBUG		0
+#if ( LIB_DEBUG == 1 )
+#include <stdio.h>
+#define LIB_TRACE	printf
+#else
+#define LIB_TRACE(...)
+#endif
+
 
 static uint8_t _CommandLaunch(void)
 {

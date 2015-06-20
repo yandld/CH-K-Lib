@@ -1,6 +1,13 @@
 #include "flash.h"
 #include "common.h"
 
+#define LIB_DEBUG		0
+#if ( LIB_DEBUG == 1 )
+#include <stdio.h>
+#define LIB_TRACE	printf
+#else
+#define LIB_TRACE(...)
+#endif
 
 /* flash commands */
 #define RD1BLK    0x00  /* read 1 block */
@@ -51,13 +58,7 @@
 #define FTF    FTFA
 #endif
 
-#define LIB_DEBUG		0
-#if ( LIB_DEBUG == 1 )
-#include <stdio.h>
-#define LIB_TRACE	printf
-#else
-#define LIB_TRACE(...)
-#endif
+
 
 
 static uint8_t _CommandLaunch(void)

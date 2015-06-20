@@ -228,7 +228,7 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
     /* Send data.*/
     while (size--)
     {
-        UART_WriteByte(UART_DebugInstance, *buffer++);
+        Console.putc(*buffer++);
         ++nChars;
     }
     return nChars;
@@ -237,7 +237,6 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
 size_t __read(int handle, unsigned char * buffer, size_t size)
 {
     size_t nChars = 0;
-    uint16_t ch = 0;
     if (buffer == 0)
     {
         /* This means that we should flush internal buffers.  Since we*/
@@ -254,8 +253,7 @@ size_t __read(int handle, unsigned char * buffer, size_t size)
     /* read data.*/
     while (size--)
     {
-        while(UART_ReadByte(UART_DebugInstance, &ch));
-        *buffer++ = (char)ch & 0xFF;
+        *buffer++ = Console.getc() & 0xFF;
         ++nChars;
     }
     return nChars;

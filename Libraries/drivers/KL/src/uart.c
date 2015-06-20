@@ -2,17 +2,6 @@
 #include "gpio.h"
 #include "common.h"
 
-#ifdef UART_USE_STDIO
-#include <stdio.h>
-#endif
-
-#if __ICCARM__
-#include <yfuns.h>
-#endif
-
-
-
-
 
 #ifdef MKL26Z4_H_
 #undef  UART_BASES

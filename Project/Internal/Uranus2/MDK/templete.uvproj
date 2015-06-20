@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>MKL26Z4 CLOCK_SETUP=0 FRDM URANUS2</Define>
+              <Define>MKL26Z4 CLOCK_SETUP=0 URANUS2</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\imu;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\utilities\veep;..\src</IncludePath>
             </VariousControls>
@@ -521,11 +521,6 @@
               <FileName>pit.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\KL\src\pit.c</FilePath>
-            </File>
-            <File>
-              <FileName>systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\KL\src\systick.c</FilePath>
             </File>
             <File>
               <FileName>uart.c</FileName>

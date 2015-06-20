@@ -12,11 +12,7 @@
 
 #include <stdint.h>
 
-
-
-
-
-//!< API declare
+//!< API functions
 void FLASH_Init(void);
 uint32_t FLASH_GetSectorSize(void);
 uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len);

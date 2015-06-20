@@ -18,15 +18,12 @@
 //#define SLIDING_FILTER_DEEP     (3)
 
 
-
 typedef struct 
 {
     float P;
     float R;
     float Y;
 }attitude_t;
-
-
 
 
 //!< API functions

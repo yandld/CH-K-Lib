@@ -10,7 +10,8 @@
 #ifndef __CH_LIB_KL_PIT_H__
 #define __CH_LIB_KL_PIT_H__
 
-#include "common.h"
+#include <stdint.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
  extern "C" {

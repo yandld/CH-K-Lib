@@ -149,7 +149,6 @@ int main(void)
    
     dcal_init(&dcal);
     dcal_print(&dcal);
-    
     uart_dma_init(HW_DMA_CH0, uart_instance);
 
     while(1)
@@ -203,11 +202,7 @@ int main(void)
                 dcal_minput(cp_mdata);
             }
             
-//            dcal_output(&dcal);
-//            if(dcal.need_update)
-//            {
-//                //veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
-//            }
+            dcal_output(&dcal);
             
             /* bmp read */
             ret = bmp180_conversion_process(&dummy, &temperature);
@@ -227,12 +222,14 @@ int main(void)
 void UART_ISR(uint16_t data)
 {
     static rev_data_t rd;
-
+    
     if(!ano_rec((uint8_t)data, &rd))
     {
         if(rd.buf[0] == 0xAA)
         {
             veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+            DelayMs(10);
+            SystemSoftReset();
         }
     }
 }

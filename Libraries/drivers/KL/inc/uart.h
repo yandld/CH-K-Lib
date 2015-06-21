@@ -1,3 +1,12 @@
+/**
+  ******************************************************************************
+  * @file    uart.h
+  * @author  YANDLD
+  * @version V2.6
+  * @date    2015.6.21
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #ifndef __CH_LIB_KL_UART_H__
 #define __CH_LIB_KL_UART_H__
 
@@ -33,33 +42,29 @@ typedef enum
     kUART_DMA_Rx,               // 开启每接收一帧传输完成触发DMA 
 }UART_ITDMAConfig_Type;
 
-/*!< UART初始化结构 */
-typedef struct
+typedef enum
 {
-    uint32_t                srcClock;       // 时钟源频率
-    uint8_t                 instance;       // UART 模块号 HW_UART0~HW_UART5
-    uint32_t                baudrate;       // UART 波特率 
-}UART_InitTypeDef;
+    kUART_IntTx,
+    kUART_IntRx,
+}UART_Int_t;
+
+
+
+
 
 /*!< UART 回调函数声明 */
 typedef void (*UART_CallBackTxType)(uint16_t * pbyteToSend);
 typedef void (*UART_CallBackRxType)(uint16_t byteReceived);
 
 /*!< API functions */
-uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate);
-void UART_Init(UART_InitTypeDef * UART_InitStruct);
-int UART_printf(const char *format,...);
-uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch);
-void UART_WriteByte(uint32_t instance, uint16_t ch);
-void UART_SelectDebugInstance(uint32_t instance);
+uint32_t UART_Init(uint32_t MAP, uint32_t baudrate);
+uint8_t UART_GetChar(uint32_t instance, uint8_t *ch);
+void UART_PutChar(uint32_t instance, uint8_t ch);
+uint32_t UART_SetIntMode(uint32_t instance, UART_Int_t mode, bool val);
 
-/* Interrupt and DMA functions */
-void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun);
-void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun);
-void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool status);
-
-#ifdef UART_USE_STDIO
-int printf(const char *fmt, ...);
+#if (CHLIB_DMA_SUPPORT == 1)
+uint32_t UART_DMASend(uint32_t instance, uint8_t *buf, uint32_t len);
+uint32_t UART_DMAGetRemain(uint32_t instance);
 #endif
 
 

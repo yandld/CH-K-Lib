@@ -1,9 +1,26 @@
+/**
+  ******************************************************************************
+  * @file    common.h
+  * @author  YANDLD
+  * @version V2.6
+  * @date    2015.6.21
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #ifndef __CH_LIB_KL_COMMON_H__
 #define __CH_LIB_KL_COMMON_H__
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+
+/* version information */
+#define CHLIB_VERSION                   (261)
+
+#ifndef CHLIB_DMA_SUPPORT
+#define CHLIB_DMA_SUPPORT   (0)
+#endif
+
 
 #ifdef MKL25Z4
 #include "MKL25Z4.h"
@@ -23,9 +40,6 @@
 #error "No CPU defined!"
 
 #endif
-
-/* version information */
-#define CHLIB_VERSION                   (261)
 
 
 #define NVIC_PriorityGroup_0         ((uint32_t)0x7) /*!< 0 bits for pre-emption priority   4 bits for subpriority */                                               
@@ -87,6 +101,15 @@ typedef struct
     uint32_t    mask;
     uint32_t    shift;
 }Reg_t;
+
+typedef struct
+{
+    void *      sAddr;
+    void *      dAddr;
+    uint32_t    trigSrc;
+    uint32_t    dmaChl;
+    bool        isActive;
+}IPDMA_t;
 
 /* BME engine */
 #define BME_AND_MASK  (1<<26)

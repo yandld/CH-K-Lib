@@ -1,5 +1,13 @@
+/**
+  ******************************************************************************
+  * @file    uart.c
+  * @author  YANDLD
+  * @version V2.6
+  * @date    2015.6.21
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #include "uart.h"
-#include "gpio.h"
 #include "common.h"
 
 
@@ -14,18 +22,18 @@ static const Reg_t CLKTbl[] =
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK, SIM_SCGC4_UART2_SHIFT},
 };
 
-static const IRQn_Type UART_IRQnTable[] = 
+static const IRQn_Type UART_IrqTbl[] = 
 {
-    UART0_IRQn,
-    UART1_IRQn,
-    UART2_IRQn,
+    (IRQn_Type)(UART0_IRQn+0),
+    (IRQn_Type)(UART0_IRQn+1),
+    (IRQn_Type)(UART0_IRQn+2),
 };
 #endif
 
 #ifdef MKL27Z4_H_
-static const struct reg_ops CLKTbl[] =
+static const struct Reg_t CLKTbl[] =
 {
-    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK},
+    {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK, SIM_SCGC4_UART2_SHIFT},
 };
 
 static const IRQn_Type UART_IRQnTable[] = 
@@ -34,31 +42,31 @@ static const IRQn_Type UART_IRQnTable[] =
 };
 #endif
 
-/* gloabl const table defination */
-const void* UART_InstanceTable[] = UART_BASES;
-static UART_CallBackTxType UART_CallBackTxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
-static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UART_InstanceTable)] = {NULL};
-/* special use for printf */
+const void* UART_IPTbl[] = UART_BASES;
 static uint8_t UART_DebugInstance;
 
 
-uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
+static int _getc(void)
 {
-    uint8_t i;
-    uint32_t clock;
-    UART_InitTypeDef Init;
-    map_t * pq = (map_t*)&(MAP);
-    Init.baudrate = baudrate;
-    Init.instance = pq->ip;
-    
-    /* clock source */
-    if(pq->ip == HW_UART0)
+    uint8_t ch;
+    while(UART_GetChar(UART_DebugInstance, &ch));
+    return ch;
+}
+
+static int _putc(uint8_t ch)
+{
+    UART_PutChar(UART_DebugInstance, ch);
+    return ch;
+}
+
+static uint32_t _SetClockSrc(uint32_t instance, void *param)
+{
+    uint32_t clk;
+    if(instance == HW_UART0)
     {
-        clock = GetClock(kMCGOutClock);
-        
+        clk = GetClock(kMCGOutClock);
         #ifdef SIM_SOPT2_UART0SRC_MASK
-        /* use PLL/2 or FLL */
-        SIM->SOPT2 &= ~SIM_SOPT2_UART0SRC_MASK;
+        SIM->SOPT2 &= ~SIM_SOPT2_UART0SRC_MASK; /* use PLL/2 or FLL */
         SIM->SOPT2 |= SIM_SOPT2_UART0SRC(1);  
         #endif
         
@@ -66,7 +74,7 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
         if(MCG->C6 & MCG_C6_PLLS_MASK) /* PLL */
         {
             SIM->SOPT2 |= SIM_SOPT2_PLLFLLSEL_MASK;
-            clock /= 2;
+            clk /= 2;
         }
         else /* FLL */
         {
@@ -76,201 +84,84 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     }
     else
     {
-        clock = GetClock(kBusClock);
+        clk = GetClock(kBusClock);
     }
-    Init.srcClock = clock;
-    for(i = 0; i < pq->pin_count; i++)
-    {
-        SetPinMux(pq->io, pq->pin_start + i,pq->mux); 
-    }
-    UART_Init(&Init);
-    
-    return pq->ip;
+    return clk;
 }
 
-/**
- * @brief  配置UART模块的中断或DMA属性
- * @code
- *      //配置UART0模块开启接收中断功能
- *      UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
- * @endcode
- * @param  instance      :芯片串口端口
- *         @arg HW_UART0 :芯片的UART0端口
- *         @arg HW_UART1 :芯片的UART1端口
- *         @arg HW_UART2 :芯片的UART2端口
- *         @arg HW_UART3 :芯片的UART3端口
- *         @arg HW_UART4 :芯片的UART4端口
- *         @arg HW_UART5 :芯片的UART5端口
- * @param  status      :开关
- * @param  config: 工作模式选择
- *         @arg kUART_IT_Tx:
- *         @arg kUART_DMA_Tx:
- *         @arg kUART_IT_Rx:
- *         @arg kUART_DMA_Rx:
- * @retval None
- */
-void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool status)
-{
-    CLK_EN(CLKTbl, instance);
-    
-    UART_Type * UARTx = (UART_Type*)UART_InstanceTable[instance];
-    
-    switch(config)
-    {
-        case kUART_IT_Tx:
-            (status)?
-            (UARTx->C2 |= UART_C2_TIE_MASK):
-            (UARTx->C2 &= ~UART_C2_TIE_MASK);
-            NVIC_EnableIRQ(UART_IRQnTable[instance]);
-            break; 
-        case kUART_IT_Rx:
-            (status)?
-            (UARTx->C2 |= UART_C2_RIE_MASK):
-            (UARTx->C2 &= ~UART_C2_RIE_MASK);
-            NVIC_EnableIRQ(UART_IRQnTable[instance]);
-            break;
-        case kUART_DMA_Tx:
-            if(instance == HW_UART0)
-            {
-                (status)?
-                (UART0->C5 |= UART0_C5_TDMAE_MASK):
-                (UART0->C5 &= ~UART0_C5_TDMAE_MASK);
-            }
-            else
-            {
-                (status)?
-                (UARTx->C4 |= UART_C4_TDMAS_MASK):
-                (UARTx->C4 &= ~UART_C4_TDMAS_MASK);
-            }
-            break;
-        case kUART_DMA_Rx:
-            (status)?
-            (UARTx->C2 |= UART_C2_RIE_MASK):
-            (UARTx->C2 &= ~UART_C2_RIE_MASK);
-            if(instance == HW_UART0)
-            {
-                (status)?
-                (UART0->C5 |= UART0_C5_RDMAE_MASK):
-                (UART0->C5 &= ~UART0_C5_RDMAE_MASK);
-            }
-            else
-            {
-                (status)?
-                (UARTx->C4 |= UART_C4_RDMAS_MASK):
-                (UARTx->C4 &= ~UART_C4_RDMAS_MASK); 
-            }
-            break;
-        default:
-            break;
-    }
-}
-
-/**
- * @brief  注册接收中断回调函数
- * @param  instance      :芯片串口端口
- *         @arg HW_UART0 :芯片的UART0端口
- *         @arg HW_UART1 :芯片的UART1端口
- *         @arg HW_UART2 :芯片的UART2端口
- *         @arg HW_UART3 :芯片的UART3端口
- *         @arg HW_UART4 :芯片的UART4端口
- *         @arg HW_UART5 :芯片的UART5端口
- * @param AppCBFun: 回调函数指针入口
- * @retval None
- * @note 对于此函数的具体应用请查阅应用实例
- */
-void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
-{
-    /* enable clock gate */
-    *((uint32_t*) CLKTbl[instance].addr) |= CLKTbl[instance].mask;
-    if(AppCBFun != NULL)
-    {
-        UART_CallBackRxTable[instance] = AppCBFun;
-    }
-}
-
-/**
- * @brief  注册发送中断回调函数
- * @param  instance      :芯片串口端口
- *         @arg HW_UART0 :芯片的UART0端口
- *         @arg HW_UART1 :芯片的UART1端口
- *         @arg HW_UART2 :芯片的UART2端口
- *         @arg HW_UART3 :芯片的UART3端口
- *         @arg HW_UART4 :芯片的UART4端口
- *         @arg HW_UART5 :芯片的UART5端口
- * @param AppCBFun: 回调函数指针入口
- * @retval None
- * @note 对于此函数的具体应用请查阅应用实例
- */
-void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun)
-{
-    /* enable clock gate */
-    *((uint32_t*) CLKTbl[instance].addr) |= CLKTbl[instance].mask;
-    if(AppCBFun != NULL)
-    {
-        UART_CallBackTxTable[instance] = AppCBFun;
-    }
-}
-
-static int _getc(void)
-{
-    uint16_t ch;
-    while(UART_ReadByte(UART_DebugInstance, &ch));
-    return ch;
-}
-
-static int _putc(uint8_t ch)
-{
-    UART_WriteByte(UART_DebugInstance, ch);
-    return ch;
-}
-
-void UART_Init(UART_InitTypeDef* Init)
+static void _UART_Init(uint32_t instance, uint32_t srcClock, uint32_t baud)
 {
     uint16_t sbr;
     static bool is_fitst_init = true;
     
-    CLK_EN(CLKTbl, Init->instance);
+    CLK_EN(CLKTbl, instance);
     
-    UART_Type * UARTx = (UART_Type*)UART_InstanceTable[Init->instance];
-    
-    /* disable Tx Rx first */
+    UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
     UARTx->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
-	
-    /* disable Tx Rx */
     UARTx->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     
     /* config baudrate */
-    sbr = Init->srcClock/((Init->baudrate)*16);
+    sbr = srcClock/((baud)*16);
     UARTx->BDH &= ~(UART_BDH_SBR_MASK);
     UARTx->BDH |= (sbr>>8) & UART_BDH_SBR_MASK;
     UARTx->BDL = (sbr & UART_BDL_SBR_MASK);
     
     /* enable Tx Rx */
     UARTx->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
-    
-    /* link debug instance */
-    /* if it's first initalized ,link getc and putc to it */
     if(is_fitst_init)
     {
-        UART_DebugInstance = Init->instance;
+        UART_DebugInstance = instance;
         SetConsole(_putc, _getc);
     }
     is_fitst_init = false;
 }
 
-void UART_WriteByte(uint32_t instance, uint16_t ch)
+uint32_t UART_Init(uint32_t MAP, uint32_t baudrate)
 {
-    UART_Type * UARTx = (UART_Type*)UART_InstanceTable[instance];
+    uint8_t i;
+    uint32_t clk;
+    
+    map_t * pq = (map_t*)&(MAP);
+    clk = _SetClockSrc(pq->ip, NULL);
+    for(i = 0; i < pq->pin_count; i++)
+    {
+        SetPinMux(pq->io, pq->pin_start + i, pq->mux); 
+    }
+    _UART_Init(pq->ip, clk, baudrate);
+    return pq->ip;
+}
+
+uint32_t UART_SetIntMode(uint32_t instance, UART_Int_t mode, bool val)
+{
+    CLK_EN(CLKTbl, instance);
+    UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
+    
+    switch(mode)
+    {
+        case kUART_IntTx:
+            (val)?(UARTx->C2 |= UART_C2_TIE_MASK):(UARTx->C2 &= ~UART_C2_TIE_MASK);
+            NVIC_EnableIRQ(UART_IrqTbl[instance]);
+            break;
+        case kUART_IntRx:
+            (val)?(UARTx->C2 |= UART_C2_RIE_MASK):(UARTx->C2 &= ~UART_C2_RIE_MASK);
+            NVIC_EnableIRQ(UART_IrqTbl[instance]);
+            break;
+        default:
+            break;
+    }
+    return 0;
+}
+
+void UART_PutChar(uint32_t instance, uint8_t ch)
+{
+    UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
     while(!(UARTx->S1 & UART_S1_TDRE_MASK));
     UARTx->D = (uint8_t)ch;
 }
 
-uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
+uint8_t UART_GetChar(uint32_t instance, uint8_t *ch)
 {
-    UART_Type * UARTx = (UART_Type*)UART_InstanceTable[instance];
-    
-    /* clear OverRun */
-    //UARTx->S1 |= UART_S1_OR_MASK;
+    UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
     
     if(UARTx->S1 & UART_S1_RDRF_MASK)
     {
@@ -280,78 +171,106 @@ uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch)
     return 1;
 }
 
-void UART0_IRQHandler(void)
+
+#if (CHLIB_DMA_SUPPORT == 1)
+#include "dma.h"
+static IPDMA_t UART_DMATbl[]=
 {
-    uint16_t ch;
-    UART_Type * UARTx = (UART_Type*)UART_InstanceTable[HW_UART0];
-    /* Tx */
-    if((UARTx->S1 & UART_S1_TDRE_MASK) && (UARTx->C2 & UART_C2_TIE_MASK))
+    {(void*)&UART0->D, (void*)&UART0->D, UART0_TRAN_DMAREQ, 0, false},
+    {(void*)&UART1->D, (void*)&UART1->D, UART1_TRAN_DMAREQ, 0, false},
+    {(void*)&UART2->D, (void*)&UART2->D, UART2_TRAN_DMAREQ, 0, false},
+};
+
+uint32_t UART_DMASend(uint32_t instance, uint8_t *buf, uint32_t len)
+{
+    uint32_t chl;
+    DMA_Init_t Init;
+    UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
+    
+    chl = DMA_ChlAlloc();
+    if(chl == 0xFFFFFFFF)
     {
-        if(UART_CallBackTxTable[HW_UART0])
-        {
-            UART_CallBackTxTable[HW_UART0](&ch);
-        }
-        UARTx->D = (uint8_t)ch;
+        return 1;
     }
-    /* Rx */
-    if((UARTx->S1 & UART_S1_RDRF_MASK) && (UARTx->C2 & UART_C2_RIE_MASK))
-    {
-        ch = (uint8_t)UARTx->D;
-        if(UART_CallBackRxTable[HW_UART0])
-        {
-            UART_CallBackRxTable[HW_UART0](ch);
-        }    
-    }
+    if(instance == HW_UART0)
+        UART0->C5 |= UART0_C5_TDMAE_MASK;
+    else
+        UARTx->C4 |= UART_C4_TDMAS_MASK;
+    
+    Init.chl = chl;
+    Init.chlTrigSrc = UART_DMATbl[instance].trigSrc;
+    Init.trigSrcMod = kDMA_TrigSrc_Normal;
+    Init.transCnt = len;
+
+    Init.sAddr = (uint32_t)buf;
+    Init.sAddrIsInc = true;
+    Init.sDataWidth = kDMA_DataWidthBit_8;
+    Init.sMod = kDMA_ModuloDisable;
+
+    Init.dAddr = (uint32_t)UART_DMATbl[instance].dAddr;
+    Init.dAddrIsInc = false;
+    Init.dDataWidth = kDMA_DataWidthBit_8;
+    Init.dMod = kDMA_ModuloDisable;
+    DMA_Init(&Init);
+
+    DMA_EnableReq(chl);
+    
+    UART_DMATbl[instance].dmaChl = chl;
+    UART_DMATbl[instance].isActive = true;
+    
+    return 0;
 }
 
-void UART1_IRQHandler(void)
+uint32_t UART_DMAGetRemain(uint32_t instance)
 {
-    uint16_t ch;
-    UART_Type * UARTx = (UART_Type*)UART_InstanceTable[HW_UART1];
-    /* Tx */
-    if((UARTx->S1 & UART_S1_TDRE_MASK) && (UARTx->C2 & UART_C2_TIE_MASK))
+    uint32_t ret, chl;
+    UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
+    
+    if(UART_DMATbl[instance].isActive == false)
     {
-        if(UART_CallBackTxTable[HW_UART1])
-        {
-            UART_CallBackTxTable[HW_UART1](&ch);
-        }
-        UARTx->D = (uint8_t)ch;
+        return 0;
     }
-    /* Rx */
-    if((UARTx->S1 & UART_S1_RDRF_MASK) && (UARTx->C2 & UART_C2_RIE_MASK))
+    chl = UART_DMATbl[instance].dmaChl;
+    ret = DMA_GetTransCnt(chl);
+    if(ret == 0)
     {
-        ch = (uint8_t)UARTx->D;
-        if(UART_CallBackRxTable[HW_UART1])
-        {
-            UART_CallBackRxTable[HW_UART1](ch);
-        }    
+        if(instance == HW_UART0)
+            UART0->C5 &= ~UART0_C5_TDMAE_MASK;
+        else
+            UARTx->C4 &= ~UART_C4_TDMAS_MASK;
+        DMA_ChlFree(chl);
+        UART_DMATbl[instance].isActive = false;
     }
+    return ret;
 }
 
-void UART2_IRQHandler(void)
-{
-    uint16_t ch;
-    UART_Type * UARTx = (UART_Type*)UART_InstanceTable[HW_UART2];
-    /* Tx */
-    if((UARTx->S1 & UART_S1_TDRE_MASK) && (UARTx->C2 & UART_C2_TIE_MASK))
-    {
-        if(UART_CallBackTxTable[HW_UART2])
-        {
-            UART_CallBackTxTable[HW_UART2](&ch);
-        }
-        UARTx->D = (uint8_t)ch;
-    }
-    /* Rx */
-    if((UARTx->S1 & UART_S1_RDRF_MASK) && (UARTx->C2 & UART_C2_RIE_MASK))
-    {
-        ch = (uint8_t)UARTx->D;
-        if(UART_CallBackRxTable[HW_UART2])
-        {
-            UART_CallBackRxTable[HW_UART2](ch);
-        }    
-    } 
-}
+#endif
 
+
+
+//void UART0_IRQHandler(void)
+//{
+//    uint16_t ch;
+//    UART_Type * UARTx = (UART_Type*)UART_IPTbl[HW_UART0];
+//    /* Tx */
+//    if((UARTx->S1 & UART_S1_TDRE_MASK) && (UARTx->C2 & UART_C2_TIE_MASK))
+//    {
+//        if(UART_CallBackTxTable[HW_UART0])
+//        {
+//            UART_CallBackTxTable[HW_UART0](&ch);
+//        }
+//        UARTx->D = (uint8_t)ch;
+//    }
+//    /* Rx */
+//    if((UARTx->S1 & UART_S1_RDRF_MASK) && (UARTx->C2 & UART_C2_RIE_MASK))
+//    {
+//        ch = (uint8_t)UARTx->D;
+//        if(UART_CallBackRxTable[HW_UART0])
+//        {
+//            UART_CallBackRxTable[HW_UART0](ch);
+//        }    
+//    }
+//}
 
 
 /*

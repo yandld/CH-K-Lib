@@ -1,3 +1,12 @@
+/**
+  ******************************************************************************
+  * @file    gpio.h
+  * @author  YANDLD
+  * @version V2.6
+  * @date    2015.6.21
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #ifndef __CH_LIB_KL_GPIO_H__
 #define __CH_LIB_KL_GPIO_H__
 
@@ -26,8 +35,6 @@
 #define PIN5        (0x80000020U) 
 #define PIN31       (0x80000000U)
 
-
-
 typedef enum
 {
     kGPIO_Mode_IFT = 0x00,       /* floating input   */
@@ -36,14 +43,12 @@ typedef enum
     kGPIO_Mode_OPP = 0x04,       /* Push pull output */
 }GPIO_Mode_t;
 
-
 typedef enum
 {
     kGPIO_Int_RE, /* raising edge */
     kGPIO_Int_FE, /* falling edge */
     kGPIO_Int_EE, /* falling edge and raising edge */
 }GPIO_Int_t;
-
 
 //!< API functions
 uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode);

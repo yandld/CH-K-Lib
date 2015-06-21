@@ -1,3 +1,12 @@
+/**
+  ******************************************************************************
+  * @file    gpio.c
+  * @author  YANDLD
+  * @version V2.6
+  * @date    2015.6.21
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #include "common.h"
 #include "gpio.h"
 

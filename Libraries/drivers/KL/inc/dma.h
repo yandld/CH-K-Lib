@@ -2,7 +2,7 @@
   ******************************************************************************
   * @file    dma.h
   * @author  YANDLD
-  * @version V2.5
+  * @version V2.6
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
@@ -13,7 +13,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-//!< DMA 触发源选择
+//!< DMA Trigger Source
 #define DISABLE_DMAREQ          0
 #define UART0_REV_DMAREQ        2
 #define UART0_TRAN_DMAREQ       3
@@ -59,9 +59,9 @@
 //!< 触发模式选择
 typedef enum
 {
-    kDMA_TriggerSource_Normal,    //正常模式
-    kDMA_TriggerSource_Periodic,  //周期触发模式
-}DMA_TriggerSource_Type;
+    kDMA_TrigSrc_Normal,    //正常模式
+    kDMA_TrigSrc_Periodic,  //周期触发模式
+}DMA_TrigSrcMod_t;
 
 //!< DMA搬运数据端口位宽设置
 typedef enum
@@ -69,7 +69,7 @@ typedef enum
     kDMA_DataWidthBit_8 = 1,   /* 8 bit data width */
     kDMA_DataWidthBit_16 = 2,  /* 16 bit data width */
     kDMA_DataWidthBit_32 = 0,  /* 32 bit data width*/
-}DMA_DataWidthBit_Type; 
+}DMA_DataWidth_t; 
 
 //!< DMA Moduluo 设置
 typedef enum 
@@ -96,51 +96,48 @@ typedef enum
 typedef struct 
 {
     uint8_t                     chl;                                /* DMA通道号 */       
-    uint8_t                     chlTriggerSource;                   /* DMA触发源选择 */
-    uint16_t                    transferByteCnt;
-    DMA_TriggerSource_Type      triggerSourceMode;                  /* 触发模式选择 */
+    uint8_t                     chlTrigSrc;                   /* DMA触发源选择 */
+    uint16_t                    transCnt;
+    DMA_TrigSrcMod_t            trigSrcMod;                  /* 触发模式选择 */
     /* 源地址配置 */
     bool                        sAddrIsInc;
     uint32_t                    sAddr;                      /* 数据源地址 */
-    DMA_DataWidthBit_Type       sDataWidth;                 /* 数据源地址数据宽度 8 16 32 */
+    DMA_DataWidth_t             sDataWidth;                 /* 数据源地址数据宽度 8 16 32 */
     DMA_Modulo_Type             sMod;                       /* Modulo 设置 参见 AN2898 */
     /* 目标地址属性配置 */
     bool                        dAddrIsInc;                
     uint32_t                    dAddr;                      
-    DMA_DataWidthBit_Type       dDataWidth;                          
+    DMA_DataWidth_t             dDataWidth;                          
     DMA_Modulo_Type             dMod;                       
-}DMA_InitTypeDef;
+}DMA_Init_t;
 
 
 //!< interrupt select
 typedef enum
 {
-    kDMA_IT_Major,              //传输完成中断开启
-}DMA_ITConfig_Type;  
+    kDMA_Int_Finish,
+}DMA_Int_t;  
 
 //!< Callback Type
 typedef void (*DMA_CallBackType)(void);
 
-//!< API functions
-void DMA_Init(DMA_InitTypeDef *Init);
-/* get vars and status */
-uint32_t DMA_GetDestAddress(uint8_t ch);
-uint32_t DMA_GetSourceAddress(uint8_t ch);
-uint32_t DMA_GetTransferByteCnt(uint8_t chl);
-void DMA_SetTransferByteCnt(uint8_t chl, uint32_t val);
-/* control */
-void DMA_SetDestAddress(uint8_t chl, uint32_t address);
-void DMA_SetSourceAddress(uint8_t chl, uint32_t address);
-void DMA_EnableRequest(uint8_t chl);
-void DMA_DisableRequest(uint8_t chl);
+void DMA_Init(DMA_Init_t *Init);
+uint32_t DMA_GetDestAddr(uint8_t ch);
+uint32_t DMA_GetSrcAddr(uint8_t ch);
+uint32_t DMA_GetTransCnt(uint8_t chl);
+void DMA_SetTransCnt(uint8_t chl, uint32_t val);
+void DMA_SetDestAddr(uint8_t chl, uint32_t address);
+void DMA_SetSrcAddr(uint8_t chl, uint32_t address);
+void DMA_EnableReq(uint8_t chl);
+void DMA_DisableReq(uint8_t chl);
 void DMA_EnableAutoDisableRequest(uint8_t chl , bool flag);
 void DMA_EnableCycleSteal(uint8_t chl, bool flag);
 void DMA_CancelTransfer(uint8_t chl);
 /* IT funtions */
-void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config, bool status);
+void DMA_SetIntMode(uint8_t chl, DMA_Int_t mode, bool val);
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun);
-
-
+uint32_t DMA_ChlAlloc(void);
+void DMA_ChlFree(uint32_t chl);
 
 #endif
 

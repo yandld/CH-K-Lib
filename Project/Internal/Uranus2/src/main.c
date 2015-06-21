@@ -16,7 +16,6 @@
 #include "bmp180.h"
 #include "virtual_eep.h"
 #include "imu.h"
-#include "trans.h"
 #include "filter.h"
 #include "calibration.h"
 
@@ -48,7 +47,11 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
     payload.pressure = pressure;
     /* set buffer */
     len = ano_encode(&payload, buf);
-    uart_dma_send(buf, len);
+    
+    if(UART_DMAGetRemain(HW_UART0) == 0)
+    {
+        UART_DMASend(HW_UART0, buf, len);
+    }
 }
 
 int sensor_init(void)
@@ -121,19 +124,15 @@ int main(void)
     static float fadata[3], fgdata[3], fmdata[3];
     static attitude_t angle;
     uint32_t ret;
-    uint32_t uart_instance;
     float pressure, dummy, temperature;
 
     DelayInit();
     GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
 
-    UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);
-    UART_CallbackRxInstall(HW_UART0, UART_ISR);
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
-
+    UART_Init(UART0_RX_PA01_TX_PA02, 115200);
+    UART_SetIntMode(HW_UART0, kUART_IntRx, true);
     ShowInfo();
     veep_init();
-    
     sensor_init();
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
 
@@ -149,7 +148,6 @@ int main(void)
    
     dcal_init(&dcal);
     dcal_print(&dcal);
-    uart_dma_init(HW_DMA_CH0, uart_instance);
 
     while(1)
     {
@@ -219,19 +217,24 @@ int main(void)
     }
 }
 
-void UART_ISR(uint16_t data)
+void UART0_IRQHandler(void)
 {
+    uint8_t data;
     static rev_data_t rd;
-    
-    if(!ano_rec((uint8_t)data, &rd))
+    if((UART0->S1 & UART_S1_RDRF_MASK) && (UART0->C2 & UART_C2_RIE_MASK))
     {
-        if(rd.buf[0] == 0xAA)
+        UART_GetChar(HW_UART0, &data);
+        if(!ano_rec((uint8_t)data, &rd))
         {
-            veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
-            DelayMs(10);
-            SystemSoftReset();
+            if(rd.buf[0] == 0xAA)
+            {
+                veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+                DelayMs(10);
+                SystemSoftReset();
+            }
         }
     }
+
 }
 
 

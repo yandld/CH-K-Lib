@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    iflash.h
+  * @file    flash.h
   * @author  YANDLD
-  * @version V2.5
-  * @date    2014.3.25
-  * @brief   design for manley
+  * @version V2.6
+  * @date    2015.36.21
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
 #ifndef __CH_LIB_IFLASH_H__

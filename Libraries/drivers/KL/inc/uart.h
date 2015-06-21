@@ -32,29 +32,12 @@
 #define UART2_RX_PD04_TX_PD05   (0x000088DAU)
 #define UART0_RX_PD06_TX_PD07   (0x00008CD8U)
 
-
-/*!< 中断及DMA配置 */
-typedef enum
-{
-    kUART_IT_Tx,                // 开启每发送一帧传输完成中断 
-    kUART_DMA_Tx,               // 开启每发送一帧传输完成触发DMA 
-    kUART_IT_Rx,                // 开启每接收一帧传输完成中断 
-    kUART_DMA_Rx,               // 开启每接收一帧传输完成触发DMA 
-}UART_ITDMAConfig_Type;
-
 typedef enum
 {
     kUART_IntTx,
     kUART_IntRx,
 }UART_Int_t;
 
-
-
-
-
-/*!< UART 回调函数声明 */
-typedef void (*UART_CallBackTxType)(uint16_t * pbyteToSend);
-typedef void (*UART_CallBackRxType)(uint16_t byteReceived);
 
 /*!< API functions */
 uint32_t UART_Init(uint32_t MAP, uint32_t baudrate);

@@ -18,7 +18,6 @@ int main(void)
     printf("usbd configure complete\r\n");
     
     
-    
     while(1)
     {
         int32_t ch;

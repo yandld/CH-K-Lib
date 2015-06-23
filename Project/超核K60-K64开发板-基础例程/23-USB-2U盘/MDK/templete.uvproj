@@ -364,7 +364,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10 RAVEN DEBUG CLOCK_SETUP=4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\drivers\K\src\usb\inc</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\USBStack\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -635,22 +635,22 @@
             <File>
               <FileName>usbd_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_kk.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_kk.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_core.c</FilePath>
             </File>
             <File>
               <FileName>usbd_core_msc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_msc.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_core_msc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_kk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_kk.c</FilePath>
             </File>
             <File>
               <FileName>usbd_msc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_msc.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_msc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1014,7 +1014,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK64F12 RAVEN DEBUG CLOCK_SETUP=4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\drivers\K\src\usb\src\descriptor\hid_mouse</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;..\..\..\..\Libraries\utilities\USBStack\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1328,22 +1328,22 @@
             <File>
               <FileName>usbd_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>usbd_kk.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_kk.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_core.c</FilePath>
             </File>
             <File>
               <FileName>usbd_core_msc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_core_msc.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_core_msc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_kk.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_kk.c</FilePath>
             </File>
             <File>
               <FileName>usbd_msc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\usb\src\usbd_msc.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_msc.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -137,6 +137,11 @@
 
 #endif
 
+#if defined(MKL26Z4)
+#define BOARD_NAME                  "frdmmkl26z4"
+#define BOARD_UART_DEBUG_MAP        UART0_RX_PA01_TX_PA02
+#endif
+
 #else
 
 #error  "Please Define a Board (RAVEN)(URANUS)"

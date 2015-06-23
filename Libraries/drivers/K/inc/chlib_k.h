@@ -49,7 +49,7 @@
 #include "arm_common_tables.h"
 
 /* USB */
-#include "../src/usb/inc/rl_usb.h"
+#include "rl_usb.h"
 
 #ifdef __cplusplus
 }

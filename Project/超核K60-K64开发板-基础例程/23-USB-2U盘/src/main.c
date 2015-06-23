@@ -18,7 +18,7 @@ void usbd_msc_init ()
 {
     USBD_MSC_MemorySize = UDISK_SIZE;
     USBD_MSC_BlockSize  = FLASH_GetSectorSize();
-    USBD_MSC_BlockGroup = 1;
+    USBD_MSC_BlockGroup = sizeof(BlockBuf) / USBD_MSC_BlockSize;
     USBD_MSC_BlockCount = USBD_MSC_MemorySize / USBD_MSC_BlockSize;
     USBD_MSC_BlockBuf   = BlockBuf;
 

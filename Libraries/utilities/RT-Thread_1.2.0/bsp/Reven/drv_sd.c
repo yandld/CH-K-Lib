@@ -9,24 +9,18 @@ static  rt_mutex_t mutex;
 
 static rt_err_t rt_sd_init (rt_device_t dev)
 {
-    mutex = rt_mutex_create("_mu", RT_IPC_FLAG_FIFO);
+    mutex = rt_mutex_create("sd0", RT_IPC_FLAG_FIFO);
     return RT_EOK;
 }
 
 static rt_err_t rt_sd_open(rt_device_t dev, rt_uint16_t oflag)
 {
-    int r;
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
     if(SD_QuickInit(20*1000*1000))
     {
         return RT_EIO;
     }
     rt_mutex_release(mutex);
-    if(r)
-    {
-        dev->open_flag = RT_DEVICE_OFLAG_CLOSE;
-        return RT_ERROR;
-    }
     dev->open_flag = RT_DEVICE_OFLAG_OPEN;
 	return RT_EOK;
 }
@@ -38,7 +32,6 @@ static rt_err_t rt_sd_close(rt_device_t dev)
 
 rt_err_t rt_sd_indicate(rt_device_t dev, rt_size_t size)
 {
-    rt_kprintf("I need indicate\r\n"); 
     return RT_EOK;
 }
 

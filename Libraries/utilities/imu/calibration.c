@@ -24,14 +24,6 @@
 static struct dcal_t dcal;
 static struct dcal_t inital_dcal;
 
-static int is_gval_ok(int16_t data)
-{
-    if((data > G_MAX) || (data < G_MIN))
-    {
-        return 1;
-    }
-    return 0; 
-}
 
 static int is_mval_ok(int16_t data)
 {
@@ -68,46 +60,11 @@ static void reset_dcal_data(struct dcal_t *dc)
 
 void dcal_init(struct dcal_t *dc)
 {
-    if((dc) && (dc->magic == CAL_MAGIC))
-    {
-        memcpy(&dcal, dc, sizeof(struct dcal_t));
-        memcpy(&inital_dcal, dc, sizeof(struct dcal_t));
-        printf("load dcal value!\r\n");
-    }
-    else
-    {
-        reset_dcal_data(dc);
-        reset_dcal_data(&dcal);
-        reset_dcal_data(&inital_dcal);
-        printf("no initial dcal value\r\n");  
-    }
+    memcpy(&dcal, dc, sizeof(struct dcal_t));
+    memcpy(&inital_dcal, dc, sizeof(struct dcal_t));
+    printf("load dcal value!\r\n");
 }
 
-void dcal_ginput(int16_t *gdata)
-{
-    int i;
-    
-    for(i=0;i<3;i++)
-    {
-        if(is_mval_ok(gdata[i]))
-        {
-         //   printf("data of out rangle!\r\n");
-            return;
-        }
-    }
-    
-//    for(i=0;i<3;i++)
-//    {
-//        if(gdata[i] > 50)
-//        {
-//            dcal.go[i]++;
-//        }
-//        if(gdata[i] < -50)
-//        {
-//            dcal.go[i]--;
-//        }
-//    }
-}
 
 /* this function must be called every 100 ms */
 void dcal_minput(int16_t *mdata)

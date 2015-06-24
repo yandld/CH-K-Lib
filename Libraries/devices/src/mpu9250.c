@@ -229,7 +229,7 @@ int mpu9250_config(struct mpu_config *config)
     /* gyro */
     val = read_reg(MPU9250_GYRO_CONFIG);
     val &= ~MPU9250_GYRO_CONFIG_FS_MASK;
-    val |= MPU9250_GYRO_CONFIG_FS(config->gfs) | 0x03;
+    val |= (MPU9250_GYRO_CONFIG_FS(config->gfs));
     write_reg(MPU9250_GYRO_CONFIG, val);
     switch(config->gfs)
     {

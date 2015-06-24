@@ -191,7 +191,7 @@ static inline void updateAHRS(float gx,float gy,float gz,float ax,float ay,float
     
     /* output data */
     angle->Y = atan2(2 * q1 * q2 + 2 * q0 * q3, q0*q0+q1*q1-q2*q2-q3*q3)* 57.3; 
-    angle->P = asin(-2 * q1 * q3 + 2 * q0* q2)* 57.3;																			// pitcho???
+    angle->P = asin(-2 * q1 * q3 + 2 * q0* q2)* 60;																			// pitcho???
     angle->R = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* 57.3;
 }
 

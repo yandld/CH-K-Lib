@@ -19,7 +19,6 @@
 #include "filter.h"
 #include "calibration.h"
 
-#include "rl_usb.h"
 
 #define     VERSION_MAJOR       (2)
 #define     VERSION_MINOR       (0)
@@ -50,7 +49,7 @@ static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata,
     
     if(UART_DMAGetRemain(HW_UART0) == 0)
     {
-        UART_DMASend(HW_UART0, buf, len);
+        UART_DMASend(HW_UART0, 0, buf, len);
     }
 }
 
@@ -77,7 +76,7 @@ int sensor_init(void)
     
     struct mpu_config config;
     
-    config.afs = AFS_8G;
+    config.afs = AFS_2G;
     config.gfs = GFS_1000DPS;
     config.mfs = MFS_16BITS;
     config.aenable_self_test = false;
@@ -92,15 +91,6 @@ static void ShowInfo(void)
     printf("VERSION%d.%d\r\n", VERSION_MAJOR, VERSION_MINOR);
     printf("CoreClock:%dHz\r\n", GetClock(kCoreClock));
 }
-
-
-
-void PIT_ISR(void)
-{
-    FLAG_TIMER = true;
-}
-
-extern void UART_ISR(uint16_t data);
 
 #define FALL_LIMIT      100
 uint32_t FallDetection(int16_t *adata)
@@ -118,11 +108,11 @@ uint32_t FallDetection(int16_t *adata)
 
 int main(void)
 {
-    int i;
+    int i,j;
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
     uint32_t fall;
     static float fadata[3], fgdata[3], fmdata[3];
-    static attitude_t angle;
+    static attitude_t angle, langle;
     uint32_t ret;
     float pressure, dummy, temperature;
 
@@ -136,19 +126,49 @@ int main(void)
     sensor_init();
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
 
-    PIT_QuickInit(HW_PIT_CH0, 50*1000);
-    PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
-    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
-    
-    PIT_QuickInit(HW_PIT_CH1, 1000*1000);
+    PIT_Init();
+    PIT_SetTime(0, 50*1000);
+    PIT_SetIntMode(0, true);
+
+    PIT_SetTime(1, 1000*1000);
+
 
     static uint32_t time, load_val, fac_us;
     fac_us = GetClock(kBusClock);
     fac_us /= 1000000;
    
+    if(dcal.magic != 0x5ACB)
+    {
+        printf("gyrp caliberation!\r\n");
+        for(i=0;i<3;i++)
+        {
+            dcal.mg[i] = 1.0;
+            dcal.mo[i] = 0;
+            dcal.go[0] = 0;
+        }
+        
+        for(j=0;j<100;j++)
+        {
+            mpu9250_read_gyro_raw(gdata);
+            for(i=0;i<3;i++)
+            {
+                dcal.go[i] += gdata[i];
+            }
+            DelayMs(1);
+        }
+        
+        for(i=0;i<3;i++)
+        {
+            dcal.go[i] = dcal.go[i]/100;
+            if(abs(dcal.go[i]) > 100)
+            {
+                dcal.go[i] = 0;
+            }
+        }
+    }
+    dcal.magic = 0x5ACB;
     dcal_init(&dcal);
     dcal_print(&dcal);
-
     while(1)
     {
         /* raw data and offset balance */
@@ -162,44 +182,36 @@ int main(void)
 
         for(i=0;i<3;i++)
         {
+            gdata[i] = gdata[i] - dcal.go[i];
             mdata[i] = (mdata[i] - dcal.mo[i])/dcal.mg[i];
         }
 
         /* set timer */
-        time = PIT_GetCounterValue(HW_PIT_CH1);
-        PIT_ResetCounter(HW_PIT_CH1);
-        load_val = PIT_GetCounterValue(HW_PIT_CH1);
+        time = PIT_GetCnt(HW_PIT_CH1);
+        PIT_SetCnt(HW_PIT_CH1, 1000*1000);
+        load_val = PIT_GetCnt(HW_PIT_CH1);
         time = load_val - time;
         time /= fac_us;
 
         /* low pass filter */
         float factor[3];
-        factor[0] = lpf_1st_factor_cal(halfT*2, 92);
-        factor[1] = lpf_1st_factor_cal(halfT*2, 92);
-        factor[2] = lpf_1st_factor_cal(halfT*2, 5);
+        factor[2] = lpf_1st_factor_cal(halfT*2, 1);
         for(i=0;i<3;i++)
         {
-            fadata[i] = lpf_1st(fadata[i], (float)adata[i], factor[0]);
-            fgdata[i] = lpf_1st(fgdata[i], (float)gdata[i], factor[1]);
+            fadata[i] = (float)adata[i];
+            fgdata[i] = (float)gdata[i];
             fmdata[i] = lpf_1st(fmdata[i], (float)mdata[i], factor[2]);
+            //fmdata[i] = 0;
         }
-
-        ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
+        
+        ret = imu_get_euler_angle(fadata, fgdata, fmdata, &langle);
+        
         halfT = ((float)time)/1000/2000;
-       
-        /* timer task */
+        angle = langle;
         if(FLAG_TIMER)
         {
             /* dcal process */
-            if((abs(cp_mdata[0]) > 1200) || (abs(cp_mdata[1]) > 1200) || (abs(cp_mdata[2]) > 1200))
-            {
-            
-            }
-            else
-            {
-                dcal_minput(cp_mdata);
-            }
-            
+            dcal_minput(cp_mdata);
             dcal_output(&dcal);
             
             /* bmp read */
@@ -210,10 +222,16 @@ int main(void)
             }
             
             GPIO_PinToggle(HW_GPIOC, 3);
-            
             FLAG_TIMER = false;
         }
-        send_data_process(&angle, adata, gdata, cp_mdata, (int32_t)pressure);
+        
+        for(i=0;i<3;i++)
+        {
+            adata[i] = (int16_t)fadata[i];
+            gdata[i] = (int16_t)fgdata[i];
+            mdata[i] = (int16_t)fmdata[i];
+        }
+        send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);
     }
 }
 
@@ -235,6 +253,15 @@ void UART0_IRQHandler(void)
         }
     }
 
+}
+
+void PIT_IRQHandler(void)
+{
+    if(PIT->CHANNEL[0].TFLG)
+    {
+        PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
+        FLAG_TIMER = true;
+    }
 }
 
 

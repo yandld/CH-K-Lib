@@ -159,7 +159,24 @@
           <Name>-S0 -C0 -P0 -FD1FFF8000 -FC1000 -FN1 -FF0MK_P512 -FS00 -FL080000 -FP0($$Device:MKL28Z512xxx7$Flash\MK_P512.FLM))</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>314</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>340</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MKL28Z7.s</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+      </Breakpoint>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>

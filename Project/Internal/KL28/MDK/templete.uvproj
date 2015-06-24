@@ -225,7 +225,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <RoSelD>3</RoSelD>
@@ -335,7 +335,7 @@
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
-                <StartAddress>0x1fff8000</StartAddress>
+                <StartAddress>0x1fffa000</StartAddress>
                 <Size>0x20000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
@@ -396,7 +396,7 @@
             <TextAddressRange>0x00000000</TextAddressRange>
             <DataAddressRange>0x1FFF8000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile></ScatterFile>
+            <ScatterFile>..\src\MKL28Z512xxx7_flash.scf</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc>--keep __fsym_*</Misc>

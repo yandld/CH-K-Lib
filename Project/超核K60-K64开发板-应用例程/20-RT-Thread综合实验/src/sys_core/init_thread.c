@@ -17,19 +17,20 @@ int ui_startup(int argc, char** argv);
 
 rt_err_t ads7843_init(const char * name, const char * spi_device_name);
 
+#define SYS_HEAP_SIZE           (1024*50)
+volatile static uint8_t SYSHEAP[SYS_HEAP_SIZE];
+
 void init_thread_entry(void* parameter)
 {
     rt_thread_t tid;
     rt_err_t err;
     
-    #ifndef FRDM
     SRAM_Init();
-    rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-    #else
-    rt_system_heap_init((void*)(0x1FFF0000), (void*)(0x1FFF0000 + 0x10000));
-    #endif
-    
-    rt_thread_delay(1);
+    err = SRAM_SelfTest();
+    if(err)
+        rt_system_heap_init((void*)SYSHEAP, (void*)(SYS_HEAP_SIZE + (uint32_t)SYSHEAP));
+    else
+        rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
     
     rt_hw_uart_init("uart0", 0);
     rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
@@ -39,8 +40,8 @@ void init_thread_entry(void* parameter)
     
     rt_hw_spi_init();
     rt_hw_rtc_init();
-    rt_hw_dflash_init("dflash0");
     rt_hw_sd_init();
+    
     /* start usbd core thread */
     tid = rt_thread_create("usbd", usb_thread_entry, RT_NULL, (1024*1), 0x15, 20);                                                      
     rt_thread_startup(tid);	
@@ -56,22 +57,18 @@ void init_thread_entry(void* parameter)
     
     if(err)
     {
-        if(dfs_mount("dflash0", "/", "elm", 0, 0))
+        if(dfs_mount("sd0", "/", "elm", 0, 0))
         {
-            dfs_mkfs("elm", "dflash0");
-            dfs_mount("dflash0", "/", "elm", 0, 0);
+            dfs_mkfs("elm", "sd0");
+            dfs_mount("sd0", "/", "elm", 0, 0);
         }
     }
-    
-    
-    at24cxx_init("at24c02", "i2c0");
 
     #ifndef FRDM
     ui_startup(RT_NULL, RT_NULL);
     #endif
     
     rt_hw_ksz8041_init();
-    
     
     /* ceate default index.html*/
     int fd;

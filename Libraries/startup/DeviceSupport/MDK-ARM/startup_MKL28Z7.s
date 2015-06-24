@@ -266,7 +266,7 @@ FPROT3          EQU     nFPROT3:EOR:0xFF
 ;       <2=> Boot from ROM
 ;       <3=> Boot from ROM
 ;         <i> Boot source selection
-FOPT          EQU     0xFF
+FOPT          EQU     0x3D
 ;   </h>
 ;   <h> Flash security byte (FSEC)
 ;     <i> WARNING: If SEC field is configured as "MCU security status is secure" and MEEN field is configured as "Mass erase is disabled",
@@ -306,12 +306,12 @@ Reset_Handler   PROC
                 EXPORT  Reset_Handler             [WEAK]
                 IMPORT  SystemInit
                 IMPORT  __main
-
-                CPSID   I               ; Mask interrupts
-                LDR     R0, =SystemInit
-                BLX     R0
-                CPSIE   i               ; Unmask interrupts
-                LDR     R0, =__main
+                IMPORT  main
+;                CPSID   I               ; Mask interrupts
+               ; LDR     R0, =SystemInit
+               ; BLX     R0
+               ; CPSIE   i               ; Unmask interrupts
+                LDR     R0, =main
                 BX      R0
                 ENDP
 

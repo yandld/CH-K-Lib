@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Processors:          MKL28Z512VDC7
-**                          MKL28Z256VDC7
+**     Processors:          MKL28Z512VMP7
 **                          MKL28Z512VLH7
-**                          MKL28Z256VLH7
 **                          MKL28Z512VLL7
-**                          MKL28Z256VLL7
-**                          MKL28Z512VMP7
+**                          MKL28Z512VDC7
 **                          MKL28Z256VMP7
+**                          MKL28Z256VLH7
+**                          MKL28Z256VLL7
+**                          MKL28Z562VDC7
 **
 **     Compilers:           Keil ARM C/C++ Compiler
 **                          Freescale C/C++ for Embedded ARM
@@ -15,16 +15,16 @@
 **                          GNU C Compiler - CodeSourcery Sourcery G++
 **                          IAR ANSI C/C++ Compiler for ARM
 **
-**     Reference manual:    KL28Z256VLH76RM, Rev.0, Feb 2015
-**     Version:             rev. 1.2, 2015-03-20
-**     Build:               b150320
+**     Reference manual:    KL28Z256VLH76RM, Rev.0, Jan 2015
+**     Version:             rev. 1.0, 2014-12-29
+**     Build:               b150221
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
 **         contains the system frequency. It configures the device and initializes
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
-**     Copyright (c) 2015 Freescale Semiconductor, Inc.
+**     Copyright (c) 2014 Freescale Semiconductor, Inc.
 **     All rights reserved.
 **
 **     Redistribution and use in source and binary forms, with or without modification,
@@ -58,19 +58,14 @@
 **     Revisions:
 **     - rev. 1.0 (2014-12-29)
 **         Initial version.
-**     - rev. 1.1 (2015-03-19)
-**         Make array for registers in XRDC, PCC and TRGMUX
-**     - rev. 1.2 (2015-03-20)
-**         Add vector table for intmux0
-**         Add IRQS for SCG, RCM, DAC, TSI
 **
 ** ###################################################################
 */
 
 /*!
  * @file MKL28Z7
- * @version 1.2
- * @date 2015-03-20
+ * @version 1.0
+ * @date 2014-12-29
  * @brief Device specific configuration file for MKL28Z7 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -95,12 +90,9 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 
 void SystemInit (void) {
 
-
-           #if (DISABLE_WDOG)
+#if (DISABLE_WDOG)
   uint32_t cs = WDOG0->CS;
   WDOG0->CS = (uint32_t) (cs & ~WDOG_CS_EN_MASK);
-  WDOG0->TOVAL = 0x4;
-
 #endif /* (DISABLE_WDOG) */
 
 #ifdef CLOCK_SETUP
@@ -117,7 +109,7 @@ void SystemInit (void) {
   SCG->RCCR=SCG_RCCR_VALUE;
   SCG->VCCR=SCG_VCCR_VALUE;
   SCG->HCCR=SCG_HCCR_VALUE;
-
+  
 #ifdef SCG_MODE_FIRC_48M
   SCG->FIRCDIV=SCG_FIRCDIV_VALUE;
   SCG->FIRCCFG=SCG_FIRCCFG_VALUE;
@@ -160,7 +152,7 @@ void SystemCoreClockUpdate (void) {
   uint32_t SCGOUTClock;                                 /* Variable to store output clock frequency of the SCG module */
   uint16_t Divider, prediv, multi;
   Divider = (SCG->CSR & SCG_CSR_DIVCORE_MASK) >> SCG_CSR_DIVCORE_SHIFT + 1;
-
+  
   switch ((SCG->CSR & SCG_CSR_SCS_MASK)) {
     case 0x2:
       /* Slow IRC */

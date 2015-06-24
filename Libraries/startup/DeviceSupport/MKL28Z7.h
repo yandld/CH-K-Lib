@@ -15124,7 +15124,7 @@ typedef struct {
 /** WDOG - Register Layout Typedef */
 typedef struct {
   __IO uint32_t CS;                                /**< Watchdog Control and Status Register, offset: 0x0 */
-  __I  uint32_t CNT;                               /**< Watchdog Counter Register, offset: 0x4 */
+  __IO uint32_t CNT;                               /**< Watchdog Counter Register, offset: 0x4 */
   __IO uint32_t TOVAL;                             /**< Watchdog Timeout Value Register, offset: 0x8 */
   __IO uint32_t WIN;                               /**< Watchdog Window Register, offset: 0xC */
 } WDOG_Type, *WDOG_MemMapPtr;

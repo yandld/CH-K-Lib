@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Processors:          MKL28Z512VDC7
-**                          MKL28Z256VDC7
+**     Processors:          MKL28Z512VMP7
 **                          MKL28Z512VLH7
-**                          MKL28Z256VLH7
 **                          MKL28Z512VLL7
-**                          MKL28Z256VLL7
-**                          MKL28Z512VMP7
+**                          MKL28Z512VDC7
 **                          MKL28Z256VMP7
+**                          MKL28Z256VLH7
+**                          MKL28Z256VLL7
+**                          MKL28Z562VDC7
 **
 **     Compilers:           Keil ARM C/C++ Compiler
 **                          Freescale C/C++ for Embedded ARM
@@ -15,16 +15,16 @@
 **                          GNU C Compiler - CodeSourcery Sourcery G++
 **                          IAR ANSI C/C++ Compiler for ARM
 **
-**     Reference manual:    KL28Z256VLH76RM, Rev.0, Feb 2015
-**     Version:             rev. 1.2, 2015-03-20
-**     Build:               b150320
+**     Reference manual:    KL28Z256VLH76RM, Rev.0, Jan 2015
+**     Version:             rev. 1.0, 2014-12-29
+**     Build:               b150221
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
 **         contains the system frequency. It configures the device and initializes
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
-**     Copyright (c) 2015 Freescale Semiconductor, Inc.
+**     Copyright (c) 2014 Freescale Semiconductor, Inc.
 **     All rights reserved.
 **
 **     Redistribution and use in source and binary forms, with or without modification,
@@ -58,19 +58,14 @@
 **     Revisions:
 **     - rev. 1.0 (2014-12-29)
 **         Initial version.
-**     - rev. 1.1 (2015-03-19)
-**         Make array for registers in XRDC, PCC and TRGMUX
-**     - rev. 1.2 (2015-03-20)
-**         Add vector table for intmux0
-**         Add IRQS for SCG, RCM, DAC, TSI
 **
 ** ###################################################################
 */
 
 /*!
  * @file MKL28Z7
- * @version 1.2
- * @date 2015-03-20
+ * @version 1.0
+ * @date 2014-12-29
  * @brief Device specific configuration file for MKL28Z7 (header file)
  *
  * Provides a system configuration function and a global variable that contains

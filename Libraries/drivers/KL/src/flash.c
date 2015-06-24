@@ -10,7 +10,7 @@
 #include "flash.h"
 #include "common.h"
 
-#define LIB_DEBUG		0
+#define LIB_DEBUG		1
 #if ( LIB_DEBUG == 1 )
 #include <stdio.h>
 #define LIB_TRACE	printf
@@ -74,19 +74,10 @@ static uint8_t _CommandLaunch(void)
 {
     /* Clear command result flags */
     FTF->FSTAT = ACCERR | FPVIOL;
-
-    /* Launch Command */
     FTF->FSTAT = CCIF;
-
-    /* wait command end */
     while(!(FTF->FSTAT & CCIF));
-
-    /*check for errors*/
     if(FTF->FSTAT & (ACCERR | FPVIOL | MGSTAT0)) return FLASH_ERROR;
-
-    /*No errors retur OK*/
     return FLASH_OK;
-
 }
 
 uint32_t FLASH_GetSectorSize(void)
@@ -104,6 +95,7 @@ void FLASH_Init(void)
 
 uint8_t FLASH_EraseSector(uint32_t addr)
 {
+    int ret;
 	union
 	{
 		uint32_t  word;
@@ -116,21 +108,16 @@ uint8_t FLASH_EraseSector(uint32_t addr)
 	FTF->FCCOB1 = dest.byte[2];
 	FTF->FCCOB2 = dest.byte[1];
 	FTF->FCCOB3 = dest.byte[0];
-		
-	if(FLASH_OK == _CommandLaunch())
-	{
-		return FLASH_OK;
-	}
-	else
-	{
-		return FLASH_ERROR;
-	}
+    __disable_irq();
+    ret = _CommandLaunch();
+    __enable_irq();
+    
+    return ret;
 }
 
 uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
 {
-	uint16_t i;
-    uint16_t step;
+    uint16_t step, ret, i;
 	union
 	{
 		uint32_t  word;
@@ -176,7 +163,11 @@ uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
 
 		dest.word += step; buf += step;
 
-		if(FLASH_OK != _CommandLaunch()) 
+        __disable_irq();
+        ret = _CommandLaunch();
+        __enable_irq();
+        
+		if(FLASH_OK != ret) 
         {
             return FLASH_ERROR;
         }
@@ -185,3 +176,44 @@ uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
 }
 
 
+uint32_t FLASH_Test(uint32_t startAddr, uint32_t size)
+{
+    int addr, i,err;
+    
+    uint8_t *p;
+    uint8_t buf[SECTOR_SIZE];
+    
+    FLASH_Init();
+    
+    for(i=0;i<SECTOR_SIZE;i++)
+    {
+        buf[i] = i % 0xFF;
+    }
+    
+    for (addr = startAddr; addr<size; addr+=SECTOR_SIZE)
+    {
+        LIB_TRACE("program addr:0x%X ...", addr);
+        err = FLASH_EraseSector(addr);
+        err += FLASH_WriteSector(addr, buf, SECTOR_SIZE);
+        if(err)
+        {
+            LIB_TRACE("issue command failed\r\n");
+            return 1;
+        }
+        p = (uint8_t*)addr;
+        LIB_TRACE("varify addr:0x%X ...", addr);
+        for(i=0;i<SECTOR_SIZE;i++)
+        {
+            if(*p++ != (i%0xFF))
+            {
+                err++;
+                LIB_TRACE("ERR:[%d]:0x%02X ", i, *p);
+            }
+        }
+        if(!err)
+            LIB_TRACE("OK\r\n");
+        else
+            LIB_TRACE("ERR\r\n");
+    }
+    return err;
+}

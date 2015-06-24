@@ -73,6 +73,7 @@ uint8_t USB_ClockInit(void)
 	return 0;
 }
 
+static uint8_t buf[1024*4];
 int main(void)
 {
   
@@ -80,19 +81,38 @@ int main(void)
     GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
 
     UART_Init(BOARD_UART_DEBUG_MAP, 115200);
+    
+    PIT_Init();
+    PIT_SetIntMode(0, true);
+    PIT_SetTime(0, 1000);
+    
+    
     printf("HelloWorld\r\n");
-    if(USB_ClockInit())
-    {
-        printf("USB  Init failed, clock must be 96M or 48M\r\n");
-        while(1);
-    }
-    USB_Init();
-    NVIC_EnableIRQ(USB0_IRQn);
-    USBD_HID_Init();
+    FLASH_Test(6*1024, 130*1024);
+    printf("flash test OK!\r\n");
+//    if(USB_ClockInit())
+//    {
+//        printf("USB  Init failed, clock must be 96M or 48M\r\n");
+//        while(1);
+//    }
+//    USB_Init();
+//    NVIC_EnableIRQ(USB0_IRQn);
+//    USBD_HID_Init();
+ //   memset(buf, '\r', sizeof(buf));
     while(1)
     {
-   
+       // UART_DMASend(HW_UART0, 0, "12345678", 8);
+       // while(UART_DMAGetRemain(HW_UART0) != 0);
+       // printf("Succ!\r\n");
     }
 }
 
+void PIT_IRQHandler(void)
+{
+    if(PIT->CHANNEL[0].TFLG)
+    {
+        PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
+        printf("!!\r\n");
+    }
+}
 

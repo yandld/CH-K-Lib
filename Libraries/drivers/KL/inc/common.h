@@ -48,6 +48,11 @@
 #define NVIC_PriorityGroup_3         ((uint32_t)0x4) /*!< 3 bits for pre-emption priority   1 bits for subpriority */                                                   
 #define NVIC_PriorityGroup_4         ((uint32_t)0x3) /*!< 4 bits for pre-emption priority   0 bits for subpriority */
 
+
+#ifndef ALIGN
+#define ALIGN(size, align)           (((size) + (align) - 1) & ~((align) - 1))
+#endif
+
 #ifndef MIN
 #define MIN(a, b)       ((a) < (b) ? (a) : (b))
 #endif
@@ -110,39 +115,6 @@ typedef struct
     uint32_t    dmaChl;
     bool        isActive;
 }IPDMA_t;
-
-/* BME engine */
-#define BME_AND_MASK  (1<<26)
-#define BME_OR_MASK   (1<<27)
-#define BME_XOR_MASK  (3<<26)
-#define BME_BFI_MASK(BIT,WIDTH)   (1<<28) | (BIT<<23) | ((WIDTH-1)<<19)
-#define BME_UBFX_MASK(BIT,WIDTH)  (1<<28) | (BIT<<23) | ((WIDTH-1)<<19)
-
-/* Decorated Store: Logical AND */
-#define BME_AND8(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_AND_MASK) = wdata)
-#define BME_AND16(addr, wdata) (*(volatile uint16_t*)((uint32_t)addr | BME_AND_MASK) = wdata)
-#define BME_AND32(addr, wdata) (*(volatile uint32_t*)((uint32_t)addr | BME_AND_MASK) = wdata)
-
-/* Decorated Store: Logical OR */
-#define BME_OR8(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_OR_MASK) = wdata)
-#define BME_OR16(addr, wdata) (*(volatile uint16_t*)((uint32_t)addr | BME_OR_MASK) = wdata)
-#define BME_OR32(addr, wdata) (*(volatile uint32_t*)((uint32_t)addr | BME_OR_MASK) = wdata)
-
-/* Decorated Store: Logical XOR */
-#define BME_XOR8(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_XOR_MASK) = wdata)
-#define BME_XOR16(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_XOR_MASK) = wdata)
-#define BME_XOR32(addr, wdata) (*(volatile uint8_t*)((uint32_t)addr | BME_XOR_MASK) = wdata)
-
-/* Decorated Store: Bit Field Insert */
-#define BME_BFI8(addr, wdata, bit, width) (*(volatile uint8_t*)((uint32_t)addr | BME_BFI_MASK(bit,width)) = wdata)
-#define BME_BFI16(addr, wdata, bit, width) (*(volatile uint16_t*)((uint32_t)addr | BME_BFI_MASK(bit,width)) = wdata)
-#define BME_BFI32(addr, wdata, bit, width) (*(volatile uint32_t*)((uint32_t)addr | BME_BFI_MASK(bit,width)) = wdata)
-
-/* Decorated Load: Unsigned Bit Field Extract */
-#define BME_UBFX8(addr, bit, width) (*(volatile uint8_t*)((uint32_t)addr | BME_UBFX_MASK(bit,width)))
-#define BME_UBFX16(addr, bit, width) (*(volatile uint16_t*)((uint32_t)addr | BME_UBFX_MASK(bit,width)))
-#define BME_UBFX32(addr, bit, width) (*(volatile uint32_t*)((uint32_t)addr | BME_UBFX_MASK(bit,width)))
-
 
 
 #define CLK_EN(t, x)               (*((uint32_t*) t[x].addr) |= t[x].mask)

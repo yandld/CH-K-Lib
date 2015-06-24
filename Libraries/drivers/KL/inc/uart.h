@@ -46,7 +46,7 @@ void UART_PutChar(uint32_t instance, uint8_t ch);
 uint32_t UART_SetIntMode(uint32_t instance, UART_Int_t mode, bool val);
 
 #if (CHLIB_DMA_SUPPORT == 1)
-uint32_t UART_DMASend(uint32_t instance, uint8_t *buf, uint32_t len);
+uint32_t UART_DMASend(uint32_t instance, uint32_t dmaChl, uint8_t *buf, uint32_t len);
 uint32_t UART_DMAGetRemain(uint32_t instance);
 #endif
 

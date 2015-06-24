@@ -136,8 +136,6 @@ void DMA_CancelTransfer(uint8_t chl);
 /* IT funtions */
 void DMA_SetIntMode(uint8_t chl, DMA_Int_t mode, bool val);
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun);
-uint32_t DMA_ChlAlloc(void);
-void DMA_ChlFree(uint32_t chl);
 
 #endif
 

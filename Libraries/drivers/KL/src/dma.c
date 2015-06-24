@@ -12,8 +12,6 @@
 #include "dma.h"
 #include "common.h"
 
-//static DMA_CallBackType DMA_CallBackTable[4] = {NULL};
-static uint32_t DMAChAllocTbl = 0x00000000;
     
 static const IRQn_Type DMA_IRQnTable[] = 
 {
@@ -23,25 +21,6 @@ static const IRQn_Type DMA_IRQnTable[] =
     DMA3_IRQn,
 };
 
-
-uint32_t DMA_ChlAlloc(void)
-{
-    uint32_t i;
-    for(i=0; i<4; i++)
-    {
-        if((DMAChAllocTbl & (1<<i)) == 0)
-        {
-            DMAChAllocTbl |= (1<<i);
-            return i;
-        }
-    }
-    return 0xFFFFFFFF;
-}
-
-void DMA_ChlFree(uint32_t chl)
-{
-    DMAChAllocTbl &= ~(1<<chl);
-}
 
 /**
  * @brief  ³õÊ¼»¯DMAÄ£¿é
@@ -55,6 +34,7 @@ void DMA_Init(DMA_Init_t *Init)
 	SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;
     
     /* disable chl first */
+    DMA0->DMA[Init->chl].DSR_BCR |= DMA_DSR_BCR_DONE_MASK;
     DMA0->DMA[Init->chl].DCR &= ~DMA_DCR_ERQ_MASK;
     
     /* dma chl source config */
@@ -73,8 +53,6 @@ void DMA_Init(DMA_Init_t *Init)
             break;
     }
     DMA0->DMA[Init->chl].DCR = 0;
-    DMA0->DMA[Init->chl].DSR_BCR |= DMA_DSR_BCR_DONE_MASK;
-
     /* transfer bytes cnt */
     DMA0->DMA[Init->chl].DSR_BCR = DMA_DSR_BCR_BCR(Init->transCnt);
     /* source config */

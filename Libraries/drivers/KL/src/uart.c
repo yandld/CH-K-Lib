@@ -181,22 +181,35 @@ static IPDMA_t UART_DMATbl[]=
     {(void*)&UART2->D, (void*)&UART2->D, UART2_TRAN_DMAREQ, 0, false},
 };
 
-uint32_t UART_DMASend(uint32_t instance, uint8_t *buf, uint32_t len)
+uint32_t UART_DMASend(uint32_t instance, uint32_t dmaChl, uint8_t *buf, uint32_t len)
 {
-    uint32_t chl;
+    uint32_t chl, remain;
     DMA_Init_t Init;
     UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
     
-    chl = DMA_ChlAlloc();
-    if(chl == 0xFFFFFFFF)
+    if(UART_DMATbl[instance].isActive == true)
     {
-        return 1;
+        chl = UART_DMATbl[instance].dmaChl;
+        remain = DMA_GetTransCnt(chl);
+        if(remain == 0)
+        {
+            if(instance == HW_UART0)
+                UART0->C5 &= ~UART0_C5_TDMAE_MASK;
+            else
+                UARTx->C4 &= ~UART_C4_TDMAS_MASK;
+            UART_DMATbl[instance].isActive = false; 
+        }
+        else
+        {
+            return 1;
+        }
     }
+    chl = dmaChl;
     if(instance == HW_UART0)
         UART0->C5 |= UART0_C5_TDMAE_MASK;
     else
         UARTx->C4 |= UART_C4_TDMAS_MASK;
-    
+
     Init.chl = chl;
     Init.chlTrigSrc = UART_DMATbl[instance].trigSrc;
     Init.trigSrcMod = kDMA_TrigSrc_Normal;
@@ -238,7 +251,6 @@ uint32_t UART_DMAGetRemain(uint32_t instance)
             UART0->C5 &= ~UART0_C5_TDMAE_MASK;
         else
             UARTx->C4 &= ~UART_C4_TDMAS_MASK;
-        DMA_ChlFree(chl);
         UART_DMATbl[instance].isActive = false;
     }
     return ret;

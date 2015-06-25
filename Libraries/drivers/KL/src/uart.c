@@ -36,7 +36,7 @@ static const struct Reg_t CLKTbl[] =
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART2_MASK, SIM_SCGC4_UART2_SHIFT},
 };
 
-static const IRQn_Type UART_IRQnTable[] = 
+static const IRQn_Type UART_IrqTbl[] = 
 {
     UART0_FLEXIO_IRQn,
 };

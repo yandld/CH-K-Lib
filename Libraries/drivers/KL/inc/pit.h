@@ -3,7 +3,7 @@
   * @file    pit.h
   * @author  YANDLD
   * @version V2.6
-  * @date    2015.36.21
+  * @date    2015.06.21
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */

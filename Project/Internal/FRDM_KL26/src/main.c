@@ -9,6 +9,7 @@
 #include "gpio.h"
 #include "uart.h"
 #include "i2c.h"
+#include "adc.h"
 #include "flash.h"
 
 
@@ -76,7 +77,7 @@ uint8_t USB_ClockInit(void)
 static uint8_t buf[1024*4];
 int main(void)
 {
-  
+    uint32_t i, val, time;
     DelayInit();
     GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
 
@@ -88,7 +89,7 @@ int main(void)
     
     
     printf("HelloWorld\r\n");
-    FLASH_Test(6*1024, 130*1024);
+  //  FLASH_Test(6*1024, 130*1024);
     printf("flash test OK!\r\n");
 //    if(USB_ClockInit())
 //    {
@@ -99,12 +100,29 @@ int main(void)
 //    NVIC_EnableIRQ(USB0_IRQn);
 //    USBD_HID_Init();
  //   memset(buf, '\r', sizeof(buf));
+    ADC_Init(ADC0_SE3A_PE22, kADC_SpeedLow);
+    //ADC_SetIntMode(HW_ADC0, true);
+    ADC_SetTrigMode(HW_ADC0, TrigSoft);
+    ADC_SetAveMode(HW_ADC0, kADC_Ave32);
     while(1)
     {
+        PIT_SetTime(0, 500*1000);
+        time = PIT_GetCnt(0);
+        val = ADC_SoftRead(HW_ADC0, 3);
+        time = time - PIT_GetCnt(0);
+        printf("val:%d %d\r\n", val, time);
+        DelayMs(30);
        // UART_DMASend(HW_UART0, 0, "12345678", 8);
        // while(UART_DMAGetRemain(HW_UART0) != 0);
        // printf("Succ!\r\n");
     }
+}
+
+void ADC0_IRQHandler(void)
+{
+    uint32_t val;
+    val = ADC0->R[0];
+   // printf("!\r\n");
 }
 
 void PIT_IRQHandler(void)
@@ -112,7 +130,7 @@ void PIT_IRQHandler(void)
     if(PIT->CHANNEL[0].TFLG)
     {
         PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
-        printf("!!\r\n");
+       // printf("!!\r\n");
     }
 }
 

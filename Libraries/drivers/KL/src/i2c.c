@@ -3,7 +3,7 @@
   * @file    i2c.c
   * @author  YANDLD
   * @version V2.6
-  * @date    2015.36.21
+  * @date    2015.06.21
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -40,7 +40,7 @@ typedef struct
 
 static i2c_gpio i2c;
 
-uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
+uint8_t I2C_Init(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
     map_t * pq = (map_t*)&(MAP);
@@ -92,10 +92,6 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
     return pq->ip;
 }
 
-void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
-{
-    
-}
 
 static inline uint8_t SDA_IN(void)
 {
@@ -1249,7 +1245,7 @@ void I2C_Scan(uint32_t MAP)
     uint8_t i;
     uint8_t ret;
     uint32_t instance;
-    instance = I2C_QuickInit(MAP, 100*1000);
+    instance = I2C_Init(MAP, 100*1000);
     for(i = 1; i < 127; i++)
     {
         ret = I2C_Probe(instance , i);

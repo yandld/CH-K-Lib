@@ -1,3 +1,12 @@
+/**
+  ******************************************************************************
+  * @file    adc.h
+  * @author  YANDLD
+  * @version V2.6
+  * @date    2015.6.21
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
+  */
 #ifndef __CH_LIB_ADC_H__
 #define __CH_LIB_ADC_H__
 
@@ -33,109 +42,42 @@
 #define ADC0_SE6B_PD05      (0x01304A18U)
 #define ADC0_SE7B_PD06      (0x01384C18U)
 
-
+/* ADC speed select */
 typedef enum
 {
-    kADC_ClockDiv1,  
-    kADC_ClockDiv2,
-    kADC_ClockDiv4,
-    kADC_ClockDiv8,
-}ADC_ClockDiv_Type;
+    kADC_SpeedHigh,
+    kADC_SpeedMiddle,
+    kADC_SpeedLow,
+}ADC_Speed_t;
 
-//!< ADC转换精度定义
+/* ADC trig mode */
 typedef enum
 {
-    kADC_SingleDiff8or9 = 0,    /* 单端8位或 差分9位精度 */
-    kADC_SingleDiff12or13 = 1,  /* 单端12位或 差分13位精度 */
-    kADC_SingleDiff10or11 = 2,  
-    kADC_SingleDIff16 = 3,
-}ADC_ResolutionMode_Type;
+    TrigSoft,   /* software trigger */
+    TrigHard,   /* hardware trigger */
+}ADC_Trig_t;
 
-//!< ADC 触发方式定义
+
+/* ADC hardware ave select */
 typedef enum
 {
-    kADC_TriggerSoftware,  //软件触发
-    kADC_TriggerHardware,  //硬件触发
-}ADC_TriggerSelect_Type;
-
-//!< 是否连续转换
-typedef enum
-{
-    kADC_ContinueConversionEnable,   //开启连续转换
-    kADC_ContinueConversionDisable,  //关闭连续转换
-}ADC_ContinueMode_Type;
-
-//!< 单端ADC还是查分ADC
-typedef enum
-{
-    kADC_Single,         //单端模式
-    kADC_Differential,   //差分模式
-}ADC_SingleOrDiffMode_Type;
-
-//!< ADC 通道触发器复用选择(每个ADC通道有2个ADC转换触发器 为MuxA 和 MuxB. MuxB 只能硬件触发)
-#define kADC_MuxA                (0x00)
-#define kADC_MuxB                (0x01)
-//!< ADC 通道复用选择(SEA 还是SEB) 硬件通道选择
-#define kADC_ChlMuxA             (0x00)
-#define kADC_ChlMuxB             (0x01)
-
-//!< 模拟电压参考源
-typedef enum
-{
-    kADC_VoltageVREF,
-    kADC_VoltageVALT,
-}ADC_VoltageRef_Type;
-
-//!< 硬件平均
-typedef enum
-{
-    kADC_HardwareAverageDisable,
-    kADC_HardwareAverage_4,
-    kADC_HardwareAverage_8,
-    kADC_HardwareAverage_16,
-    kADC_HardwareAverage_32,
-}ADC_HardwareAveMode_Type;
-
-//!< ADC中断及DMA配置选择
-typedef enum
-{
-    kADC_IT_EOF,            //ADC 转换完成中断
-    kADC_DMA_EOF,           //ADC DMA 完成中断
-}ADC_ITDMAConfig_Type;
-
-//!< ADC 回调函数定义
-typedef void (*ADC_CallBackType)(void);
-
-//!< ADC 初始化结构
-typedef struct
-{
-    uint32_t                    instance;                   //模块号
-    ADC_TriggerSelect_Type      triggerMode;                //触发模式 软件触发 或 硬件触发
-    ADC_ClockDiv_Type           clockDiv;                   //ADC时钟分频
-    ADC_ResolutionMode_Type     resolutionMode;             //分频率选择 8 10 12 16位精度等
-    ADC_SingleOrDiffMode_Type   singleOrDiffMode;           //单端 还是 差分输入
-    ADC_ContinueMode_Type       continueMode;               //是否启动连续转换
-    ADC_HardwareAveMode_Type    hardwareAveMode;            //硬件平均功能选择
-    ADC_VoltageRef_Type         vref;                       //模拟电压参考源
-}ADC_InitTypeDef;
-
+    kADC_Ave1 = 0xFF,
+    kADC_Ave4 = 0,
+    kADC_Ave8 = 1,
+    kADC_Ave16 = 2,
+    kADC_Ave32 = 3,
+}ADC_Ave_t;
 
 //!< API functions
-void ADC_CallbackInstall(uint32_t instance, ADC_CallBackType AppCBFun);
-void ADC_Init(ADC_InitTypeDef* ADC_InitStruct);
-uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode);
-void ADC_ITDMAConfig(uint32_t instance, uint32_t mux, ADC_ITDMAConfig_Type config, bool status);
-int32_t ADC_QuickReadValue(uint32_t MAP);
-int32_t ADC_ReadValue(uint32_t instance, uint32_t mux);
-void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux);
-uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux);
-void ADC_ChlMuxConfig(uint32_t instance, uint32_t mux);
-
+uint32_t ADC_Init(uint32_t MAP, ADC_Speed_t speed);
+int32_t ADC_SoftRead(uint32_t instance, uint32_t chl);
+void ADC_SetIntMode(uint32_t instance, bool val);
+void ADC_SetTrigMode(uint32_t instance, ADC_Trig_t trig);
+void ADC_SetAveMode(uint32_t instance, ADC_Ave_t mod);
 
 #ifdef __cplusplus
 }
 #endif
-
 
 
 #endif

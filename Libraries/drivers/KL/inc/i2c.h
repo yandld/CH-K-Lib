@@ -3,7 +3,7 @@
   * @file    i2c.h
   * @author  YANDLD
   * @version V2.6
-  * @date    2015.36.21
+  * @date    2015.06.21
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -16,7 +16,6 @@
 	 
 #include <stdint.h>
 
-     
 typedef struct
 {
     uint32_t instance;    //!< I2C pin select
@@ -27,7 +26,6 @@ typedef struct
 #define HW_I2C0         (0x00U)
 #define HW_I2C1         (0x01U)
 #define HW_I2C2         (0x02U)
-
 
 //!< I2C QuickInit macro
 #define I2C1_SCL_PE01_SDA_PE00  (0X000081A1U)
@@ -40,27 +38,8 @@ typedef struct
 #define I2C0_SCL_PE24_SDA_PE25  (0X0000B160U)
 #define I2C1_SCL_PC01_SDA_PC02  (0X00008291U)
 
-typedef enum
-{
-    kI2C_Read,                  //!< I2C Master Read Data
-    kI2C_Write,                 //!< I2C Master Write Data
-    kI2C_DirectionNameCount,
-}I2C_Direction_Type; 
 
-typedef enum
-{
-    kI2C_IT_Disable,        //!< Disable Interrupt
-    kI2C_DMA_Disable,       //!< Disable DMA
-    kI2C_IT_BTC,            //!< Byte Transfer Complete Interrupt
-    kI2C_DMA_BTC,           //!< DMA Trigger On Byte Transfer Complete
-}I2C_ITDMAConfig_Type;
-
-
-//!< I2C CallBack Type
-typedef void (*I2C_CallBackType)(void);
-
-
-uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate);
+uint8_t I2C_Init(uint32_t MAP, uint32_t baudrate);
 int32_t I2C_BurstRead(uint32_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len);
 uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len);
 uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData);

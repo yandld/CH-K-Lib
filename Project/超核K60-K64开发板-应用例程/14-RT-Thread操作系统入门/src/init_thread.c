@@ -32,6 +32,8 @@ void init_thread_entry(void* parameter)
 {
 
     rt_thread_t tid;
+    rt_system_heap_init((void*)0x1FFF0000, (void*)(0x10000+0x1FFF0000));
+    rt_system_comonent_init();
     /* 创建线程 t1 堆栈大小256 优先级0x24 时间片为20ms */
     tid = rt_thread_create("t1", t1_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL)

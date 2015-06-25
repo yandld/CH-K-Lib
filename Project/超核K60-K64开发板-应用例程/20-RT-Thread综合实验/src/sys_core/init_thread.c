@@ -31,7 +31,7 @@ void init_thread_entry(void* parameter)
         rt_system_heap_init((void*)SYSHEAP, (void*)(SYS_HEAP_SIZE + (uint32_t)SYSHEAP));
     else
         rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-    
+    rt_system_comonent_init();
     rt_hw_uart_init("uart0", 0);
     rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
     rt_kprintf("rt-thread system start!\r\n");

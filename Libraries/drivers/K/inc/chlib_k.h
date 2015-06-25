@@ -48,8 +48,6 @@
 #include "arm_math.h"
 #include "arm_common_tables.h"
 
-/* USB */
-#include "rl_usb.h"
 
 #ifdef __cplusplus
 }

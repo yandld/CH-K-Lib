@@ -5,7 +5,7 @@
 #include "sram.h"
 #include "rtt_drv.h"
 
-#define SYS_HEAP_SIZE           (1024*130)
+#define SYS_HEAP_SIZE           (1024*32)
 volatile static uint8_t SYSHEAP[SYS_HEAP_SIZE];
 
 void init_thread_entry(void* parameter)
@@ -16,14 +16,10 @@ void init_thread_entry(void* parameter)
     SRAM_Init();
     err = SRAM_SelfTest();
     if(err)
-    {
         rt_system_heap_init((void*)SYSHEAP, (void*)(SYS_HEAP_SIZE + (uint32_t)SYSHEAP));
-    }
     else
-    {
         rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-    }
-    
+    rt_system_comonent_init();
     rt_thread_delay(1);
     
     rt_hw_uart_init("uart0", 0);

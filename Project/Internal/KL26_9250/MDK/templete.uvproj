@@ -470,11 +470,6 @@
               <FilePath>..\..\..\..\Libraries\drivers\KL\src\gpio.c</FilePath>
             </File>
             <File>
-              <FileName>systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\KL\src\systick.c</FilePath>
-            </File>
-            <File>
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\KL\src\uart.c</FilePath>

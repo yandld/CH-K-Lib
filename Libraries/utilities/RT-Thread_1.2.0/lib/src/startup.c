@@ -1,14 +1,8 @@
-#include <rtthread.h>z
+#include <rtthread.h>
 #include <stdint.h>
 #include <rthw.h>
 #include "components.h"
 
-
-
-
-
-#define RTT_INITAL_HEAP_SIZE   (1024*6)
-static uint8_t InitalMemPoll[RTT_INITAL_HEAP_SIZE];
     
 extern int Image$$RW_IRAM1$$ZI$$Limit;
 extern int Image$$RW_IRAM1$$RW$$Limit;
@@ -69,16 +63,7 @@ extern uint32_t SystemCoreClock;
 __weak int main(void)
 {
 	rt_hw_interrupt_disable();
-    
-    /* set system heap */
-    uint32_t begin_addr = ((uint32_t)InitalMemPoll);
-    uint32_t end_addr = begin_addr + RTT_INITAL_HEAP_SIZE;
-    
-    rt_system_heap_init((void*)begin_addr, (void*)end_addr);
-    
-    /* init systick */
     SysTick_Config(SystemCoreClock / RT_TICK_PER_SECOND - 1);
-    
 	rtthread_startup();
     
 	return 0;

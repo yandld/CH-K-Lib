@@ -102,35 +102,19 @@ int fputc(int ch,FILE *f)
     return ch;
 }
 
-
 void _init_entry(void* parameter)
 {
     rt_thread_t tid;
-    
-    rt_system_comonent_init();
-    
-//    #if defined(RT_USING_DFS_ROMFS) 
-//    dfs_mount(RT_NULL, "/", "rom", 0, &romfs_root);
-//    #endif
-    
-    /* init thread */
-    tid = rt_thread_create("init", init_thread_entry, RT_NULL, 1024, 0x20, 20);                       
-    if (tid != RT_NULL)
-        rt_thread_startup(tid);		
-
-    tid = rt_thread_self();
-    rt_thread_delete(tid);
+    init_thread_entry(RT_NULL);
 }
 
-
+static uint8_t INIT_STACK[1024];
 void rt_application_init(void)
 {
-    rt_thread_t tid;
-    
-    /* internal init thread */
-    tid = rt_thread_create("init0", _init_entry, RT_NULL, 512, 5, 20);                       
-    if (tid != RT_NULL)
-        rt_thread_startup(tid);
+    int ret;
+    static struct rt_thread tid;
+    ret = rt_thread_init(&tid, "init", _init_entry, RT_NULL, INIT_STACK, sizeof(INIT_STACK), 20, 20);
+    rt_thread_startup(&tid);
 }
 
 

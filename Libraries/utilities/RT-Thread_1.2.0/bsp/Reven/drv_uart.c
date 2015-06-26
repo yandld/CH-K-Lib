@@ -64,7 +64,10 @@ static void UART0_ISR(uint16_t byteReceived)
     {
         dev->rx_len++;
         dev->rx_buf[(dev->rx_len)-1] = byteReceived;
-        dev->rtdev.rx_indicate((rt_device_t)dev, dev->rx_len);
+        if(dev->rtdev.rx_indicate)
+        {
+            dev->rtdev.rx_indicate((rt_device_t)dev, dev->rx_len); 
+        }
     }
 }
 

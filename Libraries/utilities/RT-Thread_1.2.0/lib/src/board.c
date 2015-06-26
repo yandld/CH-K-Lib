@@ -104,13 +104,14 @@ void _init_entry(void* parameter)
     init_thread_entry(RT_NULL);
 }
 
-static uint8_t INIT_STACK[512];
+static uint8_t INIT_STACK[1024];
 void rt_application_init(void)
 {
     int ret;
-    static struct rt_thread tid;
-    ret = rt_thread_init(&tid, "init", _init_entry, RT_NULL, INIT_STACK, sizeof(INIT_STACK), 20, 20);
-    rt_thread_startup(&tid);
+    static rt_thread_t tid;
+    rt_system_heap_init((void*)INIT_STACK, (void*)(INIT_STACK + sizeof(INIT_STACK)));
+    tid = rt_thread_create("init", _init_entry, RT_NULL, 256, 20, 20);
+    rt_thread_startup(tid);
 }
 
 

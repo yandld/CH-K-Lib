@@ -4,7 +4,6 @@
 
 #include <stdbool.h>
 
-
 typedef struct
 {
     uint8_t flag;

@@ -90,10 +90,6 @@ void SysTick_Handler(void)
     rt_interrupt_leave();
 }
 
-__weak void init_thread_entry(void* parameter)
-{
-    rt_kprintf("%s empty init thread!\r\n", __func__);
-}
 
 /* redefine fputc */
 int fputc(int ch,FILE *f)
@@ -108,7 +104,7 @@ void _init_entry(void* parameter)
     init_thread_entry(RT_NULL);
 }
 
-static uint8_t INIT_STACK[1024];
+static uint8_t INIT_STACK[512];
 void rt_application_init(void)
 {
     int ret;

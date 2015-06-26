@@ -17,7 +17,7 @@ int ui_startup(int argc, char** argv);
 
 rt_err_t ads7843_init(const char * name, const char * spi_device_name);
 
-#define SYS_HEAP_SIZE           (1024*50)
+#define SYS_HEAP_SIZE           (1024*10)
 volatile static uint8_t SYSHEAP[SYS_HEAP_SIZE];
 
 void init_thread_entry(void* parameter)
@@ -59,8 +59,6 @@ void init_thread_entry(void* parameter)
     {
         if(dfs_mount("sd0", "/", "elm", 0, 0))
         {
-            dfs_mkfs("elm", "sd0");
-            dfs_mount("sd0", "/", "elm", 0, 0);
         }
     }
 

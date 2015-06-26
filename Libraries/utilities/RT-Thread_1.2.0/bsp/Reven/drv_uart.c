@@ -168,15 +168,12 @@ static rt_size_t rt_uart_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_si
 {
     int len;
     struct uart_device * uart_dev;
-    _unlock((struct uart_device *)dev);
-    
+    _lock((struct uart_device *)dev);
     uart_dev = (struct uart_device*)dev;
-    
     len = uart_dev->rx_len;
     rt_memcpy(buffer, uart_dev->rx_buf, len);
     uart_dev->rx_len = 0;
-    
-    _lock((struct uart_device *)dev);
+    _unlock((struct uart_device *)dev);
     return len;
 }
 

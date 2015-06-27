@@ -454,20 +454,27 @@ FSEC            EQU     0xFE
 ;   </h>
 ; </h>
                 IF      :LNOT::DEF:RAM_TARGET
-                IF      :LNOT::DEF:BOOTLOADER				
+                IF      :LNOT::DEF:BOOTLOADER
                 AREA    |.ARM.__at_0x400|, CODE, READONLY
                 DCB     BackDoorK0, BackDoorK1, BackDoorK2, BackDoorK3
                 DCB     BackDoorK4, BackDoorK5, BackDoorK6, BackDoorK7
                 DCB     FPROT0,     FPROT1,     FPROT2,     FPROT3
                 DCB     FSEC,       FOPT,       FEPROT,     FDPROT
                 ENDIF
-				ENDIF
+				ENDIF 
                 AREA    |.text|, CODE, READONLY
 
 
 ; Reset Handler
 
 Reset_Handler   PROC
+                EXPORT  Reset_Handler             [WEAK]
+;                IMPORT  SystemInit
+                IMPORT  __main
+;                LDR     R0, =SystemInit
+;                BLX     R0
+                LDR     R0, =__main
+                BX      R0
                 ENDP
 
 

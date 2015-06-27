@@ -644,6 +644,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_at24cxx.c</FilePath>
             </File>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_lcd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -748,6 +758,31 @@
               <FileName>raven_box.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\firmware\raven_box.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>emWin</GroupName>
+          <Files>
+            <File>
+              <FileName>GUI_X.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\config\GUI_X.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\config\GUIConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCDConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\config\LCDConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_CM3.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Lib\GUI_CM3.lib</FilePath>
             </File>
           </Files>
         </Group>
@@ -1108,7 +1143,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK64F12 RAVEN</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src\gui;..\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs;..\..\..\..\Libraries\utilities\emWin\Include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\init;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\arch\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\ipv4;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\netif;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\romfs;..\src\webserver;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\drivers\K\src\usb\src\descriptor\msd;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\init;..\src\gui;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\spi;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include\drivers;..\src\webnet</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src\gui;..\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs;..\..\..\..\Libraries\utilities\emWin\Include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\init;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\arch\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\ipv4;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\netif;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\romfs;..\src\webserver;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\drivers\K\src\usb\src\descriptor\msd;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\init;..\src\gui;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\spi;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include\drivers;..\src\webnet;..\firmware</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1471,6 +1506,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_at24cxx.c</FilePath>
             </File>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_lcd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1618,6 +1663,31 @@
               <FileName>raven_box.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\firmware\raven_box.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>emWin</GroupName>
+          <Files>
+            <File>
+              <FileName>GUI_X.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\config\GUI_X.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\config\GUIConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCDConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\config\LCDConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_CM3.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Lib\GUI_CM3.lib</FilePath>
             </File>
           </Files>
         </Group>
@@ -2341,6 +2411,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_at24cxx.c</FilePath>
             </File>
+            <File>
+              <FileName>ili9320.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_lcd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2488,6 +2568,31 @@
               <FileName>raven_box.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\firmware\raven_box.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>emWin</GroupName>
+          <Files>
+            <File>
+              <FileName>GUI_X.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\config\GUI_X.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUIConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\config\GUIConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCDConf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\config\LCDConf.c</FilePath>
+            </File>
+            <File>
+              <FileName>GUI_CM3.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Lib\GUI_CM3.lib</FilePath>
             </File>
           </Files>
         </Group>

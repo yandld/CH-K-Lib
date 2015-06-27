@@ -1264,16 +1264,6 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>emwin</GroupName>
-          <Files>
-            <File>
-              <FileName>GUI_CM3.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\emWin\Lib\GUI_CM3.lib</FilePath>
-            </File>
-          </Files>
-        </Group>
       </Groups>
     </Target>
   </Targets>

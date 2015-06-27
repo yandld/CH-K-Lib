@@ -23,17 +23,21 @@ const rtthread_t rtthread =
     rt_snprintf,
     rt_console_set_device,
     rt_console_get_device,
+    rt_malloc,
+    rt_free,
     rt_thread_delay,
+    rt_tick_get,
+    rt_device_find,
+    rt_device_init,
+    rt_thread_create,
+    rt_thread_startup,
 };
-
 
 const api_t api = 
 {
     &rshell,
     &rtthread,
 };
-
-
 
 void init_thread_entry(void* parameter)
 {
@@ -43,21 +47,24 @@ void init_thread_entry(void* parameter)
     rt_system_comonent_init();
     rt_hw_uart_init("uart0", 0);
     rt_console_set_device("uart0");
-    rt_kprintf("rt-thread system start!\r\n");
-    finsh_system_init();
     rt_hw_sd_init();
     rt_hw_rtc_init();
     rt_hw_spi_init();
-    rt_hw_ksz8041_init();
+
     ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
-    tid = rt_thread_create("init", (void*)(0x40100), (void*)(&api), 1024, 20, 20);
+    rt_hw_lcd_init("lcd0");
+
+    finsh_system_init();
+    tid = rt_thread_create("init", (void*)(0x40400), (void*)(&api), 1024, 8, 20);
     rt_thread_startup(tid);
 
+    rt_hw_ksz8041_init();
 
     tid = rt_thread_self();
     rt_thread_delete(tid); 
 }
+
 
 uint8_t SYSHEAP[1024*64];
 void rt_application_init(void)
@@ -70,7 +77,11 @@ void rt_application_init(void)
         rt_system_heap_init((void*)SYSHEAP, (void*)(sizeof(SYSHEAP) + (uint32_t)SYSHEAP));
     else
         rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-    
+
+ //   void(*theUboot)(void);
+ //   theUboot = (void(*)(void))(0x40800);
+    //theUboot();
+
     tid = rt_thread_create("init", init_thread_entry, RT_NULL, 1024, 20, 20);
     rt_thread_startup(tid);
 }

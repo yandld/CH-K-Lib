@@ -1,6 +1,7 @@
 #ifndef __RT_API_H__
 #define __RT_API_H__
 
+#include <stdint.h>
 #include <rtthread.h>
 
 
@@ -20,7 +21,14 @@ typedef struct
     rt_int32_t (*rt_snprintf)(char *buf, rt_size_t size, const char *format, ...);
     rt_device_t (*rt_console_set_device)(const char *name);
     rt_device_t (*rt_console_get_device)(void);
+    void * (*rt_malloc)(rt_size_t nbytes);
+    void (*rt_free)(void *ptr);
     rt_err_t (*rt_thread_delay)(rt_tick_t tick);
+    rt_tick_t (*rt_tick_get)(void);
+    rt_device_t (*rt_device_find)(const char *name);
+    rt_err_t  (*rt_device_init) (rt_device_t dev);
+    rt_thread_t (*rt_thread_create)(const char *name, void (*entry)(void *parameter), void *parameter, rt_uint32_t stack_size, rt_uint8_t  priority,rt_uint32_t tick);
+    rt_err_t (*rt_thread_startup)(rt_thread_t thread);
 }rtthread_t;
 
 typedef struct
@@ -30,8 +38,7 @@ typedef struct
     
 }api_t;
 
-
-
+void API_SetAddr(uint32_t addr);
 
 
 

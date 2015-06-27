@@ -2,7 +2,6 @@
 #define __RT_API_H__
 
 #include <rtthread.h>
-#include <absacc.h> 
 
 
 typedef struct

@@ -725,11 +725,6 @@
           <GroupName>app_start</GroupName>
           <Files>
             <File>
-              <FileName>board.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\board.c</FilePath>
-            </File>
-            <File>
               <FileName>startup.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\startup.c</FilePath>

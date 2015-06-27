@@ -83,14 +83,6 @@ void DelayMs(uint32_t ms)
     else rt_thread_delay(ms/(1000/RT_TICK_PER_SECOND));  
 }
 
-void SysTick_Handler(void)
-{
-    rt_interrupt_enter();
-    rt_tick_increase();
-    rt_interrupt_leave();
-}
-
-
 /* redefine fputc */
 int fputc(int ch,FILE *f)
 {
@@ -100,17 +92,15 @@ int fputc(int ch,FILE *f)
 
 void _init_entry(void* parameter)
 {
-    rt_thread_t tid;
     init_thread_entry(RT_NULL);
 }
 
 static uint8_t INIT_STACK[1024];
-void rt_application_init(void)
+__weak void rt_application_init(void)
 {
-    int ret;
     static rt_thread_t tid;
     rt_system_heap_init((void*)INIT_STACK, (void*)(INIT_STACK + sizeof(INIT_STACK)));
-    tid = rt_thread_create("init", _init_entry, RT_NULL, 256, 20, 20);
+    tid = rt_thread_create("init", _init_entry, RT_NULL, 512, 20, 20);
     rt_thread_startup(tid);
 }
 

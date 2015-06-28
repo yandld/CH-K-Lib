@@ -15,8 +15,8 @@ extern api_t *api;
 #define rt_thread_startup       api->rtthread->rt_thread_startup
 #define rt_device_init          api->rtthread->rt_device_init
 #define rt_device_control       api->rtthread->rt_device_control
-
-
+#define rt_thread_find          api->rtthread->rt_thread_find
+#define finsh_syscall_append    api->finsh->finsh_syscall_append
 
 
 #endif

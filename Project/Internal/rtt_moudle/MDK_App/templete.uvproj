@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\app;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\firmware;..\..\..\..\Libraries\utilities\emWin\Include;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport</IncludePath>
+              <IncludePath>..\app;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\firmware;..\..\..\..\Libraries\utilities\emWin\Include;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -428,6 +428,11 @@
               <FileName>api.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\app\api.h</FilePath>
+            </File>
+            <File>
+              <FileName>gui_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\gui\gui_thread.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -7,6 +7,11 @@
 
 #include "rtt_api.h"
 
+const finsh_t finsh = 
+{
+    finsh_syscall_append,
+};
+
 const shell_t rshell = 
 {
     finsh_system_init,
@@ -33,12 +38,14 @@ const rtthread_t rtthread =
     rt_device_control,
     rt_thread_create,
     rt_thread_startup,
+    rt_thread_find,
 };
 
 const api_t api = 
 {
     &rshell,
     &rtthread,
+    &finsh,
 };
 
 void init_thread_entry(void* parameter)

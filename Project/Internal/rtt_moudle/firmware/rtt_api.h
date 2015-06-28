@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <rtthread.h>
-
+#include <stdarg.h>
 
 typedef struct
 {
@@ -27,6 +27,8 @@ typedef struct
     rt_tick_t (*rt_tick_get)(void);
     rt_device_t (*rt_device_find)(const char *name);
     rt_err_t  (*rt_device_init) (rt_device_t dev);
+    rt_err_t (*rt_device_register)(rt_device_t dev,const char *name, rt_uint16_t flags);
+    rt_err_t  (*rt_device_control)(rt_device_t dev, rt_uint8_t cmd, void *arg);
     rt_thread_t (*rt_thread_create)(const char *name, void (*entry)(void *parameter), void *parameter, rt_uint32_t stack_size, rt_uint8_t  priority,rt_uint32_t tick);
     rt_err_t (*rt_thread_startup)(rt_thread_t thread);
 }rtthread_t;
@@ -37,6 +39,8 @@ typedef struct
     const rtthread_t *rtthread;
     
 }api_t;
+
+
 
 void API_SetAddr(uint32_t addr);
 

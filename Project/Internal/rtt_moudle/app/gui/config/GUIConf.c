@@ -1,6 +1,7 @@
 #include "GUI.h"
 #include "DIALOG.h"
 #include <rtthread.h>
+#include "api.h"
 
 #define GUI_NUMBYTES  (1024*32)
 #define GUI_BLOCKSIZE 4

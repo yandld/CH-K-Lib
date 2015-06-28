@@ -1,6 +1,6 @@
 #include <rtthread.h>
 #include <stdint.h>
-#include "rtt_api.h"
+#include "api.h"
 #include "gui.h"
 
 extern uint32_t Image$$RW_IRAM2$$ZI$$Base[];
@@ -37,20 +37,30 @@ void init_data_bss(void)
         *zi_ram++ = 0;
 }
 
-extern api_t *api;
-#define rt_kprintf  api->rtthread->rt_kprintf
+
 
 
 int main(void* param) __attribute__((section(".ARM.__at_0x40400")));
 int main(void* param)
 {
+    int ret;
     init_data_bss();
     rt_thread_t tid;
     
     API_SetAddr((uint32_t)param);
-    rt_kprintf("!!%d\r\n", 123);
+    rt_device_t lcd;
+    lcd = rt_device_find("lcd0");
+    rt_kprintf("system start!\r\n");
+    if(lcd)
+    {
+        ret = rt_device_init(lcd);
+    }
+    if(ret)
+    {
+        return 1;
+    }
     GUI_Init();
-    GUI_DispString("Is Finial ON!!\r\n");
+    GUI_DispString("Is Sit ON!!\r\n");
 }
 
 

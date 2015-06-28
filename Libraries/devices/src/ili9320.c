@@ -185,9 +185,10 @@ void ili9320_vline(int ys, int ye, int x, int c)
     }
 }
 
-void ili9320_init(void)
+int ili9320_init(void)
 {
-   
+    int ret;
+    ret = 1;
     uint32_t gpio_instance;
     /* ??flexbus???? ?????? ?????????? */
     /* Flexbus Init */
@@ -264,12 +265,11 @@ void ili9320_init(void)
     /* reset */
     gpio_instance = GPIO_QuickInit(HW_GPIOC, 19, kGPIO_Mode_OPP);
     GPIO_WriteBit(gpio_instance, 19, 0); 
-    DelayMs(5);
+    DelayMs(1);
     GPIO_WriteBit(gpio_instance, 19, 1);
-    DelayMs(5);
+    DelayMs(1);
     
     lcd_id = ili9320_get_id();
-    ILI9320_TRACE("lcd id:0x%X\r\n", lcd_id);
     switch(lcd_id)
     {
         case 0x9320:
@@ -318,7 +318,7 @@ void ili9320_init(void)
             write_reg(0x11,0x0000);   
             write_reg(0x12,0x0000);   
             write_reg(0x13,0x0000);   
-            DelayMs(20);   
+            DelayMs(5);   
             write_reg(0x10,0x17b0);   
             write_reg(0x11,0x0004);   
             ;   
@@ -340,7 +340,8 @@ void ili9320_init(void)
             write_reg(0x39,0x0407);   
             write_reg(0x3c,0x0500);   
             write_reg(0x3d,0x0503); 
-            write_reg(0x07,0x0173);            
+            write_reg(0x07,0x0173);
+            ret = 0;
             break;
         case 0x8989:
             write_reg(0x0000,0x0001);
@@ -384,7 +385,7 @@ void ili9320_init(void)
             write_reg(0x0025,0x8000);  
             write_reg(0x004f,0);
             write_reg(0x004e,0);
-
+            ret = 0;
             break;
         default:
             break;
@@ -394,6 +395,7 @@ void ili9320_init(void)
    // ILI9320_TRACE("ID:0x%X\r\n", ili9320_get_id());
     
     ili9320_clear(BLACK);
+    return ret;
 }
 
 void GUI_DrawPixel(int color, int x, int y)

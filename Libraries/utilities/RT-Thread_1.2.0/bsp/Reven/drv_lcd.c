@@ -13,8 +13,7 @@ struct lcd_device
 
 static rt_err_t _init (rt_device_t dev)
 {
-    ili9320_init();
-    return RT_EOK;
+    return ili9320_init();
 }
 
 static rt_err_t rt_dflash_open(rt_device_t dev, rt_uint16_t oflag)
@@ -44,17 +43,14 @@ static rt_size_t rt_dflash_write (rt_device_t dev, rt_off_t pos, const void* buf
 
 static rt_err_t _control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
-    struct lcd_device * lcddev;
-    lcddev = (struct lcd_device*)dev;
-  //  struct rt_device_blk_geometry geometry;
- //   rt_memset(&geometry, 0, sizeof(geometry));
+    
 	switch (cmd)
 	{
         case RTGRAPHIC_CTRL_GET_INFO:
-
-		break;
-	default: 
-		break;
+            *(uint32_t*)args = ili9320_get_id();
+            break;
+        default: 
+            break;
 	}
 	return RT_EOK;
 }
@@ -87,11 +83,7 @@ int rt_hw_lcd_init(const char *name)
 	dev->rtdev.user_data	= RT_NULL;
 
     /* initialize mutex */
-    if (rt_mutex_init(&dev->lock, name, RT_IPC_FLAG_FIFO) != RT_EOK)
-    {
-        return -RT_ENOSYS;
-    }
-    
+    rt_mutex_init(&dev->lock, name, RT_IPC_FLAG_FIFO);
     rt_device_register(&dev->rtdev, name, RT_DEVICE_FLAG_RDWR);
     return RT_EOK;
 }

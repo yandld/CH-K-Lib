@@ -2,14 +2,14 @@
 #include "GUI.h"
 #include "GUIDRV_FlexColor.h"
 #include <stdint.h>
-#include <rtthread.h>
+#include <api.h>
 
 #define XSIZE_PHYS 240
 #define YSIZE_PHYS 320
 
 
 
-static int gLCDCode;
+static uint32_t gLCDCode;
 //
 // Color conversion
 //
@@ -121,8 +121,14 @@ void LCD_X_Config(void)
     CONFIG_FLEXCOLOR Config = {0};
     GUI_PORT_API PortAPI = {0};
     /* select different controller */
-
-    gLCDCode = 0x8989;
+    rt_device_t lcd;
+    lcd = rt_device_find("lcd0");
+    if(lcd)
+    {
+        rt_device_init(lcd);
+        rt_device_control(lcd, RTGRAPHIC_CTRL_GET_INFO, &gLCDCode);
+        rt_kprintf("lcd id:0x%X\r\n", gLCDCode);
+    }
     
     switch(gLCDCode)
     {
@@ -196,18 +202,10 @@ int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData)
 {
     int r;
     r = -1;
-    rt_device_t lcd;
-    
     switch (Cmd)
     {
         case LCD_X_INITCONTROLLER:
-        {
-            lcd = rt_device_find("lcd0");
-            if(lcd)
-            {
-                r = rt_device_init(lcd);
-            }
-        }
+            break;
     }
     return r;
 }

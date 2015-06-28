@@ -1,5 +1,5 @@
 #include "GUI_Private.H"
-#include <rtt_api.h>
+#include <api.h>
 
 
 GUI_TIMER_TIME GUI_X_GetTime (void) 

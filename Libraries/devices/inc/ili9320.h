@@ -43,7 +43,7 @@
 
 
 //!< API functions
-void ili9320_init(void);
+int ili9320_init(void);
 uint16_t ili9320_get_id(void);
 int ili9320_read_pixel(int x, int y);
 void ili9320_clear(int c);

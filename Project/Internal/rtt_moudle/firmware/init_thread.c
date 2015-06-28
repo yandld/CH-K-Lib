@@ -29,6 +29,8 @@ const rtthread_t rtthread =
     rt_tick_get,
     rt_device_find,
     rt_device_init,
+    rt_device_register,
+    rt_device_control,
     rt_thread_create,
     rt_thread_startup,
 };
@@ -76,7 +78,7 @@ void rt_application_init(void)
     if(ret)
         rt_system_heap_init((void*)SYSHEAP, (void*)(sizeof(SYSHEAP) + (uint32_t)SYSHEAP));
     else
-        rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
+      rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
 
  //   void(*theUboot)(void);
  //   theUboot = (void(*)(void))(0x40800);

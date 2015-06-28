@@ -424,6 +424,11 @@
               <FileType>1</FileType>
               <FilePath>..\app\rtt_api.c</FilePath>
             </File>
+            <File>
+              <FileName>api.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\app\api.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -523,6 +528,16 @@
               <FileName>startup_MK64F12.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK64F12.s</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>drivers</GroupName>
+          <Files>
+            <File>
+              <FileName>lcd_tml.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\app\drivers\src\lcd_tml.c</FilePath>
             </File>
           </Files>
         </Group>

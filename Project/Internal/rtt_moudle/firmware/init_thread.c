@@ -4,6 +4,7 @@
 #include "chlib_k.h"
 #include "sram.h"
 #include "rtt_drv.h"
+#include "pin.h"
 
 #include "rtt_api.h"
 
@@ -17,6 +18,13 @@ const shell_t rshell =
     finsh_system_init,
     finsh_set_device,
     finsh_get_device,
+};
+
+const pin_t pin = 
+{
+    rt_pin_mode,
+    rt_pin_write,
+    rt_pin_read,
 };
 
 const rtthread_t rtthread = 
@@ -36,6 +44,9 @@ const rtthread_t rtthread =
     rt_device_init,
     rt_device_register,
     rt_device_control,
+    rt_device_open,
+    rt_device_read,
+    rt_device_write,
     rt_thread_create,
     rt_thread_startup,
     rt_thread_find,
@@ -43,6 +54,7 @@ const rtthread_t rtthread =
 
 const api_t api = 
 {
+    &pin,
     &rshell,
     &rtthread,
     &finsh,
@@ -59,7 +71,7 @@ void init_thread_entry(void* parameter)
     rt_hw_sd_init();
     rt_hw_rtc_init();
     rt_hw_spi_init();
-
+    rt_hw_pin_init("gpio");
     ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
     rt_hw_lcd_init("lcd0");

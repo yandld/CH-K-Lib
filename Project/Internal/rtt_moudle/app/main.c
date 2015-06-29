@@ -1,5 +1,6 @@
 #include <rtthread.h>
 #include <stdint.h>
+#include "pin.h"
 #include "api.h"
 
 
@@ -37,6 +38,10 @@ void init_data_bss(void)
         *zi_ram++ = 0;
 }
 
+#define PTA6    ((0<<8) + 6)
+
+extern api_t *api;
+
 int main(void* param) __attribute__((section(".ARM.__at_0x40400")));
 int main(void* param)
 {
@@ -44,6 +49,14 @@ int main(void* param)
     init_data_bss();
     
     API_SetAddr((uint32_t)param);
+    
+    rt_device_t gpio;
+    gpio = rt_device_find("gpio");
+    rt_pin_mode(PTA6, PIN_MODE_OUTPUT);
+    uint32_t i;
+    rt_pin_write(PTA6, 0);
+    
+    
     ui_startup(0, 0);
     finsh_syscall_append("ui_startup", ui_startup);
 }

@@ -12,7 +12,7 @@
 #include "common.h"
 #include "gpio.h"
 
-
+#if 0
 /* global vars */
 TPM_Type * const TPM_InstanceTable[] = TPM_BASES;
 static TPM_CallBackType TPM_CallBackTable[ARRAY_SIZE(TPM_InstanceTable)] = {NULL};
@@ -387,4 +387,4 @@ static const QuickInit_Type TPM_QuickInitTable[] =
     { 2, 1, 3, 19, 1, 1}, //TPM2_CH1_PB19
 };
 */
-
+#endif

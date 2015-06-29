@@ -141,7 +141,6 @@ void LCD_X_Config(void)
        default:
            break;
    }
-    
 
     LCD_SetSizeEx    (0, XSIZE_PHYS,   YSIZE_PHYS);
     LCD_SetVSizeEx   (0, VXSIZE_PHYS,  VYSIZE_PHYS);

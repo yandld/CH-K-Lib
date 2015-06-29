@@ -37,7 +37,7 @@ void guit_thread_entry(void* parameter)
 {
 	while(1)
 	{
-     //   GUI_TOUCH_Exec();
+        GUI_TOUCH_Exec();
         rt_thread_delay(1);
 	}
 }
@@ -69,7 +69,6 @@ int ui_startup(int argc, char** argv)
     tid = rt_thread_create("guit", guit_thread_entry, RT_NULL, (512), 0x14, 20);                                                      
     rt_thread_startup(tid);	
 
-    
     return 0;
 }
 

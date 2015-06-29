@@ -23,17 +23,9 @@ void GUI_X_ExecIdle (void)
     GUI_X_Delay(1);
 }
 
-
-//static rt_mutex_t gui_x_mutex = RT_NULL;
-
 void  GUI_X_InitOS (void)
-{ 
-//    gui_x_mutex = rt_mutex_create("gui_x_mutex", RT_IPC_FLAG_FIFO);
-//    if (gui_x_mutex == RT_NULL)
-//    {
-//        rt_kprintf("gui_x_mutex create failed\r\n");
-//        return;
-//    }
+{
+    
 }
 
 static U32 i;
@@ -63,6 +55,7 @@ U32 GUI_X_GetTaskId (void)
 #define SAMP_CNT 4
 #define SAMP_CNT_DIV2 2
 static int buf[2];
+
 /* ÂË²¨ */
 static int ads_filter(int* buf)
 {
@@ -131,5 +124,10 @@ void GUI_X_ErrorOut(const char * s)
 
 void GUI_X_Init (void) 
 {
-//    touch_device = rt_device_find("ads7843");
+    rt_device_t dev;
+    dev = rt_device_find("ads7843");
+    if(dev)
+    {
+        rt_device_init(dev);
+    }
 }

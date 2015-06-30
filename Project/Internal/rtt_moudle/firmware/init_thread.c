@@ -69,7 +69,7 @@ void init_thread_entry(void* parameter)
     rt_hw_uart_init("uart0", 0);
     rt_console_set_device("uart0");
     rt_hw_sd_init();
-    rt_hw_rtc_init();
+    rt_hw_rtc_init("rtc");
     rt_hw_spi_init();
     rt_hw_pin_init("gpio");
     ads7843_init("ads7843", "spi20");

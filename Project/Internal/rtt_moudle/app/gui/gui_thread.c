@@ -36,12 +36,23 @@ void gui_thread_entry(void* parameter)
 void guit_thread_entry(void* parameter)
 {
     int ret;
+    rt_uint8_t buf[8];
+    rt_device_t tch;
+    tch = rt_device_find("ads7843");
+    if(tch)
+    {
+        rt_device_init(tch);
+        rt_device_open(tch, 0);
+    }
     
-    GUI_CURSOR_Show();
 	while(1)
 	{
         uint16_t x,y;
-        GUI_TOUCH_Exec();
+        ret = rt_device_read(tch, 0, buf, 4);
+        x = (buf[0]<<8) + buf[1];
+        y = (buf[2]<<8) + buf[3];
+        rt_kprintf("%d %d %d\r", x, y, ret);
+        //GUI_TOUCH_Exec();
         rt_thread_delay(1);
 	}
 }

@@ -39,8 +39,6 @@ void init_data_bss(void)
 }
 
 #define PTA6    ((0<<8) + 6)
-#define PTE6    ((4<<8) + 6)
-#define PTE7    ((4<<8) + 7)
 
 extern api_t *api;
 
@@ -54,9 +52,9 @@ int main(void* param)
     
     rt_device_t gpio;
     gpio = rt_device_find("gpio");
-    rt_pin_mode(PTE7, PIN_MODE_OUTPUT);
+    rt_pin_mode(PTA6, PIN_MODE_OUTPUT);
     uint32_t i;
-    rt_pin_write(PTE7, 1);
+    rt_pin_write(PTA6, 0);
     
     
     ui_startup(0, 0);

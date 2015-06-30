@@ -38,7 +38,6 @@ rt_err_t ads7843_init(const char * name, const char * spi_device_name)
         rt_kprintf("spi device %s not found!\r\n", spi_device_name);
         return -RT_ENOSYS;
     }
-    
     /* config spi */
     {
         struct rt_spi_configuration cfg;

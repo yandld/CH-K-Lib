@@ -128,6 +128,7 @@ void GUI_X_Init (void)
     dev = rt_device_find("ads7843");
     if(dev)
     {
-      //  rt_device_init(dev);
+        rt_device_init(dev);
+        rt_device_open(dev, 0);
     }
 }

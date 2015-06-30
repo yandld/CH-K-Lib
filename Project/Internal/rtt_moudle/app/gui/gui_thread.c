@@ -14,7 +14,7 @@ void gui_thread_entry(void* parameter)
     GUI_Init();
     GUI_DispString("gui system actived!\r\n");
 
-    GUI_CURSOR_Show();
+   // GUI_CURSOR_Show();
    // mkdir("/SF/SYS", 0);
    // GUI_AppAutoCalibration("/SF/SYS/TDATA");
   //  GUI_CreateDesktopDialog();
@@ -28,22 +28,14 @@ void gui_thread_entry(void* parameter)
 //            } 
 //        }
         rt_thread_delay(1);
-        GUI_Exec();
+     //   GUI_Exec();
 	}
 }
 
 void guit_thread_entry(void* parameter)
 {
-    int ret;
-    rt_uint8_t buf[4];
-
 	while(1)
 	{
-        uint16_t x,y;
-     //   ret = rt_device_read(tch, 0, buf, 4);
-    //    x = (buf[0]<<8) + buf[1];
-    //    y = (buf[2]<<8) + buf[3];
-    //    rt_kprintf("%d %d %d\r", x, y, ret);
         GUI_TOUCH_Exec();
         rt_thread_delay(1);
 	}
@@ -77,7 +69,7 @@ int ui_startup(int argc, char** argv)
     tid = rt_thread_create("guit", guit_thread_entry, RT_NULL, (512), 0x14, 20);                                                      
     rt_thread_startup(tid);
 
-    return 0;
+    return RT_EOK;
 }
 
 

@@ -29,7 +29,7 @@ static rt_err_t _open(rt_device_t dev, rt_uint16_t oflag)
     return RT_EOK; 
 }
 
-rt_err_t ads7843_init(const char * name, const char * spi_device_name)
+rt_err_t rt_hw_ads7843_init(const char * name, const char * spi_device_name)
 {
 
     rt_spi_device = (struct rt_spi_device *)rt_device_find(spi_device_name);

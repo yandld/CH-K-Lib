@@ -268,7 +268,6 @@ int ili9320_init(void)
     DelayMs(1);
     GPIO_WriteBit(gpio_instance, 19, 1);
     DelayMs(1);
-    
     lcd_id = ili9320_get_id();
     switch(lcd_id)
     {

@@ -60,4 +60,8 @@ int rt_hw_ksz8041_init(void);
 int rt_hw_dflash_init(const char *name);
 int rt_hw_lcd_init(const char *name);
 int rt_hw_pin_init(const char *name);
+rt_err_t rt_hw_ads7843_init(const char * name, const char * spi_device_name);
+
+
+
 #endif

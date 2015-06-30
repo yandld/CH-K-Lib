@@ -8,6 +8,9 @@
 
 #include "rtt_api.h"
 
+
+void usb_thread_entry(void* parameter);
+
 const finsh_t finsh = 
 {
     finsh_syscall_append,
@@ -72,11 +75,14 @@ void init_thread_entry(void* parameter)
     rt_hw_rtc_init();
     rt_hw_spi_init();
     rt_hw_pin_init("gpio");
-    ads7843_init("ads7843", "spi20");
+    rt_hw_ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
     rt_hw_lcd_init("lcd0");
 
     finsh_system_init();
+    tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, 1024, 9, 20);
+    rt_thread_startup(tid);
+    
     tid = rt_thread_create("init", (void*)(0x40400), (void*)(&api), 1024, 8, 20);
     rt_thread_startup(tid);
 

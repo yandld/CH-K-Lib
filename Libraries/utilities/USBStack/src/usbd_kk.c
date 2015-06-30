@@ -26,9 +26,8 @@ extern rt_mq_t msd_mq;
     
 typedef struct
 {
-    uint8_t flag;
-    uint8_t ep;
-    void (*exec)(uint8_t flag);
+    uint8_t param;
+    void (*exec)(uint8_t param);
 }msd_msg_t;
 
 #endif
@@ -569,166 +568,108 @@ U32 USBD_GetError (void) {
 }
 #endif
 
+void USB_TokenDoneHandler(uint32_t stat)
+{
+    uint32_t dir, num, ev_odd;
+    
+    num    = (stat >> 4) & 0x0F;
+    dir    = (stat >> 3) & 0x01;
+    ev_odd = (stat >> 2) & 0x01;
+        
+    int cmd; 
+    if(USBD_P_EP[num])
+    {
+        switch(TOK_PID(IDX(num, dir, ev_odd)))
+        {
+            case SETUP_TOKEN:
+                Data1 &= ~0x02;
+                cmd = USBD_EVT_SETUP;
+                break;
+            case OUT_TOKEN:
+                cmd = USBD_EVT_OUT;
+                break;
+            case IN_TOKEN:
+                cmd = USBD_EVT_IN;
+                break;  
+        }
+        USBD_P_EP[num](cmd);
+    }
+}
 
 /*
  *  USB Device Interrupt Service Routine
  */
-void USB0_IRQHandler(void) {
-  uint32_t istr, num, dir, ev_odd, stat;
-  volatile uint32_t i;
+void USB0_IRQHandler(void)
+{
+    uint32_t istr, stat;
+    volatile uint32_t i;
     
-  istr  = USB0->ISTAT;
-  stat  = USB0->STAT;
-  USB0->ISTAT = istr;
+    istr  = USB0->ISTAT;
+    stat  = USB0->STAT;
+    USB0->ISTAT = istr;
 
-  // for(i=0;i<10000;i++);
-  istr &= USB0->INTEN;
+    istr &= USB0->INTEN;
 
-/* reset interrupt                                                            */
-  if (istr & USB_ISTAT_USBRST_MASK) {
-    USBD_Reset();
-    usbd_reset_core();
-#ifdef __RTX
-    if (USBD_RTX_DevTask) {
-      isr_evt_set(USBD_EVT_RESET, USBD_RTX_DevTask);
-    }
-#else
-    if (USBD_P_Reset_Event) {
-      USBD_P_Reset_Event();
-    }
-#endif
-  }
-
-/* suspend interrupt                                                          */
-  if (istr & USB_ISTAT_SLEEP_MASK) {
-    USBD_Suspend();
-#ifdef __RTX
-    if (USBD_RTX_DevTask) {
-      isr_evt_set(USBD_EVT_SUSPEND, USBD_RTX_DevTask);
-    }
-#else
-    if (USBD_P_Suspend_Event) {
-      USBD_P_Suspend_Event();
-    }
-#endif
-  }
-
-/* resume interrupt                                                           */
-  if (istr & USB_ISTAT_RESUME_MASK) {
-    USBD_Resume();
-#ifdef __RTX
-    if (USBD_RTX_DevTask) {
-      isr_evt_set(USBD_EVT_RESUME, USBD_RTX_DevTask);
-    }
-#else
-    if (USBD_P_Resume_Event) {
-      USBD_P_Resume_Event();
-    }
-#endif
-  }
-
-
-/* Start Of Frame                                                             */
-  if (istr & USB_ISTAT_SOFTOK_MASK) {
-#ifdef __RTX
-    if (USBD_RTX_DevTask) {
-      isr_evt_set(USBD_EVT_SOF, USBD_RTX_DevTask);
-    }
-#else
-    if (USBD_P_SOF_Event) {
-      USBD_P_SOF_Event();
-    }
-#endif
-  }
-
-
-/* Error interrupt                                                            */
-  if (istr == USB_ISTAT_ERROR_MASK) {
-#ifdef __RTX
-    LastError = USB0->ERRSTAT;
-    if (USBD_RTX_DevTask) {
-      isr_evt_set(USBD_EVT_ERROR, USBD_RTX_DevTask);
-    }
-#else
-    if (USBD_P_Error_Event) {
-      USBD_P_Error_Event(USB0->ERRSTAT);
-    }
-#endif
-    USB0->ERRSTAT = 0xFF;
-  }
-
-
-/* token interrupt                                                            */
-  if (istr & USB_ISTAT_TOKDNE_MASK) {
-
-    num    = (stat >> 4) & 0x0F;
-    dir    = (stat >> 3) & 0x01;
-    ev_odd = (stat >> 2) & 0x01;
-    
-/* setup packet                                                               */
-if ((num == 0) && (TOK_PID((IDX(num, dir, ev_odd))) == SETUP_TOKEN))
+    /* reset interrupt */
+    if (istr & USB_ISTAT_USBRST_MASK)
     {
-        Data1 &= ~0x02;
-
-    #ifdef __RTX
-        if (USBD_RTX_EPTask[num])
+        USBD_Reset();
+        usbd_reset_core();
+        if (USBD_P_Reset_Event)
         {
-            isr_evt_set(USBD_EVT_SETUP, USBD_RTX_EPTask[num]);
+            USBD_P_Reset_Event();
         }
-    #else
-        if (USBD_P_EP[num])
-        {
-            USBD_P_EP[num](USBD_EVT_SETUP);
-        }
-    #endif
     }
-    else
+
+    /* suspend interrupt */
+    if (istr & USB_ISTAT_SLEEP_MASK)
     {
-            /* OUT packet */
-        if (TOK_PID((IDX(num, dir, ev_odd))) == OUT_TOKEN)
+        USBD_Suspend();
+        if (USBD_P_Suspend_Event)
         {
-    #ifdef __RTX
-            if (USBD_RTX_EPTask[num])
-            {
-                isr_evt_set(USBD_EVT_OUT, USBD_RTX_EPTask[num]);
-            }
-    #else
-            if (USBD_P_EP[num])
-            {
-                #if defined(RTT)
-                msd_msg_t msg;
-                msg.ep = num;
-                msg.flag = USBD_EVT_OUT;
-                msg.exec = USBD_P_EP[num];
-                rt_mq_send(msd_mq, &msg, sizeof(msg));
-                #else
-                USBD_P_EP[num](USBD_EVT_OUT);
-                #endif
-            }
-    #endif
+            USBD_P_Suspend_Event();
         }
-
-/* IN packet                                                                  */
-      if (TOK_PID((IDX(num, dir, ev_odd))) == IN_TOKEN) {
-#ifdef __RTX
-        if (USBD_RTX_EPTask[num]) {
-          isr_evt_set(USBD_EVT_IN,  USBD_RTX_EPTask[num]);
-        }
-#else
-        if (USBD_P_EP[num])
-        {
-            #if defined(RTT)
-            msd_msg_t msg;
-            msg.ep = num;
-            msg.flag = USBD_EVT_IN;
-            msg.exec = USBD_P_EP[num];
-            rt_mq_send(msd_mq, &msg, sizeof(msg));
-            #else
-            USBD_P_EP[num](USBD_EVT_IN);
-            #endif
-        }
-#endif
-      }
     }
-  }
+
+    /* resume interrupt */
+    if (istr & USB_ISTAT_RESUME_MASK)
+    {
+        USBD_Resume();
+        if (USBD_P_Resume_Event)
+        {
+            USBD_P_Resume_Event();
+        }
+    }
+
+    /* Start Of Frame */
+    if (istr & USB_ISTAT_SOFTOK_MASK)
+    {
+        if (USBD_P_SOF_Event)
+        {
+            USBD_P_SOF_Event();
+        }
+    }
+
+    /* Error interrupt */
+    if (istr == USB_ISTAT_ERROR_MASK)
+    {
+        if (USBD_P_Error_Event)
+        {
+            USBD_P_Error_Event(USB0->ERRSTAT);
+        }
+        USB0->ERRSTAT = 0xFF;
+    }
+
+    /* token interrupt */
+    if (istr & USB_ISTAT_TOKDNE_MASK)
+    {
+        #if defined(RTT)
+        msd_msg_t msg;
+        msg.param = stat;
+        msg.exec = USB_TokenDoneHandler;
+        rt_mq_send(msd_mq, &msg, sizeof(msg));
+        #else
+        USB_TokenDoneHandler(stat);
+        #endif
+    }
 }

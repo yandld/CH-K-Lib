@@ -1,5 +1,5 @@
 #include "chlib_k.h"
-
+#include "rl_usb.h"
 
 /*
  *  Get Mouse Input Report -> MouseInReport

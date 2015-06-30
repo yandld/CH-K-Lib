@@ -1,7 +1,8 @@
 #include "GUI_Private.H"
 #include <api.h>
 
-
+static rt_device_t tch;
+    
 GUI_TIMER_TIME GUI_X_GetTime (void) 
 {
     return (rt_tick_get()*(1000/RT_TICK_PER_SECOND));
@@ -53,43 +54,28 @@ U32 GUI_X_GetTaskId (void)
 //static rt_device_t touch_device;
 
 #define SAMP_CNT 4
-#define SAMP_CNT_DIV2 2
 static int buf[2];
 
 /* ÂË²¨ */
 static int ads_filter(int* buf)
 {
-//    int i, j, k, min;
-//    int temp;
-//    int tempXY[2][SAMP_CNT];
-//    rt_uint8_t buf1[2];
-//    for(i=0; i<SAMP_CNT; i++)
-//    {
-//        if(touch_device != RT_NULL)
-//        {
-//            touch_device->read(touch_device, 0, buf1, 2);
-//            tempXY[0][i] = ((buf1[0]<<8) + buf1[1])>>4; //12bit mode
-//            touch_device->read(touch_device, 1, buf1, 2);
-//            tempXY[1][i] = ((buf1[0]<<8) + buf1[1])>>4; //12bit mode
-//        }
-//    }
-//    for(k=0; k<2; k++)
-//    {
-//        for(i=0; i<SAMP_CNT-1; i++)
-//        {
-//            min=i;
-//            for (j=i+1; j<SAMP_CNT; j++)
-//            {
-//                if (tempXY[k][min] > tempXY[k][j]) min=j;
-//            }
-//            temp = tempXY[k][i];
-//            tempXY[k][i] = tempXY[k][min];
-//            tempXY[k][min] = temp;
-//        }
-//        if((tempXY[k][SAMP_CNT_DIV2]-tempXY[k][SAMP_CNT_DIV2-1]) > 5)
-//        return 1;
-//        buf[k] = (tempXY[k][SAMP_CNT_DIV2]+tempXY[k][SAMP_CNT_DIV2-1]) / 2;
-//    }
+    int i;
+    rt_uint8_t buf1[4];
+    
+    buf[0] = 0;
+    buf[1] = 0;
+    
+    for(i=0; i<SAMP_CNT; i++)
+    {
+        if(tch != RT_NULL)
+        {
+            tch->read(tch, 0, buf1, 4);
+            buf[0] += ((buf1[0]<<8) + buf1[1])>>4; //12bit mode
+            buf[1] += ((buf1[2]<<8) + buf1[3])>>4; //12bit mode
+        }
+    }
+    buf[0] /= SAMP_CNT;
+    buf[1] /= SAMP_CNT;
     return 0;
 }
 
@@ -124,11 +110,10 @@ void GUI_X_ErrorOut(const char * s)
 
 void GUI_X_Init (void) 
 {
-    rt_device_t dev;
-    dev = rt_device_find("ads7843");
-    if(dev)
+    tch = rt_device_find("ads7843");
+    if(tch)
     {
-        rt_device_init(dev);
-        rt_device_open(dev, 0);
+        rt_device_init(tch);
+        rt_device_open(tch, 0);
     }
 }

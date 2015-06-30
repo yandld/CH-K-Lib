@@ -1,4 +1,5 @@
 #include "chlib_k.h"
+#include "rl_usb.h"
 
 extern int Image$$ER_IROM1$$RO$$Limit;
 

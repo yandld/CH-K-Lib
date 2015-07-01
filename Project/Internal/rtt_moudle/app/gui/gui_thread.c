@@ -14,7 +14,9 @@ void gui_thread_entry(void* parameter)
     GUI_Init();
     GUI_DispString("gui system actived!\r\n");
 
-   // GUI_CURSOR_Show();
+    //GUI_CURSOR_Show();
+    MainTask();
+    rt_kprintf("!!!\r\n");
    // mkdir("/SF/SYS", 0);
    // GUI_AppAutoCalibration("/SF/SYS/TDATA");
   //  GUI_CreateDesktopDialog();
@@ -28,7 +30,7 @@ void gui_thread_entry(void* parameter)
 //            } 
 //        }
         rt_thread_delay(1);
-     //   GUI_Exec();
+//GUI_Exec();
 	}
 }
 
@@ -60,13 +62,11 @@ int ui_startup(int argc, char** argv)
     if(ret)
         return RT_ERROR;
 
-    
-    
     rt_kprintf("GUI system start!\r\n");
-    tid = rt_thread_create("gui", gui_thread_entry, RT_NULL, (1024*2), 0x13, 20);                                
+    tid = rt_thread_create("gui", gui_thread_entry, RT_NULL, (1024*8), 0x27, 20);                                
     rt_thread_startup(tid);
 
-    tid = rt_thread_create("guit", guit_thread_entry, RT_NULL, (512), 0x14, 20);                                                      
+    tid = rt_thread_create("guit", guit_thread_entry, RT_NULL, (1024*1), 0x26, 20);                                                      
     rt_thread_startup(tid);
 
     return RT_EOK;

@@ -1,6 +1,6 @@
 #include <rtthread.h>
 #include <rthw.h>
-
+#include "common.h"
 #include "gpio.h"
 #include "gui.h"
 #include "board.h"

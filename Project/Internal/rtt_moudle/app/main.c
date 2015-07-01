@@ -57,8 +57,8 @@ int main(void* param)
     rt_pin_write(PTA6, 0);
     
     
-   // ui_startup(0, 0);
-  //  finsh_syscall_append("ui_startup", ui_startup);
+    ui_startup(0, 0);
+    finsh_syscall_append("ui_startup", ui_startup);
 }
 
 

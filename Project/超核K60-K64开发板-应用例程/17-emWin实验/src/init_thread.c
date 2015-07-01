@@ -46,7 +46,7 @@ void init_thread_entry(void* parameter)
         rt_spi_bus_attach_device(&spi_device, "spi20", "spi2", &spi_cs_0);
     }
     
-    ads7843_init("ads7843", "spi20");
+    rt_hw_ads7843_init("ads7843", "spi20");
     
     tid = rt_thread_create("led", led_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);

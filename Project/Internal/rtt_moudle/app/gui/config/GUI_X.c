@@ -50,10 +50,7 @@ U32 GUI_X_GetTaskId (void)
     return 1;
 }
 
-
-//static rt_device_t touch_device;
-
-#define SAMP_CNT 4
+#define SAMP_CNT 3
 static int buf[2];
 
 /* ÂË²¨ */

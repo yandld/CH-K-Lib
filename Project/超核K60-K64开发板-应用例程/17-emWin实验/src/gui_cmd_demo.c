@@ -10,7 +10,7 @@ void gui_thread_entry(void* parameter)
     GUI_Init();
     GUI_DispString("gui system actived!\r\n");
     GUI_CURSOR_Show();
-    TOUCH_MainTask();
+  //  TOUCH_MainTask();
     MainTask();
     while(1)
     {

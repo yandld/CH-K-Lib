@@ -7,7 +7,6 @@
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
-  
 #include "sd.h"
 #include "gpio.h"
 #include "common.h"
@@ -269,15 +268,9 @@ static uint8_t SD_InitCard(void)
     SDHC_Cmd_t cmd;
 	/* initalize 80 clock */
 	SDHC->SYSCTL |= SDHC_SYSCTL_INITA_MASK;
-	while (SDHC->SYSCTL & SDHC_SYSCTL_INITA_MASK){}; //µË'y3?Í??ØÌÍ3È
-        
-	//--------------Ú????aÍ?SD?®3?Í??Ø ??‡Ì2?D-ÚÈ---------------------------
-	//?aÍ?SD?®3?Í??Ø??3Ï --------------------------------
-	//?µ?˜ ?CCMD0 -> CMD8 -> while(CMD55+ACMD41) ->CMD2 -> CMD3 ->CMD9
-	//            -> CMD7(???D?®)-> CMD16(ÈË???È'ÛD?)->(CMD55+ACMD6)ÈË????4?????Ì
-	//---------------------------?yÍ??aÍ?------------------------------  now Let's begin !
+	while (SDHC->SYSCTL & SDHC_SYSCTL_INITA_MASK){};
+    /* CMD0 -> CMD8 -> while(CMD55+ACMD41) ->CMD2 -> CMD3 ->CMD9 -> CMD7-> CMD16->(CMD55+ACMD6) */
 
-    /* now let's begin */
 	cmd.cmd = ESDHC_CMD0;
 	cmd.arg = 0;
 	cmd.blkCount = 0;
@@ -288,12 +281,12 @@ static uint8_t SD_InitCard(void)
         LIB_TRACE("CMD0 error\r\n");
         return ESDHC_ERROR_INIT_FAILED;
     }
-	//CMD8  ?D??Í?V1.0?1Í?V2.0µ??®
+	//CMD8
 	cmd.cmd = ESDHC_CMD8;
 	cmd.arg =0x000001AA;
 	cmd.blkCount = 0;
 	result = SDHC_SendCmd(&cmd);
-	if (result > 0)  //CMD8
+	if (result > 0) 
 	{
 		result = ESDHC_ERROR_INIT_FAILED;
 	}
@@ -594,48 +587,34 @@ uint8_t SD_WriteSingleBlock(uint32_t sector, uint8_t *buf)
 }
 
 /**
- * @brief ??µ?SD?®ËY·?
- * @retval SD?®ËY·???µ???MB
+ * @brief GetSD size
+ * @retval size in MB
  */ 
 uint32_t SD_GetSizeInMB(void)
 {
-	uint32_t BlockBumber;  //?Ï??Íy
-	uint32_t Muti;         //3?Íy
-	uint32_t BlockLen;     //???È3§?Ë
-	uint32_t Capacity;     //ËY·?
-	//????3?Íy
-	if((sdh.CSD[3]>>22)&0x03)
+	uint32_t BlockBumber;
+	uint32_t Muti;
+	uint32_t BlockLen;
+	uint32_t Capacity;
+	if((sdh.CSD[3]>>22)&0x03) /* SDHC  */
 	{
-		//------------------------------------------------------------
-		//CSD V2.00∞?±?(SDHC?®)
-		//?®ËY·?????1?Í?
-		//memory capacity = (C_SIZE+1) * 512K byte 
-		//------------------------------------------------------------
 		BlockLen = (sdh.CSD[2]>>24)&0xFF;
 		Capacity=((sdh.CSD[1]>>8)&0xFFFFFF)+1;
 		Capacity=(Capacity+1)/2;
 		return Capacity;
 	}
-	else
+	else /* non SDHC */
 	{
-		/*
-		CSD V1.00∞?±?(??Ì®SD?®)
-		?®ËY·?????1?Í?  BLOCKNR = (C_SIZE+1) * MULT 
-		MULT = 2^(C_SIZE_MULT+2)
-		BLOCK_LEN = 2^((C_SIZE_MULT < 8) )
-		 ËY·?=BLOCKNR*BLOCK_LEN
-		*/
-        Muti=(sdh.CSD[1]>>7)&0x7;
-        Muti=2<<(Muti+1);
-        //?????ÈÍy
+        Muti = (sdh.CSD[1]>>7)&0x7;
+        Muti = 2<<(Muti+1);
         BlockBumber = ((sdh.CSD[2]>>0)&0x03);
         BlockBumber = (BlockBumber<<10) + ((sdh.CSD[1]>>22)&0x0FFF);
         BlockBumber++;
-        BlockBumber=BlockBumber * Muti;   //µ?µ??ÏÍy
-        BlockLen = (sdh.CSD[2]>>8)&0x0F;//µ?µ????È'ÛD?
+        BlockBumber=BlockBumber * Muti;
+        BlockLen = (sdh.CSD[2]>>8)&0x0F;
         BlockLen = 2<<(BlockLen-1);
-        Capacity=BlockBumber * BlockLen;  //????ËY·? µ???Byte
-        Capacity=Capacity/1024/1024;    //µ???MB	
+        Capacity=BlockBumber * BlockLen;
+        Capacity=Capacity/1024/1024;
         return Capacity;
 	}
 }

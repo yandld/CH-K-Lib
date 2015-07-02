@@ -1,6 +1,5 @@
 #include <rtthread.h>
 #include <stdint.h>
-#include "api.h"
 #include "gui.h"
 //#include "gui_appdef.h"
 
@@ -12,11 +11,10 @@ void gui_thread_entry(void* parameter)
     //gui_msg_t msg;
     
     GUI_Init();
-    GUI_DispString("gui system actived!\r\n");
+ //   GUI_DispString("gui system actived!\r\n");
 
     //GUI_CURSOR_Show();
     MainTask();
-    rt_kprintf("!!!\r\n");
    // mkdir("/SF/SYS", 0);
    // GUI_AppAutoCalibration("/SF/SYS/TDATA");
   //  GUI_CreateDesktopDialog();

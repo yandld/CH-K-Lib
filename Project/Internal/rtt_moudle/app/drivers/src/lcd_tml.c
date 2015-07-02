@@ -1,6 +1,5 @@
 #include <rthw.h>
 #include <rtthread.h>
-#include <api.h>
 #include "gui.h"
 
 static struct rt_device lcdt_device;

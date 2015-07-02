@@ -6,62 +6,10 @@
 #include "rtt_drv.h"
 #include "pin.h"
 
-#include "rtt_api.h"
 
 
 void usb_thread_entry(void* parameter);
 
-const finsh_t finsh = 
-{
-    finsh_syscall_append,
-};
-
-const shell_t rshell = 
-{
-    finsh_system_init,
-    finsh_set_device,
-    finsh_get_device,
-};
-
-const pin_t pin = 
-{
-    rt_pin_mode,
-    rt_pin_write,
-    rt_pin_read,
-};
-
-const rtthread_t rtthread = 
-{
-    rt_kprintf,
-    rt_vsprintf,
-    rt_vsnprintf,
-    rt_sprintf,
-    rt_snprintf,
-    rt_console_set_device,
-    rt_console_get_device,
-    rt_malloc,
-    rt_free,
-    rt_thread_delay,
-    rt_tick_get,
-    rt_device_find,
-    rt_device_init,
-    rt_device_register,
-    rt_device_control,
-    rt_device_open,
-    rt_device_read,
-    rt_device_write,
-    rt_thread_create,
-    rt_thread_startup,
-    rt_thread_find,
-};
-
-const api_t api = 
-{
-    &pin,
-    &rshell,
-    &rtthread,
-    &finsh,
-};
 
 void init_thread_entry(void* parameter)
 {
@@ -81,15 +29,17 @@ void init_thread_entry(void* parameter)
 
     finsh_system_init();
     tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, 1024, 9, 20);
-    rt_thread_startup(tid);
+   // rt_thread_startup(tid);
     
-    tid = rt_thread_create("init", (void*)(0x40400), (void*)(&api), 1024, 8, 20);
+    tid = rt_thread_create("init", (void*)(0x70400), RT_NULL, 1024, 8, 20);
     rt_thread_startup(tid);
 
     rt_hw_ksz8041_init();
 
     tid = rt_thread_self();
     rt_thread_delete(tid); 
+    MainTask();
+    GUI_TOUCH_Exec();
 }
 
 

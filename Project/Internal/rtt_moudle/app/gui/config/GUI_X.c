@@ -1,8 +1,7 @@
 #include "GUI_Private.H"
-#include <api.h>
-
+#include "rtthread.h"
 static rt_device_t tch;
-    
+
 GUI_TIMER_TIME GUI_X_GetTime (void) 
 {
     return (rt_tick_get()*(1000/RT_TICK_PER_SECOND));
@@ -31,7 +30,7 @@ void  GUI_X_InitOS (void)
 
 static U32 i;
 void GUI_X_Lock (void)
-{ 
+{
     //rt_mutex_take(gui_x_mutex, RT_WAITING_FOREVER);
     //rt_kprintf("%d\r\n",i);
     i++;

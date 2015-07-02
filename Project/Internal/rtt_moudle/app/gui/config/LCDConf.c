@@ -2,7 +2,7 @@
 #include "GUI.h"
 #include "GUIDRV_FlexColor.h"
 #include <stdint.h>
-#include <api.h>
+#include <rtthread.h>
 
 #define XSIZE_PHYS 240
 #define YSIZE_PHYS 320

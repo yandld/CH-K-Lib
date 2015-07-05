@@ -38,8 +38,8 @@ void init_thread_entry(void* parameter)
 
     tid = rt_thread_self();
     rt_thread_delete(tid); 
-    MainTask();
-    GUI_TOUCH_Exec();
+    //MainTask();
+    //GUI_TOUCH_Exec();
 }
 
 

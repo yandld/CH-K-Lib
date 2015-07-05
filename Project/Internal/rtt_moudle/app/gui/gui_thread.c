@@ -11,8 +11,8 @@ void gui_thread_entry(void* parameter)
     //gui_msg_t msg;
     
     GUI_Init();
- //   GUI_DispString("gui system actived!\r\n");
-
+    GUI_DispString("lcd ok!\r\n");
+    rt_thread_delay(50);
     //GUI_CURSOR_Show();
     MainTask();
    // mkdir("/SF/SYS", 0);

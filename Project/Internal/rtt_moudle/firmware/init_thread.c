@@ -28,7 +28,7 @@ void init_thread_entry(void* parameter)
     rt_hw_lcd_init("lcd0");
 
     finsh_system_init();
-    tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, 1024, 9, 20);
+ //   tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, 1024, 9, 20);
    // rt_thread_startup(tid);
     
     tid = rt_thread_create("init", (void*)(0x70400), RT_NULL, 1024, 8, 20);
@@ -54,10 +54,6 @@ void rt_application_init(void)
         rt_system_heap_init((void*)SYSHEAP, (void*)(sizeof(SYSHEAP) + (uint32_t)SYSHEAP));
     else
       rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-
- //   void(*theUboot)(void);
- //   theUboot = (void(*)(void))(0x40800);
-    //theUboot();
 
     tid = rt_thread_create("init", init_thread_entry, RT_NULL, 1024, 20, 20);
     rt_thread_startup(tid);

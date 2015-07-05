@@ -43,16 +43,15 @@ void init_thread_entry(void* parameter)
 }
 
 
-uint8_t SYSHEAP[1024*64];
 void rt_application_init(void)
 {
     int ret;
     rt_thread_t tid;
     SRAM_Init();
     ret = SRAM_SelfTest();
-    if(ret)
-        rt_system_heap_init((void*)SYSHEAP, (void*)(sizeof(SYSHEAP) + (uint32_t)SYSHEAP));
-    else
+//    if(ret)
+//        rt_system_heap_init((void*)SYSHEAP, (void*)(sizeof(SYSHEAP) + (uint32_t)SYSHEAP));
+//    else
       rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
 
     tid = rt_thread_create("init", init_thread_entry, RT_NULL, 1024, 20, 20);

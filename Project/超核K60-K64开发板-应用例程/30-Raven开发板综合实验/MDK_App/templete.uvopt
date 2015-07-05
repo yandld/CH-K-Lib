@@ -252,12 +252,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>21</ColumnNumber>
+      <ColumnNumber>2</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>48</TopLine>
-      <CurrentLine>32</CurrentLine>
+      <TopLine>18</TopLine>
+      <CurrentLine>57</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\app\main.c</PathWithFileName>
+      <PathWithFileName>..\src_app\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -268,12 +268,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>11</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>55</TopLine>
-      <CurrentLine>60</CurrentLine>
+      <TopLine>12</TopLine>
+      <CurrentLine>28</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\app\gui\gui_thread.c</PathWithFileName>
+      <PathWithFileName>..\src_app\gui\gui_thread.c</PathWithFileName>
       <FilenameWithoutPath>gui_thread.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -282,7 +282,7 @@
 
   <Group>
     <GroupName>drivers</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -306,7 +306,7 @@
 
   <Group>
     <GroupName>emwin</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -332,12 +332,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>95</TopLine>
-      <CurrentLine>102</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\app\gui\config\GUI_X.c</PathWithFileName>
+      <PathWithFileName>..\src_app\gui\config\GUI_X.c</PathWithFileName>
       <FilenameWithoutPath>GUI_X.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -350,10 +350,10 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>29</TopLine>
-      <CurrentLine>43</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\app\gui\config\GUIConf.c</PathWithFileName>
+      <PathWithFileName>..\src_app\gui\config\GUIConf.c</PathWithFileName>
       <FilenameWithoutPath>GUIConf.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -364,12 +364,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>19</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>113</TopLine>
-      <CurrentLine>125</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\app\gui\config\LCDConf.c</PathWithFileName>
+      <PathWithFileName>..\src_app\gui\config\LCDConf.c</PathWithFileName>
       <FilenameWithoutPath>LCDConf.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -801,7 +801,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\MDK\mk64f12\flash\api.sym</PathWithFileName>
+      <PathWithFileName>..\MDK_Firmware\mk64f12\flash\api.sym</PathWithFileName>
       <FilenameWithoutPath>api.sym</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

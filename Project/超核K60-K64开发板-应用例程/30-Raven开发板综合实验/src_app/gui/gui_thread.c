@@ -13,11 +13,11 @@ void gui_thread_entry(void* parameter)
     GUI_Init();
     GUI_DispString("lcd ok!\r\n");
     rt_thread_delay(50);
-    //GUI_CURSOR_Show();
-   // MainTask();
-   // mkdir("/SF/SYS", 0);
-   // GUI_AppAutoCalibration("/SF/SYS/TDATA");
-   GUI_CreateDesktopDialog();
+//    //GUI_CURSOR_Show();
+//   // MainTask();
+//   // mkdir("/SF/SYS", 0);
+//   // GUI_AppAutoCalibration("/SF/SYS/TDATA");
+// //  GUI_CreateDesktopDialog();
 	while(1)
 	{
         if(rt_mq_recv(guimq, &msg, sizeof(gui_msg_t), 1) == RT_EOK)
@@ -27,7 +27,7 @@ void gui_thread_entry(void* parameter)
                 msg.exec(msg.parameter);
             } 
         }
-    GUI_Exec();
+        GUI_Exec();
 	}
 }
 

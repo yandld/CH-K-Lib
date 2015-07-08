@@ -82,7 +82,7 @@ uint32_t SysTick_Config(uint32_t ticks)
 
 extern uint32_t SystemCoreClock;
 
-int main(void)
+__weak int main(void)
 {
 	rt_hw_interrupt_disable();
     SysTick_Config(SystemCoreClock / RT_TICK_PER_SECOND - 1);

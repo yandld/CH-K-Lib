@@ -62,7 +62,6 @@ void dcal_init(struct dcal_t *dc)
 {
     memcpy(&dcal, dc, sizeof(struct dcal_t));
     memcpy(&inital_dcal, dc, sizeof(struct dcal_t));
-    printf("load dcal value!\r\n");
 }
 
 

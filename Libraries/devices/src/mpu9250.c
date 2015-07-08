@@ -175,6 +175,9 @@ static struct mpu_device mpu_dev;
 
 static const uint8_t mpu_addr[] = {0x68, 0x69};
 
+
+
+
 static int write_reg(uint8_t addr, uint8_t val)
 {
     return I2C_WriteSingleRegister(mpu_dev.instance, mpu_dev.addr, addr, val);
@@ -197,6 +200,23 @@ static uint8_t read_reg(uint8_t addr)
     uint8_t val;
     I2C_ReadSingleRegister(mpu_dev.instance, mpu_dev.addr, addr, &val);
     return val;
+}
+int mpu9250_read_reg(uint8_t addr)
+{
+    return read_reg(addr);
+}
+
+int mpu9250_enable_raw_data_int(void)
+{
+    uint8_t val;
+    val = read_reg(MPU9250_INT_ENABLE);
+    val |= 1;
+    write_reg(MPU9250_INT_ENABLE, val);
+}
+
+int mpu9250_get_int_status(void)
+{
+    return read_reg(MPU9250_INT_STATUS);
 }
 
 int mpu9250_config(struct mpu_config *config)

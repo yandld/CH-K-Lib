@@ -17,10 +17,8 @@
  ******************************************************************************/
 #define PI             3.1415926f
 #define Kp             3.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
-#define Ki             0.002f     /* integral gain governs rate of convergence of gyroscope biases */
+#define Ki             0.001f     /* integral gain governs rate of convergence of gyroscope biases */
 
-
-#define Gyro_Gr        (0.00052653)
    
 float halfT = 0.002f;
 
@@ -200,9 +198,9 @@ static inline void updateAHRS(float gx,float gy,float gz,float ax,float ay,float
 uint32_t imu_get_euler_angle(float *adata, float *gdata, float *mdata, attitude_t *angle)
 {
 
-    updateAHRS( (float)gdata[0] * Gyro_Gr,
-                (float)gdata[1] * Gyro_Gr,
-                (float)gdata[2] * Gyro_Gr,
+    updateAHRS( (float)gdata[0]*PI/180,
+                (float)gdata[1]*PI/180,
+                (float)gdata[2]*PI/180,
                 (float)adata[0],
                 (float)adata[1],
                 (float)adata[2],

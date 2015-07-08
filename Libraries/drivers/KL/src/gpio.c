@@ -277,28 +277,26 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
  * @brief  设置GPIO引脚中断类型或者DMA功能
  * @retval None
  */
-int GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config)
+int GPIO_SetIntMode(uint32_t instance, uint32_t pin, GPIO_Int_t mode, bool val)
 {
     CLK_EN(CLKTbl, instance);
-    if(!config)
+    if(!val)
     {
-        if(GPIO_IrqTbl[instance] == 0)
-        {
-            return 1;
-        }
-        NVIC_DisableIRQ(GPIO_IrqTbl[instance]);
+        PORT_IPTbl[instance]->PCR[pin] &= ~PORT_PCR_IRQC_MASK;
+        return 0;
     }
+    NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
     PORT_IPTbl[instance]->PCR[pin] &= ~PORT_PCR_IRQC_MASK;
-    switch(config)
+    switch(mode)
     {
         case kGPIO_Int_RE:
-            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(1);
+            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(9);
             break;
         case kGPIO_Int_FE:
-            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(2);
+            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(10);
             break;
         case kGPIO_Int_EE:
-            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(3);
+            PORT_IPTbl[instance]->PCR[pin] |= PORT_PCR_IRQC(11);
             break;
     }
     return 0;

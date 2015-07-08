@@ -32,7 +32,10 @@
 #define PIN2        (0x80000004U)
 #define PIN3        (0x80000008U)
 #define PIN4        (0x80000010U)
-#define PIN5        (0x80000020U) 
+#define PIN5        (0x80000020U)
+#define PIN6        (0x80000040U)
+#define PIN7        (0x80000080U)
+#define PIN8        (0x80000100U)
 #define PIN31       (0x80000000U)
 
 typedef enum
@@ -53,7 +56,7 @@ typedef enum
 //!< API functions
 uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode);
 void GPIO_SetPinDir(uint32_t instance, uint32_t pin, uint32_t dir);
-int GPIO_IntConfig(uint32_t instance, uint32_t pin, GPIO_Int_t config);
+int GPIO_SetIntMode(uint32_t instance, uint32_t pin, GPIO_Int_t mode, bool val);
 void GPIO_PinWrite(uint32_t instance, uint32_t pin, uint8_t data);
 void GPIO_PinToggle(uint32_t instance, uint8_t pin);
 uint32_t GPIO_PinRead(uint32_t instance, uint32_t pin);

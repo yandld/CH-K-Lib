@@ -21,6 +21,8 @@ enum accel_scale
     AFS_16G
 };
 
+
+
 enum gyro_scale
 {
     GFS_250DPS,
@@ -64,5 +66,8 @@ float mpu9250_get_ares(void);
 float mpu9250_get_gres(void);
 float mpu9250_get_mres(void);
 int mpu9250_set_gyro_bias(int16_t* bias);
+int mpu9250_enable_raw_data_int(void);
+int mpu9250_get_int_status(void);
+
 
 #endif

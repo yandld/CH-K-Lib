@@ -135,7 +135,7 @@ static int write_reg(uint8_t addr, uint8_t val)
     return I2C_WriteSingleRegister(bmp_dev.instance, bmp_dev.addr, addr, val);
 }
 
-static int read_reg(uint8_t addr, uint8_t *val)
+ int read_reg(uint8_t addr, uint8_t *val)
 {
     return I2C_ReadSingleRegister(bmp_dev.instance, bmp_dev.addr, addr, val);
 }

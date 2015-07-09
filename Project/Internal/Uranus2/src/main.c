@@ -217,7 +217,7 @@ int main(void)
 
             /* low pass filter */
             float factor[3];
-            factor[2] = lpf_1st_factor_cal(halfT*2, 4);
+            factor[2] = lpf_1st_factor_cal(halfT*2, 10);
             float real_mag[3];
             for(i=0;i<3;i++)
             {
@@ -228,7 +228,7 @@ int main(void)
                 //fmdata[i] = 0;
             }
             
-            ret = imu_get_euler_angle(fadata, fgdata, fmdata, &langle);
+            ret = imu_get_euler_angle(fadata, fgdata, real_mag, &langle);
             
             halfT = ((float)time)/1000/2000;
             angle = langle;

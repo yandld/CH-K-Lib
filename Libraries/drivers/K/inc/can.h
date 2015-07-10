@@ -25,21 +25,14 @@
 //CAN总线速度选择
 typedef enum 
 {
-	kCAN_Baudrate_25K,   //CAN通信速度为25KHz
-	kCAN_Baudrate_50K,
-	kCAN_Baudrate_100K,
-	kCAN_Baudrate_125K,
-	kCAN_Baudrate_250K,
-	kCAN_Baudrate_500K,
-	kCAN_Baudrate_1000K, //CAN通信速度为1MHz
+	kCAN_25K,
+	kCAN_50K,
+	kCAN_100K,
+	kCAN_125K,
+	kCAN_250K,
+	kCAN_500K,
+	kCAN_1000K,
 }CAN_Baudrate_Type;
-
-typedef enum
-{
-    kCAN_Frame_Remote,  //远程帧
-    kCAN_Frame_Data,    //数据帧
-}CAN_Frame_Type;
-
 
 typedef struct
 {
@@ -68,13 +61,13 @@ typedef enum
 typedef void (*CAN_CallBackType)(void);
 
 //!< API functions
-void CAN_SetReceiveMask(uint32_t instance, uint32_t mb, uint32_t mask);
-uint32_t CAN_IsMessageBoxBusy(uint32_t instance, uint32_t mb);
+void CAN_SetRxFilterMask(uint32_t instance, uint32_t mb, uint32_t mask);
 uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf, uint8_t len);
-uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint8_t *buf, uint8_t *len);
+uint32_t CAN_WriteRemote(uint32_t instance, uint32_t mb, uint32_t id, uint8_t len);
+uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint32_t *id, uint8_t *buf, uint8_t *len);
 uint32_t CAN_QuickInit(uint32_t CANxMAP, CAN_Baudrate_Type baudrate);
 void CAN_ITDMAConfig(uint32_t instance, uint32_t mb, CAN_ITDMAConfig_Type config);
-void CAN_SetReceiveMB(uint32_t instance, uint32_t mb, uint32_t id);
+void CAN_SetRxMB(uint32_t instance, uint32_t mb, uint32_t id);
 void CAN_CallbackInstall(uint32_t instance, CAN_CallBackType AppCBFun);
 void CAN_Init(CAN_InitTypeDef* CAN_InitStruct);
 

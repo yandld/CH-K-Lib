@@ -24,7 +24,8 @@ void CAN_ISR(void)
     static uint32_t cnt;
     uint8_t buf[8];
     uint8_t len;
-    if(CAN_ReadData(HW_CAN1, 3, buf, &len) == 0)
+    uint32_t id;
+    if(CAN_ReadData(HW_CAN1, 3, &id, buf, &len) == 0)
     {
         printf("DataReceived:%d ", cnt++);
         while(len--)
@@ -44,7 +45,7 @@ int main(void)
     
     printf("CAN test\r\n");
     /* 初始化 CAN 使用CAN1模块的PTE24/25引脚，通信速度为125k*/
-    CAN_QuickInit(CAN1_TX_PE24_RX_PE25, kCAN_Baudrate_125K);
+    CAN_QuickInit(CAN1_TX_PE24_RX_PE25, kCAN_125K);
     
     /* 设置接收中断 安装回调函数 */
     CAN_CallbackInstall(HW_CAN1, CAN_ISR);
@@ -52,7 +53,7 @@ int main(void)
     CAN_ITDMAConfig(HW_CAN1,3, kCAN_IT_RX);
     
     /* 设置 3号邮箱为CAN接收邮箱 */
-    CAN_SetReceiveMB(HW_CAN1, 3, CAN_RX_ID);
+    CAN_SetRxMB(HW_CAN1, 3, CAN_RX_ID);
     while(1)
     {
         /* 使用邮箱2 发送ID:0x10 发送 "CAN TEST" */

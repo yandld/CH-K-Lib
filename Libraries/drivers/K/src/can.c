@@ -170,6 +170,7 @@ static uint32_t set_id(uint32_t instance, uint32_t mb, uint32_t id)
         CANBase[instance]->MB[mb].ID |= CAN_ID_STD(id);  /* ID[28-18] */
         CANBase[instance]->MB[mb].CS &= ~(CAN_CS_IDE_MASK | CAN_CS_SRR_MASK); 
     }
+    return 0;
 }
 
 /**
@@ -314,7 +315,6 @@ static uint32_t is_mb_idle(uint32_t instance, uint32_t mb)
     {
         return 0;
     }
-    printf("%d idle:%d\r\n", mb, code);
     return code;
 }
 
@@ -383,7 +383,6 @@ uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf
  */
 uint32_t CAN_WriteRemote(uint32_t instance, uint32_t mb, uint32_t id, uint8_t len)
 {
-    uint32_t i;
     CAN_Type *CANx;
     
     CANx = CANBase[instance];
@@ -476,7 +475,6 @@ uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint32_t *id, uint8_t *buf
 {
 	uint32_t code, i;
 	uint32_t word[2] = {0};
-    uint32_t temp;
     code = CAN_GET_MB_CODE(CANBase[instance]->MB[mb].CS);
     if((code & 0x01))
     { 

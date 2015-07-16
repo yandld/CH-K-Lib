@@ -94,7 +94,7 @@ int main(void)
     printf("w25qxx test\r\n");
     
     /* 初始化SPI2接口 */
-    SPI_QuickInit(SPI2_SCK_PD12_SOUT_PD13_SIN_PD14, kSPI_CPOL0_CPHA0, 30*1000*1000);
+    SPI_QuickInit(SPI2_SCK_PD12_SOUT_PD13_SIN_PD14, kSPI_CPOL0_CPHA0, 10*1000*1000);
     
     /* 初始化w25qxx 使用CS1片选 */
     PORT_PinMuxConfig(HW_GPIOD, 15, kPinAlt2); /* SPI2_PCS1 */

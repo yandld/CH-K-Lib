@@ -159,6 +159,10 @@ static int w25qxx_probe(void)
             w25qxx_write_sr(0x00);
             return 0; 
         }
+        else /* no match */
+        {
+            w25_dev.attr = w25qxx_tbl[ARRAY_SIZE(w25qxx_tbl)-1];
+        }
     }
     return 1;
 }

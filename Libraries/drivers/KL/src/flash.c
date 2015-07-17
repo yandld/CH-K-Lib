@@ -10,13 +10,7 @@
 #include "flash.h"
 #include "common.h"
 
-#define LIB_DEBUG		1
-#if ( LIB_DEBUG == 1 )
-#include <stdio.h>
-#define LIB_TRACE	printf
-#else
-#define LIB_TRACE(...)
-#endif
+
 
 /* flash commands */
 #define RD1BLK    0x00  /* read 1 block */
@@ -67,12 +61,9 @@
 #define FTF    FTFA
 #endif
 
-
-
-
-static uint8_t _CommandLaunch(void)
+static uint8_t _cmd_lunch(void)
 {
-    /* Clear command result flags */
+    /* clear command result flags */
     FTF->FSTAT = ACCERR | FPVIOL;
     FTF->FSTAT = CCIF;
     while(!(FTF->FSTAT & CCIF));
@@ -85,10 +76,9 @@ uint32_t FLASH_GetSectorSize(void)
     return SECTOR_SIZE;
 }
 
-
 void FLASH_Init(void)
 {
-    /* Clear status */
+    /* clear status */
     FTF->FSTAT = ACCERR | FPVIOL;
 }
 
@@ -109,7 +99,7 @@ uint8_t FLASH_EraseSector(uint32_t addr)
 	FTF->FCCOB2 = dest.byte[1];
 	FTF->FCCOB3 = dest.byte[0];
     __disable_irq();
-    ret = _CommandLaunch();
+    ret = _cmd_lunch();
     __enable_irq();
     
     return ret;
@@ -164,7 +154,7 @@ uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
 		dest.word += step; buf += step;
 
         __disable_irq();
-        ret = _CommandLaunch();
+        ret = _cmd_lunch();
         __enable_irq();
         
 		if(FLASH_OK != ret) 

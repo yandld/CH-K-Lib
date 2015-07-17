@@ -14,6 +14,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#define LIB_DEBUG		1
+
+
 /* version information */
 #define CHLIB_VERSION                   (261)
 
@@ -48,6 +51,13 @@
 #define NVIC_PriorityGroup_3         ((uint32_t)0x4) /*!< 3 bits for pre-emption priority   1 bits for subpriority */                                                   
 #define NVIC_PriorityGroup_4         ((uint32_t)0x3) /*!< 4 bits for pre-emption priority   0 bits for subpriority */
 
+
+#if (LIB_DEBUG == 1)
+#include <stdio.h>
+#define LIB_TRACE	printf
+#else
+#define LIB_TRACE(...)
+#endif
 
 #ifndef ALIGN
 #define ALIGN(size, align)           (((size) + (align) - 1) & ~((align) - 1))

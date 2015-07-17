@@ -83,24 +83,17 @@ void GPIO_SetPinDir(uint32_t instance, uint32_t pin, uint32_t dir)
 }
 
  /**
- * @brief  快速初始化一个GPIO引脚 实际上是GPIO_Init的最简单配置
- * @code
- *      //初始化配置PORTB端口的10引脚为推挽输出引脚
- *      GPIO_QuickInit(HW_GPIOB, 10, kGPIO_Mode_OPP);
- * @endcode
- * @param  instance: GPIO模块号
- *         @arg HW_GPIOA :芯片的PORTA端口
- *         @arg HW_GPIOB :芯片的PORTB端口
- *         @arg HW_GPIOC :芯片的PORTC端口
- *         @arg HW_GPIOD :芯片的PORTD端口
- *         @arg HW_GPIOE :芯片的PORTE端口
- * @param  pinIndex  :端口上的引脚号 0~31
- * @param  mode  :引脚工作模式
- *         @arg kGPIO_Mode_IFT :悬空输入
- *         @arg kGPIO_Mode_IPD :下拉输入
- *         @arg kGPIO_Mode_IPU :上拉输入
- *         @arg kGPIO_Mode_OOD :开漏输出
- *         @arg kGPIO_Mode_OPP :推挽输出
+ * @brief  init a pin
+ * @note   can also init mutiple pin
+ * @param  instance:
+ *         @arg HW_GPIOx : GPIO moudle x
+ * @param  pin : pin number from 0-31
+ * @param  mode : pin operation mode
+ *         @arg kGPIO_Mode_IFT : input floating
+ *         @arg kGPIO_Mode_IPD : pull down
+ *         @arg kGPIO_Mode_IPU : pull up
+ *         @arg kGPIO_Mode_OOD : open drain
+ *         @arg kGPIO_Mode_OPP : push pull
  * @retval None
  */
 uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode)
@@ -160,7 +153,7 @@ uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode)
                         break;					
                 }
             }
-        SetPinMux(instance, i, 1);
+            SetPinMux(instance, i, 1);
         }
     }
     return instance;
@@ -274,7 +267,7 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
 }
 
 /**
- * @brief  设置GPIO引脚中断类型或者DMA功能
+ * @brief  set pin interrupt mode
  * @retval None
  */
 int GPIO_SetIntMode(uint32_t instance, uint32_t pin, GPIO_Int_t mode, bool val)
@@ -301,53 +294,6 @@ int GPIO_SetIntMode(uint32_t instance, uint32_t pin, GPIO_Int_t mode, bool val)
     }
     return 0;
 }
-
-//void GPIO_ITDMAConfig(uint32_t instance, uint8_t pinIndex, GPIO_ITDMAConfig_Type config, bool status)
-//{
-//    CLK_EN(CLKTbl, instance);
-////    PORT_InstanceTable[instance]->PCR[pinIndex] &= ~PORT_PCR_IRQC_MASK;
-//    
-//    if(!status)
-//    {
-//        NVIC_DisableIRQ(GPIO_IrqTbl[instance]);
-//        return;
-//    }
-//    
-//    switch(config)
-//    {
-//        case kGPIO_DMA_RisingEdge:
-//           // PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(1);
-//            break;
-//        case kGPIO_DMA_FallingEdge:
-//          //  PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(2);
-//            break;
-//        case kGPIO_DMA_RisingFallingEdge:
-//          //  PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(3);
-//            break;
-//        case kGPIO_IT_Low:
-//          //  PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(8);
-//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-//            break;
-//        case kGPIO_IT_RisingEdge:
-//         //   PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(9);
-//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-//            break;
-//        case kGPIO_IT_FallingEdge:
-//        //    PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(10);
-//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-//            break;
-//        case kGPIO_IT_RisingFallingEdge:
-//         //   PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(11);
-//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-//            break;
-//        case kGPIO_IT_High:
-//        //    PORT_InstanceTable[instance]->PCR[pinIndex] |= PORT_PCR_IRQC(12);
-//            NVIC_EnableIRQ(GPIO_IrqTbl[instance]);
-//            break;
-//        default:
-//            break;
-//    }
-//}
 
 
 //! @}

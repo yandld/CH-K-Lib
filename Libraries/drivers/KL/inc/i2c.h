@@ -16,12 +16,6 @@
 	 
 #include <stdint.h>
 
-typedef struct
-{
-    uint32_t instance;    //!< I2C pin select
-    uint32_t baudrate;   //!< baudrate some common baudrate: 48000Hz 76000Hz 96000Hz 376000Hz
-}I2C_InitTypeDef;
-
 
 #define HW_I2C0         (0x00U)
 #define HW_I2C1         (0x01U)
@@ -40,12 +34,12 @@ typedef struct
 
 
 uint8_t I2C_Init(uint32_t MAP, uint32_t baudrate);
-int32_t I2C_BurstRead(uint32_t instance, uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t* buf, uint32_t len);
-uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t deviceAddress, uint32_t subAddress, uint32_t subAddressLen, uint8_t *buf, uint32_t len);
-uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData);
-uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data);
-int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t* pData);
-int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t subAddr, uint8_t data);
+int32_t I2C_BurstRead(uint32_t instance, uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t* buf, uint32_t len);
+uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len);
+uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t* buf);
+uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t buf);
+int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t* buf);
+int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t buf);
 /* test function */
 uint8_t I2C_Probe(uint32_t instance, uint8_t chipAddr);
 void I2C_Scan(uint32_t MAP);

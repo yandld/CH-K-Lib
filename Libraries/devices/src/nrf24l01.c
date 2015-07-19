@@ -2,18 +2,18 @@
   ******************************************************************************
   * @file    nrf24l01.c
   * @author  YANDLD
-  * @version V2.5
+  * @version V2.6
   * @date    2013.12.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   * @note    此文件为NRF24L01无线模块的驱动，支持台产和挪威产芯片
   ******************************************************************************
   */
   
+#include <string.h>
 #include "nrf24l01.h"
-#include "spi.h"
-#include "gpio.h"
 
-#define NRF24L01_DEBUG		0
+
+#define NRF24L01_DEBUG		1
 #if ( NRF24L01_DEBUG == 1 )
 #define NRF24L01_TRACE	printf
 #else
@@ -81,10 +81,10 @@
 #define PYNPD               0x1C
 #define FEATURE             0x1D
 
+
 struct nrf24xx_device 
 {
-    uint32_t                spi_instance;
-    uint8_t                 spi_cs;
+    struct nrf24xx_ops_t    ops;
     void                    *user_data;
 };
 
@@ -95,52 +95,49 @@ const uint8_t TX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //发送地址
 const uint8_t RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //接收地址
 
 
-static inline uint8_t spi_xfer(uint8_t data, SPI_PCS_Type csStatus)
+static inline uint8_t ce_ctrl(uint8_t stat)
 {
-    return (uint8_t)SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, (uint8_t)data, nrf_dev.spi_cs, csStatus);
+    nrf_dev.ops.ce_control(stat);
+}
+
+static inline uint8_t spi_xfer(uint8_t data, uint8_t stat)
+{
+    uint8_t data_in;
+    nrf_dev.ops.xfer(&data_in, &data, 1, stat);
+    while(nrf_dev.ops.get_reamin() != 0);
+    return data_in;
 }
 
 //读寄存器
 static uint8_t read_reg(uint8_t addr)
 {
     uint8_t val;
-    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, READ_REG+(uint8_t)addr, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
-    val = SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, 0x00, nrf_dev.spi_cs, kSPI_PCS_ReturnInactive);
+    spi_xfer(READ_REG + addr, 0);
+    val = spi_xfer(0x00, 1);
     return val;
 }
 
 //写寄存器
 static void write_reg(uint8_t addr, uint8_t val)
 {
-    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, WRITE_REG+(uint8_t)addr, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
-    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, val, nrf_dev.spi_cs, kSPI_PCS_ReturnInactive);
+    spi_xfer(WRITE_REG + addr, 0);
+    spi_xfer(val, 1);
 }
 
 //写数据
 static void write_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
-    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, WRITE_REG+(uint8_t)addr, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
-    while(len--)
-    {
-        if(len)
-            SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, *buf++, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
-        else
-            SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, *buf++, nrf_dev.spi_cs, kSPI_PCS_ReturnInactive);  
-    }
+    spi_xfer(WRITE_REG + addr, 0);
+    nrf_dev.ops.xfer(NULL, buf, len, 1);
 }
 
 //读数据
 static void read_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
-    SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, READ_REG+(uint8_t)addr, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
-    while(len--)
-    {
-        if(len)
-            *buf++ = SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, 0x00, nrf_dev.spi_cs, kSPI_PCS_KeepAsserted);
-        else
-            *buf++ = SPI_ReadWriteByte(nrf_dev.spi_instance , HW_CTAR0, 0x00, nrf_dev.spi_cs, kSPI_PCS_ReturnInactive);  
-    }
+    spi_xfer(READ_REG + addr, 0);
+    nrf_dev.ops.xfer(buf, NULL, len, 1);
 }
+
 //NRF设备检测，并配置接收和发送地址
 int nrf24l01_probe(void)
 {
@@ -151,7 +148,7 @@ int nrf24l01_probe(void)
     {
         if((buf[i]!= 0) && (buf[i] != 0xFF))
         {
-            NRF24L01_CE_LOW();
+            ce_ctrl(0);
             /* init sequence */
             write_reg(CONFIG, 0x0F); /* config */
             write_reg(EN_AA, 0x03);/* aa */
@@ -177,11 +174,13 @@ int nrf24l01_probe(void)
 }
 
 //NRF模块初始化
-int nrf24l01_init(uint32_t instance, uint32_t cs)
+int nrf24l01_init(const struct nrf24xx_ops_t *ops)
 {
-    nrf_dev.spi_instance = instance;
-    nrf_dev.spi_cs = cs; 
-    SPI_CTARConfig(instance, HW_CTAR0, kSPI_CPOL0_CPHA0, 8, kSPI_MSB, 2*1000*1000);
+    if(!ops)
+    {
+        return 1;
+    }
+    memcpy(&nrf_dev.ops, ops, sizeof(struct nrf24xx_ops_t));
     return 0;
 }
 
@@ -197,11 +196,11 @@ void nrf24l01_set_tx_mode(void)
     uint8_t value;
     value = FLUSH_TX;
     spi_xfer(FLUSH_TX, kSPI_PCS_ReturnInactive);
-    NRF24L01_CE_LOW();
+    ce_ctrl(0);
     value = read_reg(CONFIG);
     value &= ~CONFIG_PRIM_RX_MASK;
     write_reg(CONFIG, value); /* Set PWR_UP bit, enable CRC(2 length) & Prim:RX. RX_DR enabled.. */
-    NRF24L01_CE_HIGH();
+    ce_ctrl(1);
 }
 
 //该函数初始化NRF24L01到RX模式
@@ -214,13 +213,13 @@ void nrf24l01_set_rx_mode(void)
     /* reflash data */
     value = FLUSH_RX;
     spi_xfer(value, kSPI_PCS_ReturnInactive);
-	NRF24L01_CE_LOW();
+	ce_ctrl(0);
     
     /* set CONFIG_PRIM_RX_MASK to enable Rx */
     value = read_reg(CONFIG);
     value |= CONFIG_PRIM_RX_MASK;
     write_reg(CONFIG, value);
-	NRF24L01_CE_HIGH();
+	ce_ctrl(1);
 }
 
 //启动NRF24L01发送一次数据
@@ -235,7 +234,7 @@ int nrf24l01_write_packet(uint8_t *buf, uint32_t len)
     status = read_reg(STATUS);
     status |= STATUS_TX_DS_MASK | STATUS_MAX_RT_MASK;
     write_reg(STATUS, status);
-    NRF24L01_CE_LOW();
+    ce_ctrl(0);
     
     /* clear PLOS */
     write_reg(RF_CH, 40); 
@@ -250,7 +249,7 @@ int nrf24l01_write_packet(uint8_t *buf, uint32_t len)
             spi_xfer(*buf++, kSPI_PCS_ReturnInactive);      
     }
     
-    NRF24L01_CE_HIGH();
+    ce_ctrl(1);
     while(1)
     {
         status = read_reg(STATUS);

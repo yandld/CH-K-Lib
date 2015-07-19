@@ -17,16 +17,16 @@
       RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //接收地址    
 */
 
-static uint8_t NRF2401RXBuffer[32] = "HelloWorld\r\n";//无线接收数据
-static uint8_t* gpRevChar;
+static uint8_t NRF2401RXBuffer[32];
+static uint8_t UART_RxBuf[32];
+static uint32_t UART_RxCnt;
+
 
 
 /* 串口接收中断 */
 void UART_ISR(uint16_t ch)
 {
-    static uint8_t rev_ch;
-    rev_ch = ch;
-    gpRevChar = (uint8_t*)&rev_ch;
+    UART_RxBuf[UART_RxCnt++] = ch;
 }
 
 static uint32_t xfer(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs_state)
@@ -42,7 +42,7 @@ static uint32_t xfer(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs
     {
         if(len == 0)
         {
-            *buf_in = SPI_ReadWriteByte(HW_SPI1, HW_CTAR0, *buf_out, 0, !cs_state); 
+            *buf_in = SPI_ReadWriteByte(HW_SPI1, HW_CTAR0, *buf_out, 0, (SPI_PCS_Type)cs_state); 
         }
         else
         {
@@ -53,6 +53,7 @@ static uint32_t xfer(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs
         if(buf_in != &dummy)
             buf_in++;
     }
+    return len;
 }
 
 static uint32_t get_reamin(void)
@@ -106,18 +107,20 @@ int main(void)
     {
         printf("nrf24xx ok!\r\n");   
     }
-    
     /* 进入Rx模式 */
     nrf24l01_set_rx_mode();
     while(1)
     {
-        /* 如果收到串口数据则发送 */
-        if(gpRevChar != NULL)
+        if((UART_RxCnt > 31) || (i > 2000))
         {
-            nrf24l01_set_tx_mode();
-            nrf24l01_write_packet(gpRevChar, 1);
-            nrf24l01_set_rx_mode();
-            gpRevChar = NULL;
+            if(UART_RxCnt)
+            {
+                nrf24l01_set_tx_mode();
+                nrf24l01_write_packet(UART_RxBuf, UART_RxCnt);
+                nrf24l01_set_rx_mode();
+            }
+            UART_RxCnt = 0;
+            i = 0;
         }
         /* 如果收到2401 的数据 则传输到串口 */
         if(!nrf24l01_read_packet(NRF2401RXBuffer, &len))
@@ -128,6 +131,7 @@ int main(void)
                 UART_WriteByte(HW_UART0, NRF2401RXBuffer[i++]);
             }
         }
+        i++;
     }
 }
 

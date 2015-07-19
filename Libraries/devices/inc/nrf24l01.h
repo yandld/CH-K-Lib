@@ -33,7 +33,8 @@ int nrf24l01_write_packet(uint8_t *buf, uint32_t len);
 int nrf24l01_read_packet(uint8_t *buf, uint32_t *len);
 int nrf24l01_probe(void);
 int nrf24l01_init(const struct nrf24xx_ops_t *ops);
-
+void nrf24l01_set_tx_addr(uint8_t *buf);
+void nrf24l01_set_rx_addr(uint8_t ch, uint8_t *addr);
 
 #endif
 

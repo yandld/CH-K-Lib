@@ -13,7 +13,7 @@
 #include "nrf24l01.h"
 
 
-#define NRF24L01_DEBUG		1
+#define NRF24L01_DEBUG		0
 #if ( NRF24L01_DEBUG == 1 )
 #define NRF24L01_TRACE	printf
 #else
@@ -95,7 +95,7 @@ const uint8_t TX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //发送地址
 const uint8_t RX_ADDRESS[5]={0x34,0x43,0x10,0x10,0x01}; //接收地址
 
 
-static inline uint8_t ce_ctrl(uint8_t stat)
+static inline void ce_ctrl(uint8_t stat)
 {
     nrf_dev.ops.ce_control(stat);
 }
@@ -108,34 +108,40 @@ static inline uint8_t spi_xfer(uint8_t data, uint8_t stat)
     return data_in;
 }
 
-//读寄存器
 static uint8_t read_reg(uint8_t addr)
 {
     uint8_t val;
-    spi_xfer(READ_REG + addr, 0);
-    val = spi_xfer(0x00, 1);
+    spi_xfer(READ_REG + addr, 1);
+    val = spi_xfer(0x00, 0);
     return val;
 }
 
-//写寄存器
 static void write_reg(uint8_t addr, uint8_t val)
 {
-    spi_xfer(WRITE_REG + addr, 0);
-    spi_xfer(val, 1);
+    spi_xfer(WRITE_REG + addr, 1);
+    spi_xfer(val, 0);
 }
 
-//写数据
 static void write_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
-    spi_xfer(WRITE_REG + addr, 0);
-    nrf_dev.ops.xfer(NULL, buf, len, 1);
+    spi_xfer(WRITE_REG + addr, 1);
+    nrf_dev.ops.xfer(NULL, buf, len, 0);
 }
 
-//读数据
 static void read_buffer(uint8_t addr, uint8_t *buf, uint32_t len)
 {
-    spi_xfer(READ_REG + addr, 0);
-    nrf_dev.ops.xfer(buf, NULL, len, 1);
+    spi_xfer(READ_REG + addr, 1);
+    nrf_dev.ops.xfer(buf, NULL, len, 0);
+}
+
+void nrf24l01_set_tx_addr(uint8_t *addr)
+{
+    write_buffer(TX_ADDR, addr, 5);
+}
+
+void nrf24l01_set_rx_addr(uint8_t ch, uint8_t *addr)
+{
+    write_buffer(RX_ADDR_P0 + ch, addr, 5);
 }
 
 //NRF设备检测，并配置接收和发送地址

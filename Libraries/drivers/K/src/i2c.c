@@ -37,19 +37,19 @@ static i2c_gpio i2c;
 uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     
     /* open drain and pull up */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        GPIO_QuickInit(pq->io_instance, pq->io_base + i, kGPIO_Mode_OOD);
-        GPIO_QuickInit(pq->io_instance, pq->io_base + i, kGPIO_Mode_OOD);
-        GPIO_WriteBit(pq->io_instance, pq->io_base + i, 1);
-        PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullUp);
+        GPIO_QuickInit(pq->io, pq->pin_start + i, kGPIO_Mode_OOD);
+        GPIO_QuickInit(pq->io, pq->pin_start + i, kGPIO_Mode_OOD);
+        GPIO_WriteBit(pq->io, pq->pin_start + i, 1);
+        PORT_PinPullConfig(pq->io, pq->pin_start + i, kPullUp);
     }
 
     /* i2c_gpio struct setup */
-    i2c.instace = pq->io_instance;
+    i2c.instace = pq->io;
     
     switch(MAP)
     {
@@ -83,7 +83,7 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
         default:
             break;
     }
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
@@ -577,21 +577,21 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
     I2C_InitTypeDef I2C_InitStruct1;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     I2C_InitStruct1.baudrate = baudrate;
-    I2C_InitStruct1.instance = pq->ip_instance;
+    I2C_InitStruct1.instance = pq->ip;
     
     /* init pinmux and  open drain and pull up */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type)pq->mux);
-        PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullUp); 
-        PORT_PinOpenDrainConfig(pq->io_instance, pq->io_base + i, ENABLE);
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type)pq->mux);
+        PORT_PinPullConfig(pq->io, pq->pin_start + i, kPullUp); 
+        PORT_PinOpenDrainConfig(pq->io, pq->pin_start + i, ENABLE);
     }
     
     /* init moudle */
     I2C_Init(&I2C_InitStruct1);
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 /**
@@ -1221,7 +1221,7 @@ void I2C1_IRQHandler(void)
 
 
 #if 0
-static const QuickInit_Type I2C_QuickInitTable[] =
+static const map_t I2C_QuickInitTable[] =
 {
     { 1, 4, 6, 0, 2, 0}, //I2C1_SCL_PE01_SDA_PE00 6
     { 0, 4, 4,18, 2, 0}, //I2C0_SCL_PE19_SDA_PE18 4

@@ -22,13 +22,13 @@ static const IRQn_Type LPTMR_IRQnTable[] =
 };
 
 #if defined(SIM_SCGC5_LPTIMER_MASK)
-static const struct reg_ops SIM_LPTMRClockGateTable[] =
+static const struct Reg_t SIM_LPTMRClockGateTable[] =
 {
     {(void*)&(SIM->SCGC5), SIM_SCGC5_LPTIMER_MASK},
 };
 
 #elif defined(SIM_SCGC5_LPTMR_MASK)
-static const struct reg_ops SIM_LPTMRClockGateTable[] =
+static const Reg_t SIM_LPTMRClockGateTable[] =
 {
     {(void*)&(SIM->SCGC5), SIM_SCGC5_LPTMR_MASK},
 };
@@ -213,10 +213,10 @@ uint32_t LPTMR_PC_ReadCounter(void)
 uint32_t LPTMR_PC_QuickInit(uint32_t MAP)
 {
     uint32_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     LPTMR_PC_InitTypeDef LPTMR_PC_InitStruct1;
     LPTMR_PC_InitStruct1.counterOverflowValue = 0xFFFF;
-    switch(pq->channel)
+    switch(pq->chl)
     {
         case 1:
             LPTMR_PC_InitStruct1.inputSource = kLPTMR_PC_InputSource_ALT1;
@@ -229,13 +229,13 @@ uint32_t LPTMR_PC_QuickInit(uint32_t MAP)
     }
     LPTMR_PC_InitStruct1.pinPolarity = kLPTMR_PC_PinPolarity_RigsingEdge;
     /* init pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux); 
     }
     /* init moudle */
     LPTMR_PC_Init(&LPTMR_PC_InitStruct1);
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 /**
@@ -270,7 +270,7 @@ void LPTimer_IRQHandler(void)
 
 
 #if 0
-static const QuickInit_Type LPTMR_QuickInitTable[] = 
+static const map_t LPTMR_QuickInitTable[] = 
 {
     { 0, 0, 6,19, 1, 1}, //LPTMR_ALT1_PA19 6
     { 0, 2, 4, 5, 1, 2}, //LPTMR_ALT2_PC05 4

@@ -126,16 +126,16 @@ __Vectors       DCD     __initial_sp  ; Top of Stack
                 DCD     CMP0_IRQHandler  ; CMP0 interrupt
                 DCD     CMP1_IRQHandler  ; CMP1 interrupt
                 DCD     CMP2_IRQHandler  ; CMP2 interrupt
-                DCD     FTM0_IRQHandler  ; FTM0 fault, overflow and channels interrupt
-                DCD     FTM1_IRQHandler  ; FTM1 fault, overflow and channels interrupt
-                DCD     FTM2_IRQHandler  ; FTM2 fault, overflow and channels interrupt
+                DCD     FTM0_IRQHandler  ; FTM0 fault, overflow and chls interrupt
+                DCD     FTM1_IRQHandler  ; FTM1 fault, overflow and chls interrupt
+                DCD     FTM2_IRQHandler  ; FTM2 fault, overflow and chls interrupt
                 DCD     CMT_IRQHandler  ; CMT interrupt
                 DCD     RTC_IRQHandler  ; RTC interrupt
                 DCD     RTC_Seconds_IRQHandler  ; RTC seconds interrupt
-                DCD     PIT0_IRQHandler  ; PIT timer channel 0 interrupt
-                DCD     PIT1_IRQHandler  ; PIT timer channel 1 interrupt
-                DCD     PIT2_IRQHandler  ; PIT timer channel 2 interrupt
-                DCD     PIT3_IRQHandler  ; PIT timer channel 3 interrupt
+                DCD     PIT0_IRQHandler  ; PIT timer chl 0 interrupt
+                DCD     PIT1_IRQHandler  ; PIT timer chl 1 interrupt
+                DCD     PIT2_IRQHandler  ; PIT timer chl 2 interrupt
+                DCD     PIT3_IRQHandler  ; PIT timer chl 3 interrupt
                 DCD     PDB0_IRQHandler  ; PDB0 Interrupt
                 DCD     USB0_IRQHandler  ; USB0 interrupt
                 DCD     USBDCD_IRQHandler  ; USBDCD Interrupt

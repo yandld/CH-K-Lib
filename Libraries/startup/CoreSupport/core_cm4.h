@@ -1724,7 +1724,7 @@ extern volatile int32_t ITM_RxBuffer;                    /*!< External variable 
 
 /** \brief  ITM Send Character
 
-    The function transmits a character via the ITM channel 0, and
+    The function transmits a character via the ITM chl 0, and
     \li Just returns when no debugger is connected that has booked the output.
     \li Is blocking when a debugger is connected, but the previous character sent has not been transmitted.
 

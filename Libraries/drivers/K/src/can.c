@@ -27,7 +27,7 @@
 /* global vars */
 CAN_Type * const CANBase[] = CAN_BASES;
 
-static const struct reg_ops ClkTbl[] =
+static const Reg_t ClkTbl[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FLEXCAN0_MASK},
 #ifdef CAN1
@@ -286,17 +286,17 @@ void CAN_Init(CAN_InitTypeDef* Init)
 uint32_t CAN_QuickInit(uint32_t CANxMAP, CAN_Baudrate_Type baudrate)
 {
 	uint32_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(CANxMAP); 
+    map_t * pq = (map_t*)&(CANxMAP); 
     CAN_InitTypeDef CAN_InitSturct1;
-    CAN_InitSturct1.instance = pq->ip_instance;
+    CAN_InitSturct1.instance = pq->ip;
     CAN_InitSturct1.baudrate = baudrate;
     CAN_Init(&CAN_InitSturct1);
     /* init pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux); 
     }
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 /**

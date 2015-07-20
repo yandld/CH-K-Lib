@@ -35,7 +35,7 @@ static UART_CallBackRxType UART_CallBackRxTable[ARRAY_SIZE(UARTBase)] = {NULL};
 static uint8_t UART_DebugInstance;
 /* instance clock gate table */
 
-static const struct reg_ops ClkTbl[] =
+static const Reg_t ClkTbl[] =
 {
     
     {(void*)&(SIM->SCGC4), SIM_SCGC4_UART0_MASK},
@@ -586,34 +586,34 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     uint8_t i;
     uint32_t clock;
     UART_InitTypeDef Init;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     Init.baudrate = baudrate;
-    Init.instance = pq->ip_instance;
+    Init.instance = pq->ip;
     Init.parityMode = kUART_ParityDisabled;
     Init.bitPerChar = kUART_8BitsPerChar;
     
     /* src clock */
     CLOCK_GetClockFrequency(kBusClock, &clock);
-    if((pq->ip_instance == HW_UART0) || (pq->ip_instance == HW_UART1))
+    if((pq->ip == HW_UART0) || (pq->ip == HW_UART1))
     {
         CLOCK_GetClockFrequency(kCoreClock, &clock); /* UART0 UART1 are use core clock */
     }
     Init.srcClock = clock;
     
     /* init pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux); 
     }
     
     /* init UART */
     UART_Init(&Init);
     
     /* default: disable hardware buffer */
-    UART_EnableTxFIFO(pq->ip_instance, false);
-    UART_EnableRxFIFO(pq->ip_instance, false);
+    UART_EnableTxFIFO(pq->ip, false);
+    UART_EnableRxFIFO(pq->ip, false);
     
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 //! @}
@@ -777,7 +777,7 @@ void UART5_RX_TX_IRQHandler(void)
 #endif
 
 /*
-static const QuickInit_Type UART_QuickInitTable[] =
+static const map_t UART_QuickInitTable[] =
 {
     { 1, 4, 3, 0, 2, 0}, //UART1_RX_PE01_TX_PE00
     { 0, 5, 4,18, 2, 0}, //UART0_RX_PF17_TX_PF18 4

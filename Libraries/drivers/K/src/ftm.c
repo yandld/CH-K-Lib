@@ -37,7 +37,7 @@ static FTM_CallBackType FTM_CallBackTable[ARRAY_SIZE(FTM_InstanceTable)] = {NULL
 
 
 static const uint32_t FTM_ChlMaxTable[] = {8,2,2}; /* reference to chip configuration->flextimer configuration */
-static const struct reg_ops SIM_FTMClockGateTable[] =
+static const Reg_t SIM_FTMClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM0_MASK},
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM1_MASK},
@@ -123,24 +123,24 @@ static void _FTM_InitBasic(uint32_t instance, uint32_t modulo, FTM_ClockDiv_Type
 uint32_t FTM_QD_QuickInit(uint32_t MAP, FTM_QD_PolarityMode_Type polarity, FTM_QD_Mode_Type mode)
 {
     uint8_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     
     /* init moudle */
-    _FTM_InitBasic(pq->ip_instance, FTM_MOD_MOD_MASK, kFTM_ClockDiv16);
+    _FTM_InitBasic(pq->ip, FTM_MOD_MOD_MASK, kFTM_ClockDiv16);
     
     /* set FTM to QD mode */
-    FTM_SetMode(pq->ip_instance, 0, kFTM_Mode_QuadratureDecoder);
+    FTM_SetMode(pq->ip, 0, kFTM_Mode_QuadratureDecoder);
     
     /* QD mode config */
     switch(polarity)
     {
         case kFTM_QD_NormalPolarity:
-            FTM_InstanceTable[pq->ip_instance]->QDCTRL &= ~FTM_QDCTRL_PHAPOL_MASK;
-            FTM_InstanceTable[pq->ip_instance]->QDCTRL &= ~FTM_QDCTRL_PHBPOL_MASK;
+            FTM_InstanceTable[pq->ip]->QDCTRL &= ~FTM_QDCTRL_PHAPOL_MASK;
+            FTM_InstanceTable[pq->ip]->QDCTRL &= ~FTM_QDCTRL_PHBPOL_MASK;
             break;
         case kFTM_QD_InvertedPolarity:
-            FTM_InstanceTable[pq->ip_instance]->QDCTRL |= FTM_QDCTRL_PHAPOL_MASK;
-            FTM_InstanceTable[pq->ip_instance]->QDCTRL |= FTM_QDCTRL_PHBPOL_MASK;
+            FTM_InstanceTable[pq->ip]->QDCTRL |= FTM_QDCTRL_PHAPOL_MASK;
+            FTM_InstanceTable[pq->ip]->QDCTRL |= FTM_QDCTRL_PHBPOL_MASK;
             break;
         default:
             break;
@@ -148,23 +148,23 @@ uint32_t FTM_QD_QuickInit(uint32_t MAP, FTM_QD_PolarityMode_Type polarity, FTM_Q
     switch(mode)
     {
         case kQD_PHABEncoding:
-            FTM_InstanceTable[pq->ip_instance]->QDCTRL &= ~FTM_QDCTRL_QUADMODE_MASK;
+            FTM_InstanceTable[pq->ip]->QDCTRL &= ~FTM_QDCTRL_QUADMODE_MASK;
             break;
         case kQD_CountDirectionEncoding:
-            FTM_InstanceTable[pq->ip_instance]->QDCTRL |= FTM_QDCTRL_QUADMODE_MASK;
+            FTM_InstanceTable[pq->ip]->QDCTRL |= FTM_QDCTRL_QUADMODE_MASK;
             break;
         default:
             break;
     }
     /* init pinmux and pull up */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux);
-        PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullUp);
-        PORT_PinOpenDrainConfig(pq->io_instance, pq->io_base + i, ENABLE);
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux);
+        PORT_PinPullConfig(pq->io, pq->pin_start + i, kPullUp);
+        PORT_PinOpenDrainConfig(pq->io, pq->pin_start + i, ENABLE);
     }
     /* init moudle */
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 /**
@@ -187,22 +187,22 @@ void FTM_QD_ClearCount(uint32_t instance)
 }
 
 
-/*combine channel control*/
+/*combine chl control*/
 /*dual capture control*/
 /**
  * @brief  内部函数，用户无需调用
  */
-static uint32_t get_channel_pair_index(uint8_t channel)
+static uint32_t get_chl_pair_index(uint8_t chl)
 {
-    if((channel == HW_FTM_CH0) || (channel == HW_FTM_CH1))
+    if((chl == HW_FTM_CH0) || (chl == HW_FTM_CH1))
     {
         return 0;
     }
-    else if((channel == HW_FTM_CH2) || (channel == HW_FTM_CH3)) 
+    else if((chl == HW_FTM_CH2) || (chl == HW_FTM_CH3)) 
     {
         return 1;
     }
-    else if((channel == HW_FTM_CH4) || (channel == HW_FTM_CH5)) 
+    else if((chl == HW_FTM_CH4) || (chl == HW_FTM_CH5)) 
     {
         return 2;
     }
@@ -214,9 +214,9 @@ static uint32_t get_channel_pair_index(uint8_t channel)
 
 
 /*!
- * @brief enable FTM peripheral timer channel pair output combine mode.
+ * @brief enable FTM peripheral timer chl pair output combine mode.
  * @param instance The FTM peripheral instance number.
- * @param channel  The FTM peripheral channel number.
+ * @param chl  The FTM peripheral chl number.
  * @param enable  true to enable channle pair to combine, false to disable.
  */
 /**
@@ -229,22 +229,22 @@ static void FTM_DualChlConfig(uint32_t instance, uint8_t chl, FTM_DualChlConfig_
     switch(mode)
     {
         case kFTM_Combine:
-            mask = FTM_COMBINE_COMBINE0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_COMBINE0_MASK << (get_chl_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;
         case kFTM_Complementary:
-            mask = FTM_COMBINE_COMP0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_COMP0_MASK << (get_chl_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;    
         case kFTM_DualEdgeCapture:
-            mask = FTM_COMBINE_DECAPEN0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_DECAPEN0_MASK << (get_chl_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;           
         case kFTM_DeadTime:
-            mask = FTM_COMBINE_DTEN0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_DTEN0_MASK << (get_chl_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;    
         case kFTM_Sync:
-            mask = FTM_COMBINE_SYNCEN0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_SYNCEN0_MASK << (get_chl_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;   
         case kFTM_FaultControl:
-            mask = FTM_COMBINE_FAULTEN0_MASK << (get_channel_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
+            mask = FTM_COMBINE_FAULTEN0_MASK << (get_chl_pair_index(chl) * FTM_COMBINE_CHAN_CTRL_WIDTH);
             break;    
         default:
             break;
@@ -386,11 +386,11 @@ uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req)
     uint32_t clock;
     int32_t pres;
     uint8_t ps = 0;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP); 
+    map_t * pq = (map_t*)&(MAP); 
     /* init pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux); 
     }
     /* calc req and ps */
     uint32_t min_val = 0xFFFF;
@@ -416,26 +416,26 @@ uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req)
     LIB_TRACE("input clk:%d\r\n", clock);
     LIB_TRACE("ps:%d\r\n", pres);
     LIB_TRACE("modulo:%d\r\n", modulo);
-    _FTM_InitBasic(pq->ip_instance, modulo, (FTM_ClockDiv_Type)ps);
+    _FTM_InitBasic(pq->ip, modulo, (FTM_ClockDiv_Type)ps);
     /* set FTM mode */
     switch(mode)
     {
         case kPWM_EdgeAligned:
-            FTM_SetMode(pq->ip_instance, pq->channel, kFTM_Mode_EdgeAligned);
+            FTM_SetMode(pq->ip, pq->chl, kFTM_Mode_EdgeAligned);
             break;
         case kPWM_Combine:
-            FTM_SetMode(pq->ip_instance, pq->channel, kFTM_Mode_Combine);
+            FTM_SetMode(pq->ip, pq->chl, kFTM_Mode_Combine);
             break;
         case kPWM_Complementary:
-            FTM_SetMode(pq->ip_instance, pq->channel, kFTM_Mode_Complementary);
+            FTM_SetMode(pq->ip, pq->chl, kFTM_Mode_Complementary);
             break;
         default:
             LIB_TRACE("error in FTM_PWM_Init\r\n");
             break;
     }
     /* set duty to 50% */
-    FTM_PWM_ChangeDuty(pq->ip_instance, pq->channel, 5000);
-    return pq->ip_instance;
+    FTM_PWM_ChangeDuty(pq->ip, pq->chl, 5000);
+    return pq->ip;
 }
 
 /**
@@ -483,14 +483,14 @@ void FTM_PWM_ChangeDuty(uint32_t instance, uint8_t chl, uint32_t pwmDuty)
 void FTM_IC_QuickInit(uint32_t MAP, FTM_ClockDiv_Type ps)
 {
     uint32_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     /* init pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux); 
     }
-    _FTM_InitBasic(pq->ip_instance, FTM_MOD_MOD_MASK, ps);
-    FTM_SetMode(pq->ip_instance, pq->channel, kFTM_Mode_InputCapture);
+    _FTM_InitBasic(pq->ip, FTM_MOD_MOD_MASK, ps);
+    FTM_SetMode(pq->ip, pq->chl, kFTM_Mode_InputCapture);
 }
 
 /**
@@ -668,7 +668,7 @@ void FTM2_IRQHandler(void)
 
 
 /*
-static const QuickInit_Type FTM_QD_QuickInitTable[] = 
+static const map_t FTM_QD_QuickInitTable[] = 
 {
     { 1, 0, 6,  8, 2, 0}, //FTM1_QD_PHA_PA08_PHB_PA09 6
     { 1, 0, 7, 12, 2, 0}, //FTM1_QD_PHA_PA12_PHB_PA13 7
@@ -677,7 +677,7 @@ static const QuickInit_Type FTM_QD_QuickInitTable[] =
     { 2, 1, 6, 18, 2, 0}, //FTM2_QD_PHA_PB18_PHB_PB19 6
 };
 
-static const QuickInit_Type FTM_QuickInitTable[] =
+static const map_t FTM_QuickInitTable[] =
 {
     { 0, 1, 4, 12, 1, 4}, //FTM0_CH4_PB12 4
     { 0, 1, 4, 13, 1, 5}, //FTM0_CH5_PB13  4

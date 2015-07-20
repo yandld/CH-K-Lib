@@ -124,7 +124,7 @@ uint32_t DMA_ChlAlloc(void)
     /* get max DMA chl on this device */
     MaxDMAChl = (ARRAY_SIZE(DMAMUX_InstanceTable[0]->CHCFG)>32)?(ARRAY_SIZE(DMAMUX_InstanceTable[0]->CHCFG)):(32);
     
-    /* alloc a channel */
+    /* alloc a chl */
     for(i=0;i<MaxDMAChl;i++)
     {
         if(!(DMAChlMAP & (1<< i)))

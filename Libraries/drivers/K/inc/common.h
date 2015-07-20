@@ -126,37 +126,39 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 #define IP_CLK_ENABLE(x)        (*((uint32_t*) ClkTbl[x].addr) |= ClkTbl[x].mask)
 #define IP_CLK_DISABLE(x)       (*((uint32_t*) ClkTbl[x].addr) &= ~ClkTbl[x].mask)
 
+#define CLK_EN(t, x)               (*((uint32_t*) t[x].addr) |= t[x].mask)
+#define CLK_DIS(t, x)              (*((uint32_t*) t[x].addr) &= ~t[x].mask)
+#define REG_GET(t, x)              ((*(uint32_t*) t[x].addr & t[x].mask)>>t[x].shift)
+
 /* QuickInitType */
 typedef struct
 {
-    uint32_t ip_instance:3;
-    uint32_t io_instance:3;
+    uint32_t ip:3;
+    uint32_t io:3;
     uint32_t mux:3;
-    uint32_t io_base:5;
-    uint32_t io_offset:5;
-    uint32_t channel:5;
+    uint32_t pin_start:5;
+    uint32_t pin_cnt:5;
+    uint32_t chl:5;
     uint32_t reserved:8;
-}QuickInit_Type;
+}map_t;
 
 /* 时钟源定义 */
 typedef enum
 {
     kCoreClock,
-    kSystemClock,
     kBusClock,
     kFlexBusClock,
     kFlashClock,
     kMCGOutClock,
-    kClockNameCount,
-}CLOCK_Source_Type; 
+}Clock_t; 
 
-struct reg_ops
+typedef struct 
 {
     void *      addr;
     uint32_t    mask;
-};
+    uint32_t    shift;
+}Reg_t;
 
- 
 static inline void SystemSoftReset(void)
 {
     NVIC_SystemReset();
@@ -167,9 +169,9 @@ static inline void SystemSoftReset(void)
 void DelayMs(uint32_t ms);
 void DelayUs(uint32_t us);
 void DelayInit(void);
-int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz);
-uint32_t QuickInitEncode(QuickInit_Type * type);
-void QuickInitDecode(uint32_t map, QuickInit_Type* type);
+int32_t CLOCK_GetClockFrequency(Clock_t clockName, uint32_t* FrequenctInHz);
+uint32_t QuickInitEncode(map_t * type);
+void QuickInitDecode(uint32_t map, map_t* type);
 void EnterSTOPMode(bool enSleepOnExit);
 
 #ifdef __cplusplus

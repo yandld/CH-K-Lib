@@ -13,7 +13,7 @@
 
 #if defined(SDHC)
 
-static const struct reg_ops ClkTbl[] =
+static const Reg_t ClkTbl[] =
 {
 #ifdef SIM_SCGC3_SDHC_MASK
     {(void*)&(SIM->SCGC3), SIM_SCGC3_SDHC_MASK},

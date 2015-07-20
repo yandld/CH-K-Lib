@@ -136,14 +136,14 @@ uint32_t TSI_QuickInit(uint32_t MAP)
 {
     uint32_t i;
     TSI_InitTypeDef TSI_InitStruct;
-    QuickInit_Type * pq = (QuickInit_Type*)&MAP;
+    map_t * pq = (map_t*)&MAP;
     /* config pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux);
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux);
     }
     /* config TSI moudle */
-    TSI_InitStruct.chl = pq->channel;
+    TSI_InitStruct.chl = pq->chl;
     TSI_InitStruct.triggerMode = kTSI_TriggerPeriodicalScan;
     TSI_InitStruct.threshld = 700;
     TSI_InitStruct.consecutiveScanTimes = 2;
@@ -151,7 +151,7 @@ uint32_t TSI_QuickInit(uint32_t MAP)
     TSI_InitStruct.extChargeCurrent = kTSI_ChargeCurrent_32uA;
     TSI_InitStruct.refChargeCurrent = kTSI_ChargeCurrent_32uA;
     TSI_Init(&TSI_InitStruct);
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 /**
@@ -222,7 +222,7 @@ void TSI0_IRQHandler(void)
 #endif
 
 /*
- static  QuickInit_Type TSI_QuickInitTable[] =
+ static  map_t TSI_QuickInitTable[] =
 {
     { 0, 1, 0, 0, 1, 0},    //TSI0_CH0_PB00
     { 0, 0, 0, 0, 1, 1},    //TSI0_CH1_PA00

@@ -37,7 +37,7 @@
  * @param  FrequenctInHz: 获得频率数据的指针 单位Hz
  * @retval 0: 成功 非0: 错误
  */
-int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* FrequenctInHz)
+int32_t CLOCK_GetClockFrequency(Clock_t clockName, uint32_t* FrequenctInHz)
 {
     uint32_t MCGOutClock = 0;
     /* calualte MCGOutClock system_MKxxx.c must not modified */
@@ -48,9 +48,6 @@ int32_t CLOCK_GetClockFrequency(CLOCK_Source_Type clockName, uint32_t* Frequenct
         case kCoreClock:
             *FrequenctInHz = MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
             break;
-        case kSystemClock:
-            *FrequenctInHz = MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
-            break;	
         case kBusClock:
             *FrequenctInHz = MCGOutClock / MCGOUT_TO_BUS_DIVIDER;
             break;
@@ -95,7 +92,7 @@ void EnterSTOPMode(bool enSleepOnExit)
  * @param  type: 快速初始化结构体指针
  * @retval       32位快速初始化编码
  */
-uint32_t QuickInitEncode(QuickInit_Type * type)
+uint32_t QuickInitEncode(map_t * type)
 {
     return *(uint32_t*)type;
 }
@@ -107,10 +104,10 @@ uint32_t QuickInitEncode(QuickInit_Type * type)
  * @param  type: 快速初始化结构指针
  * @retval None
  */
-void QuickInitDecode(uint32_t map, QuickInit_Type * type)
+void QuickInitDecode(uint32_t map, map_t * type)
 {
-    QuickInit_Type * pMap = (QuickInit_Type*)&(map);
-    memcpy(type, pMap, sizeof(QuickInit_Type));  
+    map_t * pMap = (map_t*)&(map);
+    memcpy(type, pMap, sizeof(map_t));  
 }
 
 void DWT_DelayInit(void)

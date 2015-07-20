@@ -29,7 +29,7 @@
 static ADC_Type * const ADC_InstanceTable[] = ADC_BASES;
 static ADC_CallBackType ADC_CallBackTable[ARRAY_SIZE(ADC_InstanceTable)] = {NULL};
 
-static const struct reg_ops SIM_ADCClockGateTable[] =
+static const Reg_t SIM_ADCClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC0_MASK},
 #ifdef ADC1
@@ -257,9 +257,9 @@ void ADC_EnableHardwareTrigger(uint32_t instance, bool status)
 uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
 {
     uint8_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     ADC_InitTypeDef AD_InitStruct1;
-    AD_InitStruct1.instance = pq->ip_instance;
+    AD_InitStruct1.instance = pq->ip;
     AD_InitStruct1.clockDiv = kADC_ClockDiv8;
     AD_InitStruct1.resolutionMode = resolutionMode;
     AD_InitStruct1.triggerMode = kADC_TriggerSoftware;
@@ -269,18 +269,18 @@ uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
     AD_InitStruct1.vref = kADC_VoltageVREF;
     
     /* init pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux);
-        PORT_PinPullConfig(pq->io_instance, pq->io_base + i, kPullDisabled); 
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux);
+        PORT_PinPullConfig(pq->io, pq->pin_start + i, kPullDisabled); 
     }
     /* init moudle */
     ADC_Init(&AD_InitStruct1);
     
     /* init adc chlmux */
-    ADC_ChlMuxConfig(pq->ip_instance, pq->reserved);
+    ADC_ChlMuxConfig(pq->ip, pq->reserved);
     
-    return pq->ip_instance;
+    return pq->ip;
 }
   
 /**
@@ -353,9 +353,9 @@ int32_t ADC_ReadValue(uint32_t instance, uint32_t mux)
  */
 int32_t ADC_QuickReadValue(uint32_t MAP)
 {
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
-    uint32_t instance = pq->ip_instance;
-    uint32_t chl = pq->channel;
+    map_t * pq = (map_t*)&(MAP);
+    uint32_t instance = pq->ip;
+    uint32_t chl = pq->chl;
     ADC_StartConversion(instance, chl, kADC_MuxA);
     /* waiting for ADC complete */
     while((ADC_InstanceTable[instance]->SC1[kADC_MuxA] & ADC_SC1_COCO_MASK) == 0);
@@ -449,7 +449,7 @@ void ADC1_IRQHandler(void)
 }
 
 /*
-const QuickInit_Type FTM_QuickInitTable[] =
+const map_t FTM_QuickInitTable[] =
 {
     { 0, 0, 0, 0, 0, 0, 0}, //ADC0_SE0_DP0
     { 0, 0, 0, 0, 0, 1, 0}, //ADC0_SE1_DP1

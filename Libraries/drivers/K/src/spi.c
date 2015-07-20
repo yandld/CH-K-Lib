@@ -30,7 +30,7 @@
 SPI_Type * const SPI_InstanceTable[] = SPI_BASES;
 static SPI_CallBackType SPI_CallBackTable[ARRAY_SIZE(SPI_InstanceTable)] = {NULL};
 
-static const struct reg_ops SIM_SPIClockGateTable[] =
+static const Reg_t SIM_SPIClockGateTable[] =
 {
 #ifdef SIM_SCGC6_DSPI0_MASK
     {(void*)&(SIM->SCGC6), SIM_SCGC6_DSPI0_MASK},
@@ -283,23 +283,23 @@ void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frame
 uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate)
 {
     uint32_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     SPI_InitTypeDef SPI_InitStruct1;
     SPI_InitStruct1.baudrate = baudrate;
     SPI_InitStruct1.frameFormat = (SPI_FrameFormat_Type)frameFormat;
     SPI_InitStruct1.dataSize = 8;
-    SPI_InitStruct1.instance = pq->ip_instance;
+    SPI_InitStruct1.instance = pq->ip;
     SPI_InitStruct1.mode = kSPI_Master;
     SPI_InitStruct1.bitOrder = kSPI_MSB;
     SPI_InitStruct1.ctar = HW_CTAR0;
     /* init pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_cnt; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux); 
     }
     /* init moudle */
     SPI_Init(&SPI_InitStruct1);
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 void SPI_EnableTxFIFO(uint32_t instance, bool status)
@@ -472,7 +472,7 @@ void SPI2_IRQHandler(void)
 
 
 /*
-static const QuickInit_Type SPI_QuickInitTable[] =
+static const map_t SPI_QuickInitTable[] =
 {
     { 0, 2, 2, 5, 3, 0}, //SPI0_SCK_PC05_SOUT_PC06_SIN_PC07 2
     { 0, 3, 2, 1, 3, 0}, //SPI0_SCK_PD01_SOUT_PD02_SIN_PD03 2

@@ -181,7 +181,7 @@ static const struct ov7725_reg reg_tbl[] =
 {
 
     {OV7725_COM4         , 0x81},
-    {OV7725_CLKRC        , 0x01},
+    {OV7725_CLKRC        , 0x02},
     {OV7725_COM2         , 0x03},
     {OV7725_COM3         , 0xD0},
     {OV7725_COM7         , 0x40},
@@ -298,9 +298,3 @@ int ov7725_set_image_size(ov7725_size size)
     }
     return 0;
 }
-
-
-
-
-
-

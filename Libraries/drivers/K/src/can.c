@@ -270,6 +270,9 @@ void CAN_Init(CAN_InitTypeDef* Init)
 	CAN_SetBaudrate(CANx, Init->baudrate);
 	CANx->MCR &= ~(CAN_MCR_FRZ_MASK| CAN_MCR_HALT_MASK);
     
+    /* bypass the frame sended by itself */
+    CANx->MCR |= CAN_MCR_SRXDIS_MASK; 
+    
     /* enable module */
     CANx->MCR &= ~(CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
 	while((CAN_MCR_FRZACK_MASK & (CANx->MCR)));

@@ -22,7 +22,7 @@ static const IRQn_Type LPTMR_IRQnTable[] =
 };
 
 #if defined(SIM_SCGC5_LPTIMER_MASK)
-static const struct Reg_t SIM_LPTMRClockGateTable[] =
+static const Reg_t SIM_LPTMRClockGateTable[] =
 {
     {(void*)&(SIM->SCGC5), SIM_SCGC5_LPTIMER_MASK},
 };

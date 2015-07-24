@@ -1,25 +1,43 @@
+#include <stdint.h>
+
 #include "ili9320.h"
 #include "gpio.h"
 #include "flexbus.h"
 #include "common.h"
 
-#define ILI9320_DEBUG		1
-#if ( ILI9320_DEBUG == 1 )
-#define ILI9320_TRACE	printf
-#else
-#define ILI9320_TRACE(...)
-#endif
 uint32_t lcd_id;
+
+//FlexBus总线定义
+#define ILI9320_BASE                        (0x70000000)
+#define ILI9320_CMD_BASE                    (0x70000000)
+#define ILI9320_DATA_BASE                   (0x78000000)
+
+static inline void WR_CMD(uint16_t cmd)
+{
+    *(uint16_t*)ILI9320_CMD_BASE = cmd;
+}
+
+static inline uint16_t RD_DATA(void)
+{
+    return *(uint16_t*)ILI9320_DATA_BASE;
+}
+
+static inline void WR_DATA(uint16_t data)
+{
+    *(uint16_t*)ILI9320_DATA_BASE = data;
+}
+
+
 static void write_reg(uint16_t addr, uint16_t val)
 {
-    WMLCDCOM(addr);
-    WMLCDDATA(val);
+    WR_CMD(addr);
+    WR_DATA(val);
 }
 
 static uint16_t read_reg(uint16_t addr)
 {
-    WMLCDCOM(addr);
-    return ILI9320_DATA_ADDRESS;
+    WR_CMD(addr);
+    return RD_DATA();
 }
 
 uint16_t ili9320_get_id(void)
@@ -43,10 +61,10 @@ int ili9320_read_pixel(int x, int y)
     int value;
     write_reg(0x0020, x);
     write_reg(0x0021, y);
-    WMLCDCOM(0x0022);
-    value = ILI9320_DATA_ADDRESS;
-    WMLCDCOM(0x0022);
-    value = ILI9320_DATA_ADDRESS;
+    WR_CMD(0x0022);
+    value = RD_DATA();
+    WR_CMD(0x0022);
+    value = RD_DATA();
     return LCD_BGR2RGB(value);
 }
 
@@ -54,19 +72,19 @@ void ili9320_clear(int c)
 {
 	int i;
     ili9320_set_window(0, 0, LCD_X_MAX, LCD_Y_MAX);
-	WMLCDCOM(0x22);
+	WR_CMD(0x22);
 	for(i = 0; i < (LCD_X_MAX * LCD_Y_MAX); i++)
 	{
-		WMLCDDATA(c);	   
+		WR_DATA(c);	   
 	}
 }
 
 void ili9320_write_gram(uint16_t *buf, int len)
 {
-    WMLCDCOM(0x0022);
+    WR_CMD(0x0022);
     while(len--)
     {
-        WMLCDDATA(*buf++);
+        WR_DATA(*buf++);
     }
 }
 void ili9320_write_pixel(int x, int y, int c)
@@ -76,14 +94,14 @@ void ili9320_write_pixel(int x, int y, int c)
         case 0x9320:
             write_reg(0x0020, x);
             write_reg(0x0021, y);
-            WMLCDCOM(0x0022);
-            WMLCDDATA(c);
+            WR_CMD(0x0022);
+            WR_DATA(c);
             break;
         case 0x8989:
             write_reg(0x004e,x);        
             write_reg(0x004f,y);  
-            WMLCDCOM(0x0022);
-            WMLCDDATA(c);
+            WR_CMD(0x0022);
+            WR_DATA(c);
             break;
         default:
             break;   
@@ -124,10 +142,10 @@ void ili9320_hline(int xs, int xe, int y, int c)
             write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
             write_reg(0x0020, xs);
             write_reg(0x0021, y);
-            WMLCDCOM(0x0022);
+            WR_CMD(0x0022);
             while(xs < xe)
             {
-                WMLCDDATA(c);
+                WR_DATA(c);
                 xs++;
             }
           //  write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
@@ -136,10 +154,10 @@ void ili9320_hline(int xs, int xe, int y, int c)
             write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
             write_reg(0x004e, xs);
             write_reg(0x004f, y);
-            WMLCDCOM(0x0022);
+            WR_CMD(0x0022);
             while(xs < xe)
             {
-            WMLCDDATA(c);
+            WR_DATA(c);
             xs++;
             }
             write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
@@ -160,10 +178,10 @@ void ili9320_vline(int ys, int ye, int x, int c)
             write_reg(0x03,(0<<5)|(0<<4)|(1<<3)|(1<<12));
             write_reg(0x0020, x);
             write_reg(0x0021, ys);
-            WMLCDCOM(0x0022);
+            WR_CMD(0x0022);
             while(ys < ye)
             {
-                WMLCDDATA(c);
+                WR_DATA(c);
                 ys++;
             }
            // write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
@@ -172,10 +190,10 @@ void ili9320_vline(int ys, int ye, int x, int c)
             write_reg(0x11,(0<<5)|(0<<4)|(1<<3));
             write_reg(0x004e, x);
             write_reg(0x004f, ys);
-            WMLCDCOM(0x0022);
+            WR_CMD(0x0022);
             while(ys < ye)
             {
-            WMLCDDATA(c);
+            WR_DATA(c);
             ys++;
             }
           // write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
@@ -390,8 +408,7 @@ int ili9320_init(void)
             break;
     }
     
-    //???? 
-   // ILI9320_TRACE("ID:0x%X\r\n", ili9320_get_id());
+    LIB_TRACE("LCD CONTROLLER ID:0x%X\r\n", ili9320_get_id());
     
     ili9320_clear(BLACK);
     return ret;
@@ -404,14 +421,14 @@ void GUI_DrawPixel(int color, int x, int y)
         case 0x9320:
             write_reg(0x0020, x);
             write_reg(0x0021, y);
-            WMLCDCOM(0x0022);
-            WMLCDDATA(color);
+            WR_CMD(0x0022);
+            WR_DATA(color);
             break;
         case 0x8989:
             write_reg(0x004e,x);        
             write_reg(0x004f,y);  
-            WMLCDCOM(0x0022);
-            WMLCDDATA(color);
+            WR_CMD(0x0022);
+            WR_DATA(color);
             break;
         default:
             break;   

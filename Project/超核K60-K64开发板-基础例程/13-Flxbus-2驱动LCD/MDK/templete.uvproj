@@ -646,21 +646,6 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>ucGUI</GroupName>
-          <Files>
-            <File>
-              <FileName>GUILib.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\ucGUI\build\MDK\obj\GUILib.lib</FilePath>
-            </File>
-            <File>
-              <FileName>ucGuiFunc_ili9320.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ucGuiFunc_ili9320.c</FilePath>
-            </File>
-          </Files>
-        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1300,21 +1285,6 @@
               <FileName>ads7843.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ucGUI</GroupName>
-          <Files>
-            <File>
-              <FileName>GUILib.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\ucGUI\build\MDK\obj\GUILib.lib</FilePath>
-            </File>
-            <File>
-              <FileName>ucGuiFunc_ili9320.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ucGuiFunc_ili9320.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -3,15 +3,6 @@
 
 #include <stdint.h>
 
-//FlexBus总线定义
-#define ILI9320_BASE                    (0x70000000)
-#define ILI9320_COMMAND_ADDRESS         *(unsigned short *)0x70000000
-#define ILI9320_DATA_ADDRESS            *(unsigned short *)0x78000000
-
-//写数据，写命令
-#define WMLCDCOM(cmd)	   {ILI9320_COMMAND_ADDRESS = cmd;}
-#define WMLCDDATA(data)	   {ILI9320_DATA_ADDRESS = data;}
-
 #define LCD_X_MAX   (240)
 #define LCD_Y_MAX   (320)
 

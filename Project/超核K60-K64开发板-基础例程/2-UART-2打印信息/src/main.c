@@ -45,9 +45,9 @@ int main(void)
     /* 打印芯片信息 */
     printf("%s - %dP\r\n", CPUIDY_GetFamID(), CPUIDY_GetPinCount());
     /* 打印时钟频率 */
-    CLOCK_GetClockFrequency(kCoreClock, &clock);
+    clock = GetClock(kCoreClock);
     printf("core clock:%dHz\r\n", clock);
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    clock = GetClock(kBusClock);
     printf("bus clock:%dHz\r\n", clock);
     
     while(1)

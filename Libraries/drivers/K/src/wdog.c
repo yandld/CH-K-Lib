@@ -58,7 +58,7 @@ void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
 {
     uint32_t clock;
     uint32_t time_out;
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    clock = GetClock(kBusClock);
     uint32_t wdag_value = 0x01D3u;
     switch((uint32_t)WDOG_InitStruct->mode)
     {

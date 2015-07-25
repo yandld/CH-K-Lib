@@ -258,7 +258,7 @@ void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frame
     }
     
     /* set SPI clock, SPI use Busclock */
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    clock = GetClock(kBusClock);
     dspi_hal_set_baud(instance, ctar, baudrate, clock);
     
     /* add more CS time */

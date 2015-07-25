@@ -72,7 +72,7 @@ void PDB_QuickInit(PDB_TriggerSrc_Type triggerSrc, uint32_t timeInUs)
     uint32_t clock;
     PDB_InitTypeDef  PDB_InitStruct1;
     
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    clock = GetClock(kBusClock);
 
     PDB_InitStruct1.inputTrigSource = kPDB_SoftwareTrigger;  /* software Trigger */
     PDB_InitStruct1.isContinuesMode = true;

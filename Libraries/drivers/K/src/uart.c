@@ -593,10 +593,10 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
     Init.bitPerChar = kUART_8BitsPerChar;
     
     /* src clock */
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    clock = GetClock(kBusClock);
     if((pq->ip == HW_UART0) || (pq->ip == HW_UART1))
     {
-        CLOCK_GetClockFrequency(kCoreClock, &clock); /* UART0 UART1 are use core clock */
+        clock = GetClock(kCoreClock); /* UART0 UART1 are use core clock */
     }
     Init.srcClock = clock;
     

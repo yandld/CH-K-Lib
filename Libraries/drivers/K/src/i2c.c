@@ -618,7 +618,7 @@ void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
     I2C_InstanceTable[I2C_InitStruct->instance]->C1 &= ~I2C_C1_IICEN_MASK;
     
     /* set baudrate */
-    CLOCK_GetClockFrequency(kBusClock, &freq);
+    GetClock(kBusClock, &freq);
     I2C_SetBaudrate(I2C_InitStruct->instance, freq, I2C_InitStruct->baudrate);
     
     /* enable i2c */

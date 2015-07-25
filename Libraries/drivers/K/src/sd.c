@@ -445,7 +445,7 @@ uint8_t SD_Init(SD_InitTypeDef* Init)
     SIM->SOPT2 &= ~SIM_SOPT2_SDHCSRC_MASK;
     SIM->SOPT2 |= SIM_SOPT2_SDHCSRC(0);
     #endif
-    CLOCK_GetClockFrequency(kCoreClock, &clock);
+    clock = GetClock(kCoreClock);
 	SD_SetBaudRate(clock, Init->baudrate);
 	SDHC->IRQSTAT = 0xFFFFFFFF;
 	SDHC->IRQSTATEN = 0xFFFFFFFF;

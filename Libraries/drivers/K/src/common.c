@@ -24,7 +24,7 @@
  * @code
  *         //获得总线时钟频率
  *         uint32_t BusClock;
- *         CLOCK_GetClockFrequency(kBusClock, &BusClock);
+ *         GetClock(kBusClock, &BusClock);
  *         //将总线时钟频率显示出来
  *         printf("BusClock:%dHz\r\n", BusClock);
  * @endcode
@@ -37,7 +37,7 @@
  * @param  FrequenctInHz: 获得频率数据的指针 单位Hz
  * @retval 0: 成功 非0: 错误
  */
-int32_t CLOCK_GetClockFrequency(Clock_t clockName, uint32_t* FrequenctInHz)
+uint32_t GetClock(Clock_t clockName)
 {
     uint32_t MCGOutClock = 0;
     /* calualte MCGOutClock system_MKxxx.c must not modified */
@@ -46,19 +46,19 @@ int32_t CLOCK_GetClockFrequency(Clock_t clockName, uint32_t* FrequenctInHz)
     switch (clockName)
     {
         case kCoreClock:
-            *FrequenctInHz = MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
+            return MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
             break;
         case kBusClock:
-            *FrequenctInHz = MCGOutClock / MCGOUT_TO_BUS_DIVIDER;
+            return MCGOutClock / MCGOUT_TO_BUS_DIVIDER;
             break;
         case kFlashClock:
-            *FrequenctInHz = MCGOutClock / MCGOUT_TO_FLASH_DIVIDER;	
+            return MCGOutClock / MCGOUT_TO_FLASH_DIVIDER;	
             break;
         case kMCGOutClock:
-            *FrequenctInHz = MCGOutClock;
+            return MCGOutClock;
             break;
         default:
-            return 1;
+            return 0;
     }
     return 0;
 }

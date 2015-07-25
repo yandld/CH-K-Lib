@@ -169,7 +169,7 @@ static inline void SystemSoftReset(void)
 void DelayMs(uint32_t ms);
 void DelayUs(uint32_t us);
 void DelayInit(void);
-int32_t CLOCK_GetClockFrequency(Clock_t clockName, uint32_t* FrequenctInHz);
+uint32_t GetClock(Clock_t clockName);
 uint32_t QuickInitEncode(map_t * type);
 void QuickInitDecode(uint32_t map, map_t* type);
 void EnterSTOPMode(bool enSleepOnExit);

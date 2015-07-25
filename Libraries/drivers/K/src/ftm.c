@@ -395,7 +395,7 @@ uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req)
     /* calc req and ps */
     uint32_t min_val = 0xFFFF;
     /* cal ps */
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    clock = GetClock(kBusClock);
     pres = (clock/req)/FTM_MOD_MOD_MASK;
     if((clock/req)/pres > FTM_MOD_MOD_MASK)
     {

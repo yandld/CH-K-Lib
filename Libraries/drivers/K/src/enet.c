@@ -145,7 +145,7 @@ void ENET_MII_Init(void)
     SIM->SCGC2 |= SIM_SCGC2_ENET_MASK;
     /* FSL: allow concurrent access to MPU controller. Example: ENET uDMA to SRAM, otherwise bus error */
     MPU->CESR = 0;   
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    clock = GetClock(kBusClock);
     i = (clock/1000)/1000;
     ENET->MSCR = 0 | ENET_MSCR_MII_SPEED((2*i/5)+1);
 }

@@ -23,10 +23,7 @@
  * @brief  获得系统各个总线时钟的频率
  * @code
  *         //获得总线时钟频率
- *         uint32_t BusClock;
- *         GetClock(kBusClock, &BusClock);
- *         //将总线时钟频率显示出来
- *         printf("BusClock:%dHz\r\n", BusClock);
+ *         printf("BusClock:%dHz\r\n", GetClock(kBusClock));
  * @endcode
  * @param  clockName:时钟名称
  *         @arg kCoreClock    :内核时钟
@@ -39,28 +36,27 @@
  */
 uint32_t GetClock(Clock_t clockName)
 {
-    uint32_t MCGOutClock = 0;
+    uint32_t clock = 0;
     /* calualte MCGOutClock system_MKxxx.c must not modified */
     SystemCoreClockUpdate();
-    MCGOutClock = SystemCoreClock * MCGOUT_TO_CORE_DIVIDER;
+    clock = SystemCoreClock * MCGOUT_TO_CORE_DIVIDER;
     switch (clockName)
     {
         case kCoreClock:
-            return MCGOutClock / MCGOUT_TO_CORE_DIVIDER;
+            clock = clock / MCGOUT_TO_CORE_DIVIDER;
             break;
         case kBusClock:
-            return MCGOutClock / MCGOUT_TO_BUS_DIVIDER;
+            clock = clock / MCGOUT_TO_BUS_DIVIDER;
             break;
         case kFlashClock:
-            return MCGOutClock / MCGOUT_TO_FLASH_DIVIDER;	
+            clock = clock / MCGOUT_TO_FLASH_DIVIDER;
             break;
         case kMCGOutClock:
-            return MCGOutClock;
             break;
         default:
-            return 0;
+            clock = 0;
     }
-    return 0;
+    return clock;
 }
 
  /**

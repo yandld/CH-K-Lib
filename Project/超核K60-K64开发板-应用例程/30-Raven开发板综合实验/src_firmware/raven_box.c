@@ -72,9 +72,9 @@ MSH_CMD_EXPORT(mount, mount nfs e0 /nfs 192.168.1.100:/);
 static int cpufreq(int argc, char** argv)
 {
     uint32_t clock, tick;
-    CLOCK_GetClockFrequency(kCoreClock, &clock);
+    clock = GetClock(kCoreClock);
     rt_kprintf("CoreClock:%dHz\r\n", clock);
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    clock = GetClock(kBusClock);
     rt_kprintf("BusClock:%dHz\r\n", clock);
     
     tick = rt_tick_get();

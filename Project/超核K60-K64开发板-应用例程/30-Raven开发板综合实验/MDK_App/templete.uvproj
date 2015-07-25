@@ -495,19 +495,19 @@
               <FilePath>..\..\..\..\Libraries\utilities\emWin\Lib\GUI_CM3.lib</FilePath>
             </File>
             <File>
-              <FileName>GUI_X.c</FileName>
+              <FileName>GUI_X_RTT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src_app\gui\config\GUI_X.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUI_X_RTT.c</FilePath>
             </File>
             <File>
-              <FileName>GUIConf.c</FileName>
+              <FileName>GUIConf_RTT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src_app\gui\config\GUIConf.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUIConf_RTT.c</FilePath>
             </File>
             <File>
-              <FileName>LCDConf.c</FileName>
+              <FileName>LCDConf_RTT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src_app\gui\config\LCDConf.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\LCDConf_RTT.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1572,19 +1572,19 @@
               <FilePath>..\..\..\..\Libraries\utilities\emWin\Lib\GUI_CM3.lib</FilePath>
             </File>
             <File>
-              <FileName>GUI_X.c</FileName>
+              <FileName>GUI_X_RTT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src_app\gui\config\GUI_X.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUI_X_RTT.c</FilePath>
             </File>
             <File>
-              <FileName>GUIConf.c</FileName>
+              <FileName>GUIConf_RTT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src_app\gui\config\GUIConf.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUIConf_RTT.c</FilePath>
             </File>
             <File>
-              <FileName>LCDConf.c</FileName>
+              <FileName>LCDConf_RTT.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src_app\gui\config\LCDConf.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\LCDConf_RTT.c</FilePath>
             </File>
           </Files>
         </Group>

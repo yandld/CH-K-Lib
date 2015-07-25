@@ -442,10 +442,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>18</ColumnNumber>
+      <ColumnNumber>15</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>43</TopLine>
-      <CurrentLine>54</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src_app\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -496,7 +496,7 @@
 
   <Group>
     <GroupName>emwin</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -527,8 +527,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\src_app\gui\config\GUI_X.c</PathWithFileName>
-      <FilenameWithoutPath>GUI_X.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUI_X_RTT.c</PathWithFileName>
+      <FilenameWithoutPath>GUI_X_RTT.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -543,8 +543,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\src_app\gui\config\GUIConf.c</PathWithFileName>
-      <FilenameWithoutPath>GUIConf.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUIConf_RTT.c</PathWithFileName>
+      <FilenameWithoutPath>GUIConf_RTT.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -559,8 +559,8 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\src_app\gui\config\LCDConf.c</PathWithFileName>
-      <FilenameWithoutPath>LCDConf.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\emWin\Sample\Config\LCDConf_RTT.c</PathWithFileName>
+      <FilenameWithoutPath>LCDConf_RTT.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

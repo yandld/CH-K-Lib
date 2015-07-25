@@ -42,7 +42,8 @@ void init_data_bss(void)
 #define PTA6    ((0<<8) + 6)
 
 
-int Main(void* param) __attribute__((section(".ARM.__at_0x70400")));
+
+int Main(void* param) __attribute__((section("RESET")));
 int Main(void* param)
 {
     int ret;
@@ -54,8 +55,8 @@ int Main(void* param)
     uint32_t i;
     rt_pin_write(PTA6, 0);
     
-   // ui_startup(0, 0);
-   // finsh_syscall_append("ui_startup", ui_startup);
+    ui_startup(0, 0);
+    finsh_syscall_append("ui_startup", ui_startup);
     return 0;
 }
 

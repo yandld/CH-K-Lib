@@ -31,7 +31,7 @@ void init_thread_entry(void* parameter)
  //   tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, 1024, 9, 20);
    // rt_thread_startup(tid);
     
-    tid = rt_thread_create("init", (void*)(0x70400), RT_NULL, 1024, 8, 20);
+    tid = rt_thread_create("init", (void*)(0x60000), RT_NULL, 1024, 8, 20);
     rt_thread_startup(tid);
 
     rt_hw_ksz8041_init();

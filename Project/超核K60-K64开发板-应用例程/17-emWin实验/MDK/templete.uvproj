@@ -620,19 +620,19 @@
               <FilePath>..\..\..\..\Libraries\utilities\emWin\Lib\GUI_CM3.lib</FilePath>
             </File>
             <File>
-              <FileName>LCDConf.c</FileName>
+              <FileName>GUI_X_BM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\emWin\LCDConf.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUI_X_BM.c</FilePath>
             </File>
             <File>
-              <FileName>GUI_X.c</FileName>
+              <FileName>GUIConf_BM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\emwin_config\GUI_X.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUIConf_BM.c</FilePath>
             </File>
             <File>
-              <FileName>GUIConf.c</FileName>
+              <FileName>LCDConf_BM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\emwin_config\GUIConf.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\LCDConf_BM.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1382,19 +1382,19 @@
               <FilePath>..\..\..\..\Libraries\utilities\emWin\Lib\GUI_CM3.lib</FilePath>
             </File>
             <File>
-              <FileName>LCDConf.c</FileName>
+              <FileName>GUI_X_BM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\emWin\LCDConf.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUI_X_BM.c</FilePath>
             </File>
             <File>
-              <FileName>GUI_X.c</FileName>
+              <FileName>GUIConf_BM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\emwin_config\GUI_X.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\GUIConf_BM.c</FilePath>
             </File>
             <File>
-              <FileName>GUIConf.c</FileName>
+              <FileName>LCDConf_BM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\emwin_config\GUIConf.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\Config\LCDConf_BM.c</FilePath>
             </File>
           </Files>
         </Group>

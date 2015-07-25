@@ -7,17 +7,14 @@
 #include "ili9320.h"
 #include "ads7843.h"
 
-uint32_t TimerFlag;
 
 void PIT_ISR(void)
 {
     GUI_TOUCH_Exec();
-    TimerFlag++;
 }
 
 int main(void)
 {
-    TimerFlag = 0;
     
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);

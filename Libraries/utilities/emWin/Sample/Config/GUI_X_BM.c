@@ -3,11 +3,12 @@
 #include "ads7843.h"
 #include "systick.h"
 
-extern uint32_t TimerFlag;
 
 GUI_TIMER_TIME GUI_X_GetTime (void) 
 {
-    return TimerFlag*10;
+    static int cnt;
+    cnt+=2;
+    return cnt;
 }
 
 void  GUI_X_Delay (int ms) 
@@ -111,10 +112,11 @@ int GUI_TOUCH_X_MeasureY(void)
 
 void GUI_X_ErrorOut(const char * s)
 {
-    GUI_DispString(s);
+
 }
 
 
 void GUI_X_Init (void) 
 {
+    
 }

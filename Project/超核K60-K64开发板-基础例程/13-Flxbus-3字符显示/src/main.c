@@ -14,7 +14,7 @@ int main(void)
     
     printf("flexbus lcd test\r\n");
     GUI_Init();
-    GUI_DispString("ucGUI");
+    GUI_DispString("emWin");
     GUI_DispString(GUI_GetVersionString());
     GUI_DispString("\r\nHello world!");
     while(1) 

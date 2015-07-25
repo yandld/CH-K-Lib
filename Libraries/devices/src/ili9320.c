@@ -14,17 +14,17 @@ uint32_t lcd_id;
 
 static inline void WR_CMD(uint16_t cmd)
 {
-    *(uint16_t*)ILI9320_CMD_BASE = cmd;
+    *(volatile uint16_t*)ILI9320_CMD_BASE = cmd;
 }
 
 static inline uint16_t RD_DATA(void)
 {
-    return *(uint16_t*)ILI9320_DATA_BASE;
+    return *(volatile uint16_t*)ILI9320_DATA_BASE;
 }
 
 static inline void WR_DATA(uint16_t data)
 {
-    *(uint16_t*)ILI9320_DATA_BASE = data;
+    *(volatile uint16_t*)ILI9320_DATA_BASE = data;
 }
 
 
@@ -409,7 +409,6 @@ int ili9320_init(void)
     }
     
     LIB_TRACE("LCD CONTROLLER ID:0x%X\r\n", ili9320_get_id());
-    
     ili9320_clear(BLACK);
     return ret;
 }

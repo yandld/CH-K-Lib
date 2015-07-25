@@ -1,16 +1,18 @@
 #include "GUI_Private.H"
-#include <rtthread.h>
+#include <common.h>
+#include "ads7843.h"
+#include "systick.h"
 
-static rt_device_t tch;
-    
+extern uint32_t TimerFlag;
+
 GUI_TIMER_TIME GUI_X_GetTime (void) 
 {
-    return (rt_tick_get()*(1000/RT_TICK_PER_SECOND));
+    return TimerFlag*10;
 }
 
 void  GUI_X_Delay (int ms) 
 {
-    rt_thread_delay(ms);
+    DelayMs(ms);
 }
 
 
@@ -29,19 +31,15 @@ void  GUI_X_InitOS (void)
     
 }
 
-static U32 i;
 void GUI_X_Lock (void)
 { 
-    //rt_mutex_take(gui_x_mutex, RT_WAITING_FOREVER);
-    //rt_kprintf("%d\r\n",i);
-    i++;
+    
 }
 
 
 void GUI_X_Unlock (void)
 { 
-    i--;
-    //rt_mutex_release(gui_x_mutex);
+    
 }
 
 
@@ -50,32 +48,44 @@ U32 GUI_X_GetTaskId (void)
     return 1;
 }
 
-#define SAMP_CNT 3
-static int buf[2];
 
-/* ?? */
+
+#define SAMP_CNT 8
+#define SAMP_CNT_DIV2 2
+static int buf[2];
+/* ÂË²¨ */
 static int ads_filter(int* buf)
 {
-    int i;
-    rt_uint8_t buf1[4];
-    
-    buf[0] = 0;
-    buf[1] = 0;
-    
+    int i, j, k, min;
+    int temp;
+    int tempXY[2][SAMP_CNT];
+
     for(i=0; i<SAMP_CNT; i++)
     {
-        if(tch != RT_NULL)
-        {
-            tch->read(tch, 0, buf1, 4);
-            buf[0] += ((buf1[0]<<8) + buf1[1])>>4; //12bit mode
-            buf[1] += ((buf1[2]<<8) + buf1[3])>>4; //12bit mode
-        }
+        ads7843_readX(&buf[0]);
+        ads7843_readY(&buf[1]);
+        tempXY[0][i] = buf[0];
+        tempXY[1][i] = buf[1];
     }
-    buf[0] /= SAMP_CNT;
-    buf[1] /= SAMP_CNT;
+    for(k=0; k<2; k++)
+    {
+        for(i=0; i<SAMP_CNT-1; i++)
+        {
+            min=i;
+            for (j=i+1; j<SAMP_CNT; j++)
+            {
+                if (tempXY[k][min] > tempXY[k][j]) min=j;
+            }
+            temp = tempXY[k][i];
+            tempXY[k][i] = tempXY[k][min];
+            tempXY[k][min] = temp;
+        }
+        if((tempXY[k][SAMP_CNT_DIV2]-tempXY[k][SAMP_CNT_DIV2-1]) > 5)
+        return 1;
+        buf[k] = (tempXY[k][SAMP_CNT_DIV2]+tempXY[k][SAMP_CNT_DIV2-1]) / 2;
+    }
     return 0;
 }
-
 
 void GUI_TOUCH_X_ActivateX(void)
 {
@@ -107,10 +117,4 @@ void GUI_X_ErrorOut(const char * s)
 
 void GUI_X_Init (void) 
 {
-    tch = rt_device_find("ads7843");
-    if(tch)
-    {
-        rt_device_init(tch);
-        rt_device_open(tch, 0);
-    }
 }

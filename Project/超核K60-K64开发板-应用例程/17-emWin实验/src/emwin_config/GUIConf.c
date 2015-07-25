@@ -32,28 +32,26 @@ Purpose     : Display controller initialization
 */
 
 #include "GUI.h"
-#include <rtthread.h>
-#include "sram.h"
+#include <stdint.h>
 
 #define GUI_NUMBYTES  (1024*32)
 #define GUI_BLOCKSIZE 4
 
-static void GUI_Log(const char *s)
+static uint8_t GUI_Mem[GUI_NUMBYTES];
+
+void GUI_Log(const char *s)
 {
-    rt_kprintf("GUI error:%s\r\n", s);
+    
 }
+
 
 void GUI_X_Config(void)
 {
-    U32 * aMemory = (U32*)rt_malloc(GUI_NUMBYTES);
-    if(aMemory == RT_NULL)
-    {
-        rt_kprintf("not enough mem for GUI!\r\n");
-        return;
-    }
+    U32 * aMemory = (U32*)GUI_Mem;
+
     GUI_ALLOC_AssignMemory(aMemory, GUI_NUMBYTES);
     GUI_SetOnErrorFunc(GUI_Log);
-    GUITASK_SetMaxTask(5);
+    GUITASK_SetMaxTask(1);
     GUI_ALLOC_SetAvBlockSize(GUI_BLOCKSIZE);
     GUI_SetDefaultFont(GUI_FONT_6X8);
 

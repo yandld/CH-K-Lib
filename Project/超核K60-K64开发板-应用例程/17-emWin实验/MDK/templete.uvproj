@@ -220,7 +220,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>1</useUlib>
+            <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <RoSelD>3</RoSelD>
@@ -241,7 +241,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>0</Im2Chk>
+            <Im2Chk>1</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -343,7 +343,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -394,7 +394,7 @@
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--keep __rtmsym_*   --keep __fsym_* --keep __vsym_*   --keep __rt_init*</Misc>
+            <Misc></Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -402,7 +402,7 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>lib_startup_mk6010</GroupName>
+          <GroupName>startup_mk6010</GroupName>
           <Files>
             <File>
               <FileName>system_MK60D10.c</FileName>
@@ -417,7 +417,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lib_startup_mk64f12</GroupName>
+          <GroupName>startup_mk64f12</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -492,32 +492,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>application</GroupName>
+          <GroupName>main</GroupName>
           <Files>
-            <File>
-              <FileName>init_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\init_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>led_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\led_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_cmd_demo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\gui_cmd_demo.c</FilePath>
-            </File>
             <File>
               <FileName>TOUCH_Calibrate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\TOUCH_Calibrate.c</FilePath>
             </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>lib-drivers</GroupName>
+          <GroupName>drivers</GroupName>
           <Files>
             <File>
               <FileName>gpio.c</FileName>
@@ -597,7 +587,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lib-devices</GroupName>
+          <GroupName>devices</GroupName>
           <Files>
             <File>
               <FileName>ili9320.c</FileName>
@@ -614,108 +604,10 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>rtt-driver</GroupName>
-          <Files>
             <File>
-              <FileName>drv_ads7843.c</FileName>
+              <FileName>ads7843.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ads7843.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_at24cxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_at24cxx.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_beep.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_beep.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_i2c_bit_ops.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_i2c_bit_ops.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ksz8041.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_led.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_pin.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_pin.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>drv_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -871,61 +763,6 @@
               <FileName>GUIDEMO_ZoomAndRotate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_ZoomAndRotate.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>msh_cmd</GroupName>
-          <Files>
-            <File>
-              <FileName>msh_cmd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>RTT_120</GroupName>
-          <Files>
-            <File>
-              <FileName>RTT_CM4.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\RTT_CM4.lib</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>config</GroupName>
-          <Files>
-            <File>
-              <FileName>rtconfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src\rtconfig.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>application\msh_cmd</GroupName>
-          <Files>
-            <File>
-              <FileName>kill_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\msh_cmd\kill_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\msh_cmd\reset.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>test</GroupName>
-          <Files>
-            <File>
-              <FileName>shell.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\shell.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1327,7 +1164,7 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>lib_startup_mk6010</GroupName>
+          <GroupName>startup_mk6010</GroupName>
           <GroupOption>
             <CommonProperty>
               <UseCPPCompiler>0</UseCPPCompiler>
@@ -1402,7 +1239,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lib_startup_mk64f12</GroupName>
+          <GroupName>startup_mk64f12</GroupName>
           <Files>
             <File>
               <FileName>system_MK64F12.c</FileName>
@@ -1417,32 +1254,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>application</GroupName>
+          <GroupName>main</GroupName>
           <Files>
-            <File>
-              <FileName>init_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\init_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>led_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\led_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>gui_cmd_demo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\gui_cmd_demo.c</FilePath>
-            </File>
             <File>
               <FileName>TOUCH_Calibrate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\TOUCH_Calibrate.c</FilePath>
             </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>lib-drivers</GroupName>
+          <GroupName>drivers</GroupName>
           <Files>
             <File>
               <FileName>gpio.c</FileName>
@@ -1522,7 +1349,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lib-devices</GroupName>
+          <GroupName>devices</GroupName>
           <Files>
             <File>
               <FileName>ili9320.c</FileName>
@@ -1539,108 +1366,10 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>rtt-driver</GroupName>
-          <Files>
             <File>
-              <FileName>drv_ads7843.c</FileName>
+              <FileName>ads7843.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ads7843.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_at24cxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_at24cxx.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_beep.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_beep.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_i2c_bit_ops.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_i2c_bit_ops.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ksz8041.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_led.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_led.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_pin.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_pin.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>drv_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_sd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1796,61 +1525,6 @@
               <FileName>GUIDEMO_ZoomAndRotate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo\GUIDEMO_ZoomAndRotate.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>msh_cmd</GroupName>
-          <Files>
-            <File>
-              <FileName>msh_cmd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>RTT_120</GroupName>
-          <Files>
-            <File>
-              <FileName>RTT_CM4.lib</FileName>
-              <FileType>4</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\RTT_CM4.lib</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>config</GroupName>
-          <Files>
-            <File>
-              <FileName>rtconfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src\rtconfig.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>application\msh_cmd</GroupName>
-          <Files>
-            <File>
-              <FileName>kill_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\msh_cmd\kill_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\msh_cmd\reset.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>test</GroupName>
-          <Files>
-            <File>
-              <FileName>shell.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\shell.c</FilePath>
             </File>
           </Files>
         </Group>

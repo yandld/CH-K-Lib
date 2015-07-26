@@ -34,7 +34,7 @@ Purpose     : Display controller initialization
 #include "GUI.h"
 #include <stdint.h>
 
-#define GUI_NUMBYTES  (1024*32)
+#define GUI_NUMBYTES  (1024*64)
 #define GUI_BLOCKSIZE 4
 
 static uint8_t GUI_Mem[GUI_NUMBYTES];

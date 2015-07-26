@@ -51,9 +51,8 @@ U32 GUI_X_GetTaskId (void)
 
 
 
-#define SAMP_CNT 8
+#define SAMP_CNT 4
 #define SAMP_CNT_DIV2 2
-static int buf[2];
 /* ÂË²¨ */
 static int ads_filter(int* buf)
 {
@@ -68,6 +67,7 @@ static int ads_filter(int* buf)
         tempXY[0][i] = buf[0];
         tempXY[1][i] = buf[1];
     }
+    
     for(k=0; k<2; k++)
     {
         for(i=0; i<SAMP_CNT-1; i++)
@@ -81,16 +81,23 @@ static int ads_filter(int* buf)
             tempXY[k][i] = tempXY[k][min];
             tempXY[k][min] = temp;
         }
-        if((tempXY[k][SAMP_CNT_DIV2]-tempXY[k][SAMP_CNT_DIV2-1]) > 5)
+        if((tempXY[k][SAMP_CNT_DIV2]-tempXY[k][SAMP_CNT_DIV2-1]) > 9)
         return 1;
         buf[k] = (tempXY[k][SAMP_CNT_DIV2]+tempXY[k][SAMP_CNT_DIV2-1]) / 2;
     }
+    
     return 0;
 }
 
+static int t_buf[2]; 
 void GUI_TOUCH_X_ActivateX(void)
 {
-    
+    int buf[2];
+    if(!ads_filter(buf))
+    {
+        t_buf[0] = buf[0];
+        t_buf[1] = buf[1];
+    }
 }
 
 void GUI_TOUCH_X_ActivateY(void) 
@@ -100,14 +107,13 @@ void GUI_TOUCH_X_ActivateY(void)
 
 int GUI_TOUCH_X_MeasureX(void) 
 {
-    ads_filter(buf);
-    return buf[0];
+    return t_buf[0];
 }
 
 
 int GUI_TOUCH_X_MeasureY(void) 
 {
-    return buf[1];
+    return t_buf[1];
 }
 
 void GUI_X_ErrorOut(const char * s)

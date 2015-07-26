@@ -221,7 +221,7 @@ static int WOLFSON_WriteReg(uint8_t reg, uint16_t val)
 {
     uint8_t cmd;
     cmd = (reg << 1) | ((val >> 8) & 0x0001);
-    I2C_WriteSingleRegister(wm8960_dev.instance, wm8960_dev.addr, cmd, val);
+    return I2C_WriteSingleRegister(wm8960_dev.instance, wm8960_dev.addr, cmd, val);
 }
 
 
@@ -266,6 +266,68 @@ int wm8960_init(uint32_t instance)
     }
     WM8960_TRACE("wm8960 failed\r\n");
     return 1;
+}
+
+int wm8960_format_config(uint32_t sample_rate, uint8_t bits)
+{
+    int retval;
+    printf("WOLFSON_ConfigDataFormat\r\n");
+    switch(sample_rate)
+    {
+        case 8000:
+            retval = WOLFSON_WriteReg(WM8960_CLOCK1, 0x1B0);
+            break;     
+        case 11025:
+            //retval = WOLFSON_WriteReg(handler, WM8960_CLOCK1, 0xD8);
+            break;
+        case 12000:
+            retval = WOLFSON_WriteReg(WM8960_CLOCK1, 0x120);
+            break;    
+        case 16000:
+            retval = WOLFSON_WriteReg(WM8960_CLOCK1, 0xD8);
+            break;  
+        case 22050:
+            //retval = WOLFSON_WriteReg(handler, WM8960_CLOCK1, 0xD8);
+            break;  
+        case 24000:
+            retval = WOLFSON_WriteReg( WM8960_CLOCK1, 0x90);
+            break;   
+        case 32000:
+            retval = WOLFSON_WriteReg( WM8960_CLOCK1, 0x48);
+            break;           
+        case 44100:
+            //retval = WOLFSON_WriteReg(handler, WM8960_CLOCK1, 0xD8);
+            break;         
+        case 48000:
+            retval = WOLFSON_WriteReg(WM8960_CLOCK1, 0x00);
+            break;                   
+        default:
+            retval = 0;
+            break;
+    }
+	
+    /*
+     * Slave mode (MS = 0), LRP = 0, 32bit WL, left justified (FORMAT[1:0]=0b01)
+     */
+    switch(bits)
+    {
+        case 16:
+        retval = WOLFSON_WriteReg(WM8960_IFACE1, 0x01);
+        break;
+        case 20:
+        retval = WOLFSON_WriteReg(WM8960_IFACE1, 0x05);
+        break;
+        case 24:
+        retval = WOLFSON_WriteReg(WM8960_IFACE1, 0x09);
+        break;    
+        case 32:
+        retval = WOLFSON_WriteReg(WM8960_IFACE1, 0x0D);
+        break;
+        default:
+            retval = 1;
+            break;        
+    }
+    return retval;
 }
 
 int wm8960_set_volume(wolfson_module_t module, uint32_t volume)

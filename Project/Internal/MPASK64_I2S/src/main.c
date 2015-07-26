@@ -33,8 +33,10 @@
 #include "i2c.h"
 #include "i2s.h"
 #include "wm8960.h"
+#include "pcm_data.h"
 
-static uint8_t buf[4096];
+
+
 
 int main(void)
 {
@@ -44,16 +46,13 @@ int main(void)
     UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);
     
      /** print message before mode change*/
-    printf("uart will be send on interrupt mode...\r\n");
+    printf("i2s MAPSK64 test\r\n");
     I2C_QuickInit(I2C0_SCL_PE24_SDA_PE25, 100*1000);
    // I2C_Scan(I2C0_SCL_PE24_SDA_PE25);
     wm8960_init(0);
+    wm8960_format_config(11025, 16);
    // wm8960_set_volume(kWolfsonModuleHP, 0x2FFF);
     
-    for(i=0; i<sizeof(buf); i++)
-    {
-        buf[i] = i & 0xFF;
-    }
     
     I2S_InitTypeDef Init;
     Init.instance = 0;
@@ -65,11 +64,17 @@ int main(void)
     Init.chl = 0;
     I2S_Init(&Init);
     
+    /* pinmux */
+    PORT_PinMuxConfig(HW_GPIOE, 6, kPinAlt4);
+    PORT_PinMuxConfig(HW_GPIOE, 7, kPinAlt4);
+    PORT_PinMuxConfig(HW_GPIOE, 12, kPinAlt4); 
+    PORT_PinMuxConfig(HW_GPIOE, 11, kPinAlt4); 
+    PORT_PinMuxConfig(HW_GPIOE, 10, kPinAlt4); 
+    
     while(1)
     {
-
-        I2S_SendData(0, 16, 0, buf, sizeof(buf));
-        printf("HelloWorld\r\n");
+        I2S_SendData(0, 16, 0, (uint8_t*)music, sizeof(music));
+        printf("complete\r\n");
       //  DelayMs(500);
     }
 }

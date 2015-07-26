@@ -33,5 +33,8 @@ typedef enum _WM8960_module
 //!< API function
 int wm8960_init(uint32_t instance);
 int wm8960_set_volume(wolfson_module_t module, uint32_t volume);
+int wm8960_format_config(uint32_t sample_rate, uint8_t bits);
+
+
 
 #endif

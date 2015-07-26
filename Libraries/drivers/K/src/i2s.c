@@ -68,6 +68,22 @@ void SAI_HAL_SetMclkDiv(uint32_t instance, uint32_t mclk, uint32_t src_clk)
     while(I2S0->MCR & I2S_MCR_DUF_MASK) {};
 }
 
+void I2S_SetTxCmd(uint32_t instance, bool val)
+{
+    if(val)
+    {
+        I2S0->TCSR |= I2S_TCSR_BCE_MASK;
+        I2S0->TCSR |= I2S_TCSR_TE_MASK;
+    }
+    else
+    {
+        I2S0->TCSR &= ~I2S_TCSR_BCE_MASK;
+        I2S0->TCSR &= ~I2S_TCSR_TE_MASK;
+    }
+}
+
+
+        
 void I2S_TxSetProtocol(uint32_t instance, I2S_Protocol_t protocol)
 {
     switch (protocol)
@@ -92,26 +108,28 @@ void I2S_TxSetProtocol(uint32_t instance, I2S_Protocol_t protocol)
             break;
 
         case kSaiBusPCMA:
-//            I2S_BWR_TCR2_BCP(base,0u); /* Bit clock active low */
-//            I2S_BWR_TCR4_MF(base, 1u); /* MSB transmitted first */
-//            I2S_BWR_TCR4_SYWD(base, 0u); /* Only one bit clock in a frame sync */
-//            I2S_BWR_TCR4_FSE(base,1u);/* Frame sync one bit early */
-//            I2S_BWR_TCR4_FSP(base,0u);/* Frame sync polarity, left chennel is high */                
-//            I2S_BWR_TCR4_FRSZ(base,1u);/* I2S uses 2 word in a frame */
-//            I2S_BWR_TCR3_WDFL(base, 0u); /* The first word set the start flag */
+            I2S0->TCR2 &= ~I2S_TCR2_BCP_MASK;    /* Bit clock polarity */
+            I2S0->TCR4 |= I2S_TCR4_MF_MASK;     /* MSB transmitted fisrt */
+            I2S0->TCR4 |= I2S_TCR4_SYWD(0);     /* Only one bit clock in a frame sync */
+            I2S0->TCR4 |= I2S_TCR4_FSE_MASK;    /* Frame sync one bit early */
+            I2S0->TCR4 &= ~I2S_TCR4_FSP_MASK;   /* Frame sync polarity, left chennel is high */  
+            I2S0->TCR4 |= I2S_TCR4_FRSZ(1);     /* I2S uses 2 word in a frame */
+            I2S0->TCR3 &= ~I2S_TCR3_WDFL_MASK;  /* The first word set the start flag */ 
             break;
             
         case kSaiBusPCMB:
-//            I2S_BWR_TCR2_BCP(base,0u); /* Bit clock active high */
-//            I2S_BWR_TCR4_MF(base, 1u); /* MSB transmitted first */
-//            I2S_BWR_TCR4_FSE(base,0u);/* Frame sync not early */
-//            I2S_BWR_TCR4_SYWD(base, 0u); /* Only one bit clock in a frame sync */
-//            I2S_BWR_TCR4_FSP(base,0u);/* Frame sync polarity, left chennel is high */
-//            I2S_BWR_TCR4_FRSZ(base,1u);/* I2S uses 2 word in a frame */
-//            I2S_BWR_TCR3_WDFL(base, 0u); /* The first word set the start flag */
+            I2S0->TCR2 &= ~I2S_TCR2_BCP_MASK;    /* Bit clock polarity */
+            I2S0->TCR4 |= I2S_TCR4_MF_MASK;     /* MSB transmitted fisrt */
+            I2S0->TCR4 |= I2S_TCR4_FSE_MASK;    /* Frame sync one bit early */
+            I2S0->TCR4 |= I2S_TCR4_SYWD(0);     /* Only one bit clock in a frame sync */
+            I2S0->TCR4 &= ~I2S_TCR4_FSP_MASK;   /* Frame sync polarity, left chennel is high */  
+            I2S0->TCR4 |= I2S_TCR4_FRSZ(1);     /* I2S uses 2 word in a frame */
+            I2S0->TCR3 &= ~I2S_TCR3_WDFL_MASK;  /* The first word set the start flag */ 
+
             break;
             
         case kSaiBusAC97:
+
 //            I2S_BWR_TCR2_BCP(base,1u); /* Bit clock active high */
 //            I2S_BWR_TCR4_MF(base,1u); /* MSB transmitted first */
 //            I2S_BWR_TCR4_FSE(base,1u);/* Frame sync one bit early */
@@ -163,39 +181,31 @@ void I2S_TxSetSyncMode(uint32_t instance, SAI_SyncMode_t mode)
 
 void I2S_SendData(uint32_t instance, uint32_t sampleBit, uint32_t chl, uint8_t *buf, uint32_t len)
 {
-    uint32_t i,j,data, sample_byte;
-    sample_byte = sampleBit/8;
+    uint32_t i, j, data;
+
+    I2S_SetTxCmd(instance, true);
+    I2S0->TCR3 |= I2S_TCR3_TCE(1<<(chl));
     
-    for(i=0; i<len/sample_byte; i++)
+    for(i=0; i<(len/(sampleBit/8)); i++)
     {
-        for(j = 0; j < sample_byte; j ++)
+        data = 0;
+        for(j = 0; j < (sampleBit/8); j ++)
         {
             data |= ((uint32_t)(*buf) << (j * 8u));
-            buf ++;
+            buf++;
         }
-        
-        /* Wait while fifo is empty */
         while(!(I2S0->TCSR & I2S_TCSR_FWF_MASK)) {};
         I2S0->TDR[chl] = data;
-        data = 0;
-        //txBuff ++;
     }
+    I2S0->TCR3 &= ~I2S_TCR3_TCE(1<<(chl));
+    I2S_SetTxCmd(instance, false);
 }
-
-
 
 
 void I2S_Init(I2S_InitTypeDef *Init)
 {
     /* clock gate */
     SIM->SCGC6 |= SIM_SCGC6_I2S_MASK;
-    
-    /* pinmux */
-    PORT_PinMuxConfig(HW_GPIOE, 6, kPinAlt4);
-    PORT_PinMuxConfig(HW_GPIOE, 7, kPinAlt4);
-    PORT_PinMuxConfig(HW_GPIOE, 12, kPinAlt4); 
-    PORT_PinMuxConfig(HW_GPIOE, 11, kPinAlt4); 
-    PORT_PinMuxConfig(HW_GPIOE, 10, kPinAlt4); 
     
     /* software reset and FIFO reset */
     I2S0->TCSR |= I2S_TCSR_SR_MASK | I2S_TCSR_FR_MASK;
@@ -212,8 +222,8 @@ void I2S_Init(I2S_InitTypeDef *Init)
     /* Tx or Rx */
     if(Init->isMaster)
     {
-        I2S0->TCR2 |=  I2S_TCR2_BCD_MASK;
-        I2S0->TCR4 |=  I2S_TCR4_FSD_MASK;
+        I2S0->TCR2 |= I2S_TCR2_BCD_MASK;
+        I2S0->TCR4 |= I2S_TCR4_FSD_MASK;
         #ifdef I2S_MCR_MICS_MASK
         I2S0->MCR |= I2S_MCR_MOE_MASK;
         #endif
@@ -242,13 +252,13 @@ void I2S_Init(I2S_InitTypeDef *Init)
     bclk = (Init->sampleBit)*(Init->sampleRate)*2;
     mclk = Init->sampleRate*384;
     bclk_div = mclk/bclk;
-    I2S0->TCR2 = I2S_TCR2_MSEL(1) | I2S_TCR2_DIV(bclk_div/2 -1);
+    I2S0->TCR2 |= I2S_TCR2_MSEL(1) | I2S_TCR2_DIV(bclk_div/2 -1);
 
 #if I2S_MCR_MICS_MASK
     I2S0->MCR |= I2S_MCR_MICS(0); /* mclk src = core clock */
 #if I2S_MDR_DIVIDE_MASK
     /* Configure MCLK divider */
-    CLOCK_GetClockFrequency(kCoreClock, &core_clk);
+    core_clk = GetClock(kCoreClock);
     SAI_HAL_SetMclkDiv(0, mclk, core_clk);
 #endif
 #endif
@@ -259,15 +269,8 @@ void I2S_Init(I2S_InitTypeDef *Init)
     /* sample bit and prol */
     I2S_TxSetProtocol(Init->instance, Init->protocol);
     I2S_SetSampleBit(Init->instance, Init->protocol, Init->sampleBit);
-    
     I2S_TxSetSyncMode(Init->instance, kSaiModeAsync);
-    
-    /* enable chl */
-    I2S0->TCR3 |= I2S_TCR3_TCE(1<<(Init->chl));
-    
-    /* enable tranmit */
-    I2S0->TCSR |= I2S_TCSR_BCE_MASK;
-    I2S0->TCSR |= I2S_TCSR_TE_MASK;
+
 }
 
 

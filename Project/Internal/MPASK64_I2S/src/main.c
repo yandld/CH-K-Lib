@@ -50,7 +50,7 @@ int main(void)
     I2C_QuickInit(I2C0_SCL_PE24_SDA_PE25, 100*1000);
    // I2C_Scan(I2C0_SCL_PE24_SDA_PE25);
     wm8960_init(0);
-    wm8960_format_config(11025, 16);
+    wm8960_format_config(44100, 16);
    // wm8960_set_volume(kWolfsonModuleHP, 0x2FFF);
     
     
@@ -60,7 +60,7 @@ int main(void)
     Init.isMaster = true;
     Init.protocol = kSaiBusI2SLeft;
     Init.sampleBit = 16;
-    Init.sampleRate = 11025;
+    Init.sampleRate = 44100;
     Init.chl = 0;
     I2S_Init(&Init);
     
@@ -73,7 +73,7 @@ int main(void)
     
     while(1)
     {
-        I2S_SendData(0, 16, 0, (uint8_t*)music, sizeof(music));
+        I2S_SendData(0, 16, 0, (uint8_t*)music_44100_16_2, sizeof(music_44100_16_2));
         printf("complete\r\n");
       //  DelayMs(500);
     }

@@ -44,6 +44,13 @@ typedef struct
     I2S_Protocol_t  protocol;
 }I2S_InitTypeDef;
 
+typedef enum
+{
+    kI2S_IntTxFIFOEmpty,
+    kI2S_IntRxFIFOFull,
+}I2S_Int_t;
+
+
 
 /* API functions */
 void I2S_Init(I2S_InitTypeDef *Init);
@@ -51,6 +58,7 @@ void I2S_TxSetProtocol(uint32_t instance, I2S_Protocol_t protocol);
 void I2S_SetSampleBit(uint32_t instance, I2S_Protocol_t protocol, uint32_t bits);
 void I2S_SendData(uint32_t instance, uint32_t sampleBit, uint32_t chl, uint8_t *buf, uint32_t len);
 void I2S_TxSetSyncMode(uint32_t instance, SAI_SyncMode_t mode);
+void I2S_SetIntMode(uint32_t instance, I2S_Int_t mode, bool val);
 
 #endif
 

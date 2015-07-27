@@ -156,6 +156,24 @@ void I2S_SetSampleBit(uint32_t instance, I2S_Protocol_t protocol, uint32_t bits)
     I2S0->TCR5 = I2S_TCR5_WNW(bits - 1) | I2S_TCR5_W0W(bits - 1) | I2S_TCR5_FBT(bits - 1);
 }
 
+void I2S_SetIntMode(uint32_t instance, I2S_Int_t mode, bool val)
+{   
+    if(val)
+    {
+        NVIC_EnableIRQ(I2S0_Tx_IRQn);
+        NVIC_EnableIRQ(I2S0_Rx_IRQn);
+    }
+    
+    switch(mode)
+    {
+        case kI2S_IntTxFIFOEmpty:
+            (val)?(I2S0->TCSR |= I2S_TCSR_FWIE_MASK):(I2S0->TCSR &= ~I2S_TCSR_FWIE_MASK);
+            break;
+        case kI2S_IntRxFIFOFull:
+            (val)?(I2S0->RCSR |= I2S_RCSR_FWIE_MASK):(I2S0->RCSR &= ~I2S_RCSR_FWIE_MASK); 
+            break;
+    }
+}
 
 void I2S_TxSetSyncMode(uint32_t instance, SAI_SyncMode_t mode)
 {

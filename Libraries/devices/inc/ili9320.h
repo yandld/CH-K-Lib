@@ -43,7 +43,7 @@ void ili9320_set_window(int x, int y, int xlen, int ylen);
 void ili9320_write_pixel(int x, int y, int c);
 void ili9320_hline(int xs, int xe, int y, int c);
 void ili9320_vline(int ys, int ye, int x, int c);
-
+int ili9320_get_lcd_size(int *x, int* y);
 
 #endif
 

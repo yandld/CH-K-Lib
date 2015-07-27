@@ -203,6 +203,13 @@ void ili9320_vline(int ys, int ye, int x, int c)
     }
 }
 
+int ili9320_get_lcd_size(int *x, int* y)
+{
+    *x = LCD_X_MAX;
+    *y = LCD_Y_MAX;
+    return 0;
+}
+
 int ili9320_init(void)
 {
     int ret;

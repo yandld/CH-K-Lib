@@ -85,6 +85,7 @@
 #endif
   
 #if defined(LIB_DEBUG)
+#include <stdio.h>
 #define LIB_TRACE	printf
 #else
 #define LIB_TRACE(...)

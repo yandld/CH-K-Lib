@@ -20,6 +20,8 @@ static uint16_t ColorTable[] =
 int main(void)
 {
     uint8_t i;
+    int x,y;
+    
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
@@ -27,6 +29,8 @@ int main(void)
     printf("flexbus lcd test\r\n");
     ili9320_init();
     printf("controller id:0x%X\r\n", ili9320_get_id());
+    ili9320_get_lcd_size(&x, &y);
+    printf("size: %dx%d\r\n", x, y);
     
     while(1)
     {

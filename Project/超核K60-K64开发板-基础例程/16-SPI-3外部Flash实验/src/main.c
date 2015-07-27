@@ -20,13 +20,11 @@ static int w25qxx_test(void)
 {
     uint32_t i, block, buf_size,j;
     static uint8_t buf[4*1024];
-    struct w25qxx_attr_t w25qxx;
     
-    w25qxx_get_attr(&w25qxx);
+    printf("spi flash id:0x%X\r\n", w25qxx_get_id());
     buf_size = sizeof(buf);
-    block = w25qxx.size/buf_size;
     
-    printf("test unit count:%d\r\n", block);
+    block = 512;
     
     /* erase chip */
     printf("erase all chips...\r\n");
@@ -83,6 +81,7 @@ static uint32_t xfer(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs
         if(buf_in != &dummy_in)
             buf_in++;
     }
+    return len;
 }
 
 int main(void)
@@ -112,13 +111,7 @@ int main(void)
     }
     else
     {
-        struct w25qxx_attr_t w25qxx;
-        w25qxx_get_attr(&w25qxx);
-        printf("%s(0x%X) detected!\r\n", w25qxx.name, w25qxx.id);
-        printf("total size:%dKB\r\n", w25qxx.size/1024);
-        printf("block size:%dKB\r\n", w25qxx.block_size/1024);
-        printf("sector size:%d\r\n", w25qxx.sector_size);
-        printf("page size:%d\r\n", w25qxx.page_size);
+        printf("spi_flash found id:0x%X\r\n", w25qxx_get_id());
     }
 
     w25qxx_test();

@@ -23,19 +23,6 @@
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 #endif
 
-#define W25QXX_CS_LOW       0
-#define W25QXX_CS_HIGH      1
-
-struct w25qxx_attr_t
-{
-    const char* name;
-    uint32_t size;
-    uint16_t id;
-    uint32_t page_size;
-    uint32_t sector_size;
-    uint32_t block_size;
-};
-
 struct w25qxx_init_t
 {
     uint32_t (*xfer)(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs_state);
@@ -50,7 +37,7 @@ int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len);
 int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len);
 int w25qxx_erase_sector(uint32_t addr);
 int w25qxx_erase_chip(void);
-int w25qxx_get_attr(struct w25qxx_attr_t* attr);
+int w25qxx_get_id(void);
 
 #endif 
 

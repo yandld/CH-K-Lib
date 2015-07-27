@@ -70,7 +70,7 @@ static uint32_t xfer(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs
     {
         if(len == 0)
         {
-            *buf_in = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, *buf_out, 1, !cs_state); 
+            *buf_in = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, *buf_out, 1, (SPI_PCS_Type)!cs_state); 
         }
         else
         {

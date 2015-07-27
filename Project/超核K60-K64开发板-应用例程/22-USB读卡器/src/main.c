@@ -46,6 +46,9 @@ int main(void)
 
     
     SD_QuickInit(20*1000*1000);
+    printf("SD size:%dMB\r\n", SD_GetSizeInMB());
+    
+    printf("attach usb...\r\n");
     
     usbd_init();                          /* USB Device Initialization          */
     usbd_connect(__TRUE);                 /* USB Device Connect                 */

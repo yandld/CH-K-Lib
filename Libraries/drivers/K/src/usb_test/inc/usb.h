@@ -67,9 +67,6 @@ if (!(EX))                                                                  \
 
 #define USB_DEVICE_CLASS USB_DEVICE_CLASS_HID
 
-//常用操作宏定义
-#define BIT_SET(BitNumber, Register)        (Register |=(1<<BitNumber))
-#define BIT_CLR(BitNumber, Register)        (Register &=~(1<<BitNumber))
 
 
 

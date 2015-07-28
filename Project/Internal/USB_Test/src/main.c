@@ -39,7 +39,7 @@ uint8_t USB_ClockInit(void)
     
     /* clock config */
     uint32_t clock;
-    CLOCK_GetClockFrequency(kMCGOutClock, &clock);
+    clock = GetClock(kMCGOutClock);
     if(USB_SetClockDiv(clock))
     {
         LIB_TRACE("USB clock setup fail\r\n");

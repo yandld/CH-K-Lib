@@ -206,7 +206,7 @@ static uint8_t I2C_GetByte(void)
  *         @arg buf        : read len
  * @note 
  */
-uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
+int I2C_BurstWrite(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
 {
     uint8_t *p;
     uint8_t err;
@@ -243,7 +243,7 @@ uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint3
  *         @arg pData      : data pointer
  * @note   usually used on i2c sensor devices
  */
-uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t data)
+int I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t data)
 {
     return I2C_BurstWrite(instance, chipAddr, addr, 1, &data, 1);
 }
@@ -258,7 +258,7 @@ uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t add
  *         @arg buf        : read len
  * @note 
  */
-int32_t I2C_BurstRead(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
+int I2C_BurstRead(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
 {
     uint8_t *p;
     uint8_t err;
@@ -302,7 +302,7 @@ int32_t I2C_BurstRead(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32
  *         @arg chipAddr   : i2c slave addr
  * @note   see if it's available i2c slave on the bus
  */
-uint8_t I2C_Probe(uint32_t instance, uint8_t chipAddr)
+int I2C_Probe(uint32_t instance, uint8_t chipAddr)
 {
     uint8_t err;
     
@@ -324,13 +324,13 @@ uint8_t I2C_Probe(uint32_t instance, uint8_t chipAddr)
  *         @arg pData      : data pointer
  * @note   usually used on i2c sensor devices
  */
-uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t* pData)
+int I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t *data)
 {
-    return I2C_BurstRead(instance, chipAddr, addr, 1, pData, 1);
+    return I2C_BurstRead(instance, chipAddr, addr, 1, data, 1);
 }
 
 
-int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t* pData)
+int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t* data)
 {
     uint8_t err;
     uint8_t retry;
@@ -353,7 +353,7 @@ int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, u
         I2C_SendByte(chipAddr+1);
         err += I2C_WaitAck();
         
-        *pData = I2C_GetByte();
+        *data = I2C_GetByte();
        // err += I2C_WaitAck();
         
         I2C_NAck();
@@ -1097,9 +1097,9 @@ uint8_t I2C_BurstWrite(uint32_t instance ,uint8_t deviceAddress, uint32_t subAdd
  * @param  Data: 需要写入的数据
  * @retval 0:成功  1:地址发送失败 2:数据发送失败
  */
-uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t data)
+uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t data)
 {
-    return I2C_BurstWrite(instance ,deviceAddress, registerAddress, 1, &data, 1);
+    return I2C_BurstWrite(instance ,chipAddr, addr, 1, &data, 1);
 }
 
 /**
@@ -1117,9 +1117,9 @@ uint8_t I2C_WriteSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_
  * @param  pData: 数据指针
  * @retval 0:成功  1:地址发送失败 2:数据发送失败
  */
-uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t deviceAddress, uint8_t registerAddress, uint8_t* pData)
+uint8_t I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t *data)
 {
-    return I2C_BurstRead(instance, deviceAddress, registerAddress, 1, pData, 1);
+    return I2C_BurstRead(instance, chipAddr, addr, 1, data, 1);
 }
 
 

@@ -514,6 +514,11 @@
               <FileType>1</FileType>
               <FilePath>..\src_firmware\usb_thread.c</FilePath>
             </File>
+            <File>
+              <FileName>msh_cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1400,6 +1405,11 @@
               <FileName>usb_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src_firmware\usb_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>msh_cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
             </File>
           </Files>
         </Group>

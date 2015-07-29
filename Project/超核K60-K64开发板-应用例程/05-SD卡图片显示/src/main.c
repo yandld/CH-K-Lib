@@ -1,7 +1,7 @@
 #include "gpio.h"
 #include "uart.h"
 #include "sd.h"
-#include "sram.h"
+#include "IS61WV25616.h"
 
 #include "ff.h"
 #include "gui.h"

@@ -1,5 +1,5 @@
 #include "chlib_k.h"
-#include "sram.h"
+#include "IS61WV25616.h"
 
 #define OV7620_W    (320) /* 每行有多少像素 */
 #define OV7620_H    (240) /* 高度有多少行 */

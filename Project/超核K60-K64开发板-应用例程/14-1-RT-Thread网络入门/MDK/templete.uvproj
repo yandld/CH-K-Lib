@@ -72,8 +72,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopB1X>0</nStopB1X>
-            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
@@ -130,7 +128,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -142,8 +139,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -608,11 +605,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
             <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
               <FileName>ksz8041.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
@@ -621,6 +613,11 @@
               <FileName>drv_data_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_data_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>IS61WV25616.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -792,8 +789,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopB1X>0</nStopB1X>
-            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
@@ -850,7 +845,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -862,8 +856,8 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>0</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
-            <UsePdscDebugDescription>1</UsePdscDebugDescription>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>6</TargetSelection>
@@ -1408,11 +1402,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
             <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
               <FileName>ksz8041.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
@@ -1421,6 +1410,11 @@
               <FileName>drv_data_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_data_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>IS61WV25616.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
             </File>
           </Files>
         </Group>

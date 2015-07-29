@@ -2,7 +2,6 @@
 #include "common.h"
 #include "uart.h"
 #include "dma.h"
-#include "sram.h"
 #include "ili9320.h"
 #include "dma.h"
 

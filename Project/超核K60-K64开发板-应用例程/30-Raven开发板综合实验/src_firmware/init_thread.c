@@ -2,7 +2,7 @@
 #include "board.h"
 #include "components.h"
 #include "chlib_k.h"
-#include "sram.h"
+#include "IS61WV25616.h"
 #include "rtt_drv.h"
 #include "pin.h"
 

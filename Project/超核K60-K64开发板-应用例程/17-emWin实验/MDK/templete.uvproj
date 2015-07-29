@@ -595,11 +595,6 @@
               <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
             </File>
             <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
               <FileName>ksz8041.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
@@ -1355,11 +1350,6 @@
               <FileName>ili9320.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
-            </File>
-            <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
             </File>
             <File>
               <FileName>ksz8041.c</FileName>

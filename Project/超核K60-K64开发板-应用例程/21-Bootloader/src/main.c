@@ -2,7 +2,7 @@
 #include "uart.h"
 #include "dma.h"
 #include "mq.h"
-#include "FlashOS.H"
+#include "flash.h"
 
 
 /*  
@@ -81,13 +81,7 @@ static void RunningApplication(uint32_t addr)
 
 
 
-static int MKP512FlashInit(void)
-{
-    uint32_t clock;
-    uint32_t flash_clock = CLOCK_GetClockFrequency(kFlashClock, &clock);
-    /* fnc:  Function Code (1 - Erase, 2 - Program, 3 - Verify) */         
-    return Init(PROGRAM_ADDR_BASE, clock, 2);
-}
+
 
 static void* SwitchBuffer(void* p1, void *p2)
 {
@@ -126,8 +120,6 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     BOOTLAODER_LOG("press [D] to download...\r\n");
     
-    /* initilize ssd(stand flash driver) */
-    MKP512FlashInit();
     
     /* initalize message queue */
     mq_init();
@@ -209,8 +201,8 @@ int main(void)
                 /* program flash */
                 BOOTLAODER_LOG("programing @0x%08X size:%04d ...", program_addr, transfer_size);
                 DisableInterrupts();
-                EraseSector (program_addr);
-                ProgramPage (program_addr, SECTER_SIZE, pMsg->p);
+                FLASH_EraseSector(program_addr);
+                FLASH_WriteSector(program_addr, pMsg->p, SECTER_SIZE);
                 EnableInterrupts();
                 BOOTLAODER_LOG("ok\r\n");
                 program_addr += SECTER_SIZE;

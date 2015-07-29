@@ -625,11 +625,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
             <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
               <FileName>ksz8041.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
@@ -688,6 +683,11 @@
               <FileName>rrtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\rtc\rrtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>IS61WV25616.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1517,11 +1517,6 @@
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
             </File>
             <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
               <FileName>ksz8041.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
@@ -1580,6 +1575,11 @@
               <FileName>rrtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\rtc\rrtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>IS61WV25616.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
             </File>
           </Files>
         </Group>

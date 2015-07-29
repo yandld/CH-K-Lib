@@ -605,11 +605,6 @@
           <GroupName>devices</GroupName>
           <Files>
             <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
-            <File>
               <FileName>ili9320.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
@@ -1231,11 +1226,6 @@
         <Group>
           <GroupName>devices</GroupName>
           <Files>
-            <File>
-              <FileName>sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\sram.c</FilePath>
-            </File>
             <File>
               <FileName>ili9320.c</FileName>
               <FileType>1</FileType>

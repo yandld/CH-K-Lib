@@ -2,7 +2,6 @@
 #include "common.h"
 #include "uart.h"
 #include "dma.h"
-#include "sram.h"
 #include <absacc.h> 
 
 int test(void) __attribute__((section(".ARM.__at_0x8000")));

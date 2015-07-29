@@ -3,7 +3,7 @@
 #include "uart.h"
 #include "flexbus.h"
 
-#include "sram.h"
+#include "IS61WV25616.h"
 #include "ili9320.h"
 
 static uint16_t ColorTable[] = 

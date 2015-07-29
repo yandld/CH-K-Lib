@@ -7,7 +7,7 @@
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
-#include "sram.h"
+#include "IS61WV25616.h"
 #include "flexbus.h"
 #include "common.h"
 

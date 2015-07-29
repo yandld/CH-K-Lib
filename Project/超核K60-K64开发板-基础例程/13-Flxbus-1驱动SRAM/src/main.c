@@ -3,7 +3,7 @@
 #include "uart.h"
 #include "flexbus.h"
 
-#include "sram.h" 
+#include "IS61WV25616.h" 
 /* CH Kinetis固件库 V2.50 版本 */
 /* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 
@@ -17,6 +17,7 @@
 int main(void)
 {
     DelayInit();
+    DelayMs(10);
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     

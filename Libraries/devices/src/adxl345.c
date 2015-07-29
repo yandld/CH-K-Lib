@@ -178,10 +178,10 @@ short adxl345_convert_angle(short x, short y, short z, short *ax, short *ay, sho
     fx = (float)x; fy = (float)y;  fz = (float)z; 
 
     temp = sqrt((fx*fx+fy*fy))/fz;
-    *az = atan(temp)*1800/3.14;
+    *az = (short)(atan(temp)*1800/3.14);
     temp = fx/sqrt((fy*fy+fz*fz));
-    *ax = atan(temp)*1800/3.14;;
+    *ax = (short)(atan(temp)*1800/3.14);
     temp = fy/sqrt((fx*fx+fz*fz));
-    *ay = atan(temp)*1800/3.14;;
+    *ay = (short)(atan(temp)*1800/3.14);
 	return 0;
 }

@@ -29,7 +29,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>39</state>
         </option>
         <option>
@@ -60,7 +60,7 @@
         </option>
         <option>
           <name>FPU</name>
-          <version>2</version>
+          <version>5</version>
           <state>0</state>
         </option>
         <option>
@@ -87,7 +87,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.2.7418</state>
+          <state>7.40.2.8567</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -137,12 +137,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>39</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>39</state>
         </option>
         <option>
@@ -169,7 +169,6 @@
         <option>
           <name>CCDefines</name>
           <state>MK60D10</state>
-          <state>DEBUG</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -302,6 +301,9 @@
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\CoreSupport</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport\IAR-ARM</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport</state>
+          <state>$PROJ_DIR$\..\..\..\..\Libraries\devices\inc</state>
+          <state>$PROJ_DIR$\..\src</state>
+          <state>$PROJ_DIR$\..\..\..\..\Libraries\utilities\emWin\Include</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -588,8 +590,8 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
-          <state>2</state>
+          <version>3</version>
+          <state>3</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -615,6 +617,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -974,7 +977,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>40</state>
         </option>
         <option>
@@ -1005,8 +1008,8 @@
         </option>
         <option>
           <name>FPU</name>
-          <version>2</version>
-          <state>5</state>
+          <version>5</version>
+          <state>7</state>
         </option>
         <option>
           <name>OGCoreOrChip</name>
@@ -1032,7 +1035,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.2.7418</state>
+          <state>7.40.2.8567</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1082,12 +1085,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>40</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>40</state>
         </option>
         <option>
@@ -1114,7 +1117,6 @@
         <option>
           <name>CCDefines</name>
           <state>MK64F12</state>
-          <state>DEBUG</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -1247,6 +1249,9 @@
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\CoreSupport</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport\IAR-ARM</state>
           <state>$PROJ_DIR$\..\..\..\..\Libraries\startup\DeviceSupport</state>
+          <state>$PROJ_DIR$\..\..\..\..\Libraries\devices\inc</state>
+          <state>$PROJ_DIR$\..\src</state>
+          <state>$PROJ_DIR$\..\..\..\..\Libraries\utilities\emWin\Include</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1533,8 +1538,8 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
-          <state>2</state>
+          <version>3</version>
+          <state>3</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -1560,6 +1565,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -1892,6 +1898,33 @@
       <data/>
     </settings>
   </configuration>
+  <group>
+    <name>devices</name>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\ads7843.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\adxl345.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\at24cxx.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\ili9320.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\IS61WV25616.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\ksz8041.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\nrf24l01.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\w25qxx.c</name>
+    </file>
+  </group>
   <group>
     <name>drivers</name>
     <file>

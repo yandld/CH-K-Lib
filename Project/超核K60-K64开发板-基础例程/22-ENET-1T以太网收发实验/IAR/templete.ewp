@@ -1916,6 +1916,9 @@
       <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\IS61WV25616.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\ksz8041.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\nrf24l01.c</name>
     </file>
     <file>

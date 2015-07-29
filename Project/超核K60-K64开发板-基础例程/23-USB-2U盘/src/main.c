@@ -9,7 +9,7 @@ extern int Image$$ER_IROM1$$RO$$Limit;
 
 static uint32_t StartAddr;
 
-#define UDISK_SIZE          (100*1024)
+#define UDISK_SIZE          (300*1024)
 
 
 U8 BlockBuf[4096];

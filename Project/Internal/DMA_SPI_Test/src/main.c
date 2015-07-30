@@ -2,6 +2,7 @@
 #include "common.h"
 #include "uart.h"
 #include "dma.h"
+#include "sram.h"
 /* CH Kinetis固件库 V2.50 版本 */
 /* 修改主频 请修改 CMSIS标准文件 system_MKxxxx.c 中的 CLOCK_SETUP 宏 */
 

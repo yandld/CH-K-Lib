@@ -626,6 +626,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>devies</GroupName>
+          <Files>
+            <File>
+              <FileName>w25qxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\w25qxx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1245,6 +1255,16 @@
               <FileName>vref.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\vref.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>devies</GroupName>
+          <Files>
+            <File>
+              <FileName>w25qxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\w25qxx.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -19,7 +19,14 @@ static uint32_t gProbleCmd[] =
     (0 << SPI_PUSHR_CONT_SHIFT) | SPI_PUSHR_CTAS(0) | SPI_PUSHR_PCS(1<<1) | SPI_PUSHR_TXDATA(0xFF),
 };
 
+uint32_t rev_buf[32];
 
+void DMA1_IRQHandler(void)
+{
+    int i;
+    DMA0->CINT = DMA_CINT_CINT(DMA_SPI_RX_CH);
+    printf("spi flash id:0x%X\r\n", (rev_buf[5]<<8) + rev_buf[4]);
+}
 
 void SPI_xfer(uint32_t *buf_in, uint32_t *buf_out, uint32_t size)
 {
@@ -43,6 +50,7 @@ void SPI_xfer(uint32_t *buf_in, uint32_t *buf_out, uint32_t size)
     
     /* enable request */
     DMA0->ERQ = (1 << DMA_SPI_TX_CH) | (1 << DMA_SPI_RX_CH);
+
 }
 
 static void UART_SPI_Config(void)
@@ -59,7 +67,7 @@ static void UART_SPI_Config(void)
     /* source configuration MOSI */
     DMA0->TCD[DMA_SPI_TX_CH].SADDR = NULL;
     DMA0->TCD[DMA_SPI_TX_CH].ATTR |= DMA_ATTR_SSIZE(2);
-    DMA0->TCD[DMA_SPI_TX_CH].SOFF= 4;
+    DMA0->TCD[DMA_SPI_TX_CH].SOFF = 4;
     DMA0->TCD[DMA_SPI_TX_CH].SLAST = 0;
     
     /* destination configuration MOSI */
@@ -74,7 +82,7 @@ static void UART_SPI_Config(void)
     /* source configuration MISO */
     DMA0->TCD[DMA_SPI_RX_CH].SADDR = (uint32_t)&SPI2->POPR;
     DMA0->TCD[DMA_SPI_RX_CH].ATTR |= DMA_ATTR_SSIZE(2);
-    DMA0->TCD[DMA_SPI_RX_CH].SOFF= 0;
+    DMA0->TCD[DMA_SPI_RX_CH].SOFF = 0;
     DMA0->TCD[DMA_SPI_RX_CH].SLAST = 0;
     
     /* destination configuration MISO */
@@ -86,13 +94,15 @@ static void UART_SPI_Config(void)
     /* set CITER and BITER to maximum value MISO */
     DMA0->TCD[DMA_SPI_RX_CH].NBYTES_MLNO = 4;
     
+    /* enable interrupt enable */
+    DMA0->TCD[DMA_SPI_RX_CH].CSR |= DMA_CSR_INTMAJOR_MASK;
+    NVIC_EnableIRQ(DMA1_IRQn);
 }
 
 
 int main(void)
 {
     int i;
-    uint32_t rev_buf[32];
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
@@ -108,10 +118,6 @@ int main(void)
     SPI_ITDMAConfig(HW_SPI2, kSPI_DMA_RFDF, true);
 
     SPI_xfer(gProbleCmd, rev_buf, 6);
-
-    DelayMs(100);
-    
-    printf("spi flash id:0x%X\r\n", (rev_buf[5]<<8) + rev_buf[4]);
     
     while(1)
     {

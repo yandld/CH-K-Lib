@@ -15,6 +15,8 @@
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 #endif
 
+
+
 int ssd1306_init(uint32_t instance)
 {
     uint32_t i;

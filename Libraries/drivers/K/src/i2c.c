@@ -42,8 +42,8 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
     /* open drain and pull up */
     for(i = 0; i < pq->pin_cnt; i++)
     {
-        GPIO_QuickInit(pq->io, pq->pin_start + i, kGPIO_Mode_OOD);
-        GPIO_QuickInit(pq->io, pq->pin_start + i, kGPIO_Mode_OOD);
+        GPIO_QuickInit(pq->io, pq->pin_start + i, kGPIO_Mode_OPP);
+        GPIO_QuickInit(pq->io, pq->pin_start + i, kGPIO_Mode_OPP);
         GPIO_WriteBit(pq->io, pq->pin_start + i, 1);
         PORT_PinPullConfig(pq->io, pq->pin_start + i, kPullUp);
     }
@@ -79,6 +79,9 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
             break;
         case I2C1_SCL_PC01_SDA_PC02:
             i2c.scl_pin = 1;i2c.sda_pin = 2;
+            break;
+        case I2Cx_SCL_PC14_SDA_PC15:
+            i2c.scl_pin = 14;i2c.sda_pin = 15;
             break;
         default:
             break;
@@ -1249,7 +1252,7 @@ void I2C_Scan(uint32_t MAP)
         ret = I2C_Probe(instance , i);
         if(!ret)
         {
-            LIB_TRACE("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
+            printf("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
         }
     }
 }

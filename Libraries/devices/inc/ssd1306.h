@@ -14,7 +14,7 @@
 
 
 //API funtctions
-
+void ssd1306_init(void);
 
 #endif
 

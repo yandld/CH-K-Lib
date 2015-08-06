@@ -105,13 +105,6 @@ static void _FTM_InitBasic(uint32_t instance, uint32_t modulo, FTM_ClockDiv_Type
     /* set LOCK bit to load MOD value */
     FTM_InstanceTable[instance]->PWMLOAD = 0xFFFFFFFF;
     
-    /* set FTM clock to system clock */
-    FTM_InstanceTable[instance]->SC &= ~FTM_SC_CLKS_MASK;
-    FTM_InstanceTable[instance]->SC |= FTM_SC_CLKS(1);
-    
-    /* set ps, this must be done after set modulo */
-    FTM_InstanceTable[instance]->SC &= ~FTM_SC_PS_MASK;
-    FTM_InstanceTable[instance]->SC |= FTM_SC_PS(ps); 
 }
 
 
@@ -435,6 +428,15 @@ uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req)
     }
     /* set duty to 50% */
     FTM_PWM_ChangeDuty(pq->ip, pq->chl, 5000);
+    
+    /* set FTM clock to system clock */
+    FTM_InstanceTable[pq->ip]->SC &= ~FTM_SC_CLKS_MASK;
+    FTM_InstanceTable[pq->ip]->SC |= FTM_SC_CLKS(1);
+    
+    /* set ps, this must be done after set modulo */
+    FTM_InstanceTable[pq->ip]->SC &= ~FTM_SC_PS_MASK;
+    FTM_InstanceTable[pq->ip]->SC |= FTM_SC_PS(ps); 
+    
     return pq->ip;
 }
 

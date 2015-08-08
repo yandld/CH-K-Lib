@@ -15,6 +15,13 @@
 
 //API funtctions
 void ssd1306_init(void);
+void OLED_Fill(unsigned char dat);
+void OLED_Enable(void);
+void OLED_Disable(void);
+void OLED_ShowStr(unsigned char x, unsigned char y, char *str);
+void OLED_DrawBMP(unsigned char x0,unsigned char y0,unsigned char x1,unsigned char y1,unsigned char BMP[]);
+void OLED_ShowCN(unsigned char x, unsigned char y, unsigned char N);
+
 
 #endif
 

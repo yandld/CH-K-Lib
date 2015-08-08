@@ -5,8 +5,6 @@
 #include "ssd1306.h"
 
 
-
-
 int main(void)
 {
     int i;
@@ -18,7 +16,12 @@ int main(void)
     I2C_QuickInit(I2Cx_SCL_PC14_SDA_PC15,100*1000);
    // I2C_Scan(I2C1_SCL_PC10_SDA_PC11);
     ssd1306_init();
-    
+    OLED_ShowStr(5, 0, "www.beyondcore.net");
+    for(i=0;i<4;i++)
+    {
+        OLED_ShowCN(22+i*16, 3, i);
+    }
+    DelayMs(5000);
     while(1)
     {
         OLED_Fill(0xFF);

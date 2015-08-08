@@ -78,7 +78,7 @@ int sensor_init(void)
     
     struct mpu_config config;
     
-    config.afs = AFS_8G;
+    config.afs = AFS_16G;
     config.gfs = GFS_2000DPS;
     config.mfs = MFS_14BITS;
     config.aenable_self_test = false;

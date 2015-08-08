@@ -36,14 +36,12 @@ static int is_mval_ok(int16_t data)
    
 void dcal_print(struct dcal_t * dc)
 {
-    printf("calibrartion data:\r\n");
-
-    printf("gyro offset:%d %d %d \r\n", dc->go[0], dc->go[1], dc->go[2]);
-    printf("acce offset:%d %d %d \r\n", dc->ao[0], dc->ao[1], dc->ao[2]);
-    printf("magn offset:%d %d %d \r\n", dc->mo[0], dc->mo[1], dc->mo[2]);
-    printf("mag gain:%f %f %f \r\n",    dc->mg[0], dc->mg[1], dc->mg[2]);
-    printf("mag max:%d %d %d \r\n",     dc->m_max[0], dc->m_max[1], dc->m_max[2]);
-    printf("mag min:%d %d %d \r\n",     dc->m_min[0], dc->m_min[1], dc->m_min[2]);
+    printf("GO:%d %d %d \r\n", dc->go[0], dc->go[1], dc->go[2]);
+    printf("AO:%d %d %d \r\n", dc->ao[0], dc->ao[1], dc->ao[2]);
+    printf("MO:%d %d %d \r\n", dc->mo[0], dc->mo[1], dc->mo[2]);
+    printf("MG:%f %f %f \r\n",    dc->mg[0], dc->mg[1], dc->mg[2]);
+    printf("MX:%d %d %d \r\n",     dc->m_max[0], dc->m_max[1], dc->m_max[2]);
+    printf("MI:%d %d %d \r\n",     dc->m_min[0], dc->m_min[1], dc->m_min[2]);
 }
 
 static void reset_dcal_data(struct dcal_t *dc)

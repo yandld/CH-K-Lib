@@ -689,10 +689,30 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
             </File>
+            <File>
+              <FileName>i2c_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\i2c\i2c_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\i2c\i2c_dev.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c-bit-ops.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\i2c\i2c-bit-ops.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_i2c_bit_ops.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_i2c_bit_ops.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>RTT_120</GroupName>
+          <GroupName>RTTLib</GroupName>
           <Files>
             <File>
               <FileName>RTT_CM4.lib</FileName>
@@ -813,6 +833,26 @@
               <FileName>usbd_hid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_hid.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>demo</GroupName>
+          <Files>
+            <File>
+              <FileName>device_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\device_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>fs_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\fs_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>mem_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\mem_test.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1581,10 +1621,30 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
             </File>
+            <File>
+              <FileName>i2c_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\i2c\i2c_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\i2c\i2c_dev.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c-bit-ops.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\i2c\i2c-bit-ops.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_i2c_bit_ops.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_i2c_bit_ops.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>RTT_120</GroupName>
+          <GroupName>RTTLib</GroupName>
           <Files>
             <File>
               <FileName>RTT_CM4.lib</FileName>
@@ -1748,6 +1808,26 @@
               <FileName>usbd_hid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_hid.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>demo</GroupName>
+          <Files>
+            <File>
+              <FileName>device_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\device_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>fs_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\fs_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>mem_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\examples\test\mem_test.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -53,9 +53,11 @@ static rt_err_t _block_device_test(rt_device_t device)
     {
         // device can read and write.
         // step 1: open device
+        rt_device_close(device);
         result = rt_device_open(device,RT_DEVICE_FLAG_RDWR);
         if( result != RT_EOK )
         {
+            rt_kprintf("device open failed. err code:%d\r\n", result);
             return result;
         }
 

@@ -23,10 +23,12 @@ void init_thread_entry(void* parameter)
     rt_hw_rtc_init();
     rt_hw_spi_init();
     rt_hw_pin_init("gpio");
+    rt_hw_i2c_bit_ops_bus_init("i2c0");
+    at24cxx_init("at24c02", "i2c0");
     rt_hw_ads7843_init("ads7843", "spi20");
     w25qxx_init("sf0", "spi21");
     rt_hw_lcd_init("lcd0");
-
+    
     finsh_system_init();
  //   tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, 1024, 9, 20);
    // rt_thread_startup(tid);

@@ -4,6 +4,7 @@
 #include "drivers/i2c.h"
 #include "rtt_drv.h"
 
+#define AT24CXX_DEBUG;
 
 #ifdef AT24CXX_DEBUG
 #define AT24CXX_TRACE         rt_kprintf
@@ -58,21 +59,23 @@ static void unlock(struct at24cxx_device * dev)
 
 static rt_size_t write_page(rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
-    int addr,i;
+    int addr,i, sector_size, sub_addr;
     rt_uint8_t *p = (void*)buffer;
     struct rt_i2c_bus_device* bus;
     rt_uint8_t buf[1];
     struct rt_i2c_msg msg[2];
-    for(i=0;i<size;i++)
+    
+    sector_size = at24cxx_device.attr.page_size;
+    
+    for(i=0; i<size; i++)
     {
         /* prepare data */
-        p = (rt_uint8_t*)buffer + i*at24cxx_device.attr.page_size;
-        pos = pos + i;
-        pos = pos*at24cxx_device.attr.page_size;
-        addr = at24cxx_device.attr.chip_addr + (pos/256); 
-        buf[0] = (pos%256); /* sub addr */
+        p = (rt_uint8_t*)buffer + i * sector_size;
+        sub_addr = (pos + i) * sector_size;
+        addr = at24cxx_device.attr.chip_addr + (sub_addr / 256); 
+        buf[0] = (sub_addr % 256); /* sub addr */
         bus = at24cxx_device.bus;
-        
+
         /* write operation */
         lock(&at24cxx_device);
         
@@ -83,10 +86,10 @@ static rt_size_t write_page(rt_device_t dev, rt_off_t pos, const void* buffer, r
 
         msg[1].addr = addr;
         msg[1].buf = p;
-        msg[1].len = at24cxx_device.attr.page_size;
-        msg[1].flags = RT_I2C_WR|RT_I2C_NO_START;
-        rt_i2c_transfer(bus, msg, 2);
+        msg[1].len = sector_size;
+        msg[1].flags = RT_I2C_WR | RT_I2C_NO_START;
         
+        rt_i2c_transfer(bus, msg, 2);
         unlock(&at24cxx_device);
         
         /* delay some time to let EEPORM idle */
@@ -97,15 +100,16 @@ static rt_size_t write_page(rt_device_t dev, rt_off_t pos, const void* buffer, r
 
 static rt_size_t read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
-    int addr;
+    int addr, sector_size;
     struct rt_i2c_bus_device* bus;
     rt_uint8_t buf[1];
     struct rt_i2c_msg msg[2];
     
     /* prepare data */
-    pos = pos*at24cxx_device.attr.page_size;
-    addr = at24cxx_device.attr.chip_addr + (pos/256); 
-    buf[0] = (pos%256);
+    sector_size = at24cxx_device.attr.page_size;
+    pos = pos * sector_size;
+    addr = at24cxx_device.attr.chip_addr + (pos / 256); 
+    buf[0] = (pos % 256);
     bus = at24cxx_device.bus;
     
     /* read operation */
@@ -118,7 +122,7 @@ static rt_size_t read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t siz
 
     msg[1].addr = addr;
     msg[1].buf = buffer;
-    msg[1].len = size*at24cxx_device.attr.page_size;
+    msg[1].len = size * sector_size;
     msg[1].flags = RT_I2C_RD;
     
     rt_i2c_transfer(bus, msg, 2);
@@ -180,6 +184,7 @@ rt_err_t at24cxx_init(const char * device_name, const char * i2c_bus_name)
     /* devices not supported */
     if( i == ARRAY_SIZE(at24cxx_attr_table))
     {
+        AT24CXX_TRACE("at24cxx device unspported\r\n");
         return RT_ERROR;
     }
     

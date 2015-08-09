@@ -49,7 +49,7 @@ struct at24cxx_device
 };
 
 
-int rt_hw_i2c_bit_ops_bus_init(void);
+int rt_hw_i2c_bit_ops_bus_init(const char *name);
 int rt_hw_uart_init(const char *name, uint32_t instance);
 void rt_hw_spi_init(void);
 void rt_hw_sd_init(void);

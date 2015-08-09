@@ -114,7 +114,7 @@ int main(void)
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
     uint32_t fall;
     float fadata[3], fgdata[3], fmdata[3];
-    static attitude_t angle, langle;
+    static attitude_t angle;
     uint32_t ret;
     float pressure, dummy, temperature;
     float ares, gres, mres;
@@ -228,10 +228,9 @@ int main(void)
                 //fmdata[i] = 0;
             }
             
-            ret = imu_get_euler_angle(fadata, fgdata, real_mag, &langle);
+            ret = imu_get_euler_angle(fadata, fgdata, real_mag, &angle);
             
             halfT = ((float)time)/1000/2000;
-            angle = langle;
             if(FLAG_TIMER)
             {
                 /* dcal process */

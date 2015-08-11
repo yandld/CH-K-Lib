@@ -180,7 +180,7 @@ void OLED_Fill(unsigned char dat)
 {
     int i;
     uint8_t buf[128];
-    unsigned char m,n;
+    unsigned char m;
     for(m=0;m<8;m++)
     {
         WriteCmd(0xb0+m);		//page0-page1

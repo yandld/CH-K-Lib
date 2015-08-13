@@ -487,7 +487,7 @@ uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint32_t *id, uint8_t *buf
     if(CANBase[instance]->IFLAG1 & (1<<mb))
     {
         /* clear IT pending bit */
-        CANBase[instance]->IFLAG1 |= (1 << mb);
+        CANBase[instance]->IFLAG1 = (1 << mb);
         /* read content */
         *len = CAN_GET_FRAME_LEN(CANBase[instance]->MB[mb].CS);
         word[0] = CANBase[instance]->MB[mb].WORD0;

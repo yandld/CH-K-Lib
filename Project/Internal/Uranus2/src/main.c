@@ -20,8 +20,7 @@
 #include "calibration.h"
 
 
-#define     VERSION_MAJOR       (1)
-#define     VERSION_MINOR       (1)
+#define     VERSION_STRING          "V2.2.0"
 
 
 static bool FLAG_TIMER;
@@ -90,7 +89,7 @@ int sensor_init(void)
 
 static void ShowInfo(void)
 {
-    printf("VERSION%d.%d\r\n", VERSION_MAJOR, VERSION_MINOR);
+    printf("Uranus %s\r\n", VERSION_STRING);
     printf("CoreClock:%dHz\r\n", GetClock(kCoreClock));
 }
 
@@ -100,10 +99,24 @@ uint32_t FallDetection(int16_t *adata)
     uint32_t ret;
     
     ret = 0;
-    if((adata[0] < FALL_LIMIT) && (adata[1] < FALL_LIMIT) && (adata[2] < FALL_LIMIT))
+    if((abs(adata[0])< FALL_LIMIT) && (abs(adata[1]) < FALL_LIMIT) && (abs(adata[2]) < FALL_LIMIT))
     {
         ret = 1;
     }
+    return ret;
+}
+
+uint32_t FallDetectionG(int16_t *gdata)
+{
+    uint32_t sum, ret;
+    ret = 0;
+    
+    sum = gdata[0]*gdata[0] + gdata[1]*gdata[1] + gdata[2]*gdata[2];
+    if(sum > 500000)
+    {
+        ret = 1;
+    }
+
     return ret;
 }
 
@@ -158,46 +171,18 @@ int main(void)
     fac_us = GetClock(kBusClock);
     fac_us /= 1000000;
    
-//    if(dcal.magic != 0x5ACB)
-//    {
-//        printf("gyrp caliberation!\r\n");
-//        for(i=0;i<3;i++)
-//        {
-//            dcal.mg[i] = 1.0;
-//            dcal.mo[i] = 0;
-//            dcal.go[0] = 0;
-//        }
-//        
-//        for(j=0;j<100;j++)
-//        {
-//            mpu9250_read_gyro_raw(gdata);
-//            for(i=0;i<3;i++)
-//            {
-//                dcal.go[i] += gdata[i];
-//            }
-//            DelayMs(1);
-//        }
-//        
-//        for(i=0;i<3;i++)
-//        {
-//            dcal.go[i] = dcal.go[i]/100;
-//            if(abs(dcal.go[i]) > 100)
-//            {
-//                dcal.go[i] = 0;
-//            }
-//        }
-//    }
+
     while(1)
     {
         uint8_t val;
-        val = mpu9250_get_int_status();
-        if(val & 1)
+ //       val = mpu9250_get_int_status();
+        if(RAW_DATA_RDY_FLAG)
         {
             /* raw data and offset balance */
             mpu9250_read_accel_raw(adata);
             mpu9250_read_gyro_raw(gdata);
             mpu9250_read_mag_raw(mdata);
-            fall = FallDetection(adata);
+
             cp_mdata[0] = mdata[0];
             cp_mdata[1] = mdata[1];
             cp_mdata[2] = mdata[2];
@@ -257,10 +242,13 @@ int main(void)
                 gdata[i] = (int16_t)(fgdata[i]);
                 mdata[i] = (int16_t)(fmdata[i]);
             }
+            fall = FallDetectionG(gdata);
+            //GPIO_PinWrite(HW_GPIOC, 3, fall);
+            
             send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);
             RAW_DATA_RDY_FLAG = false;
+            EnterSTOPMode(false);
         }
-
     }
 }
 

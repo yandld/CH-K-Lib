@@ -212,6 +212,7 @@ int mpu9250_enable_raw_data_int(void)
     val = read_reg(MPU9250_INT_ENABLE);
     val |= 1;
     write_reg(MPU9250_INT_ENABLE, val);
+    return 0;
 }
 
 int mpu9250_get_int_status(void)
@@ -359,7 +360,7 @@ static int _mpu9250_init_seq(void)
      can join the I2C bus and all can be controlled by the Kinetis as master
      */
      
-    write_reg(MPU9250_INT_PIN_CFG, 0x22U);    
+    write_reg(MPU9250_INT_PIN_CFG, 0x02U);    
     write_reg(MPU9250_INT_ENABLE, 0x01U);  // Enable data ready (bit 0) interrupt
     return 0;
 }

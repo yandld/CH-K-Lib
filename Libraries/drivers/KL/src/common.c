@@ -96,7 +96,28 @@ void SetPinPull(uint32_t instance, uint32_t pin, uint32_t val)
     }
 }
 
-
+ /**
+ * @brief  Enter ARM stop mode
+ * @param  enSleepOnExit: if continue sleep when exit STOP mode
+ * @retval None
+ * @note  
+ */
+void EnterSTOPMode(bool enSleepOnExit)
+{
+    /* Set the SLEEPDEEP bit to enable deep sleep mode (STOP) */
+    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+    if (enSleepOnExit)
+    {
+        SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;
+    }
+    else
+    {
+        SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
+    }
+    
+    /* WFI instruction will start entry into STOP mode */
+    __ASM("WFI");
+}
 
 uint32_t EncodeMAP(map_t * type)
 {

@@ -3,7 +3,7 @@
 #include "rtt_drv.h"
 #include <rtdevice.h>
 #include <netif/ethernetif.h>
-#include "ksz8041.h"
+#include "enet_phy.h"
 
 static struct eth_device device;
 static uint8_t gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
@@ -22,7 +22,7 @@ void ENET_ISR(void)
 }
 
 
-static rt_err_t rt_ksz8041_init(rt_device_t dev)
+static rt_err_t rt_enet_phy_init(rt_device_t dev)
 {
     /* init driver */
     ENET_InitTypeDef ENET_InitStruct1;
@@ -44,9 +44,9 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
-    ksz8041_init();
+    enet_phy_init();
 
-//    if(!ksz8041_is_linked())
+//    if(!enet_phy_is_linked())
 //    {
 //        eth_device_linkchange(&device, false);
 //        return RT_EIO;
@@ -59,27 +59,27 @@ static rt_err_t rt_ksz8041_init(rt_device_t dev)
 }
 
 
-static rt_err_t rt_ksz8041_open(rt_device_t dev, rt_uint16_t oflag)
+static rt_err_t rt_enet_phy_open(rt_device_t dev, rt_uint16_t oflag)
 {
     return RT_EOK;
 }
 
-static rt_err_t rt_ksz8041_close(rt_device_t dev)
+static rt_err_t rt_enet_phy_close(rt_device_t dev)
 {
     return RT_EOK;
 }
 
-static rt_size_t rt_ksz8041_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
+static rt_size_t rt_enet_phy_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
     return RT_EOK;
 }
 
-static rt_size_t rt_ksz8041_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
+static rt_size_t rt_enet_phy_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
 {
     return RT_EOK;
 }
 
-static rt_err_t rt_ksz8041_control(rt_device_t dev, rt_uint8_t cmd, void *args)
+static rt_err_t rt_enet_phy_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
     switch (cmd)
     {
@@ -97,7 +97,7 @@ static rt_err_t rt_ksz8041_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     return RT_EOK;
 }
 
-struct pbuf *rt_ksz8041_rx(rt_device_t dev)
+struct pbuf *rt_enet_phy_rx(rt_device_t dev)
 {
     struct pbuf* p;
     rt_uint32_t i;
@@ -129,7 +129,7 @@ struct pbuf *rt_ksz8041_rx(rt_device_t dev)
     return p;
 }
 
-rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
+rt_err_t rt_enet_phy_tx( rt_device_t dev, struct pbuf* p)
 {
 
     rt_uint32_t tx_len;
@@ -143,7 +143,7 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
     }
     
     /* check if still linked */
-    if(!ksz8041_is_linked())
+    if(!enet_phy_is_linked())
     {
         eth_device_linkchange(&device, false);
         return RT_ERROR;
@@ -166,19 +166,19 @@ rt_err_t rt_ksz8041_tx( rt_device_t dev, struct pbuf* p)
 }
 
 
-int rt_hw_ksz8041_init(void)
+int rt_hw_enet_phy_init(void)
 {
-    device.parent.init       = rt_ksz8041_init;
-    device.parent.open       = rt_ksz8041_open;
-    device.parent.close      = rt_ksz8041_close;
+    device.parent.init       = rt_enet_phy_init;
+    device.parent.open       = rt_enet_phy_open;
+    device.parent.close      = rt_enet_phy_close;
     
-    device.parent.read       = rt_ksz8041_read;
-    device.parent.write      = rt_ksz8041_write;
-    device.parent.control    = rt_ksz8041_control;
+    device.parent.read       = rt_enet_phy_read;
+    device.parent.write      = rt_enet_phy_write;
+    device.parent.control    = rt_enet_phy_control;
     device.parent.user_data    = RT_NULL;
 
-    device.eth_rx     = rt_ksz8041_rx;
-    device.eth_tx     = rt_ksz8041_tx;
+    device.eth_rx     = rt_enet_phy_rx;
+    device.eth_tx     = rt_enet_phy_tx;
     
     gTxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE+16);
     gTxBuf = (rt_uint8_t*)(uint32_t)RT_ALIGN((uint32_t)gTxBuf, 16);

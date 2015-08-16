@@ -45,7 +45,7 @@ void init_thread_entry(void* parameter)
         }
     }
 
-    rt_hw_ksz8041_init();
+    rt_hw_enet_phy_init();
     
     rt_kprintf("waitting for connection...");
     

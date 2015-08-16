@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    ksz8041.c
+  * @file    enet_phy.c
   * @author  YANDLD
   * @version V2.5
   * @date    2015.02.11
@@ -8,9 +8,8 @@
   ******************************************************************************
   */
 
-#include "ksz8041.h"
+#include "enet_phy.h"
 #include "enet.h"
-#include "common.h"
 
 /* MII寄存器地址 */
 #define PHY_BMCR                    (0x00) /* Basic Control */
@@ -79,13 +78,12 @@
 #define PHY_DUPLEX_STATUS           ( 4<<2 )
 #define PHY_SPEED_STATUS            ( 1<<2 )
 
-#define KSZ8041_PHY_PHYIDR1_VALUE   (0x22)
 
-#define KSZ8041_DEBUG		0
-#if ( KSZ8041_DEBUG == 1 )
-#define KSZ8041_TRACE	printf
+#define ENET_PHY_DEBUG		0
+#if ( ENET_PHY_DEBUG == 1 )
+#define ENET_PHY_TRACE	printf
 #else
-#define KSZ8041_TRACE(...)
+#define ENET_PHY_TRACE(...)
 #endif
 
 static int gChipAddr;
@@ -102,7 +100,7 @@ static bool _AutoDiscover(uint8_t * Addr)
         ENET_MII_Read(i, PHY_PHYIDR1, &data);
         if((data !=0) && (data != 0xFFFF))
         {
-            KSZ8041_TRACE("Addr:%d Val:0x%X found!\r\n", i, data);
+            ENET_PHY_TRACE("Addr:%d Val:0x%X found!\r\n", i, data);
             *Addr = i;
             return true;
         }
@@ -111,7 +109,7 @@ static bool _AutoDiscover(uint8_t * Addr)
 }
     
 
-int ksz8041_init(void)
+int enet_phy_init(void)
 {
     uint16_t usData;
 	uint16_t timeout = 0;
@@ -134,43 +132,43 @@ int ksz8041_init(void)
         timeout++;
         usData = 0xFFFF;
         ENET_MII_Read(gChipAddr, PHY_PHYIDR1, &usData );
-        if(KSZ8041_PHY_PHYIDR1_VALUE == usData) break;
+        if((usData != 0xFFFF) && (usData != 0x0000))
+        {
+            ENET_PHY_TRACE("PHY_PHYIDR1:0x%X\r\n",usData);
+            break;
+        }
     }while(timeout < 10);
     
-    if(KSZ8041_PHY_PHYIDR1_VALUE != usData)
-    {
-        return 1;
-    }
     
     ENET_MII_Read(gChipAddr, PHY_BMCR, &usData );
-    KSZ8041_TRACE("PHY_BMCR:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_BMCR:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_BMSR, &usData );
-    KSZ8041_TRACE("PHY_BMSR:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_BMSR:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_PHYIDR1, &usData );
-    KSZ8041_TRACE("PHY_PHYIDR1:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_PHYIDR1:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_PHYIDR2, &usData );
-    KSZ8041_TRACE("PHY_PHYIDR2:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_PHYIDR2:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_ANAR, &usData );
-    KSZ8041_TRACE("PHY_ANAR:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_ANAR:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_ANLPAR, &usData );
-    KSZ8041_TRACE("PHY_ANLPAR:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_ANLPAR:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_ANER, &usData );
-    KSZ8041_TRACE("PHY_ANER:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_ANER:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_LPNPA, &usData );
-    KSZ8041_TRACE("PHY_LPNPA:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_LPNPA:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_RXERC, &usData );
-    KSZ8041_TRACE("PHY_RXERC:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_RXERC:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_ICS, &usData );
-    KSZ8041_TRACE("PHY_ICS:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_ICS:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_PHYC1, &usData );
-    KSZ8041_TRACE("PHY_PHYC1:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_PHYC1:0x%X\r\n",usData);
     ENET_MII_Read(gChipAddr, PHY_PHYC2, &usData );
-    KSZ8041_TRACE("PHY_PHYC2:0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_PHYC2:0x%X\r\n",usData);
     
     /* start auto-negotiation */
     ENET_MII_Write(gChipAddr, PHY_BMCR, (PHY_BMCR_AN_RESTART | PHY_BMCR_AN_ENABLE ));
     ENET_MII_Read(gChipAddr, PHY_BMCR, &usData );
-    KSZ8041_TRACE("PHY_BMCR=0x%X\r\n",usData);
+    ENET_PHY_TRACE("PHY_BMCR=0x%X\r\n",usData);
     /* waitting for auto-negotiation completed */
     do
     {
@@ -178,43 +176,43 @@ int ksz8041_init(void)
 		timeout++;
 		if(timeout > 30)
         {
-            KSZ8041_TRACE("enet Auto-Negotiation failed\r\n");
+            ENET_PHY_TRACE("enet Auto-Negotiation failed\r\n");
             break;
         }
         ENET_MII_Read(gChipAddr, PHY_BMSR, &usData );
     } while( !( usData & PHY_BMSR_AN_COMPLETE ) );
     
-    if(!ksz8041_is_linked())
+    if(!enet_phy_is_linked())
     {
-        KSZ8041_TRACE("ksz8041 - no wire connection!\r\n");
+        ENET_PHY_TRACE("enet_phy - no wire connection!\r\n");
     }
     
     return 0;
 }
 
-bool ksz8041_is_phy_full_dpx(void)
+bool enet_phy_is_full_dpx(void)
 {
     uint16_t usData;
     ENET_MII_Read(gChipAddr, PHY_PHYC2, &usData );
     if( usData & PHY_DUPLEX_STATUS )
     {
-        KSZ8041_TRACE("ksz8041-full duplex\r\n");
+        ENET_PHY_TRACE("enet_phy-full duplex\r\n");
         return true;
     }
-    KSZ8041_TRACE("ksz8041-falf duplex\r\n");
+    ENET_PHY_TRACE("enet_phy-falf duplex\r\n");
     return false;
 }
 
-bool ksz8041_is_phy_10m_speed(void)
+bool enet_phy_is_10m_speed(void)
 {
     uint16_t usData;
     ENET_MII_Read(gChipAddr, PHY_PHYC2, &usData );
     if( usData & PHY_SPEED_STATUS )
     {
-        KSZ8041_TRACE("ksz8041-10M speed\r\n");
+        ENET_PHY_TRACE("enet_phy-10M speed\r\n");
         return true;
     }
-    KSZ8041_TRACE("ksz8041-100M speed\r\n");
+    ENET_PHY_TRACE("enet_phy-100M speed\r\n");
     return false;
 }
 
@@ -223,7 +221,7 @@ bool ksz8041_is_phy_10m_speed(void)
  * @brief  网线是否连接
  * @retval 0:连接 1:未连接
  */
-bool ksz8041_is_linked(void)
+bool enet_phy_is_linked(void)
 {
 	uint16_t reg = 0;
 	ENET_MII_Read(gChipAddr, PHY_BMSR, &reg);

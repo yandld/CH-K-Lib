@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    ksz8041.h
+  * @file    enet_phy.h
   * @author  YANDLD
   * @version V2.5
   * @date    2015.02.11
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
-#ifndef __KSZ8041_H__
-#define __KSZ8041_H__
+#ifndef __ENEY_PHY_H__
+#define __ENEY_PHY_H__
 
 #include <stdbool.h>
 
@@ -16,10 +16,10 @@
 
 
 //!< API
-int ksz8041_init(void);
-bool ksz8041_is_linked(void);
-bool ksz8041_is_phy_full_dpx(void);
-bool ksz8041_is_phy_10m_speed(void);
+int enet_phy_init(void);
+bool enet_phy_is_linked(void);
+bool enet_phy_is_phy_full_dpx(void);
+bool enet_phy_is_phy_10m_speed(void);
 
 
 #endif

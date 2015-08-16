@@ -56,7 +56,7 @@ void rt_hw_sd_init(void);
 int rt_hw_spi_bus_init(void);
 int rt_hw_rtc_init(void);
 rt_err_t at24cxx_init(const char * device_name, const char * i2c_bus_name);
-int rt_hw_ksz8041_init(void);
+int rt_hw_enet_phy_init(void);
 int rt_hw_dflash_init(const char *name);
 int rt_hw_lcd_init(const char *name);
 int rt_hw_pin_init(const char *name);

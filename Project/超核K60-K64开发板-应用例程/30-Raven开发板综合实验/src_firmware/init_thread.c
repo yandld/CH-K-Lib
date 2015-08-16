@@ -36,7 +36,7 @@ void init_thread_entry(void* parameter)
     tid = rt_thread_create("init", (void*)(0x60000), RT_NULL, 1024, 8, 20);
     rt_thread_startup(tid);
 
-    rt_hw_ksz8041_init();
+    rt_hw_enet_phy_init();
 
     tid = rt_thread_self();
     rt_thread_delete(tid); 

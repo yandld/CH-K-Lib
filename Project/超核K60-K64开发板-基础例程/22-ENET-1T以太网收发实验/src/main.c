@@ -2,7 +2,7 @@
 #include "common.h"
 #include "uart.h"
 #include "enet.h"
-#include "ksz8041.h"
+#include "enet_phy.h"
 
 #define     ENET_TYPE_ARP   {0x08, 0x06}
 #define     ENET_TYPE_IP    {0x08, 0x00}
@@ -48,21 +48,21 @@ int main(void)
     PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt4);
     PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt4);
     
-    r = ksz8041_init();
+    r = enet_phy_init();
     if(r)
     {
-        printf("ksz8041 init failed! code:%d\r\n", r);
+        printf("enet_phy init failed! code:%d\r\n", r);
         while(1);
     }
-    if(!ksz8041_is_linked())
+    if(!enet_phy_is_linked())
     {
         printf("no wire connected\r\n");
     }
     
     ENET_InitTypeDef ENET_InitStruct1;
     ENET_InitStruct1.pMacAddress = gCfgLoca_MAC;
-    ENET_InitStruct1.is10MSpped = ksz8041_is_phy_10m_speed();
-    ENET_InitStruct1.isHalfDuplex = !ksz8041_is_phy_full_dpx();
+    ENET_InitStruct1.is10MSpped = enet_phy_is_10m_speed();
+    ENET_InitStruct1.isHalfDuplex = !enet_phy_is_full_dpx();
     ENET_Init(&ENET_InitStruct1);
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);

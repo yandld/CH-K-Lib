@@ -615,19 +615,9 @@
           <GroupName>rtt-driver</GroupName>
           <Files>
             <File>
-              <FileName>drv_ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ksz8041.c</FilePath>
-            </File>
-            <File>
               <FileName>drv_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
             </File>
             <File>
               <FileName>drv_data_flash.c</FileName>
@@ -708,6 +698,16 @@
               <FileName>drv_i2c_bit_ops.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_i2c_bit_ops.c</FilePath>
+            </File>
+            <File>
+              <FileName>enet_phy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\enet_phy.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_enet_phy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_enet_phy.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1547,19 +1547,9 @@
           <GroupName>rtt-driver</GroupName>
           <Files>
             <File>
-              <FileName>drv_ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_ksz8041.c</FilePath>
-            </File>
-            <File>
               <FileName>drv_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
             </File>
             <File>
               <FileName>drv_data_flash.c</FileName>
@@ -1640,6 +1630,16 @@
               <FileName>drv_i2c_bit_ops.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_i2c_bit_ops.c</FilePath>
+            </File>
+            <File>
+              <FileName>enet_phy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\enet_phy.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_enet_phy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven\drv_enet_phy.c</FilePath>
             </File>
           </Files>
         </Group>

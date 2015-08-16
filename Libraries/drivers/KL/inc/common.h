@@ -140,6 +140,6 @@ void DelayMs(uint32_t ms);
 void DelayUs(uint32_t ms);
 uint32_t GetClock(Clock_t clock);
 void SetConsole(int (*putc)(uint8_t ch), int (*getc)(void));
-void EnterSTOPMode(bool enSleepOnExit);
+void EnterWaitMode(bool enSleepOnExit);
 
 #endif

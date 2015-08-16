@@ -247,7 +247,7 @@ int main(void)
             
             send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);
             RAW_DATA_RDY_FLAG = false;
-            EnterSTOPMode(false);
+            EnterWaitMode(false);
         }
     }
 }

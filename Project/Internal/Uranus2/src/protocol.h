@@ -15,7 +15,7 @@
 #define CMD_H2S_READ_FW         0x80
 #define CMD_H2S_DATA_FW         0x82
 #define CMD_H2S_READ_OFFSET     0x81
-#define CMD_H2S_DATA_OFFSET     0x83
+#define CMD_H2S_WRITE_OFFSET     0x83
 
 typedef __packed struct
 {

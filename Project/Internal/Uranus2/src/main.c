@@ -212,6 +212,9 @@ int main(void)
                     cp_mdata[0] = mdata[0];
                     cp_mdata[1] = mdata[1];
                     cp_mdata[2] = mdata[2];
+                    dcal.mg[0] = 1;
+                    dcal.mg[1] = 1;
+                    dcal.mg[2] = 1;
 
                     for(i=0;i<3;i++)
                     {
@@ -254,57 +257,48 @@ int main(void)
                     send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);
                     break;
                 case MSG_CMD_PACKET_REV:
-                    printf("cmd:0x%X\r\n", pMsg->type);
+                    int len, i;
+                    static uint8_t buf[64];
+                    len = 0;
+                    switch(pMsg->type)
+                    {
+                        case CMD_H2S_READ_FW:
+                            fw_info_t fwinfo;
+                            fwinfo.version = VERSION;
+                            fwinfo.uid = GetUID();
+                            len = ano_encode_fwinfo(&fwinfo, buf);
+                            break;
+                        case CMD_H2S_READ_OFFSET:
+                            offset_t offset;
+
+                            for(i=0; i<3; i++)
+                            {
+                                offset.acc_offset[i] = dcal.ao[i];
+                                offset.gyro_offset[i] = dcal.go[i];
+                                offset.mag_offset[i] = dcal.mo[i];
+                            }
+                            len = ano_encode_offset_packet(&offset, buf);
+                            break;
+                        case CMD_H2S_WRITE_OFFSET:
+                            rev_data_t* rd = (rev_data_t*)pMsg->msg;
+                            
+                            dcal.ao[0] = (rd->buf[0]<<8) + (rd->buf[1]<<0);
+                            dcal.ao[1] = (rd->buf[2]<<8) + (rd->buf[3]<<0);
+                            dcal.ao[2] = (rd->buf[4]<<8) + (rd->buf[5]<<0);
+                            veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+
+                            len = 0;
+                            break;
+                    }
+                    
+                    while(UART_DMAGetRemain(HW_UART0) != 0);
+                    for(i=0; i<len; i++)
+                    {
+                        UART_PutChar(HW_UART0, buf[i]);
+                    }
                     break;
             }
         }
-
-//        
-//        if(REV_CMD != CMD_ERROR)
-//        {
-//            int len, i;
-//            static uint8_t buf[64];
-//            
-//            len = 0;
-//            
-//            if(REV_CMD == CMD_H2S_READ_FW)
-//            {
-//                fw_info_t fwinfo;
-//                fwinfo.version = VERSION;
-//                fwinfo.uid = GetUID();
-//                len = ano_encode_fwinfo(&fwinfo, buf);
-//            }
-//            if(REV_CMD == CMD_H2S_READ_OFFSET)
-//            {
-//                offset_t offset;
-
-//                for(i=0; i<3; i++)
-//                {
-//                    offset.acc_offset[i] = dcal.ao[i];
-//                    offset.gyro_offset[i] = dcal.go[i];
-//                    offset.mag_offset[i] = dcal.mo[i];
-//                }
-//                len = ano_encode_offset_packet(&offset, buf);
-//            }
-//            if(REV_CMD == CMD_H2S_DATA_OFFSET)
-//            {
-//                dcal.ao[0] = (rd.buf[0]<<8) + (rd.buf[1]<<0);
-//                dcal.ao[1] = (rd.buf[2]<<8) + (rd.buf[3]<<0);
-//                dcal.ao[1] = (rd.buf[4]<<8) + (rd.buf[5]<<0);
-//                veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
-
-//                len = 0;
-//            }
-//            for(i=0; i<len; i++)
-//            {
-//                UART_PutChar(HW_UART0, buf[i]);
-//            }
-//            REV_CMD = CMD_ERROR;
-//        }
-//        else
-//        {
-//        //   send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);
-//        }
         
     }
 }

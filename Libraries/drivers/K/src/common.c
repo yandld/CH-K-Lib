@@ -93,6 +93,12 @@ uint32_t QuickInitEncode(map_t * type)
     return *(uint32_t*)type;
 }
 
+uint32_t GetUID(void) 
+{
+    return SIM->UIDL ^ SIM->UIDML ^ SIM->UIDMH;
+}
+
+
  /**
  * @brief  解码快速初始化结构 用户不需调用
  *

@@ -15,6 +15,8 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("Hello K60!\r\n");
+    printf("CoreClock:%dHz\r\n", GetClock(kCoreClock));
+    printf("BusClock:%dHz\r\n", GetClock(kBusClock));
     
     GPIO_WriteBit(HW_GPIOE, 0, 0);
     I2C_QuickInit(I2Cx_SCL_PC14_SDA_PC15,100*1000);

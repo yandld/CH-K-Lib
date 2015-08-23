@@ -65,29 +65,13 @@
 #define CLOCK_SETUP     4
 #endif
 /* Predefined clock setups
-   0 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
-         Reference clock source for MCG module is the slow internal clock source 32.768kHz
-         Core clock = 41.94MHz, BusClock = 41.94MHz
-   1 ... Multipurpose Clock Generator (MCG) in PLL Engaged External (PEE) mode
-         Reference clock source for MCG module is an external crystal 8MHz
-         Core clock = 100MHz, BusClock = 100MHz
-   2 ... Multipurpose Clock Generator (MCG) in Bypassed Low Power External (BLPE) mode
-         Core clock/Bus clock derived directly from an external crystal 8MHz with no multiplication
-         Core clock = 8MHz, BusClock = 8MHz
-         
-         Below added by Yandld  yandld@126.com
-   3 ... Multipurpose Clock Generator (MCG) in Bypassed Low Power External (PEE) mode
-         Core clock/Bus clock derived directly from an external clock 50MHz
-         Core clock = 100MHz, BusClock = 50MHz  
-   4 ... Multipurpose Clock Generator (MCG) in FLL Engaged Internal (FEI) mode
-         Reference clock source for MCG module is the slow internal clock source 32.768kHz
-         Core clock = 96MHz, BusClock = 48MHz
-   5 ... Multipurpose Clock Generator (MCG) in Bypassed Low Power External (PEE) mode
-         Core clock/Bus clock derived directly from an external clock 50MHz
-         Core clock = 200MHz, BusClock = 100MHz
-   6 ... Multipurpose Clock Generator (MCG) in Bypassed Low Power External (PEE) mode
-         Core clock/Bus clock derived directly from an external clock 12MHz
-         Core clock = 96MHz, BusClock = 48MHz
+   0 ... Internal clock 32.768KHz  FLL output   Core clock = 41.94MHz   BusClock = 41.94MHz
+   1 ... External clock 25Mhz      PLL output   Core clock = 200MHz     BusClock = 100MHz
+   2 ... External clock 8Mhz    no PLL output   Core clock = 8MHz       BusClock = 8MHz
+   3 ... External clock 50Mhz      PLL output   Core clock = 100MHz     BusClock = 50MHz  
+   4 ... Internal clock 32.768KHz  FLL output   Core clock = 96MHz      BusClock = 48MHz  
+   5 ... External clock 50Mhz      PLL output   Core clock = 200MHz     BusClock = 100MHz  
+   6 ... External clock 12Mhz      PLL output   Core clock = 96MHz      BusClock = 48MHz  
 */
 
 /*----------------------------------------------------------------------------
@@ -100,7 +84,7 @@
     #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
     #define DEFAULT_SYSTEM_CLOCK            41943040u /* Default System clock value */
 #elif (CLOCK_SETUP == 1)
-    #define CPU_XTAL_CLK_HZ                 8000000u /* Value of the external crystal or oscillator clock frequency in Hz */
+    #define CPU_XTAL_CLK_HZ                 25000000u /* Value of the external crystal or oscillator clock frequency in Hz */
     #define CPU_XTAL32k_CLK_HZ              32768u   /* Value of the external 32k crystal or oscillator clock frequency in Hz */
     #define CPU_INT_SLOW_CLK_HZ             32768u   /* Value of the slow internal oscillator clock frequency in Hz  */
     #define CPU_INT_FAST_CLK_HZ             4000000u /* Value of the fast internal oscillator clock frequency in Hz  */
@@ -177,45 +161,26 @@ void SystemInit (void) {
   while((MCG->S & 0x0Cu) != 0x00u) {    /* Wait until output of the FLL is selected */
   }
 #elif (CLOCK_SETUP == 1)
-  /* SIM->CLKDIV1: OUTDIV1=0,OUTDIV2=0,OUTDIV3=1,OUTDIV4=1,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0 */
-  SIM->CLKDIV1 = (uint32_t)0x00110000u; /* Update system prescalers */
-  /* Switch to FBE Mode */
-  /* OSC->CR: ERCLKEN=0,??=0,EREFSTEN=0,??=0,SC2P=0,SC4P=0,SC8P=0,SC16P=0 */
-  OSC->CR = (uint8_t)0x00u;
-  /* MCG->C7: OSCSEL=0 */
-  MCG->C7 = (uint8_t)0x00u;
-  /* MCG->C2: ??=0,??=0,RANGE0=2,HGO=0,EREFS=1,LP=0,IRCS=0 */
-  MCG->C2 = (uint8_t)0x24u;
-  /* MCG->C1: CLKS=2,FRDIV=3,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
-  MCG->C1 = (uint8_t)0x9Au;
-  /* MCG->C4: DMX32=0,DRST_DRS=0 */
-  MCG->C4 &= (uint8_t)~(uint8_t)0xE0u;
-  /* MCG->C5: ??=0,PLLCLKEN=0,PLLSTEN=0,PRDIV0=3 */
-  MCG->C5 = (uint8_t)0x03u;
-  /* MCG->C6: LOLIE=0,PLLS=0,CME=0,VDIV0=0 */
-  MCG->C6 = (uint8_t)0x00u;
-  while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u) { /* Check that the oscillator is running */
-  }
-  while((MCG->S & MCG_S_IREFST_MASK) != 0u) { /* Check that the source of the FLL reference clock is the external reference clock. */
-  }
-  while((MCG->S & 0x0Cu) != 0x08u) {    /* Wait until external reference clock is selected as MCG output */
-  }
-  /* Switch to PBE Mode */
-  /* MCG_C5: ??=0,PLLCLKEN=0,PLLSTEN=0,PRDIV0=1 */
-  MCG->C5 = (uint8_t)0x01u;
-  /* MCG->C6: LOLIE=0,PLLS=1,CME=0,VDIV0=1 */
-  MCG->C6 = (uint8_t)0x41u;
-  while((MCG->S & MCG_S_PLLST_MASK) == 0u) { /* Wait until the source of the PLLS clock has switched to the PLL */
-  }
-  while((MCG->S & MCG_S_LOCK0_MASK) == 0u) { /* Wait until locked */
-  }
-  /* Switch to PEE Mode */
-  /* MCG->C1: CLKS=0,FRDIV=3,IREFS=0,IRCLKEN=1,IREFSTEN=0 */
-  MCG->C1 = (uint8_t)0x1Au;
-  while((MCG->S & 0x0Cu) != 0x0Cu) {    /* Wait until output of the PLL is selected */
-  }
-  while((MCG->S & MCG_S_LOCK0_MASK) == 0u) { /* Wait until locked */
-  }
+    SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;
+    OSC->CR = (uint8_t)0x00u;
+    SIM->SOPT2 &= ~0x01u;                               /* select OSCCLK as MCG input clock */
+    MCG->C2 = (uint8_t)0x24u;  
+    MCG->C1 = (uint8_t)0x9Au;
+    MCG->C4 &= (uint8_t)~(uint8_t)0xE0u;
+    MCG->C5 = (uint8_t)0x03u;
+    MCG->C6 = (uint8_t)0x00u;
+    while((MCG->S & MCG_S_OSCINIT0_MASK) == 0u);        /* 检查 FLL参考时钟是内部参考时钟 */
+    while((MCG->S & MCG_S_IREFST_MASK) != 0u);          /* 检查 FLL参考时钟是内部参考时钟 */
+    while((MCG->S & 0x0Cu) != 0x08u);                   /* 等待 FBE 被选择 */
+    MCG->C5 = (uint8_t)MCG_C5_PRDIV0(5);                /* 25/6 */
+    MCG->C6 = (uint8_t)(0x40u|MCG_C6_VDIV0(24));        /* (25/6)*(6*8) = 200 */
+    SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(7));	
+    while((MCG->S & MCG_S_PLLST_MASK) == 0u);           /* 等待PLLS 时钟源转到 PLL */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待锁定 */
+    /* 启动PLL */
+    MCG->C1 = (uint8_t)0x1Au;
+    while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待PLL输出 */
+    while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待PLL锁定 */
 #elif (CLOCK_SETUP == 2)
   /* SIM_CLKDIV1: OUTDIV1=0,OUTDIV2=0,OUTDIV3=1,OUTDIV4=1,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0,??=0 */
   SIM->CLKDIV1 = (uint32_t)0x00110000u; /* Update system prescalers */
@@ -265,22 +230,16 @@ void SystemInit (void) {
     while((MCG->S & 0x0Cu) != 0x0Cu);                   /* 等待PLL输出 */
     while((MCG->S & MCG_S_LOCK0_MASK) == 0u);           /* 等待PLL锁定 */
 #elif (CLOCK_SETUP == 4)
-	//SIM->CLKDIV1 = (u32)0x00110000u; //配置系统预分频器
-	SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu; //配置系统预分频器 先设置为都为最低分频
+	SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;
 	// 转到 FEI 模式 
 	MCG->C1 = (uint8_t)0x06u;
 	MCG->C2 = (uint8_t)0x00u;
 	MCG->C4|= (1<<6)|(1<<7)|(1<<5);   //内部参考慢速时钟32.768KHZ  倍频因子 2197 倍频后为96MHZ 参见MCG->C4寄存器
-	//分频策略:  
-	//SIM_CLKDIV1_OUTDIV1(0) CORE     CLOCK  1分频   UP TO 100M  
-	//SIM_CLKDIV1_OUTDIV2(1) BUS      CLOCK  2分频   UP TO 50M 
-	//SIM_CLKDIV1_OUTDIV3(1) FlexBus  ClOCK  2分频   UP TO 50M 
-	//SIM_CLKDIV1_OUTDIV4(3) Flash    ClOCK  3分频   UP TO 25M 
 	SIM->CLKDIV1 =(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(1)|SIM_CLKDIV1_OUTDIV4(3));
-  MCG->C5 = (uint8_t)0x00u;
-  MCG->C6 = (uint8_t)0x00u;
-  while((MCG->S & MCG_S_IREFST_MASK) == 0u);  //检查 FLL参考时钟是内部参考时钟
-  while((MCG->S & 0x0Cu) != 0x00u);           //等待FLL被选择
+    MCG->C5 = (uint8_t)0x00u;
+    MCG->C6 = (uint8_t)0x00u;
+    while((MCG->S & MCG_S_IREFST_MASK) == 0u);  //检查 FLL参考时钟是内部参考时钟
+    while((MCG->S & 0x0Cu) != 0x00u);           //等待FLL被选择
 #elif (CLOCK_SETUP == 5)
     SIM->CLKDIV1 = (uint32_t)0xFFFFFFFFu;               /* 配置系统预分频器 先设置为都为最低分频 */
     OSC->CR = (uint8_t)0x00u;

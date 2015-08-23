@@ -467,19 +467,12 @@ int mpu9250_set_gyro_bias(int16_t* bias)
 }
 
 
-#define AVR_CNT     1
 int mpu9250_read_mag_raw(int16_t *mdata)
 {
     uint8_t err,c;
     uint8_t val;
     uint8_t buf[7];
-    uint8_t cnt;
-    int32_t sumx,sumy,sumz;
-    cnt = 0;
-    sumx=0;sumy=0;sumz=0;
     
-    while(1)
-    {
         val = ak8963_read_reg(AK8963_ST1) & 0x01;
         if(val)
         {
@@ -494,21 +487,8 @@ int mpu9250_read_mag_raw(int16_t *mdata)
                 mdata[0] = mpu_dev.mag_adj[0]*(mdata[0]);
                 mdata[1] = mpu_dev.mag_adj[1]*(mdata[1]);
                 mdata[2] = mpu_dev.mag_adj[2]*(mdata[2]);
-                sumx += mdata[0]; sumy += mdata[1]; sumz += mdata[2];
-                cnt++;
             }
-            if(err)
-            {
-                return err;
-            }
-        }
-        if(cnt == AVR_CNT)
-        {
-            mdata[0] = sumx/AVR_CNT;
-            mdata[1] = sumy/AVR_CNT;
-            mdata[2] = sumz/AVR_CNT;
-            return 0;
-        }
+            return err;
     }
 }
 

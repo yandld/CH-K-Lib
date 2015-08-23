@@ -141,5 +141,8 @@ void DelayUs(uint32_t ms);
 uint32_t GetClock(Clock_t clock);
 void SetConsole(int (*putc)(uint8_t ch), int (*getc)(void));
 void EnterWaitMode(bool enSleepOnExit);
+uint32_t GetUID(void);
+
 
 #endif
+

@@ -434,6 +434,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\veep\virtual_eep.c</FilePath>
             </File>
+            <File>
+              <FileName>mq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\mq.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

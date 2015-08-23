@@ -295,6 +295,11 @@ void SystemSoftReset(void)
     NVIC_SystemReset();
 }
 
+uint32_t GetUID(void) 
+{
+    return SIM->UIDL ^ SIM->UIDML ^ SIM->UIDMH;
+}
+
 
 void NMI_Handler(void)
 {

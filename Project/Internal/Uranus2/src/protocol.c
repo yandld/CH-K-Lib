@@ -11,85 +11,175 @@
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
 #endif
 
-typedef __packed struct
-{
-    uint8_t trans_header[3];
-    payload_t patload;
-    uint8_t sum;
-}packet_t;
 
-
-
-uint32_t ano_encode(payload_t* payload, uint8_t* buf)
-{
-    int i;
-    uint8_t sum = 0;
-    packet_t *packet = (packet_t*)buf;
-    uint8_t *p = buf;
-    for(i=0;i<3;i++)
-    {
-        payload->acc[i] = BSWAP_16(payload->acc[i]);
-        payload->gyo[i] = BSWAP_16(payload->gyo[i]);
-        payload->mag[i] = BSWAP_16(payload->mag[i]);
-    }
-    payload->Y = BSWAP_16(payload->Y);
-    payload->P = BSWAP_16(payload->P);
-    payload->R = BSWAP_16(payload->R);
-    payload->pressure = (payload->pressure);
-    memcpy(&packet->patload, payload, sizeof(payload_t));
-    packet->trans_header[0] = 0x88;
-    packet->trans_header[1] = 0xAF;
-    packet->trans_header[2] = 0x1C;
-    for(i = 0; i < sizeof(packet_t)-1;i++)
-    {
-      sum += *p++;
-    }
-    packet->sum = sum;
-    return sizeof(packet_t);
-}
 
 enum ano_status
 {
-    ANO_IDLE,
-    ANO_SOF,
-    ANO_LEN,
-    ANO_DATA,
+    kANO_IDLE,
+    kANO_CMD,
+    kANO_LEN,
+    kANO_DATA,
+    kANO_CHECKSUM,
 };
+
+uint32_t ano_encode_fwinfo(fw_info_t* fwinfo, uint8_t* buf)
+{
+    int i;
+    uint8_t sum = 0;
+    uint8_t len;
+    uint8_t *p = buf;
+    
+    len = sizeof(fw_info_t);
+    
+    buf[0] = 0x88;
+    buf[1] = CMD_S2H_DATA_FW;
+    buf[2] = len;
+    buf[3] = fwinfo->version;
+    buf[4] = fwinfo->uid>>0;
+    buf[5] = fwinfo->uid>>8;
+    buf[6] = fwinfo->uid>>16;
+    buf[7] = fwinfo->uid>>24;
+    
+    for(i = 0; i < len+3; i++)
+    {
+      sum += *p++;
+    }
+    buf[len+3] = sum;
+    return (len+4);
+}
+
+uint32_t ano_encode_packet(payload_t* payload, uint8_t* buf)
+{
+    int i;
+    uint8_t sum = 0;
+    uint8_t len;
+    uint8_t *p = buf;
+    
+    len = sizeof(payload_t);
+    
+    buf[0] = 0x88;
+    buf[1] = CMD_S2H_DATA;
+    buf[2] = len;
+    buf[3] = (payload->acc[0])>>8;
+    buf[4] = (payload->acc[0])>>0;
+    buf[5] = (payload->acc[1])>>8;
+    buf[6] = (payload->acc[1])>>0;
+    buf[7] = (payload->acc[2])>>8;
+    buf[8] = (payload->acc[2])>>0;
+    buf[9] = (payload->gyo[0])>>8;
+    buf[10] = (payload->gyo[0])>>0;
+    buf[11] = (payload->gyo[1])>>8;
+    buf[12] = (payload->gyo[1])>>0;
+    buf[13] = (payload->gyo[2])>>8;
+    buf[14] = (payload->gyo[2])>>0;
+    buf[15] = (payload->mag[0])>>8;
+    buf[16] = (payload->mag[0])>>0;
+    buf[17] = (payload->mag[1])>>8;
+    buf[18] = (payload->mag[1])>>0;
+    buf[19] = (payload->mag[2])>>8;
+    buf[20] = (payload->mag[2])>>0;
+    buf[21] = (payload->P)>>8;
+    buf[22] = (payload->P)>>0;
+    buf[23] = (payload->R)>>8;
+    buf[24] = (payload->R)>>0;
+    buf[25] = (payload->Y)>>8;
+    buf[26] = (payload->Y)>>0;
+    
+    buf[27] = (payload->pressure)>>0;
+    buf[28] = (payload->pressure)>>8;
+    buf[29] = (payload->pressure)>>16;
+    buf[30] = (payload->pressure)>>24;
+    
+    for(i = 0; i < len+3;i++)
+    {
+      sum += *p++;
+    }
+    buf[len+3] = sum;
+    return (len+4);
+}
+
+uint32_t ano_encode_offset_packet(offset_t* offset, uint8_t* buf)
+{
+    int i;
+    uint8_t sum = 0;
+    uint8_t len;
+    uint8_t *p = buf;
+    
+    len = sizeof(offset_t);
+    
+    buf[0] = 0x88;
+    buf[1] = CMD_S2H_DATA_OFFSET;
+    buf[2] = len;
+    buf[3] = (offset->acc_offset[0])>>8;
+    buf[4] = (offset->acc_offset[0])>>0;
+    buf[5] = (offset->acc_offset[1])>>8;
+    buf[6] = (offset->acc_offset[1])>>0;
+    buf[7] = (offset->acc_offset[2])>>8;
+    buf[8] = (offset->acc_offset[2])>>0;
+    buf[9] = (offset->gyro_offset[0])>>8;
+    buf[10] = (offset->gyro_offset[0])>>0;
+    buf[11] = (offset->gyro_offset[1])>>8;
+    buf[12] = (offset->gyro_offset[1])>>0;
+    buf[13] = (offset->gyro_offset[2])>>8;
+    buf[14] = (offset->gyro_offset[2])>>0;
+    buf[15] = (offset->mag_offset[0])>>8;
+    buf[16] = (offset->mag_offset[0])>>0;
+    buf[17] = (offset->mag_offset[1])>>8;
+    buf[18] = (offset->mag_offset[1])>>0;
+    buf[19] = (offset->mag_offset[2])>>8;
+    buf[20] = (offset->mag_offset[2])>>0;
+    
+    for(i = 0; i < len+3;i++)
+    {
+      sum += *p++;
+    }
+    buf[len+3] = sum;
+    return (len+4);
+}
+
 
 int ano_rec(uint8_t ch, rev_data_t *rd)
 {
     int ret;
     static int i;
-    static enum ano_status states = ANO_IDLE;
+    static enum ano_status states = kANO_IDLE;
     
     ret = 1;
     
     switch(states)
     {
-        case ANO_IDLE:
-            if((uint8_t)ch == 0x8A)
+        case kANO_IDLE:
+            if((uint8_t)ch == 0x88)
             {
-                states = ANO_SOF;
+                states = kANO_CMD;
             }
             break;
-        case ANO_SOF:
-            if((uint8_t)ch == 0x8B)
-            {
-                states = ANO_LEN;
-            }
+        case kANO_CMD:
+            rd->cmd = ch;
+            states = kANO_LEN;
             break;
-        case ANO_LEN:
+        case kANO_LEN:
             rd->len = ch;
-            states = ANO_DATA;
-            i = 0;
+            if(ch == 0)
+            {
+                states = kANO_CHECKSUM;
+            }
+            else
+            {
+                i = 0;
+                states = kANO_DATA;
+            }
             break;
-        case ANO_DATA:
+        case kANO_DATA:
+            rd->buf[i++] = ch;
             if(i == rd->len)
             {
-                states = ANO_IDLE;
-                ret = 0;
+                states = kANO_CHECKSUM;
             }
-            rd->buf[i++] = ch;
+            break;
+        case kANO_CHECKSUM:
+            ret = 0;
+            states = kANO_IDLE;
             break;
     }
     return ret;

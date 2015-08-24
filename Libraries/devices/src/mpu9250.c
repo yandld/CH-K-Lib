@@ -467,17 +467,19 @@ int mpu9250_set_gyro_bias(int16_t* bias)
 }
 
 
+
 int mpu9250_read_mag_raw(int16_t *mdata)
 {
     uint8_t err,c;
     uint8_t val;
     uint8_t buf[7];
     
+    err = 1;
         val = ak8963_read_reg(AK8963_ST1) & 0x01;
         if(val)
         {
             /* Read the six raw data and ST2 registers sequentially into data array */
-            err = I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, buf, 7);  
+            err = I2C_BurstRead(0,AK8963_ADDRESS, AK8963_XOUT_L, 1, buf, 7);
             c = buf[6];
             if(!(c & 0x08))// Check if magnetic sensor overflow set, if not then report data
             {  
@@ -487,10 +489,12 @@ int mpu9250_read_mag_raw(int16_t *mdata)
                 mdata[0] = mpu_dev.mag_adj[0]*(mdata[0]);
                 mdata[1] = mpu_dev.mag_adj[1]*(mdata[1]);
                 mdata[2] = mpu_dev.mag_adj[2]*(mdata[2]);
+                err = 0;
             }
-            return err;
-    }
+        }
+        return err;
 }
+
 
 int mpu9250_read_temp_raw(int16_t *val)
 {

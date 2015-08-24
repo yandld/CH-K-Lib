@@ -206,11 +206,12 @@ int main(void)
                 case kMSG_CMD_SENSOR_DATA_READY:
                     mpu9250_read_accel_raw(adata);
                     mpu9250_read_gyro_raw(gdata);
-                    mpu9250_read_mag_raw(mdata);
-                    if((mdata[0] == 0) || (mdata[1] == 0) || (mdata[2] == 0))
+                    ret = mpu9250_read_mag_raw(mdata);
+                    if(ret)
                     {
                         break;
                     }
+
 
                     cp_mdata[0] = mdata[0];
                     cp_mdata[1] = mdata[1];

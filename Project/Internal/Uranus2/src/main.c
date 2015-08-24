@@ -22,9 +22,12 @@
 
 #define     VERSION     221
 
-#define MSG_CMD_TIMER               0x11
-#define MSG_CMD_SENSOR_DATA_READY   0x15
-#define MSG_CMD_PACKET_REV          0x17
+enum 
+{
+    kMSG_CMD_TIMER,
+    kMSG_CMD_SENSOR_DATA_READY,
+    kMSG_CMD_DATA_REV,
+};
 
 
 static bool is_cal_data_ok;
@@ -141,6 +144,7 @@ int main(void)
     
     UART_Init(UART0_RX_PA01_TX_PA02, 115200);
     UART_SetIntMode(HW_UART0, kUART_IntRx, true);
+    
     ShowInfo();
     mq_init();
     veep_init();
@@ -175,7 +179,6 @@ int main(void)
     fac_us = GetClock(kBusClock);
     fac_us /= 1000000;
    
-
     while(1)
     {
         if(mq_exist())
@@ -184,7 +187,7 @@ int main(void)
             pMsg = mq_pop();
             switch(pMsg->cmd)
             {
-                case MSG_CMD_TIMER:
+                case kMSG_CMD_TIMER:
                     // /* dcal process */
                     if(is_cal_data_ok == false)
                     {
@@ -200,7 +203,7 @@ int main(void)
                     }
                     GPIO_PinToggle(HW_GPIOC, 3);
                     break;
-                case MSG_CMD_SENSOR_DATA_READY:
+                case kMSG_CMD_SENSOR_DATA_READY:
                     mpu9250_read_accel_raw(adata);
                     mpu9250_read_gyro_raw(gdata);
                     mpu9250_read_mag_raw(mdata);
@@ -256,19 +259,24 @@ int main(void)
                     //GPIO_PinWrite(HW_GPIOC, 3, fall);
                     send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);
                     break;
-                case MSG_CMD_PACKET_REV:
+                case kMSG_CMD_DATA_REV:
+                {
                     int len, i;
                     static uint8_t buf[64];
                     len = 0;
                     switch(pMsg->type)
                     {
                         case CMD_H2S_READ_FW:
+                        {
                             fw_info_t fwinfo;
                             fwinfo.version = VERSION;
                             fwinfo.uid = GetUID();
                             len = ano_encode_fwinfo(&fwinfo, buf);
                             break;
+                        }
+
                         case CMD_H2S_READ_OFFSET:
+                        {
                             offset_t offset;
 
                             for(i=0; i<3; i++)
@@ -279,16 +287,27 @@ int main(void)
                             }
                             len = ano_encode_offset_packet(&offset, buf);
                             break;
-                        case CMD_H2S_WRITE_OFFSET:
-                            rev_data_t* rd = (rev_data_t*)pMsg->msg;
-                            
-                            dcal.ao[0] = (rd->buf[0]<<8) + (rd->buf[1]<<0);
-                            dcal.ao[1] = (rd->buf[2]<<8) + (rd->buf[3]<<0);
-                            dcal.ao[2] = (rd->buf[4]<<8) + (rd->buf[5]<<0);
-                            veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+                        }
 
-                            len = 0;
-                            break;
+                        case CMD_H2S_WRITE_OFFSET:
+                            {
+                                rev_data_t* rd = (rev_data_t*)pMsg->msg;
+                                
+                                dcal.ao[0] = (rd->buf[0]<<8) + (rd->buf[1]<<0);
+                                dcal.ao[1] = (rd->buf[2]<<8) + (rd->buf[3]<<0);
+                                dcal.ao[2] = (rd->buf[4]<<8) + (rd->buf[5]<<0);
+                                dcal.go[0] = (rd->buf[6]<<8) + (rd->buf[7]<<0);
+                                dcal.go[1] = (rd->buf[8]<<8) + (rd->buf[9]<<0);
+                                dcal.go[2] = (rd->buf[10]<<8) + (rd->buf[11]<<0);
+                                dcal.mo[0] = (rd->buf[12]<<8) + (rd->buf[13]<<0);
+                                dcal.mo[1] = (rd->buf[14]<<8) + (rd->buf[15]<<0);
+                                dcal.mo[2] = (rd->buf[16]<<8) + (rd->buf[17]<<0);
+                                
+                                veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+
+                                len = 0;
+                                break;
+                            }
                     }
                     
                     while(UART_DMAGetRemain(HW_UART0) != 0);
@@ -297,6 +316,8 @@ int main(void)
                         UART_PutChar(HW_UART0, buf[i]);
                     }
                     break;
+                }
+
             }
         }
         
@@ -305,18 +326,19 @@ int main(void)
 
 void UART0_IRQHandler(void)
 {
-    static rev_data_t rd;
     uint8_t ch;
+    static rev_data_t rd, rd_cp;
     if((UART0->S1 & UART_S1_RDRF_MASK) && (UART0->C2 & UART_C2_RIE_MASK))
     {
         ch = UART0->D;
         if(ano_rec(ch, &rd) == 0)
         {
+            rd_cp = rd;
             msg_t msg;
-            msg.cmd = MSG_CMD_PACKET_REV;
-            msg.type = rd.cmd;
-            msg.msg_len = rd.len;
-            msg.msg = &rd;
+            msg.cmd = kMSG_CMD_DATA_REV;
+            msg.type = rd_cp.cmd;
+            msg.msg_len = rd_cp.len;
+            msg.msg = &rd_cp;
             mq_push(msg);
         }
     }
@@ -328,7 +350,7 @@ void PIT_IRQHandler(void)
     {
         PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
         msg_t msg;
-        msg.cmd = MSG_CMD_TIMER;
+        msg.cmd = kMSG_CMD_TIMER;
         mq_push(msg);
     }
 }
@@ -337,6 +359,6 @@ void PORTA_IRQHandler(void)
 {
     PORTA->ISFR |= (1<<18);
     msg_t msg;
-    msg.cmd = MSG_CMD_SENSOR_DATA_READY;
+    msg.cmd = kMSG_CMD_SENSOR_DATA_READY;
     mq_push(msg);
 }

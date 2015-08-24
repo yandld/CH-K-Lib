@@ -17,8 +17,6 @@ typedef struct
 }msg_t;
 
 
-
-
 void mq_init(void);
 uint8_t mq_exist(void);
 msg_t *mq_pop(void);

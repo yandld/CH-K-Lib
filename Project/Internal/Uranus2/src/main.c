@@ -191,8 +191,8 @@ int main(void)
                     // /* dcal process */
                     if(is_cal_data_ok == false)
                     {
-                        //dcal_minput(cp_mdata);
-                        // dcal_output(&dcal);  
+                        dcal_minput(cp_mdata);
+                        dcal_output(&dcal);  
                     }
                 
                     /* bmp read */
@@ -221,6 +221,7 @@ int main(void)
 
                     for(i=0;i<3;i++)
                     {
+                        adata[i] = adata[i] - dcal.ao[i];
                         gdata[i] = gdata[i] - dcal.go[i];
                         mdata[i] = (mdata[i] - dcal.mo[i])/dcal.mg[i];
                     }

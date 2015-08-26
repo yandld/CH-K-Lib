@@ -3,46 +3,25 @@
 
 #include <stdint.h>
 
-#define CMD_ERROR               0x00
 
-#define CMD_S2H_DATA            0xAF
-#define CMD_S2H_READ_FW         0xA0
-#define CMD_S2H_DATA_FW         0xA2
-#define CMD_S2H_READ_OFFSET     0xA1
-#define CMD_S2H_DATA_OFFSET     0xA3
-
-#define CMD_H2S_DATA            0x8F
-#define CMD_H2S_READ_FW         0x80
-#define CMD_H2S_DATA_FW         0x82
-#define CMD_H2S_READ_OFFSET     0x81
-#define CMD_H2S_WRITE_OFFSET    0x83
-
-/* protocol:
-0x88 + <PROT_FUN> + <LEN> + <DATA> + SUM
-
-<PROT_FUN>: 0xAF: general data(S->H)   0x0F: general data(H->S)
-    <DATA>:data specific
-
-<PROT_FUN>: 0xA5: general cmd(S->H)    0x05: general cmd(H->S)
-    <DATA>: <CMD> + <ID> + data
-        IMU_OffsetAll + <ID> + AccX + AccY + AccZ + GyroX + GyroY + GyroZ + MagX + MagY +MagZ
-        IMU_CmdConfig + <ID>
-        IMU_CmdRun    + <ID>
-*/
-
-#define PROT_FUN_DATA           0xAF /* general data */
-#define PROT_FUN_CMD            0xA5 /* general cmd */
-
-/* A5 section */
 enum
 {
-    IMU_OffsetAll,
-    IMU_OffsetAcc,
-    IMU_OffsetGyro,
-    IMU_OffsetMag,
-    IMU_FwInfo,
-    IMU_CmdRun,
-    IMU_CmdConfig,
+    kPTL_DATA_OUTPUT = 0xAF, /* 0xAF */
+    kPTL_REQ_FW,
+    kPTL_DATA_FW,
+    kPTL_REQ_RAW,
+    kPTL_DATA_RAW,
+    kPTL_REQ_OFS_ALL,
+    kPTL_REQ_OFS_ACC,
+    kPTL_REQ_OFS_GYRO,
+    kPTL_REQ_OFS_MAG,
+    kPTL_DATA_OFS_ALL,
+    kPTL_DATA_OFS_ACC,
+    kPTL_DATA_OFS_GYRO,
+    kPTL_DATA_OFS_MAG,
+    
+    kPTL_REQ_MODE_RUN,
+    kPTL_REQ_MODE_CAL,
 };
 
 

@@ -125,11 +125,6 @@ uint32_t FallDetectionG(int16_t *gdata)
     return ret;
 }
 
-void imu_data_proc(int16_t *acc, int16_t *gyro, int16_t *mag, float *angle)
-{
-    
-    
-}
 
 int main(void)
 {
@@ -190,8 +185,8 @@ int main(void)
             switch(pMsg->cmd)
             {
                 case kMSG_CMD_TIMER:
-                    dcal_minput(cp_mdata);
-                    dcal_output(&dcal);  
+                   // dcal_minput(cp_mdata);
+                  //  dcal_output(&dcal);  
                 
                     /* bmp read */
                     ret = bmp180_conversion_process(&dummy, &temperature);
@@ -266,7 +261,7 @@ int main(void)
                     len = 0;
                     switch(pMsg->type)
                     {
-                        case CMD_H2S_READ_FW:
+                        case kPTL_REQ_FW:
                         {
                             fw_info_t fwinfo;
                             fwinfo.version = VERSION;
@@ -275,7 +270,7 @@ int main(void)
                             break;
                         }
 
-                        case CMD_H2S_READ_OFFSET:
+                        case kPTL_REQ_OFS_ALL:
                         {
                             offset_t offset;
 
@@ -289,7 +284,7 @@ int main(void)
                             break;
                         }
 
-                        case CMD_H2S_WRITE_OFFSET:
+                        case kPTL_DATA_OFS_ALL:
                             {
                                 rev_data_t* rd = (rev_data_t*)pMsg->msg;
                                 

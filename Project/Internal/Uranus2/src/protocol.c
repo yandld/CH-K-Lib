@@ -32,7 +32,7 @@ uint32_t ano_encode_fwinfo(fw_info_t* fwinfo, uint8_t* buf)
     len = sizeof(fw_info_t);
     
     buf[0] = 0x88;
-    buf[1] = CMD_S2H_DATA_FW;
+    buf[1] = kPTL_DATA_FW;
     buf[2] = len;
     buf[3] = fwinfo->version;
     buf[4] = fwinfo->uid>>0;
@@ -58,7 +58,7 @@ uint32_t ano_encode_packet(payload_t* payload, uint8_t* buf)
     len = sizeof(payload_t);
     
     buf[0] = 0x88;
-    buf[1] = CMD_S2H_DATA;
+    buf[1] = kPTL_DATA_OUTPUT;
     buf[2] = len;
     buf[3] = (payload->acc[0])>>8;
     buf[4] = (payload->acc[0])>>0;
@@ -108,7 +108,7 @@ uint32_t ano_encode_offset_packet(offset_t* offset, uint8_t* buf)
     len = sizeof(offset_t);
     
     buf[0] = 0x88;
-    buf[1] = CMD_S2H_DATA_OFFSET;
+    buf[1] = kPTL_DATA_OFS_ALL;
     buf[2] = len;
     buf[3] = (offset->acc_offset[0])>>8;
     buf[4] = (offset->acc_offset[0])>>0;

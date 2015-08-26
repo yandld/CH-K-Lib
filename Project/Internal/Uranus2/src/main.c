@@ -30,7 +30,6 @@ enum
 };
 
 
-static bool is_cal_data_ok;
 struct dcal_t dcal;
 
 static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata, int32_t pressure)
@@ -126,6 +125,11 @@ uint32_t FallDetectionG(int16_t *gdata)
     return ret;
 }
 
+void imu_data_proc(int16_t *acc, int16_t *gyro, int16_t *mag, float *angle)
+{
+    
+    
+}
 
 int main(void)
 {
@@ -159,12 +163,10 @@ int main(void)
     {
         printf("cal data read ok!\r\n");
         dcal_print(&dcal);
-        is_cal_data_ok = true;
     }
     else
     {
         printf("cal data read err!\r\n");
-        is_cal_data_ok = false;
         dcal_init(&dcal);
     }
     
@@ -188,12 +190,8 @@ int main(void)
             switch(pMsg->cmd)
             {
                 case kMSG_CMD_TIMER:
-                    // /* dcal process */
-                    if(is_cal_data_ok == false)
-                    {
-                        dcal_minput(cp_mdata);
-                        dcal_output(&dcal);  
-                    }
+                    dcal_minput(cp_mdata);
+                    dcal_output(&dcal);  
                 
                     /* bmp read */
                     ret = bmp180_conversion_process(&dummy, &temperature);

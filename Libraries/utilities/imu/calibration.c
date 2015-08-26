@@ -68,7 +68,6 @@ void dcal_minput(int16_t *mdata)
 {
     int i;
     static float last_gain;
-    dcal.need_update = false;
     for(i=0;i<3;i++)
     {
         if(is_mval_ok(mdata[i]))
@@ -97,10 +96,6 @@ void dcal_minput(int16_t *mdata)
     /* constant val */
     if(dcal.mg[1] != last_gain)
     {
-        if((dcal.mg[1] < 1.1) && (dcal.mg[1] > 0.9) && (dcal.mg[2] < 1.1) && (dcal.mg[2] > 0.9) && (dcal.mg[1] != last_gain))
-        {
-            dcal.need_update = true;
-        }
         last_gain = dcal.mg[1];
     }
 }

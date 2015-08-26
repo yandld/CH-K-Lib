@@ -79,21 +79,6 @@
       <Books>
         <Book>
           <Number>0</Number>
-          <Title>Quick Start Guide (TWR-K60D100M)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100MQSG.pdf</Path>
-        </Book>
-        <Book>
-          <Number>1</Number>
-          <Title>User Manual (TWR-K60D100M)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100M_SCH.pdf</Path>
-        </Book>
-        <Book>
-          <Number>2</Number>
-          <Title>User Manual (TWR-K60D100M)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWRK60D100MUM.pdf</Path>
-        </Book>
-        <Book>
-          <Number>3</Number>
           <Title>TWR-K60D100M Web Page (TWR-K60D100M)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=TWR-K60D100M</Path>
         </Book>
@@ -492,10 +477,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>6</ColumnNumber>
+      <ColumnNumber>23</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>10</TopLine>
-      <CurrentLine>16</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>13</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -993,22 +978,6 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\devices\src\ksz8041.c</PathWithFileName>
-      <FilenameWithoutPath>ksz8041.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>5</GroupNumber>
-      <FileNumber>36</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>3937340</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
-      <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\devices\src\nrf24l01.c</PathWithFileName>
       <FilenameWithoutPath>nrf24l01.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -1016,7 +985,7 @@
     </File>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>37</FileNumber>
+      <FileNumber>36</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1034,13 +1003,13 @@
 
   <Group>
     <GroupName>emwin</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>38</FileNumber>
+      <FileNumber>37</FileNumber>
       <FileType>4</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1056,7 +1025,7 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>39</FileNumber>
+      <FileNumber>38</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1072,7 +1041,7 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>40</FileNumber>
+      <FileNumber>39</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -1088,7 +1057,7 @@
     </File>
     <File>
       <GroupNumber>6</GroupNumber>
-      <FileNumber>41</FileNumber>
+      <FileNumber>40</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>

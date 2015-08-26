@@ -15,7 +15,36 @@
 #define CMD_H2S_READ_FW         0x80
 #define CMD_H2S_DATA_FW         0x82
 #define CMD_H2S_READ_OFFSET     0x81
-#define CMD_H2S_WRITE_OFFSET     0x83
+#define CMD_H2S_WRITE_OFFSET    0x83
+
+/* protocol:
+0x88 + <PROT_FUN> + <LEN> + <DATA> + SUM
+
+<PROT_FUN>: 0xAF: general data(S->H)   0x0F: general data(H->S)
+    <DATA>:data specific
+
+<PROT_FUN>: 0xA5: general cmd(S->H)    0x05: general cmd(H->S)
+    <DATA>: <CMD> + <ID> + data
+        IMU_OffsetAll + <ID> + AccX + AccY + AccZ + GyroX + GyroY + GyroZ + MagX + MagY +MagZ
+        IMU_CmdConfig + <ID>
+        IMU_CmdRun    + <ID>
+*/
+
+#define PROT_FUN_DATA           0xAF /* general data */
+#define PROT_FUN_CMD            0xA5 /* general cmd */
+
+/* A5 section */
+enum
+{
+    IMU_OffsetAll,
+    IMU_OffsetAcc,
+    IMU_OffsetGyro,
+    IMU_OffsetMag,
+    IMU_FwInfo,
+    IMU_CmdRun,
+    IMU_CmdConfig,
+};
+
 
 typedef __packed struct
 {

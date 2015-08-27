@@ -44,7 +44,7 @@ void dcal_print(struct dcal_t * dc)
     printf("MI:%d %d %d \r\n",     dc->m_min[0], dc->m_min[1], dc->m_min[2]);
 }
 
-static void reset_dcal_data(struct dcal_t *dc)
+void dcal_reset_mag(struct dcal_t *dc)
 {
     int i;
     for(i=0;i<3;i++)
@@ -67,15 +67,8 @@ void dcal_init(struct dcal_t *dc)
 void dcal_minput(int16_t *mdata)
 {
     int i;
-    static float last_gain;
     for(i=0;i<3;i++)
     {
-        if(is_mval_ok(mdata[i]))
-        {
-            memcpy(&dcal, &inital_dcal, sizeof(struct dcal_t));
-            return;
-        }
-        
         if(dcal.m_max[i] < mdata[i])
         {
             dcal.m_max[i] = mdata[i];
@@ -93,11 +86,6 @@ void dcal_minput(int16_t *mdata)
     dcal.mg[1] = (float)(dcal.m_max[1] - dcal.m_min[1])/(float)(dcal.m_max[0] - dcal.m_min[0]);
     dcal.mg[2]  = (float)(dcal.m_max[2] - dcal.m_min[2])/(float)(dcal.m_max[0] - dcal.m_min[0]);
         
-    /* constant val */
-    if(dcal.mg[1] != last_gain)
-    {
-        last_gain = dcal.mg[1];
-    }
 }
 
 void dcal_output(struct dcal_t *dc)

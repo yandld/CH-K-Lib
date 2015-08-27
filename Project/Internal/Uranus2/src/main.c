@@ -29,9 +29,6 @@ enum
     kMSG_CMD_DATA_REV,
 };
 
-
-struct dcal_t dcal;
-
 static void send_data_process(attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata, int32_t pressure)
 {
     int i;
@@ -129,6 +126,8 @@ uint32_t FallDetectionG(int16_t *gdata)
 int main(void)
 {
     int i;
+    int RunState;
+    struct dcal_t dcal;
     int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
     uint32_t fall;
     float fadata[3], fgdata[3], fmdata[3];
@@ -154,28 +153,21 @@ int main(void)
     mres  = mpu9250_get_mres();
     
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
-    if(dcal.magic == 0x5ACB)
-    {
-        printf("cal data read ok!\r\n");
-        dcal_print(&dcal);
-    }
-    else
-    {
-        printf("cal data read err!\r\n");
-        dcal_init(&dcal);
-    }
-    
+    dcal_init(&dcal);
+    printf("cal data read %s", (dcal.magic == 0x5ACB)?("ok!\r\n"):("err!\r\n"));
+
     PIT_Init();
     PIT_SetTime(0, 50*1000);
     PIT_SetIntMode(0, true);
 
     PIT_SetTime(1, 1000*1000);
 
-
     static uint32_t time, load_val, fac_us;
     fac_us = GetClock(kBusClock);
     fac_us /= 1000000;
    
+    RunState = kPTL_REQ_MODE_RUN;
+    
     while(1)
     {
         if(mq_exist())
@@ -184,10 +176,13 @@ int main(void)
             pMsg = mq_pop();
             switch(pMsg->cmd)
             {
+                /* timer event */
                 case kMSG_CMD_TIMER:
-                   // dcal_minput(cp_mdata);
-                  //  dcal_output(&dcal);  
-                
+                    if(RunState == kPTL_REQ_MODE_CAL)
+                    {
+                        dcal_minput(cp_mdata);
+                        dcal_output(&dcal);  
+                    }
                     /* bmp read */
                     ret = bmp180_conversion_process(&dummy, &temperature);
                     if(!ret)
@@ -195,6 +190,8 @@ int main(void)
                         pressure = dummy;
                     }
                     break;
+                    
+                 /* IMU sensor data ready */
                 case kMSG_CMD_SENSOR_DATA_READY:
                     mpu9250_read_accel_raw(adata);
                     mpu9250_read_gyro_raw(gdata);
@@ -203,8 +200,6 @@ int main(void)
                     {
                         break;
                     }
-
-
                     cp_mdata[0] = mdata[0];
                     cp_mdata[1] = mdata[1];
                     cp_mdata[2] = mdata[2];
@@ -251,8 +246,9 @@ int main(void)
                     }
                    // fall = FallDetectionG(gdata);
                     GPIO_PinWrite(HW_GPIOC, 3, fall);
-                    send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);
+                    send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);   
                     break;
+                /* data reviecved from PC */
                 case kMSG_CMD_DATA_REV:
                 {
                     int len, i;
@@ -298,10 +294,15 @@ int main(void)
                                 dcal.mo[2] = (rd->buf[16]<<8) + (rd->buf[17]<<0);
                                 
                                 veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
-
-                                len = 0;
                                 break;
                             }
+                        case kPTL_REQ_MODE_RUN:
+                            RunState = pMsg->type;
+                            break;
+                        case kPTL_REQ_MODE_CAL:
+                            dcal_reset_mag(&dcal);
+                            RunState = pMsg->type;
+                            break;
                     }
                     
                     while(UART_DMAGetRemain(HW_UART0) != 0);
@@ -314,7 +315,6 @@ int main(void)
 
             }
         }
-        
     }
 }
 

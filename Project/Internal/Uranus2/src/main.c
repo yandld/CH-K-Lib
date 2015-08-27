@@ -194,7 +194,6 @@ int main(void)
                     {
                         pressure = dummy;
                     }
-                    GPIO_PinToggle(HW_GPIOC, 3);
                     break;
                 case kMSG_CMD_SENSOR_DATA_READY:
                     mpu9250_read_accel_raw(adata);
@@ -251,7 +250,7 @@ int main(void)
                         mdata[i] = (int16_t)(fmdata[i]);
                     }
                    // fall = FallDetectionG(gdata);
-                    //GPIO_PinWrite(HW_GPIOC, 3, fall);
+                    GPIO_PinWrite(HW_GPIOC, 3, fall);
                     send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);
                     break;
                 case kMSG_CMD_DATA_REV:

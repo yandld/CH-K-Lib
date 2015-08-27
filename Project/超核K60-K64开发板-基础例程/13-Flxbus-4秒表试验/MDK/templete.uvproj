@@ -655,11 +655,6 @@
               <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
             </File>
             <File>
-              <FileName>ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
-            </File>
-            <File>
               <FileName>nrf24l01.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\nrf24l01.c</FilePath>
@@ -1345,11 +1340,6 @@
               <FileName>IS61WV25616.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
-            </File>
-            <File>
-              <FileName>ksz8041.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ksz8041.c</FilePath>
             </File>
             <File>
               <FileName>nrf24l01.c</FileName>

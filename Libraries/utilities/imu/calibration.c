@@ -21,9 +21,6 @@
 #define G_MIN           (-900)
 #define CAL_MAGIC       (0x5ACB)
 
-static struct dcal_t dcal;
-static struct dcal_t inital_dcal;
-
 
 static int is_mval_ok(int16_t data)
 {
@@ -58,39 +55,37 @@ void dcal_reset_mag(struct dcal_t *dc)
 
 void dcal_init(struct dcal_t *dc)
 {
-    memcpy(&dcal, dc, sizeof(struct dcal_t));
-    memcpy(&inital_dcal, dc, sizeof(struct dcal_t));
+    
 }
 
 
 /* this function must be called every 100 ms */
-void dcal_minput(int16_t *mdata)
+void dcal_minput(struct dcal_t *dc, int16_t *mdata)
 {
     int i;
     for(i=0;i<3;i++)
     {
-        if(dcal.m_max[i] < mdata[i])
+        if(dc->m_max[i] < mdata[i])
         {
-            dcal.m_max[i] = mdata[i];
+            dc->m_max[i] = mdata[i];
         }
             
-        if(dcal.m_min[i] > mdata[i])
+        if(dc->m_min[i] > mdata[i])
         {
-            dcal.m_min[i] = mdata[i];
+            dc->m_min[i] = mdata[i];
         }
         
-        dcal.mo[i] = (dcal.m_max[i] + dcal.m_min[i])/2;
+        dc->mo[i] = (dc->m_max[i] + dc->m_min[i])/2;
     }
     
-    dcal.mg[0] = 1.000;
-    dcal.mg[1] = (float)(dcal.m_max[1] - dcal.m_min[1])/(float)(dcal.m_max[0] - dcal.m_min[0]);
-    dcal.mg[2]  = (float)(dcal.m_max[2] - dcal.m_min[2])/(float)(dcal.m_max[0] - dcal.m_min[0]);
+    dc->mg[0] = 1.000;
+    dc->mg[1] = (float)(dc->m_max[1] - dc->m_min[1])/(float)(dc->m_max[0] - dc->m_min[0]);
+    dc->mg[2]  = (float)(dc->m_max[2] - dc->m_min[2])/(float)(dc->m_max[0] - dc->m_min[0]);
         
 }
 
 void dcal_output(struct dcal_t *dc)
 {
-    dcal.magic = CAL_MAGIC;
-    memcpy(dc, &dcal, sizeof(struct dcal_t));
+    dc->magic = CAL_MAGIC;
 }
 

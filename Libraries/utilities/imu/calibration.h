@@ -28,7 +28,7 @@ struct dcal_t
 
 
 void dcal_init(struct dcal_t *dc);
-void dcal_minput(int16_t *mdata);
+void dcal_minput(struct dcal_t *dc, int16_t *mdata);
 void dcal_ginput(int16_t *gdata);
 void dcal_output(struct dcal_t *dc);
 void dcal_print(struct dcal_t * dc);

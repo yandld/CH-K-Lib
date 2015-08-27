@@ -128,7 +128,8 @@ int main(void)
     int i;
     int RunState;
     struct dcal_t dcal;
-    int16_t adata[3], gdata[3], mdata[3], cp_mdata[3];
+    int16_t adata[3], gdata[3], mdata[3];
+    int16_t radata[3], rgdata[3], rmdata[3];
     uint32_t fall;
     float fadata[3], fgdata[3], fmdata[3];
     static attitude_t angle;
@@ -154,6 +155,7 @@ int main(void)
     
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
     dcal_init(&dcal);
+    dcal_print(&dcal);
     printf("cal data read %s", (dcal.magic == 0x5ACB)?("ok!\r\n"):("err!\r\n"));
 
     PIT_Init();
@@ -180,8 +182,9 @@ int main(void)
                 case kMSG_CMD_TIMER:
                     if(RunState == kPTL_REQ_MODE_CAL)
                     {
-                        dcal_minput(cp_mdata);
-                        dcal_output(&dcal);  
+                        dcal_minput(&dcal, rmdata);
+                        dcal_output(&dcal);
+                        GPIO_PinToggle(HW_GPIOC, 3);
                     }
                     /* bmp read */
                     ret = bmp180_conversion_process(&dummy, &temperature);
@@ -193,22 +196,20 @@ int main(void)
                     
                  /* IMU sensor data ready */
                 case kMSG_CMD_SENSOR_DATA_READY:
-                    mpu9250_read_accel_raw(adata);
-                    mpu9250_read_gyro_raw(gdata);
-                    ret = mpu9250_read_mag_raw(mdata);
+                    mpu9250_read_accel_raw(radata);
+                    mpu9250_read_gyro_raw(rgdata);
+                    ret = mpu9250_read_mag_raw(rmdata);
                     if(ret)
                     {
                         break;
                     }
-                    cp_mdata[0] = mdata[0];
-                    cp_mdata[1] = mdata[1];
-                    cp_mdata[2] = mdata[2];
-                    dcal.mg[0] = 1;
-                    dcal.mg[1] = 1;
-                    dcal.mg[2] = 1;
 
                     for(i=0;i<3;i++)
                     {
+                        adata[i] = radata[i];
+                        gdata[i] = rgdata[i];
+                        mdata[i] = rmdata[i];
+                        
                         adata[i] = adata[i] - dcal.ao[i];
                         gdata[i] = gdata[i] - dcal.go[i];
                         mdata[i] = (mdata[i] - dcal.mo[i])/dcal.mg[i];
@@ -241,12 +242,16 @@ int main(void)
                     for(i=0;i<3;i++)
                     {
                         adata[i] = (int16_t)(fadata[i]*1000);
-                        gdata[i] = (int16_t)(fgdata[i]);
+                        //gdata[i] = (int16_t)(fgdata[i]);
                         mdata[i] = (int16_t)(fmdata[i]);
                     }
-                   // fall = FallDetectionG(gdata);
-                    GPIO_PinWrite(HW_GPIOC, 3, fall);
-                    send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);   
+
+                    if(RunState == kPTL_REQ_MODE_RUN)
+                    {
+                        GPIO_PinToggle(HW_GPIOC, 3);
+                        send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);   
+                    }
+
                     break;
                 /* data reviecved from PC */
                 case kMSG_CMD_DATA_REV:
@@ -264,11 +269,10 @@ int main(void)
                             len = ano_encode_fwinfo(&fwinfo, buf);
                             break;
                         }
-
+                        /* send all cal data to PC */
                         case kPTL_REQ_OFS_ALL:
                         {
                             offset_t offset;
-
                             for(i=0; i<3; i++)
                             {
                                 offset.acc_offset[i] = dcal.ao[i];
@@ -278,7 +282,7 @@ int main(void)
                             len = ano_encode_offset_packet(&offset, buf);
                             break;
                         }
-
+                        /* get all cal data and program to flash */
                         case kPTL_DATA_OFS_ALL:
                             {
                                 rev_data_t* rd = (rev_data_t*)pMsg->msg;
@@ -292,15 +296,17 @@ int main(void)
                                 dcal.mo[0] = (rd->buf[12]<<8) + (rd->buf[13]<<0);
                                 dcal.mo[1] = (rd->buf[14]<<8) + (rd->buf[15]<<0);
                                 dcal.mo[2] = (rd->buf[16]<<8) + (rd->buf[17]<<0);
-                                
-                                veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
                                 break;
                             }
+                        case kPTL_REQ_SAVE_OFS:
+                            veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
+                            break;
                         case kPTL_REQ_MODE_RUN:
                             RunState = pMsg->type;
                             break;
                         case kPTL_REQ_MODE_CAL:
                             dcal_reset_mag(&dcal);
+                            
                             RunState = pMsg->type;
                             break;
                     }

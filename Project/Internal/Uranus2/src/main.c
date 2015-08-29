@@ -136,6 +136,8 @@ int main(void)
     uint32_t ret;
     float pressure, dummy, temperature;
     float ares, gres, mres;
+    
+    
     DelayInit();
     GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
     GPIO_Init(HW_GPIOA, 18, kGPIO_Mode_IFT);
@@ -167,8 +169,8 @@ int main(void)
     static uint32_t time, load_val, fac_us;
     fac_us = GetClock(kBusClock);
     fac_us /= 1000000;
-   
-    RunState = kPTL_REQ_MODE_RUN;
+
+    RunState = kPTL_REQ_MODE_9AXIS;
     
     while(1)
     {
@@ -246,7 +248,7 @@ int main(void)
                         mdata[i] = (int16_t)(fmdata[i]);
                     }
 
-                    if(RunState == kPTL_REQ_MODE_RUN)
+                    if(RunState == kPTL_REQ_MODE_9AXIS || RunState == kPTL_REQ_MODE_6AXIS)
                     {
                         GPIO_PinToggle(HW_GPIOC, 3);
                         send_data_process(&angle, adata, gdata, mdata, (int32_t)pressure);   
@@ -255,7 +257,6 @@ int main(void)
                     break;
                 /* data reviecved from PC */
                 case kMSG_CMD_DATA_REV:
-                {
                     int len, i;
                     static uint8_t buf[64];
                     len = 0;
@@ -301,12 +302,12 @@ int main(void)
                         case kPTL_REQ_SAVE_OFS:
                             veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
                             break;
-                        case kPTL_REQ_MODE_RUN:
+                        case kPTL_REQ_MODE_6AXIS:
+                        case kPTL_REQ_MODE_9AXIS:
                             RunState = pMsg->type;
                             break;
                         case kPTL_REQ_MODE_CAL:
                             dcal_reset_mag(&dcal);
-                            
                             RunState = pMsg->type;
                             break;
                     }
@@ -317,7 +318,7 @@ int main(void)
                         UART_PutChar(HW_UART0, buf[i]);
                     }
                     break;
-                }
+
 
             }
         }

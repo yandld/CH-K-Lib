@@ -245,17 +245,16 @@ int main(void)
 
                     /* low pass filter */
                     float factor[3];
+                    factor[0] = lpf_1st_factor_cal(halfT*2, 80);
                     factor[2] = lpf_1st_factor_cal(halfT*2, 10);
-                    float real_mag[3];
                     for(i=0;i<3;i++)
                     {
-                        fadata[i] = ((float)adata[i])*ares;
+                        fadata[i] = lpf_1st(fadata[i], (float)adata[i]*ares, factor[2]);
                         fgdata[i] = ((float)gdata[i])*gres;
-                        fmdata[i] = lpf_1st(fmdata[i], (float)mdata[i], factor[2]);
-                        real_mag[i] = fmdata[i]*mres;
+                        fmdata[i] = lpf_1st(fmdata[i], (float)mdata[i]*mres, factor[2]);
                     }
                     
-                    ret = imu_get_euler_angle(fadata, fgdata, real_mag, &angle);
+                    ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
                     
                     halfT = ((float)time)/1000/2000;
 

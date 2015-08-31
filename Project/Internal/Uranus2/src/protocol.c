@@ -39,7 +39,8 @@ uint32_t ano_encode_fwinfo(fw_info_t* fwinfo, uint8_t* buf)
     buf[5] = fwinfo->uid>>8;
     buf[6] = fwinfo->uid>>16;
     buf[7] = fwinfo->uid>>24;
-    
+    buf[8] = fwinfo->id;
+    buf[9] = fwinfo->mode; 
     for(i = 0; i < len+3; i++)
     {
       sum += *p++;

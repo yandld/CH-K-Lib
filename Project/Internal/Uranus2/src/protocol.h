@@ -42,6 +42,8 @@ typedef __packed struct
 {
     uint8_t version;
     uint32_t uid;
+    uint8_t id;
+    uint8_t mode;
 }fw_info_t;
 
 typedef __packed struct

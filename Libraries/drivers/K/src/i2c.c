@@ -387,6 +387,23 @@ int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, 
 }
 
 
+/* i2c bus scan test */
+void I2C_Scan(uint32_t MAP)
+{
+    uint8_t i;
+    uint8_t ret;
+    uint32_t instance;
+    instance = I2C_QuickInit(MAP, 100*1000);
+    for(i = 1; i < 127; i++)
+    {
+        ret = I2C_Probe(instance , i);
+        if(!ret)
+        {
+            LIB_TRACE("ADDR:0x%2X(7BIT) | 0x%2X(8BIT) found!\r\n", i, i<<1);
+        }
+    }
+}
+
 
 
 

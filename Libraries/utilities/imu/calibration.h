@@ -24,6 +24,9 @@ struct dcal_t
     float       mg[3];
     int16_t     ao[3];
     int16_t     go[3];
+    
+    uint8_t     id;
+    uint8_t     mode;
 };
 
 

@@ -13,7 +13,7 @@
 #include "common.h"
 #include "i2c.h"
 
-#define MPU9250_DEBUG		1
+#define MPU9250_DEBUG		0
 #if ( MPU9250_DEBUG == 1 )
 #include <stdio.h>
 #define MPU9250_TRACE	printf

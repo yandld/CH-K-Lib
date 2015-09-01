@@ -20,25 +20,16 @@
 #define G_MAX           (900)
 #define G_MIN           (-900)
 #define CAL_MAGIC       (0x5ACB)
-
-
-static int is_mval_ok(int16_t data)
-{
-    if((data > M_MAX) || (data < M_MIN))
-    {
-        return 1;
-    }
-    return 0;
-}
    
 void dcal_print(struct dcal_t * dc)
 {
-    printf("GO:%d %d %d \r\n", dc->go[0], dc->go[1], dc->go[2]);
-    printf("AO:%d %d %d \r\n", dc->ao[0], dc->ao[1], dc->ao[2]);
-    printf("MO:%d %d %d \r\n", dc->mo[0], dc->mo[1], dc->mo[2]);
-    printf("MG:%f %f %f \r\n",    dc->mg[0], dc->mg[1], dc->mg[2]);
-    printf("MX:%d %d %d \r\n",     dc->m_max[0], dc->m_max[1], dc->m_max[2]);
-    printf("MI:%d %d %d \r\n",     dc->m_min[0], dc->m_min[1], dc->m_min[2]);
+    printf("cal data read %s", (dc->magic == 0x5ACB)?("ok!\r\n"):("err!\r\n"));
+    printf("Gyro Off:%d %d %d \r\n", dc->go[0], dc->go[1], dc->go[2]);
+    printf("Acc  Off:%d %d %d \r\n", dc->ao[0], dc->ao[1], dc->ao[2]);
+    printf("Mag  Off:%d %d %d \r\n", dc->mo[0], dc->mo[1], dc->mo[2]);
+    printf("Mag Gain:%f %f %f \r\n",    dc->mg[0], dc->mg[1], dc->mg[2]);
+    printf("Mag  max:%d %d %d \r\n",     dc->m_max[0], dc->m_max[1], dc->m_max[2]);
+    printf("Mag  min:%d %d %d \r\n",     dc->m_min[0], dc->m_min[1], dc->m_min[2]);
 }
 
 void dcal_reset_mag(struct dcal_t *dc)

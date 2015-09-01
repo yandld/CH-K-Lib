@@ -55,7 +55,7 @@ typedef __packed struct
 
 typedef struct
 {
-    uint8_t buf[32];
+    uint8_t buf[64];
     uint8_t len;
     uint8_t cmd;
 }rev_data_t;

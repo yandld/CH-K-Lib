@@ -20,7 +20,7 @@
 #include "calibration.h"
 #include "mq.h"
 
-#define VERSION         (200)
+#define VERSION         (201)
 
 struct dcal_t dcal;
 int RunState;
@@ -221,7 +221,7 @@ int main(void)
                         break;
                     }
                     
-                    for(i=0;i<3;i++)
+                    for(i=0; i<3; i++)
                     {
                         adata[i] = radata[i];
                         gdata[i] = rgdata[i];
@@ -245,11 +245,11 @@ int main(void)
 
                     /* low pass filter */
                     float factor[3];
-                    factor[0] = lpf_1st_factor_cal(halfT*2, 80);
+                    factor[0] = lpf_1st_factor_cal(halfT*2, 100);
                     factor[2] = lpf_1st_factor_cal(halfT*2, 10);
                     for(i=0;i<3;i++)
                     {
-                        fadata[i] = lpf_1st(fadata[i], (float)adata[i]*ares, factor[2]);
+                        fadata[i] = lpf_1st(fadata[i], (float)adata[i]*ares, factor[0]);
                         fgdata[i] = ((float)gdata[i])*gres;
                         fmdata[i] = lpf_1st(fmdata[i], (float)mdata[i]*mres, factor[2]);
                     }
@@ -260,9 +260,9 @@ int main(void)
 
                     for(i=0;i<3;i++)
                     {
-                        adata[i] = (int16_t)(fadata[i]*1000);
+                        adata[i] = (adata[i]*ares*1000);
                         //gdata[i] = (int16_t)(fgdata[i]);
-                        mdata[i] = (int16_t)(fmdata[i]);
+                        //mdata[i] = (int16_t)(fmdata[i]);
                     }
                     len = encode_data_packet(buf, &angle, adata, gdata, rmdata, (int32_t)pressure);
                     

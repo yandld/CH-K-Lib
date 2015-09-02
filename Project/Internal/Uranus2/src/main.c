@@ -22,6 +22,8 @@
 
 #define VERSION         (201)
 
+#define MPU9250_INT_PIN     (18)
+
 struct dcal_t dcal;
 int RunState;
     
@@ -149,8 +151,8 @@ int main(void)
     
     DelayInit();
     GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
-    GPIO_Init(HW_GPIOA, 18, kGPIO_Mode_IFT);
-    GPIO_SetIntMode(HW_GPIOA, 18, kGPIO_Int_RE, true);
+    GPIO_Init(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Mode_IFT);
+    GPIO_SetIntMode(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Int_RE, true);
     
     UART_Init(UART0_RX_PA01_TX_PA02, 115200);
     UART_SetIntMode(HW_UART0, kUART_IntRx, true);
@@ -372,6 +374,14 @@ void UART0_IRQHandler(void)
             mq_push(msg);
         }
     }
+    /**
+        this is very important because in real applications
+        OR usually occers, the RDRF will block when OR is asserted 
+    */
+    if(UART0->S1 & UART_S1_OR_MASK)
+    {
+        ch = UART0->D;
+    }
 }
 
 void PIT_IRQHandler(void)
@@ -387,7 +397,7 @@ void PIT_IRQHandler(void)
 
 void PORTA_IRQHandler(void)
 {
-    PORTA->ISFR |= (1<<18);
+    PORTA->ISFR |= (1<<MPU9250_INT_PIN);
     msg_t msg;
     msg.cmd = kMSG_CMD_SENSOR_DATA_READY;
     mq_push(msg);

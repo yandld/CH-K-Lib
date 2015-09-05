@@ -29,7 +29,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>21</version>
+          <version>20</version>
           <state>39</state>
         </option>
         <option>
@@ -60,7 +60,7 @@
         </option>
         <option>
           <name>FPU</name>
-          <version>5</version>
+          <version>2</version>
           <state>0</state>
         </option>
         <option>
@@ -87,7 +87,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.40.2.8567</state>
+          <state>7.20.2.7418</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -137,12 +137,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>21</version>
+          <version>20</version>
           <state>39</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>20</version>
           <state>39</state>
         </option>
         <option>
@@ -590,7 +590,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>3</version>
+          <version>2</version>
           <state>3</state>
         </option>
         <option>
@@ -599,7 +599,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>templete.bin</state>
+          <state>templete.sim</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -617,7 +617,6 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
-        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -977,7 +976,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>21</version>
+          <version>20</version>
           <state>40</state>
         </option>
         <option>
@@ -1008,7 +1007,7 @@
         </option>
         <option>
           <name>FPU</name>
-          <version>5</version>
+          <version>2</version>
           <state>7</state>
         </option>
         <option>
@@ -1085,12 +1084,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>21</version>
+          <version>20</version>
           <state>40</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>20</version>
           <state>40</state>
         </option>
         <option>
@@ -1538,7 +1537,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>3</version>
+          <version>2</version>
           <state>3</state>
         </option>
         <option>
@@ -1565,7 +1564,6 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
-        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -1910,13 +1908,13 @@
       <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\at24cxx.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\enet_phy.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\ili9320.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\IS61WV25616.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\ksz8041.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\Libraries\devices\src\nrf24l01.c</name>

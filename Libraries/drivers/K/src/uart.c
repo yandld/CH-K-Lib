@@ -239,45 +239,53 @@ _loop:
  * @param  baudrate  :串口通讯速率设置
  * @retval None
  */
-void UART_Init(UART_InitTypeDef* UART_InitStruct)
+void UART_Init(UART_InitTypeDef* Init)
 {
     uint16_t sbr;
-    uint8_t brfa; 
+    uint8_t brfa;
+    uint32_t clock;
     static bool is_fitst_init = true;
     
+    /* src clock */
+    clock = GetClock(kBusClock);
+    if((Init->instance == HW_UART0) || (Init->instance == HW_UART1))
+    {
+        clock = GetClock(kCoreClock); /* UART0 UART1 are use core clock */
+    }
+    Init->srcClock = clock;
     
-    IP_CLK_ENABLE(UART_InitStruct->instance);
+    IP_CLK_ENABLE(Init->instance);
     
     /* disable Tx Rx first */
-    UARTBase[UART_InitStruct->instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    UARTBase[Init->instance]->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     
     /* baud rate generation */
-    sbr = (uint16_t)((UART_InitStruct->srcClock)/((UART_InitStruct->baudrate)*16));
-    brfa = ((32*UART_InitStruct->srcClock)/((UART_InitStruct->baudrate)*16)) - 32*sbr;
+    sbr = (uint16_t)((Init->srcClock)/((Init->baudrate)*16));
+    brfa = ((32*Init->srcClock)/((Init->baudrate)*16)) - 32*sbr;
     
     /* config baudrate */
-    UARTBase[UART_InitStruct->instance]->BDH &= ~UART_BDH_SBR_MASK;
-    UARTBase[UART_InitStruct->instance]->BDL &= ~UART_BDL_SBR_MASK;
-    UARTBase[UART_InitStruct->instance]->C4 &= ~UART_C4_BRFA_MASK;
+    UARTBase[Init->instance]->BDH &= ~UART_BDH_SBR_MASK;
+    UARTBase[Init->instance]->BDL &= ~UART_BDL_SBR_MASK;
+    UARTBase[Init->instance]->C4 &= ~UART_C4_BRFA_MASK;
     
-    UARTBase[UART_InitStruct->instance]->BDH |= UART_BDH_SBR(sbr>>8); 
-    UARTBase[UART_InitStruct->instance]->BDL = UART_BDL_SBR(sbr); 
-    UARTBase[UART_InitStruct->instance]->C4 |= UART_C4_BRFA(brfa);
+    UARTBase[Init->instance]->BDH |= UART_BDH_SBR(sbr>>8); 
+    UARTBase[Init->instance]->BDL = UART_BDL_SBR(sbr); 
+    UARTBase[Init->instance]->C4 |= UART_C4_BRFA(brfa);
     
     /* parity */
-    switch(UART_InitStruct->parityMode)
+    switch(Init->parityMode)
     {
         case kUART_ParityDisabled: /* standard N 8 N 1*/
-            UARTBase[UART_InitStruct->instance]->C1 &= ~UART_C1_PE_MASK;
-            UARTBase[UART_InitStruct->instance]->C1 &= ~UART_C1_M_MASK;
+            UARTBase[Init->instance]->C1 &= ~UART_C1_PE_MASK;
+            UARTBase[Init->instance]->C1 &= ~UART_C1_M_MASK;
             break;
         case kUART_ParityEven:/* 8 bit data + 1bit parity */
-            UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_PE_MASK;
-            UARTBase[UART_InitStruct->instance]->C1 &= ~UART_C1_PT_MASK;
+            UARTBase[Init->instance]->C1 |= UART_C1_PE_MASK;
+            UARTBase[Init->instance]->C1 &= ~UART_C1_PT_MASK;
             break;
         case kUART_ParityOdd:
-            UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_PE_MASK;
-            UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_PT_MASK;
+            UARTBase[Init->instance]->C1 |= UART_C1_PE_MASK;
+            UARTBase[Init->instance]->C1 |= UART_C1_PT_MASK;
             break;
         default:
             break;
@@ -285,47 +293,47 @@ void UART_Init(UART_InitTypeDef* UART_InitStruct)
     
     /* bit per char */
     /* note: Freescale's bit size config in register are including parity bit! */
-    switch(UART_InitStruct->bitPerChar)
+    switch(Init->bitPerChar)
     {
         case kUART_8BitsPerChar:
-            if(UARTBase[UART_InitStruct->instance]->C1 & UART_C1_PE_MASK)
+            if(UARTBase[Init->instance]->C1 & UART_C1_PE_MASK)
             {
                 /* parity is enabled it's actually 9bit*/
-                UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_M_MASK;
-                UARTBase[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;    
+                UARTBase[Init->instance]->C1 |= UART_C1_M_MASK;
+                UARTBase[Init->instance]->C4 &= ~UART_C4_M10_MASK;    
             }
             else
             {
-                UARTBase[UART_InitStruct->instance]->C1 &= ~UART_C1_M_MASK;
-                UARTBase[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;    
+                UARTBase[Init->instance]->C1 &= ~UART_C1_M_MASK;
+                UARTBase[Init->instance]->C4 &= ~UART_C4_M10_MASK;    
             }
             break;
         case kUART_9BitsPerChar:
-            if(UARTBase[UART_InitStruct->instance]->C1 & UART_C1_PE_MASK)
+            if(UARTBase[Init->instance]->C1 & UART_C1_PE_MASK)
             {
                 /* parity is enabled it's actually 10 bit*/
-                UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_M_MASK;
-                UARTBase[UART_InitStruct->instance]->C4 |= UART_C4_M10_MASK;  
+                UARTBase[Init->instance]->C1 |= UART_C1_M_MASK;
+                UARTBase[Init->instance]->C4 |= UART_C4_M10_MASK;  
             } 
             else
             {
-                UARTBase[UART_InitStruct->instance]->C1 |= UART_C1_M_MASK;
-                UARTBase[UART_InitStruct->instance]->C4 &= ~UART_C4_M10_MASK;      
+                UARTBase[Init->instance]->C1 |= UART_C1_M_MASK;
+                UARTBase[Init->instance]->C4 &= ~UART_C4_M10_MASK;      
             }
             break;
         default:
             break;
     }
-    UARTBase[UART_InitStruct->instance]->S2 &= ~UART_S2_MSBF_MASK; /* LSB */
+    UARTBase[Init->instance]->S2 &= ~UART_S2_MSBF_MASK; /* LSB */
     
     /* enable Tx Rx */
-    UARTBase[UART_InitStruct->instance]->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    UARTBase[Init->instance]->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     
     /* link debug instance */
     /* if it's first initalized ,link getc and putc to it */
     if(is_fitst_init)
     {
-        UART_DebugInstance = UART_InitStruct->instance;
+        UART_DebugInstance = Init->instance;
     }
     is_fitst_init = false;
 }
@@ -584,21 +592,12 @@ void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun)
 uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
-    uint32_t clock;
     UART_InitTypeDef Init;
     map_t * pq = (map_t*)&(MAP);
     Init.baudrate = baudrate;
     Init.instance = pq->ip;
     Init.parityMode = kUART_ParityDisabled;
     Init.bitPerChar = kUART_8BitsPerChar;
-    
-    /* src clock */
-    clock = GetClock(kBusClock);
-    if((pq->ip == HW_UART0) || (pq->ip == HW_UART1))
-    {
-        clock = GetClock(kCoreClock); /* UART0 UART1 are use core clock */
-    }
-    Init.srcClock = clock;
     
     /* init pinmux */
     for(i = 0; i < pq->pin_cnt; i++)

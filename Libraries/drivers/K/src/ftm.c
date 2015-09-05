@@ -405,10 +405,10 @@ uint8_t FTM_PWM_QuickInit(uint32_t MAP, FTM_PWM_Mode_Type mode, uint32_t req)
     if(pres > (1<<ps)) ps++;
     if(ps > 7) ps = 7;
     modulo = ((clock/(1<<ps))/req) - 1;
-    LIB_TRACE("input frequency:%dHz\r\n", req);
-    LIB_TRACE("input clk:%d\r\n", clock);
-    LIB_TRACE("ps:%d\r\n", pres);
-    LIB_TRACE("modulo:%d\r\n", modulo);
+    LIB_TRACE("FTM PWM input frequency:%dHz\r\n", req);
+    LIB_TRACE("FTM PWM input clk:%d\r\n", clock);
+    LIB_TRACE("FTM PWM ps:%d\r\n", pres);
+    LIB_TRACE("FTM PWM modulo:%d\r\n", modulo);
     _FTM_InitBasic(pq->ip, modulo, (FTM_ClockDiv_Type)ps);
     /* set FTM mode */
     switch(mode)
@@ -492,6 +492,14 @@ void FTM_IC_QuickInit(uint32_t MAP, FTM_ClockDiv_Type ps)
         PORT_PinMuxConfig(pq->io, pq->pin_start + i, (PORT_PinMux_Type) pq->mux); 
     }
     _FTM_InitBasic(pq->ip, FTM_MOD_MOD_MASK, ps);
+    
+    /* set FTM clock to system clock */
+    FTM_InstanceTable[pq->ip]->SC &= ~FTM_SC_CLKS_MASK;
+    FTM_InstanceTable[pq->ip]->SC |= FTM_SC_CLKS(1);
+    
+    /* set ps, this must be done after set modulo */
+    FTM_InstanceTable[pq->ip]->SC &= ~FTM_SC_PS_MASK;
+    FTM_InstanceTable[pq->ip]->SC |= FTM_SC_PS(2); /* set div = 4 */
     FTM_SetMode(pq->ip, pq->chl, kFTM_Mode_InputCapture);
 }
 

@@ -10,7 +10,7 @@ static void FTM1_ISR(void)
 {
     uint32_t clock;
     InputCaptureValue = FTM_GetChlCounter(HW_FTM1, HW_FTM_CH0);
-    CLOCK_GetClockFrequency(kBusClock, &clock);
+    clock = GetClock(kBusClock);
     FTM_SetMoudleCounter(HW_FTM1, 0); /* 复位计数值 */
     InputCaptureValue = (clock/128/InputCaptureValue);  /* 频率 = FTM输入时钟/分频/计数值 */
 }

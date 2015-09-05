@@ -630,39 +630,19 @@
           <GroupName>devices</GroupName>
           <Files>
             <File>
-              <FileName>ads7843.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
-            </File>
-            <File>
-              <FileName>adxl345.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\adxl345.c</FilePath>
-            </File>
-            <File>
-              <FileName>at24cxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\at24cxx.c</FilePath>
-            </File>
-            <File>
               <FileName>ili9320.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
             </File>
             <File>
-              <FileName>IS61WV25616.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
-            </File>
-            <File>
-              <FileName>nrf24l01.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\nrf24l01.c</FilePath>
-            </File>
-            <File>
               <FileName>w25qxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\w25qxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>IS61WV25616.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1292,39 +1272,19 @@
           <GroupName>devices</GroupName>
           <Files>
             <File>
-              <FileName>ads7843.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\ads7843.c</FilePath>
-            </File>
-            <File>
-              <FileName>adxl345.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\adxl345.c</FilePath>
-            </File>
-            <File>
-              <FileName>at24cxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\at24cxx.c</FilePath>
-            </File>
-            <File>
               <FileName>ili9320.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\ili9320.c</FilePath>
             </File>
             <File>
-              <FileName>IS61WV25616.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
-            </File>
-            <File>
-              <FileName>nrf24l01.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\devices\src\nrf24l01.c</FilePath>
-            </File>
-            <File>
               <FileName>w25qxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\w25qxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>IS61WV25616.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\devices\src\IS61WV25616.c</FilePath>
             </File>
           </Files>
         </Group>

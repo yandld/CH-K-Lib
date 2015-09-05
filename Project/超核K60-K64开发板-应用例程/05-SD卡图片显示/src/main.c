@@ -106,6 +106,8 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     SRAM_Init();
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    
+    printf("init GUI system...\r\n");
     GUI_Init();
     GUI_DispString("BMP file test\r\n");
     GUI_DispString("please insert SD card...\r\n");

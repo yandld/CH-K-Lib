@@ -289,52 +289,39 @@ void DAC_CallbackInstall(uint8_t instance, DAC_CallBackType AppCBFun)
     }
 }
 
+static void DAC_IRQHandler(uint32_t instance)
+{
+    /* clear IT pending bit */
+    uint32_t C0 = DAC_InstanceTable[instance]->C0;
+    if(C0 & DAC_C0_DACBWIEN_MASK)
+    {
+        DAC_InstanceTable[instance]->SR &= ~DAC_SR_DACBFWMF_MASK;
+    }
+    if(C0 & DAC_C0_DACBBIEN_MASK)
+    {
+        DAC_InstanceTable[instance]->SR &= ~DAC_SR_DACBFRPBF_MASK;
+    }
+    if(C0 & DAC_C0_DACBTIEN_MASK)
+    {
+        DAC_InstanceTable[instance]->SR &= ~DAC_SR_DACBFRPTF_MASK;
+    }
+    /* call back */
+    if(DAC_CallBackTable[instance] != NULL)
+    {
+        DAC_CallBackTable[instance]();
+    }   
+}
 
 void DAC0_IRQHandler(void)
 {
-    /* clear IT pending bit */
-    uint32_t C0 = DAC_InstanceTable[HW_DAC0]->C0;
-    if(C0 & DAC_C0_DACBWIEN_MASK)
-    {
-        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFWMF_MASK;
-    }
-    if(C0 & DAC_C0_DACBBIEN_MASK)
-    {
-        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFRPBF_MASK;
-    }
-    if(C0 & DAC_C0_DACBTIEN_MASK)
-    {
-        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFRPTF_MASK;
-    }
-    /* call back */
-    if(DAC_CallBackTable[HW_DAC0] != NULL)
-    {
-        DAC_CallBackTable[HW_DAC0]();
-    }  
+    DAC_IRQHandler(HW_DAC0);
 }
 
-
+#if defined(DAC1)
 void DAC1_IRQHandler(void)
 {
-    /* clear IT pending bit */
-    uint32_t C0 = DAC_InstanceTable[HW_DAC0]->C0;
-    if(C0 & DAC_C0_DACBWIEN_MASK)
-    {
-        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFWMF_MASK;
-    }
-    if(C0 & DAC_C0_DACBBIEN_MASK)
-    {
-        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFRPBF_MASK;
-    }
-    if(C0 & DAC_C0_DACBTIEN_MASK)
-    {
-        DAC_InstanceTable[HW_DAC0]->SR &= ~DAC_SR_DACBFRPTF_MASK;
-    }
-    /* call back */
-    if(DAC_CallBackTable[HW_DAC1] != NULL)
-    {
-        DAC_CallBackTable[HW_DAC1]();
-    }  
+    DAC_IRQHandler(HW_DAC1);
 }
+#endif
  
 #endif

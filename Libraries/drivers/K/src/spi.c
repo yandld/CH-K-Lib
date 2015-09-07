@@ -436,39 +436,31 @@ void SPI_WaitSync(uint32_t instance)
 }
 */
 
-/**
- * @brief  中断处理函数入口
- * @param  SPI0_IRQHandler :芯片的SPI0模块中断函数入口
- *         SPI1_IRQHandler :芯片的SPI1模块中断函数入口
- *         SPI2_IRQHandler :芯片的SPI2模块中断函数入口
- * @note 函数内部用于中断事件处理
- */
+static void SPI_IRQHandler(uint32_t instance)
+{
+    SPI_InstanceTable[instance]->SR |= SPI_SR_TCF_MASK ;
+    if(SPI_CallBackTable[instance])
+    {
+        SPI_CallBackTable[instance]();
+    }
+}
+
 void SPI0_IRQHandler(void)
 {
-    SPI_InstanceTable[HW_SPI0]->SR |= SPI_SR_TCF_MASK ;
-    if(SPI_CallBackTable[HW_SPI0])
-    {
-        SPI_CallBackTable[HW_SPI0]();
-    }
+    SPI_IRQHandler(HW_SPI0);
 }
 
 void SPI1_IRQHandler(void)
 {
-    SPI_InstanceTable[HW_SPI1]->SR |= SPI_SR_TCF_MASK ;
-    if(SPI_CallBackTable[HW_SPI1])
-    {
-        SPI_CallBackTable[HW_SPI1]();
-    }
+    SPI_IRQHandler(HW_SPI1);
 }
 
+#if defined(SPI2)
 void SPI2_IRQHandler(void)
 {
-    SPI_InstanceTable[HW_SPI2]->SR |= SPI_SR_TCF_MASK ;
-    if(SPI_CallBackTable[HW_SPI2])
-    {
-        SPI_CallBackTable[HW_SPI2]();
-    }
+    SPI_IRQHandler(HW_SPI2);
 }
+#endif
 
 
 /*

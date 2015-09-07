@@ -187,38 +187,31 @@ void PIT_CallbackInstall(uint8_t chl, PIT_CallBackType AppCBFun)
 
 //! @}
 
+static void PIT_IRQHandler(uint32_t instance)
+{
+    PIT->CHANNEL[instance].TFLG |= PIT_TFLG_TIF_MASK;
+    if(PIT_CallBackTable[instance])
+    {
+        PIT_CallBackTable[instance]();
+    }
+}
+
 void PIT0_IRQHandler(void)
 {
-    PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
-    if(PIT_CallBackTable[0])
-    {
-        PIT_CallBackTable[0]();
-    }
+    PIT_IRQHandler(0);
 }
 
 void PIT1_IRQHandler(void)
 {
-    PIT->CHANNEL[1].TFLG |= PIT_TFLG_TIF_MASK;
-    if(PIT_CallBackTable[1])
-    {
-        PIT_CallBackTable[1]();
-    }
+    PIT_IRQHandler(1);
 }
 
 void PIT2_IRQHandler(void)
 {
-    PIT->CHANNEL[2].TFLG |= PIT_TFLG_TIF_MASK;
-    if(PIT_CallBackTable[2])
-    {
-        PIT_CallBackTable[2]();
-    }
+    PIT_IRQHandler(2);
 }
 
 void PIT3_IRQHandler(void)
 {
-    PIT->CHANNEL[3].TFLG |= PIT_TFLG_TIF_MASK;
-    if(PIT_CallBackTable[3])
-    {
-        PIT_CallBackTable[3]();
-    }
+    PIT_IRQHandler(3);
 }

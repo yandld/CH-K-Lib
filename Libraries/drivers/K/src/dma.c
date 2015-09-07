@@ -388,95 +388,28 @@ void DMA_CancelTransfer(void)
     DMA0->CR |= DMA_CR_CX_MASK;
 }
 
-/**
- * @brief  中断处理函数入口
- * @param  DMA0_IRQHandler :芯片的DMA0通道中断函数入口
- *               ...       :         ....
- *         DMA15_IRQHandler:芯片的DMA15通道中断函数入口
- * @note 函数内部用于中断事件处理
- */
-void DMA0_IRQHandler(void)
+
+static void DMA_IRQHandler(uint32_t instance)
 {
-    DMA0->CINT = DMA_CINT_CINT(0);
-    if(DMA_CallBackTable[0]) DMA_CallBackTable[0]();
-}
-void DMA1_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(1);
-    if(DMA_CallBackTable[1]) DMA_CallBackTable[1]();
-}
-void DMA2_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(2);
-    if(DMA_CallBackTable[2]) DMA_CallBackTable[2]();
-}
-void DMA3_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(3);
-    if(DMA_CallBackTable[3]) DMA_CallBackTable[3]();
-}
-void DMA4_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(4);
-    if(DMA_CallBackTable[4]) DMA_CallBackTable[4]();
-}
-void DMA5_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(5);
-    if(DMA_CallBackTable[5]) DMA_CallBackTable[5]();
-}
-void DMA6_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(6);
-    if(DMA_CallBackTable[6]) DMA_CallBackTable[6]();
-}
-void DMA7_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(7);
-    if(DMA_CallBackTable[7]) DMA_CallBackTable[7]();
-}
-void DMA8_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(8);
-    if(DMA_CallBackTable[8]) DMA_CallBackTable[8]();
-}
-void DMA9_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(9);
-    if(DMA_CallBackTable[9]) DMA_CallBackTable[9]();
-}
-void DMA10_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(10);
-    if(DMA_CallBackTable[10]) DMA_CallBackTable[10]();
-}
-void DMA11_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(11);
-    if(DMA_CallBackTable[11]) DMA_CallBackTable[11]();
-}
-void DMA12_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(12);
-    if(DMA_CallBackTable[12]) DMA_CallBackTable[12]();
-}
-void DMA13_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(13);
-    if(DMA_CallBackTable[13]) DMA_CallBackTable[13]();
-}
-void DMA14_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(14);
-    if(DMA_CallBackTable[14]) DMA_CallBackTable[14]();
-}
-void DMA15_IRQHandler(void)
-{
-    DMA0->CINT = DMA_CINT_CINT(15);
-    if(DMA_CallBackTable[15]) DMA_CallBackTable[15]();
+    DMA0->CINT = DMA_CINT_CINT(instance);
+    if(DMA_CallBackTable[instance]) DMA_CallBackTable[instance]();
 }
 
-
-
+void DMA0_IRQHandler(void) {DMA_IRQHandler(0);}
+void DMA1_IRQHandler(void) {DMA_IRQHandler(1);}
+void DMA2_IRQHandler(void) {DMA_IRQHandler(2);}
+void DMA3_IRQHandler(void) {DMA_IRQHandler(3);}
+void DMA4_IRQHandler(void) {DMA_IRQHandler(4);}
+void DMA5_IRQHandler(void) {DMA_IRQHandler(5);}
+void DMA6_IRQHandler(void) {DMA_IRQHandler(6);}
+void DMA7_IRQHandler(void) {DMA_IRQHandler(7);}
+void DMA8_IRQHandler(void) {DMA_IRQHandler(8);}
+void DMA9_IRQHandler(void) {DMA_IRQHandler(9);}
+void DMA10_IRQHandler(void) {DMA_IRQHandler(10);}
+void DMA11_IRQHandler(void) {DMA_IRQHandler(11);}
+void DMA12_IRQHandler(void) {DMA_IRQHandler(12);}
+void DMA13_IRQHandler(void) {DMA_IRQHandler(13);}
+void DMA14_IRQHandler(void) {DMA_IRQHandler(14);}
+void DMA15_IRQHandler(void) {DMA_IRQHandler(15);}
 
 

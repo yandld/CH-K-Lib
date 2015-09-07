@@ -10,6 +10,7 @@ del *.omf /s
 ::del *.opt /s  ::不允许删除JLINK的设置
 del *.plg /s
 del *.rpt /s
+del *.uvgui.* /s
 del *.tmp /s
 del *.__i /s
 del *.crf /s

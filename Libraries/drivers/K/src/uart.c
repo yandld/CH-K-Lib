@@ -619,159 +619,69 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 
 //! @}
 
-/**
- * @brief  中断处理函数入口
- * @param  UART0_RX_TX_IRQHandler :芯片的UART0端口中断函数入口
- *         UART1_RX_TX_IRQHandler :芯片的UART1端口中断函数入口
- *         UART2_RX_TX_IRQHandler :芯片的UART2端口中断函数入口
- *         UART3_RX_TX_IRQHandler :芯片的UART3端口中断函数入口
- *         UART4_RX_TX_IRQHandler :芯片的UART4端口中断函数入口
- *         UART5_RX_TX_IRQHandler :芯片的UART5端口中断函数入口
- * @note 函数内部用于中断事件处理
- */
-void UART0_RX_TX_IRQHandler(void)
+static void UART_IRQ_Handler(uint32_t instance)
 {
     uint16_t ch;
     /* Tx */
-    if((UARTBase[HW_UART0]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART0]->C2 & UART_C2_TIE_MASK))
+    if((UARTBase[instance]->S1 & UART_S1_TDRE_MASK) && (UARTBase[instance]->C2 & UART_C2_TIE_MASK))
     {
-        if(UART_CallBackTxTable[HW_UART0])
+        if(UART_CallBackTxTable[instance])
         {
-            UART_CallBackTxTable[HW_UART0](&ch);
+            UART_CallBackTxTable[instance](&ch);
         }
-        UARTBase[HW_UART0]->D = (uint8_t)ch;
+        UARTBase[instance]->D = (uint8_t)ch;
     }
     /* Rx */
-    if((UARTBase[HW_UART0]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART0]->C2 & UART_C2_RIE_MASK))
+    if((UARTBase[instance]->S1 & UART_S1_RDRF_MASK) && (UARTBase[instance]->C2 & UART_C2_RIE_MASK))
     {
-        ch = (uint8_t)UARTBase[HW_UART0]->D;
-        if(UART_CallBackRxTable[HW_UART0])
+        ch = (uint8_t)UARTBase[instance]->D;
+        if(UART_CallBackRxTable[instance])
         {
-            UART_CallBackRxTable[HW_UART0](ch);
-        }    
+            UART_CallBackRxTable[instance](ch);
+        }
     }
+    if(UARTBase[instance]->S1 & UART_S1_OR_MASK)
+    {
+        volatile uint32_t dummy;
+        dummy = UARTBase[instance]->D;
+    }
+}
+
+void UART0_RX_TX_IRQHandler(void)
+{
+    UART_IRQ_Handler(HW_UART0);
 }
 
 void UART1_RX_TX_IRQHandler(void)
 {
-    uint16_t ch;
-    /* Tx */
-    if((UARTBase[HW_UART1]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART1]->C2 & UART_C2_TIE_MASK))
-    {
-        if(UART_CallBackTxTable[HW_UART1])
-        {
-            UART_CallBackTxTable[HW_UART1](&ch);
-        }
-        UARTBase[HW_UART1]->D = (uint8_t)ch;
-    }
-    /* Rx */
-    if((UARTBase[HW_UART1]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART1]->C2 & UART_C2_RIE_MASK))
-    {
-        ch = (uint8_t)UARTBase[HW_UART1]->D;
-        if(UART_CallBackRxTable[HW_UART1])
-        {
-            UART_CallBackRxTable[HW_UART1](ch);
-        }    
-    }
+    UART_IRQ_Handler(HW_UART1);
 }
 
 #ifdef UART2
 void UART2_RX_TX_IRQHandler(void)
 {
-    uint16_t ch;
-    /* Tx */
-    if((UARTBase[HW_UART2]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART2]->C2 & UART_C2_TIE_MASK))
-    {
-        if(UART_CallBackTxTable[HW_UART2])
-        {
-            UART_CallBackTxTable[HW_UART2](&ch);
-        }
-        UARTBase[HW_UART2]->D = (uint8_t)ch;
-    }
-    /* Rx */
-    if((UARTBase[HW_UART2]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART2]->C2 & UART_C2_RIE_MASK))
-    {
-        ch = (uint8_t)UARTBase[HW_UART2]->D;
-        if(UART_CallBackRxTable[HW_UART2])
-        {
-            UART_CallBackRxTable[HW_UART2](ch);
-        }    
-    }
+    UART_IRQ_Handler(HW_UART2);
 }
 #endif
 
 #ifdef UART3
 void UART3_RX_TX_IRQHandler(void)
 {
-    uint16_t ch;
-    /* Tx */
-    if((UARTBase[HW_UART3]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART3]->C2 & UART_C2_TIE_MASK))
-    {
-        if(UART_CallBackTxTable[HW_UART3])
-        {
-            UART_CallBackTxTable[HW_UART3](&ch);
-        }
-        UARTBase[HW_UART3]->D = (uint8_t)ch;
-    }
-    /* Rx */
-    if((UARTBase[HW_UART3]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART3]->C2 & UART_C2_RIE_MASK))
-    {
-        ch = (uint8_t)UARTBase[HW_UART3]->D;
-        if(UART_CallBackRxTable[HW_UART3])
-        {
-            UART_CallBackRxTable[HW_UART3](ch);
-        }    
-    }
+    UART_IRQ_Handler(HW_UART3);
 }
 #endif
 
 #ifdef UART4
 void UART4_RX_TX_IRQHandler(void)
 {
-    uint16_t ch;
-    /* Tx */
-    if((UARTBase[HW_UART4]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART4]->C2 & UART_C2_TIE_MASK))
-    {
-        if(UART_CallBackTxTable[HW_UART4])
-        {
-            UART_CallBackTxTable[HW_UART4](&ch);
-        }
-        UARTBase[HW_UART4]->D = (uint8_t)ch;
-    }
-    /* Rx */
-    if((UARTBase[HW_UART4]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART4]->C2 & UART_C2_RIE_MASK))
-    {
-        ch = (uint8_t)UARTBase[HW_UART4]->D;
-        if(UART_CallBackRxTable[HW_UART4])
-        {
-            UART_CallBackRxTable[HW_UART4](ch);
-        }    
-    }
+    UART_IRQ_Handler(HW_UART4);
 }
 #endif
 
 #ifdef UART5
 void UART5_RX_TX_IRQHandler(void)
 {
-    uint16_t ch;
-    /* Tx */
-    if((UARTBase[HW_UART5]->S1 & UART_S1_TDRE_MASK) && (UARTBase[HW_UART5]->C2 & UART_C2_TIE_MASK))
-    {
-        if(UART_CallBackTxTable[HW_UART5])
-        {
-            UART_CallBackTxTable[HW_UART5](&ch);
-        }
-        UARTBase[HW_UART5]->D = (uint8_t)ch;
-    }
-    /* Rx */
-    if((UARTBase[HW_UART5]->S1 & UART_S1_RDRF_MASK) && (UARTBase[HW_UART5]->C2 & UART_C2_RIE_MASK))
-    {
-        ch = (uint8_t)UARTBase[HW_UART5]->D;
-        if(UART_CallBackRxTable[HW_UART5])
-        {
-            UART_CallBackRxTable[HW_UART5](ch);
-        }    
-    }
+    UART_IRQ_Handler(HW_UART5);
 }
 #endif
 

@@ -162,12 +162,12 @@ static uint32_t set_id(uint32_t instance, uint32_t mb, uint32_t id)
 {
     if(id > 0x7FF)
     {
-        CANBase[instance]->MB[mb].ID |= (id & (CAN_ID_STD_MASK | CAN_ID_EXT_MASK));  /* ID [28-0]*/
+        CANBase[instance]->MB[mb].ID = (id & (CAN_ID_STD_MASK | CAN_ID_EXT_MASK));  /* ID [28-0]*/
         CANBase[instance]->MB[mb].CS |= (CAN_CS_SRR_MASK | CAN_CS_IDE_MASK);  
     }
     else
     {
-        CANBase[instance]->MB[mb].ID |= CAN_ID_STD(id);  /* ID[28-18] */
+        CANBase[instance]->MB[mb].ID = CAN_ID_STD(id);  /* ID[28-18] */
         CANBase[instance]->MB[mb].CS &= ~(CAN_CS_IDE_MASK | CAN_CS_SRR_MASK); 
     }
     return 0;

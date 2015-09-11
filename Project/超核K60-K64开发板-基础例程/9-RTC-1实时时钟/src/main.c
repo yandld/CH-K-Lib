@@ -28,6 +28,7 @@ int main(void)
     /* 当时间无效(从来未执行过RTC时) 初始化时间 */
     if(RTC_IsTimeValid())
     {
+        printf("time invalid, reset time!\r\n");
         RTC_SetDateTime(&td);
     }
     while(1)

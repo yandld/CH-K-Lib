@@ -27,9 +27,9 @@ int main(void)
     AD_InitStruct1.clockDiv = kADC_ClockDiv8;
     AD_InitStruct1.resolutionMode = kADC_SingleDiff12or13;
     AD_InitStruct1.triggerMode = kADC_TriggerSoftware; /* 软件触发转换 */
-    AD_InitStruct1.singleOrDiffMode = kADC_Differential; /*单端模式 */
+    AD_InitStruct1.singleOrDiffMode = kADC_Single; /*单端模式 */
     AD_InitStruct1.continueMode = kADC_ContinueConversionDisable; 
-    AD_InitStruct1.hardwareAveMode = kADC_HardwareAverage_32;
+    AD_InitStruct1.hardwareAveMode = kADC_HardwareAverageDisable;
     ADC_Init(&AD_InitStruct1);
     
     /* 初始化对应引脚 */
@@ -55,7 +55,7 @@ int main(void)
         }
         temp=25 - temp;
         //结束
-        printf("tempature:%2.3fC  \r", temp);   
+        printf("tempature:%3fC  \r", temp);   
         DelayMs(100);
         GPIO_ToggleBit(HW_GPIOE, 6);
     }

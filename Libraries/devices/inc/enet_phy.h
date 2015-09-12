@@ -18,8 +18,8 @@
 //!< API
 int enet_phy_init(void);
 bool enet_phy_is_linked(void);
-bool enet_phy_is_phy_full_dpx(void);
-bool enet_phy_is_phy_10m_speed(void);
+bool enet_phy_is_full_dpx(void);
+bool enet_phy_is_10m_speed(void);
 
 
 #endif

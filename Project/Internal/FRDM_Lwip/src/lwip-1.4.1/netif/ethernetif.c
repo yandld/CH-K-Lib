@@ -43,11 +43,10 @@
  * something that better describes your network interface.
  */
 
+#include <enet.h>
+
 #include "lwip/opt.h"
-
-#if 0 /* don't build, this is only a skeleton, see previous comment */
-
-#include "lwip/def.h"
+#include <string.h>
 #include "lwip/mem.h"
 #include "lwip/pbuf.h"
 #include <lwip/stats.h>
@@ -55,9 +54,14 @@
 #include "netif/etharp.h"
 #include "netif/ppp_oe.h"
 
+
+
 /* Define those to better describe your network interface. */
 #define IFNAME0 'e'
 #define IFNAME1 'n'
+
+__align(4) static uint8_t gTxBuf[1520];
+__align(4) static uint8_t gRxBuf[1520];
 
 /**
  * Helper struct to hold private data used to operate your ethernet interface.
@@ -71,7 +75,9 @@ struct ethernetif {
 };
 
 /* Forward declarations. */
-static void  ethernetif_input(struct netif *netif);
+ void  ethernetif_input(struct netif *netif);
+
+
 
 /**
  * In this function, the hardware should be initialized.
@@ -89,9 +95,13 @@ low_level_init(struct netif *netif)
   netif->hwaddr_len = ETHARP_HWADDR_LEN;
 
   /* set MAC hardware address */
-  netif->hwaddr[0] = ;
-  ...
-  netif->hwaddr[5] = ;
+extern uint8_t     gCfgLoca_MAC[];
+  netif->hwaddr[0] = gCfgLoca_MAC[0];
+  netif->hwaddr[1] = gCfgLoca_MAC[1];
+  netif->hwaddr[2] = gCfgLoca_MAC[2];
+  netif->hwaddr[3] = gCfgLoca_MAC[3];
+  netif->hwaddr[4] = gCfgLoca_MAC[4];
+  netif->hwaddr[5] = gCfgLoca_MAC[5];
 
   /* maximum transfer unit */
   netif->mtu = 1500;
@@ -124,21 +134,23 @@ low_level_output(struct netif *netif, struct pbuf *p)
 {
   struct ethernetif *ethernetif = netif->state;
   struct pbuf *q;
-
-  initiate transfer();
-  
+  u32_t tx_len;
+  tx_len = 0;
 #if ETH_PAD_SIZE
   pbuf_header(p, -ETH_PAD_SIZE); /* drop the padding word */
 #endif
 
-  for(q = p; q != NULL; q = q->next) {
-    /* Send the data from the pbuf to the interface, one pbuf at a
-       time. The size of the data in each pbuf is kept in the ->len
-       variable. */
-    send data from(q->payload, q->len);
-  }
+    
+    for (q = p; q != NULL; q = q->next)
+    {
+        memcpy(&gTxBuf[tx_len], q->payload, q->len);
+        tx_len += q->len;
+    }
+    printf("sending addr:%d!!!!!!!!!!!!!\r\n", tx_len);
+    __disable_irq();
+    ENET_MacSendData(gTxBuf, tx_len);
+    __enable_irq();
 
-  signal that packet should be sent();
 
 #if ETH_PAD_SIZE
   pbuf_header(p, ETH_PAD_SIZE); /* reclaim the padding word */
@@ -148,6 +160,8 @@ low_level_output(struct netif *netif, struct pbuf *p)
 
   return ERR_OK;
 }
+
+
 
 /**
  * Should allocate a pbuf and transfer the bytes of the incoming
@@ -160,13 +174,14 @@ low_level_output(struct netif *netif, struct pbuf *p)
 static struct pbuf *
 low_level_input(struct netif *netif)
 {
-  struct ethernetif *ethernetif = netif->state;
-  struct pbuf *p, *q;
-  u16_t len;
+    struct ethernetif *ethernetif = netif->state;
+    struct pbuf *p, *q;
+    u16_t len, rx_len;
 
-  /* Obtain the size of the packet and put it into the "len"
-     variable. */
-  len = ;
+    /* Obtain the size of the packet and put it into the "len"
+    variable. */
+    rx_len = 0;
+    len = ENET_MacReceiveData(gRxBuf);
 
 #if ETH_PAD_SIZE
   len += ETH_PAD_SIZE; /* allow room for Ethernet padding */
@@ -175,26 +190,20 @@ low_level_input(struct netif *netif)
   /* We allocate a pbuf chain of pbufs from the pool. */
   p = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
   
+    
   if (p != NULL) {
 
 #if ETH_PAD_SIZE
     pbuf_header(p, -ETH_PAD_SIZE); /* drop the padding word */
 #endif
-
+  //  printf("low_level_input\r\n");
     /* We iterate over the pbuf chain until we have read the entire
      * packet into the pbuf. */
-    for(q = p; q != NULL; q = q->next) {
-      /* Read enough bytes to fill this pbuf in the chain. The
-       * available data in the pbuf is given by the q->len
-       * variable.
-       * This does not necessarily have to be a memcpy, you can also preallocate
-       * pbufs for a DMA-enabled MAC and after receiving truncate it to the
-       * actually received size. In this case, ensure the tot_len member of the
-       * pbuf is the sum of the chained pbuf len members.
-       */
-      read data into(q->payload, q->len);
+    for(q = p; q != NULL; q = q->next)
+    {
+        memcpy(q->payload, &gRxBuf[rx_len], q->len);
+        rx_len += q->len;
     }
-    acknowledge that packet has been read();
 
 #if ETH_PAD_SIZE
     pbuf_header(p, ETH_PAD_SIZE); /* reclaim the padding word */
@@ -202,13 +211,15 @@ low_level_input(struct netif *netif)
 
     LINK_STATS_INC(link.recv);
   } else {
-    drop packet();
+  //  drop packet();
     LINK_STATS_INC(link.memerr);
     LINK_STATS_INC(link.drop);
   }
 
   return p;  
 }
+
+
 
 /**
  * This function should be called when a packet is ready to be read
@@ -219,7 +230,7 @@ low_level_input(struct netif *netif)
  *
  * @param netif the lwip network interface structure for this ethernetif
  */
-static void
+ void
 ethernetif_input(struct netif *netif)
 {
   struct ethernetif *ethernetif;
@@ -314,4 +325,4 @@ ethernetif_init(struct netif *netif)
   return ERR_OK;
 }
 
-#endif /* 0 */
+

@@ -34,14 +34,31 @@
 #include "lwip/def.h"
 #include "lwip/lwip_sys.h"
 #include "lwip/mem.h"
-#include "timer.h"
 
-//为LWIP提供计时
-extern uint32_t lwip_localtime;//lwip本地时间计数器,单位:ms
-u32_t sys_now(void){
-	return lwip_localtime;
+#include <stdint.h>
+
+static uint32_t lwip_timer;//lwip本地时间计数器,单位:ms
+
+void PIT_ISR(void)
+{
+    lwip_timer++;
 }
 
+u32_t sys_now(void)
+{
+	return lwip_timer;
+}
+
+u8_t timer_expired(u32_t *last_time,u32_t tmr_interval)
+{
+	u32_t time;
+	time = *last_time;	
+	if((lwip_timer-time)>=tmr_interval){
+		*last_time = lwip_timer;
+		return 1;
+	}
+	return 0;
+}
 
 
 

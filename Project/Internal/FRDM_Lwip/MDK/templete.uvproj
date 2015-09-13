@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_projx.xsd">
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_proj.xsd">
 
-  <SchemaVersion>2.1</SchemaVersion>
+  <SchemaVersion>1.1</SchemaVersion>
 
   <Header>### uVision Project, (C) Keil Software</Header>
 
@@ -13,12 +13,12 @@
       <TargetOption>
         <TargetCommonOption>
           <Device>MK64FN1M0xxx12</Device>
-          <Vendor>Freescale</Vendor>
-          <Cpu>IROM(0x00000000,0x100000) IRAM(0x20000000,0x30000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
+          <Vendor>Freescale Semiconductor</Vendor>
+          <Cpu>IROM(0x00000000,0x100000) IRAM(0x20000000,0x30000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(120000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0MK_P1M0 -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM))</FlashDriverDll>
-          <DeviceId>0</DeviceId>
+          <DeviceId>7425</DeviceId>
           <RegisterFile>$$Device:MK64FN1M0xxx12$Device\Include\MK64F12.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
@@ -138,7 +138,7 @@
             <RestoreMemoryDisplay>1</RestoreMemoryDisplay>
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
-            <RestoreTracepoints>0</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
             <RestoreTracepoints>1</RestoreTracepoints>
             <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
@@ -241,7 +241,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>1</Im2Chk>
+            <Im2Chk>0</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -424,6 +424,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
+            <File>
+              <FileName>lwipopts.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\lwipopts.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -593,6 +598,49 @@
               <FileName>timers.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\lwip-1.4.1\core\timers.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
             </File>
             <File>
               <FileName>udp.c</FileName>
@@ -639,6 +687,106 @@
               <FileType>1</FileType>
               <FilePath>..\src\lwip-1.4.1\core\ipv4\ip_frag.c</FilePath>
             </File>
+            <File>
+              <FileName>lwip_timers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\core\lwip_timers.c</FilePath>
+            </File>
+            <File>
+              <FileName>asn1_dec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\core\snmp\asn1_dec.c</FilePath>
+            </File>
+            <File>
+              <FileName>asn1_enc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\core\snmp\asn1_enc.c</FilePath>
+            </File>
+            <File>
+              <FileName>mib_structs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\core\snmp\mib_structs.c</FilePath>
+            </File>
+            <File>
+              <FileName>mib2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\core\snmp\mib2.c</FilePath>
+            </File>
+            <File>
+              <FileName>msg_in.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\core\snmp\msg_in.c</FilePath>
+            </File>
+            <File>
+              <FileName>msg_out.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\core\snmp\msg_out.c</FilePath>
+            </File>
+            <File>
+              <FileName>auth.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\auth.c</FilePath>
+            </File>
+            <File>
+              <FileName>chap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\chap.c</FilePath>
+            </File>
+            <File>
+              <FileName>chpms.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\chpms.c</FilePath>
+            </File>
+            <File>
+              <FileName>fsm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\fsm.c</FilePath>
+            </File>
+            <File>
+              <FileName>ipcp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\ipcp.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\lcp.c</FilePath>
+            </File>
+            <File>
+              <FileName>magic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\magic.c</FilePath>
+            </File>
+            <File>
+              <FileName>md5.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\md5.c</FilePath>
+            </File>
+            <File>
+              <FileName>pap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\pap.c</FilePath>
+            </File>
+            <File>
+              <FileName>ppp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\ppp.c</FilePath>
+            </File>
+            <File>
+              <FileName>ppp_oe.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\ppp_oe.c</FilePath>
+            </File>
+            <File>
+              <FileName>randm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\randm.c</FilePath>
+            </File>
+            <File>
+              <FileName>vj.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lwip-1.4.1\netif\ppp\vj.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -663,76 +811,6 @@
               <FileName>sys_arch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\arch\sys_arch.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>lwip_app</GroupName>
-          <GroupOption>
-            <CommonProperty>
-              <UseCPPCompiler>0</UseCPPCompiler>
-              <RVCTCodeConst>0</RVCTCodeConst>
-              <RVCTZI>0</RVCTZI>
-              <RVCTOtherData>0</RVCTOtherData>
-              <ModuleSelection>0</ModuleSelection>
-              <IncludeInBuild>0</IncludeInBuild>
-              <AlwaysBuild>2</AlwaysBuild>
-              <GenerateAssemblyFile>2</GenerateAssemblyFile>
-              <AssembleAssemblyFile>2</AssembleAssemblyFile>
-              <PublicsOnly>2</PublicsOnly>
-              <StopOnExitCode>11</StopOnExitCode>
-              <CustomArgument></CustomArgument>
-              <IncludeLibraryModules></IncludeLibraryModules>
-              <ComprImg>1</ComprImg>
-            </CommonProperty>
-            <GroupArmAds>
-              <Cads>
-                <interw>2</interw>
-                <Optim>0</Optim>
-                <oTime>2</oTime>
-                <SplitLS>2</SplitLS>
-                <OneElfS>2</OneElfS>
-                <Strict>2</Strict>
-                <EnumInt>2</EnumInt>
-                <PlainCh>2</PlainCh>
-                <Ropi>2</Ropi>
-                <Rwpi>2</Rwpi>
-                <wLevel>0</wLevel>
-                <uThumb>2</uThumb>
-                <uSurpInc>2</uSurpInc>
-                <uC99>2</uC99>
-                <useXO>2</useXO>
-                <VariousControls>
-                  <MiscControls></MiscControls>
-                  <Define></Define>
-                  <Undefine></Undefine>
-                  <IncludePath></IncludePath>
-                </VariousControls>
-              </Cads>
-              <Aads>
-                <interw>2</interw>
-                <Ropi>2</Ropi>
-                <Rwpi>2</Rwpi>
-                <thumb>2</thumb>
-                <SplitLS>2</SplitLS>
-                <SwStkChk>2</SwStkChk>
-                <NoWarn>2</NoWarn>
-                <uSurpInc>2</uSurpInc>
-                <useXO>2</useXO>
-                <VariousControls>
-                  <MiscControls></MiscControls>
-                  <Define></Define>
-                  <Undefine></Undefine>
-                  <IncludePath></IncludePath>
-                </VariousControls>
-              </Aads>
-            </GroupArmAds>
-          </GroupOption>
-          <Files>
-            <File>
-              <FileName>lwip_comm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\lwip_app\lwip_comm\lwip_comm.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -75,7 +75,7 @@ struct ethernetif {
 };
 
 /* Forward declarations. */
- void  ethernetif_input(struct netif *netif);
+ err_t  ethernetif_input(struct netif *netif);
 
 
 
@@ -95,7 +95,7 @@ low_level_init(struct netif *netif)
   netif->hwaddr_len = ETHARP_HWADDR_LEN;
 
   /* set MAC hardware address */
-extern uint8_t     gCfgLoca_MAC[];
+    extern uint8_t     gCfgLoca_MAC[];
   netif->hwaddr[0] = gCfgLoca_MAC[0];
   netif->hwaddr[1] = gCfgLoca_MAC[1];
   netif->hwaddr[2] = gCfgLoca_MAC[2];
@@ -134,24 +134,29 @@ low_level_output(struct netif *netif, struct pbuf *p)
 {
   struct ethernetif *ethernetif = netif->state;
   struct pbuf *q;
+  uint32_t i;
   u32_t tx_len;
   tx_len = 0;
+    
 #if ETH_PAD_SIZE
   pbuf_header(p, -ETH_PAD_SIZE); /* drop the padding word */
 #endif
 
-    
     for (q = p; q != NULL; q = q->next)
     {
         memcpy(&gTxBuf[tx_len], q->payload, q->len);
         tx_len += q->len;
     }
-    printf("sending addr:%d!!!!!!!!!!!!!\r\n", tx_len);
-    __disable_irq();
+    
     ENET_MacSendData(gTxBuf, tx_len);
-    __enable_irq();
 
-
+    printf("sending frame:%d!!!!!!!!!!!!!\r\n", tx_len);
+//for(i=0;i<tx_len;i++)
+    {
+  //     printf("%x ", gTxBuf[i]);
+    }
+  //  printf("\r\n");
+    
 #if ETH_PAD_SIZE
   pbuf_header(p, ETH_PAD_SIZE); /* reclaim the padding word */
 #endif
@@ -230,45 +235,24 @@ low_level_input(struct netif *netif)
  *
  * @param netif the lwip network interface structure for this ethernetif
  */
- void
-ethernetif_input(struct netif *netif)
+ 
+err_t ethernetif_input(struct netif *netif)
 {
-  struct ethernetif *ethernetif;
-  struct eth_hdr *ethhdr;
-  struct pbuf *p;
-
-  ethernetif = netif->state;
-
-  /* move received packet into a new pbuf */
-  p = low_level_input(netif);
-  /* no packet could be read, silently ignore this */
-  if (p == NULL) return;
-  /* points to packet payload, which starts with an Ethernet header */
-  ethhdr = p->payload;
-
-  switch (htons(ethhdr->type)) {
-  /* IP or ARP packet? */
-  case ETHTYPE_IP:
-  case ETHTYPE_ARP:
-#if PPPOE_SUPPORT
-  /* PPPoE packet? */
-  case ETHTYPE_PPPOEDISC:
-  case ETHTYPE_PPPOE:
-#endif /* PPPOE_SUPPORT */
-    /* full packet send to tcpip_thread to process */
-    if (netif->input(p, netif)!=ERR_OK)
-     { LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
-       pbuf_free(p);
-       p = NULL;
-     }
-    break;
-
-  default:
-    pbuf_free(p);
-    p = NULL;
-    break;
-  }
+	err_t err;
+	struct pbuf *p;
+	p=low_level_input(netif);
+	if(p==NULL) return ERR_MEM;
+	err=netif->input(p, netif);
+	if(err!=ERR_OK)
+	{
+		LWIP_DEBUGF(NETIF_DEBUG,("ethernetif_input: IP input error\n"));
+		pbuf_free(p);
+		p = NULL;
+	} 
+	return err;
 }
+
+
 
 /**
  * Should be called at the beginning of the program to set up the

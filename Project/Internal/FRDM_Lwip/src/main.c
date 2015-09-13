@@ -40,6 +40,7 @@
 #include "lwip/mem.h"
 #include "lwip/raw.h"
 #include "lwip/icmp.h"
+#include "lwip/dhcp.h"
 #include "lwip/netif.h"
 #include "lwip/sys.h"
 #include "lwip/timers.h"
@@ -53,33 +54,24 @@ u32_t last_ipreass_time;
 
 struct netif fsl_netif0;
 extern err_t ethernetif_init(struct netif *netif);
-extern void ethernetif_input(struct netif *netif);
+extern err_t ethernetif_input(struct netif *netif);
 u8_t timer_expired(u32_t *last_time,u32_t tmr_interval);
 extern void PIT_ISR(void);
 void LWIP_Polling(void);
 
+uint8_t     gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
 
-#define     ENET_TYPE_ARP   {0x08, 0x06}
-#define     ENET_TYPE_IP    {0x08, 0x00}
-uint8_t     gCfgLoca_MAC[] = {0x22, 0x22, 0x22, 0x00, 0x00, 0x01};
-uint8_t     gCfgDest_MAC[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-uint8_t     gCfgEnet_Type[] = ENET_TYPE_ARP;
-uint8_t     gTxBuffer[200];
 void ENET_ISR(void)
 {
-  //  uint32_t len;
-  //  len = ENET_MacReceiveData(gTxBuffer);
-   // printf("enet frame received len\r\n");
     ethernetif_input(&fsl_netif0); 
-   // if(len)
-    {
-    //    printf("enet frame received len:%d @ %d\r\n", len, cnt++);
-    }
 }
 
 #include "lwip/opt.h"
 
-
+void time_init()
+{
+    
+}
 
 
 int main(void)
@@ -129,22 +121,7 @@ int main(void)
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);
 
-    gTxBuffer[0]  = gCfgDest_MAC[0];
-    gTxBuffer[1]  = gCfgDest_MAC[1];
-    gTxBuffer[2]  = gCfgDest_MAC[2];
-    gTxBuffer[3]  = gCfgDest_MAC[3];
-    gTxBuffer[4]  = gCfgDest_MAC[4];
-    gTxBuffer[5]  = gCfgDest_MAC[5];
-    
-    gTxBuffer[6]  = gCfgLoca_MAC[0];
-    gTxBuffer[7]  = gCfgLoca_MAC[1];
-    gTxBuffer[8]  = gCfgLoca_MAC[2];
-    gTxBuffer[9]  = gCfgLoca_MAC[3];
-    gTxBuffer[10] = gCfgLoca_MAC[4];
-    gTxBuffer[11] = gCfgLoca_MAC[5];
-  
-    gTxBuffer[12] = gCfgEnet_Type[0];
-    gTxBuffer[13] = gCfgEnet_Type[1];
+
     
   ip_addr_t fsl_netif0_ipaddr, fsl_netif0_netmask, fsl_netif0_gw;
 
@@ -152,15 +129,41 @@ int main(void)
  // OSA_Init();
   lwip_init();
 
-  IP4_ADDR(&fsl_netif0_ipaddr, 192,168,2,102);
-  IP4_ADDR(&fsl_netif0_netmask, 255,255,255,0);
-  IP4_ADDR(&fsl_netif0_gw, 192,168,2,100);
+#if LWIP_DHCP					 //??DHCP??
+    fsl_netif0_ipaddr.addr=0;
+    fsl_netif0_netmask.addr=0;
+    fsl_netif0_gw.addr=0;
+#else    
+    IP4_ADDR(&fsl_netif0_ipaddr, 192,168,2,102);
+    IP4_ADDR(&fsl_netif0_netmask, 255,255,255,0);
+    IP4_ADDR(&fsl_netif0_gw, 192,168,2,100);
+#endif 
+  
   netif_add(&fsl_netif0, &fsl_netif0_ipaddr, &fsl_netif0_netmask, &fsl_netif0_gw, NULL, ethernetif_init, ethernet_input);
   netif_set_default(&fsl_netif0);
   netif_set_up(&fsl_netif0);
+    dhcp_start(&fsl_netif0);
+    
+    dhcp_fine_tmr();
+    
+	/*????????IP?????*/
+    while(fsl_netif0.dhcp==NULL||fsl_netif0.dhcp->offered_ip_addr.addr==0 
+        ||fsl_netif0.dhcp->offered_sn_mask.addr==0 
+          ||fsl_netif0.dhcp->offered_gw_addr.addr==0)
+    {
+    }
+
+    /*????IP??*/
+     netif_set_addr(&fsl_netif0, &(fsl_netif0.dhcp->offered_ip_addr),
+                    &(fsl_netif0.dhcp->offered_sn_mask),
+                    &(fsl_netif0.dhcp->offered_gw_addr));
+      netif_set_default(&fsl_netif0);//???????????    
+      netif_set_up(&fsl_netif0);     //??netif
+
     
     while(1)
     {
+       // ethernetif_input(&fsl_netif0); 
         LWIP_Polling();
       //  printf("!!\r\n");
       //  ENET_MacSendData(gTxBuffer, sizeof(gTxBuffer));
@@ -173,7 +176,15 @@ u32_t input_time;
 #define CLOCKTICKS_PER_MS   10
 #define IP_TMR_INTERVAL 1000
 #define TCP_TMR_INTERVAL       250
-//LWIP查询
+
+
+#if LWIP_DHCP>0	
+u32_t last_dhcp_fine_time;			
+u32_t last_dhcp_coarse_time;  
+u32_t dhcp_ip=0;
+#endif
+
+
 void LWIP_Polling(void){
 	
     if(timer_expired(&input_time,5)) //接收包，周期处理函数
@@ -182,7 +193,7 @@ void LWIP_Polling(void){
   }
   if(timer_expired(&last_tcp_time,TCP_TMR_INTERVAL/CLOCKTICKS_PER_MS))//TCP处理定时器处理函数
   {
-	 tcp_tmr();
+	// tcp_tmr();
   }
   if(timer_expired(&last_arp_time,ARP_TMR_INTERVAL/CLOCKTICKS_PER_MS))//ARP处理定时器
   {
@@ -191,6 +202,15 @@ void LWIP_Polling(void){
  	if(timer_expired(&last_ipreass_time,IP_TMR_INTERVAL/CLOCKTICKS_PER_MS)){ //IP重新组装定时器
  		ip_reass_tmr();
    }
-
+  #if LWIP_DHCP>0			   					
+  if(timer_expired(&last_dhcp_fine_time,DHCP_FINE_TIMER_MSECS/CLOCKTICKS_PER_MS))
+  {
+	 dhcp_fine_tmr();
+  }
+  if(timer_expired(&last_dhcp_coarse_time,DHCP_COARSE_TIMER_MSECS/CLOCKTICKS_PER_MS))
+  {
+	dhcp_coarse_tmr();
+  }  
+  #endif
   
 }

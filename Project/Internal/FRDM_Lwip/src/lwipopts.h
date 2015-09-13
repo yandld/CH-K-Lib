@@ -1,10 +1,47 @@
+/**
+  ******************************************************************************
+  * @file    lwipopts.h
+  * This file is based on \src\include\lwip\opt.h 
+  ******************************************************************************
+   * Copyright (c) 2013 - 2014, Freescale Semiconductor, Inc.
+   * All rights reserved.
+   *
+   * Redistribution and use in source and binary forms, with or without modification,
+   * are permitted provided that the following conditions are met:
+   *
+   * o Redistributions of source code must retain the above copyright notice, this list
+   *   of conditions and the following disclaimer.
+   *
+   * o Redistributions in binary form must reproduce the above copyright notice, this
+   *   list of conditions and the following disclaimer in the documentation and/or
+   *   other materials provided with the distribution.
+   *
+   * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+   *   contributors may be used to endorse or promote products derived from this
+   *   software without specific prior written permission.
+   *
+   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+   * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+   * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+   * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+   * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+   * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+   * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+   */
+
+
 #ifndef __LWIPOPTS_H__
 #define __LWIPOPTS_H__
+/*include fsl os abstraction header file to judge whether OS is used*/
 
-#define SYS_LIGHTWEIGHT_PROT    0
-
-//NO_SYS==1:不使用操作系统
-#define NO_SYS                  1  //不使用UCOS操作系统
+/**
+ * SYS_LIGHTWEIGHT_PROT==1: if you want inter-task protection for certain
+ * critical regions during buffer allocation, deallocation and memory
+ * allocation and deallocation.
+ */
 #define SYS_LIGHTWEIGHT_PROT    0
 #if USE_RTOS
 
@@ -67,7 +104,7 @@
 #define MEMP_NUM_TCP_PCB_LISTEN 6
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
-#define MEMP_NUM_TCP_SEG        12
+#define MEMP_NUM_TCP_SEG        16
 /* MEMP_NUM_SYS_TIMEOUT: the number of simulateously active
    timeouts. */
 #define MEMP_NUM_SYS_TIMEOUT    10
@@ -174,17 +211,6 @@ Some MCU allow computing and verifying the IP, UDP, TCP and ICMP checksums by ha
 
 #define LWIP_DEBUG
 
-#ifdef LWIP_DEBUG
-#define U8_F "c"
-#define S8_F "c"
-#define U16_F "u"
-#define S16_F "d"
-#define X16_F "x"
-#define U32_F "u"
-#define S32_F "d"
-#define X32_F "x"
-
-#endif 
 
 #define TCPIP_MBOX_SIZE                 32
 #define TCPIP_THREAD_STACKSIZE	        1024
@@ -220,3 +246,4 @@ Some MCU allow computing and verifying the IP, UDP, TCP and ICMP checksums by ha
 
 #endif /* __LWIPOPTS_H__ */
 
+/******************* (C) COPYRIGHT 2009 STMicroelectronics *****END OF FILE****/

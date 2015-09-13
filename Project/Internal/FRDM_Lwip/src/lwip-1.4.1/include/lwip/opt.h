@@ -103,7 +103,7 @@
  * already use it.
  */
 #ifndef MEM_LIBC_MALLOC
-#define MEM_LIBC_MALLOC                 0	//使用LWIP自身的动态内存堆分配策略
+#define MEM_LIBC_MALLOC                 0
 #endif
 
 /**
@@ -112,7 +112,7 @@
 * speed and usage from interrupts!
 */
 #ifndef MEMP_MEM_MALLOC
-#define MEMP_MEM_MALLOC                 0	//使用内存池分配策略
+#define MEMP_MEM_MALLOC                 0
 #endif
 
 /**
@@ -953,7 +953,7 @@
  * an upper limit on the MSS advertised by the remote host.
  */
 #ifndef TCP_MSS
-#define TCP_MSS                         536
+#define TCP_MSS                  536
 #endif
 
 /**
@@ -1331,7 +1331,7 @@
  * sys_thread_new() when the thread is created.
  */
 #ifndef DEFAULT_THREAD_STACKSIZE
-#define DEFAULT_THREAD_STACKSIZE        0
+#define DEFAULT_THREAD_STACKSIZE        1024
 #endif
 
 /**
@@ -1340,7 +1340,7 @@
  * sys_thread_new() when the thread is created.
  */
 #ifndef DEFAULT_THREAD_PRIO
-#define DEFAULT_THREAD_PRIO             1
+#define DEFAULT_THREAD_PRIO             3
 #endif
 
 /**
@@ -1440,7 +1440,11 @@
  * names (read, write & close). (only used if you use sockets.c)
  */
 #ifndef LWIP_POSIX_SOCKETS_IO_NAMES
+#ifdef FSL_RTOS_MQX
+#define LWIP_POSIX_SOCKETS_IO_NAMES     0
+#else
 #define LWIP_POSIX_SOCKETS_IO_NAMES     1
+#endif
 #endif
 
 /**

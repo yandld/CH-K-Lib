@@ -32,7 +32,7 @@
 /* lwIP includes. */
 #include "lwip/debug.h"
 #include "lwip/def.h"
-#include "lwip/lwip_sys.h"
+#include "lwip/sys.h"
 #include "lwip/mem.h"
 
 #include <stdint.h>
@@ -46,7 +46,7 @@ void PIT_ISR(void)
 
 u32_t sys_now(void)
 {
-	return lwip_timer;
+	return lwip_timer*10;
 }
 
 u8_t timer_expired(u32_t *last_time,u32_t tmr_interval)

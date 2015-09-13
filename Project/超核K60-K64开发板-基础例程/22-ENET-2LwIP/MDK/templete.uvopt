@@ -73,7 +73,7 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>1</IsCurrentTarget>
+        <IsCurrentTarget>0</IsCurrentTarget>
       </OPTFL>
       <CpuCode>14</CpuCode>
       <Books>
@@ -312,24 +312,29 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>0</IsCurrentTarget>
+        <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>14</CpuCode>
       <Books>
         <Book>
           <Number>0</Number>
-          <Title>MK60 100MHz Reference Manual</Title>
-          <Path>$$Device:MK60DN512xxx10$Documents\K60P144M100SF2V2RM.pdf</Path>
+          <Title>Quick Start Guide (TWR-K60D100M)</Title>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100MQSG.pdf</Path>
         </Book>
         <Book>
           <Number>1</Number>
-          <Title>MK60 100MHz Data Sheet</Title>
-          <Path>$$Device:MK60DN512xxx10$Documents\K60P144M100SF2V2.pdf</Path>
+          <Title>User Manual (TWR-K60D100M)</Title>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100M_SCH.pdf</Path>
         </Book>
         <Book>
           <Number>2</Number>
-          <Title>Cortex-M4 Generic User Guide</Title>
-          <Path>$$Device:MK60DN512xxx10$Documents\dui0553a_cortex_m4_dgug.pdf</Path>
+          <Title>User Manual (TWR-K60D100M)</Title>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWRK60D100MUM.pdf</Path>
+        </Book>
+        <Book>
+          <Number>3</Number>
+          <Title>TWR-K60D100M Web Page (TWR-K60D100M)</Title>
+          <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=TWR-K60D100M</Path>
         </Book>
       </Books>
       <DllOpt>
@@ -557,7 +562,7 @@
       <Focus>0</Focus>
       <ColumnNumber>12</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>185</TopLine>
+      <TopLine>186</TopLine>
       <CurrentLine>195</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
@@ -1165,7 +1170,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>58</TopLine>
+      <TopLine>59</TopLine>
       <CurrentLine>62</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\utilities\lwip\lwip-1.4.1\core\udp.c</PathWithFileName>

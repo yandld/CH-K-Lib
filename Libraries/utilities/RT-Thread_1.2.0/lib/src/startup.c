@@ -35,7 +35,7 @@ void _init_entry(void* parameter)
     init_thread_entry(RT_NULL);
 }
 
-static uint8_t INIT_STACK[1024];
+static uint8_t INIT_STACK[2048];
 __weak void rt_application_init(void)
 {
     rt_thread_t tid;

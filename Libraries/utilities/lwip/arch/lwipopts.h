@@ -210,7 +210,8 @@ Some MCU allow computing and verifying the IP, UDP, TCP and ICMP checksums by ha
 */
 
 #define LWIP_DEBUG
-
+//#define ICMP_DEBUG                      LWIP_DBG_ON
+//#define UDP_DEBUG                       LWIP_DBG_ON
 
 #define TCPIP_MBOX_SIZE                 32
 #define TCPIP_THREAD_STACKSIZE	        1024

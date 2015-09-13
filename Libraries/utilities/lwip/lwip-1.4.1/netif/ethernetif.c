@@ -150,7 +150,7 @@ low_level_output(struct netif *netif, struct pbuf *p)
     
     ENET_MacSendData(gTxBuf, tx_len);
 
-    printf("sending frame:%d!!!!!!!!!!!!!\r\n", tx_len);
+  //  printf("sending frame:%d!!!!!!!!!!!!!\r\n", tx_len);
 //for(i=0;i<tx_len;i++)
     {
   //     printf("%x ", gTxBuf[i]);

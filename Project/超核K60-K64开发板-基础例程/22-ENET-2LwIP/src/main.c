@@ -52,6 +52,7 @@ u32_t last_arp_time;
 u32_t last_tcp_time;	
 u32_t last_ipreass_time;
 
+
 struct netif fsl_netif0;
 extern err_t ethernetif_init(struct netif *netif);
 extern err_t ethernetif_input(struct netif *netif);
@@ -66,11 +67,49 @@ void ENET_ISR(void)
     ethernetif_input(&fsl_netif0); 
 }
 
-#include "lwip/opt.h"
-
-void time_init()
+void udp_echo_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct 
+ip_addr *addr, u16_t port)
 {
-    
+    char buffer[512];
+    if (p != NULL) 
+    {
+        if(pbuf_copy_partial(p, buffer, p->tot_len,0) != p->tot_len) 
+        {
+            LWIP_DEBUGF(LWIP_DBG_ON, ("pbuf_copy_partial failed\r\n"));
+        } 
+        else 
+        {
+            buffer[p->tot_len] = '\0';
+            LWIP_DEBUGF(LWIP_DBG_ON, ("got %s\r\n", buffer));
+        }
+        // send received packet back to sender
+        udp_sendto(pcb, p, addr, port);
+        // free the pbuf
+        pbuf_free(p);
+    }
+}
+
+void udp_echo_init(void)
+{
+    struct udp_pcb * pcb;
+
+    // get new pcb
+    pcb = udp_new();
+    if (pcb == NULL) {
+        LWIP_DEBUGF(UDP_DEBUG, ("udp_new failed!\n"));
+        return;
+    }
+
+    // bind to any IP address on port 7
+    if (udp_bind(pcb, IP_ADDR_ANY, 7) != ERR_OK) {
+        LWIP_DEBUGF(UDP_DEBUG, ("udp_bind failed!\n"));
+        return;
+    }
+    printf("bind to PORT:7 OK!\r\n");
+
+    // set udp_echo_recv() as callback function
+    // for received packets
+    udp_recv(pcb, udp_echo_recv, NULL);
 }
 
 
@@ -79,14 +118,13 @@ int main(void)
     int ret;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     PIT_QuickInit(0, 1000*10);
     PIT_CallbackInstall(0, PIT_ISR);
     PIT_ITDMAConfig(0, kPIT_IT_TOF, true);
     
-    printf("ENET test!\r\n");
-    printf("RMII clock is fiexd to OSCERCLK and must be 50Mhz\r\n");
+    printf("ENET LwIP test!\r\n");
     
     /* enable PinMux */
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);
@@ -121,15 +159,11 @@ int main(void)
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);
 
+    ip_addr_t fsl_netif0_ipaddr, fsl_netif0_netmask, fsl_netif0_gw;
 
-    
-  ip_addr_t fsl_netif0_ipaddr, fsl_netif0_netmask, fsl_netif0_gw;
+    lwip_init();
 
- // app_low_level_init();
- // OSA_Init();
-  lwip_init();
-
-#if LWIP_DHCP					 //??DHCP??
+#if LWIP_DHCP					 // DHCP
     fsl_netif0_ipaddr.addr=0;
     fsl_netif0_netmask.addr=0;
     fsl_netif0_gw.addr=0;
@@ -139,39 +173,32 @@ int main(void)
     IP4_ADDR(&fsl_netif0_gw, 192,168,2,100);
 #endif 
   
-  netif_add(&fsl_netif0, &fsl_netif0_ipaddr, &fsl_netif0_netmask, &fsl_netif0_gw, NULL, ethernetif_init, ethernet_input);
-  netif_set_default(&fsl_netif0);
-  netif_set_up(&fsl_netif0);
+    netif_add(&fsl_netif0, &fsl_netif0_ipaddr, &fsl_netif0_netmask, &fsl_netif0_gw, NULL, ethernetif_init, ethernet_input);
+    netif_set_default(&fsl_netif0);
+    netif_set_up(&fsl_netif0);
+    
+#if LWIP_DHCP	
+    printf("dhcp start getting addr...\r\n");
     dhcp_start(&fsl_netif0);
-    
+    while(fsl_netif0.dhcp->offered_ip_addr.addr == 0)  {};
     dhcp_fine_tmr();
-    
-	/*????????IP?????*/
-    while(fsl_netif0.dhcp==NULL||fsl_netif0.dhcp->offered_ip_addr.addr==0 
-        ||fsl_netif0.dhcp->offered_sn_mask.addr==0 
-          ||fsl_netif0.dhcp->offered_gw_addr.addr==0)
-    {
-    }
+    netif_set_addr(&fsl_netif0, &(fsl_netif0.dhcp->offered_ip_addr), &(fsl_netif0.dhcp->offered_sn_mask), &(fsl_netif0.dhcp->offered_gw_addr));
+    netif_set_default(&fsl_netif0);
+    netif_set_up(&fsl_netif0);
+        
+    u8_t *ip = (u8_t*)&fsl_netif0.ip_addr.addr;
+    printf("dhcp new ip: %u.%u.%u.%u \r",ip[0], ip[1],ip[2], ip[3]);
+#endif
 
-    /*????IP??*/
-     netif_set_addr(&fsl_netif0, &(fsl_netif0.dhcp->offered_ip_addr),
-                    &(fsl_netif0.dhcp->offered_sn_mask),
-                    &(fsl_netif0.dhcp->offered_gw_addr));
-      netif_set_default(&fsl_netif0);//???????????    
-      netif_set_up(&fsl_netif0);     //??netif
-
-    
+    udp_echo_init();
+        
     while(1)
     {
-       // ethernetif_input(&fsl_netif0); 
-        LWIP_Polling();
-      //  printf("!!\r\n");
-      //  ENET_MacSendData(gTxBuffer, sizeof(gTxBuffer));
-      //  GPIO_ToggleBit(HW_GPIOE, 6);
-     //   DelayMs(50);	
+    //    LWIP_Polling();
     }
 }
 
+#if 0
 u32_t input_time;
 #define CLOCKTICKS_PER_MS   10
 #define IP_TMR_INTERVAL 1000
@@ -214,3 +241,4 @@ void LWIP_Polling(void){
   #endif
   
 }
+#endif

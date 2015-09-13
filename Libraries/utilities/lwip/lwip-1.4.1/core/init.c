@@ -292,9 +292,7 @@ lwip_init(void)
   stats_init();
 #if !NO_SYS
   sys_init();
-#else
-  time_init();
-#endif/* !NO_SYS */
+#endif /* !NO_SYS */
   mem_init();
   memp_init();
   pbuf_init();

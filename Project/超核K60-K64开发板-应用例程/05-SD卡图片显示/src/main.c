@@ -1,5 +1,6 @@
 #include "gpio.h"
 #include "uart.h"
+#include "common.h"
 #include "sd.h"
 #include "IS61WV25616.h"
 

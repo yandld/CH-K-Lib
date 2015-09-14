@@ -1,6 +1,7 @@
 #include "gpio.h"
 #include "uart.h"
 #include "systick.h"
+#include "common.h"
 #include "shell.h"
 
 

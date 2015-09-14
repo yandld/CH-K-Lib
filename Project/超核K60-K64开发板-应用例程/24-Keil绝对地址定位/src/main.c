@@ -2,7 +2,6 @@
 #include "common.h"
 #include "uart.h"
 #include "dma.h"
-#include <absacc.h> 
 
 int test(void) __attribute__((section(".ARM.__at_0x8000")));
 int test(void)
@@ -10,7 +9,7 @@ int test(void)
     printf("I am test function\r\n");
 }
 
-const char var __at (0x8100);
+const char var __attribute__((section(".ARM.__at_0x8100")));
 
 int main(void)
 {

@@ -43,6 +43,7 @@ int main(void)
 {
     uint32_t instance; /*存放 UART 的模块号 */
     DelayInit();
+    DelayMs(10);
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     
     /* 初始化UART 使用快速初始化方式 波特率 115200 其他配置默认 返回初始化后 UART的模块号 */

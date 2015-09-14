@@ -21,7 +21,7 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     /* 初始化看门狗 */
-    WDOG_InitTypeDef WDOG_InitStruct1 = {0};
+    WDOG_InitTypeDef WDOG_InitStruct1;
     WDOG_InitStruct1.mode = kWDOG_Mode_Window;   //设置看门狗为窗口模式
     WDOG_InitStruct1.windowInMs = 1000;   /* 开窗时间 设置为窗体模式后 喂狗必须在 看门狗开始计时后 1000 - 2000 MS内完成 多了少了都复位 比普通看门狗严格*/
     WDOG_InitStruct1.timeOutInMs = 2000; /* 时限 2000MS : 2000MS 内没有喂狗则复位 */

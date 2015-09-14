@@ -31,8 +31,8 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
-    printf("ENET test!\r\n");
-    printf("RMII clock is fiexd to OSCERCLK and must be 50Mhz\r\n");
+    printf("ENET PHY test!\r\n");
+    printf("Ihis demo does not include any TCP/IP stack, only ENET physical transfer\r\n");
     
     /* enable PinMux */
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);

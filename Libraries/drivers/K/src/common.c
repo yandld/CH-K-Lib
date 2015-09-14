@@ -95,7 +95,11 @@ uint32_t QuickInitEncode(map_t * type)
 
 uint32_t GetUID(void) 
 {
-    return SIM->UIDL ^ SIM->UIDML ^ SIM->UIDMH;
+    uint32_t dummy;
+    dummy = SIM->UIDL;
+    dummy ^= SIM->UIDML;
+    dummy ^= SIM->UIDMH;
+    return dummy;
 }
 
 

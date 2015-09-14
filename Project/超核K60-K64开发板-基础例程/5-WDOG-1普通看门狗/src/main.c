@@ -25,7 +25,8 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     /* 初始化看门狗 */
-    WDOG_InitTypeDef WDOG_InitStruct1 = {0};
+    WDOG_InitTypeDef WDOG_InitStruct1;
+    WDOG_InitStruct1.windowInMs = 0;
     WDOG_InitStruct1.mode = kWDOG_Mode_Normal;  //设置看门狗处于正常工作模式
     WDOG_InitStruct1.timeOutInMs = 2000; /* 时限 2000MS : 2000MS 内没有喂狗则复位 */
     WDOG_Init(&WDOG_InitStruct1);

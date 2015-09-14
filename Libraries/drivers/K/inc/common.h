@@ -176,6 +176,10 @@ void QuickInitDecode(uint32_t map, map_t* type);
 void EnterSTOPMode(bool enSleepOnExit);
 uint32_t GetUID(void);
 
+void DWT_DelayInit(void);
+void DWT_DelayUs(uint32_t us);
+void DWT_DelayMs(uint32_t ms);
+
 #ifdef __cplusplus
 }
 #endif

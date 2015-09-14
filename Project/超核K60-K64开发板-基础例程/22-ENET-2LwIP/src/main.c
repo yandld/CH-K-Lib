@@ -67,51 +67,8 @@ void ENET_ISR(void)
     ethernetif_input(&fsl_netif0); 
 }
 
-void udp_echo_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct 
-ip_addr *addr, u16_t port)
-{
-    char buffer[512];
-    if (p != NULL) 
-    {
-        if(pbuf_copy_partial(p, buffer, p->tot_len,0) != p->tot_len) 
-        {
-            LWIP_DEBUGF(LWIP_DBG_ON, ("pbuf_copy_partial failed\r\n"));
-        } 
-        else 
-        {
-            buffer[p->tot_len] = '\0';
-            LWIP_DEBUGF(LWIP_DBG_ON, ("got %s\r\n", buffer));
-        }
-        // send received packet back to sender
-        udp_sendto(pcb, p, addr, port);
-        // free the pbuf
-        pbuf_free(p);
-    }
-}
-
-void udp_echo_init(void)
-{
-    struct udp_pcb * pcb;
-
-    // get new pcb
-    pcb = udp_new();
-    if (pcb == NULL) {
-        LWIP_DEBUGF(UDP_DEBUG, ("udp_new failed!\n"));
-        return;
-    }
-
-    // bind to any IP address on port 7
-    if (udp_bind(pcb, IP_ADDR_ANY, 7) != ERR_OK) {
-        LWIP_DEBUGF(UDP_DEBUG, ("udp_bind failed!\n"));
-        return;
-    }
-    printf("bind to PORT:7 OK!\r\n");
-
-    // set udp_echo_recv() as callback function
-    // for received packets
-    udp_recv(pcb, udp_echo_recv, NULL);
-}
-
+extern void udp_echo_init(void);
+extern void echo_init(void);
 
 int main(void)
 {
@@ -143,12 +100,8 @@ int main(void)
     ret = enet_phy_init();
     if(ret)
     {
-        printf("ksz8041 init failed! code:%d\r\n", ret);
+        printf("enet phy init failed! code:%d\r\n", ret);
         while(1);
-    }
-    if(!enet_phy_is_linked())
-    {
-        printf("no wire connected\r\n");
     }
     
     ENET_InitTypeDef ENET_InitStruct1;
@@ -191,7 +144,7 @@ int main(void)
 #endif
 
     udp_echo_init();
-        
+    echo_init();
     while(1)
     {
     //    LWIP_Polling();

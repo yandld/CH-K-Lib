@@ -499,6 +499,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
             </File>
+            <File>
+              <FileName>udp_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\udp_demo.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1275,6 +1280,11 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>udp_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\udp_demo.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -24,6 +24,8 @@
 #include "MK10D7.h"
 #elif MK20D5
 #include "MK20D5.h"
+#elif MK20D7
+#include "MK20D7.h"
 #elif MK10D10
 #include "MK10D10.h"
 #elif MK20D10

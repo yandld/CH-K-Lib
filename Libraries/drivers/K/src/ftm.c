@@ -18,14 +18,13 @@
 /* leagacy support for Kineis Z Version(inital version) */
 #if (!defined(FTM_BASES))
 
-#ifdef FTM1
-    #define FTM_BASES {FTM0, FTM1}
-#elif  FTM2
+
+#if !defined(FTM3)
     #define FTM_BASES {FTM0, FTM1, FTM2}
-#elif  FTM3
-    #define FTM_BASES {FTM0, FTM1, FTM2, FTM3}
+#elif !defined(FTM2)
+    #define FTM_BASES {FTM0, FTM1}
 #else
-    #define FTM_BASES {FTM0}     
+    #define FTM_BASES {FTM0, FTM1, FTM2, FTM3}
 #endif
 
 #endif
@@ -654,6 +653,7 @@ void FTM1_IRQHandler(void)
     }
 }
 
+#if defined(FTM2)
 void FTM2_IRQHandler(void)
 {
     uint32_t i;
@@ -675,6 +675,7 @@ void FTM2_IRQHandler(void)
         }
     }
 }
+#endif
 
 
 /*

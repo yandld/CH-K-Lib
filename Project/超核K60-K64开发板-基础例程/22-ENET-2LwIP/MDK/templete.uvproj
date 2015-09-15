@@ -504,6 +504,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\udp_demo.c</FilePath>
             </File>
+            <File>
+              <FileName>tcp_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\tcp_demo.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1285,6 +1290,11 @@
               <FileName>udp_demo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\udp_demo.c</FilePath>
+            </File>
+            <File>
+              <FileName>tcp_demo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\tcp_demo.c</FilePath>
             </File>
           </Files>
         </Group>

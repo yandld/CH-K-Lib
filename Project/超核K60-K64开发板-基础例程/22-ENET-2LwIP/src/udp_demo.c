@@ -48,7 +48,7 @@ void udp_echo_init(void)
         LWIP_DEBUGF(UDP_DEBUG, ("udp_bind failed!\n"));
         return;
     }
-    printf("bind to PORT:7 OK!\r\n");
+    printf("UDP bind to PORT:7 OK!\r\n");
 
     // set udp_echo_recv() as callback function
     // for received packets

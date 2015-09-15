@@ -48,9 +48,13 @@
 #include "lwip/init.h"
 #include "netif/etharp.h"
 
+#if 0
 u32_t last_arp_time;			
 u32_t last_tcp_time;	
 u32_t last_ipreass_time;
+#endif
+
+bool gEnetRev = false;
 
 
 struct netif fsl_netif0;
@@ -64,7 +68,7 @@ uint8_t     gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
 
 void ENET_ISR(void)
 {
-    ethernetif_input(&fsl_netif0); 
+    gEnetRev = true;
 }
 
 extern void udp_echo_init(void);
@@ -133,7 +137,15 @@ int main(void)
 #if LWIP_DHCP	
     printf("dhcp start getting addr...\r\n");
     dhcp_start(&fsl_netif0);
-    while(fsl_netif0.dhcp->offered_ip_addr.addr == 0)  {};
+    while(fsl_netif0.dhcp->offered_ip_addr.addr == 0)
+    {
+        if(gEnetRev)
+        {
+            ethernetif_input(&fsl_netif0); 
+            gEnetRev = false;
+        }
+    }
+    
     dhcp_fine_tmr();
     netif_set_addr(&fsl_netif0, &(fsl_netif0.dhcp->offered_ip_addr), &(fsl_netif0.dhcp->offered_sn_mask), &(fsl_netif0.dhcp->offered_gw_addr));
     netif_set_default(&fsl_netif0);
@@ -147,7 +159,11 @@ int main(void)
     echo_init();
     while(1)
     {
-    //    LWIP_Polling();
+        if(gEnetRev)
+        {
+            gEnetRev = false;
+            ethernetif_input(&fsl_netif0); 
+        }
     }
 }
 

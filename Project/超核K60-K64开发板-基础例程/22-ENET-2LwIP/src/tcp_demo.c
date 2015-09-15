@@ -56,6 +56,7 @@ void echo_init(void)
         {
             echo_pcb = tcp_listen(echo_pcb);
             tcp_accept(echo_pcb, echo_accept);
+            printf("TCP bind to PORT:7 OK!\r\n");
         }
         else 
         {

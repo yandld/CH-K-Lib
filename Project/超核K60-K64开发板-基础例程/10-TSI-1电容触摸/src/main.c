@@ -14,7 +14,9 @@
         下载程序时需要按着复位键下载。
 */
 
-
+#if !defined(TSI0)
+#error "This chip does not have TSI module"
+#endif
 
 int main(void)
 {

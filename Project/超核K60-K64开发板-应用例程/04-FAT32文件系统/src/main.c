@@ -1,6 +1,7 @@
 #include "gpio.h"
 #include "uart.h"
 #include "sd.h"
+#include "common.h"
 
 #include "ff.h"
 
@@ -50,7 +51,7 @@ int main(void)
     /* ¶ÁÈ¡ÎÄ¼þ */
     rc = f_open(&fil, "0:/fatfs.txt", FA_READ);
     ERROR_TRACE(rc);
-    printf("file size:%l\r\n", f_size(&fil));
+    printf("file size:%d\r\n", f_size(&fil));
     printf("file contents:\r\n");
     while(1)
     {

@@ -16,30 +16,6 @@ static rt_err_t _init (rt_device_t dev)
     return ili9320_init();
 }
 
-static rt_err_t rt_dflash_open(rt_device_t dev, rt_uint16_t oflag)
-{
-	return RT_EOK;
-}
-
-static rt_err_t rt_dflash_close(rt_device_t dev)
-{
-	return RT_EOK;
-}
-
-static rt_err_t rt_dflash_indicate(rt_device_t dev, rt_size_t size)
-{
-    return RT_EOK;
-}
-
-static rt_size_t rt_dflash_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
-{
-	return 0;
-}
-
-static rt_size_t rt_dflash_write (rt_device_t dev, rt_off_t pos, const void* buffer, rt_size_t size)
-{
-    return 0;
-}
 
 static rt_err_t _control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {

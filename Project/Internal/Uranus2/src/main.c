@@ -24,6 +24,8 @@
 
 #define MPU9250_INT_PIN     (18)
 
+KalmanState_t KState[3];
+
 struct dcal_t dcal;
 int RunState;
     
@@ -190,6 +192,10 @@ int main(void)
         RunState = kPTL_REQ_MODE_6AXIS;
     }
     
+    KalmanSimple1D(&KState[0], 1, 30);
+    KalmanSimple1D(&KState[1], 1, 30);
+    KalmanSimple1D(&KState[2], 1, 30);
+    
     while(1)
     {
         if(mq_exist())
@@ -246,28 +252,29 @@ int main(void)
                     time /= fac_us;
 
                     /* low pass filter */
-                    float factor[3];
-                    factor[0] = lpf_1st_factor_cal(halfT*2, 100);
-                    factor[2] = lpf_1st_factor_cal(halfT*2, 10);
                     for(i=0;i<3;i++)
                     {
-                        fadata[i] = lpf_1st(fadata[i], (float)adata[i]*ares, factor[0]);
+                        fadata[i] = (float)adata[i]*ares;
                         fgdata[i] = ((float)gdata[i])*gres;
-                        fmdata[i] = lpf_1st(fmdata[i], (float)mdata[i]*mres, factor[2]);
+                        fmdata[i] = (float)mdata[i]*mres;
                     }
                     
-                    ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
-                    
-                    halfT = ((float)time)/1000/2000;
 
+                    ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
+                    halfT = ((float)time)/1000/2000;
+                    
+                    KalmanRun(&KState[0], angle.P);
+                    angle.P = KState[0].State;
+    
+                    KalmanRun(&KState[1], angle.R);
+                    angle.R = KState[1].State;
+                        
                     for(i=0;i<3;i++)
                     {
                         adata[i] = (adata[i]*ares*1000);
-                        //gdata[i] = (int16_t)(fgdata[i]);
-                        //mdata[i] = (int16_t)(fmdata[i]);
                     }
-                    len = encode_data_packet(buf, &angle, adata, gdata, rmdata, (int32_t)pressure);
                     
+                    len = encode_data_packet(buf, &angle, adata, gdata, rmdata, (int32_t)pressure);
                     
                     if(RunState != kPTL_REQ_MODE_CAL)
                     {
@@ -326,20 +333,20 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf)
         }
         /* get all cal data and program to flash */
         case kPTL_DATA_OFS_ALL:
-            {
-                rev_data_t* rd = (rev_data_t*)pMsg->msg;
-                
-                dcal.ao[0] = (rd->buf[0]<<8) + (rd->buf[1]<<0);
-                dcal.ao[1] = (rd->buf[2]<<8) + (rd->buf[3]<<0);
-                dcal.ao[2] = (rd->buf[4]<<8) + (rd->buf[5]<<0);
-                dcal.go[0] = (rd->buf[6]<<8) + (rd->buf[7]<<0);
-                dcal.go[1] = (rd->buf[8]<<8) + (rd->buf[9]<<0);
-                dcal.go[2] = (rd->buf[10]<<8) + (rd->buf[11]<<0);
-                dcal.mo[0] = (rd->buf[12]<<8) + (rd->buf[13]<<0);
-                dcal.mo[1] = (rd->buf[14]<<8) + (rd->buf[15]<<0);
-                dcal.mo[2] = (rd->buf[16]<<8) + (rd->buf[17]<<0);
-                break;
-            }
+        {
+            rev_data_t* rd = (rev_data_t*)pMsg->msg;
+            
+            dcal.ao[0] = (rd->buf[0]<<8) + (rd->buf[1]<<0);
+            dcal.ao[1] = (rd->buf[2]<<8) + (rd->buf[3]<<0);
+            dcal.ao[2] = (rd->buf[4]<<8) + (rd->buf[5]<<0);
+            dcal.go[0] = (rd->buf[6]<<8) + (rd->buf[7]<<0);
+            dcal.go[1] = (rd->buf[8]<<8) + (rd->buf[9]<<0);
+            dcal.go[2] = (rd->buf[10]<<8) + (rd->buf[11]<<0);
+            dcal.mo[0] = (rd->buf[12]<<8) + (rd->buf[13]<<0);
+            dcal.mo[1] = (rd->buf[14]<<8) + (rd->buf[15]<<0);
+            dcal.mo[2] = (rd->buf[16]<<8) + (rd->buf[17]<<0);
+            break;
+        }
         case kPTL_REQ_SAVE_OFS:
             veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
             break;

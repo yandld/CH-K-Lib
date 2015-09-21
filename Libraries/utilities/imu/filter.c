@@ -42,5 +42,25 @@ float inline lpf_1st(float old_data, float new_data, float factor)
 }
 
 
+void KalmanSimple1D(KalmanState_t *S, double q, double r)
+{
+    S->Q = q;
+    S->R = r;
+    S->F = 1;
+    S->H = 1;
+}
 
+void KalmanRun(KalmanState_t *S, double data)
+{
+    float K;
 
+    
+    //time update - prediction
+    S->X0 = S->F * S->State;
+    S->P0 = S->F * S->Covariance * S->F + S->Q;
+
+    //measurement update - correction
+    K = S->H * S->P0 / (S->H * S->P0 * S->H + S->R);
+    S->State = S->X0 + K * (data - S->H * S->X0);
+    S->Covariance = (1 - K * S->H) * S->P0;
+}

@@ -15,12 +15,8 @@
 
 #include "calibration.h"
 
-#define M_MAX           (1200)
-#define M_MIN           (-1200)
-#define G_MAX           (900)
-#define G_MIN           (-900)
 #define CAL_MAGIC       (0x5ACB)
-   
+
 void dcal_print(struct dcal_t * dc)
 {
     printf("cal data read %s", (dc->magic == 0x5ACB)?("ok!\r\n"):("err!\r\n"));

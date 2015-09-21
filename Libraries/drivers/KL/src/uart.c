@@ -135,18 +135,35 @@ uint32_t UART_SetIntMode(uint32_t instance, UART_Int_t mode, bool val)
 {
     CLK_EN(CLKTbl, instance);
     UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
+    NVIC_EnableIRQ(UART_IrqTbl[instance]);
     
     switch(mode)
     {
         case kUART_IntTx:
             (val)?(UARTx->C2 |= UART_C2_TIE_MASK):(UARTx->C2 &= ~UART_C2_TIE_MASK);
-            NVIC_EnableIRQ(UART_IrqTbl[instance]);
             break;
         case kUART_IntRx:
             (val)?(UARTx->C2 |= UART_C2_RIE_MASK):(UARTx->C2 &= ~UART_C2_RIE_MASK);
-            NVIC_EnableIRQ(UART_IrqTbl[instance]);
             break;
+        case kUART_IntIdleLine:
+            (val)?(UARTx->C2 |= UART_C2_ILIE_MASK):(UARTx->C2 &= ~UART_C2_ILIE_MASK);
         default:
+            break;
+    }
+    return 0;
+}
+
+uint32_t UART_SetDMAMode(uint32_t instance, UART_DMA_t mode, bool val)
+{
+    CLK_EN(CLKTbl, instance);
+ //   UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
+    switch(mode)
+    {
+        case kUART_DMATx:
+            (val)?(UART0->C5 |= UART0_C5_TDMAE_MASK):(UART0->C5 &= ~UART0_C5_TDMAE_MASK);
+            break;
+        case kUART_DMARx:
+            (val)?(UART0->C5 |= UART0_C5_RDMAE_MASK):(UART0->C5 &= ~UART0_C5_RDMAE_MASK);
             break;
     }
     return 0;

@@ -36,7 +36,14 @@ typedef enum
 {
     kUART_IntTx,
     kUART_IntRx,
+    kUART_IntIdleLine,
 }UART_Int_t;
+
+typedef enum
+{
+    kUART_DMATx,
+    kUART_DMARx,
+}UART_DMA_t;
 
 
 /*!< API functions */
@@ -44,6 +51,7 @@ uint32_t UART_Init(uint32_t MAP, uint32_t baudrate);
 uint8_t UART_GetChar(uint32_t instance, uint8_t *ch);
 void UART_PutChar(uint32_t instance, uint8_t ch);
 uint32_t UART_SetIntMode(uint32_t instance, UART_Int_t mode, bool val);
+uint32_t UART_SetDMAMode(uint32_t instance, UART_DMA_t mode, bool val);
 
 #if (CHLIB_DMA_SUPPORT == 1)
 uint32_t UART_DMASend(uint32_t instance, uint32_t dmaChl, uint8_t *buf, uint32_t len);

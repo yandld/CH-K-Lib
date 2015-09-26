@@ -506,25 +506,67 @@ uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint32_t *id, uint8_t *buf
     return 1;
 }
 
+uint32_t CAN_ReadFIFO(uint32_t instance, uint32_t *id, uint8_t *buf, uint8_t *len)
+{
+	uint32_t i;
+	uint32_t word[2] = {0};
+
+    /* read content */
+    *len = CAN_GET_FRAME_LEN(CANBase[instance]->MB[0].CS);
+    word[0] = CANBase[instance]->MB[0].WORD0;
+    word[1] = CANBase[instance]->MB[0].WORD1;
+    for(i = 0; i < *len; i++)
+    {
+        if(i < 4)
+        (*(buf + i))=(word[0]>>((3-i)*8));
+        else							
+        (*(buf + i))=(word[1]>>((7-i)*8));
+    }
+    *id = (CANBase[instance]->MB[0].ID & (CAN_ID_EXT_MASK | CAN_ID_STD_MASK));
+    i = CANBase[instance]->TIMER; /* unlock MB */
+    CANBase[instance]->IFLAG1 = (1 << CAN_RX_FIFO_MB);
+    return 0;
+}
+
+bool CAN_IsRxFIFOEnable(uint32_t instance)
+{
+    return (CANBase[instance]->MCR & CAN_MCR_RFEN_MASK);
+}
+
+void CAN_SetRxFIFO(uint32_t instance)
+{
+    CAN_Type *CANx;
+    
+    CANx = CANBase[instance];
+    /* halt mode */
+    CANx->MCR |= (CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
+	while(!(CAN_MCR_FRZACK_MASK & (CANx->MCR))) {}; 
+        
+    CANx->MCR |= CAN_MCR_RFEN_MASK;
+    CANx->CTRL2 |= CAN_CTRL2_RFFN(0);
+    
+    /* enable module */
+    CANx->MCR &= ~(CAN_MCR_FRZ_MASK | CAN_MCR_HALT_MASK);
+	while((CAN_MCR_FRZACK_MASK & (CANx->MCR)));
+	while(((CANx->MCR)&CAN_MCR_NOTRDY_MASK));
+}
+
+
+
+void CAN_IRQHandler(uint32_t instance)
+{
+    if(CAN_CallBackTable[instance])
+    {
+        CAN_CallBackTable[instance]();
+    }
+}
 
 /**
  * @brief  中断处理函数入口
  * @note 函数内部用于中断事件处理
  */
-void CAN0_ORed_Message_buffer_IRQHandler(void)
-{
-    if(CAN_CallBackTable[HW_CAN0])
-    {
-        CAN_CallBackTable[HW_CAN0]();
-    }
-}
+void CAN0_ORed_Message_buffer_IRQHandler(void) {CAN_IRQHandler(HW_CAN0);}
+void CAN1_ORed_Message_buffer_IRQHandler(void) {CAN_IRQHandler(HW_CAN1);}
 
-void CAN1_ORed_Message_buffer_IRQHandler(void)
-{
-    if(CAN_CallBackTable[HW_CAN1])
-    {
-        CAN_CallBackTable[HW_CAN1]();
-    } 
-}
 
 #endif

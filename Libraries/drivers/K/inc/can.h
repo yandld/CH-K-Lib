@@ -22,6 +22,10 @@
 #define HW_CAN0  (0x00U)  //CAN0模块
 #define HW_CAN1  (0x01U)  //CAN1模块  
      
+//!< RX FIFO
+/* when FIFO is enabled, MB5 interrupt is RXFIFO interrupt */
+#define CAN_RX_FIFO_MB      (0x05)
+     
 //CAN总线速度选择
 typedef enum 
 {
@@ -70,6 +74,10 @@ void CAN_ITDMAConfig(uint32_t instance, uint32_t mb, CAN_ITDMAConfig_Type config
 void CAN_SetRxMB(uint32_t instance, uint32_t mb, uint32_t id);
 void CAN_CallbackInstall(uint32_t instance, CAN_CallBackType AppCBFun);
 void CAN_Init(CAN_InitTypeDef* CAN_InitStruct);
+
+void CAN_SetRxFIFO(uint32_t instance);
+bool CAN_IsRxFIFOEnable(uint32_t instance);
+uint32_t CAN_ReadFIFO(uint32_t instance, uint32_t *id, uint8_t *buf, uint8_t *len);
 
 #ifdef __cplusplus
 }

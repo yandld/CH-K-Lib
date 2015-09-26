@@ -1,5 +1,6 @@
 #include "lwip/mem.h"
 #include "lwip/raw.h"
+#include "lwip/udp.h"
 #include "lwip/icmp.h"
 #include "lwip/dhcp.h"
 #include "lwip/netif.h"

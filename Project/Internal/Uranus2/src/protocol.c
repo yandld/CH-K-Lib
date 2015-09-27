@@ -11,6 +11,7 @@
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
 #endif
 
+static callback_t ano_callback = NULL;
 
 
 enum ano_status
@@ -139,49 +140,63 @@ uint32_t ano_encode_offset_packet(offset_t* offset, uint8_t* buf)
 }
 
 
-int ano_rec(uint8_t ch, rev_data_t *rd)
+
+void ano_set_callback(callback_t cb)
+{
+    ano_callback = cb;
+}
+
+int ano_rec(rev_data_t *rd, uint8_t *buf, uint32_t len)
 {
     int ret;
-    static int i;
+    int i;
+    static int j;
     static enum ano_status states = kANO_IDLE;
     
     ret = 1;
-    
-    switch(states)
+    for(i=0; i<len; i++)
     {
-        case kANO_IDLE:
-            if((uint8_t)ch == 0x88)
-            {
-                states = kANO_CMD;
-            }
-            break;
-        case kANO_CMD:
-            rd->cmd = ch;
-            states = kANO_LEN;
-            break;
-        case kANO_LEN:
-            rd->len = ch;
-            if(ch == 0)
-            {
-                states = kANO_CHECKSUM;
-            }
-            else
-            {
-                i = 0;
-                states = kANO_DATA;
-            }
-            break;
-        case kANO_DATA:
-            rd->buf[i++] = ch;
-            if(i == rd->len)
-            {
-                states = kANO_CHECKSUM;
-            }
-            break;
-        case kANO_CHECKSUM:
-            ret = 0;
-            states = kANO_IDLE;
-            break;
+        switch(states)
+        {
+            case kANO_IDLE:
+                if((uint8_t)buf[i] == 0x88)
+                {
+                    states = kANO_CMD;
+                }
+                break;
+            case kANO_CMD:
+                rd->cmd = buf[i];
+                states = kANO_LEN;
+                break;
+            case kANO_LEN:
+                rd->len = buf[i];
+                if(rd->len == 0)
+                {
+                    states = kANO_CHECKSUM;
+                }
+                else
+                {
+                    j = 0;
+                    states = kANO_DATA;
+                }
+                break;
+            case kANO_DATA:
+                rd->buf[j++] = buf[i];
+                if(j == rd->len)
+                {
+                    states = kANO_CHECKSUM;
+                }
+                break;
+            case kANO_CHECKSUM:
+                if(ano_callback)
+                {
+                    ano_callback(rd);
+                }
+
+                ret = 0;
+                states = kANO_IDLE;
+                break;
+        }
     }
     return ret;
 }

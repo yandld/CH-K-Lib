@@ -20,12 +20,13 @@
 #include "calibration.h"
 #include "mq.h"
 
-#define VERSION         (201)
-
+#define VERSION             (201)
 #define MPU9250_INT_PIN     (18)
+#define DMA_TX_CH      (HW_DMA_CH0)
+#define DMA_RX_CH      (HW_DMA_CH1)
 
 KalmanState_t KState[3];
-
+static uint8_t gRevBuf[64];
 struct dcal_t dcal;
 int RunState;
     
@@ -60,13 +61,13 @@ int sensor_init(void)
     uint32_t ret;
 
     I2C_Init(I2C0_SCL_PB00_SDA_PB01, 100*1000);
-    DelayMs(10);
+    DelayMs(15);
     ret = mpu9250_init(0);
     if(ret)
     {
         printf("mpu9250 init:%d\r\n", ret);
         printf("restarting...\r\n");
-        DelayMs(500);
+        DelayMs(300);
         SystemSoftReset();
     }
     
@@ -105,6 +106,7 @@ static void ShowInfo(void)
             printf("RunState:0x%X\r\n", RunState);
             break;
     }
+    dcal_print(&dcal);
 }
 
 //#define FALL_LIMIT      100
@@ -134,7 +136,43 @@ static void ShowInfo(void)
 //    return ret;
 //}
 
+void HWInit(void)
+{
+    DelayInit();
+    GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
+    GPIO_Init(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Mode_IFT);
+    GPIO_SetIntMode(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Int_RE, true);
+    
+    UART_Init(UART0_RX_PA01_TX_PA02, 115200);
+    UART_SetDMAMode(HW_UART0, kUART_DMARx, true);
+    UART_SetIntMode(HW_UART0, kUART_IntIdleLine, true);
+    DMA_Init_t Init;
+    Init.chl = DMA_RX_CH;
+    Init.chlTrigSrc = UART0_REV_DMAREQ;
+    Init.trigSrcMod = kDMA_TrigSrc_Normal;
+    Init.transCnt = 9999;
 
+    Init.sAddr = (uint32_t)&UART0->D;
+    Init.sAddrIsInc = false;
+    Init.sDataWidth = kDMA_DataWidthBit_8;
+    Init.sMod = kDMA_ModuloDisable;
+
+    Init.dAddr = (uint32_t)gRevBuf;
+    Init.dAddrIsInc = true;
+    Init.dDataWidth = kDMA_DataWidthBit_8;
+    Init.dMod = kDMA_ModuloDisable;
+    DMA_Init(&Init);
+
+    DMA_EnableReq(DMA_RX_CH);
+    
+    veep_init();
+    mq_init();
+    veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
+    sensor_init();
+}
+
+
+void ano_callback(rev_data_t *rd);
 uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf);
 
 int main(void)
@@ -151,26 +189,13 @@ int main(void)
     uint32_t len;
     static uint8_t buf[64];
     
-    DelayInit();
-    GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
-    GPIO_Init(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Mode_IFT);
-    GPIO_SetIntMode(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Int_RE, true);
-    
-    UART_Init(UART0_RX_PA01_TX_PA02, 115200);
-    UART_SetIntMode(HW_UART0, kUART_IntRx, true);
-    
-    ShowInfo();
-    mq_init();
-    veep_init();
-    sensor_init();
+    HWInit();
 
     ares  = mpu9250_get_ares();
     gres  = mpu9250_get_gres();
     mres  = mpu9250_get_mres();
     
-    veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
-    dcal_print(&dcal);
-
+    ano_set_callback(ano_callback);
 
     PIT_Init();
     PIT_SetTime(0, 50*1000);
@@ -191,6 +216,7 @@ int main(void)
     {
         RunState = kPTL_REQ_MODE_6AXIS;
     }
+    ShowInfo();
     
     KalmanSimple1D(&KState[0], 1, 30);
     KalmanSimple1D(&KState[1], 1, 30);
@@ -259,7 +285,6 @@ int main(void)
                         fmdata[i] = (float)mdata[i]*mres;
                     }
                     
-
                     ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
                     halfT = ((float)time)/1000/2000;
                     
@@ -281,7 +306,7 @@ int main(void)
                         GPIO_PinToggle(HW_GPIOC, 3);
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
-                            UART_DMASend(HW_UART0, 0, buf, len);
+                            UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
                         }
                     }
                 break;
@@ -296,7 +321,6 @@ int main(void)
                     }
                     break;
                 }
-
             }
         }
     }
@@ -334,20 +358,19 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf)
         /* get all cal data and program to flash */
         case kPTL_DATA_OFS_ALL:
         {
-            rev_data_t* rd = (rev_data_t*)pMsg->msg;
-            
-            dcal.ao[0] = (rd->buf[0]<<8) + (rd->buf[1]<<0);
-            dcal.ao[1] = (rd->buf[2]<<8) + (rd->buf[3]<<0);
-            dcal.ao[2] = (rd->buf[4]<<8) + (rd->buf[5]<<0);
-            dcal.go[0] = (rd->buf[6]<<8) + (rd->buf[7]<<0);
-            dcal.go[1] = (rd->buf[8]<<8) + (rd->buf[9]<<0);
-            dcal.go[2] = (rd->buf[10]<<8) + (rd->buf[11]<<0);
-            dcal.mo[0] = (rd->buf[12]<<8) + (rd->buf[13]<<0);
-            dcal.mo[1] = (rd->buf[14]<<8) + (rd->buf[15]<<0);
-            dcal.mo[2] = (rd->buf[16]<<8) + (rd->buf[17]<<0);
+            dcal.ao[0] = (pMsg->payload[0]<<8) + (pMsg->payload[1]<<0);
+            dcal.ao[1] = (pMsg->payload[2]<<8) + (pMsg->payload[3]<<0);
+            dcal.ao[2] = (pMsg->payload[4]<<8) + (pMsg->payload[5]<<0);
+            dcal.go[0] = (pMsg->payload[6]<<8) + (pMsg->payload[7]<<0);
+            dcal.go[1] = (pMsg->payload[8]<<8) + (pMsg->payload[9]<<0);
+            dcal.go[2] = (pMsg->payload[10]<<8) + (pMsg->payload[11]<<0);
+            dcal.mo[0] = (pMsg->payload[12]<<8) + (pMsg->payload[13]<<0);
+            dcal.mo[1] = (pMsg->payload[14]<<8) + (pMsg->payload[15]<<0);
+            dcal.mo[2] = (pMsg->payload[16]<<8) + (pMsg->payload[17]<<0);
             break;
         }
         case kPTL_REQ_SAVE_OFS:
+            dcal.magic = 0x5ACB;
             veep_write((uint8_t*)&dcal, sizeof(struct dcal_t));
             break;
         case kPTL_REQ_MODE_6AXIS:
@@ -363,32 +386,47 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf)
     return len;
 }
 
+void ano_callback(rev_data_t *rd)
+{
+    msg_t msg;
+    msg.cmd = kMSG_CMD_DATA_REV;
+    msg.type = rd->cmd;
+    msg.msg_len = rd->len;
+    memcpy(msg.payload, rd->buf, rd->len);
+    msg.msg = msg.payload;
+    mq_push(msg);
+}
+
 void UART0_IRQHandler(void)
 {
-    uint8_t ch;
-    static rev_data_t rd, rd_cp;
+    static uint8_t buf[64];
+    uint32_t len;
+    static rev_data_t rd;
     if((UART0->S1 & UART_S1_RDRF_MASK) && (UART0->C2 & UART_C2_RIE_MASK))
     {
-        ch = UART0->D;
-        if(ano_rec(ch, &rd) == 0)
-        {
-            rd_cp = rd;
-            msg_t msg;
-            msg.cmd = kMSG_CMD_DATA_REV;
-            msg.type = rd_cp.cmd;
-            msg.msg_len = rd_cp.len;
-            msg.msg = &rd_cp;
-            mq_push(msg);
-        }
+       // gRevBuf[i++] = UART0->D;
     }
+    
+    if(UART0->S1 & UART_S1_IDLE_MASK)
+    {
+        UART0->S1 |=  UART_S1_IDLE_MASK;
+        
+        len = 9999 - DMA_GetTransCnt(DMA_RX_CH);
+        memcpy(buf, gRevBuf, len);
+        DMA_SetDestAddr(DMA_RX_CH, (uint32_t)gRevBuf);
+        DMA_SetTransCnt(DMA_RX_CH, 9999);
+        ano_rec(&rd, buf, len);
+    }
+    
     /**
         this is very important because in real applications
         OR usually occers, the RDRF will block when OR is asserted 
     */
     if(UART0->S1 & UART_S1_OR_MASK)
     {
-        ch = UART0->D;
+      //  ch = UART0->D;
     }
+    
 }
 
 void PIT_IRQHandler(void)

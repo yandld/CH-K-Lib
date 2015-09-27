@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 
+
 enum
 {
     kPTL_DATA_OUTPUT = 0xAF, /* 0xAF */
@@ -60,14 +61,15 @@ typedef struct
     uint8_t cmd;
 }rev_data_t;
 
+typedef void (*callback_t)(rev_data_t *rd);
 
 //!< API
 
 uint32_t ano_encode_packet(payload_t* data, uint8_t* buf);
 uint32_t ano_encode_fwinfo(fw_info_t* fwinfo, uint8_t* buf);
 uint32_t ano_encode_offset_packet(offset_t* offset, uint8_t* buf);
-int ano_rec(uint8_t ch, rev_data_t *rd);
-
+int ano_rec(rev_data_t *rd, uint8_t *buf, uint32_t len);
+void ano_set_callback(callback_t cb);
 
 #endif
 

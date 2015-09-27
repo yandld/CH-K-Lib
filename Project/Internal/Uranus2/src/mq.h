@@ -14,6 +14,7 @@ typedef struct
     uint8_t   type;
     uint16_t  msg_len;
     void*     msg;
+    uint8_t   payload[64];
 }msg_t;
 
 

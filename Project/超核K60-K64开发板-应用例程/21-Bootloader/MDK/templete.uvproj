@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\znfat;..\..\..\..\Libraries\emWin\Include;..\..\..\..\Libraries\emWin\Sample\LCD_X;D:\Software\Keil_V4\ARM\Flash</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\src;..\src\bootloader</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -405,14 +405,14 @@
           <GroupName>startup</GroupName>
           <Files>
             <File>
+              <FileName>system_MK60D10.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\system_MK60D10.c</FilePath>
+            </File>
+            <File>
               <FileName>startup_MK60D10.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK60D10.s</FilePath>
-            </File>
-            <File>
-              <FileName>system_MK60D10.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\system_MK60D10.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -423,11 +423,6 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>mq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\mq.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -455,14 +450,29 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
             </File>
             <File>
-              <FileName>dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\dma.c</FilePath>
-            </File>
-            <File>
               <FileName>flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\flash.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>bootloader</GroupName>
+          <Files>
+            <File>
+              <FileName>bootloader.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\bootloader\bootloader.c</FilePath>
+            </File>
+            <File>
+              <FileName>bootloader_util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\bootloader\bootloader_util.c</FilePath>
+            </File>
+            <File>
+              <FileName>message_manage.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\bootloader\message_manage.c</FilePath>
             </File>
           </Files>
         </Group>

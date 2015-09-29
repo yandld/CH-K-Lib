@@ -12,7 +12,7 @@ int main(void)
     DelayInit();
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
-    BootloaderInit(UART0, 115200, 2000);
+    BootloaderInit(2000);
     
     while(1)
     {

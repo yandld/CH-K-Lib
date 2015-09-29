@@ -33,10 +33,8 @@ extern RunType_t M_Control;
 extern UART_Type *pUARTx;
 
 
-extern void Fn_RxProcData(const uint8_t buf);
-extern void Fn_SendResponse(uint8_t* content, uint8_t cipherFlg,  uint16_t len);
-
-
+void Fn_RxProcData(uint8_t data);
+void Fn_SendResponse(uint8_t* content, uint8_t cipherFlg,  uint16_t len);
 
 
 #endif

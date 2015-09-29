@@ -23,11 +23,9 @@
 #define SUB_VER				1
 
 
-#define FLASH_SIZE              (512*1024UL)
-#define FLASH_PAGE_SIZE         2048UL
-#define END_ADDR                (512 * 1024UL-1)
-
-#define APP_START_ADDR          (20480UL)
+#define FLASH_SIZE              (512*1024)
+#define FLASH_PAGE_SIZE         (2048)
+#define APP_START_ADDR          (20*1024)
 
 
 

@@ -12,8 +12,6 @@
 
 typedef  void (*pFunction)(void);
 
-
-
 //数据帧格式
 #pragma pack(1)
 typedef struct
@@ -63,15 +61,6 @@ typedef struct
 } VerificationFrame_t;
 
 
-/* 应用程序结构体 */
-typedef struct
-{
-    uint32_t 	app_size;       /* 应用程序长度 */
-    uint32_t 	app_crc;        /* 应用CRC检验值 */
-    uint32_t	app_start_addr; /* 程序起始地址 */
-} AppType_t;
-
-
 //应用程序信息结构体
 #pragma pack(1)
 typedef struct
@@ -90,7 +79,6 @@ typedef void(*pFuncCallback)(MessageType_t *pMsg);
 
 static MessageType_t* pMsg;         /* 消息指针 */
 static pFuncCallback pExecFun;      /* 回调函数变量 */
-static uint8_t CacheFirstPg[FLASH_PAGE_SIZE];/* 第一页的数据缓存 */
  uint32_t runAferDelayMs;
 
 
@@ -102,9 +90,6 @@ static pFuncCallback MsgCallbackFind(MessageType_t* pMsg);
 
 /* 串口消息处理函数 */
 static void ProcessUartMsg(MessageType_t* pMsg);
-
-/* 芯片信息处理函数 */
-static void ProcessChiMsg(MessageType_t* pMsg);
 
 /* 应用程序信息处理函数 */
 static void ProcessAppInfoMsg(MessageType_t* pMsg);
@@ -125,9 +110,7 @@ static void ProccessAppCheckMsg(MessageType_t* pMsg);
  void TickProcess(void);
 
 static void ProcessChipInfoMsg(MessageType_t* pMsg);
-static uint32_t Fn_AppVerification(uint8_t* firstPgStart, uint16_t pkgNo);
-void Fn_GoToUserApplication(__IO uint32_t app_start_addr);
-static uint8_t Fn_IsAppValid(void);
+void GoToUserApp(__IO uint32_t app_start_addr);
 
 
 /*
@@ -186,8 +169,6 @@ static void ProcessUartMsg(MessageType_t* pMsg)
     fn_msg_push(m_Msg);
 }
 
-
-
 static void ProcessChipInfoMsg(MessageType_t* pMsg)
 {
     ChipInfo_t infoFrame;
@@ -240,17 +221,8 @@ static void ProcessTransDataMsg(MessageType_t* pMsg)
         if(needWrite)
         {
             FLASH_EraseSector(M_Control.write_addr);
-            //缓存第一页，直到收完整个包之后再存第一页，这样可以防止写完一半后重启进入不完整程序的现象
-            if(M_Control.write_addr == APP_START_ADDR)
+            if(FLASH_WriteSector(M_Control.write_addr, pDataFrame->content, FLASH_PAGE_SIZE) == FLASH_OK)
             {
-                memcpy(CacheFirstPg, pDataFrame->content, FLASH_PAGE_SIZE);
-                M_Control.op_state = RCV_OK;
-
-            }
-
-            else if(FLASH_WriteSector(M_Control.write_addr, pDataFrame->content, FLASH_PAGE_SIZE) == FLASH_OK)
-            {
-							
                 if(memcmp((void*)M_Control.write_addr, pDataFrame->content, FLASH_PAGE_SIZE) == 0)
                 {
                     M_Control.op_state = RCV_OK;
@@ -281,7 +253,7 @@ static void ProcessTransDataMsg(MessageType_t* pMsg)
         }
 
         rspFrame.pkg_no = pDataFrame->currentPkgNo;
-        if(M_Control.retryCnt<3)
+        if(M_Control.retryCnt < 3)
         {
             Fn_SendResponse((uint8_t*)&rspFrame, 0, sizeof(rspFrame));
         }
@@ -293,35 +265,7 @@ static void ProcessTransDataMsg(MessageType_t* pMsg)
     for(volatile uint32_t delayCnt = 26000; delayCnt; delayCnt--);
 }
 
-/* 
-    验证应用程序是否合法
-    这里采用的简单的把所有字节加起来返回一个uint32_t类型的数据的方法
-    一般情况下这种应用没有问题
-*/
-static uint32_t Fn_AppVerification(uint8_t* firstPgStart, uint16_t pkgNo)
-{
-    uint16_t pkgOffset = 0;
-    uint32_t endOfVerificationAddr;
-    uint32_t i;
-    uint32_t fcs = 0;
 
-    for(i=0; i< FLASH_PAGE_SIZE; i++)
-    {
-        fcs += firstPgStart[i];
-    }
-    pkgOffset = 1;
-
-    if(pkgNo > pkgOffset)
-    {
-        endOfVerificationAddr = APP_START_ADDR + FLASH_PAGE_SIZE * pkgNo;
-        for(i = APP_START_ADDR + FLASH_PAGE_SIZE; i < endOfVerificationAddr; i++)
-        {
-            fcs += (*(uint8_t*)i);
-        }
-    }
-
-    return fcs;
-}
 
 /* 验证应用程序是否有问题 */
 static void ProcessAppVerificationMsg(MessageType_t* pMsg)
@@ -337,16 +281,8 @@ static void ProcessAppVerificationMsg(MessageType_t* pMsg)
         rspFrame.cmd = CMD_VERIFICATION;
         rspFrame.status = RCV_ERR;
 
-        if(pVFrame->fcs == Fn_AppVerification(CacheFirstPg, M_Control.total_pkg))
-        {
-            if(FLASH_WriteSector(M_Control.write_addr, CacheFirstPg, FLASH_PAGE_SIZE) == FLASH_OK)
-            {
-                rspFrame.status = RCV_OK;
-            }
-        }
-
+        rspFrame.status = RCV_OK;
         Fn_SendResponse((uint8_t*)&rspFrame, 0, sizeof(rspFrame));
-
         fn_msg_push(m_Msg);
     }
 }
@@ -354,13 +290,8 @@ static void ProcessAppVerificationMsg(MessageType_t* pMsg)
 /* 检测程序是否有效，如果有效， 则跳转到应用程序执行 */
 static void ProccessAppCheckMsg(MessageType_t* pMsg)
 {
-	uint32_t i;
-	uint8_t* p;
-    if(Fn_IsAppValid())
-    {
-        for(volatile uint32_t i=0; i<26000; i++);
-        Fn_GoToUserApplication( APP_START_ADDR);
-    }
+    for(volatile uint32_t i=0; i<26000; i++);
+    GoToUserApp( APP_START_ADDR);
 }
 
 static void ProcessTimeOutEvt(void)
@@ -395,26 +326,15 @@ static void TickProcess(void)
     }
 }
 
-static uint8_t Fn_IsAppValid(void)
-{
-    if(*(uint32_t*)APP_START_ADDR != 0xFFFFFFFFU)
-    {
-        return 1;
-    }
-    return 0;
-}
 
-
-
-
- void Fn_GoToUserApplication(__IO uint32_t app_start_addr)
+void GoToUserApp(__IO uint32_t app_start_addr)
 {
     pFunction jump_to_application;
     uint32_t jump_addr;
     jump_addr = *(__IO uint32_t*)(app_start_addr + 4);  //RESET中断
     
     //由于采用了bootloader, 故程序的jump_addr地址应该在 (0x5000, END_ADDR] 范围内
-    if(app_start_addr != 0xfffffffful && (jump_addr > 0x5000 && jump_addr < END_ADDR))
+    if(app_start_addr != 0xFFFFFFFFUL && (jump_addr > APP_START_ADDR))
     {
 
         jump_to_application = (pFunction)jump_addr;
@@ -423,71 +343,23 @@ static uint8_t Fn_IsAppValid(void)
     }
 }
 
-uint8_t BootloaderInit(UART_Type *uartch, uint32_t buadrate, uint32_t delayMs)
+uint32_t BootloaderInit(uint32_t timeOut)
 {
     FLASH_Init();
     SysTick_Cfg(GetClock(kBusClock)/1000);
-    pUARTx = uartch;
+    pUARTx = UART0;
     fn_queue_init();
     
-    runAferDelayMs = delayMs; 
-    
-    //等待串口稳定
-    for(volatile uint32_t delayCnt = 2600; delayCnt; delayCnt--);
-    
-    if(pUARTx != NULL)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-//串口接收缓冲区
-uint8_t UARTRxBuf[32];
-void BootloaderWaitUARTData(void)
-{
-				while(1)
-				{
-                    
-					if(UART_ReadByte(0, (uint16_t*)UARTRxBuf) == 0) //串口0接收到数据
-					{
-						pUARTx = UART0;
-						Fn_RxProcData(UARTRxBuf[0]);
-						break;
-					}
-
-					if (fn_msg_exist())
-					{
-						pMsg =  fn_msg_pop();
-
-						//找到合适的消息处理函数
-						pExecFun = MsgCallbackFind(pMsg);
-
-						if(pExecFun != NULL)
-						{
-							pExecFun(pMsg);
-							pExecFun = NULL;
-						}
-					}
-							//如果超过设定的等待时间且没有与上位机通信 
-					if((M_Control.usart_timeout >= runAferDelayMs) && (!M_Control.bootloaderFlg))
-					{
-							ProcessTimeOutEvt();
-					}
-					TickProcess();
-				}
+    runAferDelayMs = timeOut; 
+    return 0;
 }
 
 void BootloaderProc(void)
 {
-    uint16_t i,RecCnt;
-    
-    if(UART_ReadByte(0, (uint16_t*)UARTRxBuf) == 0)
+    uint8_t data;
+    if(UART_ReadByte(0, (uint16_t*)&data) == 0)
     {
-        Fn_RxProcData(UARTRxBuf[0]);
+        Fn_RxProcData(data);
     }
     if (fn_msg_exist())
     {

@@ -1,11 +1,11 @@
-#include "message_manage.h"
+#include "mq.h"
 
 #define C_MAX_SIZE          10
 
 
 typedef struct
 {
-    MessageType_t m_Msg[C_MAX_SIZE];
+    msg_t m_Msg[C_MAX_SIZE];
     uint8_t front;
     uint8_t rear;
 } SqQueue_t;
@@ -13,19 +13,19 @@ typedef struct
 static SqQueue_t msgQueue;
 
 
-void fn_queue_init(void)
+void mq_init(void)
 {
     msgQueue.front = msgQueue.rear = 0;
 }
 
-uint8_t fn_msg_exist(void)
+uint8_t mq_exist(void)
 {
     return msgQueue.front != msgQueue.rear;
 }
 
-MessageType_t *fn_msg_pop(void)
+msg_t *mq_pop(void)
 {
-    MessageType_t *pMsg = (void*)0;
+    msg_t *pMsg = (void*)0;
 
     if(msgQueue.front != msgQueue.rear)
     {
@@ -38,7 +38,7 @@ MessageType_t *fn_msg_pop(void)
     return pMsg;
 }
 
-uint8_t fn_msg_push(MessageType_t pMsg)
+uint8_t mq_push(msg_t pMsg)
 {
     if(msgQueue.front == (msgQueue.rear+1)%C_MAX_SIZE)
     {

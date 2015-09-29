@@ -359,7 +359,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--c99</MiscControls>
-              <Define>MK60D10</Define>
+              <Define>MK60D10 CLOCK_SETUP=0</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\src;..\src\bootloader</IncludePath>
             </VariousControls>
@@ -440,11 +440,6 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\uart.c</FilePath>
             </File>
             <File>
-              <FileName>systick.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
-            </File>
-            <File>
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
@@ -470,9 +465,9 @@
               <FilePath>..\src\bootloader\bootloader_util.c</FilePath>
             </File>
             <File>
-              <FileName>message_manage.c</FileName>
+              <FileName>mq.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\bootloader\message_manage.c</FilePath>
+              <FilePath>..\src\bootloader\mq.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,7 +1,7 @@
 #include "bootloader.h"
 #include "def.h"
 #include "flash.h"
-#include "message_manage.h"
+#include "mq.h"
 #include "bootloader_util.h"
 #include <string.h>
 #include "common.h"
@@ -18,7 +18,7 @@ typedef struct
 {
     uint8_t  cmd;
     uint16_t currentPkgNo;
-    uint8_t content[8189];
+    uint8_t content[4096];
 } DataFrame_t;
 
 
@@ -40,7 +40,6 @@ typedef struct
     uint8_t cmd;
     uint16_t pkg_no;
     uint8_t status;
-//    uint8_t Reserved[3];
 } ResponseFrame_t;
 
 
@@ -51,14 +50,6 @@ typedef struct
     uint8_t cmd;
     uint8_t content[8191];
 } GenericRecvFrame_t;
-
-//接收到的数据校验帧格式
-#pragma pack(1)
-typedef struct
-{
-    uint8_t cmd;
-    uint32_t fcs;
-} VerificationFrame_t;
 
 
 //应用程序信息结构体
@@ -73,35 +64,35 @@ typedef struct
 
 
 //用于消息处理的回调函数
-typedef void(*pFuncCallback)(MessageType_t *pMsg);
+typedef void(*pFuncCallback)(msg_t *pMsg);
 
 
 
-static MessageType_t* pMsg;         /* 消息指针 */
+static msg_t* pMsg;         /* 消息指针 */
 static pFuncCallback pExecFun;      /* 回调函数变量 */
- uint32_t runAferDelayMs;
+uint32_t SysTimeOut;
 
 
 /* Systick计数器的初始化 */
 static void SysTick_Cfg(uint32_t ticks);
 
 /* 命令解析函数 */
-static pFuncCallback MsgCallbackFind(MessageType_t* pMsg);
+static pFuncCallback MsgCallbackFind(msg_t* pMsg);
 
 /* 串口消息处理函数 */
-static void ProcessUartMsg(MessageType_t* pMsg);
+static void ProcessUartMsg(msg_t* pMsg);
 
 /* 应用程序信息处理函数 */
-static void ProcessAppInfoMsg(MessageType_t* pMsg);
+static void ProcessAppInfoMsg(msg_t* pMsg);
 
 /* 传输数据消息处理函数 */
-static void ProcessTransDataMsg(MessageType_t* pMsg);
+static void ProcessTransDataMsg(msg_t* pMsg);
 
 /* 应用检验消息处理函数 */
-static void ProcessAppVerificationMsg(MessageType_t* pMsg);
+static void ProcessAppVerificationMsg(msg_t* pMsg);
 
 /* 应用程序检查函数 */
-static void ProccessAppCheckMsg(MessageType_t* pMsg);
+static void ProccessAppCheckMsg(msg_t* pMsg);
 
 /* 超时事件处理函数 */
  void ProcessTimeOutEvt(void);
@@ -109,18 +100,18 @@ static void ProccessAppCheckMsg(MessageType_t* pMsg);
 /* Tick处理函数 */
  void TickProcess(void);
 
-static void ProcessChipInfoMsg(MessageType_t* pMsg);
+static void ProcessChipInfoMsg(msg_t* pMsg);
 void GoToUserApp(__IO uint32_t app_start_addr);
 
 
 /*
     寻找合适的消息回调函数，并返回该函数
 */
-static pFuncCallback MsgCallbackFind(MessageType_t* pMsg)
+static pFuncCallback MsgCallbackFind(msg_t* pMsg)
 {
     pFuncCallback pCallBack = NULL;
 
-    switch(pMsg->m_Command)
+    switch(pMsg->cmd)
     {
     case CMD_SERIALPORT:
         pCallBack = ProcessUartMsg;
@@ -155,21 +146,21 @@ static pFuncCallback MsgCallbackFind(MessageType_t* pMsg)
 }
 
 
-static void ProcessUartMsg(MessageType_t* pMsg)
+static void ProcessUartMsg(msg_t* pMsg)
 {
     GenericRecvFrame_t *pRcvFrame;
-    MessageType_t m_Msg;
+    msg_t m_Msg;
 
     pRcvFrame = (GenericRecvFrame_t *)(((uint8_t*)pMsg->pMessage)) ;
-    M_Control.bootloaderFlg = 1;
+    M_Control.IsBootMode = true;
 
-    m_Msg.m_Command = pRcvFrame->cmd;
+    m_Msg.cmd = pRcvFrame->cmd;
     m_Msg.pMessage = pRcvFrame;
 		
-    fn_msg_push(m_Msg);
+    mq_push(m_Msg);
 }
 
-static void ProcessChipInfoMsg(MessageType_t* pMsg)
+static void ProcessChipInfoMsg(msg_t* pMsg)
 {
     ChipInfo_t infoFrame;
 
@@ -178,33 +169,30 @@ static void ProcessChipInfoMsg(MessageType_t* pMsg)
     infoFrame.FCFG2 = SIM->FCFG2;
     infoFrame.SDID  = SIM->SDID;
 
-    Fn_SendResponse((uint8_t*)&infoFrame, 0, sizeof(infoFrame));
+    SendResp((uint8_t*)&infoFrame, 0, sizeof(infoFrame));
 }
 
-static void ProcessAppInfoMsg(MessageType_t* pMsg)
+static void ProcessAppInfoMsg(msg_t* pMsg)
 {
-    AppInfoType_t*pAppInfo;
-    ResponseFrame_t rspFrame = {CMD_APP_INFO, 0, RCV_OK};
+    AppInfoType_t* pAppInfo = (AppInfoType_t*)pMsg->pMessage;
+    ResponseFrame_t Resp = {CMD_APP_INFO, 0, RCV_OK};
 
-    pAppInfo = (AppInfoType_t*)pMsg->pMessage;
 
-    M_Control.app_length = pAppInfo->app_len;
-    M_Control.total_pkg = pAppInfo->total_pkg;
     M_Control.write_addr = APP_START_ADDR;
     M_Control.currentPkgNo = 0;
     M_Control.retryCnt = 0;
 
-    Fn_SendResponse((uint8_t*)&rspFrame, 0, sizeof(rspFrame));
+    SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
 }
 
-static void ProcessTransDataMsg(MessageType_t* pMsg)
+static void ProcessTransDataMsg(msg_t* pMsg)
 {
     DataFrame_t* pDataFrame;
-    ResponseFrame_t rspFrame;
+    ResponseFrame_t Resp;
     uint8_t needWrite = 0;
 
     pDataFrame = (DataFrame_t*)pMsg->pMessage;
-    rspFrame.cmd = CMD_TRANS_DATA;
+    Resp.cmd = CMD_TRANS_DATA;
     //如果是下一包或者是重复包
     if((M_Control.currentPkgNo == (pDataFrame->currentPkgNo-1)) || (M_Control.currentPkgNo == pDataFrame->currentPkgNo))
     {
@@ -245,62 +233,45 @@ static void ProcessTransDataMsg(MessageType_t* pMsg)
                 M_Control.retryCnt++;
             }
 
-            rspFrame.status = M_Control.op_state;
+            Resp.status = M_Control.op_state;
         }
         else
         {
-            rspFrame.status = RCV_OK;
+            Resp.status = RCV_OK;
         }
 
-        rspFrame.pkg_no = pDataFrame->currentPkgNo;
+        Resp.pkg_no = pDataFrame->currentPkgNo;
         if(M_Control.retryCnt < 3)
         {
-            Fn_SendResponse((uint8_t*)&rspFrame, 0, sizeof(rspFrame));
+            SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
         }
     }
     //如果收到的包号不连续
     else
     {
+        
     }
-    for(volatile uint32_t delayCnt = 26000; delayCnt; delayCnt--);
 }
 
 
 
-/* 验证应用程序是否有问题 */
-static void ProcessAppVerificationMsg(MessageType_t* pMsg)
+static void ProcessAppVerificationMsg(msg_t* pMsg)
 {
-    VerificationFrame_t *pVFrame ;
-    ResponseFrame_t rspFrame;
-    MessageType_t m_Msg = {CMD_APP_CHECK, 0, 0, &m_Msg};
+    ResponseFrame_t Resp = {CMD_VERIFICATION, 0, RCV_OK};
+    msg_t m_Msg = {CMD_APP_CHECK, 0, 0, &m_Msg};
 
-    pVFrame = (VerificationFrame_t *)pMsg->pMessage;
-
-    if(M_Control.currentPkgNo == M_Control.total_pkg)
-    {
-        rspFrame.cmd = CMD_VERIFICATION;
-        rspFrame.status = RCV_ERR;
-
-        rspFrame.status = RCV_OK;
-        Fn_SendResponse((uint8_t*)&rspFrame, 0, sizeof(rspFrame));
-        fn_msg_push(m_Msg);
-    }
+    SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
+    mq_push(m_Msg);
 }
 
 /* 检测程序是否有效，如果有效， 则跳转到应用程序执行 */
-static void ProccessAppCheckMsg(MessageType_t* pMsg)
+static void ProccessAppCheckMsg(msg_t* pMsg)
 {
-    for(volatile uint32_t i=0; i<26000; i++);
+    ResponseFrame_t Resp = {CMD_VERIFICATION, 0, RCV_OK};
+    SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
     GoToUserApp( APP_START_ADDR);
 }
 
-static void ProcessTimeOutEvt(void)
-{
-    MessageType_t m_Msg = {CMD_APP_CHECK,0, 0, &m_Msg};
-
-    M_Control.usart_timeout = 0;
-    fn_msg_push(m_Msg);
-}
 
 
 static void SysTick_Cfg(uint32_t ticks)
@@ -315,14 +286,11 @@ static void SysTick_Cfg(uint32_t ticks)
 
 
 
-
-
-
 static void TickProcess(void)
 {
     if(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)
     {
-        ++M_Control.usart_timeout;
+        ++M_Control.timeout;
     }
 }
 
@@ -339,6 +307,7 @@ void GoToUserApp(__IO uint32_t app_start_addr)
 
         jump_to_application = (pFunction)jump_addr;
         __set_MSP(*(__IO uint32_t*)app_start_addr); //栈地址
+        SCB->VTOR = app_start_addr;
         jump_to_application();
     }
 }
@@ -348,9 +317,9 @@ uint32_t BootloaderInit(uint32_t timeOut)
     FLASH_Init();
     SysTick_Cfg(GetClock(kBusClock)/1000);
     pUARTx = UART0;
-    fn_queue_init();
+    mq_init();
     
-    runAferDelayMs = timeOut; 
+    SysTimeOut = timeOut; 
     return 0;
 }
 
@@ -361,9 +330,9 @@ void BootloaderProc(void)
     {
         Fn_RxProcData(data);
     }
-    if (fn_msg_exist())
+    if (mq_exist())
     {
-        pMsg =  fn_msg_pop();
+        pMsg =  mq_pop();
         pExecFun = MsgCallbackFind(pMsg);
         if(pExecFun != NULL)
         {
@@ -372,10 +341,13 @@ void BootloaderProc(void)
         }
     }
 
-    if((M_Control.usart_timeout >= runAferDelayMs) && (!M_Control.bootloaderFlg))
+    if((M_Control.timeout >= SysTimeOut) && (!M_Control.IsBootMode))
     {
-        ProcessTimeOutEvt();
+        msg_t m_Msg = {CMD_APP_CHECK,0, 0, &m_Msg};
+        M_Control.timeout = 0;
+        mq_push(m_Msg);
     }
+    
     TickProcess();
 }
 

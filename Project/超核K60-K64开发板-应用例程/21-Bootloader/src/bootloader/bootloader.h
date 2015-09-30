@@ -14,13 +14,17 @@ typedef struct
     uint32_t (*flash_erase)(uint32_t addr);
     uint32_t (*flash_write)(uint32_t addr, const uint8_t *buf, uint32_t len);
     
+    /* transmit */
+    uint32_t (*send)(uint8_t *buf, uint32_t len);
+    uint32_t (*receive)(uint8_t *buf, uint32_t len);
+    
+    /* settings */
     uint32_t TimeOut;
 }BLParam_t;
 
 //!< API 
 uint32_t BootloaderInit(uint32_t timeOut);
 void BootloaderProc(void);
-
 
 
 #endif

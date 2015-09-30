@@ -30,7 +30,7 @@ typedef struct
     uint32_t FCFG1;
     uint32_t FCFG2;
     uint32_t SDID;
-    uint8_t  Reserved[3];
+    uint32_t FlashPageSize;
 } ChipInfo_t;
 
 //回应帧数据部分格式
@@ -65,7 +65,6 @@ typedef struct
 
 //用于消息处理的回调函数
 typedef void(*pFuncCallback)(msg_t *pMsg);
-
 
 
 static msg_t* pMsg;         /* 消息指针 */
@@ -145,7 +144,6 @@ static pFuncCallback MsgCallbackFind(msg_t* pMsg)
     return pCallBack;
 }
 
-
 static void ProcessUartMsg(msg_t* pMsg)
 {
     GenericRecvFrame_t *pRcvFrame;
@@ -156,27 +154,25 @@ static void ProcessUartMsg(msg_t* pMsg)
 
     m_Msg.cmd = pRcvFrame->cmd;
     m_Msg.pMessage = pRcvFrame;
-		
+
     mq_push(m_Msg);
 }
 
 static void ProcessChipInfoMsg(msg_t* pMsg)
 {
-    ChipInfo_t infoFrame;
+    ChipInfo_t info;
 
-    infoFrame.cmd = CMD_CHIPINFO;
-    infoFrame.FCFG1 = SIM->FCFG1;
-    infoFrame.FCFG2 = SIM->FCFG2;
-    infoFrame.SDID  = SIM->SDID;
-
-    SendResp((uint8_t*)&infoFrame, 0, sizeof(infoFrame));
+    info.cmd = CMD_CHIPINFO;
+    info.FCFG1 = SIM->FCFG1;
+    info.FCFG2 = SIM->FCFG2;
+    info.SDID  = SIM->SDID;
+    info.FlashPageSize = FLASH_GetSectorSize();
+    SendResp((uint8_t*)&info, 0, sizeof(info));
 }
 
 static void ProcessAppInfoMsg(msg_t* pMsg)
 {
-    AppInfoType_t* pAppInfo = (AppInfoType_t*)pMsg->pMessage;
     ResponseFrame_t Resp = {CMD_APP_INFO, 0, RCV_OK};
-
 
     M_Control.write_addr = APP_START_ADDR;
     M_Control.currentPkgNo = 0;
@@ -269,7 +265,10 @@ static void ProccessAppCheckMsg(msg_t* pMsg)
 {
     ResponseFrame_t Resp = {CMD_VERIFICATION, 0, RCV_OK};
     SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
-    GoToUserApp( APP_START_ADDR);
+    if(*(uint32_t*)APP_START_ADDR != 0xFFFFFFFF)
+    {
+        GoToUserApp( APP_START_ADDR);
+    }
 }
 
 

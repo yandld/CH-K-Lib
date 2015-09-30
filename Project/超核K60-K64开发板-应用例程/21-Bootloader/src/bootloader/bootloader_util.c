@@ -13,7 +13,7 @@ typedef enum
     FCS_STATE,
     END_HS_STATE,
     END_STATE
-} RevStates_t;
+}States_t;
 
 
 UART_Type *pUARTx;
@@ -31,7 +31,7 @@ void Fn_RxProcData(uint8_t data)
     static uint8_t RevBuf[4096];
     static int i, length;
     static uint8_t fcs;
-    static RevStates_t States = INIT_STATE;
+    static States_t States = INIT_STATE;
     if(M_Control.timeout > 500)
     {
         States = INIT_STATE;

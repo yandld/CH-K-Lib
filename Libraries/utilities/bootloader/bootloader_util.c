@@ -1,6 +1,6 @@
 #include "mq.h"
 #include "bootloader_util.h"
-
+#include "bootloader.h"
 
 typedef enum
 {
@@ -16,11 +16,9 @@ typedef enum
 }States_t;
 
 
-UART_Type *pUARTx;
+
 RunType_t M_Control;
-
 static 	msg_t m_Msg;
-
 
 /**
   * @fn: Fn_RxProcData
@@ -139,19 +137,7 @@ void Fn_RxProcData(uint8_t data)
 
 }
 
-static void OP_SendData(uint8_t *buf, uint32_t len)
-{
-    int i;
-    for(i=0; i<len; i++)
-    {
-        UART_WriteByte(0, *buf++);
-    }
-}
-
-/**
-  * @fn:    SendResp
-  * @bref:  发送回应函数
-  */
+extern Boot_t Bootloader;
 
 void SendResp(uint8_t* content, uint8_t cipherFlg,  uint16_t len)
 {
@@ -176,9 +162,9 @@ void SendResp(uint8_t* content, uint8_t cipherFlg,  uint16_t len)
     }
     footer[0] = fcs;
     
-    OP_SendData(header, sizeof(header));
-    OP_SendData(content, len);
-    OP_SendData(footer, sizeof(footer));
+    Bootloader.send(header, sizeof(header));
+    Bootloader.send(content, len);
+    Bootloader.send(footer, sizeof(footer));
 }
 
 

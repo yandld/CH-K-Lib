@@ -2,8 +2,9 @@
 #define __BOOTLOADER_H__
 
 #include <stdint.h>
-#include "uart.h"
-#include "common.h"
+
+#define BL_FLASH_OK     (0x00)
+#define BL_FLASH_ERR    (0x01)
 
 typedef struct
 {
@@ -20,10 +21,10 @@ typedef struct
     
     /* settings */
     uint32_t TimeOut;
-}BLParam_t;
+}Boot_t;
 
 //!< API 
-uint32_t BootloaderInit(uint32_t timeOut);
+uint32_t BootloaderInit(Boot_t* boot);
 void BootloaderProc(void);
 
 

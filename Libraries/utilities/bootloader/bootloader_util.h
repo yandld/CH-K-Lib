@@ -1,8 +1,8 @@
 #ifndef __BOOTLOADER_UTIL_H__
 #define __BOOTLOADER_UTIL_H__
 
-#include <common.h>
-#include "uart.h"
+#include <stdint.h>
+#include <stdbool.h>
 
 #define CMD_SERIALPORT      (0xFD)
 #define CMD_CHIPINFO        (0x80)
@@ -26,7 +26,6 @@ typedef struct
 
 
 extern RunType_t M_Control;
-extern UART_Type *pUARTx;
 
 //!< API functions
 void Fn_RxProcData(uint8_t data);

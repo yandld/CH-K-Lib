@@ -373,7 +373,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10 CLOCK_SETUP=0</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\src;..\src\bootloader</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\utilities\bootloader</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -469,17 +469,17 @@
             <File>
               <FileName>bootloader.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\bootloader\bootloader.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\bootloader\bootloader.c</FilePath>
             </File>
             <File>
               <FileName>bootloader_util.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\bootloader\bootloader_util.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\bootloader\bootloader_util.c</FilePath>
             </File>
             <File>
               <FileName>mq.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\bootloader\mq.c</FilePath>
+              <FilePath>..\..\..\..\Libraries\utilities\bootloader\mq.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,14 +1,14 @@
 #include "bootloader.h"
-#include "def.h"
-#include "flash.h"
 #include "mq.h"
 #include "bootloader_util.h"
 #include <string.h>
-#include "common.h"
+#include <common.h>
 
 #define RCV_OK              0xA5
 #define RCV_ERR             0x5A
 #define RCV_SKIP            0x5B
+
+Boot_t Bootloader;
 
 typedef  void (*pFunction)(void);
 
@@ -26,11 +26,11 @@ typedef struct
 #pragma pack(1)
 typedef struct
 {
-    uint8_t cmd;
-    uint32_t FCFG1;
-    uint32_t FCFG2;
-    uint32_t SDID;
-    uint32_t FlashPageSize;
+    uint8_t     cmd;
+    uint32_t    FCFG1;
+    uint32_t    FCFG2;
+    uint32_t    SDID;
+    uint32_t    FlashPageSize;
 } ChipInfo_t;
 
 //回应帧数据部分格式
@@ -48,19 +48,8 @@ typedef struct
 typedef struct
 {
     uint8_t cmd;
-    uint8_t content[8191];
+    uint8_t content[4096];
 } GenericRecvFrame_t;
-
-
-//应用程序信息结构体
-#pragma pack(1)
-typedef struct
-{
-    uint8_t  cmd;
-    uint32_t app_len;
-    uint16_t total_pkg;
-    uint8_t Reserved[1];
-} AppInfoType_t;
 
 
 //用于消息处理的回调函数
@@ -72,8 +61,6 @@ static pFuncCallback pExecFun;      /* 回调函数变量 */
 uint32_t SysTimeOut;
 
 
-/* Systick计数器的初始化 */
-static void SysTick_Cfg(uint32_t ticks);
 
 /* 命令解析函数 */
 static pFuncCallback MsgCallbackFind(msg_t* pMsg);
@@ -100,7 +87,7 @@ static void ProccessAppCheckMsg(msg_t* pMsg);
  void TickProcess(void);
 
 static void ProcessChipInfoMsg(msg_t* pMsg);
-void GoToUserApp(__IO uint32_t app_start_addr);
+void GoToUserApp(uint32_t app_start_addr);
 
 
 /*
@@ -166,7 +153,7 @@ static void ProcessChipInfoMsg(msg_t* pMsg)
     info.FCFG1 = SIM->FCFG1;
     info.FCFG2 = SIM->FCFG2;
     info.SDID  = SIM->SDID;
-    info.FlashPageSize = FLASH_GetSectorSize();
+    info.FlashPageSize = Bootloader.FlashPageSize;
     SendResp((uint8_t*)&info, 0, sizeof(info));
 }
 
@@ -174,7 +161,7 @@ static void ProcessAppInfoMsg(msg_t* pMsg)
 {
     ResponseFrame_t Resp = {CMD_APP_INFO, 0, RCV_OK};
 
-    M_Control.write_addr = APP_START_ADDR;
+    M_Control.write_addr = Bootloader.AppStartAddr;
     M_Control.currentPkgNo = 0;
     M_Control.retryCnt = 0;
 
@@ -195,19 +182,19 @@ static void ProcessTransDataMsg(msg_t* pMsg)
         if(M_Control.currentPkgNo != pDataFrame->currentPkgNo)
         {
             needWrite = 1;
-            M_Control.write_addr = APP_START_ADDR + (pDataFrame->currentPkgNo-1)*FLASH_PAGE_SIZE;
+            M_Control.write_addr = Bootloader.AppStartAddr + (pDataFrame->currentPkgNo-1)*Bootloader.FlashPageSize;
         }
         else if(M_Control.op_state != RCV_OK)
         {
             needWrite = 1;
-            M_Control.write_addr = APP_START_ADDR + pDataFrame->currentPkgNo*FLASH_PAGE_SIZE;
+            M_Control.write_addr = Bootloader.AppStartAddr + pDataFrame->currentPkgNo*Bootloader.FlashPageSize;
         }
         if(needWrite)
         {
-            FLASH_EraseSector(M_Control.write_addr);
-            if(FLASH_WriteSector(M_Control.write_addr, pDataFrame->content, FLASH_PAGE_SIZE) == FLASH_OK)
+            Bootloader.flash_erase(M_Control.write_addr);
+            if(Bootloader.flash_write(M_Control.write_addr, pDataFrame->content, Bootloader.FlashPageSize) == BL_FLASH_OK)
             {
-                if(memcmp((void*)M_Control.write_addr, pDataFrame->content, FLASH_PAGE_SIZE) == 0)
+                if(memcmp((void*)M_Control.write_addr, pDataFrame->content, Bootloader.FlashPageSize) == 0)
                 {
                     M_Control.op_state = RCV_OK;
                 }
@@ -249,8 +236,6 @@ static void ProcessTransDataMsg(msg_t* pMsg)
     }
 }
 
-
-
 static void ProcessAppVerificationMsg(msg_t* pMsg)
 {
     ResponseFrame_t Resp = {CMD_VERIFICATION, 0, RCV_OK};
@@ -265,13 +250,11 @@ static void ProccessAppCheckMsg(msg_t* pMsg)
 {
     ResponseFrame_t Resp = {CMD_VERIFICATION, 0, RCV_OK};
     SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
-    if(*(uint32_t*)APP_START_ADDR != 0xFFFFFFFF)
+    if(*(uint32_t*)Bootloader.AppStartAddr != 0xFFFFFFFF)
     {
-        GoToUserApp( APP_START_ADDR);
+        GoToUserApp( Bootloader.AppStartAddr);
     }
 }
-
-
 
 static void SysTick_Cfg(uint32_t ticks)
 {
@@ -283,8 +266,6 @@ static void SysTick_Cfg(uint32_t ticks)
                      SysTick_CTRL_ENABLE_Msk;                    /* Enable SysTick IRQ and SysTick Timer */                                                 /* Function successful */
 }
 
-
-
 static void TickProcess(void)
 {
     if(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)
@@ -294,41 +275,44 @@ static void TickProcess(void)
 }
 
 
-void GoToUserApp(__IO uint32_t app_start_addr)
+void GoToUserApp(uint32_t app_start_addr)
 {
     pFunction jump_to_application;
     uint32_t jump_addr;
-    jump_addr = *(__IO uint32_t*)(app_start_addr + 4);  //RESET中断
+    jump_addr = *(uint32_t*)(app_start_addr + 4);  //RESET中断
     
     //由于采用了bootloader, 故程序的jump_addr地址应该在 (0x5000, END_ADDR] 范围内
-    if(app_start_addr != 0xFFFFFFFFUL && (jump_addr > APP_START_ADDR))
+    if(app_start_addr != 0xFFFFFFFFUL && (jump_addr > Bootloader.AppStartAddr))
     {
-
         jump_to_application = (pFunction)jump_addr;
-        __set_MSP(*(__IO uint32_t*)app_start_addr); //栈地址
+        __set_MSP(*(uint32_t*)app_start_addr); //栈地址
         SCB->VTOR = app_start_addr;
         jump_to_application();
     }
 }
 
-uint32_t BootloaderInit(uint32_t timeOut)
+uint32_t BootloaderInit(Boot_t* boot)
 {
-    FLASH_Init();
-    SysTick_Cfg(GetClock(kBusClock)/1000);
-    pUARTx = UART0;
     mq_init();
-    
-    SysTimeOut = timeOut; 
+    SysTick_Cfg(GetClock(kBusClock)/1000);
+    memcpy(&Bootloader, boot, sizeof(Boot_t));
+    SysTimeOut = Bootloader.TimeOut; 
     return 0;
 }
 
 void BootloaderProc(void)
 {
-    uint8_t data;
-    if(UART_ReadByte(0, (uint16_t*)&data) == 0)
+    uint8_t buf[32];
+    uint32_t len, i;
+    len = Bootloader.receive(buf, 1);
+    if(len)
     {
-        Fn_RxProcData(data);
+        for(i=0; i<len; i++)
+        {
+            Fn_RxProcData(buf[i]);
+        }
     }
+
     if (mq_exist())
     {
         pMsg =  mq_pop();

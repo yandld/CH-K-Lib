@@ -17,7 +17,6 @@ typedef struct
     
     /* transmit */
     uint32_t (*send)(uint8_t *buf, uint32_t len);
-    uint32_t (*receive)(uint8_t *buf, uint32_t len);
     
     /* settings */
     uint32_t TimeOut;
@@ -26,6 +25,6 @@ typedef struct
 //!< API 
 uint32_t BootloaderInit(Boot_t* boot);
 void BootloaderProc(void);
-
+void GetData(uint8_t data);
 
 #endif

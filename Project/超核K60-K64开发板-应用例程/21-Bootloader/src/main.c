@@ -1,9 +1,10 @@
+#include <string.h>
+
 #include "common.h"
 #include "uart.h"
 #include "dma.h"
 #include "flash.h"
 #include "bootloader.h"
-
 
 static uint32_t send(uint8_t *buf, uint32_t len)
 {
@@ -15,14 +16,7 @@ static uint32_t send(uint8_t *buf, uint32_t len)
     return len;
 }
 
-static uint32_t receive(uint8_t *buf, uint32_t len)
-{
-    if(UART_ReadByte(HW_UART0, (uint16_t*)buf) == 0)
-    {
-        return 1;
-    }
-    return 0;
-}
+
 
 static uint32_t flash_erase(uint32_t addr)
 {
@@ -48,20 +42,25 @@ static uint32_t flash_write(uint32_t addr, const uint8_t *buf, uint32_t len)
     }
 }
 
-
+void UART_ISR(uint16_t data)
+{
+    GetData(data);
+}
+    
 static Boot_t Boot;
 
 int main(void)
 {
     DelayInit();
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 921600);
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_CallbackRxInstall(HW_UART0, UART_ISR);
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     FLASH_Init();
     
     Boot.AppStartAddr = 0x5000;
     Boot.TimeOut = 2000;
     Boot.FlashPageSize = FLASH_GetSectorSize();
     Boot.send = send;
-    Boot.receive = receive;
     Boot.flash_erase = flash_erase;
     Boot.flash_write = flash_write;
     

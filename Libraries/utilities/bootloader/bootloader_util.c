@@ -21,10 +21,10 @@ RunType_t M_Control;
 static 	msg_t m_Msg;
 
 /**
-  * @fn: Fn_RxProcData
+  * @fn: GetData
   * @bre: 处理接收到的数据,采用状态机的方式来实现
 */
-void Fn_RxProcData(uint8_t data)
+void GetData(uint8_t data)
 {
     static uint8_t RevBuf[4096];
     static int i, length;

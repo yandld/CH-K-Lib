@@ -302,17 +302,6 @@ uint32_t BootloaderInit(Boot_t* boot)
 
 void BootloaderProc(void)
 {
-    uint8_t buf[32];
-    uint32_t len, i;
-    len = Bootloader.receive(buf, 1);
-    if(len)
-    {
-        for(i=0; i<len; i++)
-        {
-            Fn_RxProcData(buf[i]);
-        }
-    }
-
     if (mq_exist())
     {
         pMsg =  mq_pop();

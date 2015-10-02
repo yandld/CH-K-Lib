@@ -228,13 +228,14 @@ FSEC            EQU     0xFE
 ;   </h>
 
                 IF      :LNOT::DEF:RAM_TARGET
+                IF      :LNOT::DEF:BOOTLOADER	
                 AREA    |.ARM.__at_0x400|, CODE, READONLY
                 DCB     BackDoorK0, BackDoorK1, BackDoorK2, BackDoorK3
                 DCB     BackDoorK4, BackDoorK5, BackDoorK6, BackDoorK7
                 DCB     FPROT0,     FPROT1,     FPROT2,     FPROT3
                 DCB     FSEC,       FOPT,       0xFF,     0xFF
                 ENDIF
-
+                ENDIF
                 AREA    |.text|, CODE, READONLY
 
 

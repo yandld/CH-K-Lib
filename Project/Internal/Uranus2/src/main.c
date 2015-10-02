@@ -145,7 +145,6 @@ void HWInit(void)
     
     UART_Init(UART0_RX_PA01_TX_PA02, 115200);
     UART_SetDMAMode(HW_UART0, kUART_DMARx, true);
-    UART_SetIntMode(HW_UART0, kUART_IntIdleLine, true);
     DMA_Init_t Init;
     Init.chl = DMA_RX_CH;
     Init.chlTrigSrc = UART0_REV_DMAREQ;
@@ -169,6 +168,7 @@ void HWInit(void)
     mq_init();
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
     sensor_init();
+    UART_SetIntMode(HW_UART0, kUART_IntIdleLine, true);
 }
 
 

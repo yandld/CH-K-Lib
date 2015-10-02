@@ -48,7 +48,7 @@
           <OutputName>templete</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\</ListingPath>
@@ -305,7 +305,7 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
+                <StartAddress>0x5000</StartAddress>
                 <Size>0x10000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
@@ -376,7 +376,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>BOOTLOADER</Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>

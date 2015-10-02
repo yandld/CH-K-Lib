@@ -52,7 +52,7 @@ static Boot_t Boot;
 int main(void)
 {
     DelayInit();
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 921600);
     UART_CallbackRxInstall(HW_UART0, UART_ISR);
     UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     FLASH_Init();

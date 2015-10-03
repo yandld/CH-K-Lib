@@ -1,28 +1,28 @@
 /**
-  ******************************************************************************
   * @file    dac.c
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+  * @date    2015.10.03 FreeXc 完善了dac.c&adc.h中API函数的注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  ******************************************************************************
-  */
+  */ 
   
- #include "dac.h"
- #include "common.h"
- #if defined(DAC0)
+#include "dac.h"
+#include "common.h"
+
+#if defined(DAC0)
  
 #if (!defined(DAC_BASES))
 
 #ifdef DAC0
-#define DAC_BASES   {DAC0}
+    #define DAC_BASES   {DAC0}
 #elif  DAC1
-#define DAC_BASES   {DAC0, DAC1}
+    #define DAC_BASES   {DAC0, DAC1}
 #endif
 
 #endif
  
- /* global vars */
+/* global vars */
 static DAC_Type * const DAC_InstanceTable[] = DAC_BASES;
 static DAC_CallBackType DAC_CallBackTable[ARRAY_SIZE(DAC_InstanceTable)] = {NULL};
 static const IRQn_Type DAC_IRQnTable[] = 
@@ -34,19 +34,16 @@ static const IRQn_Type DAC_IRQnTable[] =
 };
 
 /**
- * @brief  ��ʼ��DACģ��
+ * @brief  初始化DAC模块
  * @code
- *  DAC_InitTypeDef DAC_InitStruct = {0};
- *  DAC_InitStruct.bufferMode = kDAC_Buffer_Swing; 
- *  DAC_InitStruct.instance = HW_DAC0;
- *  DAC_InitStruct.referenceMode = kDAC_Reference_2; 
- *  DAC_InitStruct.triggerMode = kDAC_TriggerSoftware; 
- *  DAC_Init(&DAC_InitStruct);
+ *   DAC_InitTypeDef DAC_InitStruct = {0};
+ *   DAC_InitStruct.bufferMode = kDAC_Buffer_Swing; 
+ *   DAC_InitStruct.instance = HW_DAC0;
+ *   DAC_InitStruct.referenceMode = kDAC_Reference_2; 
+ *   DAC_InitStruct.triggerMode = kDAC_TriggerSoftware; 
+ *   DAC_Init(&DAC_InitStruct);
  * @endcode
- * @param  DAC_InitTypeDef: 
- *         instance      :ģ���
- *         @arg HW_DAC0 :оƬ��DAC0 ģ��
- *         @arg HW_DAC1 :оƬ��DAC1 ģ��
+ * @param[in]  DAC_InitStruct DAC 初始化结构体
  * @retval None
  */
 void DAC_Init(DAC_InitTypeDef* DAC_InitStruct)
@@ -109,13 +106,12 @@ void DAC_Init(DAC_InitTypeDef* DAC_InitStruct)
 }
  
 /**
- * @brief  ���DACģ��buffer��ָ��
- *
- * @param  instance      :ģ���
- *         @arg HW_DAC0 :оƬ��DAC0 ģ��
- *         @arg HW_DAC1 :оƬ��DAC1 ģ��
- * @note   ����DAC��ǰת������ buffer ָ�� λ��
- * @retval None
+ * @brief  获得DAC模块buffer的指针
+ * @param[in]  instance      模块号
+ *              @arg HW_DAC0 芯片的DAC0 模块
+ *              @arg HW_DAC1 芯片的DAC1 模块
+ * @note   返回DAC当前转换到的 buffer 指针 位置
+ * @retval 当前buffer指针位置 0-15
  */
 uint32_t DAC_GetBufferReadPointer(uint32_t instance)
 {
@@ -123,12 +119,11 @@ uint32_t DAC_GetBufferReadPointer(uint32_t instance)
 }
 
 /**
- * @brief  ����DACģ��buffer��ָ��
- *
- * @param  instance     :ģ���
- *         @arg HW_DAC0 :оƬ��DAC0 ģ��
- *         @arg HW_DAC1 :оƬ��DAC1 ģ��
- * @param  value        :ָ��λ�� 0-15
+ * @brief  设置DAC模块buffer的指针
+ * @param[in]  instance     模块号
+ *              @arg HW_DAC0 芯片的DAC0 模块
+ *              @arg HW_DAC1 芯片的DAC1 模块
+ * @param  value 指针位置 0-15
  * @retval None
  */
 void DAC_SetBufferReadPointer(uint32_t instance, uint32_t value)
@@ -138,12 +133,15 @@ void DAC_SetBufferReadPointer(uint32_t instance, uint32_t value)
 }
 
 /**
- * @brief  ����DACģ���ȡbufferָ��ʱ���������ֵ
- *
- * @param  instance     :ģ���
- *         @arg HW_DAC0 :оƬ��DAC0 ģ��
- *         @arg HW_DAC1 :оƬ��DAC1 ģ��
- * @param  value        :ָ��λ������ 0-15
+ * @brief  设置DAC模块读取buffer指针时的最高上限值
+ * \code
+ *   //设置DAC0模块buffer指针上限值为2 
+ *   DAC_SetBufferUpperLimit(HW_DAC0, 2);
+ * \endcode
+ * @param[in]  instance     模块号
+ *              @arg HW_DAC0 芯片的DAC0 模块
+ *              @arg HW_DAC1 芯片的DAC1 模块
+ * @param[in]  value        指针位置上限 0-15
  * @retval None
  */
 void DAC_SetBufferUpperLimit(uint32_t instance, uint32_t value)
@@ -153,20 +151,20 @@ void DAC_SetBufferUpperLimit(uint32_t instance, uint32_t value)
 }
 
 /**
- * @brief  ����DACģ���жϺ�DMA
+ * @brief  设置DAC模块中断和DMA
  *
- * @param  instance     :ģ���
- *         @arg HW_DAC0 :оƬ��DAC0 ģ��
- *         @arg HW_DAC1 :оƬ��DAC1 ģ��
- * @param  config       :����ѡ��
- *         @arg kDAC_DMA_Disable                : ��ֹDAC DMA����
- *         @arg kDAC_IT_Disable                 : ��ֹDAC �жϹ���
- *         @arg kDAC_IT_BufferPointer_WaterMark : ����DAC ˮλ�ж�
- *         @arg kDAC_IT_BufferPointer_TopFlag   : ����DAC ReadPointer = 0�ж�
- *         @arg kDAC_IT_BufferPointer_BottomFlag: ��ʼDAC ReadPointer = UpLimit �ж�
- *         @arg kDAC_DMA_BufferPointer_WaterMark: 
- *         @arg kDAC_DMA_BufferPointer_TopFlag  :
- *         @arg kDAC_DMA_BufferPointer_BottomFlag:
+ * @param[in]  instance     模块号
+ *              @arg HW_DAC0 芯片的DAC0 模块
+ *              @arg HW_DAC1 芯片的DAC1 模块
+ * @param[in]  config       配置选项
+ *              @arg kDAC_DMA_Disable                  禁止DAC DMA功能
+ *              @arg kDAC_IT_Disable                   禁止DAC 中断功能
+ *              @arg kDAC_IT_BufferPointer_WaterMark   开启DAC 水位中断
+ *              @arg kDAC_IT_BufferPointer_TopFlag     开启DAC ReadPointer = 0中断
+ *              @arg kDAC_IT_BufferPointer_BottomFlag  开始DAC ReadPointer = UpLimit 中断
+ *              @arg kDAC_DMA_BufferPointer_WaterMark  开启DAC 水位中断（DMA）
+ *              @arg kDAC_DMA_BufferPointer_TopFlag    开启DAC ReadPointer = 0中断（DMA）
+ *              @arg kDAC_DMA_BufferPointer_BottomFlag 开始DAC ReadPointer = UpLimit 中断（DMA）
  * @retval None
  */
 void DAC_ITDMAConfig(uint32_t instance, DAC_ITDMAConfig_Type config)
@@ -209,11 +207,14 @@ void DAC_ITDMAConfig(uint32_t instance, DAC_ITDMAConfig_Type config)
 }
 
 /**
- * @brief  ��������DAC��ʼ����
- *
- * @param  instance     :ģ���
- *         @arg HW_DAC0 :оƬ��DAC0 ģ��
- *         @arg HW_DAC1 :оƬ��DAC1 ģ��
+ * @brief  软件触发DAC开始工作
+ * \code
+ *   //软件触发DAC0开始工作
+ *   DAC_SoftwareStartConversion(HW_DAC0);
+ * \endcode
+ * @param[in]  instance     模块号
+ *              @arg HW_DAC0 芯片的DAC0 模块
+ *              @arg HW_DAC1 芯片的DAC1 模块
  * @note   will only trigger once and will advence the read pointer by one step
  * @retval None
  */
@@ -223,12 +224,11 @@ void DAC_SoftwareStartConversion(uint32_t instance)
 }
 
 /**
- * @brief  ����DAC Buffer��ˮλ
- *
- * @param  instance     :ģ���
- *         @arg HW_DAC0 :оƬ��DAC0 ģ��
- *         @arg HW_DAC1 :оƬ��DAC1 ģ��
- * @param  value        :ˮλֵ 0-15
+ * @brief  设置DAC Buffer的水位
+ * @param[in]  instance     模块号
+ *              @arg HW_DAC0 芯片的DAC0 模块
+ *              @arg HW_DAC1 芯片的DAC1 模块
+ * @param  value 水位值 0-15
  * @retval None
  */
 void DAC_SetWaterMark(uint32_t instance, DAC_WaterMarkMode_Type value)
@@ -253,13 +253,18 @@ void DAC_SetWaterMark(uint32_t instance, DAC_WaterMarkMode_Type value)
 }
 
 /**
- * @brief  ���DAC ����������
- *
- * @param  instance     :ģ���
- *         @arg HW_DAC0 :оƬ��DAC0 ģ��
- *         @arg HW_DAC1 :оƬ��DAC1 ģ��
- * @param  buf          :����ָ��
- * @param  len          :����
+ * @brief  填充DAC 缓冲区数据
+ * \code
+ *   //填充待转换的数据至缓冲区
+ *   uint16_t dacVol[3] = {0x400,0x800,0xb00};
+ *   DAC_SetBufferValue(HW_DAC0, dacVol,3);
+ * \endcode
+ * \attention 填充至缓冲区的数据应与设置的转换序列长度相符
+ * @param[in]  instance     模块号
+ *              @arg HW_DAC0 芯片的DAC0 模块
+ *              @arg HW_DAC1 芯片的DAC1 模块
+ * @param[in]  buf          指向待转换数据的指针
+ * @param[in]  len          待转换数据的长度
  * @retval None
  */
 void DAC_SetBufferValue(uint32_t instance, uint16_t* buf, uint8_t len)
@@ -273,13 +278,13 @@ void DAC_SetBufferValue(uint32_t instance, uint16_t* buf, uint8_t len)
 }
 
 /**
- * @brief  ע���жϻص�����
- * @param  instance: DAC ģ���
- *         @arg HW_DAC0  :DAC0ģ��
- *         @arg HW_DAC1  :DAC1ģ��
- * @param AppCBFun: �ص�����ָ�����
+ * @brief  注册中断回调函数
+ * @param[in]  instance DAC 模块号
+ *              @arg HW_DAC0  DAC0模块
+ *              @arg HW_DAC1  DAC1模块
+ * @param[in] AppCBFun 回调函数指针入口
  * @retval None
- * @note ���ڴ˺����ľ���Ӧ�������Ӧ��ʵ��
+ * @note 对于此函数的具体应用请查阅应用实例
  */
 void DAC_CallbackInstall(uint8_t instance, DAC_CallBackType AppCBFun)
 {
@@ -289,6 +294,11 @@ void DAC_CallbackInstall(uint8_t instance, DAC_CallBackType AppCBFun)
     }
 }
 
+/**
+ * @brief  中断处理函数
+ * @details  DAC_IRQHandler 芯片的DAC模块中断函数，清标志位位并调用用户指定的中断函数
+ * @note 函数内部用于中断事件处理,用户无需使用
+ */
 static void DAC_IRQHandler(uint32_t instance)
 {
     /* clear IT pending bit */
@@ -312,16 +322,26 @@ static void DAC_IRQHandler(uint32_t instance)
     }   
 }
 
+/**
+ * @brief  中断处理函数入口
+ * @details  DAC0_IRQHandler 芯片的DAC0模块中断函数入口
+ * @note 函数内部用于中断事件处理,用户无需使用
+ */
 void DAC0_IRQHandler(void)
 {
     DAC_IRQHandler(HW_DAC0);
 }
 
 #if defined(DAC1)
+/**
+ * @brief  中断处理函数入口
+ * @details  DAC1_IRQHandler 芯片的DAC1模块中断函数入口
+ * @note 函数内部用于中断事件处理,用户无需使用
+ */
 void DAC1_IRQHandler(void)
 {
     DAC_IRQHandler(HW_DAC1);
 }
 #endif
- 
+
 #endif

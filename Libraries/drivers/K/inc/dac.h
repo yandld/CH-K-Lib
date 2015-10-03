@@ -7,71 +7,89 @@
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
-  
 #ifndef __CH_LIB_DAC_H__
 #define __CH_LIB_DAC_H__
 
 #include <stdint.h>
 
+/* DACå¤–è®¾æ¨¡å—å· */
+#define HW_DAC0     (0x00)  /* DACå¤–è®¾æ¨¡å—å·0ï¼Œä¾æ¬¡ç±»æ¨ */
+#define HW_DAC1     (0x01)  
 
-#define HW_DAC0     (0x00)  //DAC0Ä£¿é
-#define HW_DAC1     (0x01)  //DAC1Ä£¿é
 
-
-//!< DAC »Øµ÷º¯Êı¶¨Òå
+//!< DAC å›è°ƒå‡½æ•°å®šä¹‰
 typedef void (*DAC_CallBackType)(void);
 
-
+/**
+ * \enum DAC_TriggerSelect_Type
+ * \brief DAC Trigger Style
+ */
 typedef enum
 {
-    kDAC_TriggerSoftware,  //Èí¼ş´¥·¢
-    kDAC_TriggerHardware,  //Ó²¼ş´¥·¢
+    kDAC_TriggerSoftware,  /**<The DAC software trigger is selected.*/
+    kDAC_TriggerHardware,  /**<The DAC hardware trigger is selected.*/
 }DAC_TriggerSelect_Type;
 
-/*DAC ·¢ËÍ»º³åÄ£Ê½ Ñ¡Ôñ */
+/**
+ * \enum DAC_BufferMode_Type
+ * \brief DAC Buffer Work Mode Select
+ */
 typedef enum
 {
-    kDAC_Buffer_Disable,    //¹Ø±ÕDAC»º´æ
-    kDAC_Buffer_Normal,     //¿ªÆôDAC»º´æ
-    kDAC_Buffer_Swing,      //dacÒ¡°ÚÄ£Ê½
-    kDAC_Buffer_OneTimeScan,//DACÒ»´Îä¯ÀÀ
+    kDAC_Buffer_Disable,    /**<å…³é—­DACç¼“å­˜*/
+    kDAC_Buffer_Normal,     /**<å¼€å¯DACç¼“å­˜*/
+    kDAC_Buffer_Swing,      /**<dacæ‘‡æ‘†æ¨¡å¼*/
+    kDAC_Buffer_OneTimeScan,/**<DACä¸€æ¬¡æµè§ˆ*/
 }DAC_BufferMode_Type;
 
+/**
+ * \enum DAC_ReferenceSelect_Type
+ * \brief DAC Reference Select
+ */
 typedef enum
 {
-    kDAC_Reference_1,       /* ²Î¿¼µçÑ¹Ô´ VREF_OUT */
-    kDAC_Reference_2,       /* ²Î¿¼µçÑ¹Ô´ VDDA */
+    kDAC_Reference_1,       /**< å‚è€ƒç”µå‹æº VREF_OUT */
+    kDAC_Reference_2,       /**< å‚è€ƒç”µå‹æº VDDA */
 }DAC_ReferenceSelect_Type;
 
+/**
+ * \struct DAC_InitTypeDef
+ * \brief DACåˆå§‹åŒ–ç»“æ„
+ */
 typedef struct
 {
-    uint32_t                    instance;      //DACÄ£¿éºÅ0~1
-    DAC_TriggerSelect_Type      triggerMode;   //DAC´¥·¢Ä£Ê½
-    DAC_BufferMode_Type         bufferMode;    //»º´æÀàĞÍ
-    DAC_ReferenceSelect_Type    referenceMode; //²Î¿¼Ô´Ñ¡Ôñ
+    uint32_t                    instance;      ///<DACæ¨¡å—å·0~1
+    DAC_TriggerSelect_Type      triggerMode;   ///<DACè§¦å‘æ¨¡å¼
+    DAC_BufferMode_Type         bufferMode;    ///<ç¼“å­˜ç±»å‹
+    DAC_ReferenceSelect_Type    referenceMode; ///<å‚è€ƒæºé€‰æ‹©
 }DAC_InitTypeDef;
 
-
-//!< DACÖĞ¶Ï¼°DMAÅäÖÃÑ¡Ôñ
+/**
+ * \enum DAC_ITDMAConfig_Type
+ * \brief DACä¸­æ–­åŠDMAé…ç½®é€‰æ‹©
+ */
 typedef enum
 {
-    kDAC_DMA_Disable,
-    kDAC_IT_Disable,
-    kDAC_IT_BufferPointer_WaterMark,
-    kDAC_IT_BufferPointer_TopFlag,      /* when read pointer reach 0 */
-    kDAC_IT_BufferPointer_BottomFlag,   /* when read pointer reach upper limit */
-    kDAC_DMA_BufferPointer_WaterMark,
-    kDAC_DMA_BufferPointer_TopFlag,    
-    kDAC_DMA_BufferPointer_BottomFlag, 
+    kDAC_DMA_Disable,                       /**<disable DMA*/
+    kDAC_IT_Disable,                        /**<disable interrupt*/
+    kDAC_IT_BufferPointer_WaterMark,        /**<when read pointer reach watermask*/
+    kDAC_IT_BufferPointer_TopFlag,          /**<when read pointer reach 0 */
+    kDAC_IT_BufferPointer_BottomFlag,       /**<when read pointer reach upper limit */
+    kDAC_DMA_BufferPointer_WaterMark,       /**<when read pointer reach watermask(DMA)*/
+    kDAC_DMA_BufferPointer_TopFlag,         /**<when read pointer reach 0 (DMA)*/
+    kDAC_DMA_BufferPointer_BottomFlag,      /**<when read pointer reach upper limit (DMA)*/
 }DAC_ITDMAConfig_Type;
  
-
+/**
+ * \enum DAC_WaterMarkMode_Type
+ * \brief DAC Buffer Watermark Select(1â€“4 words away from the upper limit)
+ */
 typedef enum
 {
-    kDAC_WaterMark_1Word,
-    kDAC_WaterMark_2Word,
-    kDAC_WaterMark_3Word,
-    kDAC_WaterMark_4Word,
+    kDAC_WaterMark_1Word,       /**<1ä¸ªå­—*/
+    kDAC_WaterMark_2Word,       /**<2ä¸ªå­—*/
+    kDAC_WaterMark_3Word,       /**<3ä¸ªå­—*/
+    kDAC_WaterMark_4Word,       /**<4ä¸ªå­—*/
 }DAC_WaterMarkMode_Type;
 
  //!< API functions

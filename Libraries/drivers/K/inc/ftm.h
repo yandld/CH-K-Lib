@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÄ£¿éÎªĞ¾Æ¬FTMÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ¨¡å—ä¸ºèŠ¯ç‰‡FTMæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #ifndef __CH_LIB_FTM_H_
@@ -18,14 +18,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-/* FTM Ó²¼şÄ£¿éºÅ */
-#define HW_FTM0    (0x00)
+#define HW_FTM0    (0x00)   /* FTMç¡¬ä»¶æ¨¡å—å·0ï¼Œä¾æ¬¡ç±»æ¨ */
 #define HW_FTM1    (0x01) 
 #define HW_FTM2    (0x02)
 #define HW_FTM3    (0x03)
 
-/* FTM¿ÉÓÃµÄÍ¨µÀ */
-#define HW_FTM_CH0 (0x00)
+#define HW_FTM_CH0 (0x00)   /* FTMå¯ç”¨çš„é€šé“0ï¼Œä¾æ¬¡ç±»æ¨ */
 #define HW_FTM_CH1 (0x01)
 #define HW_FTM_CH2 (0x02)
 #define HW_FTM_CH3 (0x03)
@@ -34,75 +32,94 @@
 #define HW_FTM_CH6 (0x06)
 #define HW_FTM_CH7 (0x07)
 
-/* PWM ²¨ĞÎÊä³ö */
+/**
+ * \enum FTM_PWM_Mode_Type
+ * \brief PWM Mode Select
+ */
 typedef enum
 {
-	kPWM_EdgeAligned,           //±ßÑØ¶ÔÆë ×î³£ÓÃ
-	kPWM_Combine,               //×éºÏÄ£Ê½
-    kPWM_Complementary,         //»¥²¹Ä£Ê½ ÀàËÆ×éºÏÄ£Ê½ µ«ÊÇChl(n) ºÍ Chl(n+1) ÊÇ»¥²¹Êä³ö
+	kPWM_EdgeAligned,           /**<è¾¹æ²¿å¯¹é½ æœ€å¸¸ç”¨*/
+	kPWM_Combine,               /**<ç»„åˆæ¨¡å¼*/
+    kPWM_Complementary,         /**<äº’è¡¥æ¨¡å¼ ç±»ä¼¼ç»„åˆæ¨¡å¼ ä½†æ˜¯Chl(n) å’Œ Chl(n+1) æ˜¯äº’è¡¥è¾“å‡º*/
 }FTM_PWM_Mode_Type;
-/* PWM ¼«ĞÔ·´×ª */
+
+/* PWM ææ€§åè½¬ */
 #define kFTM_PWM_HighTrue       (0x00)
 #define kFTM_PWM_LowTrue        (0x01)
 
-/** QD Õı½»½âÂë */
+/**
+ * \enum FTM_QD_PolarityMode_Type
+ * \brief QD æ­£äº¤è§£ç 
+ */
 typedef enum
 {
-    kFTM_QD_NormalPolarity,     /* Õı³£¼«ĞÔ */
-    kFTM_QD_InvertedPolarity,   /*·´Õı¼«ĞÔ */
+    kFTM_QD_NormalPolarity,     /**<æ­£å¸¸ææ€§ */
+    kFTM_QD_InvertedPolarity,   /**<åæ­£ææ€§ */
 }FTM_QD_PolarityMode_Type;
  
+/**
+ * \enum FTM_QD_Mode_Type
+ * \brief QD Mode Select
+ */
 typedef enum
 {
-	kQD_PHABEncoding,           /* Ê¹ÓÃABÏà±àÂëÆ÷ */
-	kQD_CountDirectionEncoding, /* Ê¹ÓÃ·½Ïò-Âö³åĞÍ±àÂëÆ÷ */
+	kQD_PHABEncoding,           /**< ä½¿ç”¨ABç›¸ç¼–ç å™¨ */
+	kQD_CountDirectionEncoding, /**< ä½¿ç”¨æ–¹å‘-è„‰å†²å‹ç¼–ç å™¨ */
 }FTM_QD_Mode_Type;
 
-/* IC ÊäÈë²¶×½ */
+/**
+ * \enum FTM_IC_Mode_Type
+ * \brief FTM Input Capture Mode select
+ */
 typedef enum
 {
-	kFTM_IC_FallingEdge,
-	kFTM_IC_RisingEdge,
-	kFTM_IC_RisingFallingEdge,
+	kFTM_IC_FallingEdge,        /**<ä¸Šå‡æ²¿*/
+	kFTM_IC_RisingEdge,         /**<ä¸‹é™æ²¿*/
+	kFTM_IC_RisingFallingEdge,  /**<è·³å˜æ²¿*/
 }FTM_IC_Mode_Type;
 
-//!< FTM ÖĞ¶Ï¼°DMA ÅäÖÃ
+/**
+ * \enum FTM_ITDMAConfig_Type
+ * \brief FTM ä¸­æ–­åŠDMA é…ç½®
+ */
 typedef enum
 {
-    kFTM_IT_TOF,
-    kFTM_IT_CH0,
-    kFTM_IT_CH1,
-    kFTM_IT_CH2,
-    kFTM_IT_CH3,
-    kFTM_IT_CH4,
-    kFTM_IT_CH5,
-    kFTM_IT_CH6,
-    kFTM_IT_CH7,
-    kFTM_DMA_CH0,
-    kFTM_DMA_CH1,
-    kFTM_DMA_CH2,
-    kFTM_DMA_CH3,
-    kFTM_DMA_CH4,
-    kFTM_DMA_CH5,
-    kFTM_DMA_CH6,
-    kFTM_DMA_CH7,
+    kFTM_IT_TOF,                /**<å®šæ—¶å™¨æº¢å‡ºä¸­æ–­*/
+    kFTM_IT_CH0,                /**<é€šé“0ä¸­æ–­*/
+    kFTM_IT_CH1,                /**<é€šé“1ä¸­æ–­*/
+    kFTM_IT_CH2,                /**<é€šé“2ä¸­æ–­*/
+    kFTM_IT_CH3,                /**<é€šé“3ä¸­æ–­*/
+    kFTM_IT_CH4,                /**<é€šé“4ä¸­æ–­*/
+    kFTM_IT_CH5,                /**<é€šé“5ä¸­æ–­*/
+    kFTM_IT_CH6,                /**<é€šé“6ä¸­æ–­*/
+    kFTM_IT_CH7,                /**<é€šé“7ä¸­æ–­*/
+    kFTM_DMA_CH0,               /**<é€šé“0DMAä¸­æ–­*/
+    kFTM_DMA_CH1,               /**<é€šé“1DMAä¸­æ–­*/
+    kFTM_DMA_CH2,               /**<é€šé“2DMAä¸­æ–­*/
+    kFTM_DMA_CH3,               /**<é€šé“3DMAä¸­æ–­*/
+    kFTM_DMA_CH4,               /**<é€šé“4DMAä¸­æ–­*/
+    kFTM_DMA_CH5,               /**<é€šé“5DMAä¸­æ–­*/
+    kFTM_DMA_CH6,               /**<é€šé“6DMAä¸­æ–­*/
+    kFTM_DMA_CH7,               /**<é€šé“7DMAä¸­æ–­*/
 }FTM_ITDMAConfig_Type;
-
-/* ·ÖÆµ */
+/**
+ * \enum FTM_ClockDiv_Type
+ * \brief åˆ†é¢‘ç³»æ•°
+ */
 typedef enum
 {
-    kFTM_ClockDiv1,
-    kFTM_ClockDiv2,
-    kFTM_ClockDiv4,
-    kFTM_ClockDiv8,
-    kFTM_ClockDiv16,
-    kFTM_ClockDiv32,
-    kFTM_ClockDiv64,
-    kFTM_ClockDiv128,
+    kFTM_ClockDiv1,         /**<ä¸åˆ†é¢‘*/
+    kFTM_ClockDiv2,         /**<2åˆ†é¢‘*/
+    kFTM_ClockDiv4,         /**<4åˆ†é¢‘*/
+    kFTM_ClockDiv8,         /**<8åˆ†é¢‘*/
+    kFTM_ClockDiv16,        /**<16åˆ†é¢‘*/
+    kFTM_ClockDiv32,        /**<32åˆ†é¢‘*/
+    kFTM_ClockDiv64,        /**<64åˆ†é¢‘*/
+    kFTM_ClockDiv128,       /**<128åˆ†é¢‘*/
 }FTM_ClockDiv_Type;
 
-//!< FTM PWM ¿ìËÙ³õÊ¼»¯
-#define FTM0_CH4_PB12   (0x205908U)  /* FTM0Ä£¿éµÄ4Í¨µÀ PTB12Òı½Å ÒÔÏÂÀàÍÆ */
+/* FTM PWM å¿«é€Ÿåˆå§‹åŒ– */
+#define FTM0_CH4_PB12   (0x205908U)        /* FTM0æ¨¡å—çš„4é€šé“ PTB12å¼•è„š ä»¥ä¸‹ç±»æ¨ */
 #define FTM0_CH5_PB13   (0x285b08U)
 #define FTM0_CH5_PA00   (0x2840c0U)
 #define FTM0_CH6_PA01   (0x3042c0U)
@@ -151,14 +168,14 @@ typedef enum
 
 
 
-//!< FTM Õı½»½âÂë¿ìËÙ³õÊ¼»¯
-#define FTM1_QD_PHA_PA08_PHB_PA09       (0x9181U) /* FTM1Ä£¿éµÄPTA8¡¢PTA9ÎªÕı½»½âÂë */
+/* FTM æ­£äº¤è§£ç å¿«é€Ÿåˆå§‹åŒ– */
+#define FTM1_QD_PHA_PA08_PHB_PA09       (0x9181U) /* FTM1æ¨¡å—çš„PTA8ã€PTA9ä¸ºæ­£äº¤è§£ç ï¼Œä¾æ¬¡ç±»æ¨ */
 #define FTM1_QD_PHA_PA12_PHB_PA13       (0x99c1U)
 #define FTM1_QD_PHA_PB00_PHB_PB01       (0x8189U)
 #define FTM2_QD_PHA_PA10_PHB_PA11       (0x9582U)
 #define FTM2_QD_PHA_PB18_PHB_PB19       (0xa58aU)
 
-//!< Callback
+/* Callback */
 typedef void (*FTM_CallBackType)(void);
 
 //!< API functions

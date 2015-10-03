@@ -1,12 +1,11 @@
 /**
-  ******************************************************************************
   * @file    gpio.c
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.24
+  * \date    2015.9.25 FreeXc å®Œå–„äº†gpio.h & gpio.cæ–‡ä»¶çš„æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   * @note    gpio driver source file
-  ******************************************************************************
   */
 #include "common.h"
 #include "gpio.h"
@@ -21,7 +20,6 @@
 #define GPIO_BASES {PTA, PTB, PTC, PTD, PTE}
 #define PORT_BASES {PORTA, PORTB, PORTC, PORTD, PORTE}
 #endif
-
 
 #endif
 
@@ -46,22 +44,15 @@ static const IRQn_Type GPIO_IRQnTable[] =
     PORTE_IRQn,
 };
 
-//! @defgroup CHKinetis
-//! @{
-
-
-//! @defgroup GPIO
-//! @brief GPIO API functions
-//! @{
 
  /**
- * @brief set GPIO pin mux
- * @note  enable PORT clock before set pinmux number
- * @param  instance: 
- *         @arg HW_GPIOx : GPIOx moudle
- * @param  pin  : pin index number 0-31
- * @param  pinMux: pinmux function
- *         @arg kPinAltx : Pinmux function x
+ * @brief  set GPIO pin mux
+ * @note   enable PORT clock before set pinmux number
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOx  GPIOx moudle
+ * @param[in]  pin pin index number 0-31
+ * @param[in]  pinMux pinmux function
+ *              @arg kPinAltx  Pinmux function x
  * @retval None
  */
 void PORT_PinMuxConfig(uint32_t instance, uint8_t pin, PORT_PinMux_Type pinMux)
@@ -74,13 +65,13 @@ void PORT_PinMuxConfig(uint32_t instance, uint8_t pin, PORT_PinMux_Type pinMux)
  /**
  * @brief  set pin internal pullup/down resistors
  * @note   pull resistor value is about 20K
- * @param  instance: 
- *         @arg HW_GPIOx : GPIOx moudle
- * @param  pin  : pin index number 0-31
- * @param  pull : pull select
- *         @arg kPullDisabled : disable pull resistor
- *         @arg kPullUp       : pull up
- *         @arg kPullDown     : pull down
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOx  GPIOx moudle
+ * @param[in]  pin  pin index number 0-31
+ * @param[in]  pull pull select
+ *              @arg kPullDisabled  disable pull resistor
+ *              @arg kPullUp        pull up
+ *              @arg kPullDown      pull down
  * @retval None
  */
 void PORT_PinPullConfig(uint32_t instance, uint8_t pin, PORT_Pull_Type pull)
@@ -104,21 +95,21 @@ void PORT_PinPullConfig(uint32_t instance, uint8_t pin, PORT_Pull_Type pull)
     }
 }
 /**
- * @brief  ¶Ë¿ÚÒı½ÅµÄ¿ªÂ©×´Ì¬ÅäÖÃ ÓÃ»§Ò»°ã²»±Øµ÷ÓÃ
+ * @brief  ç«¯å£å¼•è„šçš„å¼€æ¼çŠ¶æ€é…ç½® ç”¨æˆ·ä¸€èˆ¬ä¸å¿…è°ƒç”¨
  * @code
- *      // ½«PORTA¶Ë¿ÚµÄ3Òı½ÅÉèÖÃÎª¿ªÂ©×´Ì¬ 
+ *      // å°†PORTAç«¯å£çš„3å¼•è„šè®¾ç½®ä¸ºå¼€æ¼çŠ¶æ€ 
  *      PORT_PinOpenDrainConfig(HW_GPIOA, 3, ENABLE);
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @param  pin  :¶Ë¿ÚÉÏµÄÒı½ÅºÅ 0~31
- * @param  newState  :¹¦ÄÜ¿ª¹Ø¿ØÖÆ
- *         @arg ENABLE   :¿ªÆô¹¦ÄÜ
- *         @arg DISABLE  :¹Ø±Õ¹¦ÄÜ
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pin  ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
+ * @param[in]  status  åŠŸèƒ½å¼€å…³æ§åˆ¶
+ *              @arg ENABLE   å¼€å¯åŠŸèƒ½ 
+ *              @arg DISABLE  å…³é—­åŠŸèƒ½
  * @retval None
  */
 void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pin, bool status)
@@ -128,21 +119,21 @@ void PORT_PinOpenDrainConfig(uint32_t instance, uint8_t pin, bool status)
 }
 
 /**
- * @brief  ¶Ë¿ÚÒı½ÅµÄ¿ªÆôÎŞÔ´ÂË²¨Æ÷ ×÷ÎªÊäÈëÊ±ÓĞĞ§
+ * @brief  ç«¯å£å¼•è„šçš„å¼€å¯æ— æºæ»¤æ³¢å™¨ ä½œä¸ºè¾“å…¥æ—¶æœ‰æ•ˆ
  * @code
- *      // ½«PORTA¶Ë¿ÚµÄ3Òı½ÅÉèÖÃÎª¿ªÂ©×´Ì¬ 
+ *      // å°†PORTAç«¯å£çš„3å¼•è„šè®¾ç½®ä¸ºå¼€æ¼çŠ¶æ€ 
  *      PORT_PinPassiveFilterConfig(HW_GPIOA, 3, ENABLE);
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @param  pin  :¶Ë¿ÚÉÏµÄÒı½ÅºÅ 0~31
- * @param  newState  :¹¦ÄÜ¿ª¹Ø¿ØÖÆ
- *         @arg ENABLE   :¿ªÆô¹¦ÄÜ
- *         @arg DISABLE  :¹Ø±Õ¹¦ÄÜ
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pin  ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
+ * @param[in]  status  åŠŸèƒ½å¼€å…³æ§åˆ¶
+ *              @arg ENABLE   å¼€å¯åŠŸèƒ½
+ *              @arg DISABLE  å…³é—­åŠŸèƒ½
  * @retval None
  */
 void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pin, bool status)
@@ -152,22 +143,22 @@ void PORT_PinPassiveFilterConfig(uint32_t instance, uint8_t pin, bool status)
 }
 
  /**
- * @brief  ÉèÖÃÒı½ÅÎªÊäÈë»¹ÊÇÊä³ö¹¦ÄÜ  ÓÃ»§Ò»°ã²»±Øµ÷ÓÃ
- * @note   Ö»ÓĞµ±Òı½Å×÷ÎªGPIOÊ±²ÅÓĞÒâÒå
+ * @brief  è®¾ç½®å¼•è„šä¸ºè¾“å…¥è¿˜æ˜¯è¾“å‡ºåŠŸèƒ½  ç”¨æˆ·ä¸€èˆ¬ä¸å¿…è°ƒç”¨
+ * @note   åªæœ‰å½“å¼•è„šä½œä¸ºGPIOæ—¶æ‰æœ‰æ„ä¹‰
  * @code
- *      // ½«PORTB¶Ë¿ÚµÄ3Òı½ÅÉèÖÃÊäÈëÒı½Å
+ *      // å°†PORTBç«¯å£çš„3å¼•è„šè®¾ç½®è¾“å…¥å¼•è„š
  *      GPIO_PinConfig(HW_GPIOB, 3, kInpput);
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @param  pin  :¶Ë¿ÚÉÏµÄÒı½ÅºÅ 0~31
- * @param  mode      :ÊäÈë»òÕßÊä³öÉèÖÃ
- *         @arg kInpput  :ÊäÈë¹¦ÄÜÑ¡Ôñ
- *         @arg kOutput  :Êä³ö¹¦ÄÜÑ¡Ôñ
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pin  ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
+ * @param[in]  mode è¾“å…¥æˆ–è€…è¾“å‡ºè®¾ç½®
+ *              @arg kInpput  è¾“å…¥åŠŸèƒ½é€‰æ‹©
+ *              @arg kOutput  è¾“å‡ºåŠŸèƒ½é€‰æ‹©
  * @retval None
  */
 void GPIO_PinConfig(uint32_t instance, uint8_t pin, GPIO_PinConfig_Type mode)
@@ -177,18 +168,18 @@ void GPIO_PinConfig(uint32_t instance, uint8_t pin, GPIO_PinConfig_Type mode)
 }
 
  /**
- * @brief  GPIO³õÊ¼»¯ÅäÖÃ
+ * @brief  GPIOåˆå§‹åŒ–é…ç½®
  * @code
- *    //³õÊ¼»¯ÅäÖÃPORTB¶Ë¿ÚµÄ10Òı½ÅÎªÍÆÍìÊä³öÒı½Å
- *    GPIO_InitTypeDef GPIO_InitStruct1;      //ÉêÇëÒ»¸ö½á¹¹±äÁ¿
- *    GPIO_InitStruct1.instance = HW_GPIOB;   //Ñ¡ÔñPORTB¶Ë¿Ú
- *    GPIO_InitStruct1.mode = kGPIO_Mode_OPP; //ÍÆÍìÊä³ö
- *    GPIO_InitStruct1.pinx = 10;             //Ñ¡Ôñ10Òı½Å
- *    //µ÷ÓÃ³õÊ¼»¯GPIOº¯Êı 
+ *    //åˆå§‹åŒ–é…ç½®PORTBç«¯å£çš„10å¼•è„šä¸ºæ¨æŒ½è¾“å‡ºå¼•è„š
+ *    GPIO_InitTypeDef GPIO_InitStruct1;      //ç”³è¯·ä¸€ä¸ªç»“æ„å˜é‡
+ *    GPIO_InitStruct1.instance = HW_GPIOB;   //é€‰æ‹©PORTBç«¯å£
+ *    GPIO_InitStruct1.mode = kGPIO_Mode_OPP; //æ¨æŒ½è¾“å‡º
+ *    GPIO_InitStruct1.pinx = 10;             //é€‰æ‹©10å¼•è„š
+ *    //è°ƒç”¨åˆå§‹åŒ–GPIOå‡½æ•° 
  *    GPIO_Init(&GPIO_InitStruct1);
  * @endcode
- * @param  GPIO_InitStruct: GPIO³õÊ¼»¯½á¹¹Ìå£¬°üº¬ÁËÒı½Å×´Ì¬²ÎÊı  
-           GPIO_InitStruct.instance   :¶Ë¿ÚºÅ HW_GPIOA ~ HW_GPIOE
+ * @param[in]  GPIO_InitStruct GPIOåˆå§‹åŒ–ç»“æ„ä½“ï¼ŒåŒ…å«äº†å¼•è„šçŠ¶æ€å‚æ•°  
+ * @see GPIOåˆå§‹åŒ–é…ç½®ä¾‹ç¨‹
  * @retval None
  */
 void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
@@ -229,25 +220,25 @@ void GPIO_Init(GPIO_InitTypeDef * GPIO_InitStruct)
 }
 
  /**
- * @brief  ¿ìËÙ³õÊ¼»¯Ò»¸öGPIOÒı½Å Êµ¼ÊÉÏÊÇGPIO_InitµÄ×î¼òµ¥ÅäÖÃ
+ * @brief  å¿«é€Ÿåˆå§‹åŒ–ä¸€ä¸ªGPIOå¼•è„š å®é™…ä¸Šæ˜¯GPIO_Initçš„æœ€ç®€å•é…ç½®
  * @code
- *      //³õÊ¼»¯ÅäÖÃPORTB¶Ë¿ÚµÄ10Òı½ÅÎªÍÆÍìÊä³öÒı½Å
+ *      //åˆå§‹åŒ–é…ç½®PORTBç«¯å£çš„10å¼•è„šä¸ºæ¨æŒ½è¾“å‡ºå¼•è„š
  *      GPIO_QuickInit(HW_GPIOB, 10, kGPIO_Mode_OPP);
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @param  pin  :¶Ë¿ÚÉÏµÄÒı½ÅºÅ 0~31
- * @param  mode  :Òı½Å¹¤×÷Ä£Ê½
- *         @arg kGPIO_Mode_IFT :Ğü¿ÕÊäÈë
- *         @arg kGPIO_Mode_IPD :ÏÂÀ­ÊäÈë
- *         @arg kGPIO_Mode_IPU :ÉÏÀ­ÊäÈë
- *         @arg kGPIO_Mode_OOD :¿ªÂ©Êä³ö
- *         @arg kGPIO_Mode_OPP :ÍÆÍìÊä³ö
- * @retval None
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pinx ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
+ * @param[in]  mode å¼•è„šå·¥ä½œæ¨¡å¼
+ *              @arg kGPIO_Mode_IFT æ‚¬ç©ºè¾“å…¥
+ *              @arg kGPIO_Mode_IPD ä¸‹æ‹‰è¾“å…¥
+ *              @arg kGPIO_Mode_IPU ä¸Šæ‹‰è¾“å…¥
+ *              @arg kGPIO_Mode_OOD å¼€æ¼è¾“å‡º
+ *              @arg kGPIO_Mode_OPP æ¨æŒ½è¾“å‡º
+ * @retval instance GPIOæ¨¡å—å·
  */
 uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
 {
@@ -260,22 +251,22 @@ uint8_t GPIO_QuickInit(uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)
 }
 
  /**
- * @brief  ÉèÖÃÖ¸¶¨Òı½ÅÊä³ö¸ßµçÆ½»òÕßµÍµçÆ½
- * @note   ´ËÒı½ÅÊ×ÏÈÅäÖÃ³ÉÊä³öÒı½Å
+ * @brief  è®¾ç½®æŒ‡å®šå¼•è„šè¾“å‡ºé«˜ç”µå¹³æˆ–è€…ä½ç”µå¹³
+ * @note   æ­¤å¼•è„šé¦–å…ˆé…ç½®æˆè¾“å‡ºå¼•è„š
  * @code
- *      //ÉèÖÃPORTB¶Ë¿ÚµÄ10Òı½ÅÊä³ö¸ßµçÆ½
+ *      //è®¾ç½®PORTBç«¯å£çš„10å¼•è„šè¾“å‡ºé«˜ç”µå¹³
  *      GPIO_WriteBit(HW_GPIOB, 10, 1);
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @param  pin  :¶Ë¿ÚÉÏµÄÒı½ÅºÅ 0~31
- * @param  data   : Òı½ÅµÄµçÆ½×´Ì¬  
- *         @arg 0 : µÍµçÆ½ 
- *         @arg 1 : ¸ßµçÆ½
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pin  ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
+ * @param[in]  data å¼•è„šçš„ç”µå¹³çŠ¶æ€  
+ *              @arg 0  ä½ç”µå¹³ 
+ *              @arg 1  é«˜ç”µå¹³
  * @retval None
  */
 void GPIO_WriteBit(uint32_t instance, uint8_t pin, uint8_t data)
@@ -284,33 +275,64 @@ void GPIO_WriteBit(uint32_t instance, uint8_t pin, uint8_t data)
     (data) ? (GPIO_InstanceTable[instance]->PSOR |= (1 << pin)):(GPIO_InstanceTable[instance]->PCOR |= (1 << pin));
 }
 
+ /**
+ * @brief  ç½®ä½æŒ‡å®šå¼•è„šçš„ç”µå¹³çŠ¶æ€ï¼ˆå³ä¸ºé«˜ç”µå¹³ï¼‰
+ * @note   æ­¤å¼•è„šé¦–å…ˆé…ç½®æˆè¾“å‡ºå¼•è„š
+ * @code
+ *      //ç½®ä½PORTBç«¯å£çš„10å¼•è„š
+ *      GPIO_SetBit(HW_GPIOB, 10);
+ * @endcode
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pin  ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
+ * @retval None
+ */
 void GPIO_SetBit(uint32_t instance, uint32_t pin)
 {
     GPIO_InstanceTable[instance]->PSOR |= (1 << pin);
 }
 
+ /**
+ * @brief  å¤ä½æŒ‡å®šå¼•è„šçš„ç”µå¹³çŠ¶æ€ï¼ˆå³ä¸ºä½ç”µå¹³ï¼‰
+ * @note   æ­¤å¼•è„šé¦–å…ˆé…ç½®æˆè¾“å‡ºå¼•è„š
+ * @code
+ *      //å¤ä½PORTBç«¯å£çš„10å¼•è„š
+ *      GPIO_ResetBit(HW_GPIOB, 10);
+ * @endcode
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pin  ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
+ * @retval None
+ */
 void GPIO_ResetBit(uint32_t instance, uint32_t pin)
 {
     GPIO_InstanceTable[instance]->PCOR |= (1 << pin);
 }
 
  /**
- * @brief  ¶ÁÈ¡Ò»¸öÒı½ÅÉÏµÄµçÆ½×´Ì¬
+ * @brief  è¯»å–ä¸€ä¸ªå¼•è„šä¸Šçš„ç”µå¹³çŠ¶æ€
  * @code
- *      //¶ÁÈ¡PORTB¶Ë¿ÚµÄ10Òı½ÅµÄµçÆ½×´Ì¬
- *      uint8_t status ; //ÓÃÓÚ´æ´¢Òı½ÅµÄ×´Ì¬
- *      status = GPIO_ReadBit(HW_GPIOB, 10); //»ñÈ¡Òı½ÅµÄ×´Ì¬²¢´æ´¢µ½statusÖĞ
+ *      //è¯»å–PORTBç«¯å£çš„10å¼•è„šçš„ç”µå¹³çŠ¶æ€
+ *      uint8_t status ; //ç”¨äºå­˜å‚¨å¼•è„šçš„çŠ¶æ€
+ *      status = GPIO_ReadBit(HW_GPIOB, 10); //è·å–å¼•è„šçš„çŠ¶æ€å¹¶å­˜å‚¨åˆ°statusä¸­
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @param  pin  :¶Ë¿ÚÉÏµÄÒı½ÅºÅ 0~31
- * @retval 
- *         @arg 0 : µÍµçÆ½
- *         @arg 1 : ¸ßµçÆ½
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pin  ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
+ * @retval 0 ä½ç”µå¹³
+ * @retval 1 é«˜ç”µå¹³
  */
 uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pin)
 {
@@ -326,18 +348,18 @@ uint8_t GPIO_ReadBit(uint32_t instance, uint8_t pin)
 }
 
  /**
- * @brief  ·­×ªÒ»¸öÒı½ÅµÄµçÆ½×´Ì¬
+ * @brief  ç¿»è½¬ä¸€ä¸ªå¼•è„šçš„ç”µå¹³çŠ¶æ€
  * @code
- *      //·­×ªPORTB¶Ë¿ÚµÄ10Òı½ÅµÄµçÆ½×´Ì¬
+ *      //ç¿»è½¬PORTBç«¯å£çš„10å¼•è„šçš„ç”µå¹³çŠ¶æ€
  *      GPIO_ToggleBit(HW_GPIOB, 10); 
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @param  pin  :¶Ë¿ÚÉÏµÄÒı½ÅºÅ 0~31
+ * @param[in]  instance: GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pin  ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
  * @retval None
  */
 void GPIO_ToggleBit(uint32_t instance, uint8_t pin)
@@ -346,37 +368,37 @@ void GPIO_ToggleBit(uint32_t instance, uint8_t pin)
 }
 
 /**
- * @brief  ¶ÁÈ¡Ò»¸ö¶Ë¿Ú32Î»µÄÊı¾İ
+ * @brief  è¯»å–ä¸€ä¸ªç«¯å£32ä½çš„æ•°æ®
  * @code
- *      //»ñÈ¡PORTB¶Ë¿ÚµÄËùÓĞÒı½ÅµÄµçÆ½×´Ì¬
- *      uint32_t status ; //ÓÃÓÚ´æ´¢Òı½ÅµÄ×´Ì¬
- *      status = GPIO_ReadPort(HW_GPIOB); //»ñÈ¡Òı½ÅµÄ×´Ì¬²¢´æ´¢µ½statusÖĞ
+ *      //è·å–PORTBç«¯å£çš„æ‰€æœ‰å¼•è„šçš„ç”µå¹³çŠ¶æ€
+ *      uint32_t status ; //ç”¨äºå­˜å‚¨å¼•è„šçš„çŠ¶æ€
+ *      status = GPIO_ReadPort(HW_GPIOB); //è·å–å¼•è„šçš„çŠ¶æ€å¹¶å­˜å‚¨åˆ°statusä¸­
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @retval ¶Ë¿ÚµÄ32Î»Êı¾İ
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @retval ç«¯å£çš„32ä½æ•°æ®
  */
 uint32_t GPIO_ReadPort(uint32_t instance)
 {
     return (GPIO_InstanceTable[instance]->PDIR);
 }
 /**
- * @brief  ÏòÒ»¸ö¶Ë¿ÚĞ´Èë32Î»Êı¾İ
+ * @brief  å‘ä¸€ä¸ªç«¯å£å†™å…¥32ä½æ•°æ®
  * @code
- *      //ÏòPORTB¶Ë¿ÚĞ´Èë0xFFFFFFFF
+ *      //å‘PORTBç«¯å£å†™å…¥0xFFFFFFFF
  *      GPIO_WriteByte(HW_GPIOB, 0xFFFFFFFF); 
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @param  data  :32Î»Êı¾İ
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  data  32ä½æ•°æ®
  * @retval None
  */
 void GPIO_WritePort(uint32_t instance, uint32_t data)
@@ -386,27 +408,30 @@ void GPIO_WritePort(uint32_t instance, uint32_t data)
 
 
 /**
- * @brief  ÉèÖÃGPIOÒı½ÅÖĞ¶ÏÀàĞÍ»òÕßDMA¹¦ÄÜ
+ * @brief  è®¾ç½®GPIOå¼•è„šä¸­æ–­ç±»å‹æˆ–è€…DMAåŠŸèƒ½
  * @code
- *      //ÉèÖÃPORTB¶Ë¿ÚµÄ10Òı½ÅÎªÏÂ½µÑØ´¥·¢ÖĞ¶Ï
+ *      //è®¾ç½®PORTBç«¯å£çš„10å¼•è„šä¸ºä¸‹é™æ²¿è§¦å‘ä¸­æ–­
  *      GPIO_ITDMAConfig(HW_GPIOB, 10, kGPIO_IT_FallingEdge, true); 
  * @endcode
- * @param  instance: GPIOÄ£¿éºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿Ú
- * @param  pin  :¶Ë¿ÚÉÏµÄÒı½ÅºÅ 0~31
- * @param config: ÅäÖÃÄ£Ê½
- *         @arg kGPIO_DMA_RisingEdge DMAÉÏÉıÑØ´¥·¢
- *         @arg kGPIO_DMA_FallingEdge DMAÏÂ½µÑØ´¥·¢
- *         @arg kGPIO_DMA_RisingFallingEdge DMAÉÏÉıºÍÏÂ½µÑØ¶¼´¥·¢
- *         @arg kGPIO_IT_Low µÍµçÆ½´¥·¢ÖĞ¶Ï
- *         @arg kGPIO_IT_RisingEdge ÉÏÉıÑØ´¥·¢ÖĞ¶Ï
- *         @arg kGPIO_IT_FallingEdge ÏÂ½µÑØ´¥·¢ÖĞ¶Ï
- *         @arg kGPIO_IT_RisingFallingEdge ÉÏÉıºÍÏÂ½µÑØ¶¼´¥·¢ÖĞ¶Ï
- *         @arg kGPIO_IT_High ¸ßµçÆ½´¥·¢ÖĞ¶Ï
+ * @param[in]  instance GPIOæ¨¡å—å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£
+ * @param[in]  pin ç«¯å£ä¸Šçš„å¼•è„šå· 0~31
+ * @param[in]  config é…ç½®æ¨¡å¼
+ *              @arg kGPIO_DMA_RisingEdge DMAä¸Šå‡æ²¿è§¦å‘
+ *              @arg kGPIO_DMA_FallingEdge DMAä¸‹é™æ²¿è§¦å‘
+ *              @arg kGPIO_DMA_RisingFallingEdge DMAä¸Šå‡å’Œä¸‹é™æ²¿éƒ½è§¦å‘
+ *              @arg kGPIO_IT_Low ä½ç”µå¹³è§¦å‘ä¸­æ–­
+ *              @arg kGPIO_IT_RisingEdge ä¸Šå‡æ²¿è§¦å‘ä¸­æ–­
+ *              @arg kGPIO_IT_FallingEdge ä¸‹é™æ²¿è§¦å‘ä¸­æ–­
+ *              @arg kGPIO_IT_RisingFallingEdge ä¸Šå‡å’Œä¸‹é™æ²¿éƒ½è§¦å‘ä¸­æ–­
+ *              @arg kGPIO_IT_High é«˜ç”µå¹³è§¦å‘ä¸­æ–­
+ * @param[in]  status æ˜¯å¦ä½¿èƒ½
+ *              @arg 0 disable
+ *              @arg 1 enable
  * @retval None
  */
 void GPIO_ITDMAConfig(uint32_t instance, uint8_t pin, GPIO_ITDMAConfig_Type config, bool status)
@@ -457,16 +482,26 @@ void GPIO_ITDMAConfig(uint32_t instance, uint8_t pin, GPIO_ITDMAConfig_Type conf
     }
 }
 /**
- * @brief  ×¢²áÖĞ¶Ï»Øµ÷º¯Êı
- * @param  instance: GPIOÄ£¿éÖĞ¶ÏÈë¿ÚºÅ
- *         @arg HW_GPIOA :Ğ¾Æ¬µÄPORTA¶Ë¿ÚÖĞ¶ÏÈë¿Ú
- *         @arg HW_GPIOB :Ğ¾Æ¬µÄPORTB¶Ë¿ÚÖĞ¶ÏÈë¿Ú
- *         @arg HW_GPIOC :Ğ¾Æ¬µÄPORTC¶Ë¿ÚÖĞ¶ÏÈë¿Ú
- *         @arg HW_GPIOD :Ğ¾Æ¬µÄPORTD¶Ë¿ÚÖĞ¶ÏÈë¿Ú
- *         @arg HW_GPIOE :Ğ¾Æ¬µÄPORTE¶Ë¿ÚÖĞ¶ÏÈë¿Ú
- * @param AppCBFun: »Øµ÷º¯ÊıÖ¸ÕëÈë¿Ú
+ * @brief  æ³¨å†Œä¸­æ–­å›è°ƒå‡½æ•°
+ * @code
+ *      //æ³¨å†ŒPTB10çš„EXTIä¸­æ–­å›è°ƒå‡½æ•°
+ *      void PTB10_EXTI_ISR(uint32_t pinxArray)
+ *      {
+ *          if(pinxArray & (1u << 10))
+ *              ;//ç”¨æˆ·è‡ªå®šä¹‰å‡½æ•°åŠŸèƒ½
+ *      }
+ *      GPIO_CallbackInstall(instance,PTB10_EXTI_ISR);
+ * @endcode
+ * @attention  è¯¥å›è°ƒå‡½æ•°æ˜¯æœ‰å½¢å‚çš„
+ * @param[in]  instance GPIOæ¨¡å—ä¸­æ–­å…¥å£å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£ä¸­æ–­å…¥å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£ä¸­æ–­å…¥å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£ä¸­æ–­å…¥å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£ä¸­æ–­å…¥å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£ä¸­æ–­å…¥å£
+ * @param[in]  AppCBFun å›è°ƒå‡½æ•°æŒ‡é’ˆå…¥å£
  * @retval None
- * @note ¶ÔÓÚ´Ëº¯ÊıµÄ¾ßÌåÓ¦ÓÃÇë²éÔÄÓ¦ÓÃÊµÀı
+ * @see å¯¹äºæ­¤å‡½æ•°çš„å…·ä½“åº”ç”¨è¯·æŸ¥é˜…åº”ç”¨å®ä¾‹
  */
 void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun)
 {
@@ -478,9 +513,18 @@ void GPIO_CallbackInstall(uint32_t instance, GPIO_CallBackType AppCBFun)
     }
 }
 
-//! @}
 
-
+/**
+ * @brief  GPIOä¸­æ–­æ€»å¤„ç†å‡½æ•°ï¼Œç”¨æˆ·ä¸€èˆ¬æ— éœ€ä½¿ç”¨å’Œä¿®æ”¹
+ * @param[in]  instance GPIOæ¨¡å—ä¸­æ–­å…¥å£å·
+ *              @arg HW_GPIOA èŠ¯ç‰‡çš„PORTAç«¯å£ä¸­æ–­å…¥å£
+ *              @arg HW_GPIOB èŠ¯ç‰‡çš„PORTBç«¯å£ä¸­æ–­å…¥å£
+ *              @arg HW_GPIOC èŠ¯ç‰‡çš„PORTCç«¯å£ä¸­æ–­å…¥å£
+ *              @arg HW_GPIOD èŠ¯ç‰‡çš„PORTDç«¯å£ä¸­æ–­å…¥å£
+ *              @arg HW_GPIOE èŠ¯ç‰‡çš„PORTEç«¯å£ä¸­æ–­å…¥å£
+ * @attention é™æ€å‡½æ•°ï¼Œä»…æœ¬æ–‡ä»¶å¯è§
+ * @retval None
+ */
 static void PORT_IRQHandler(uint32_t instance)
 {
     uint32_t ISFR;
@@ -494,32 +538,50 @@ static void PORT_IRQHandler(uint32_t instance)
     }
 }
 
+/**
+ * @brief  ç³»ç»ŸGPIOä¸­æ–­å‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void PORTA_IRQHandler(void)
 {
     PORT_IRQHandler(HW_GPIOA);
 }
 
+/**
+ * @brief  ç³»ç»ŸGPIOä¸­æ–­å‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void PORTB_IRQHandler(void)
 {
     PORT_IRQHandler(HW_GPIOB);
 }
 
+/**
+ * @brief  ç³»ç»ŸGPIOä¸­æ–­å‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void PORTC_IRQHandler(void)
 {
     PORT_IRQHandler(HW_GPIOC);
 }
 
+/**
+ * @brief  ç³»ç»ŸGPIOä¸­æ–­å‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void PORTD_IRQHandler(void)
 {
     PORT_IRQHandler(HW_GPIOD);
 }
 
+/**
+ * @brief  ç³»ç»ŸGPIOä¸­æ–­å‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void PORTE_IRQHandler(void)
 {
     PORT_IRQHandler(HW_GPIOE);
 }
 
 #if (defined(MK70F12))
+/**
+ * @brief  ç³»ç»ŸGPIOä¸­æ–­å‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void PORTF_IRQHandler(void)
 {
     PORT_IRQHandler(HW_GPIOF);
@@ -527,4 +589,3 @@ void PORTF_IRQHandler(void)
 #endif
 
 
-//! @}

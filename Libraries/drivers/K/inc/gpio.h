@@ -1,12 +1,10 @@
 /**
-  ******************************************************************************
   * @file    gpio.h
   * @author  YANDLD
   * @version V2.5
-  * @date    2014.3.24
+  * @date    2014.3.24 vdsav avfdsfdsafasgdsa
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬GPIOÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
-  ******************************************************************************
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡GPIOæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   */
 #ifndef __CH_LIB_GPIO_H__
 #define __CH_LIB_GPIO_H__
@@ -18,81 +16,99 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-/* GPIO¶Ë¿Ú¶¨Òå */
-#define HW_GPIOA  (0x00U)   /* hardware GPIOA */
+/* GPIOç«¯å£å®šä¹‰ */
+#define HW_GPIOA  (0x00U) /*GPIOæ¨¡å—A,ä¾æ¬¡ç±»æ¨*/  
 #define HW_GPIOB  (0x01U)
 #define HW_GPIOC  (0x02U)
 #define HW_GPIOD  (0x03U)
 #define HW_GPIOE  (0x04U)
 #define HW_GPIOF  (0x05U)
 
-
-/* ¶Ë¿Ú¸´ÓÃÑ¡Ôñ ¸ù¾İÊÖ²á Signal Multiplexing and Signal Descriptions ÕÂ½ÚÑ¡Ôñ¸´ÓÃ */
+/**
+ * \enum PORT_PinMux_Type
+ * \brief ç«¯å£å¤ç”¨é€‰æ‹©
+ * \see Signal Multiplexing and Signal Descriptions ç« èŠ‚
+ */
 typedef enum
 {
-    kPinAlt0,  //0¹¦ÄÜ¸´ÓÃ
-    kPinAlt1,  //1¹¦ÄÜ¸´ÓÃ
-    kPinAlt2,  //2¹¦ÄÜ¸´ÓÃ
-    kPinAlt3,  //3¹¦ÄÜ¸´ÓÃ
-    kPinAlt4,  //4¹¦ÄÜ¸´ÓÃ
-    kPinAlt5,  //5¹¦ÄÜ¸´ÓÃ
-    kPinAlt6,  //6¹¦ÄÜ¸´ÓÃ
-    kPinAlt7,  //7¹¦ÄÜ¸´ÓÃ
+    kPinAlt0,  /**<0åŠŸèƒ½å¤ç”¨*/
+    kPinAlt1,  /**<1åŠŸèƒ½å¤ç”¨*/
+    kPinAlt2,  /**<2åŠŸèƒ½å¤ç”¨*/
+    kPinAlt3,  /**<3åŠŸèƒ½å¤ç”¨*/
+    kPinAlt4,  /**<4åŠŸèƒ½å¤ç”¨*/
+    kPinAlt5,  /**<5åŠŸèƒ½å¤ç”¨*/
+    kPinAlt6,  /**<6åŠŸèƒ½å¤ç”¨*/
+    kPinAlt7,  /**<7åŠŸèƒ½å¤ç”¨*/
 }PORT_PinMux_Type;
 
-/* ¶Ë¿ÚÉÏÏÂÀ­ÅäÖÃ £¬µç×è×èÖµÔ¼Îª20K */
+/**
+ * \enum PORT_Pull_Type
+ * \brief ç«¯å£ä¸Šä¸‹æ‹‰é…ç½® ï¼Œç”µé˜»é˜»å€¼çº¦ä¸º20K
+ */
 typedef enum
 {
-    kPullDisabled,  //¹Ø±ÕÉÏÏÂÀ­µç×è¹¦ÄÜ
-    kPullUp,        //¿ªÆôÉÏÀ­µç×è¹¦ÄÜ
-    kPullDown,      //¿ªÆôÏÂÀ­µç×è¹¦ÄÜ
+    kPullDisabled,  /**<å…³é—­ä¸Šä¸‹æ‹‰ç”µé˜»åŠŸèƒ½*/
+    kPullUp,        /**<å¼€å¯ä¸Šæ‹‰ç”µé˜»åŠŸèƒ½*/
+    kPullDown,      /**<å¼€å¯ä¸‹æ‹‰ç”µé˜»åŠŸèƒ½*/
 }PORT_Pull_Type;
 
-/* GPIO¶Ë¿ÚÄ£Ê½ÅäÖÃ */
+/**
+ * \enum GPIO_Mode_Type
+ * \brief GPIOç«¯å£æ¨¡å¼é…ç½®
+ */
 typedef enum
 {
-    kGPIO_Mode_IFT = 0x00,       /* ¸¡¿ÕÊäÈë */
-    kGPIO_Mode_IPD = 0x01,       /* ÏÂÀ­ÊäÈë */
-    kGPIO_Mode_IPU = 0x02,       /* ÉÏÀ­ÊäÈë */
-    kGPIO_Mode_OOD = 0x03,       /* ¿ªÂ©Êä³ö */
-    kGPIO_Mode_OPP = 0x04,       /* ÍÆÍìÊä³ö */
+    kGPIO_Mode_IFT = 0x00,       /**< æµ®ç©ºè¾“å…¥ */
+    kGPIO_Mode_IPD = 0x01,       /**< ä¸‹æ‹‰è¾“å…¥ */
+    kGPIO_Mode_IPU = 0x02,       /**< ä¸Šæ‹‰è¾“å…¥ */
+    kGPIO_Mode_OOD = 0x03,       /**< å¼€æ¼è¾“å‡º */
+    kGPIO_Mode_OPP = 0x04,       /**< æ¨æŒ½è¾“å‡º */
 }GPIO_Mode_Type;
 
-/* ¶Ë¿ÚÊäÈëÊä³öÄ£Ê½Ñ¡Ôñ */
+/**
+ * \enum GPIO_PinConfig_Type
+ * \brief ç«¯å£è¾“å…¥è¾“å‡ºæ¨¡å¼é€‰æ‹©
+ */
 typedef enum
 {
-    kInput,                  /* Òı½ÅÊäÈëÄ£Ê½ */
-    kOutput,                 /* Òı½ÅÊä³öÄ£Ê½ */
+    kInput,                  /**< å¼•è„šè¾“å…¥æ¨¡å¼ */
+    kOutput,                 /**< å¼•è„šè¾“å‡ºæ¨¡å¼ */
 }GPIO_PinConfig_Type;
 
-/* ¶Ë¿ÚÖĞ¶Ï¼°DMAÅäÖÃÑ¡Ôñ */
+/**
+ * \enum GPIO_ITDMAConfig_Type
+ * \brief ç«¯å£ä¸­æ–­åŠDMAé…ç½®é€‰æ‹©
+ */
 typedef enum
 {
-    kGPIO_DMA_RisingEdge,	      //ÉÏÉıÑØ´¥·¢DMA
-    kGPIO_DMA_FallingEdge,        //ÏÂ½µÑØ´¥·¢DMA
-    kGPIO_DMA_RisingFallingEdge,  //ÉÏÉıÑØºÍÏÂ½µÑØ´¥·¢DMA
-    kGPIO_IT_Low,                 //µÍµçÆ½³ö·¢ÖĞ¶Ï
-    kGPIO_IT_RisingEdge,          //ÉÏÉıÑØ´¥·¢ÖĞ¶Ï
-    kGPIO_IT_FallingEdge,         //ÏÂ½µÑØ´¥·¢ÖĞ¶Ï
-    kGPIO_IT_RisingFallingEdge,   //ÉÏÉıÑØºÍÏÂ½µÑØ´¥·¢ÖĞ¶Ï
-    kGPIO_IT_High,                //¸ßµçÆ½´¥·¢ÖĞ¶Ï
+    kGPIO_DMA_RisingEdge,	      /**<ä¸Šå‡æ²¿è§¦å‘DMA*/
+    kGPIO_DMA_FallingEdge,        /**<ä¸‹é™æ²¿è§¦å‘DMA*/
+    kGPIO_DMA_RisingFallingEdge,  /**<ä¸Šå‡æ²¿å’Œä¸‹é™æ²¿è§¦å‘DMA*/
+    kGPIO_IT_Low,                 /**<ä½ç”µå¹³å‡ºå‘ä¸­æ–­*/
+    kGPIO_IT_RisingEdge,          /**<ä¸Šå‡æ²¿è§¦å‘ä¸­æ–­*/
+    kGPIO_IT_FallingEdge,         /**<ä¸‹é™æ²¿è§¦å‘ä¸­æ–­*/
+    kGPIO_IT_RisingFallingEdge,   /**<ä¸Šå‡æ²¿å’Œä¸‹é™æ²¿è§¦å‘ä¸­æ–­*/
+    kGPIO_IT_High,                /**<é«˜ç”µå¹³è§¦å‘ä¸­æ–­*/
 }GPIO_ITDMAConfig_Type;
 
-/* ¶Ë¿Ú³õÊ¼»¯½á¹¹Ìå */
+/**
+ * \struct DAC_InitTypeDef
+ * \brief GPIOç«¯å£åˆå§‹åŒ–ç»“æ„ä½“ 
+ */
 typedef struct
 {
-    uint8_t                instance;    //Òı½Å¶Ë¿ÚHW_GPIOA~HW_GPIOF
-    GPIO_Mode_Type         mode;        //¹¤×÷Ä£Ê½
-    uint32_t               pinx;        //Òı½ÅºÅ0~31
+    uint8_t                instance;    ///<å¼•è„šç«¯å£HW_GPIOA~HW_GPIOF
+    GPIO_Mode_Type         mode;        ///<å·¥ä½œæ¨¡å¼
+    uint32_t               pinx;        ///<å¼•è„šå·0~31
 }GPIO_InitTypeDef;
 
-/* ¶Ë¿ÚÖĞ¶Ï»Øµ÷º¯Êı¶¨Òå */
+/* ç«¯å£ä¸­æ–­å›è°ƒå‡½æ•°å®šä¹‰ */
 typedef void (*GPIO_CallBackType)(uint32_t pinxArray);
 
 
-/* Î»´ø²Ù×÷ ÄÚ´æÆ«ÒÆ¼ÆËã Ïê¼û Cortex-M4 Generic User Guide 2.25 */
-/* CM4ÖĞÓĞ2¿ébitbandÇøÓò 0x2000_0000-0x200F_FFFF Ó³ÉäÖÁ 0x2200_0000-0x23FF_FFFF
-                         0x4000_0000-0x4000_FFFF Ó³ÉäÖÁ 0x4200_0000-0x43FF_FFFF
+/* ä½å¸¦æ“ä½œ å†…å­˜åç§»è®¡ç®— è¯¦è§ Cortex-M4 Generic User Guide 2.25 */
+/* CM4ä¸­æœ‰2å—bitbandåŒºåŸŸ 0x2000_0000-0x200F_FFFF æ˜ å°„è‡³ 0x2200_0000-0x23FF_FFFF
+                         0x4000_0000-0x4000_FFFF æ˜ å°„è‡³ 0x4200_0000-0x43FF_FFFF
 */
 #define PAout(n)   BITBAND_REG(PTA->PDOR, n)
 #define PAin(n)    BITBAND_REG(PTA->PDIR, n)

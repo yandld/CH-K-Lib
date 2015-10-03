@@ -4,33 +4,26 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+  * \date    2015.10.03 FreeXcå®Œå–„äº†systickæ¨¡å—çš„ç›¸å…³æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬ARMÄÚºËÖĞµÄSysTickÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡ARMå†…æ ¸ä¸­çš„SysTickæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
-  
 #include "systick.h"
 #include "common.h"
 
 static uint32_t fac_us = 0;     //!< usDelay Mut
-static uint32_t fac_ms = 0;
+static uint32_t fac_ms = 0;     //!< msDelay Mut
 
 
-//! @defgroup CHKinetis
-//! @{
-
-
-//! @defgroup SysTick
-//! @brief SysTick API functions
-//! @{
 
  /**
- * @brief  ³õÊ¼»¯SysTickÊ±ÖÓ
+ * @brief  åˆå§‹åŒ–SysTickæ—¶é’Ÿ
  * @code
- *     // ³õÊ¼»¯SysTickÊ±ÖÓ Éè¶¨ÖĞ¶ÏÖÜÆÚÎª10000us(10ms)
+ *     // åˆå§‹åŒ–SysTickæ—¶é’Ÿ è®¾å®šä¸­æ–­å‘¨æœŸä¸º10000us(10ms)
  *      SYSTICK_Init(10000);
  * @endcode
- * @param  timeInUs: ÖĞ¶ÏÖÜÆÚ µ¥Î»us
+ * @param[in]  timeInUs ä¸­æ–­å‘¨æœŸ,å•ä½us
  * @retval None
  */
 void SYSTICK_Init(uint32_t timeInUs)
@@ -45,31 +38,30 @@ void SYSTICK_Init(uint32_t timeInUs)
 }
 
  /**
- * @brief  ³õÊ¼»¯SysTickÎªÑÓÊ±Ó¦ÓÃ ³õÊ¼»¯ºó¾Í¿ÉÒÔµ÷ÓÃ DelayMs DelayUs
+ * @brief  åˆå§‹åŒ–SysTickä¸ºå»¶æ—¶åº”ç”¨ åˆå§‹åŒ–åå°±å¯ä»¥è°ƒç”¨ DelayMs DelayUs
  * @code
- *      //½«SysTickÓÃ×÷ÑÓÊ±µÄ³õÊ¼»¯ ³õÊ¼»¯ºóÏµÍ³ÑÓÊ±20ms
+ *      //å°†SysTickç”¨ä½œå»¶æ—¶çš„åˆå§‹åŒ– åˆå§‹åŒ–åç³»ç»Ÿå»¶æ—¶20ms
  *      SYSTICK_DelayInit();
  *      SYSTICK_DelayMs(20);
  * @endcode
- * @param  None
  * @retval None
  */
 void SYSTICK_DelayInit(void)
 {
-    SYSTICK_Init(1234);
+    SYSTICK_Init(1000);
     SYSTICK_Cmd(true);
     SYSTICK_ITConfig(false);
 }
 
  /**
- * @brief  ¿ªÆô»òÕßÍ£Ö¹SysTickÊ±ÖÓ
+ * @brief  å¼€å¯æˆ–è€…åœæ­¢SysTickæ—¶é’Ÿ
  * @code
- *      //¿ªÆôÊ±ÖÓ
+ *      //å¼€å¯æ—¶é’Ÿ
  *      SYSTICK_Cmd(true);
  * @endcode
- * @param  NewState:Ê¹ÄÜ»òÕß¹Ø±Õ
- *         @arg true :Ê¹ÄÜ
- *         @arg false:Í£Ö¹
+ * @param[in]  NewState ä½¿èƒ½æˆ–è€…å…³é—­
+ *              @arg true ä½¿èƒ½
+ *              @arg false åœæ­¢
  * @retval None
  */
 void SYSTICK_Cmd(bool NewState)
@@ -78,14 +70,14 @@ void SYSTICK_Cmd(bool NewState)
 }
 
  /**
- * @brief  ¿ªÆôSysTickÖĞ¶Ï
+ * @brief  å¼€å¯SysTickä¸­æ–­
  * @code
- *      //¿ªÆôÖĞ¶Ï¹¦ÄÜ
+ *      //å¼€å¯ä¸­æ–­åŠŸèƒ½
  *      SYSTICK_ITConfig(true);
  * @endcode
- * @param  NewState:Ê¹ÄÜ»òÕß¹Ø±Õ
- *         @arg true :Ê¹ÄÜ
- *         @arg false:½ûÖ¹
+ * @param[in]  NewState ä½¿èƒ½æˆ–è€…å…³é—­
+ *              @arg true  ä½¿èƒ½
+ *              @arg false ç¦æ­¢
  * @retval None
  */
 void SYSTICK_ITConfig(bool NewState)
@@ -94,12 +86,12 @@ void SYSTICK_ITConfig(bool NewState)
 }
 
  /**
- * @brief Î¢Ãë¼¶ÑÓÊ±º¯Êı
+ * @brief å¾®ç§’çº§å»¶æ—¶å‡½æ•°
  * @code
- *      //ÑÓÊ±100us
+ *      //å»¶æ—¶100us
  *      SYSTICK_DelayUs(100);
  * @endcode
- * @param  us:ÑÓÊ±Ê±¼ä µ¥Î»us
+ * @param[in]  us å»¶æ—¶æ—¶é—´ å•ä½us
  * @retval None
  */
 void SYSTICK_DelayUs(uint32_t us)
@@ -116,13 +108,13 @@ void SYSTICK_DelayUs(uint32_t us)
 }
 
  /**
- * @brief  ºÁÃë¼¶ÑÓÊ±º¯Êı
+ * @brief  æ¯«ç§’çº§å»¶æ—¶å‡½æ•°
  * 
  * @code
- *      //ÑÓÊ±100ms
+ *      //å»¶æ—¶100ms
  *      SYSTICK_DelayMs(100);
  * @endcode
- * @param  us:ÑÓÊ±
+ * @param[in]  ms å»¶æ—¶
  * @retval None
  */
 void SYSTICK_DelayMs(uint32_t ms)
@@ -142,13 +134,11 @@ void SYSTICK_DelayMs(uint32_t ms)
 	}
 }
 
+/**
+ * @brief  è·å¾—å½“å‰System tick timerçš„å€¼
+ * @retval å½“å‰System tick timerçš„å€¼
+ */
 uint32_t SYSTICK_GetVal(void)
 {
     return SysTick->VAL;
 }
-
- 
-//! @}
-
-//! @}
-

@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
-  * @file    systick.c
+  * @file    systick.h
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ���ļ�ΪоƬARM�ں��е�SysTickģ��ĵײ㹦�ܺ���
+  * @note    此文件为芯片ARM内核中的SysTick模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __CH_LIB_SYSTICK_H__
@@ -14,7 +14,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-//API functions
+
 void SYSTICK_DelayInit(void);
 void SYSTICK_Init(uint32_t timeInUs);
 void SYSTICK_Cmd(bool NewState);

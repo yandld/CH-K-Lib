@@ -4,8 +4,9 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.25
+  * @date    2015.9.26 FreeXc å®Œå–„äº†adc.c & adc.hæ–‡ä»¶çš„æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬ADCÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡ADCæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 
@@ -51,30 +52,21 @@ static const IRQn_Type ADC_IRQnTable[] =
 };
 
 
-
-//! @defgroup CHKinetis
-//! @{
-
-//! @defgroup ADC(Ä£Êı×ª»»Ä£¿é)
-//! @brief ADC API functions
-//! @{
-
 /**
- * @brief  ÅĞ¶ÏAD×ª»»ÊÇ·ñ½áÊø
+ * @brief  åˆ¤æ–­ADè½¬æ¢æ˜¯å¦ç»“æŸ
  * @code
- *      //²é¿´ADC0 Ä£¿éµÄAÍ¨µÀµÄ×ª»»ÊÇ·ñÍê³É
+ *      //æŸ¥çœ‹ADC0 æ¨¡å—çš„Aé€šé“çš„è½¬æ¢æ˜¯å¦å®Œæˆ
  *      ADC_IsConversionCompleted(HW_ADC0, kADC_MuxA); 
  * @endcode         
- * @param  instance: ADC Ä£¿éºÅ
- *         @arg HW_ADC0  :ADC0Ä£¿é
- *         @arg HW_ADC1  :ADC1Ä£¿é
- *         @arg HW_ADC2  :ADC2Ä£¿é
- * @param  mux: ADC ×ª»»Æ÷Í¨µÀ ¸´ÓÃ Ñ¡Ôñ
- *         @arg kADC_MuxA   :AÍ¨µÀÄ£Ê½
- *         @arg kADC_MuxB   :BÍ¨µÀÄ£Ê½
- * @retval 
- *         @arg 0:×ª»»Íê³É
- *         @arg 1:×ª»»Î´Íê³É
+ * @param[in]  instance: ADC æ¨¡å—å·
+ *              @arg HW_ADC0  :ADC0æ¨¡å—
+ *              @arg HW_ADC1  :ADC1æ¨¡å—
+ *              @arg HW_ADC2  :ADC2æ¨¡å—
+ * @param[in]  mux: ADC è½¬æ¢å™¨é€šé“ å¤ç”¨ é€‰æ‹©
+ *              @arg kADC_MuxA   :Aé€šé“æ¨¡å¼
+ *              @arg kADC_MuxB   :Bé€šé“æ¨¡å¼
+ * \retval  0 è½¬æ¢å®Œæˆ
+ * \retval  1 è½¬æ¢æœªå®Œæˆ
  */
 uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
 {
@@ -87,21 +79,13 @@ uint8_t ADC_IsConversionCompleted(uint32_t instance, uint32_t mux)
 }
 
 /**
- * @brief  AD²É¼¯Ğ£×¼º¯Êı£¬ÄÚ²¿º¯Êı
- * @code
- *      //²é¿´ADC0 Ä£¿éµÄAÍ¨µÀµÄ×ª»»ÊÇ·ñÍê³É
- *      ADC_IsConversionCompleted(HW_ADC0, kADC_MuxA); 
- * @endcode         
- * @param  instance: ADC Ä£¿éºÅ
- *         @arg HW_ADC0  :ADC0Ä£¿é
- *         @arg HW_ADC1  :ADC1Ä£¿é
- *         @arg HW_ADC2  :ADC2Ä£¿é
- * @param  mux: ADC ×ª»»Æ÷Í¨µÀ ¸´ÓÃ Ñ¡Ôñ
- *         @arg kADC_MuxA   :AÍ¨µÀÄ£Ê½
- *         @arg kADC_MuxB   :BÍ¨µÀÄ£Ê½
- * @retval 
- *         @arg 0:×ª»»Íê³É
- *         @arg 1:×ª»»Î´Íê³É
+ * @brief  ADé‡‡é›†æ ¡å‡†å‡½æ•°ï¼Œå†…éƒ¨å‡½æ•°,ç”¨æˆ·æ— éœ€è°ƒç”¨
+ * @param[in]  instance: ADC æ¨¡å—å·
+ *              @arg HW_ADC0  :ADC0æ¨¡å—
+ *              @arg HW_ADC1  :ADC1æ¨¡å—
+ *              @arg HW_ADC2  :ADC2æ¨¡å—
+ * \retval  0 æ ¡å‡†å®Œæˆ
+ * \retval  1 æ ¡å‡†å¤±è´¥
  */
 int32_t ADC_Calibration(uint32_t instance)
 {
@@ -147,21 +131,21 @@ int32_t ADC_Calibration(uint32_t instance)
 }
 
 /**
- * @brief  ADCÄ£¿é¹¤×÷³õÊ¼»¯ÅäÖÃ
+ * @brief  ADCæ¨¡å—å·¥ä½œåˆå§‹åŒ–é…ç½®
  * @code
- *   //Ê¹ÓÃadc0Ä£¿éµÄ1Í¨µÀ µ¥¶ËÄ£Ê½ 8Î»¾«¶È Èí¼ş´¥·¢
- *   ADC_InitTypeDef ADC_InitStruct1;  //ÉêÇëÒ»¸ö½á¹¹Ìå
- *   ADC_InitStruct1.chl = 1;  //1Í¨µÀ
- *   ADC_InitStruct1.clockDiv = kADC_ClockDiv8; //ADC×ª»»Ê±ÖÓÎªÊäÈëÊ±ÖÓ(Ä¬ÈÏBusClock) µÄ8·ÖÆµ£¬ºÍ×ª»»ËÙ¶ÈÏà¹Ø
- *   ADC_InitStruct1.instance = HW_ADC0;        //Ñ¡ÔñADC0Ä£¿é
- *   ADC_InitStruct1.resolutionMode = kADC_SingleDiff8or9; //µ¥¶ËÄ£Ê½ÏÂ8Î»¾«¶È ²é·ÖÄ£Ê½ÏÂ9Î»¾«¶È
- *   ADC_InitStruct1.SingleOrDifferential = kADC_Single;   //Ñ¡Ôñµ¥¶ËÄ£Ê½
- *   ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;   //ÉèÖÃÎªÈí¼ş´¥·¢
- *   ADC_InitStruct1.vref = kADC_VoltageVREF;              //Ê¹ÓÃÍâ²¿VERFH VREFL ×÷ÎªÄ£ÄâµçÑ¹²Î¿¼
- *   //³õÊ¼»¯ADCÄ£¿é
+ *   //ä½¿ç”¨adc0æ¨¡å—çš„1é€šé“ å•ç«¯æ¨¡å¼ 8ä½ç²¾åº¦ è½¯ä»¶è§¦å‘
+ *   ADC_InitTypeDef ADC_InitStruct1;  //ç”³è¯·ä¸€ä¸ªç»“æ„ä½“
+ *   ADC_InitStruct1.chl = 1;  //1é€šé“
+ *   ADC_InitStruct1.clockDiv = kADC_ClockDiv8; //ADCè½¬æ¢æ—¶é’Ÿä¸ºè¾“å…¥æ—¶é’Ÿ(é»˜è®¤BusClock) çš„8åˆ†é¢‘ï¼Œå’Œè½¬æ¢é€Ÿåº¦ç›¸å…³
+ *   ADC_InitStruct1.instance = HW_ADC0;        //é€‰æ‹©ADC0æ¨¡å—
+ *   ADC_InitStruct1.resolutionMode = kADC_SingleDiff8or9; //å•ç«¯æ¨¡å¼ä¸‹8ä½ç²¾åº¦ æŸ¥åˆ†æ¨¡å¼ä¸‹9ä½ç²¾åº¦
+ *   ADC_InitStruct1.SingleOrDifferential = kADC_Single;   //é€‰æ‹©å•ç«¯æ¨¡å¼
+ *   ADC_InitStruct1.triggerMode = kADC_TriggleSoftware;   //è®¾ç½®ä¸ºè½¯ä»¶è§¦å‘
+ *   ADC_InitStruct1.vref = kADC_VoltageVREF;              //ä½¿ç”¨å¤–éƒ¨VERFH VREFL ä½œä¸ºæ¨¡æ‹Ÿç”µå‹å‚è€ƒ
+ *   //åˆå§‹åŒ–ADCæ¨¡å—
  *   ADC_Init(&ADC_InitStruct1);
  * @endcode
- * @param  ADC_InitStruct: ADC³õÊ¼»¯½á¹¹Ìå£¬ÄÚÈİÏê¼û×¢ÊÍ
+ * @param[in]  ADC_InitStruct: ADCåˆå§‹åŒ–ç»“æ„ä½“ï¼Œå†…å®¹è¯¦è§æ³¨é‡Š
  * @retval None
  */
 void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
@@ -231,6 +215,17 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
     ADC_Calibration(ADC_InitStruct->instance);
 }
 
+/*
+ * @brief  ADé‡‡é›†ç¡¬ä»¶/è½¯ä»¶è§¦å‘é€‰æ‹©
+ * @param[in]  instance ADC æ¨¡å—å·
+ *              @arg HW_ADC0  ADC0æ¨¡å—
+ *              @arg HW_ADC1  ADC1æ¨¡å—
+ *              @arg HW_ADC2  ADC2æ¨¡å—
+ * \param[in]  Conversion trigger select
+ *              \arg 0 Software trigger selected
+ *              \arg 1 Hardware trigger selected
+ * \retval  None
+ */
 void ADC_EnableHardwareTrigger(uint32_t instance, bool status)
 {
     (status)?
@@ -239,20 +234,20 @@ void ADC_EnableHardwareTrigger(uint32_t instance, bool status)
 }
 
 /**
- * @brief  ¿ìËÙÍê³ÉAD³õÊ¼»¯ÅäÖÃ
+ * @brief  å¿«é€Ÿå®ŒæˆADåˆå§‹åŒ–é…ç½®
  * @code
- *    //³õÊ¼»¯ ADC0 Í¨µÀ20 Òı½ÅDM1 µ¥¶Ë ¾«¶È 12Î»
+ *    //åˆå§‹åŒ– ADC0 é€šé“20 å¼•è„šDM1 å•ç«¯ ç²¾åº¦ 12ä½
  *    ADC_QuickInit(ADC0_SE20_DM1, kADC_SingleDiff12or13);
- *    //¶ÁÈ¡AD×ª»»½á¹û
+ *    //è¯»å–ADè½¬æ¢ç»“æœ
  *    value = ADC_QuickReadValue(ADC0_SE20_DM1);
  * @endcode
- * @param  MAP: ¿ìËÙ³õÊ¼»¯ºê£¬Ïê¼ûADC.HÎÄ¼ş
- * @param  resolutionMode: ×ª»»·Ö±æÂÊÉèÖÃ
- *         @arg kADC_SingleDiff8or9   :×ª»»¾«¶ÈÎª8/9Î»
- *         @arg kADC_SingleDiff10or11 :×ª»»¾«¶ÈÎª10/11Î»
- *         @arg kADC_SingleDiff12or13 :×ª»»¾«¶ÈÎª12/13Î»
- *         @arg kADC_SingleDIff16     :×ª»»¾«¶ÈÎª16Î»
- * @retval ADCÄ£¿éºÅ
+ * @param[in]  MAP å¿«é€Ÿåˆå§‹åŒ–å®ï¼Œè¯¦è§ADC.Hæ–‡ä»¶
+ * @param[in]  resolutionMode  è½¬æ¢åˆ†è¾¨ç‡è®¾ç½®
+ *              @arg kADC_SingleDiff8or9   è½¬æ¢ç²¾åº¦ä¸º8/9ä½
+ *              @arg kADC_SingleDiff10or11 è½¬æ¢ç²¾åº¦ä¸º10/11ä½
+ *              @arg kADC_SingleDiff12or13 è½¬æ¢ç²¾åº¦ä¸º12/13ä½
+ *              @arg kADC_SingleDIff16     è½¬æ¢ç²¾åº¦ä¸º16ä½
+ * @retval ADCæ¨¡å—å·
  */
 uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
 {
@@ -284,20 +279,20 @@ uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
 }
   
 /**
- * @brief  ADC¿ªÊ¼Ò»´Î×ª»» 
- * @note   Á¢¼´·µ»Ø ·Ç×èÈûÊ½ ²»µÈ´ı×ª»»½á¹û
+ * @brief  ADCå¼€å§‹ä¸€æ¬¡è½¬æ¢ 
+ * @note   ç«‹å³è¿”å› éé˜»å¡å¼ ä¸ç­‰å¾…è½¬æ¢ç»“æœ
  * @code
- *    //Æô¶¯ ADC0 Í¨µÀ20 ÔÚAÄ£Ê½ÏÂÊı¾İ×ª»»
+ *    //å¯åŠ¨ ADC0 é€šé“20 åœ¨Aæ¨¡å¼ä¸‹æ•°æ®è½¬æ¢
  *    ADC_StartConversion(HW_ADC0, 20, kADC_MuxA);
  * @endcode
- * @param  instance: ADC Ä£¿éºÅ
- *         @arg HW_ADC0  :ADC0Ä£¿é
- *         @arg HW_ADC1  :ADC1Ä£¿é
- *         @arg HW_ADC2  :ADC2Ä£¿é
- * @param  chl: ADC Í¨µÀºÅ
- * @param  mux: ADC ×ª»»Æ÷Í¨µÀ ¸´ÓÃ Ñ¡Ôñ
- *         @arg kADC_MuxA   :A×ª»»Æ÷´¥·¢
- *         @arg kADC_MuxB   :B×ª»»Æ÷´¥·¢
+ * @param[in]  instance: ADC æ¨¡å—å·
+ *              @arg HW_ADC0  ADC0æ¨¡å—
+ *              @arg HW_ADC1  ADC1æ¨¡å—
+ *              @arg HW_ADC2  ADC2æ¨¡å—
+ * @param[in]  chl: ADC é€šé“å·
+ * @param[in]  mux: ADC è½¬æ¢å™¨é€šé“ å¤ç”¨ é€‰æ‹©
+ *              @arg kADC_MuxA   Aè½¬æ¢å™¨è§¦å‘
+ *              @arg kADC_MuxB   Bè½¬æ¢å™¨è§¦å‘
  * @retval None
  */
 void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux)
@@ -306,6 +301,21 @@ void ADC_StartConversion(uint32_t instance, uint32_t chl, uint32_t mux)
     ADC_InstanceTable[instance]->SC1[mux] |= ADC_SC1_ADCH(chl);
 }
 
+/**
+ * @brief  ADC Mux select 
+ * @code
+ *    //å¯åŠ¨ ADC0 é€šé“åœ¨Aæ¨¡å¼ä¸‹è¿›è¡Œæ•°æ®è½¬æ¢
+ *    ADC_ChlMuxConfig(HW_ADC0, kADC_MuxA);
+ * @endcode
+ * @param[in]  instance ADCæ¨¡å—å·
+ *              @arg HW_ADC0  ADC0æ¨¡å—
+ *              @arg HW_ADC1  ADC1æ¨¡å—
+ *              @arg HW_ADC2  ADC2æ¨¡å—
+ * @param[in]  mux ADCè½¬æ¢å™¨é€šé“å¤ç”¨é€‰æ‹©
+ *              @arg kADC_MuxA   Aè½¬æ¢å™¨è§¦å‘
+ *              @arg kADC_MuxB   Bè½¬æ¢å™¨è§¦å‘
+ * @retval None
+ */
 void ADC_ChlMuxConfig(uint32_t instance, uint32_t mux)
 {
     if(kADC_ChlMuxA ==  mux)
@@ -319,21 +329,21 @@ void ADC_ChlMuxConfig(uint32_t instance, uint32_t mux)
 }
 
 /**
- * @brief  ¶ÁÈ¡ADC×ª»»Êı¾İ
- * @note   Á¢¼´·µ»Ø ·Ç×èÈûÊ½ 
+ * @brief  è¯»å–ADCè½¬æ¢æ•°æ®
+ * @note   ç«‹å³è¿”å› éé˜»å¡å¼ 
  * @code
- *    //¶ÁÈ¡ ADC0Ä£¿éÏÂµÄÔÚAÄ£Ê½ÏÂÊı¾İ×ª»»½á¹û
- *    uint32_t data;   //´æ´¢×ª»»½á¹û
+ *    //è¯»å– ADC0æ¨¡å—ä¸‹çš„åœ¨Aæ¨¡å¼ä¸‹æ•°æ®è½¬æ¢ç»“æœ
+ *    uint32_t data;   //å­˜å‚¨è½¬æ¢ç»“æœ
  *    data = ADC_ReadValue(HW_ADC0, kADC_MuxA);
  * @endcode
- * @param  instance: ADC Ä£¿éºÅ
- *         @arg HW_ADC0  :ADC0Ä£¿é
- *         @arg HW_ADC1  :ADC1Ä£¿é
- *         @arg HW_ADC2  :ADC2Ä£¿é
- * @param  mux: ADC ×ª»»Æ÷Í¨µÀ ¸´ÓÃ Ñ¡Ôñ
- *         @arg kADC_MuxA   :AÍ¨µÀÄ£Ê½
- *         @arg kADC_MuxB   :BÍ¨µÀÄ£Ê½
- * @retval :¶ÁÈ¡½á¹û Èç¹ûµ±Ç°»¹Î´Íê³É×ª»» Ôò·µ»ØÉÏÒ»´Î½á¹û
+ * @param[in]  instance: ADC æ¨¡å—å·
+ *              @arg HW_ADC0  :ADC0æ¨¡å—
+ *              @arg HW_ADC1  :ADC1æ¨¡å—
+ *              @arg HW_ADC2  :ADC2æ¨¡å—
+ * @param[in]  mux: ADC è½¬æ¢å™¨é€šé“ å¤ç”¨ é€‰æ‹©
+ *              @arg kADC_MuxA   :Aé€šé“æ¨¡å¼
+ *              @arg kADC_MuxB   :Bé€šé“æ¨¡å¼
+ * @retval è¯»å–ç»“æœ å¦‚æœå½“å‰è¿˜æœªå®Œæˆè½¬æ¢ åˆ™è¿”å›ä¸Šä¸€æ¬¡ç»“æœ
  */
 int32_t ADC_ReadValue(uint32_t instance, uint32_t mux)
 {
@@ -341,15 +351,15 @@ int32_t ADC_ReadValue(uint32_t instance, uint32_t mux)
 }
 
 /**
- * @brief  ¶ÁÈ¡ADC×ª»»½á¹û(¼ò»¯°æ) Ö»ĞèÌîÈëADC¿ìËÙ³õÊ¼»¯ºê¼´¿É
- * @note   ×èÈûÊ½ Ö±µ½Êı¾İ×ª»»Íê³É    
+ * @brief  è¯»å–ADCè½¬æ¢ç»“æœ(ç®€åŒ–ç‰ˆ) åªéœ€å¡«å…¥ADCå¿«é€Ÿåˆå§‹åŒ–å®å³å¯
+ * @note   é˜»å¡å¼ ç›´åˆ°æ•°æ®è½¬æ¢å®Œæˆ    
  * @code
- *    //¶ÁÈ¡AD0Ä£¿é20Í¨µÀDM1Òı½ÅµÄ×ª»»½á¹û
- *    uint32_t value;   //´æ´¢Êı¾İ×ª»»½á¹û
+ *    //è¯»å–AD0æ¨¡å—20é€šé“DM1å¼•è„šçš„è½¬æ¢ç»“æœ
+ *    uint32_t value;   //å­˜å‚¨æ•°æ®è½¬æ¢ç»“æœ
  *    value = ADC_QuickReadValue(ADC0_SE20_DM1);
  * @endcode
- * @param  MAP: ¿ìËÙ³õÊ¼»¯ºê£¬Ïê¼ûADC.HÎÄ¼ş
- * @retval ×ª»»½á¹û
+ * @param  MAP å¿«é€Ÿåˆå§‹åŒ–å®ï¼Œè¯¦è§ADC.Hæ–‡ä»¶
+ * @retval è½¬æ¢ç»“æœ
  */
 int32_t ADC_QuickReadValue(uint32_t MAP)
 {
@@ -363,23 +373,23 @@ int32_t ADC_QuickReadValue(uint32_t MAP)
 }
 
 /**
- * @brief  ADCÖĞ¶Ï¼°DMA¹¦ÄÜ¿ª¹Øº¯Êı
+ * @brief  ADCä¸­æ–­åŠDMAåŠŸèƒ½å¼€å…³å‡½æ•°
  * @code
- *    //ÅäÖÃAD0Ä£¿é ×ª»»Íê³ÉÖĞ¶Ï
+ *    //é…ç½®AD0æ¨¡å— è½¬æ¢å®Œæˆä¸­æ–­
  *    ADC_ITDMAConfig(HW_ADC0, kADC_MuxA, kADC_IT_EOF);
  * @endcode         
- * @param  instance: ADC Ä£¿éºÅ
- *         @arg HW_ADC0  :ADC0Ä£¿é
- *         @arg HW_ADC1  :ADC1Ä£¿é
- *         @arg HW_ADC2  :ADC2Ä£¿é
- * @param  mux: ADC ×ª»»Æ÷Í¨µÀ ¸´ÓÃ Ñ¡Ôñ
- *         @arg kADC_MuxA   :AÍ¨µÀÄ£Ê½
- *         @arg kADC_MuxB   :BÍ¨µÀÄ£Ê½
- * @param  config:   ADCÖĞ¶Ï¼°DMAÅäÖÃ
- *         @arg kADC_IT_Disable    :¹Ø±ÕÖĞ¶Ï
- *         @arg kADC_DMA_Disable   :¹Ø±ÕDMA¹¦ÄÜ 
- *         @arg kADC_IT_EOF        :×ª»»Íê³ÉÖĞ¶Ï
- *         @arg kADC_DMA_EOF       :DMAÍê³ÉÖĞ¶Ï
+ * @param[in]  instance ADCæ¨¡å—å·
+ *              @arg HW_ADC0  ADC0æ¨¡å—
+ *              @arg HW_ADC1  ADC1æ¨¡å—
+ *              @arg HW_ADC2  ADC2æ¨¡å—
+ * @param[in]  mux ADCè½¬æ¢å™¨é€šé“å¤ç”¨é€‰æ‹©
+ *              @arg kADC_MuxA   Aé€šé“æ¨¡å¼
+ *              @arg kADC_MuxB   Bé€šé“æ¨¡å¼
+ * @param[in]  config   ADCä¸­æ–­åŠDMAé…ç½®
+ *              @arg kADC_IT_Disable    å…³é—­ä¸­æ–­
+ *              @arg kADC_DMA_Disable   å…³é—­DMAåŠŸèƒ½ 
+ *              @arg kADC_IT_EOF        è½¬æ¢å®Œæˆä¸­æ–­
+ *              @arg kADC_DMA_EOF       DMAå®Œæˆä¸­æ–­
  * @retval None
  */
 void ADC_ITDMAConfig(uint32_t instance, uint32_t mux, ADC_ITDMAConfig_Type config)
@@ -406,14 +416,14 @@ void ADC_ITDMAConfig(uint32_t instance, uint32_t mux, ADC_ITDMAConfig_Type confi
 }
 
 /**
- * @brief  ×¢²áÖĞ¶Ï»Øµ÷º¯Êı
- * @param  instance: ADC Ä£¿éºÅ
- *         @arg HW_ADC0  :ADC0Ä£¿é
- *         @arg HW_ADC1  :ADC1Ä£¿é
- *         @arg HW_ADC2  :ADC2Ä£¿é
- * @param AppCBFun: »Øµ÷º¯ÊıÖ¸ÕëÈë¿Ú
+ * @brief  æ³¨å†Œä¸­æ–­å›è°ƒå‡½æ•°
+ * @param[in]  instance ADC æ¨¡å—å·
+ *              @arg HW_ADC0  ADC0æ¨¡å—
+ *              @arg HW_ADC1  ADC1æ¨¡å—
+ *              @arg HW_ADC2  ADC2æ¨¡å—
+ * @param[in] AppCBFun å›è°ƒå‡½æ•°æŒ‡é’ˆå…¥å£
  * @retval None
- * @note ¶ÔÓÚ´Ëº¯ÊıµÄ¾ßÌåÓ¦ÓÃÇë²éÔÄÓ¦ÓÃÊµÀı
+ * @see å¯¹äºæ­¤å‡½æ•°çš„å…·ä½“åº”ç”¨è¯·æŸ¥é˜…åº”ç”¨å®ä¾‹
  */
 void ADC_CallbackInstall(uint32_t instance, ADC_CallBackType AppCBFun)
 {
@@ -423,14 +433,10 @@ void ADC_CallbackInstall(uint32_t instance, ADC_CallBackType AppCBFun)
     }
 }
 
-//! @}
-
-//! @}
 /**
- * @brief  ÖĞ¶Ï´¦Àíº¯ÊıÈë¿Ú
- * @param  ADC0_IRQHandler :Ğ¾Æ¬µÄADC0Ä£¿éÖĞ¶Ïº¯ÊıÈë¿Ú
- *         ADC1_IRQHandler :Ğ¾Æ¬µÄADC0Ä£¿éÖĞ¶Ïº¯ÊıÈë¿Ú
- * @note º¯ÊıÄÚ²¿ÓÃÓÚÖĞ¶ÏÊÂ¼ş´¦Àí
+ * @brief  ä¸­æ–­å¤„ç†å‡½æ•°å…¥å£
+ * @details  ADC0_IRQHandler :èŠ¯ç‰‡çš„ADC0æ¨¡å—ä¸­æ–­å‡½æ•°å…¥å£
+ * @note å‡½æ•°å†…éƒ¨ç”¨äºä¸­æ–­äº‹ä»¶å¤„ç†ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
  */
 void ADC0_IRQHandler(void)
 {
@@ -440,6 +446,11 @@ void ADC0_IRQHandler(void)
     }
 }
 
+/**
+ * @brief  ä¸­æ–­å¤„ç†å‡½æ•°å…¥å£
+ * @details  ADC1_IRQHandler :èŠ¯ç‰‡çš„ADC0æ¨¡å—ä¸­æ–­å‡½æ•°å…¥å£
+ * @note å‡½æ•°å†…éƒ¨ç”¨äºä¸­æ–­äº‹ä»¶å¤„ç†,ç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void ADC1_IRQHandler(void)
 {
     if(ADC_CallBackTable[HW_ADC1] != NULL)

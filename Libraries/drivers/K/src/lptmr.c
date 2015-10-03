@@ -4,6 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+  * \date    2015.10.03 FreeXc å®Œå–„äº†lptmræ¨¡å—çš„ç›¸å…³æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -13,9 +14,9 @@
 #include "gpio.h"
 
 
-/* »Øµ÷º¯Êı Ö¸Õë */
+/* å›è°ƒå‡½æ•° æŒ‡é’ˆ */
 static LPTMR_CallBackType LPTMR_CallBackTable[1] = {NULL};
-/* ÖĞ¶ÏÏòÁ¿Èë¿Ú */
+/* ä¸­æ–­å‘é‡å…¥å£ */
 static const IRQn_Type LPTMR_IRQnTable[] = 
 {
     LPTimer_IRQn,
@@ -35,15 +36,15 @@ static const Reg_t SIM_LPTMRClockGateTable[] =
 #endif
 
 /**
- * @brief  ³õÊ¼»¯ÅäÖÃLPTMÄ£¿é´¦ÓÚ¼ÆÊ±Æ÷Ä£Ê½
+ * @brief  åˆå§‹åŒ–é…ç½®LPTMRæ¨¡å—å¤„äºè®¡æ—¶å™¨æ¨¡å¼
  * @code
- *      //ÉèÖÃLPTM¹¤×÷ÔÚ¼ÆÊ±Æ÷Ä£Ê½£¬Ê±¼ä¼ä¸ôÊÇ500ºÁÃë
- *      LPTMR_TC_InitTypeDef LPTMR_TC_InitStruct1; //ÉêÇëÒ»¸ö½á¹¹±äÁ¿
- *      LPTMR_TC_InitStruct1.timeInMs = 500;       //ÉèÖÃ¼ÆÊ±Ê±¼äÊÇ500ms
+ *      //è®¾ç½®LPTMå·¥ä½œåœ¨è®¡æ—¶å™¨æ¨¡å¼ï¼Œæ—¶é—´é—´éš”æ˜¯500æ¯«ç§’
+ *      LPTMR_TC_InitTypeDef LPTMR_TC_InitStruct1; //ç”³è¯·ä¸€ä¸ªç»“æ„å˜é‡
+ *      LPTMR_TC_InitStruct1.timeInMs = 500;       //è®¾ç½®è®¡æ—¶æ—¶é—´æ˜¯500ms
  *      LPTMR_TC_Init(&LPTMR_TC_InitStruct1);
  * @endcode
- * @param  LPTMR_TC_InitStruct: ¹¤×÷ÅäÖÃ½á¹¹Ìå
- *         @arg timeInMs :¶¨Ê±Ê±¼ä µ¥Î»Îªms
+ * @param[in]  LPTMR_TC_InitStruct LPTMRé…ç½®ç»“æ„ä½“
+ *              @arg timeInMs å®šæ—¶æ—¶é—´ å•ä½ä¸ºms
  * @retval None
  */
 void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct)
@@ -75,17 +76,17 @@ void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct)
 }
 
 /**
- * @brief  ³õÊ¼»¯ÅäÖÃLPTMÄ£¿é´¦ÓÚÂö³å¼ÆÊıÄ£Ê½
+ * @brief  åˆå§‹åŒ–é…ç½®LPTMæ¨¡å—å¤„äºè„‰å†²è®¡æ•°æ¨¡å¼
  * @code
- *      //ÉèÖÃLPTM¹¤×÷ÔÚÂö³å¼ÆÊıÄ£Ê½£¬¼ÆÊıÉÏÏŞÊÇ0xFFFE
- *      LPTMR_PC_InitTypeDef LPTMR_PC_InitStruct1; //ÉêÇëÒ»¸ö½á¹¹±äÁ¿
- *      LPTMR_PC_InitStruct1.timeInMs = 500;       //ÉèÖÃ¼ÆÊ±Ê±¼äÊÇ500ms
+ *      //è®¾ç½®LPTMå·¥ä½œåœ¨è„‰å†²è®¡æ•°æ¨¡å¼ï¼Œè®¡æ•°ä¸Šé™æ˜¯0xFFFE
+ *      LPTMR_PC_InitTypeDef LPTMR_PC_InitStruct1; //ç”³è¯·ä¸€ä¸ªç»“æ„å˜é‡
+ *      LPTMR_PC_InitStruct1.timeInMs = 500;       //è®¾ç½®è®¡æ—¶æ—¶é—´æ˜¯500ms
  *      LPTMR_TC_Init(&LPTMR_TC_InitStruct1);
  * @endcode
- * @param  LPTMR_PC_InitTypeDef: ¹¤×÷ÅäÖÃ½á¹¹Ìå
- *         @arg counterOverflowValue       :¼ÆÊıÆ÷¼ÆÊıÉÏÏŞ£¬¼«ÏŞÎª0xFFFF
- *         @arg inputSource :Âö³åÔ´Ñ¡Ôñ kLPTMR_PC_InputSource_CMP0-CMP0×÷ÎªÂö³å¼ÆÊıÊ±ÖÓÔ´ kLPTMR_PC_InputSource_ALT1-Íâ²¿Òı½ÅLPTMR_ALT1×÷ÎªÍâ²¿¼ÆÊıÊ±ÖÓÔ´ kLPTMR_PC_InputSource_ALT2-Íâ²¿Òı½ÅLPTMR_ALT2×÷ÎªÍâ²¿¼ÆÊıÊ±ÖÓÔ´
- *         @arg pinPolarity :Âö³å¼ÆÊı¼«ĞÔÑ¡Ôñ kLPTMR_PC_PinPolarity_RigsingEdge ÉÏÉıÑØ¼ÆÊı kLPTMR_PC_PinPolarity_FallingEdge ÏÂ½µÑØ¼ÆÊı
+ * @param[in]  LPTMR_PC_InitStruct LPTMRé…ç½®ç»“æ„ä½“
+ *              @arg counterOverflowValue       è®¡æ•°å™¨è®¡æ•°ä¸Šé™ï¼Œæé™ä¸º0xFFFF
+ *              @arg inputSource è„‰å†²æºé€‰æ‹© kLPTMR_PC_InputSource_CMP0-CMP0ä½œä¸ºè„‰å†²è®¡æ•°æ—¶é’Ÿæº kLPTMR_PC_InputSource_ALT1-å¤–éƒ¨å¼•è„šLPTMR_ALT1ä½œä¸ºå¤–éƒ¨è®¡æ•°æ—¶é’Ÿæº kLPTMR_PC_InputSource_ALT2-å¤–éƒ¨å¼•è„šLPTMR_ALT2ä½œä¸ºå¤–éƒ¨è®¡æ•°æ—¶é’Ÿæº
+ *              @arg pinPolarity è„‰å†²è®¡æ•°ææ€§é€‰æ‹© kLPTMR_PC_PinPolarity_RigsingEdge ä¸Šå‡æ²¿è®¡æ•° kLPTMR_PC_PinPolarity_FallingEdge ä¸‹é™æ²¿è®¡æ•°
  * @retval None
  */
 void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
@@ -146,14 +147,17 @@ void LPTMR_PC_Init(LPTMR_PC_InitTypeDef* LPTMR_PC_InitStruct)
 }
 
 /**
- * @brief  LPTMÄ£¿éÖĞ¶ÏºÍDMA¹¦ÄÜÅäÖÃ
+ * @brief  LPTMæ¨¡å—ä¸­æ–­å’ŒDMAåŠŸèƒ½é…ç½®
  * @code
- *     //ÅäÖÃLPTMÄ£¿é²úÉúÒç³öÖĞ¶Ï
+ *     //é…ç½®LPTMæ¨¡å—äº§ç”Ÿæº¢å‡ºä¸­æ–­
  *     LPTMR_ITDMAConfig(kLPTMR_IT_TOF, true);
  * @endcode
- * @param  LPTMR_ITDMAConfig_Type: LPTMÖĞ¶ÏÀàĞÍ
- *         @arg kLPTMR_IT_Disable  :¹Ø±ÕÖĞ¶Ï
- *         @arg kLPTMR_IT_TOF      :¿ªÆô¼ÆÊıÒç³öÖĞ¶Ï
+ * @param[in]  config LPTMä¸­æ–­ç±»å‹
+ *         @arg kLPTMR_IT_Disable  å…³é—­ä¸­æ–­
+ *         @arg kLPTMR_IT_TOF      å¼€å¯è®¡æ•°æº¢å‡ºä¸­æ–­
+ * @param[in] status æ˜¯å¦ä½¿èƒ½ä¸­æ–­
+ *         @arg 0  interrupt disable
+ *         @arg 1  interrupt enable
  * @retval None
  */
 void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config, bool status)
@@ -176,10 +180,10 @@ void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config, bool status)
 }
 
 /**
- * @brief  ×¢²áÖĞ¶Ï»Øµ÷º¯Êı
- * @param  AppCBFun: »Øµ÷º¯ÊıÖ¸ÕëÈë¿Ú
+ * @brief  æ³¨å†ŒLPTMRä¸­æ–­å›è°ƒå‡½æ•°
+ * @param[in]  AppCBFun å›è°ƒå‡½æ•°æŒ‡é’ˆå…¥å£
  * @retval None
- * @note ¶ÔÓÚ´Ëº¯ÊıµÄ¾ßÌåÓ¦ÓÃÇë²éÔÄÓ¦ÓÃÊµÀı
+ * @note å¯¹äºæ­¤å‡½æ•°çš„å…·ä½“åº”ç”¨è¯·æŸ¥é˜…åº”ç”¨å®ä¾‹
  */
 void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun)
 {
@@ -193,14 +197,13 @@ void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun)
 }
 
 /**
- * @brief  »ñÈ¡Âö³å¼ÆÊıÆ÷µÄÂö³åÊıe
+ * @brief  è·å–è„‰å†²è®¡æ•°å™¨çš„è„‰å†²æ•°
  * @code
- *     //»ñÈ¡Âö³å¼ÆÊıµÄ¸öÊı
+ *     //è·å–è„‰å†²è®¡æ•°çš„ä¸ªæ•°
  *     uint32_t counter;
  *     counter = LPTMR_PC_ReadCounter();
  * @endcode
- * @param  None
- * @retval Âö³å¼ÆÊı¸öÊı
+ * @retval è„‰å†²è®¡æ•°ä¸ªæ•°
  */
 uint32_t LPTMR_PC_ReadCounter(void)
 {
@@ -209,6 +212,17 @@ uint32_t LPTMR_PC_ReadCounter(void)
     *p = 0x1234;
 	return (uint32_t)((LPTMR0->CNR & LPTMR_CNR_COUNTER_MASK) >> LPTMR_CNR_COUNTER_SHIFT); 
 }
+
+/**
+ * @brief  LPTMRè„‰å†²è®¡æ•°å¿«é€Ÿåˆå§‹åŒ–
+ * @code
+ *     //LPTMRè„‰å†²è®¡æ•°å¿«é€Ÿåˆå§‹åŒ–
+ *     LPTMR_PC_QuickInit(LPTMR_ALT2_PC05);
+ * @endcode
+ * @param[in] MAP å•è·¯è„‰å†²è®¡æ•°æ¨¡å—
+ * @see MAPè¯¦ç»†çš„å®å®šä¹‰è¯·è§lptmr.hæ–‡ä»¶
+ * @retval è„‰å†²è®¡æ•°çš„æ¨¡å—å·
+ */
 
 uint32_t LPTMR_PC_QuickInit(uint32_t MAP)
 {
@@ -239,12 +253,11 @@ uint32_t LPTMR_PC_QuickInit(uint32_t MAP)
 }
 
 /**
- * @brief  Çå³ıÂö³å¼ÆÊıÆ÷µÄÂö³åÊı
+ * @brief  æ¸…é™¤è„‰å†²è®¡æ•°å™¨çš„è„‰å†²æ•°
  * @code
- *     //Çå³ıÂö³å¼ÆÊıµÄ¸öÊı
+ *     //æ¸…é™¤è„‰å†²è®¡æ•°çš„ä¸ªæ•°
  *     LPTMR_ClearCounter();
  * @endcode
- * @param  None
  * @retval None
  */
 void LPTMR_ClearCounter(void)
@@ -255,9 +268,8 @@ void LPTMR_ClearCounter(void)
 }
 
 /**
- * @brief  ÖĞ¶Ï´¦Àíº¯ÊıÈë¿Ú
- * @param  LPTimer_IRQHandler :LPTMÖĞ¶Ï´¦Àíº¯Êı
- * @note º¯ÊıÄÚ²¿ÓÃÓÚÖĞ¶ÏÊÂ¼ş´¦Àí
+ * @brief  ä¸­æ–­å¤„ç†å‡½æ•°å…¥å£ï¼Œè°ƒç”¨ç”¨æˆ·æ³¨å†Œçš„å›è°ƒå‡½æ•°
+ * @note å‡½æ•°å†…éƒ¨ç”¨äºä¸­æ–­äº‹ä»¶å¤„ç†
  */
 void LPTimer_IRQHandler(void)
 {

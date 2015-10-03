@@ -15,47 +15,62 @@
 #include <stdbool.h>
 
 
-/* LPTMR »Øµ÷º¯ÊıÉùÃ÷ */
+//!LPTMR å›è°ƒå‡½æ•°å£°æ˜
 typedef void (*LPTMR_CallBackType)(void);
 
-/* LPTMR ÖĞ¶ÏDMAÅäÖÃ */
+/**
+ * \enum LPTMR_ITDMAConfig_Type
+ * \brief LPTMR ä¸­æ–­DMAé…ç½®
+ */
 typedef enum
 {
-    kLPTMR_IT_TOF,            /* ¿ªÆô¼ÆÊıÆ÷Òç³öÖĞ¶Ï */
+    kLPTMR_IT_TOF,            /**<å¼€å¯è®¡æ•°å™¨æº¢å‡ºä¸­æ–­ */
 }LPTMR_ITDMAConfig_Type;
 
-/* LPTMR ¶¨Ê±Æ÷¹¦ÄÜ ³õÊ¼»¯ */
+/**
+ * \struct LPTMR_TC_InitTypeDef
+ * \brief LPTMR å®šæ—¶å™¨åŠŸèƒ½ åˆå§‹åŒ–
+ */
 typedef struct
 {
-    uint16_t        timeInMs;  //¶¨Ê±Ê±¼ä
+    uint16_t        timeInMs;  ///<å®šæ—¶æ—¶é—´
 }LPTMR_TC_InitTypeDef;
 
-/* LPTMR Âö³å¼ÆÊıÔ´Ñ¡Ôñ */
+/**
+ * \enum LPTMR_PC_IntputSource_Type
+ * \brief LPTMR è„‰å†²è®¡æ•°æºé€‰æ‹©
+ */
 typedef enum
 {
-    kLPTMR_PC_InputSource_CMP0, /* CMP0 ×÷ÎªÂö³å¼ÆÊıÊ±ÖÓÔ´ */
-    kLPTMR_PC_InputSource_ALT1, /* Íâ²¿Òı½ÅLPTMR_ALT1×÷ÎªÍâ²¿¼ÆÊıÊ±ÖÓÔ´ */
-    kLPTMR_PC_InputSource_ALT2, /* Íâ²¿Òı½ÅLPTMR_ALT2×÷ÎªÍâ²¿¼ÆÊıÊ±ÖÓÔ´ */
+    kLPTMR_PC_InputSource_CMP0, /**< CMP0 ä½œä¸ºè„‰å†²è®¡æ•°æ—¶é’Ÿæº */
+    kLPTMR_PC_InputSource_ALT1, /**< å¤–éƒ¨å¼•è„šLPTMR_ALT1ä½œä¸ºå¤–éƒ¨è®¡æ•°æ—¶é’Ÿæº */
+    kLPTMR_PC_InputSource_ALT2, /**< å¤–éƒ¨å¼•è„šLPTMR_ALT2ä½œä¸ºå¤–éƒ¨è®¡æ•°æ—¶é’Ÿæº */
 }LPTMR_PC_IntputSource_Type;
 
-/* LPTMR Íâ²¿Òı½Å×÷Îª¼ÆÊıÊ± ´¥·¢¼«ĞÔÑ¡Ôñ */
+/**
+ * \enum LPTMR_PC_PinPolarity_Type
+ * \brief LPTMR å¤–éƒ¨å¼•è„šä½œä¸ºè®¡æ•°æ—¶ è§¦å‘ææ€§é€‰æ‹©
+ */
 typedef enum
 {
-    kLPTMR_PC_PinPolarity_RigsingEdge,  /* ÉÏÉıÑØ´¥·¢¼ÆÊı */
-    kLPTMR_PC_PinPolarity_FallingEdge,  /* ÏÂ½µÑØ´¥·¢¼ÆÊı */
+    kLPTMR_PC_PinPolarity_RigsingEdge,  /**< ä¸Šå‡æ²¿è§¦å‘è®¡æ•° */
+    kLPTMR_PC_PinPolarity_FallingEdge,  /**< ä¸‹é™æ²¿è§¦å‘è®¡æ•° */
 }LPTMR_PC_PinPolarity_Type;
 
-/* LPTMR ÓÃ×÷Íâ²¿µ¥Â·Âö³å¼¼Êõ ³õÊ¼»¯ */
+/**
+ * \struct LPTMR_PC_InitTypeDef
+ * \brief LPTMR ç”¨ä½œå¤–éƒ¨å•è·¯è„‰å†²æŠ€æœ¯ åˆå§‹åŒ–
+ */
 typedef struct
 {
-    uint16_t                        counterOverflowValue;   /* Âö³åÀÛ¼ÓÆ÷Òç³ö·§Öµ ×î´ó0xFFFF */
-    LPTMR_PC_IntputSource_Type      inputSource;            /* ÊäÈëÔ´Ñ¡Ôñ */
-    LPTMR_PC_PinPolarity_Type       pinPolarity;            /* ÊäÈë²¶×½¼«ĞÔÑ¡Ôñ */
+    uint16_t                        counterOverflowValue;   ///< è„‰å†²ç´¯åŠ å™¨æº¢å‡ºé˜€å€¼ æœ€å¤§0xFFFF 
+    LPTMR_PC_IntputSource_Type      inputSource;            ///< è¾“å…¥æºé€‰æ‹© 
+    LPTMR_PC_PinPolarity_Type       pinPolarity;            ///< è¾“å…¥æ•æ‰ææ€§é€‰æ‹© 
 }LPTMR_PC_InitTypeDef;
 
-//!< ¿ìËÙ³õÊ¼»¯½á¹¹ ÓÃÓÚµ¥Â·Âö³å¼ÆÊı
-#define LPTMR_ALT1_PA19   (0x86780U)   /* Ê¹ÓÃPTA19Òı½Å×÷ÎªÂö³å¼ÆÊıÔ´ */
-#define LPTMR_ALT2_PC05   (0x104b10U)  /* Ê¹ÓÃPTC05Òı½Å×÷ÎªÂö³å¼ÆÊıÔ´ */
+//!< å¿«é€Ÿåˆå§‹åŒ–ç»“æ„ ç”¨äºå•è·¯è„‰å†²è®¡æ•°
+#define LPTMR_ALT1_PA19   (0x86780U)   /* ä½¿ç”¨PTA19å¼•è„šä½œä¸ºè„‰å†²è®¡æ•°æº */
+#define LPTMR_ALT2_PC05   (0x104b10U)  /* ä½¿ç”¨PTC05å¼•è„šä½œä¸ºè„‰å†²è®¡æ•°æº */
 
 //!< API functions
 void LPTMR_TC_Init(LPTMR_TC_InitTypeDef* LPTMR_TC_InitStruct);

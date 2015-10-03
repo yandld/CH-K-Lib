@@ -13,38 +13,50 @@
 #include <stdint.h>
 #include "common.h"
 
-
+/**
+ * \struct RTC_DateTime_Type
+ * \brief RTCåˆå§‹åŒ–ç»“æ„
+ */
 typedef struct 
 {
-   uint16_t year;    /*!< ÄêRange from 200 to 2099.*/
-   uint16_t month;   /*!< ÔÂRange from 1 to 12.*/
-   uint16_t day;     /*!< ÈÕRange from 1 to 31 (depending on month).*/
-   uint16_t hour;    /*!< Ê±Range from 0 to 23.*/
-   uint16_t minute;  /*!< ·ÖRange from 0 to 59.*/
-   uint8_t second;   /*!< ÃëRange from 0 to 59.*/
+   uint16_t year;    ///< å¹´Range from 200 to 2099.
+   uint16_t month;   ///< æœˆRange from 1 to 12.
+   uint16_t day;     ///< æ—¥Range from 1 to 31 (depending on month).
+   uint16_t hour;    ///< æ—¶Range from 0 to 23.
+   uint16_t minute;  ///< åˆ†Range from 0 to 59.
+   uint8_t second;   ///< ç§’Range from 0 to 59.
 }RTC_DateTime_Type;
 
-
+/**
+ * \enum RTC_OscLoad_Type
+ * \brief RTCå†…ç½®ç”µå®¹è¡¥å¿
+ */
 typedef enum
 {
-    kRTC_OScLoad_0PF,   /* µçÈİÅäÖÃ */
-    kRTC_OScLoad_2PF,
-    kRTC_OScLoad_4PF,
-    kRTC_OScLoad_8PF,
-    kRTC_OScLoad_16PF,
+    kRTC_OScLoad_0PF,       /**< Oscillator 0pF Load */
+    kRTC_OScLoad_2PF,       /**< Oscillator 2pF Load */
+    kRTC_OScLoad_4PF,       /**< Oscillator 4pF Load */
+    kRTC_OScLoad_8PF,       /**< Oscillator 8pF Load */
+    kRTC_OScLoad_16PF,      /**< Oscillator 16pF Load */
 }RTC_OscLoad_Type;
 
-
+/**
+ * \struct RTC_InitTypeDef
+ * \brief OSC ç”µå®¹è´Ÿè½½
+ */
 typedef struct
 {
-    RTC_OscLoad_Type        oscLoad;            // OSC µçÈİ¸ºÔØ
+    RTC_OscLoad_Type        oscLoad;            // OSC ç”µå®¹è´Ÿè½½
 }RTC_InitTypeDef;
 
-//!< interrupt and DMA select
+/**
+ * \enum RTC_ITDMAConfig_Type
+ * \brief RTC interrupt and DMA select
+ */
 typedef enum
 {
-    kRTC_IT_TimeAlarm,             /* ¿ªÆôÄÖÖÓÖĞ¶Ï */
-    kRTC_IT_TimeOverflow,          /* ¿ªÆôÊ±¼äÒç³öÖĞ¶Ï */    
+    kRTC_IT_TimeAlarm,             /**< å¼€å¯é—¹é’Ÿä¸­æ–­ */
+    kRTC_IT_TimeOverflow,          /**< å¼€å¯æ—¶é—´æº¢å‡ºä¸­æ–­ */    
 }RTC_ITDMAConfig_Type;
 
 //!< CallbackType
@@ -57,7 +69,7 @@ void RTC_SetDateTime(RTC_DateTime_Type * datetime);
 void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config, bool status);
 uint32_t RTC_IsTimeValid(void);
 void RTC_CallbackInstall(RTC_CallBackType AppCBFun);
-//!< function which may not be used
+
 void RTC_Init(RTC_InitTypeDef * RTC_InitStruct);
 int  RTC_GetWeekFromYMD(int year, int month, int days);
 uint32_t RTC_GetTSR(void);

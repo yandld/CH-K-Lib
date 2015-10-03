@@ -4,6 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+  * @date    2015.10.03 FreeXcå®Œå–„äº†rtc.c & rtc.hæ–‡ä»¶çš„ç›¸å…³æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -27,7 +28,7 @@ static const uint8_t  LY[] = {0U, 31U, 29U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 3
 static const uint16_t MONTH_DAYS[] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 212U, 243U, 273U, 304U, 334U};
 
 /**
- * @brief  RTCÄ£¿é¿ìËÙ³õÊ¼»¯ÅäÖÃ
+ * @brief  RTCæ¨¡å—å¿«é€Ÿåˆå§‹åŒ–é…ç½®ï¼Œè®¾å®šå†…éƒ¨ç”µå®¹ä¸º8pF
  * @retval None
  */
 void RTC_QuickInit(void)
@@ -38,11 +39,11 @@ void RTC_QuickInit(void)
 }
 
 /**
- * @brief  ÓÉÄêÔÂÈÕ¼ÆËã³öÖÜÊı
- * @param  year  :Äê
- * @param  month :ÔÂ
- * @param  days  :ÈÕ
- * @retval ·µ»Ø¼ÆËã³öÀ´µÄÖÜÆÚÊı
+ * @brief  ç”±å¹´æœˆæ—¥è®¡ç®—å‡ºå‘¨æ•°
+ * @param[in]   year  å¹´
+ * @param[in]  month æœˆ
+ * @param[in]   days  æ—¥
+ * @retval è¿”å›è®¡ç®—å‡ºæ¥çš„å‘¨æœŸæ•°
  */
 int RTC_GetWeekFromYMD(int year, int month, int days)
 {  
@@ -58,9 +59,9 @@ int RTC_GetWeekFromYMD(int year, int month, int days)
 }
  
 /**
- * @brief  ÓÉÈÕÆÚ¼ÆËã³öÃë
- * @param  RTC_DateTime_Type :RTCÊ±ÖÓÊı¾İ½á¹¹Ìå£¬Ïê¼ûrtc.h
- * @param  seconds           :¾ÍËã³öÀ´µÄÃëÊı¾İ´æ´¢µØÖ·
+ * @brief  ç”±æ—¥æœŸè®¡ç®—å‡ºç§’
+ * @param[in]  datetime æŒ‡å‘RTCæ—¶é’Ÿæ•°æ®ç»“æ„ä½“çš„æŒ‡é’ˆï¼Œè¯¦è§rtc.h
+ * @param[out] seconds å­˜æ”¾ç§’æ•°æ®çš„åœ°å€
  * @retval None
  */
 static void RTC_DateTimeToSecond(const RTC_DateTime_Type * datetime, uint32_t * seconds)
@@ -85,9 +86,9 @@ static void RTC_DateTimeToSecond(const RTC_DateTime_Type * datetime, uint32_t * 
 }
 
 /**
- * @brief  ÓÉÃë¼ÆËã³öÈÕÆÚ
- * @param  seconds           :ÊäÈëµÄÃë
- * @param  datetime  :¼ÆËã³öÀ´µÄÄêÔÂÈÕµÈĞÅÏ¢½á¹¹Ìå
+ * @brief  ç”±ç§’è®¡ç®—å‡ºæ—¥æœŸ
+ * @param[in]  seconds    è¾“å…¥çš„ç§’ï¼ˆå˜é‡å­˜å‚¨åœ°å€ï¼‰
+ * @param[out] datetime  è®¡æŒ‡å‘å¹´æœˆæ—¥ç­‰ä¿¡æ¯ç»“æ„ä½“æŒ‡é’ˆ
  * @retval None
  */
 static void RTC_SecondToDateTime(const uint32_t * seconds, RTC_DateTime_Type * datetime)
@@ -152,13 +153,13 @@ static void RTC_SecondToDateTime(const uint32_t * seconds, RTC_DateTime_Type * d
 }
 
 /**
- * @brief  »ñµÃRTCµÄÊ±¼ä
+ * @brief  è·å¾—RTCçš„æ—¶é—´
  * @code
- *      //»ñµÃRTCµÄÊ±¼ä
- *      RTC_DateTime_Type ts;    //ÉêÇëÒ»¸ö½á¹¹Ìå
- *      RTC_GetDateTime(&ts);    //½«ÈÕÆÚ´æ´¢µ½tsÖĞ
+ *      //è·å¾—RTCçš„æ—¶é—´
+ *      RTC_DateTime_Type ts;    //ç”³è¯·ä¸€ä¸ªç»“æ„ä½“
+ *      RTC_GetDateTime(&ts);    //å°†æ—¥æœŸå­˜å‚¨åˆ°tsä¸­
  * @endcode
- * @param  datetime  :·µ»Ø³öÀ´µÄÄêÔÂÈÕµÈĞÅÏ¢½á¹¹Ìå
+ * @param  datetime  è¿”å›å‡ºæ¥çš„å¹´æœˆæ—¥ç­‰ä¿¡æ¯ç»“æ„ä½“
  * @retval None
  */
 void RTC_GetDateTime(RTC_DateTime_Type * datetime)
@@ -172,8 +173,17 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
 }
 
 /**
- * @brief  ÅĞ¶Ïµ±Ç°RTCÊ±ÖÓÄ£¿éÊ±¼äÊÇ·ñÓĞĞ§
- * @retval 0: ÓĞĞ§ !0 ÎŞĞ§
+ * @brief  åˆ¤æ–­å½“å‰RTCæ—¶é’Ÿæ¨¡å—æ—¶é—´æ˜¯å¦æœ‰æ•ˆ
+ * \code
+ *     /* å½“æ—¶é—´æ— æ•ˆï¼ˆä»æ¥æœªæ‰§è¡Œè¿‡RTCæ—¶ï¼Œåˆå§‹åŒ–RTCçš„æ—¶é—´ï¼‰ */
+ *    if(RTC_IsTimeValid())
+ *    {
+ *       printf("time invalid, reset time!\r\n");
+ *       RTC_SetDateTime(&td);
+ *    }
+ * \endcode
+ * @retval 0  æœ‰æ•ˆ 
+ * \retval !0 æ— æ•ˆ
  */
 uint32_t RTC_IsTimeValid(void)
 {
@@ -185,8 +195,8 @@ uint32_t RTC_IsTimeValid(void)
 }
 
 /**
- * @brief  ÉèÖÃÄÖÖÓÊ±¼ä
- * @param  datetime  : Ê±¼ä´Á½á¹¹Ìå
+ * @brief  è®¾ç½®é—¹é’Ÿæ—¶é—´
+ * @param[in]  datetime   æ—¶é—´æˆ³ç»“æ„ä½“
  * @retval None
  */
 void RTC_SetAlarm(RTC_DateTime_Type * datetime)
@@ -201,7 +211,7 @@ void RTC_SetAlarm(RTC_DateTime_Type * datetime)
 }
 
 /**
- * @brief  ÉèÖÃRTC²¹³¥¼Ä´æÆ÷
+ * @brief  è®¾ç½®RTCè¡¥å¿å¯„å­˜å™¨
  * @param  compensationInterval
       Configures the compensation interval in seconds from 1 to 256 to control
     *  how frequently the TCR should adjust the number of 32.768 kHz cycles in
@@ -232,8 +242,8 @@ void RTC_SetCompensation(uint32_t compensationInterval, uint32_t timeCompensatio
 }
     
 /**
- * @brief  RTCÄ£¿é³õÊ¼»¯ÅäÖÃ
- * @param  RTC_DateTime_Type :RTC¹¤×÷Ä£Ê½ÅäÖÃ£¬Ïê¼ûrtc.h
+ * @brief  RTCæ¨¡å—åˆå§‹åŒ–é…ç½®ï¼Œç”¨æ¥é…ç½®å†…éƒ¨çš„ç”µå®¹å‚æ•°
+ * @param[in]  RTC_InitStruct æŒ‡å‘RTCåˆå§‹åŒ–ç»“æ„ä½“æŒ‡é’ˆ
  * @retval None
  */
 void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
@@ -277,21 +287,28 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
 }
 
 /**
- * @brief  »ñµÃTSRÖµ
- * @retval TSRÖµ Îª0ÔòËµÃ÷ÎŞĞ§
+ * @brief  è·å¾—TSRå€¼
+ * @retval  0  unvalid
+ * \retval !0 valid
  */
 uint32_t RTC_GetTSR(void)
 {
     return RTC->TSR;
 }
 
+/**
+ * @brief  è·å¾—Time Alarmå€¼
+ * @retval  0  unvalid
+ * \retval !0 valid
+ */
 uint32_t RTC_GetTAR(void)
 {
     return RTC->TAR;
 }
+
 /**
- * @brief  ÉèÖÃRTCµÄÊ±¼ä
- * @param  datetime  :Ê±¼ä´Á½á¹¹
+ * @brief  è®¾ç½®RTCçš„æ—¶é—´
+ * @param[in]  datetime  æŒ‡å‘æ—¶é—´çš„ç»“æ„ä½“æŒ‡é’ˆ
  * @retval None
  */
 void RTC_SetDateTime(RTC_DateTime_Type * datetime)
@@ -308,6 +325,11 @@ void RTC_SetDateTime(RTC_DateTime_Type * datetime)
     RTC->SR |= RTC_SR_TCE_MASK;
 }
 
+/**
+ * @brief  è®¾ç½®RTCçš„Time Seconds Register
+ * @param[in]  val time second vlaue
+ * @retval None
+ */
 void RTC_SetTSR(uint32_t val)
 {
     RTC->SR &= ~RTC_SR_TCE_MASK;
@@ -316,14 +338,17 @@ void RTC_SetTSR(uint32_t val)
 }
 
 /**
- * @brief  ÉèÖÃRTCÖĞ¶Ï¹¦ÄÜ
+ * @brief  è®¾ç½®RTCä¸­æ–­åŠŸèƒ½
  * @code
- *      //ÉèÖÃRTC¿ªÆôÄÖÖÓÖĞ¶Ï
+ *      //è®¾ç½®RTCå¼€å¯é—¹é’Ÿä¸­æ–­
  *      RTC_ITDMAConfig(kRTC_IT_TimeAlarm, true); 
  * @endcode
- * @param config: ÅäÖÃÖĞ¶ÏÀàĞÍ
- *         @arg kRTC_IT_TimeAlarm            :ÄÖÖÓÖĞ¶Ï
- *         @arg kRTC_IT_TimeOverflow         :Ê±¼äÒç³öÖĞ¶Ï
+ * @param[in] config é…ç½®ä¸­æ–­ç±»å‹
+ *                      @arg kRTC_IT_TimeAlarm            é—¹é’Ÿä¸­æ–­
+ *                      @arg kRTC_IT_TimeOverflow         æ—¶é—´æº¢å‡ºä¸­æ–­
+ * \param[in] status æ˜¯å¦ä½¿èƒ½RTCä¸­æ–­
+ *              @arg 0 å…³é—­ä¸­æ–­
+ *              @arg 1 æ‰“å¼€ä¸­æ–­   
  * @retval None
  */
 void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config, bool status)
@@ -351,10 +376,10 @@ void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config, bool status)
 }
 
 /**
- * @brief  ×¢²áÖĞ¶Ï»Øµ÷º¯Êı
- * @param AppCBFun: »Øµ÷º¯ÊıÖ¸ÕëÈë¿Ú
+ * @brief  æ³¨å†Œä¸­æ–­å›è°ƒå‡½æ•°
+ * @param[in] AppCBFun å›è°ƒå‡½æ•°æŒ‡é’ˆå…¥å£
  * @retval None
- * @note ¶ÔÓÚ´Ëº¯ÊıµÄ¾ßÌåÓ¦ÓÃÇë²éÔÄÓ¦ÓÃÊµÀı
+ * @note å¯¹äºæ­¤å‡½æ•°çš„å…·ä½“åº”ç”¨è¯·æŸ¥é˜…åº”ç”¨å®ä¾‹
  */
 void RTC_CallbackInstall(RTC_CallBackType AppCBFun)
 {
@@ -364,9 +389,8 @@ void RTC_CallbackInstall(RTC_CallBackType AppCBFun)
     }
 }
 /**
- * @brief  ÖĞ¶Ï´¦Àíº¯ÊıÈë¿Ú
- * @param  RTC_IRQHandler :Ğ¾Æ¬µÄRTCÖĞ¶Ïº¯ÊıÈë¿Ú
- * @note º¯ÊıÄÚ²¿ÓÃÓÚÖĞ¶ÏÊÂ¼ş´¦Àí
+ * @brief  ç³»ç»Ÿä¸­æ–­å¤„ç†å‡½æ•°ï¼Œè°ƒç”¨ç”¨æˆ·å®šä¹‰çš„å›è°ƒå‡½æ•°ï¼Œæ­¤å‡½æ•°ç”¨æˆ·æ— éœ€ä½¿ç”¨
+ * @note å‡½æ•°å†…éƒ¨ç”¨äºä¸­æ–­äº‹ä»¶å¤„ç†
  */
 void RTC_IRQHandler(void)
 {

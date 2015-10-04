@@ -17,69 +17,83 @@
 #include "common.h"
 #include <stdint.h>
      
-    
-#define HW_PDB_CH0
+/* PDBå¤–è®¾æ¨¡å—å· */
+#define HW_PDB_CH0 /* PDBå¤–è®¾æ¨¡å—channel 0ï¼Œä¾æ¬¡ç±»æ¨ */
 #define HW_PDB_CH1
      
 #define HW_PDB_TRIG_CH0
 #define HW_PDB_TRIG_CH1
      
-//!< PIT CallBack Type
+//!< PDB CallBack Type
 typedef void (*PDB_CallBackType)(void);
 
-     
-/* PDB ´¥·¢Ô´ ²Î¿¼Chip configurationÕÂ½Ú */
+/**
+ * \enum  PDB_TriggerSrc_Type
+ * \brief PDB è§¦å‘æº 
+ * \see Chip configurationç« èŠ‚ K60P144M100SF2RM Table 3-53
+ */
 typedef enum
 {
-    kPDB_TriggerSrc0,
-    kPDB_TriggerSrc1,
-    kPDB_TriggerSrc2,
-    kPDB_TriggerSrc3,
-    kPDB_TriggerSrc4,
-    kPDB_TriggerSrc5,
-    kPDB_TriggerSrc6,
-    kPDB_TriggerSrc7,
-    kPDB_TriggerSrc8,
-    kPDB_TriggerSrc9, 
-    kPDB_TriggerSrc10,
-    kPDB_TriggerSrc11,
-    kPDB_TriggerSrc12,
-    kPDB_TriggerSrc13,
-    kPDB_TriggerSrc14,
-    kPDB_SoftwareTrigger, 
+    kPDB_TriggerSrc0,       /**< External Trigger */
+    kPDB_TriggerSrc1,       /**< CMP 0 */
+    kPDB_TriggerSrc2,       /**< CMP 1 */
+    kPDB_TriggerSrc3,       /**< CMP 2 */
+    kPDB_TriggerSrc4,       /**< PIT Ch 0 Output */
+    kPDB_TriggerSrc5,       /**< PIT Ch 1 Output */
+    kPDB_TriggerSrc6,       /**< PIT Ch 2 Output */
+    kPDB_TriggerSrc7,       /**< PIT Ch 3 Output */
+    kPDB_TriggerSrc8,       /**< FTM0 Init and Ext Trigger Outputs */
+    kPDB_TriggerSrc9,       /**< FTM1 Init and Ext Trigger Outputs */
+    kPDB_TriggerSrc10,      /**< FTM2 Init and Ext Trigger Outputs */
+    kPDB_TriggerSrc11,      /**< Reserved */
+    kPDB_TriggerSrc12,      /**< RTC Alarm */
+    kPDB_TriggerSrc13,      /**< RTC Seconds */
+    kPDB_TriggerSrc14,      /**< LPTMR Output */
+    kPDB_SoftwareTrigger,   /**< Software Trigger */
 }PDB_TriggerSrc_Type;
 
+/**
+ * \enum  FTM_PWM_Mode_Type
+ * \brief PWM Mode Select
+ */
 typedef enum
 {
-	kPWM_EdgeAligned,           //±ßÑØ¶ÔÆë ×î³£ÓÃ
-	kPWM_Combine,               //×éºÏÄ£Ê½
-    kPWM_Complementary,         //»¥²¹Ä£Ê½ ÀàËÆ×éºÏÄ£Ê½ µ«ÊÇChl(n) ºÍ Chl(n+1) ÊÇ»¥²¹Êä³ö
+	kPWM_EdgeAligned,           /**< è¾¹æ²¿å¯¹é½ æœ€å¸¸ç”¨ */
+	kPWM_Combine,               /**< ç»„åˆæ¨¡å¼ */
+    kPWM_Complementary,         /**< äº’è¡¥æ¨¡å¼ ç±»ä¼¼ç»„åˆæ¨¡å¼ ä½†æ˜¯Chl(n) å’Œ Chl(n+1) æ˜¯äº’è¡¥è¾“å‡º */
 }FTM_PWM_Mode_Type;
      
+/**
+ * \struct PDB_InitTypeDef
+ * \brief PDBåˆå§‹åŒ–ç»“æ„
+ */
 typedef struct
 {
-    uint32_t                srcClock;           // Ê±ÖÓÔ´ÆµÂÊ
-    PDB_TriggerSrc_Type     inputTrigSource;    // ÊäÈëÊäÈë´¥·¢Ô´
-    bool                    isContinuesMode;    //ÊÇ·ñÊÇÁ¬Ğø´¥·¢Ä£Ê½
-    uint32_t                timeInUs;
+    uint32_t                srcClock;           ///< æ—¶é’Ÿæºé¢‘ç‡
+    PDB_TriggerSrc_Type     inputTrigSource;    ///< è¾“å…¥è¾“å…¥è§¦å‘æº
+    bool                    isContinuesMode;    ///< æ˜¯å¦æ˜¯è¿ç»­è§¦å‘æ¨¡å¼
+    uint32_t                timeInUs;           ///< us delay
 }PDB_InitTypeDef;
 
-/*!< ÖĞ¶Ï¼°DMAÅäÖÃ */
+/**
+ * \enum PDB_ITDMAConfig_Type
+ * \brief PDBä¸­æ–­åŠDMAé…ç½®é€‰æ‹©
+ */
 typedef enum
 {
-    kPDB_IT_CF,
-    kPDB_DMA_CF,
+    kPDB_IT_CF,         /**< Interrupt Mode */
+    kPDB_DMA_CF,        /**< DMA Mode */
 }PDB_ITDMAConfig_Type;
 
 
-//!< API functions
+/* API functions */
 void PDB_QuickInit(PDB_TriggerSrc_Type triggerSrc, uint32_t timeInUs);
 void PDB_Init(PDB_InitTypeDef * PDB_InitStruct);
 void PDB_SoftwareTrigger(void);
 void PDB_ITDMAConfig(PDB_ITDMAConfig_Type config, bool status);
 void PDB_CallbackInstall(PDB_CallBackType AppCBFun);
 uint32_t PDB_GetMODValue(void);
-//!< ADC trigger function
+/* ADC trigger function */
 void PDB_SetADCPreTrigger(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue, bool status);
 void PDB_SetBackToBackMode(uint32_t adcInstance, uint32_t adcMux, bool status);
 

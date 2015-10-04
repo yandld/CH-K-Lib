@@ -4,6 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.24
+  * @date    2015.10.05 FreeXc 完善了wdog模块的相关API注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   * @note    此文件为芯片看门狗模块的底层功能函数
   ******************************************************************************
@@ -12,9 +13,9 @@
 #include "common.h"
 
 static WDOG_CallBackType WDOG_CallBackTable[1] = {NULL};
+
 /**
- * @brief  看门狗解锁 内部函数
- * @param  None
+ * @brief  看门狗解锁 内部函数，用户无需调用
  * @retval None
  */
 static void WDOG_Unlock(void)
@@ -27,10 +28,10 @@ static void WDOG_Unlock(void)
 /**
  * @brief  看门狗快速初始化配置
  * @code
- *      //配置看门狗的时间为100ms
+ *      //配置看门狗的定时时间为100ms
  *      WDOG_QuickInit(100); 
  * @endcode
- * @param  timeInMs: 看门狗触发时间 单位ms
+ * @param[in]  timeInMs 看门狗触发时间，单位ms
  * @retval None
  */
 void WDOG_QuickInit(uint32_t timeInMs)
@@ -51,7 +52,7 @@ void WDOG_QuickInit(uint32_t timeInMs)
  *    WDOG_InitStruct1.windowInMs  = 20;        //在正常模式下无意义
  *    WDOG_Init(&WDOG_InitStruct1); 
  * @endcode
- * @param  WDOG_InitStruct: 看门狗工作模式配置结构体   
+ * @param[in]  WDOG_InitStruct 看门狗工作模式配置结构体   
  * @retval None
  */
 void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
@@ -92,7 +93,9 @@ void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct)
  *      //开启看门狗中断功能    
  *      WDOG_ITDMAConfig(true);  //中断不常用
  * @endcode
- * @param  status: true 开启中断  false 关闭中断
+ * @param[in]  status 是否开启WDOG中断
+ *          \arg true  开启中断
+ *          \arg false 关闭中断
  * @retval None
  */
 void WDOG_ITDMAConfig(bool status)
@@ -108,8 +111,8 @@ void WDOG_ITDMAConfig(bool status)
 }
 
 /**
- * @brief  注册中断回调函数
- * @param AppCBFun: 回调函数指针入口
+ * @brief  WDOG注册中断回调函数
+ * @param[in] AppCBFun 回调函数指针入口
  * @retval None
  * @note 对于此函数的具体应该请查阅应用实例
  */
@@ -148,6 +151,10 @@ void WDOG_ClearResetCounter(void)
     WDOG->RSTCNT = WDOG_RSTCNT_RSTCNT_MASK;
 }
 
+/**
+ * @brief  读取看门狗当前定时器的输出值
+ * @return Watchdog Timer Output Value
+ */
 uint32_t WDOG_GetCurrentCounter(void)
 {
     uint32_t val;
@@ -161,7 +168,7 @@ uint32_t WDOG_GetCurrentCounter(void)
  * @code
  *     WDOG_Refresh();  //喂狗
  * @endcode
- * @retval 当前计数器的数值
+ * @retval None
  */
 void WDOG_Refresh(void)
 {
@@ -177,7 +184,10 @@ void WDOG_Refresh(void)
     }
 }
 
-//!< Wdog Interrupt
+/**
+ * @brief  中断处理函数入口
+ * @note   用于调用用户注册的回调函数,用户无需使用
+ */
 void Watchdog_IRQHandler(void)
 {
     WDOG->STCTRLL |= WDOG_STCTRLL_INTFLG_MASK;    
@@ -186,4 +196,3 @@ void Watchdog_IRQHandler(void)
         WDOG_CallBackTable[0]();
     }
 }
-

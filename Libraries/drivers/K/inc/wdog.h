@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-	* @note    ´ËÎÄ¼şÎªĞ¾Æ¬¿´ÃÅ¹·Ä£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡çœ‹é—¨ç‹—æ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 
@@ -14,24 +14,31 @@
 
 #include "common.h"
 
+/**
+ * \enum WDOG_Mode_Type
+ * \brief WDOG mode select
+ */
 typedef enum
 {
-    kWDOG_Mode_Normal,            //ÆÕÍ¨Ä£Ê½¿´ÃÅ¹·
-    kWDOG_Mode_Window,            // WDOG ´°ÌåÄ£Ê½
+    kWDOG_Mode_Normal,            /**< æ™®é€šæ¨¡å¼çœ‹é—¨ç‹— */
+    kWDOG_Mode_Window,            /**< WDOG çª—ä½“æ¨¡å¼  */
 }WDOG_Mode_Type;
 
-
+/**
+ * \struct WDOG_InitTypeDef
+ * \brief WDOGåˆå§‹åŒ–ç»“æ„
+ */
 typedef struct
 {
-    WDOG_Mode_Type      mode;                   //WDOG ¹¤×÷Ä£Ê½Ñ¡Ôñ
-    uint32_t            timeOutInMs;            //WDOG ×î´óÎ¹¹·Ê±ÏŞ
-    uint32_t            windowInMs;             //WDOG ¿ª´°ÆğÊ¼Ê±¼ä
+    WDOG_Mode_Type      mode;                   ///<WDOG å·¥ä½œæ¨¡å¼é€‰æ‹©
+    uint32_t            timeOutInMs;            ///<WDOG æœ€å¤§å–‚ç‹—æ—¶é™
+    uint32_t            windowInMs;             ///<WDOG å¼€çª—èµ·å§‹æ—¶é—´
 }WDOG_InitTypeDef;
 
-//!< Callback Type
+/* Callback Type */
 typedef void (*WDOG_CallBackType)(void);
 
-//!< API functions
+/* API functions */
 void WDOG_QuickInit(uint32_t timeInUs);
 void WDOG_Init(WDOG_InitTypeDef* WDOG_InitStruct);
 void WDOG_ITDMAConfig(bool status);

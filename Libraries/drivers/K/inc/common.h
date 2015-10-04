@@ -56,7 +56,7 @@
 
 /* configuration */
 #if !defined(UART_DMA_SUPPORT)
-#define UART_DMA_SUPPORT 0
+    #define UART_DMA_SUPPORT 0
 #endif
 
 
@@ -69,7 +69,7 @@
 #define FW_VERSION                ((CHK_VERSION * 10000) + \
                                   (CHK_SUBVERSION * 100) + CHK_REVISION)
 
-//���������
+//参数检测器
 #if defined(LIB_DEBUG)
 
 /**
@@ -87,13 +87,21 @@
 #endif
   
 #if defined(LIB_DEBUG)
-#include <stdio.h>
-#define LIB_TRACE	printf
+    #include <stdio.h>
+    #define LIB_TRACE	printf
 #else
-#define LIB_TRACE(...)
+    #define LIB_TRACE(...)
 #endif
 
-typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
+/**
+ * \enum  FunctionalState
+ * \brief disable or enable
+ */
+typedef enum 
+{
+    DISABLE = 0,        /**< 不使能 */
+    ENABLE = !DISABLE,  /**< 使能 */
+}FunctionalState;
 
 #define NVIC_PriorityGroup_0         ((uint32_t)0x7) /*!< 0 bits for pre-emption priority   4 bits for subpriority */                                               
 #define NVIC_PriorityGroup_1         ((uint32_t)0x6) /*!< 1 bits for pre-emption priority   3 bits for subpriority */                                                  
@@ -102,28 +110,28 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 #define NVIC_PriorityGroup_4         ((uint32_t)0x3) /*!< 4 bits for pre-emption priority   0 bits for subpriority */
 
 #if !defined(MIN)
-#define MIN(a, b)       ((a) < (b) ? (a) : (b))
+    #define MIN(a, b)       ((a) < (b) ? (a) : (b))
 #endif
 
 #if !defined(MAX)
-#define MAX(a, b)       ((a) > (b) ? (a) : (b))
+    #define MAX(a, b)       ((a) > (b) ? (a) : (b))
 #endif
 
 #if !defined(ABS)
-#define ABS(a)         (((a) < 0) ? (-(a)) : (a))
+    #define ABS(a)         (((a) < 0) ? (-(a)) : (a))
 #endif
 
 #if !defined(ARRAY_SIZE)
-#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
+    #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 #endif
 
 #ifndef BSWAP_32
-#define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
+    #define BSWAP_32(val)	(uint32_t)((BSWAP_16((uint32_t)(val) & (uint32_t)0xFFFF) << 0x10) |  \
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
 #endif
 
 #ifndef BSWAP_16
-#define BSWAP_16(x)     (uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))
+    #define BSWAP_16(x)     (uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))
 #endif
 
 #define IP_CLK_ENABLE(x)        (*((uint32_t*) ClkTbl[x].addr) |= ClkTbl[x].mask)
@@ -133,7 +141,10 @@ typedef enum {DISABLE = 0, ENABLE = !DISABLE} FunctionalState;
 #define CLK_DIS(t, x)              (*((uint32_t*) t[x].addr) &= ~t[x].mask)
 #define REG_GET(t, x)              ((*(uint32_t*) t[x].addr & t[x].mask)>>t[x].shift)
 
-/* QuickInitType */
+/**
+ * \struct map_t
+ * \brief QuickInitType
+ */
 typedef struct
 {
     uint32_t ip:3;
@@ -145,16 +156,23 @@ typedef struct
     uint32_t reserved:8;
 }map_t;
 
-/* ʱ��Դ���� */
+/**
+ * \enum  Clock_t
+ * \brief 时钟源定义
+ */
 typedef enum
 {
-    kCoreClock,
-    kBusClock,
-    kFlexBusClock,
-    kFlashClock,
-    kMCGOutClock,
+    kCoreClock,     /**< core时钟频率 */
+    kBusClock,      /**< 总线时钟频率 */
+    kFlexBusClock,  /**< Flex总线时钟频率 */
+    kFlashClock,    /**< flash时钟频率 */
+    kMCGOutClock,   /**< MCG模块输出时钟频率 */
 }Clock_t; 
 
+/**
+ * \struct Reg_t
+ * \brief 寄存器变量
+ */
 typedef struct 
 {
     void *      addr;
@@ -162,6 +180,9 @@ typedef struct
     uint32_t    shift;
 }Reg_t;
 
+/**
+ * \brief 系统软复位
+ */
 static inline void SystemSoftReset(void)
 {
     NVIC_SystemReset();

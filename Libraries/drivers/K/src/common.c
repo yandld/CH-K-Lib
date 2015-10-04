@@ -4,8 +4,9 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2013.12.25
+  * \date    2015.10.04 FreeXcå®Œå–„äº†common.h & common.cæ–‡ä»¶çš„æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-	* @note    ´ËÎÄ¼şÎªÄÚ²¿ÎÄ¼ş£¬ÓÃ»§ÎŞĞèµ÷ÓÃºÍĞŞ¸Ä  
+  * @note    æ­¤æ–‡ä»¶ä¸ºå†…éƒ¨æ–‡ä»¶ï¼Œç”¨æˆ·æ— éœ€è°ƒç”¨å’Œä¿®æ”¹  
   ******************************************************************************
   */
 #include "common.h"
@@ -20,19 +21,19 @@
 #define MCGOUT_TO_FLASH_DIVIDER          (((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)
 
  /**
- * @brief  »ñµÃÏµÍ³¸÷¸ö×ÜÏßÊ±ÖÓµÄÆµÂÊ
+ * @brief  è·å¾—ç³»ç»Ÿå„ä¸ªæ€»çº¿æ—¶é’Ÿçš„é¢‘ç‡
  * @code
- *         //»ñµÃ×ÜÏßÊ±ÖÓÆµÂÊ
+ *         //è·å¾—æ€»çº¿æ—¶é’Ÿé¢‘ç‡
  *         printf("BusClock:%dHz\r\n", GetClock(kBusClock));
  * @endcode
- * @param  clockName:Ê±ÖÓÃû³Æ
- *         @arg kCoreClock    :ÄÚºËÊ±ÖÓ
- *         @arg kSystemClock  :ÏµÍ³Ê±ÖÓ = ÄÚºËÊ±ÖÓ
- *         @arg kBusClock     :×ÜÏßÊ±ÖÓ
- *         @arg kFlexBusClock :Flexbus×ÜÏßÊ±ÖÓ
- *         @arg kFlashClock   :Flash×ÜÏßÊ±ÖÓ
- * @param  FrequenctInHz: »ñµÃÆµÂÊÊı¾İµÄÖ¸Õë µ¥Î»Hz
- * @retval 0: ³É¹¦ ·Ç0: ´íÎó
+ * @param[in]  clockName æ—¶é’Ÿåç§°
+ *              @arg kCoreClock    å†…æ ¸æ—¶é’Ÿ
+ *              @arg kSystemClock  ç³»ç»Ÿæ—¶é’Ÿ = å†…æ ¸æ—¶é’Ÿ
+ *              @arg kBusClock     æ€»çº¿æ—¶é’Ÿ
+ *              @arg kFlexBusClock Flexbusæ€»çº¿æ—¶é’Ÿ
+ *              @arg kFlashClock   Flashæ€»çº¿æ—¶é’Ÿ
+ * @retval 0    æˆåŠŸ
+ * \retval é0  é”™è¯¯
  */
 uint32_t GetClock(Clock_t clockName)
 {
@@ -60,10 +61,10 @@ uint32_t GetClock(Clock_t clockName)
 }
 
  /**
- * @brief  ½øÈëµÍ¹¦ºÄÄ£Ê½
- * @param  enSleepOnExit:ÔÚÏµÍ³»½ĞÑÊ±ºò ÊÇ·ñ¼ÌĞø½øÈëµÍ¹¦ºÄ
- * @retval 0: ³É¹¦ ·Ç0: ´íÎó
- * @note  ÈÎºÎÖĞ¶Ï ¶¼¿ÉÒÔ»½ĞÑCPU
+ * @brief  è¿›å…¥ä½åŠŸè€—æ¨¡å¼
+ * @param[in]  enSleepOnExit åœ¨ç³»ç»Ÿå”¤é†’æ—¶å€™ æ˜¯å¦ç»§ç»­è¿›å…¥ä½åŠŸè€—
+ * @retval None
+ * @note  ä»»ä½•ä¸­æ–­ éƒ½å¯ä»¥å”¤é†’CPU
  */
 void EnterSTOPMode(bool enSleepOnExit)
 {
@@ -83,16 +84,19 @@ void EnterSTOPMode(bool enSleepOnExit)
 }
 
  /**
- * @brief  ±àÂë¿ìËÙ³õÊ¼»¯½á¹¹ ÓÃ»§²»Ğèµ÷ÓÃ
- *
- * @param  type: ¿ìËÙ³õÊ¼»¯½á¹¹ÌåÖ¸Õë
- * @retval       32Î»¿ìËÙ³õÊ¼»¯±àÂë
+ * @brief  ç¼–ç å¿«é€Ÿåˆå§‹åŒ–ç»“æ„ ç”¨æˆ·ä¸éœ€è°ƒç”¨
+ * @param[in]  type å¿«é€Ÿåˆå§‹åŒ–ç»“æ„ä½“æŒ‡é’ˆ
+ * @retval     32ä½å¿«é€Ÿåˆå§‹åŒ–ç¼–ç 
  */
 uint32_t QuickInitEncode(map_t * type)
 {
     return *(uint32_t*)type;
 }
 
+/**
+ * @brief  è·å¾—èŠ¯ç‰‡UIDä¿¡æ¯(å…¨çƒå”¯ä¸€è¯†åˆ«ç )
+ * @retval UIDä¿¡æ¯
+ */
 uint32_t GetUID(void) 
 {
     uint32_t dummy;
@@ -104,10 +108,9 @@ uint32_t GetUID(void)
 
 
  /**
- * @brief  ½âÂë¿ìËÙ³õÊ¼»¯½á¹¹ ÓÃ»§²»Ğèµ÷ÓÃ
- *
- * @param  map: 32Î»¿ìËÙ³õÊ¼»¯±àÂë
- * @param  type: ¿ìËÙ³õÊ¼»¯½á¹¹Ö¸Õë
+ * @brief  è§£ç å¿«é€Ÿåˆå§‹åŒ–ç»“æ„ ç”¨æˆ·ä¸éœ€è°ƒç”¨
+ * @param[in]  map 32ä½å¿«é€Ÿåˆå§‹åŒ–ç¼–ç 
+ * @param[out]  type å¿«é€Ÿåˆå§‹åŒ–ç»“æ„æŒ‡é’ˆ
  * @retval None
  */
 void QuickInitDecode(uint32_t map, map_t * type)
@@ -116,6 +119,10 @@ void QuickInitDecode(uint32_t map, map_t * type)
     memcpy(type, pMap, sizeof(map_t));  
 }
 
+/**
+ * \brief DWT delay function
+ * \retval None
+ */
 void DWT_DelayInit(void)
 {
     /* enable DEM */
@@ -125,6 +132,12 @@ void DWT_DelayInit(void)
     DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
 }
 
+/**
+ * @brief  DWTå¾®ç§’çº§å»¶æ—¶
+ * @param[in]  us å»¶æ—¶å¾®ç§’æ•°
+ * \note DWT(Data and Address Watchpoints)å…·æœ‰ä¸€ä¸ªCore Clockçš„è®¡æ•°å™¨ï¼Œé€šè¿‡è¯¥è®¡æ•°å™¨æ¥å®ç°usçº§å»¶æ—¶
+ * \retval  None
+ */
 void DWT_DelayUs(uint32_t us)
 {
     uint32_t startts, endts, ts;
@@ -142,19 +155,23 @@ void DWT_DelayUs(uint32_t us)
     }
 }
 
+/**
+ * @brief  DWTæ¯«ç§’çº§å»¶æ—¶
+ * @param[in]  ms å»¶æ—¶æ¯«ç§’æ•°
+ * \retval  None
+ */
 void DWT_DelayMs(uint32_t ms)
 {
     DWT_DelayUs(ms*1000);
 }
 
 /**
- * @brief  ÑÓÊ±³õÊ¼»¯º¯Êı
+ * @brief  å»¶æ—¶åˆå§‹åŒ–å‡½æ•°
  * @code
- *      // Íê³ÉÑÓÊ±³õÊ¼»¯ÅäÖÃ£¬
- *      //Ê¹ÓÃÄÚºËµÄSYSticÄ£¿éÊµÏÖÑÓÊ±¹¦ÄÜ
- *        DelayInit();
+ *   // å®Œæˆå»¶æ—¶åˆå§‹åŒ–é…ç½®ï¼Œ
+ *   //ä½¿ç”¨å†…æ ¸çš„Systickæ¨¡å—å®ç°å»¶æ—¶åŠŸèƒ½
+ *   DelayInit();
  * @endcode
- * @param  None
  * @retval None
  */
 #pragma weak DelayInit
@@ -164,16 +181,15 @@ void DelayInit(void)
 }
 
 /**
- * @brief ³éÏóºÁÃë¼¶µÄÑÓÊ±ÉèÖÃº¯Êı
+ * @brief æŠ½è±¡æ¯«ç§’çº§çš„å»¶æ—¶è®¾ç½®å‡½æ•°
  * @code
- *      // ÊµÏÖ500msµÄÑÓÊ±¹¦ÄÜ
- *        DelayMs(500);
+ *   // å®ç°500msçš„å»¶æ—¶åŠŸèƒ½
+ *   DelayMs(500);
  * @endcode
- * @param  ms :ĞèÒªÑÓÊ±µÄÊ±¼ä£¬µ¥Î»ºÁÃë
+ * @param[in]  ms éœ€è¦å»¶æ—¶çš„æ—¶é—´ï¼Œå•ä½æ¯«ç§’
  * @retval None
- * @note  Ê×ÏÈĞèÒªÍê³ÉÑÓÊ±³õÊ¼»¯ÅäÖÃ
+ * @note  é¦–å…ˆéœ€è¦å®Œæˆå»¶æ—¶åˆå§‹åŒ–é…ç½®
  */
-
 #pragma weak DelayMs
 void DelayMs(uint32_t ms)
 {
@@ -181,14 +197,14 @@ void DelayMs(uint32_t ms)
 }
 
 /**
- * @brief ³éÏóÎ¢Ãë¼¶µÄÑÓÊ±ÉèÖÃº¯Êı
+ * @brief æŠ½è±¡å¾®ç§’çº§çš„å»¶æ—¶è®¾ç½®å‡½æ•°
  * @code
- *      // ÊµÏÖ500usµÄÑÓÊ±¹¦ÄÜ
- *        DelayUs(500);
+ *   // å®ç°500usçš„å»¶æ—¶åŠŸèƒ½
+ *   DelayUs(500);
  * @endcode
- * @param  us :ĞèÒªÑÓÊ±µÄÊ±¼ä£¬µ¥Î»Î¢Ãë
+ * @param[in]  us éœ€è¦å»¶æ—¶çš„æ—¶é—´ï¼Œå•ä½å¾®ç§’
  * @retval None
- * @note  Ê×ÏÈĞèÒªÍê³ÉÑÓÊ±³õÊ¼»¯ÅäÖÃ
+ * @note  é¦–å…ˆéœ€è¦å®Œæˆå»¶æ—¶åˆå§‹åŒ–é…ç½®
  */
 #pragma weak DelayUs
 void DelayUs(uint32_t us)
@@ -200,15 +216,22 @@ void DelayUs(uint32_t us)
 
 #if (defined(LIB_DEBUG))
 
+/**
+ * \brief æ–­è¨€æ£€æµ‹
+ * \param[in] file æŒ‡å‘å­—ç¬¦ä¸²çš„æŒ‡é’ˆ
+ * \param[in] line å½“å‰é”™è¯¯å¤„å¯¹åº”çš„è¡Œæ•°
+ */
 void assert_failed(char * file, uint32_t line)
 {
     LIB_TRACE("assert failed @ %s in %d\r\n", file, line);
-	//¶ÏÑÔÊ§°Ü¼ì²â
+	//æ–­è¨€å¤±è´¥æ£€æµ‹
 	while(1);
 }
 #endif
 
-/* ·Ç¿ÉÆÁ±ÎÖĞ¶Ï non maskable interrupt*/
+/**
+ * @brief  éå¯å±è”½ä¸­æ–­ non maskable interrupt
+ */
 void NMI_Handler(void)
 {
     /* clear NMI pending bit */
@@ -219,18 +242,23 @@ void NMI_Handler(void)
 
 #if (defined(LIB_DEBUG) && defined(DEBUG_FAULT_HANDLER))
 
-
+/**
+ * @brief  Hard Faultä¸­æ–­å¤„ç†å‡½æ•°å…¥å£
+ */
 void HardFault_Handler(void)
 {
     printf("HardFault_Handler\r\n");
-      __asm("BKPT #0x03"); 
+    ?__asm("BKPT #0x03");?
     while(1);
 }
 
+/**
+ * @brief  Bus Faultä¸­æ–­å¤„ç†å‡½æ•°å…¥å£
+ */
 void BusFault_Handler(void)
 {
     printf("BusFault_Handler\r\n");
-      __asm("BKPT #0x03"); 
+    ?__asm("BKPT #0x03");?
     while(1);
 }
 

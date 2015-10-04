@@ -175,7 +175,7 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
 /**
  * @brief  判断当前RTC时钟模块时间是否有效
  * \code
- *     /* 当时间无效（从来未执行过RTC时，初始化RTC的时间） */
+ *      当时间无效（从来未执行过RTC时，初始化RTC的时间） 
  *    if(RTC_IsTimeValid())
  *    {
  *       printf("time invalid, reset time!\r\n");

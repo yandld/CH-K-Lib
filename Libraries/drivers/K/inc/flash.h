@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    iflash.h
+  * @file    flash.h
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.25
@@ -23,7 +23,7 @@
 #define FLASH_NOT_ERASED            0x10
 #define FLASH_CONTENTERR            0x11
 
-//!< API declare
+/* API declaration */
 void FLASH_Init(void);
 uint32_t FLASH_GetSectorSize(void);
 uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len);

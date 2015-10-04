@@ -1,3 +1,12 @@
+/**
+  * @file    flash.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2014.3.26
+  * @date    2015.10.05 FreeXc 完善了flash模块中API函数的注释
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  */
+  
 #include "flash.h"
 #include "common.h"
 
@@ -24,7 +33,7 @@
 
 
 
-/* disable interrupt before lunch command */
+/* disable interrupt before launch command */
 #define CCIF    (1<<7)
 #define ACCERR  (1<<5)
 #define FPVIOL  (1<<4)
@@ -44,7 +53,12 @@
 #define FTF    FTFA
 #endif
 
-
+/**
+ * \brief luanch command
+ * \note Internal function, user needn't use
+ * \retval 0x00 launch successfully
+ * \retval 0x04 launch failure
+ */
 static uint8_t _CommandLaunch(void)
 {
     /* Clear command result flags */
@@ -64,19 +78,31 @@ static uint8_t _CommandLaunch(void)
 
 }
 
+/**
+ * \brief get the flash sector size
+ * \return sector size
+ */
 uint32_t FLASH_GetSectorSize(void)
 {
     return SECTOR_SIZE;
 }
 
-
+/**
+ * \brief Flash Initialization
+ * \note clear the flags : Flash Access Error Flag &Flash Protection Violation Flag
+ * \retval None
+ */
 void FLASH_Init(void)
 {
     /* Clear status */
     FTF->FSTAT = ACCERR | FPVIOL;
 }
 
-
+/**
+ * \brief erase Flash sector
+ * \param[in] addr 待擦除块的地址
+ * \retval None
+ */
 uint8_t FLASH_EraseSector(uint32_t addr)
 {
 	union
@@ -101,7 +127,14 @@ uint8_t FLASH_EraseSector(uint32_t addr)
 		return FLASH_ERROR;
 	}
 }
-
+/**
+ * \brief Flash块写入操作
+ * \param[in] addr 写入的目的地址
+ * \param[in] buf 字符串指针
+ * \param[in] len 写入大小
+ * \retval 0x00 FLASH_OK
+ * \retval 0x04 FLASH_ERROR
+ */
 uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
 {
 	uint16_t i;

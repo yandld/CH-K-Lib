@@ -1,11 +1,12 @@
 /**
   ******************************************************************************
-  * @file    clock.c
+  * @file    cpuidy.c
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.24
+  * @date    2015.10.04 FreeXc å®Œå–„äº†cpuidy.c & cpuidy.hæ–‡ä»¶çš„æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªÄÚ²¿ÎÄ¼ş£¬ÓÃÓÚ»ñÈ¡Ğ¾Æ¬µÄ³ö³§ĞÅÏ¢£¬ÉÙ²¿·ÖÓÃ»§Ê¹ÓÃ
+  * @note    æ­¤æ–‡ä»¶ä¸ºå†…éƒ¨æ–‡ä»¶ï¼Œç”¨äºè·å–èŠ¯ç‰‡çš„å‡ºå‚ä¿¡æ¯ï¼Œå°‘éƒ¨åˆ†ç”¨æˆ·ä½¿ç”¨
   ******************************************************************************
   */
 #include "cpuidy.h"
@@ -44,22 +45,14 @@ static const char *CPUIDY_FamIDTable[8] =
     "K51 or K53",
 };
 
-//! @defgroup CHKinetis
-//! @{
-
-
-//! @defgroup CPUIDY
-//! @brief CPUIDY API functions
-//! @{
 
 /**
- * @brief  »ñµÃĞ¾Æ¬µÄÏµÁĞID
+ * @brief  è·å¾—èŠ¯ç‰‡çš„ç³»åˆ—ID
  * @code
- *      // ´òÓ¡Ğ¾Æ¬ĞÍºÅ
+ *      // æ‰“å°èŠ¯ç‰‡å‹å·
  *      printf("Family Type:%s\r\n", CPUIDY_GetFamID());
  * @endcode
- * @param  None
- * @retval ID×Ö·û´®Ö¸Õë
+ * @retval IDå­—ç¬¦ä¸²æŒ‡é’ˆ
  */
 char *CPUIDY_GetFamID(void)
 {
@@ -67,15 +60,15 @@ char *CPUIDY_GetFamID(void)
 }
 
 /**
- * @brief  »ñµÃĞ¾Æ¬µÄÒı½ÅÊı
+ * @brief  è·å¾—èŠ¯ç‰‡çš„å¼•è„šæ•°
  * @code
- *      // »ñÈ¡Ğ¾Æ¬µÄÒı½ÅÊı
+ *      // è·å–èŠ¯ç‰‡çš„å¼•è„šæ•°
  *      uint32_t PinCnt;
  *      PinCnt = CPUIDY_GetPinCount();
- *      //½«Ğ¾Æ¬µÄÒı½ÅÊıÏÔÊ¾³öÀ´
+ *      //å°†èŠ¯ç‰‡çš„å¼•è„šæ•°æ˜¾ç¤ºå‡ºæ¥
  *      printf("Pin Cnt:%d\r\n", PinCnt);
  * @endcode
- * @retval Òı½ÅÊıÁ¿
+ * @retval å¼•è„šæ•°é‡
  */
 uint32_t CPUIDY_GetPinCount(void)
 {
@@ -83,20 +76,19 @@ uint32_t CPUIDY_GetPinCount(void)
 }
 
 /**
- * @brief  »ñµÃĞ¾Æ¬ROM/RAM ´óĞ¡
+ * @brief  è·å¾—èŠ¯ç‰‡ROM/RAM å¤§å°
  * @code
- *      // »ñÈ¡Ğ¾Æ¬PflashµÄ´óĞ¡²¢ÏÔÊ¾³öÀ´
+ *      // è·å–èŠ¯ç‰‡Pflashçš„å¤§å°å¹¶æ˜¾ç¤ºå‡ºæ¥
  *      uint32_t PFlashSize;
  *      PFlashSize = CPUIDY_GetMemSize(kPFlashSizeInKB);
  *      printf("PFlash Size:%dKB\r\n", PFlashSize);
  * @endcode
- * @param  memSizeName: ´æ´¢Æ÷ÀàĞÍ
- *         @arg kPFlashSizeInKB  :±à³ÌFlashµÄ³ß´ç
- *         @arg kDFlashSizeInKB  :Êı¾İFlashµÄ³ß´ç
- *         @arg kFlexNVMSizeInKB :FlexNVMµÄ³ß´ç
- *         @arg kEEPORMSizeInByte:EEPOROMµÄ³ß´ç
- *         @arg kRAMSizeInKB     :Ğ¾Æ¬RAMµÄ³ß´ç
- * @param  memSizeInKB   :»ñµÃ´æ´¢Æ÷´óĞ¡Êı¾İµÄÖ¸Õë µ¥Î»KB
+ * @param[in]  memSizeName å­˜å‚¨å™¨ç±»å‹
+ *              @arg kPFlashSizeInKB   ç¼–ç¨‹Flashçš„å°ºå¯¸
+ *              @arg kDFlashSizeInKB   æ•°æ®Flashçš„å°ºå¯¸
+ *              @arg kFlexNVMSizeInKB  FlexNVMçš„å°ºå¯¸
+ *              @arg kEEPROMSizeInByte EEPOROMçš„å°ºå¯¸
+ *              @arg kRAMSizeInKB      èŠ¯ç‰‡RAMçš„å°ºå¯¸
  * @retval None
  */
 uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName)
@@ -127,17 +119,17 @@ uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName)
 }
 
 /**
- * @brief  »ñµÃĞ¾Æ¬UIDĞÅÏ¢(È«ÇòÎ¨Ò»Ê¶±ğÂë)
+ * @brief  è·å¾—èŠ¯ç‰‡UIDä¿¡æ¯(å…¨çƒå”¯ä¸€è¯†åˆ«ç )
  * @code
- *      // »ñÈ¡Ğ¾Æ¬µÄUID²¢ÏÔÊ¾³öÀ´
- *      uint32_t UID[4];
+ *      // è·å–èŠ¯ç‰‡çš„UIDå¹¶æ˜¾ç¤ºå‡ºæ¥
+ *      uint32_t UID[4],i;
  *      CPUIDY_GetUID(UID);
  *      for(i = 0; i < 4; i++)
  *      {
- *          printf("UID[i]:0x%d", UID[i]);
+ *          printf("UID[%d]:0x%x\n", i, UID[i]);
  *      }
  * @endcode
- * @param  UIDArray: UIDÊı¾İµÄÊ×µØÖ·
+ * @param[in]  UIDArray UIDæ•°æ®çš„é¦–åœ°å€
  * @retval None
  */
 void CPUIDY_GetUID(uint32_t * UIDArray)
@@ -147,8 +139,3 @@ void CPUIDY_GetUID(uint32_t * UIDArray)
     UIDArray[2] = SIM->UIDMH;
     UIDArray[3] = SIM->UIDH;
 }
-
-//! @}
-
-//! @}
-

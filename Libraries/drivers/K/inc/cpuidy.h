@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
-  * @file    clock.c
+  * @file    cpuidy.h
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.24
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-	* @note    此文件为内部文件，用于获取芯片的出厂信息，少部分用户使用
+  * @note    姝ゆ枃浠朵负鍐呴儴鏂囦欢锛岀敤浜庤幏鍙栬姱鐗囩殑鍑哄巶淇℃伅锛屽皯閮ㄥ垎鐢ㄦ埛浣跨敤
   ******************************************************************************
   */
 #ifndef __CH_LIB_CPUIDY_H__
@@ -13,19 +13,22 @@
 
 #include <stdint.h>
 
-/*芯片信息结构体定义*/
+/**
+ * \enum  CPUIDY_MemSize_Type
+ * \brief 鑺墖淇℃伅
+ */
 typedef enum
 {
-    kPFlashSizeInKB,   //芯片内部的PFlash大小                
-    kDFlashSizeInKB,   //芯片内部的DFlash大小 
-    kFlexNVMSizeInKB,  //芯片内部的FlexNVMFlash大小 
-    kEEPROMSizeInByte, //芯片内部的EEPROM大小 
-    kRAMSizeInKB,      //芯片内部的RAM大小 
-    kMemNameCount,
+    kPFlashSizeInKB,   /**< 鑺墖鍐呴儴鐨凱Flash澶у皬 */              
+    kDFlashSizeInKB,   /**< 鑺墖鍐呴儴鐨凞Flash澶у皬 */ 
+    kFlexNVMSizeInKB,  /**< 鑺墖鍐呴儴鐨凢lexNVMFlash澶у皬 */ 
+    kEEPROMSizeInByte, /**< 鑺墖鍐呴儴鐨凟EPROM澶у皬 */ 
+    kRAMSizeInKB,      /**< 鑺墖鍐呴儴鐨凴AM澶у皬 */ 
+    kMemNameCount,     /**< 鏆傛湭瀹氫箟 */
 }CPUIDY_MemSize_Type;
 
 
-//!< API functions
+/* API functions */
 char *CPUIDY_GetFamID(void);
 uint32_t CPUIDY_GetPinCount(void);
 uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName);

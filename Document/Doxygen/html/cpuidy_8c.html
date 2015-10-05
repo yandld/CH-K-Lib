@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.10"/>
-<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/cpuidy.c 文件参考</title>
+<title>CH Kinetis library for K series: cpuidy.c 文件参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,76 +36,32 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li><li class="navelem"><a class="el" href="dir_2d0309ee3258ca782993eb20e8152a0f.html">src</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">宏定义</a> &#124;
-<a href="#func-members">函数</a> &#124;
-<a href="#var-members">变量</a>  </div>
+<a href="#func-members">函数</a>  </div>
   <div class="headertitle">
 <div class="title">cpuidy.c 文件参考</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a>  
-<a href="#details">更多...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="cpuidy_8h_source.html">cpuidy.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
-</div>
 <p><a href="cpuidy_8c_source.html">浏览源代码.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-宏定义</h2></td></tr>
-<tr class="memitem:a17cd175eea520dbe78a4fcceed74cbbd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a17cd175eea520dbe78a4fcceed74cbbd">PFLASH_SIZE_FIELD</a>&#160;&#160;&#160;((SIM-&gt;FCFG1 &amp; SIM_FCFG1_PFSIZE_MASK)&gt;&gt;SIM_FCFG1_PFSIZE_SHIFT)</td></tr>
-<tr class="separator:a17cd175eea520dbe78a4fcceed74cbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8b207c7f37d0a39044f056677cafc2f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#ab8b207c7f37d0a39044f056677cafc2f">DFLASH_SIZE_FIELD</a>&#160;&#160;&#160;((SIM-&gt;FCFG1 &amp; SIM_FCFG1_PFSIZE_MASK)&gt;&gt;SIM_FCFG1_PFSIZE_SHIFT)</td></tr>
-<tr class="separator:ab8b207c7f37d0a39044f056677cafc2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6b3eb0e54d5fc89a6b59a931ebb3a14"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#ae6b3eb0e54d5fc89a6b59a931ebb3a14">FLEXNVM_SIZE_FIELD</a>&#160;&#160;&#160;((SIM-&gt;FCFG1 &amp; SIM_FCFG1_NVMSIZE_MASK)&gt;&gt;SIM_FCFG1_NVMSIZE_SHIFT)</td></tr>
-<tr class="separator:ae6b3eb0e54d5fc89a6b59a931ebb3a14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27ffda787f393fdee6de242e5912bbe5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a27ffda787f393fdee6de242e5912bbe5">EEPROM_SIZE_FIELD</a>&#160;&#160;&#160;((SIM-&gt;FCFG1 &amp; SIM_FCFG1_EESIZE_MASK)&gt;&gt;SIM_FCFG1_EESIZE_SHIFT)</td></tr>
-<tr class="separator:a27ffda787f393fdee6de242e5912bbe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91bbc1e7432ae1b968d3a77d77ee2112"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a91bbc1e7432ae1b968d3a77d77ee2112">RAM_SIZE_FIELD</a>&#160;&#160;&#160;((SIM-&gt;SOPT1 &amp; SIM_SOPT1_RAMSIZE_MASK)&gt;&gt;SIM_SOPT1_RAMSIZE_SHIFT)</td></tr>
-<tr class="separator:a91bbc1e7432ae1b968d3a77d77ee2112"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a1f17c135a408e2b7c53fac093eb630"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a3a1f17c135a408e2b7c53fac093eb630">PINCOUNT_FIELD</a>&#160;&#160;&#160;((SIM-&gt;SDID &amp; SIM_SDID_PINID_MASK)&gt;&gt;SIM_SDID_PINID_SHIFT)</td></tr>
-<tr class="separator:a3a1f17c135a408e2b7c53fac093eb630"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af86d75bc742bf2485592456d9a9cc92c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#af86d75bc742bf2485592456d9a9cc92c">FAMID_FIELD</a>&#160;&#160;&#160;((SIM-&gt;SDID &amp; SIM_SDID_FAMID_MASK)&gt;&gt;SIM_SDID_FAMID_SHIFT)</td></tr>
-<tr class="separator:af86d75bc742bf2485592456d9a9cc92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
 <tr class="memitem:af839b2783d0b60ec6e2f005561b23f90"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#af839b2783d0b60ec6e2f005561b23f90">CPUIDY_GetFamID</a> (void)</td></tr>
-<tr class="memdesc:af839b2783d0b60ec6e2f005561b23f90"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得芯片的系列ID  <a href="#af839b2783d0b60ec6e2f005561b23f90">更多...</a><br /></td></tr>
 <tr class="separator:af839b2783d0b60ec6e2f005561b23f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab36f3d27b5ca3737f1de08f4e437befb"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#ab36f3d27b5ca3737f1de08f4e437befb">CPUIDY_GetPinCount</a> (void)</td></tr>
-<tr class="memdesc:ab36f3d27b5ca3737f1de08f4e437befb"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得芯片的引脚数  <a href="#ab36f3d27b5ca3737f1de08f4e437befb">更多...</a><br /></td></tr>
 <tr class="separator:ab36f3d27b5ca3737f1de08f4e437befb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9dc5f2606368ab03ecb4721b3df579eb"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a9dc5f2606368ab03ecb4721b3df579eb">CPUIDY_GetMemSize</a> (<a class="el" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61">CPUIDY_MemSize_Type</a> memSizeName)</td></tr>
-<tr class="memdesc:a9dc5f2606368ab03ecb4721b3df579eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得芯片ROM/RAM 大小  <a href="#a9dc5f2606368ab03ecb4721b3df579eb">更多...</a><br /></td></tr>
+<tr class="memitem:a9dc5f2606368ab03ecb4721b3df579eb"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a9dc5f2606368ab03ecb4721b3df579eb">CPUIDY_GetMemSize</a> (CPUIDY_MemSize_Type memSizeName)</td></tr>
 <tr class="separator:a9dc5f2606368ab03ecb4721b3df579eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b68300ca5fd5f304da6da81075c4bf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a1b68300ca5fd5f304da6da81075c4bf5">CPUIDY_GetUID</a> (uint32_t *UIDArray)</td></tr>
-<tr class="memdesc:a1b68300ca5fd5f304da6da81075c4bf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得芯片UID信息(全球唯一识别码)  <a href="#a1b68300ca5fd5f304da6da81075c4bf5">更多...</a><br /></td></tr>
 <tr class="separator:a1b68300ca5fd5f304da6da81075c4bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-变量</h2></td></tr>
-<tr class="memitem:afb79bebd74ec0f70b4af2793ac4be223"><td class="memItemLeft" align="right" valign="top">static const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#afb79bebd74ec0f70b4af2793ac4be223">CPUIDY_PFlashSizeTable</a> [16] = {8, 16, 24, 32, 48, 64, 96 ,128, 192, 256, 0, 512, 0, 0, 0, 0}</td></tr>
-<tr class="separator:afb79bebd74ec0f70b4af2793ac4be223"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fbb63b9b0a5fa3d24360a984337bda3"><td class="memItemLeft" align="right" valign="top">static const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a4fbb63b9b0a5fa3d24360a984337bda3">CPUIDY_RAMSizeTable</a> [16] = {4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 0, 0, 0, 0, 0, 0}</td></tr>
-<tr class="separator:a4fbb63b9b0a5fa3d24360a984337bda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e072ae03047e00e9291c6c4e3b2009c"><td class="memItemLeft" align="right" valign="top">static const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a0e072ae03047e00e9291c6c4e3b2009c">CPUIDY_EEPROMSizeTable</a> [16] = {16*1024, 8*1024, 4*1024, 2*1024, 1*1024, 512, 256, 128, 64, 32, 0, 0, 0, 0, 0}</td></tr>
-<tr class="separator:a0e072ae03047e00e9291c6c4e3b2009c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3790b922c730deacb3f909cf3819e20"><td class="memItemLeft" align="right" valign="top">static const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#ad3790b922c730deacb3f909cf3819e20">CPUIDY_NVMSizeTable</a> [16] = {8, 16, 24, 32, 48, 64, 96, 128, 192, 256 ,0, 512, 0, 0, 0, 0}</td></tr>
-<tr class="separator:ad3790b922c730deacb3f909cf3819e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5453f2f82c350ee14e1886556a7baf69"><td class="memItemLeft" align="right" valign="top">static const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a5453f2f82c350ee14e1886556a7baf69">CPUIDY_PinCountTable</a> [16] = {16, 24, 32, 46, 48, 64, 80, 81, 100, 121, 144, 168, 196, 200, 256}</td></tr>
-<tr class="separator:a5453f2f82c350ee14e1886556a7baf69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e7e0890067d7599df938915fda63ec3"><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpuidy_8c.html#a4e7e0890067d7599df938915fda63ec3">CPUIDY_FamIDTable</a> [8]</td></tr>
-<tr class="separator:a4e7e0890067d7599df938915fda63ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a> </p>
-<dl class="section author"><dt>作者</dt><dd>YANDLD </dd></dl>
+<div class="textblock"><dl class="section author"><dt>作者</dt><dd>YANDLD </dd></dl>
 <dl class="section version"><dt>版本</dt><dd>V2.5 </dd></dl>
 <dl class="section date"><dt>日期</dt><dd>2014.3.24 </dd>
 <dd>
@@ -113,106 +69,7 @@
 <dl class="section note"><dt>注解</dt><dd>此文件为内部文件，用于获取芯片的出厂信息，少部分用户使用 </dd></dl>
 
 <p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 中定义.</p>
-</div><h2 class="groupheader">宏定义说明</h2>
-<a class="anchor" id="ab8b207c7f37d0a39044f056677cafc2f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DFLASH_SIZE_FIELD&#160;&#160;&#160;((SIM-&gt;FCFG1 &amp; SIM_FCFG1_PFSIZE_MASK)&gt;&gt;SIM_FCFG1_PFSIZE_SHIFT)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00017">17</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a27ffda787f393fdee6de242e5912bbe5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define EEPROM_SIZE_FIELD&#160;&#160;&#160;((SIM-&gt;FCFG1 &amp; SIM_FCFG1_EESIZE_MASK)&gt;&gt;SIM_FCFG1_EESIZE_SHIFT)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00019">19</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="af86d75bc742bf2485592456d9a9cc92c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FAMID_FIELD&#160;&#160;&#160;((SIM-&gt;SDID &amp; SIM_SDID_FAMID_MASK)&gt;&gt;SIM_SDID_FAMID_SHIFT)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00033">33</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae6b3eb0e54d5fc89a6b59a931ebb3a14"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FLEXNVM_SIZE_FIELD&#160;&#160;&#160;((SIM-&gt;FCFG1 &amp; SIM_FCFG1_NVMSIZE_MASK)&gt;&gt;SIM_FCFG1_NVMSIZE_SHIFT)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00018">18</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a17cd175eea520dbe78a4fcceed74cbbd"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define PFLASH_SIZE_FIELD&#160;&#160;&#160;((SIM-&gt;FCFG1 &amp; SIM_FCFG1_PFSIZE_MASK)&gt;&gt;SIM_FCFG1_PFSIZE_SHIFT)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00016">16</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a3a1f17c135a408e2b7c53fac093eb630"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define PINCOUNT_FIELD&#160;&#160;&#160;((SIM-&gt;SDID &amp; SIM_SDID_PINID_MASK)&gt;&gt;SIM_SDID_PINID_SHIFT)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00029">29</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a91bbc1e7432ae1b968d3a77d77ee2112"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define RAM_SIZE_FIELD&#160;&#160;&#160;((SIM-&gt;SOPT1 &amp; SIM_SOPT1_RAMSIZE_MASK)&gt;&gt;SIM_SOPT1_RAMSIZE_SHIFT)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00020">20</a> 行定义.</p>
-
-</div>
-</div>
-<h2 class="groupheader">函数说明</h2>
+</div><h2 class="groupheader">函数说明</h2>
 <a class="anchor" id="af839b2783d0b60ec6e2f005561b23f90"></a>
 <div class="memitem">
 <div class="memproto">
@@ -248,7 +105,7 @@
         <tr>
           <td class="memname">uint32_t CPUIDY_GetMemSize </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61">CPUIDY_MemSize_Type</a>&#160;</td>
+          <td class="paramtype">CPUIDY_MemSize_Type&#160;</td>
           <td class="paramname"><em>memSizeName</em></td><td>)</td>
           <td></td>
         </tr>
@@ -351,150 +208,6 @@
 </dl>
 
 <p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00135">135</a> 行定义.</p>
-
-</div>
-</div>
-<h2 class="groupheader">变量说明</h2>
-<a class="anchor" id="a0e072ae03047e00e9291c6c4e3b2009c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint32_t CPUIDY_EEPROMSizeTable[16] = {16*1024, 8*1024, 4*1024, 2*1024, 1*1024, 512, 256, 128, 64, 32, 0, 0, 0, 0, 0}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00025">25</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a4e7e0890067d7599df938915fda63ec3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char* CPUIDY_FamIDTable[8]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>初始值:</b><div class="fragment"><div class="line">= </div>
-<div class="line">{</div>
-<div class="line">    <span class="stringliteral">&quot;K10&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;K20&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;K61 or K30&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;K40&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;K60&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;K70&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;K50 or K52&quot;</span>,</div>
-<div class="line">    <span class="stringliteral">&quot;K51 or K53&quot;</span>,</div>
-<div class="line">}</div>
-</div><!-- fragment -->
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00036">36</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="ad3790b922c730deacb3f909cf3819e20"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint32_t CPUIDY_NVMSizeTable[16] = {8, 16, 24, 32, 48, 64, 96, 128, 192, 256 ,0, 512, 0, 0, 0, 0}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00026">26</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="afb79bebd74ec0f70b4af2793ac4be223"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint32_t CPUIDY_PFlashSizeTable[16] = {8, 16, 24, 32, 48, 64, 96 ,128, 192, 256, 0, 512, 0, 0, 0, 0}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00023">23</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a5453f2f82c350ee14e1886556a7baf69"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint32_t CPUIDY_PinCountTable[16] = {16, 24, 32, 46, 48, 64, 80, 81, 100, 121, 144, 168, 196, 200, 256}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00030">30</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a4fbb63b9b0a5fa3d24360a984337bda3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint32_t CPUIDY_RAMSizeTable[16] = {4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 0, 0, 0, 0, 0, 0}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="cpuidy_8c_source.html">cpuidy.c</a> 第 <a class="el" href="cpuidy_8c_source.html#l00024">24</a> 行定义.</p>
 
 </div>
 </div>

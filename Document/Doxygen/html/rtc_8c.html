@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.10"/>
-<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/rtc.c 文件参考</title>
+<title>CH Kinetis library for K series: rtc.c 文件参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,183 +36,59 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li><li class="navelem"><a class="el" href="dir_2d0309ee3258ca782993eb20e8152a0f.html">src</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">宏定义</a> &#124;
-<a href="#func-members">函数</a> &#124;
-<a href="#var-members">变量</a>  </div>
+<a href="#func-members">函数</a>  </div>
   <div class="headertitle">
 <div class="title">rtc.c 文件参考</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a>  
-<a href="#details">更多...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="rtc_8h_source.html">rtc.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
-</div>
 <p><a href="rtc_8c_source.html">浏览源代码.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-宏定义</h2></td></tr>
-<tr class="memitem:a6508df70318d3f264c21b2df2dfe0417"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a6508df70318d3f264c21b2df2dfe0417">SECONDS_IN_A_DAY</a>&#160;&#160;&#160;(86400U)</td></tr>
-<tr class="separator:a6508df70318d3f264c21b2df2dfe0417"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89f27ac647907366a71f2c8cc17bc779"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a89f27ac647907366a71f2c8cc17bc779">SECONDS_IN_A_HOUR</a>&#160;&#160;&#160;(3600U)</td></tr>
-<tr class="separator:a89f27ac647907366a71f2c8cc17bc779"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d4507f6669e33be61a692bf2a927465"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a2d4507f6669e33be61a692bf2a927465">SECONDS_IN_A_MIN</a>&#160;&#160;&#160;(60U)</td></tr>
-<tr class="separator:a2d4507f6669e33be61a692bf2a927465"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86ea846ff952e2c09d60d0bacccfb0e0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a86ea846ff952e2c09d60d0bacccfb0e0">DAYS_IN_A_YEAR</a>&#160;&#160;&#160;(365U)</td></tr>
-<tr class="separator:a86ea846ff952e2c09d60d0bacccfb0e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac74e4ed694402638591a210c9100528e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#ac74e4ed694402638591a210c9100528e">DAYS_IN_A_LEAP_YEAR</a>&#160;&#160;&#160;(366U)</td></tr>
-<tr class="separator:ac74e4ed694402638591a210c9100528e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
 <tr class="memitem:a0f2e25987149a5766e0908a34e41d0f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a0f2e25987149a5766e0908a34e41d0f4">RTC_QuickInit</a> (void)</td></tr>
-<tr class="memdesc:a0f2e25987149a5766e0908a34e41d0f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">RTC模块快速初始化配置，设定内部电容为8pF.  <a href="#a0f2e25987149a5766e0908a34e41d0f4">更多...</a><br /></td></tr>
 <tr class="separator:a0f2e25987149a5766e0908a34e41d0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac79760d221e75d682b381bd7fc5e5cdb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#ac79760d221e75d682b381bd7fc5e5cdb">RTC_GetWeekFromYMD</a> (int year, int month, int days)</td></tr>
-<tr class="memdesc:ac79760d221e75d682b381bd7fc5e5cdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">由年月日计算出周数  <a href="#ac79760d221e75d682b381bd7fc5e5cdb">更多...</a><br /></td></tr>
 <tr class="separator:ac79760d221e75d682b381bd7fc5e5cdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa33d1e90c0ff2390c5d17ec18dd361b0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#aa33d1e90c0ff2390c5d17ec18dd361b0">RTC_DateTimeToSecond</a> (const <a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *datetime, uint32_t *seconds)</td></tr>
-<tr class="memdesc:aa33d1e90c0ff2390c5d17ec18dd361b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">由日期计算出秒  <a href="#aa33d1e90c0ff2390c5d17ec18dd361b0">更多...</a><br /></td></tr>
-<tr class="separator:aa33d1e90c0ff2390c5d17ec18dd361b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46ea6f4d85f28a7424e106f44de40a96"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a46ea6f4d85f28a7424e106f44de40a96">RTC_SecondToDateTime</a> (const uint32_t *seconds, <a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *datetime)</td></tr>
-<tr class="memdesc:a46ea6f4d85f28a7424e106f44de40a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">由秒计算出日期  <a href="#a46ea6f4d85f28a7424e106f44de40a96">更多...</a><br /></td></tr>
-<tr class="separator:a46ea6f4d85f28a7424e106f44de40a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48e388cc670748b2f7f9b1427eb29113"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a48e388cc670748b2f7f9b1427eb29113">RTC_GetDateTime</a> (<a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *datetime)</td></tr>
-<tr class="memdesc:a48e388cc670748b2f7f9b1427eb29113"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得RTC的时间  <a href="#a48e388cc670748b2f7f9b1427eb29113">更多...</a><br /></td></tr>
+<tr class="memitem:a48e388cc670748b2f7f9b1427eb29113"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a48e388cc670748b2f7f9b1427eb29113">RTC_GetDateTime</a> (RTC_DateTime_Type *datetime)</td></tr>
 <tr class="separator:a48e388cc670748b2f7f9b1427eb29113"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f6966685fa28c050b66f5d519611055"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a2f6966685fa28c050b66f5d519611055">RTC_IsTimeValid</a> (void)</td></tr>
-<tr class="memdesc:a2f6966685fa28c050b66f5d519611055"><td class="mdescLeft">&#160;</td><td class="mdescRight">判断当前RTC时钟模块时间是否有效  <a href="#a2f6966685fa28c050b66f5d519611055">更多...</a><br /></td></tr>
 <tr class="separator:a2f6966685fa28c050b66f5d519611055"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e606742e83a253f4dc1f48e1731dd47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a3e606742e83a253f4dc1f48e1731dd47">RTC_SetAlarm</a> (<a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *datetime)</td></tr>
-<tr class="memdesc:a3e606742e83a253f4dc1f48e1731dd47"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置闹钟时间  <a href="#a3e606742e83a253f4dc1f48e1731dd47">更多...</a><br /></td></tr>
+<tr class="memitem:a3e606742e83a253f4dc1f48e1731dd47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a3e606742e83a253f4dc1f48e1731dd47">RTC_SetAlarm</a> (RTC_DateTime_Type *datetime)</td></tr>
 <tr class="separator:a3e606742e83a253f4dc1f48e1731dd47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a866ad8e1eabe3168a66d9be0eb82697f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a866ad8e1eabe3168a66d9be0eb82697f">RTC_SetCompensation</a> (uint32_t compensationInterval, uint32_t timeCompensation)</td></tr>
-<tr class="memdesc:a866ad8e1eabe3168a66d9be0eb82697f"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置RTC补偿寄存器  <a href="#a866ad8e1eabe3168a66d9be0eb82697f">更多...</a><br /></td></tr>
 <tr class="separator:a866ad8e1eabe3168a66d9be0eb82697f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ce3baabe19d07a3fc6ca06edfc64045"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a5ce3baabe19d07a3fc6ca06edfc64045">RTC_Init</a> (<a class="el" href="struct_r_t_c___init_type_def.html">RTC_InitTypeDef</a> *RTC_InitStruct)</td></tr>
-<tr class="memdesc:a5ce3baabe19d07a3fc6ca06edfc64045"><td class="mdescLeft">&#160;</td><td class="mdescRight">RTC模块初始化配置，用来配置内部的电容参数  <a href="#a5ce3baabe19d07a3fc6ca06edfc64045">更多...</a><br /></td></tr>
+<tr class="memitem:a5ce3baabe19d07a3fc6ca06edfc64045"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a5ce3baabe19d07a3fc6ca06edfc64045">RTC_Init</a> (RTC_InitTypeDef *RTC_InitStruct)</td></tr>
 <tr class="separator:a5ce3baabe19d07a3fc6ca06edfc64045"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55bf4b4faeb7cdf6a439755030657d19"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a55bf4b4faeb7cdf6a439755030657d19">RTC_GetTSR</a> (void)</td></tr>
-<tr class="memdesc:a55bf4b4faeb7cdf6a439755030657d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得TSR值  <a href="#a55bf4b4faeb7cdf6a439755030657d19">更多...</a><br /></td></tr>
 <tr class="separator:a55bf4b4faeb7cdf6a439755030657d19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad536fad9607cef0dba9f32d932aa1a78"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#ad536fad9607cef0dba9f32d932aa1a78">RTC_GetTAR</a> (void)</td></tr>
-<tr class="memdesc:ad536fad9607cef0dba9f32d932aa1a78"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得Time Alarm值  <a href="#ad536fad9607cef0dba9f32d932aa1a78">更多...</a><br /></td></tr>
 <tr class="separator:ad536fad9607cef0dba9f32d932aa1a78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ba9fbfac547a868112f3bd726439f61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a3ba9fbfac547a868112f3bd726439f61">RTC_SetDateTime</a> (<a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *datetime)</td></tr>
-<tr class="memdesc:a3ba9fbfac547a868112f3bd726439f61"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置RTC的时间  <a href="#a3ba9fbfac547a868112f3bd726439f61">更多...</a><br /></td></tr>
+<tr class="memitem:a3ba9fbfac547a868112f3bd726439f61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a3ba9fbfac547a868112f3bd726439f61">RTC_SetDateTime</a> (RTC_DateTime_Type *datetime)</td></tr>
 <tr class="separator:a3ba9fbfac547a868112f3bd726439f61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2990d6de1d5f4f0fbd424a7ff7db1c0c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a2990d6de1d5f4f0fbd424a7ff7db1c0c">RTC_SetTSR</a> (uint32_t val)</td></tr>
-<tr class="memdesc:a2990d6de1d5f4f0fbd424a7ff7db1c0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置RTC的Time Seconds Register  <a href="#a2990d6de1d5f4f0fbd424a7ff7db1c0c">更多...</a><br /></td></tr>
 <tr class="separator:a2990d6de1d5f4f0fbd424a7ff7db1c0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab40ae2572ca2383ef06c36beef625479"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#ab40ae2572ca2383ef06c36beef625479">RTC_ITDMAConfig</a> (<a class="el" href="rtc_8h.html#a92307d03f065927ecbe577d96025af61">RTC_ITDMAConfig_Type</a> config, bool status)</td></tr>
-<tr class="memdesc:ab40ae2572ca2383ef06c36beef625479"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置RTC中断功能  <a href="#ab40ae2572ca2383ef06c36beef625479">更多...</a><br /></td></tr>
+<tr class="memitem:ab40ae2572ca2383ef06c36beef625479"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#ab40ae2572ca2383ef06c36beef625479">RTC_ITDMAConfig</a> (RTC_ITDMAConfig_Type config, bool status)</td></tr>
 <tr class="separator:ab40ae2572ca2383ef06c36beef625479"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2907938f4a07d731fcc2b31772882a21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a2907938f4a07d731fcc2b31772882a21">RTC_CallbackInstall</a> (<a class="el" href="rtc_8h.html#abd5529150f07b298e1af8095886bdd42">RTC_CallBackType</a> AppCBFun)</td></tr>
-<tr class="memdesc:a2907938f4a07d731fcc2b31772882a21"><td class="mdescLeft">&#160;</td><td class="mdescRight">注册中断回调函数  <a href="#a2907938f4a07d731fcc2b31772882a21">更多...</a><br /></td></tr>
+<tr class="memitem:a2907938f4a07d731fcc2b31772882a21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a2907938f4a07d731fcc2b31772882a21">RTC_CallbackInstall</a> (RTC_CallBackType AppCBFun)</td></tr>
 <tr class="separator:a2907938f4a07d731fcc2b31772882a21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab86b9dd0d7b4eacfe38086e1fa4c2312"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#ab86b9dd0d7b4eacfe38086e1fa4c2312">RTC_IRQHandler</a> (void)</td></tr>
-<tr class="memdesc:ab86b9dd0d7b4eacfe38086e1fa4c2312"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统中断处理函数，调用用户定义的回调函数，此函数用户无需使用  <a href="#ab86b9dd0d7b4eacfe38086e1fa4c2312">更多...</a><br /></td></tr>
 <tr class="separator:ab86b9dd0d7b4eacfe38086e1fa4c2312"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-变量</h2></td></tr>
-<tr class="memitem:ace29156b6a4d29cff3dc22ba7f921d37"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="rtc_8h.html#abd5529150f07b298e1af8095886bdd42">RTC_CallBackType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#ace29156b6a4d29cff3dc22ba7f921d37">RTC_CallBackTable</a> [1] = {NULL}</td></tr>
-<tr class="memdesc:ace29156b6a4d29cff3dc22ba7f921d37"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt; Callback function slot  <a href="#ace29156b6a4d29cff3dc22ba7f921d37">更多...</a><br /></td></tr>
-<tr class="separator:ace29156b6a4d29cff3dc22ba7f921d37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23efa45b94ae21abe595d59a0a6610c5"><td class="memItemLeft" align="right" valign="top">static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a23efa45b94ae21abe595d59a0a6610c5">ULY</a> [] = {0U, 31U, 28U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 31U, 30U, 31U}</td></tr>
-<tr class="separator:a23efa45b94ae21abe595d59a0a6610c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d0cf926ed0db04e7849569772916e45"><td class="memItemLeft" align="right" valign="top">static const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a0d0cf926ed0db04e7849569772916e45">LY</a> [] = {0U, 31U, 29U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 31U, 30U, 31U}</td></tr>
-<tr class="separator:a0d0cf926ed0db04e7849569772916e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d1d051a553e9e686ac8b550c406c38a"><td class="memItemLeft" align="right" valign="top">static const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="rtc_8c.html#a2d1d051a553e9e686ac8b550c406c38a">MONTH_DAYS</a> [] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 212U, 243U, 273U, 304U, 334U}</td></tr>
-<tr class="separator:a2d1d051a553e9e686ac8b550c406c38a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a> </p>
-<dl class="section author"><dt>作者</dt><dd>YANDLD </dd></dl>
+<div class="textblock"><dl class="section author"><dt>作者</dt><dd>YANDLD </dd></dl>
 <dl class="section version"><dt>版本</dt><dd>V2.5 </dd></dl>
 <dl class="section date"><dt>日期</dt><dd>2014.3.26 </dd>
 <dd>
 2015.10.03 FreeXc完善了rtc.c &amp; rtc.h文件的相关注释 </dd></dl>
 
 <p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 中定义.</p>
-</div><h2 class="groupheader">宏定义说明</h2>
-<a class="anchor" id="ac74e4ed694402638591a210c9100528e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DAYS_IN_A_LEAP_YEAR&#160;&#160;&#160;(366U)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00022">22</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a86ea846ff952e2c09d60d0bacccfb0e0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DAYS_IN_A_YEAR&#160;&#160;&#160;(365U)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00021">21</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6508df70318d3f264c21b2df2dfe0417"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define SECONDS_IN_A_DAY&#160;&#160;&#160;(86400U)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00018">18</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a89f27ac647907366a71f2c8cc17bc779"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define SECONDS_IN_A_HOUR&#160;&#160;&#160;(3600U)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00019">19</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a2d4507f6669e33be61a692bf2a927465"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define SECONDS_IN_A_MIN&#160;&#160;&#160;(60U)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00020">20</a> 行定义.</p>
-
-</div>
-</div>
-<h2 class="groupheader">函数说明</h2>
+</div><h2 class="groupheader">函数说明</h2>
 <a class="anchor" id="a2907938f4a07d731fcc2b31772882a21"></a>
 <div class="memitem">
 <div class="memproto">
@@ -220,7 +96,7 @@
         <tr>
           <td class="memname">void RTC_CallbackInstall </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="rtc_8h.html#abd5529150f07b298e1af8095886bdd42">RTC_CallBackType</a>&#160;</td>
+          <td class="paramtype">RTC_CallBackType&#160;</td>
           <td class="paramname"><em>AppCBFun</em></td><td>)</td>
           <td></td>
         </tr>
@@ -246,57 +122,6 @@
 
 </div>
 </div>
-<a class="anchor" id="aa33d1e90c0ff2390c5d17ec18dd361b0"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void RTC_DateTimeToSecond </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *&#160;</td>
-          <td class="paramname"><em>datetime</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t *&#160;</td>
-          <td class="paramname"><em>seconds</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>由日期计算出秒 </p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">datetime</td><td>指向RTC时钟数据结构体的指针，详见rtc.h </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">seconds</td><td>存放秒数据的地址 </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="retval"><dt>返回值</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">None</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00067">67</a> 行定义.</p>
-
-</div>
-</div>
 <a class="anchor" id="a48e388cc670748b2f7f9b1427eb29113"></a>
 <div class="memitem">
 <div class="memproto">
@@ -304,7 +129,7 @@
         <tr>
           <td class="memname">void RTC_GetDateTime </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *&#160;</td>
+          <td class="paramtype">RTC_DateTime_Type *&#160;</td>
           <td class="paramname"><em>datetime</em></td><td>)</td>
           <td></td>
         </tr>
@@ -443,7 +268,7 @@
         <tr>
           <td class="memname">void RTC_Init </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_r_t_c___init_type_def.html">RTC_InitTypeDef</a> *&#160;</td>
+          <td class="paramtype">RTC_InitTypeDef *&#160;</td>
           <td class="paramname"><em>RTC_InitStruct</em></td><td>)</td>
           <td></td>
         </tr>
@@ -529,7 +354,7 @@
         <tr>
           <td class="memname">void RTC_ITDMAConfig </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="rtc_8h.html#a92307d03f065927ecbe577d96025af61">RTC_ITDMAConfig_Type</a>&#160;</td>
+          <td class="paramtype">RTC_ITDMAConfig_Type&#160;</td>
           <td class="paramname"><em>config</em>, </td>
         </tr>
         <tr>
@@ -601,57 +426,6 @@
 
 </div>
 </div>
-<a class="anchor" id="a46ea6f4d85f28a7424e106f44de40a96"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void RTC_SecondToDateTime </td>
-          <td>(</td>
-          <td class="paramtype">const uint32_t *&#160;</td>
-          <td class="paramname"><em>seconds</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *&#160;</td>
-          <td class="paramname"><em>datetime</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>由秒计算出日期 </p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">seconds</td><td>输入的秒（变量存储地址） </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">datetime</td><td>计指向年月日等信息结构体指针 </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="retval"><dt>返回值</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">None</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00094">94</a> 行定义.</p>
-
-</div>
-</div>
 <a class="anchor" id="a3e606742e83a253f4dc1f48e1731dd47"></a>
 <div class="memitem">
 <div class="memproto">
@@ -659,7 +433,7 @@
         <tr>
           <td class="memname">void RTC_SetAlarm </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *&#160;</td>
+          <td class="paramtype">RTC_DateTime_Type *&#160;</td>
           <td class="paramname"><em>datetime</em></td><td>)</td>
           <td></td>
         </tr>
@@ -743,7 +517,7 @@
         <tr>
           <td class="memname">void RTC_SetDateTime </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> *&#160;</td>
+          <td class="paramtype">RTC_DateTime_Type *&#160;</td>
           <td class="paramname"><em>datetime</em></td><td>)</td>
           <td></td>
         </tr>
@@ -797,97 +571,6 @@
 </dl>
 
 <p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00333">333</a> 行定义.</p>
-
-</div>
-</div>
-<h2 class="groupheader">变量说明</h2>
-<a class="anchor" id="a0d0cf926ed0db04e7849569772916e45"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint8_t LY[] = {0U, 31U, 29U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 31U, 30U, 31U}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00026">26</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a2d1d051a553e9e686ac8b550c406c38a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint16_t MONTH_DAYS[] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 212U, 243U, 273U, 304U, 334U}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00028">28</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="ace29156b6a4d29cff3dc22ba7f921d37"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="rtc_8h.html#abd5529150f07b298e1af8095886bdd42">RTC_CallBackType</a> RTC_CallBackTable[1] = {NULL}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>&lt; Callback function slot </p>
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00016">16</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a23efa45b94ae21abe595d59a0a6610c5"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint8_t ULY[] = {0U, 31U, 28U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 31U, 30U, 31U}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="rtc_8c_source.html">rtc.c</a> 第 <a class="el" href="rtc_8c_source.html#l00024">24</a> 行定义.</p>
 
 </div>
 </div>

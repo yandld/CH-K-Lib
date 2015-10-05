@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.10"/>
-<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/gpio.c 文件参考</title>
+<title>CH Kinetis library for K series: gpio.c 文件参考</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,118 +36,74 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li><li class="navelem"><a class="el" href="dir_2d0309ee3258ca782993eb20e8152a0f.html">src</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">宏定义</a> &#124;
-<a href="#func-members">函数</a> &#124;
-<a href="#var-members">变量</a>  </div>
+<a href="#func-members">函数</a>  </div>
   <div class="headertitle">
 <div class="title">gpio.c 文件参考</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a>  
-<a href="#details">更多...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="gpio_8h_source.html">gpio.h</a>&quot;</code><br />
-</div>
 <p><a href="gpio_8c_source.html">浏览源代码.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-宏定义</h2></td></tr>
-<tr class="memitem:a6dcb35020dceb1c58b30c07906840780"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a6dcb35020dceb1c58b30c07906840780">GPIO_BASES</a>&#160;&#160;&#160;{PTA, PTB, PTC, PTD, PTE}</td></tr>
-<tr class="separator:a6dcb35020dceb1c58b30c07906840780"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4b98e503f54129f95278e86852e7782"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ad4b98e503f54129f95278e86852e7782">PORT_BASES</a>&#160;&#160;&#160;{PORTA, PORTB, PORTC, PORTD, PORTE}</td></tr>
-<tr class="separator:ad4b98e503f54129f95278e86852e7782"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 函数</h2></td></tr>
-<tr class="memitem:a80cc0dd88f97a39f1caf9f8e419b0fe3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a80cc0dd88f97a39f1caf9f8e419b0fe3">PORT_PinMuxConfig</a> (uint32_t instance, uint8_t pin, <a class="el" href="gpio_8h.html#a8d7b6680e89956aaa0367c5f2a8c87d0">PORT_PinMux_Type</a> pinMux)</td></tr>
-<tr class="memdesc:a80cc0dd88f97a39f1caf9f8e419b0fe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">set GPIO pin mux  <a href="#a80cc0dd88f97a39f1caf9f8e419b0fe3">更多...</a><br /></td></tr>
+<tr class="memitem:a80cc0dd88f97a39f1caf9f8e419b0fe3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a80cc0dd88f97a39f1caf9f8e419b0fe3">PORT_PinMuxConfig</a> (uint32_t instance, uint8_t pin, PORT_PinMux_Type pinMux)</td></tr>
 <tr class="separator:a80cc0dd88f97a39f1caf9f8e419b0fe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7e122e8788db27b57668d237537441d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ab7e122e8788db27b57668d237537441d">PORT_PinPullConfig</a> (uint32_t instance, uint8_t pin, <a class="el" href="gpio_8h.html#a82e05c7163c76edb4f42bfb77432a8fc">PORT_Pull_Type</a> pull)</td></tr>
-<tr class="memdesc:ab7e122e8788db27b57668d237537441d"><td class="mdescLeft">&#160;</td><td class="mdescRight">set pin internal pullup/down resistors  <a href="#ab7e122e8788db27b57668d237537441d">更多...</a><br /></td></tr>
+<tr class="memitem:ab7e122e8788db27b57668d237537441d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ab7e122e8788db27b57668d237537441d">PORT_PinPullConfig</a> (uint32_t instance, uint8_t pin, PORT_Pull_Type pull)</td></tr>
 <tr class="separator:ab7e122e8788db27b57668d237537441d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae12542be114744e272d180330bc3c4e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ae12542be114744e272d180330bc3c4e8">PORT_PinOpenDrainConfig</a> (uint32_t instance, uint8_t pin, bool status)</td></tr>
-<tr class="memdesc:ae12542be114744e272d180330bc3c4e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">端口引脚的开漏状态配置 用户一般不必调用  <a href="#ae12542be114744e272d180330bc3c4e8">更多...</a><br /></td></tr>
 <tr class="separator:ae12542be114744e272d180330bc3c4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab87f6f7a9c8530bc4b38a69c1992b5a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ab87f6f7a9c8530bc4b38a69c1992b5a3">PORT_PinPassiveFilterConfig</a> (uint32_t instance, uint8_t pin, bool status)</td></tr>
-<tr class="memdesc:ab87f6f7a9c8530bc4b38a69c1992b5a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">端口引脚的开启无源滤波器 作为输入时有效  <a href="#ab87f6f7a9c8530bc4b38a69c1992b5a3">更多...</a><br /></td></tr>
 <tr class="separator:ab87f6f7a9c8530bc4b38a69c1992b5a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a0f2fb7765a6f15a75e5274a55916f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a3a0f2fb7765a6f15a75e5274a55916f2">GPIO_PinConfig</a> (uint32_t instance, uint8_t pin, <a class="el" href="gpio_8h.html#a625e2fc329d0ee69dab8dbcdbbc72d0b">GPIO_PinConfig_Type</a> mode)</td></tr>
-<tr class="memdesc:a3a0f2fb7765a6f15a75e5274a55916f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置引脚为输入还是输出功能 用户一般不必调用  <a href="#a3a0f2fb7765a6f15a75e5274a55916f2">更多...</a><br /></td></tr>
+<tr class="memitem:a3a0f2fb7765a6f15a75e5274a55916f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a3a0f2fb7765a6f15a75e5274a55916f2">GPIO_PinConfig</a> (uint32_t instance, uint8_t pin, GPIO_PinConfig_Type mode)</td></tr>
 <tr class="separator:a3a0f2fb7765a6f15a75e5274a55916f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9af553c40d0c4b6d14abf1a6b9de5166"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a9af553c40d0c4b6d14abf1a6b9de5166">GPIO_Init</a> (<a class="el" href="struct_g_p_i_o___init_type_def.html">GPIO_InitTypeDef</a> *GPIO_InitStruct)</td></tr>
-<tr class="memdesc:a9af553c40d0c4b6d14abf1a6b9de5166"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO初始化配置  <a href="#a9af553c40d0c4b6d14abf1a6b9de5166">更多...</a><br /></td></tr>
+<tr class="memitem:a9af553c40d0c4b6d14abf1a6b9de5166"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a9af553c40d0c4b6d14abf1a6b9de5166">GPIO_Init</a> (GPIO_InitTypeDef *GPIO_InitStruct)</td></tr>
 <tr class="separator:a9af553c40d0c4b6d14abf1a6b9de5166"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25379ee3170ff756c6db241f0750179a"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a25379ee3170ff756c6db241f0750179a">GPIO_QuickInit</a> (uint32_t instance, uint32_t pinx, <a class="el" href="gpio_8h.html#ae00b227edf8b757fb75c5cc5c293dbef">GPIO_Mode_Type</a> mode)</td></tr>
-<tr class="memdesc:a25379ee3170ff756c6db241f0750179a"><td class="mdescLeft">&#160;</td><td class="mdescRight">快速初始化一个GPIO引脚 实际上是GPIO_Init的最简单配置  <a href="#a25379ee3170ff756c6db241f0750179a">更多...</a><br /></td></tr>
+<tr class="memitem:a25379ee3170ff756c6db241f0750179a"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a25379ee3170ff756c6db241f0750179a">GPIO_QuickInit</a> (uint32_t instance, uint32_t pinx, GPIO_Mode_Type mode)</td></tr>
 <tr class="separator:a25379ee3170ff756c6db241f0750179a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e87279d96cbdb2e7420287fdf421646"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a8e87279d96cbdb2e7420287fdf421646">GPIO_WriteBit</a> (uint32_t instance, uint8_t pin, uint8_t data)</td></tr>
-<tr class="memdesc:a8e87279d96cbdb2e7420287fdf421646"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置指定引脚输出高电平或者低电平  <a href="#a8e87279d96cbdb2e7420287fdf421646">更多...</a><br /></td></tr>
 <tr class="separator:a8e87279d96cbdb2e7420287fdf421646"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9766d4d229c2c7947d25aea40f025951"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a9766d4d229c2c7947d25aea40f025951">GPIO_SetBit</a> (uint32_t instance, uint32_t pin)</td></tr>
-<tr class="memdesc:a9766d4d229c2c7947d25aea40f025951"><td class="mdescLeft">&#160;</td><td class="mdescRight">置位指定引脚的电平状态（即为高电平）  <a href="#a9766d4d229c2c7947d25aea40f025951">更多...</a><br /></td></tr>
 <tr class="separator:a9766d4d229c2c7947d25aea40f025951"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09db5e1fc571a1fceea44704b14ad20c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a09db5e1fc571a1fceea44704b14ad20c">GPIO_ResetBit</a> (uint32_t instance, uint32_t pin)</td></tr>
-<tr class="memdesc:a09db5e1fc571a1fceea44704b14ad20c"><td class="mdescLeft">&#160;</td><td class="mdescRight">复位指定引脚的电平状态（即为低电平）  <a href="#a09db5e1fc571a1fceea44704b14ad20c">更多...</a><br /></td></tr>
 <tr class="separator:a09db5e1fc571a1fceea44704b14ad20c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d773723153183f131955c743139b126"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a8d773723153183f131955c743139b126">GPIO_ReadBit</a> (uint32_t instance, uint8_t pin)</td></tr>
-<tr class="memdesc:a8d773723153183f131955c743139b126"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取一个引脚上的电平状态  <a href="#a8d773723153183f131955c743139b126">更多...</a><br /></td></tr>
 <tr class="separator:a8d773723153183f131955c743139b126"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1c25440162d1cccec5e795fa0c36b70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#aa1c25440162d1cccec5e795fa0c36b70">GPIO_ToggleBit</a> (uint32_t instance, uint8_t pin)</td></tr>
-<tr class="memdesc:aa1c25440162d1cccec5e795fa0c36b70"><td class="mdescLeft">&#160;</td><td class="mdescRight">翻转一个引脚的电平状态  <a href="#aa1c25440162d1cccec5e795fa0c36b70">更多...</a><br /></td></tr>
 <tr class="separator:aa1c25440162d1cccec5e795fa0c36b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4876ef80940ccff9af6ea9656b161db5"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a4876ef80940ccff9af6ea9656b161db5">GPIO_ReadPort</a> (uint32_t instance)</td></tr>
-<tr class="memdesc:a4876ef80940ccff9af6ea9656b161db5"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取一个端口32位的数据  <a href="#a4876ef80940ccff9af6ea9656b161db5">更多...</a><br /></td></tr>
 <tr class="separator:a4876ef80940ccff9af6ea9656b161db5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7095c71dab995b71db1030d2c9ea8ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ad7095c71dab995b71db1030d2c9ea8ad">GPIO_WritePort</a> (uint32_t instance, uint32_t data)</td></tr>
-<tr class="memdesc:ad7095c71dab995b71db1030d2c9ea8ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">向一个端口写入32位数据  <a href="#ad7095c71dab995b71db1030d2c9ea8ad">更多...</a><br /></td></tr>
 <tr class="separator:ad7095c71dab995b71db1030d2c9ea8ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5625ffa603641cdb8bfc5a6751ad3eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#af5625ffa603641cdb8bfc5a6751ad3eb">GPIO_ITDMAConfig</a> (uint32_t instance, uint8_t pin, <a class="el" href="gpio_8h.html#ad5d53224d457759717489956034a6db2">GPIO_ITDMAConfig_Type</a> config, bool status)</td></tr>
-<tr class="memdesc:af5625ffa603641cdb8bfc5a6751ad3eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置GPIO引脚中断类型或者DMA功能  <a href="#af5625ffa603641cdb8bfc5a6751ad3eb">更多...</a><br /></td></tr>
+<tr class="memitem:af5625ffa603641cdb8bfc5a6751ad3eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#af5625ffa603641cdb8bfc5a6751ad3eb">GPIO_ITDMAConfig</a> (uint32_t instance, uint8_t pin, GPIO_ITDMAConfig_Type config, bool status)</td></tr>
 <tr class="separator:af5625ffa603641cdb8bfc5a6751ad3eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27b81e6a1239b57c175ace34c3bd0f30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a27b81e6a1239b57c175ace34c3bd0f30">GPIO_CallbackInstall</a> (uint32_t instance, <a class="el" href="gpio_8h.html#a135425f42939ce16bb4766311d967e28">GPIO_CallBackType</a> AppCBFun)</td></tr>
-<tr class="memdesc:a27b81e6a1239b57c175ace34c3bd0f30"><td class="mdescLeft">&#160;</td><td class="mdescRight">注册中断回调函数  <a href="#a27b81e6a1239b57c175ace34c3bd0f30">更多...</a><br /></td></tr>
+<tr class="memitem:a27b81e6a1239b57c175ace34c3bd0f30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a27b81e6a1239b57c175ace34c3bd0f30">GPIO_CallbackInstall</a> (uint32_t instance, GPIO_CallBackType AppCBFun)</td></tr>
 <tr class="separator:a27b81e6a1239b57c175ace34c3bd0f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a927cdde43bec9c4ab0946f4774885dde"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a927cdde43bec9c4ab0946f4774885dde">PORT_IRQHandler</a> (uint32_t instance)</td></tr>
-<tr class="memdesc:a927cdde43bec9c4ab0946f4774885dde"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO中断总处理函数，用户一般无需使用和修改  <a href="#a927cdde43bec9c4ab0946f4774885dde">更多...</a><br /></td></tr>
-<tr class="separator:a927cdde43bec9c4ab0946f4774885dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae01b365de69142666b470757d24fae84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ae01b365de69142666b470757d24fae84">PORTA_IRQHandler</a> (void)</td></tr>
-<tr class="memdesc:ae01b365de69142666b470757d24fae84"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统GPIO中断函数，用户无需使用  <a href="#ae01b365de69142666b470757d24fae84">更多...</a><br /></td></tr>
+<tr class="memitem:ae01b365de69142666b470757d24fae84"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae01b365de69142666b470757d24fae84"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ae01b365de69142666b470757d24fae84">PORTA_IRQHandler</a> (void)</td></tr>
 <tr class="separator:ae01b365de69142666b470757d24fae84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7da56b6dd5e3750bfdd10c687d5bb39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#aa7da56b6dd5e3750bfdd10c687d5bb39">PORTB_IRQHandler</a> (void)</td></tr>
-<tr class="memdesc:aa7da56b6dd5e3750bfdd10c687d5bb39"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统GPIO中断函数，用户无需使用  <a href="#aa7da56b6dd5e3750bfdd10c687d5bb39">更多...</a><br /></td></tr>
+<tr class="memitem:aa7da56b6dd5e3750bfdd10c687d5bb39"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7da56b6dd5e3750bfdd10c687d5bb39"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#aa7da56b6dd5e3750bfdd10c687d5bb39">PORTB_IRQHandler</a> (void)</td></tr>
 <tr class="separator:aa7da56b6dd5e3750bfdd10c687d5bb39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a7f89fa7db08f2a1df1f1b80111ee6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a2a7f89fa7db08f2a1df1f1b80111ee6a">PORTC_IRQHandler</a> (void)</td></tr>
-<tr class="memdesc:a2a7f89fa7db08f2a1df1f1b80111ee6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统GPIO中断函数，用户无需使用  <a href="#a2a7f89fa7db08f2a1df1f1b80111ee6a">更多...</a><br /></td></tr>
+<tr class="memitem:a2a7f89fa7db08f2a1df1f1b80111ee6a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a7f89fa7db08f2a1df1f1b80111ee6a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a2a7f89fa7db08f2a1df1f1b80111ee6a">PORTC_IRQHandler</a> (void)</td></tr>
 <tr class="separator:a2a7f89fa7db08f2a1df1f1b80111ee6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6747d58848bd5d7da6b36528aac2fd5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ac6747d58848bd5d7da6b36528aac2fd5">PORTD_IRQHandler</a> (void)</td></tr>
-<tr class="memdesc:ac6747d58848bd5d7da6b36528aac2fd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统GPIO中断函数，用户无需使用  <a href="#ac6747d58848bd5d7da6b36528aac2fd5">更多...</a><br /></td></tr>
+<tr class="memitem:ac6747d58848bd5d7da6b36528aac2fd5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac6747d58848bd5d7da6b36528aac2fd5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ac6747d58848bd5d7da6b36528aac2fd5">PORTD_IRQHandler</a> (void)</td></tr>
 <tr class="separator:ac6747d58848bd5d7da6b36528aac2fd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6719fe903cc8daaf4364237a80d9ef67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a6719fe903cc8daaf4364237a80d9ef67">PORTE_IRQHandler</a> (void)</td></tr>
-<tr class="memdesc:a6719fe903cc8daaf4364237a80d9ef67"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统GPIO中断函数，用户无需使用  <a href="#a6719fe903cc8daaf4364237a80d9ef67">更多...</a><br /></td></tr>
+<tr class="memitem:a6719fe903cc8daaf4364237a80d9ef67"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6719fe903cc8daaf4364237a80d9ef67"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a6719fe903cc8daaf4364237a80d9ef67">PORTE_IRQHandler</a> (void)</td></tr>
 <tr class="separator:a6719fe903cc8daaf4364237a80d9ef67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-变量</h2></td></tr>
-<tr class="memitem:ae94b60799d510f21755e8d942e4789c3"><td class="memItemLeft" align="right" valign="top">static GPIO_Type *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#ae94b60799d510f21755e8d942e4789c3">GPIO_InstanceTable</a> [] = <a class="el" href="gpio_8c.html#a6dcb35020dceb1c58b30c07906840780">GPIO_BASES</a></td></tr>
-<tr class="separator:ae94b60799d510f21755e8d942e4789c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3804671495b446b63fc1713badd2749a"><td class="memItemLeft" align="right" valign="top">static PORT_Type *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a3804671495b446b63fc1713badd2749a">PORT_InstanceTable</a> [] = <a class="el" href="gpio_8c.html#ad4b98e503f54129f95278e86852e7782">PORT_BASES</a></td></tr>
-<tr class="separator:a3804671495b446b63fc1713badd2749a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ef1291073a304955ec15199c77c8dc7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="gpio_8h.html#a135425f42939ce16bb4766311d967e28">GPIO_CallBackType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a5ef1291073a304955ec15199c77c8dc7">GPIO_CallBackTable</a> [<a class="el" href="common_8h.html#a6242a25f9d996f0cc4f4cdb911218b75">ARRAY_SIZE</a>(<a class="el" href="gpio_8c.html#a3804671495b446b63fc1713badd2749a">PORT_InstanceTable</a>)] = {NULL}</td></tr>
-<tr class="separator:a5ef1291073a304955ec15199c77c8dc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0267f823bea85304bc5ec02023c066af"><td class="memItemLeft" align="right" valign="top">static const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a0267f823bea85304bc5ec02023c066af">SIM_GPIOClockGateTable</a> []</td></tr>
-<tr class="separator:a0267f823bea85304bc5ec02023c066af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a680274dad5d785a6ac1c5a1be5ca57b0"><td class="memItemLeft" align="right" valign="top">static const IRQn_Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#a680274dad5d785a6ac1c5a1be5ca57b0">GPIO_IRQnTable</a> []</td></tr>
-<tr class="separator:a680274dad5d785a6ac1c5a1be5ca57b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee44e4e79cb0421b141fe1a45ef82289"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee44e4e79cb0421b141fe1a45ef82289"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gpio_8c.html#aee44e4e79cb0421b141fe1a45ef82289">PORTF_IRQHandler</a> (void)</td></tr>
+<tr class="separator:aee44e4e79cb0421b141fe1a45ef82289"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a> </p>
-<dl class="section author"><dt>作者</dt><dd>YANDLD </dd></dl>
+<div class="textblock"><dl class="section author"><dt>作者</dt><dd>YANDLD </dd></dl>
 <dl class="section version"><dt>版本</dt><dd>V2.5 </dd></dl>
 <dl class="section date"><dt>日期</dt><dd>2014.3.24 </dd>
 <dd>
@@ -155,36 +111,7 @@
 <dl class="section note"><dt>注解</dt><dd>gpio driver source file </dd></dl>
 
 <p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 中定义.</p>
-</div><h2 class="groupheader">宏定义说明</h2>
-<a class="anchor" id="a6dcb35020dceb1c58b30c07906840780"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define GPIO_BASES&#160;&#160;&#160;{PTA, PTB, PTC, PTD, PTE}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00020">20</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="ad4b98e503f54129f95278e86852e7782"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define PORT_BASES&#160;&#160;&#160;{PORTA, PORTB, PORTC, PORTD, PORTE}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00021">21</a> 行定义.</p>
-
-</div>
-</div>
-<h2 class="groupheader">函数说明</h2>
+</div><h2 class="groupheader">函数说明</h2>
 <a class="anchor" id="a27b81e6a1239b57c175ace34c3bd0f30"></a>
 <div class="memitem">
 <div class="memproto">
@@ -198,7 +125,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="gpio_8h.html#a135425f42939ce16bb4766311d967e28">GPIO_CallBackType</a>&#160;</td>
+          <td class="paramtype">GPIO_CallBackType&#160;</td>
           <td class="paramname"><em>AppCBFun</em>&#160;</td>
         </tr>
         <tr>
@@ -210,7 +137,6 @@
 </div><div class="memdoc">
 
 <p>注册中断回调函数 </p>
-<p>low level functions</p>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;//注册PTB10的EXTI中断回调函数</div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;void PTB10_EXTI_ISR(uint32_t pinxArray)</div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;{</div>
@@ -252,7 +178,7 @@
         <tr>
           <td class="memname">void GPIO_Init </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_g_p_i_o___init_type_def.html">GPIO_InitTypeDef</a> *&#160;</td>
+          <td class="paramtype">GPIO_InitTypeDef *&#160;</td>
           <td class="paramname"><em>GPIO_InitStruct</em></td><td>)</td>
           <td></td>
         </tr>
@@ -304,7 +230,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="gpio_8h.html#ad5d53224d457759717489956034a6db2">GPIO_ITDMAConfig_Type</a>&#160;</td>
+          <td class="paramtype">GPIO_ITDMAConfig_Type&#160;</td>
           <td class="paramname"><em>config</em>, </td>
         </tr>
         <tr>
@@ -384,7 +310,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="gpio_8h.html#a625e2fc329d0ee69dab8dbcdbbc72d0b">GPIO_PinConfig_Type</a>&#160;</td>
+          <td class="paramtype">GPIO_PinConfig_Type&#160;</td>
           <td class="paramname"><em>mode</em>&#160;</td>
         </tr>
         <tr>
@@ -448,7 +374,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="gpio_8h.html#ae00b227edf8b757fb75c5cc5c293dbef">GPIO_Mode_Type</a>&#160;</td>
+          <td class="paramtype">GPIO_Mode_Type&#160;</td>
           <td class="paramname"><em>mode</em>&#160;</td>
         </tr>
         <tr>
@@ -865,54 +791,6 @@
 
 </div>
 </div>
-<a class="anchor" id="a927cdde43bec9c4ab0946f4774885dde"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void PORT_IRQHandler </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>instance</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>GPIO中断总处理函数，用户一般无需使用和修改 </p>
-<dl class="params"><dt>参数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>GPIO模块中断入口号 <ul>
-<li>HW_GPIOA 芯片的PORTA端口中断入口 </li>
-<li>HW_GPIOB 芯片的PORTB端口中断入口 </li>
-<li>HW_GPIOC 芯片的PORTC端口中断入口 </li>
-<li>HW_GPIOD 芯片的PORTD端口中断入口 </li>
-<li>HW_GPIOE 芯片的PORTE端口中断入口 </li>
-</ul>
-</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section attention"><dt>注意</dt><dd>静态函数，仅本文件可见 </dd></dl>
-<dl class="retval"><dt>返回值</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">None</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00528">528</a> 行定义.</p>
-
-</div>
-</div>
 <a class="anchor" id="a80cc0dd88f97a39f1caf9f8e419b0fe3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -932,7 +810,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="gpio_8h.html#a8d7b6680e89956aaa0367c5f2a8c87d0">PORT_PinMux_Type</a>&#160;</td>
+          <td class="paramtype">PORT_PinMux_Type&#160;</td>
           <td class="paramname"><em>pinMux</em>&#160;</td>
         </tr>
         <tr>
@@ -1115,7 +993,7 @@
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="gpio_8h.html#a82e05c7163c76edb4f42bfb77432a8fc">PORT_Pull_Type</a>&#160;</td>
+          <td class="paramtype">PORT_Pull_Type&#160;</td>
           <td class="paramname"><em>pull</em>&#160;</td>
         </tr>
         <tr>
@@ -1152,233 +1030,6 @@
 </dl>
 
 <p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00077">77</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae01b365de69142666b470757d24fae84"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void PORTA_IRQHandler </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>系统GPIO中断函数，用户无需使用 </p>
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00544">544</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa7da56b6dd5e3750bfdd10c687d5bb39"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void PORTB_IRQHandler </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>系统GPIO中断函数，用户无需使用 </p>
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00552">552</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a2a7f89fa7db08f2a1df1f1b80111ee6a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void PORTC_IRQHandler </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>系统GPIO中断函数，用户无需使用 </p>
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00560">560</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="ac6747d58848bd5d7da6b36528aac2fd5"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void PORTD_IRQHandler </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>系统GPIO中断函数，用户无需使用 </p>
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00568">568</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6719fe903cc8daaf4364237a80d9ef67"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void PORTE_IRQHandler </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>系统GPIO中断函数，用户无需使用 </p>
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00576">576</a> 行定义.</p>
-
-</div>
-</div>
-<h2 class="groupheader">变量说明</h2>
-<a class="anchor" id="a5ef1291073a304955ec15199c77c8dc7"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="gpio_8h.html#a135425f42939ce16bb4766311d967e28">GPIO_CallBackType</a> GPIO_CallBackTable[<a class="el" href="common_8h.html#a6242a25f9d996f0cc4f4cdb911218b75">ARRAY_SIZE</a>(<a class="el" href="gpio_8c.html#a3804671495b446b63fc1713badd2749a">PORT_InstanceTable</a>)] = {NULL}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00029">29</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae94b60799d510f21755e8d942e4789c3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">GPIO_Type* const GPIO_InstanceTable[] = <a class="el" href="gpio_8c.html#a6dcb35020dceb1c58b30c07906840780">GPIO_BASES</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00027">27</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a680274dad5d785a6ac1c5a1be5ca57b0"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const IRQn_Type GPIO_IRQnTable[]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>初始值:</b><div class="fragment"><div class="line">= </div>
-<div class="line">{</div>
-<div class="line">    PORTA_IRQn,</div>
-<div class="line">    PORTB_IRQn,</div>
-<div class="line">    PORTC_IRQn,</div>
-<div class="line">    PORTD_IRQn,</div>
-<div class="line">    PORTE_IRQn,</div>
-<div class="line">}</div>
-</div><!-- fragment -->
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00038">38</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a3804671495b446b63fc1713badd2749a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">PORT_Type* const PORT_InstanceTable[] = <a class="el" href="gpio_8c.html#ad4b98e503f54129f95278e86852e7782">PORT_BASES</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00028">28</a> 行定义.</p>
-
-</div>
-</div>
-<a class="anchor" id="a0267f823bea85304bc5ec02023c066af"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const uint32_t SIM_GPIOClockGateTable[]</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>初始值:</b><div class="fragment"><div class="line">=</div>
-<div class="line">{</div>
-<div class="line">    SIM_SCGC5_PORTA_MASK,</div>
-<div class="line">    SIM_SCGC5_PORTB_MASK,</div>
-<div class="line">    SIM_SCGC5_PORTC_MASK,</div>
-<div class="line">    SIM_SCGC5_PORTD_MASK,</div>
-<div class="line">    SIM_SCGC5_PORTE_MASK,</div>
-<div class="line">}</div>
-</div><!-- fragment -->
-<p>在文件 <a class="el" href="gpio_8c_source.html">gpio.c</a> 第 <a class="el" href="gpio_8c_source.html#l00030">30</a> 行定义.</p>
 
 </div>
 </div>

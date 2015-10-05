@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.10"/>
-<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/pdb.c 源文件</title>
+<title>CH Kinetis library for K series: pdb.c 源文件</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,7 +36,7 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li><li class="navelem"><a class="el" href="dir_2d0309ee3258ca782993eb20e8152a0f.html">src</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -45,16 +45,16 @@
 </div><!--header-->
 <div class="contents">
 <a href="pdb_8c.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="pdb_8h.html">pdb.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;pdb.h&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="pdb_8c.html#a8f980ea31f109c9eb532479cff0f8a3d">   14</a></span>&#160;<span class="keyword">static</span> <a class="code" href="pdb_8h.html#a2ddfb9a713dd79117e545463a74afd72">PDB_CallBackType</a> <a class="code" href="pdb_8c.html#a8f980ea31f109c9eb532479cff0f8a3d">PDB_CallBackTable</a>[1] = {NULL};</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">static</span> PDB_CallBackType PDB_CallBackTable[1] = {NULL};</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="pdb_8h.html#a6f4366d65744be532b6738e435a78d52">   20</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#a6f4366d65744be532b6738e435a78d52">PDB_SoftwareTrigger</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="pdb_8c.html#a6f4366d65744be532b6738e435a78d52">   20</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#a6f4366d65744be532b6738e435a78d52">PDB_SoftwareTrigger</a>(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    PDB0-&gt;SC |= PDB_SC_SWTRIG_MASK;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;}</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="pdb_8c.html#a8981c4facd986dc20fb85c48d19bc4b8">   32</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#a8981c4facd986dc20fb85c48d19bc4b8">_PDB_SetCounterPeriod</a>(uint32_t srcClock, uint32_t timeInUs)</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> _PDB_SetCounterPeriod(uint32_t srcClock, uint32_t timeInUs)</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> uint8_t MULT[4] = {1, 10, 20, 40};</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    uint32_t clkDiv,mult;</div>
@@ -72,7 +72,7 @@
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        }</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    }</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="common_8h.html#ab725342e4bb14e632cad12a1871ff064">LIB_TRACE</a>(<span class="stringliteral">&quot;clkDiv:%d Mult:%d\r\n&quot;</span>,clkDiv, mult);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    LIB_TRACE(<span class="stringliteral">&quot;clkDiv:%d Mult:%d\r\n&quot;</span>,clkDiv, mult);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    </div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">/* clk div */</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    PDB0-&gt;SC &amp;= ~PDB_SC_PRESCALER_MASK;</div>
@@ -82,31 +82,31 @@
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    PDB0-&gt;SC &amp;= ~PDB_SC_MULT_MASK;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    PDB0-&gt;SC |= PDB_SC_MULT(mult);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <a class="code" href="common_8h.html#ab725342e4bb14e632cad12a1871ff064">LIB_TRACE</a>(<span class="stringliteral">&quot;MOD:%d\r\n&quot;</span>, (srcClock/1000000)*timeInUs/((1&lt;&lt;clkDiv)*MULT[mult]));</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    LIB_TRACE(<span class="stringliteral">&quot;MOD:%d\r\n&quot;</span>, (srcClock/1000000)*timeInUs/((1&lt;&lt;clkDiv)*MULT[mult]));</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    PDB0-&gt;MOD = (srcClock/1000000)*timeInUs/((1&lt;&lt;clkDiv)*MULT[mult]);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    PDB0-&gt;IDLY = (srcClock/1000000)*timeInUs/((1&lt;&lt;clkDiv)*MULT[mult]);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;}</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="pdb_8h.html#aaa2e846617f30b2ced1b3da050ba3ab3">   69</a></span>&#160;uint32_t <a class="code" href="pdb_8c.html#aaa2e846617f30b2ced1b3da050ba3ab3">PDB_GetMODValue</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="pdb_8c.html#aaa2e846617f30b2ced1b3da050ba3ab3">   69</a></span>&#160;uint32_t <a class="code" href="pdb_8c.html#aaa2e846617f30b2ced1b3da050ba3ab3">PDB_GetMODValue</a>(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;{</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordflow">return</span> PDB0-&gt;MOD;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad6ee10c143cf1441cac69e519e0cf792">   84</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#ad6ee10c143cf1441cac69e519e0cf792">PDB_QuickInit</a>(<a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163">PDB_TriggerSrc_Type</a> triggerSrc, uint32_t timeInUs)</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="pdb_8c.html#ad6ee10c143cf1441cac69e519e0cf792">   84</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#ad6ee10c143cf1441cac69e519e0cf792">PDB_QuickInit</a>(PDB_TriggerSrc_Type triggerSrc, uint32_t timeInUs)</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;{</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    uint32_t clock;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <a class="code" href="struct_p_d_b___init_type_def.html">PDB_InitTypeDef</a>  PDB_InitStruct1;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    PDB_InitTypeDef  PDB_InitStruct1;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    clock = <a class="code" href="common_8c.html#a729b6f2e085ac19b06d846024fc870db">GetClock</a>(<a class="code" href="common_8h.html#accce41f196e729af6b1839e3747d87dda179fc28ca8fe6925432599f0399f2800">kBusClock</a>);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    clock = <a class="code" href="common_8c.html#a729b6f2e085ac19b06d846024fc870db">GetClock</a>(kBusClock);</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    PDB_InitStruct1.<a class="code" href="struct_p_d_b___init_type_def.html#a5826592f8b92bc6cde1af605f463d98e">inputTrigSource</a> = <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a9a9ec5a32a52ed34acc67f89ddb05597">kPDB_SoftwareTrigger</a>;  <span class="comment">/* software Trigger */</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    PDB_InitStruct1.<a class="code" href="struct_p_d_b___init_type_def.html#a6ae04f6d5608c9d1b4a259e5ccbfed6e">isContinuesMode</a> = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    PDB_InitStruct1.<a class="code" href="struct_p_d_b___init_type_def.html#a8d4ff27bdb6e086868abb8b8a7404130">srcClock</a> = clock;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    PDB_InitStruct1.<a class="code" href="struct_p_d_b___init_type_def.html#afcd9bfc9e390b713ac5e7314850c012b">timeInUs</a> = timeInUs;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    PDB_InitStruct1.inputTrigSource = kPDB_SoftwareTrigger;  <span class="comment">/* software Trigger */</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    PDB_InitStruct1.isContinuesMode = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    PDB_InitStruct1.srcClock = clock;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    PDB_InitStruct1.timeInUs = timeInUs;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <a class="code" href="pdb_8c.html#ab0c79ef7707094d516c8d5ab81aacd45">PDB_Init</a>(&amp;PDB_InitStruct1);</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;}</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
-<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="pdb_8h.html#ab0c79ef7707094d516c8d5ab81aacd45">  104</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#ab0c79ef7707094d516c8d5ab81aacd45">PDB_Init</a>(<a class="code" href="struct_p_d_b___init_type_def.html">PDB_InitTypeDef</a> * PDB_InitStruct)</div>
+<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="pdb_8c.html#ab0c79ef7707094d516c8d5ab81aacd45">  104</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#ab0c79ef7707094d516c8d5ab81aacd45">PDB_Init</a>(PDB_InitTypeDef * PDB_InitStruct)</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;{</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="comment">/* enable clock gate */</span></div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    SIM-&gt;SCGC6 |= SIM_SCGC6_PDB_MASK ;</div>
@@ -115,13 +115,13 @@
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    PDB0-&gt;SC = 0x00;</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="comment">/* trigger source */</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    PDB0-&gt;SC |= PDB_SC_TRGSEL(PDB_InitStruct-&gt;<a class="code" href="struct_p_d_b___init_type_def.html#a5826592f8b92bc6cde1af605f463d98e">inputTrigSource</a>);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    PDB0-&gt;SC |= PDB_SC_TRGSEL(PDB_InitStruct-&gt;inputTrigSource);</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="comment">/* if continues mode */</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    (PDB_InitStruct-&gt;<a class="code" href="struct_p_d_b___init_type_def.html#a6ae04f6d5608c9d1b4a259e5ccbfed6e">isContinuesMode</a>)?(PDB0-&gt;SC |= PDB_SC_CONT_MASK):(PDB0-&gt;SC &amp;= ~PDB_SC_CONT_MASK);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    (PDB_InitStruct-&gt;isContinuesMode)?(PDB0-&gt;SC |= PDB_SC_CONT_MASK):(PDB0-&gt;SC &amp;= ~PDB_SC_CONT_MASK);</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    </div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="comment">/* set PDB period */</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <a class="code" href="pdb_8c.html#a8981c4facd986dc20fb85c48d19bc4b8">_PDB_SetCounterPeriod</a>(PDB_InitStruct-&gt;<a class="code" href="struct_p_d_b___init_type_def.html#a8d4ff27bdb6e086868abb8b8a7404130">srcClock</a>, PDB_InitStruct-&gt;<a class="code" href="struct_p_d_b___init_type_def.html#afcd9bfc9e390b713ac5e7314850c012b">timeInUs</a>);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    _PDB_SetCounterPeriod(PDB_InitStruct-&gt;srcClock, PDB_InitStruct-&gt;timeInUs);</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="comment">/* enable PDB */</span></div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    PDB0-&gt;SC |= PDB_SC_PDBEN_MASK; </div>
@@ -130,7 +130,7 @@
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    PDB0-&gt;SC |= PDB_SC_LDOK_MASK;</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;}</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="pdb_8h.html#af50ae5345f28c2c5e9ace7fffbe1923f">  143</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#af50ae5345f28c2c5e9ace7fffbe1923f">PDB_SetADCPreTrigger</a>(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue, <span class="keywordtype">bool</span> status)</div>
+<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="pdb_8c.html#af50ae5345f28c2c5e9ace7fffbe1923f">  143</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#af50ae5345f28c2c5e9ace7fffbe1923f">PDB_SetADCPreTrigger</a>(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue, <span class="keywordtype">bool</span> status)</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;{</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="comment">/* disable PDB */</span></div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    (status)?</div>
@@ -142,14 +142,14 @@
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    (PDB0-&gt;CH[adcInstance].C1 &amp;= ~PDB_C1_TOS(1&lt;&lt;adcMux));</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;}</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
-<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="pdb_8h.html#a749578c5f573f31e23ebcfa66fa2bb86">  170</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#a749578c5f573f31e23ebcfa66fa2bb86">PDB_SetBackToBackMode</a>(uint32_t adcInstance, uint32_t adcMux, <span class="keywordtype">bool</span> status)</div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="pdb_8c.html#a749578c5f573f31e23ebcfa66fa2bb86">  170</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#a749578c5f573f31e23ebcfa66fa2bb86">PDB_SetBackToBackMode</a>(uint32_t adcInstance, uint32_t adcMux, <span class="keywordtype">bool</span> status)</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;{</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    (status)?</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    (PDB0-&gt;CH[adcInstance].C1 |= PDB_C1_BB(1&lt;&lt;adcMux)):</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    (PDB0-&gt;CH[adcInstance].C1 &amp;= ~PDB_C1_BB(1&lt;&lt;adcMux));</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;}</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
-<div class="line"><a name="l00187"></a><span class="lineno"><a class="line" href="pdb_8h.html#a4b922d1f231c19b401d4a29cc51693fe">  187</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#a4b922d1f231c19b401d4a29cc51693fe">PDB_ITDMAConfig</a>(<a class="code" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101">PDB_ITDMAConfig_Type</a> config, <span class="keywordtype">bool</span> status)</div>
+<div class="line"><a name="l00187"></a><span class="lineno"><a class="line" href="pdb_8c.html#a4b922d1f231c19b401d4a29cc51693fe">  187</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#a4b922d1f231c19b401d4a29cc51693fe">PDB_ITDMAConfig</a>(PDB_ITDMAConfig_Type config, <span class="keywordtype">bool</span> status)</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;{</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    <span class="comment">/* enable clock gate */</span></div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    SIM-&gt;SCGC6 |= SIM_SCGC6_PDB_MASK;</div>
@@ -162,13 +162,13 @@
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    </div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="keywordflow">switch</span>(config)</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    {</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a702424d3e89c996860c81643f36de7ff">kPDB_IT_CF</a>:</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">case</span> kPDB_IT_CF:</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            (status)?</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            (PDB0-&gt;SC |= PDB_SC_PDBIE_MASK):</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            (PDB0-&gt;SC &amp;= ~PDB_SC_PDBIE_MASK);</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            NVIC_EnableIRQ(PDB0_IRQn);</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <span class="keywordflow">break</span>; </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a467a435fc408409442696224fe8fb329">kPDB_DMA_CF</a>:</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="keywordflow">case</span> kPDB_DMA_CF:</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            (status)?</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            (PDB0-&gt;SC |= PDB_SC_DMAEN_MASK):</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            (PDB0-&gt;SC &amp;= ~PDB_SC_DMAEN_MASK);   </div>
@@ -177,13 +177,13 @@
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    }</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;}</div>
 <div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
-<div class="line"><a name="l00221"></a><span class="lineno"><a class="line" href="pdb_8h.html#a1fecbc99c84396f594f5ea59eecc520f">  221</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#a1fecbc99c84396f594f5ea59eecc520f">PDB_CallbackInstall</a>(<a class="code" href="pdb_8h.html#a2ddfb9a713dd79117e545463a74afd72">PDB_CallBackType</a> AppCBFun)</div>
+<div class="line"><a name="l00221"></a><span class="lineno"><a class="line" href="pdb_8c.html#a1fecbc99c84396f594f5ea59eecc520f">  221</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8c.html#a1fecbc99c84396f594f5ea59eecc520f">PDB_CallbackInstall</a>(PDB_CallBackType AppCBFun)</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;{</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    <span class="comment">/* enable clock gate */</span></div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    SIM-&gt;SCGC6 |= SIM_SCGC6_PDB_MASK;</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="keywordflow">if</span>(AppCBFun != NULL)</div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    {</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        <a class="code" href="pdb_8c.html#a8f980ea31f109c9eb532479cff0f8a3d">PDB_CallBackTable</a>[0] = AppCBFun;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        PDB_CallBackTable[0] = AppCBFun;</div>
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    }</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;}</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;</div>
@@ -192,37 +192,21 @@
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <span class="comment">/* clear IT pending flags */</span></div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    PDB0-&gt;SC &amp;= ~PDB_SC_PDBIF_MASK;</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    </div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="pdb_8c.html#a8f980ea31f109c9eb532479cff0f8a3d">PDB_CallBackTable</a>[0])</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="keywordflow">if</span>(PDB_CallBackTable[0])</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    {</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <a class="code" href="pdb_8c.html#a8f980ea31f109c9eb532479cff0f8a3d">PDB_CallBackTable</a>[0]();</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        PDB_CallBackTable[0]();</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    }</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;}</div>
-<div class="ttc" id="struct_p_d_b___init_type_def_html"><div class="ttname"><a href="struct_p_d_b___init_type_def.html">PDB_InitTypeDef</a></div><div class="ttdoc">PDB初始化结构 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00070">pdb.h:70</a></div></div>
-<div class="ttc" id="common_8h_html_accce41f196e729af6b1839e3747d87dda179fc28ca8fe6925432599f0399f2800"><div class="ttname"><a href="common_8h.html#accce41f196e729af6b1839e3747d87dda179fc28ca8fe6925432599f0399f2800">kBusClock</a></div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00166">common.h:166</a></div></div>
-<div class="ttc" id="pdb_8c_html_a8f980ea31f109c9eb532479cff0f8a3d"><div class="ttname"><a href="pdb_8c.html#a8f980ea31f109c9eb532479cff0f8a3d">PDB_CallBackTable</a></div><div class="ttdeci">static PDB_CallBackType PDB_CallBackTable[1]</div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00014">pdb.c:14</a></div></div>
 <div class="ttc" id="pdb_8c_html_a749578c5f573f31e23ebcfa66fa2bb86"><div class="ttname"><a href="pdb_8c.html#a749578c5f573f31e23ebcfa66fa2bb86">PDB_SetBackToBackMode</a></div><div class="ttdeci">void PDB_SetBackToBackMode(uint32_t adcInstance, uint32_t adcMux, bool status)</div><div class="ttdoc">PDB ADC pre-trigger operation as back-to-back mode. </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00170">pdb.c:170</a></div></div>
 <div class="ttc" id="pdb_8c_html_a4b922d1f231c19b401d4a29cc51693fe"><div class="ttname"><a href="pdb_8c.html#a4b922d1f231c19b401d4a29cc51693fe">PDB_ITDMAConfig</a></div><div class="ttdeci">void PDB_ITDMAConfig(PDB_ITDMAConfig_Type config, bool status)</div><div class="ttdoc">PDB中断及DMA功能开关函数 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00187">pdb.c:187</a></div></div>
-<div class="ttc" id="pdb_8h_html"><div class="ttname"><a href="pdb_8h.html">pdb.h</a></div><div class="ttdoc">www.beyondcore.net http://upcmcu.taobao.com </div></div>
-<div class="ttc" id="struct_p_d_b___init_type_def_html_afcd9bfc9e390b713ac5e7314850c012b"><div class="ttname"><a href="struct_p_d_b___init_type_def.html#afcd9bfc9e390b713ac5e7314850c012b">PDB_InitTypeDef::timeInUs</a></div><div class="ttdeci">uint32_t timeInUs</div><div class="ttdoc">us delay </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00075">pdb.h:75</a></div></div>
-<div class="ttc" id="pdb_8h_html_a2ddfb9a713dd79117e545463a74afd72"><div class="ttname"><a href="pdb_8h.html#a2ddfb9a713dd79117e545463a74afd72">PDB_CallBackType</a></div><div class="ttdeci">void(* PDB_CallBackType)(void)</div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00028">pdb.h:28</a></div></div>
 <div class="ttc" id="pdb_8c_html_a1fecbc99c84396f594f5ea59eecc520f"><div class="ttname"><a href="pdb_8c.html#a1fecbc99c84396f594f5ea59eecc520f">PDB_CallbackInstall</a></div><div class="ttdeci">void PDB_CallbackInstall(PDB_CallBackType AppCBFun)</div><div class="ttdoc">PDB注册中断回调函数 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00221">pdb.c:221</a></div></div>
-<div class="ttc" id="struct_p_d_b___init_type_def_html_a8d4ff27bdb6e086868abb8b8a7404130"><div class="ttname"><a href="struct_p_d_b___init_type_def.html#a8d4ff27bdb6e086868abb8b8a7404130">PDB_InitTypeDef::srcClock</a></div><div class="ttdeci">uint32_t srcClock</div><div class="ttdoc">时钟源频率 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00072">pdb.h:72</a></div></div>
 <div class="ttc" id="common_8c_html_a729b6f2e085ac19b06d846024fc870db"><div class="ttname"><a href="common_8c.html#a729b6f2e085ac19b06d846024fc870db">GetClock</a></div><div class="ttdeci">uint32_t GetClock(Clock_t clockName)</div><div class="ttdoc">获得系统各个总线时钟的频率 </div><div class="ttdef"><b>Definition:</b> <a href="common_8c_source.html#l00038">common.c:38</a></div></div>
-<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a9a9ec5a32a52ed34acc67f89ddb05597"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a9a9ec5a32a52ed34acc67f89ddb05597">kPDB_SoftwareTrigger</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00052">pdb.h:52</a></div></div>
-<div class="ttc" id="pdb_8c_html_a8981c4facd986dc20fb85c48d19bc4b8"><div class="ttname"><a href="pdb_8c.html#a8981c4facd986dc20fb85c48d19bc4b8">_PDB_SetCounterPeriod</a></div><div class="ttdeci">static void _PDB_SetCounterPeriod(uint32_t srcClock, uint32_t timeInUs)</div><div class="ttdoc">设置PDB转换频率 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00032">pdb.c:32</a></div></div>
 <div class="ttc" id="pdb_8c_html_af50ae5345f28c2c5e9ace7fffbe1923f"><div class="ttname"><a href="pdb_8c.html#af50ae5345f28c2c5e9ace7fffbe1923f">PDB_SetADCPreTrigger</a></div><div class="ttdeci">void PDB_SetADCPreTrigger(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue, bool status)</div><div class="ttdoc">设置PDB触发ADC </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00143">pdb.c:143</a></div></div>
 <div class="ttc" id="pdb_8c_html_ad6ee10c143cf1441cac69e519e0cf792"><div class="ttname"><a href="pdb_8c.html#ad6ee10c143cf1441cac69e519e0cf792">PDB_QuickInit</a></div><div class="ttdeci">void PDB_QuickInit(PDB_TriggerSrc_Type triggerSrc, uint32_t timeInUs)</div><div class="ttdoc">PDB快速初始化 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00084">pdb.c:84</a></div></div>
 <div class="ttc" id="pdb_8c_html_aaa2e846617f30b2ced1b3da050ba3ab3"><div class="ttname"><a href="pdb_8c.html#aaa2e846617f30b2ced1b3da050ba3ab3">PDB_GetMODValue</a></div><div class="ttdeci">uint32_t PDB_GetMODValue(void)</div><div class="ttdoc">获得PDB Mod 寄存器 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00069">pdb.c:69</a></div></div>
 <div class="ttc" id="pdb_8c_html_a6f4366d65744be532b6738e435a78d52"><div class="ttname"><a href="pdb_8c.html#a6f4366d65744be532b6738e435a78d52">PDB_SoftwareTrigger</a></div><div class="ttdeci">void PDB_SoftwareTrigger(void)</div><div class="ttdoc">软件触发PDB开始转换一次 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00020">pdb.c:20</a></div></div>
-<div class="ttc" id="pdb_8h_html_a8891838cba96b171efaeb75b0f022101a467a435fc408409442696224fe8fb329"><div class="ttname"><a href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a467a435fc408409442696224fe8fb329">kPDB_DMA_CF</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00085">pdb.h:85</a></div></div>
-<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163">PDB_TriggerSrc_Type</a></div><div class="ttdeci">PDB_TriggerSrc_Type</div><div class="ttdoc">PDB 触发源 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00035">pdb.h:35</a></div></div>
-<div class="ttc" id="struct_p_d_b___init_type_def_html_a6ae04f6d5608c9d1b4a259e5ccbfed6e"><div class="ttname"><a href="struct_p_d_b___init_type_def.html#a6ae04f6d5608c9d1b4a259e5ccbfed6e">PDB_InitTypeDef::isContinuesMode</a></div><div class="ttdeci">bool isContinuesMode</div><div class="ttdoc">是否是连续触发模式 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00074">pdb.h:74</a></div></div>
-<div class="ttc" id="pdb_8h_html_a8891838cba96b171efaeb75b0f022101"><div class="ttname"><a href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101">PDB_ITDMAConfig_Type</a></div><div class="ttdeci">PDB_ITDMAConfig_Type</div><div class="ttdoc">PDB中断及DMA配置选择 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00082">pdb.h:82</a></div></div>
 <div class="ttc" id="pdb_8c_html_a84e9e8552e53cb7e6ba12bc0b4926ec4"><div class="ttname"><a href="pdb_8c.html#a84e9e8552e53cb7e6ba12bc0b4926ec4">PDB0_IRQHandler</a></div><div class="ttdeci">void PDB0_IRQHandler(void)</div><div class="ttdoc">PDB中断处理函数入口 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00236">pdb.c:236</a></div></div>
-<div class="ttc" id="pdb_8h_html_a8891838cba96b171efaeb75b0f022101a702424d3e89c996860c81643f36de7ff"><div class="ttname"><a href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a702424d3e89c996860c81643f36de7ff">kPDB_IT_CF</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00084">pdb.h:84</a></div></div>
-<div class="ttc" id="struct_p_d_b___init_type_def_html_a5826592f8b92bc6cde1af605f463d98e"><div class="ttname"><a href="struct_p_d_b___init_type_def.html#a5826592f8b92bc6cde1af605f463d98e">PDB_InitTypeDef::inputTrigSource</a></div><div class="ttdeci">PDB_TriggerSrc_Type inputTrigSource</div><div class="ttdoc">输入输入触发源 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00073">pdb.h:73</a></div></div>
 <div class="ttc" id="pdb_8c_html_ab0c79ef7707094d516c8d5ab81aacd45"><div class="ttname"><a href="pdb_8c.html#ab0c79ef7707094d516c8d5ab81aacd45">PDB_Init</a></div><div class="ttdeci">void PDB_Init(PDB_InitTypeDef *PDB_InitStruct)</div><div class="ttdoc">PDB模块初始化 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00104">pdb.c:104</a></div></div>
-<div class="ttc" id="common_8h_html_ab725342e4bb14e632cad12a1871ff064"><div class="ttname"><a href="common_8h.html#ab725342e4bb14e632cad12a1871ff064">LIB_TRACE</a></div><div class="ttdeci">#define LIB_TRACE(...)</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00093">common.h:93</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

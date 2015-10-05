@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.10"/>
-<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/rtc.c 源文件</title>
+<title>CH Kinetis library for K series: rtc.c 源文件</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,7 +36,7 @@
   </div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li><li class="navelem"><a class="el" href="dir_2d0309ee3258ca782993eb20e8152a0f.html">src</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -45,31 +45,31 @@
 </div><!--header-->
 <div class="contents">
 <a href="rtc_8c.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor"> #include &quot;<a class="code" href="rtc_8h.html">rtc.h</a>&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor"> #include &quot;<a class="code" href="common_8h.html">common.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor"> #include &quot;rtc.h&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor"> #include &quot;common.h&quot;</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="rtc_8c.html#ace29156b6a4d29cff3dc22ba7f921d37">   16</a></span>&#160;<span class="keyword">static</span> <a class="code" href="rtc_8h.html#abd5529150f07b298e1af8095886bdd42">RTC_CallBackType</a> <a class="code" href="rtc_8c.html#ace29156b6a4d29cff3dc22ba7f921d37">RTC_CallBackTable</a>[1] = {NULL};</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">static</span> RTC_CallBackType RTC_CallBackTable[1] = {NULL};</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="rtc_8c.html#a6508df70318d3f264c21b2df2dfe0417">   18</a></span>&#160;<span class="preprocessor">#define SECONDS_IN_A_DAY     (86400U)</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="rtc_8c.html#a89f27ac647907366a71f2c8cc17bc779">   19</a></span>&#160;<span class="preprocessor">#define SECONDS_IN_A_HOUR    (3600U)</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="rtc_8c.html#a2d4507f6669e33be61a692bf2a927465">   20</a></span>&#160;<span class="preprocessor">#define SECONDS_IN_A_MIN     (60U)</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="rtc_8c.html#a86ea846ff952e2c09d60d0bacccfb0e0">   21</a></span>&#160;<span class="preprocessor">#define DAYS_IN_A_YEAR       (365U)</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="rtc_8c.html#ac74e4ed694402638591a210c9100528e">   22</a></span>&#160;<span class="preprocessor">#define DAYS_IN_A_LEAP_YEAR  (366U)</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define SECONDS_IN_A_DAY     (86400U)</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#define SECONDS_IN_A_HOUR    (3600U)</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define SECONDS_IN_A_MIN     (60U)</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define DAYS_IN_A_YEAR       (365U)</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define DAYS_IN_A_LEAP_YEAR  (366U)</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">// Table of month length (in days) for the Un-leap-year</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="rtc_8c.html#a23efa45b94ae21abe595d59a0a6610c5">   24</a></span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> uint8_t <a class="code" href="rtc_8c.html#a23efa45b94ae21abe595d59a0a6610c5">ULY</a>[] = {0U, 31U, 28U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 31U, 30U, 31U};</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> uint8_t ULY[] = {0U, 31U, 28U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 31U, 30U, 31U};</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">// Table of month length (in days) for the Leap-year</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="rtc_8c.html#a0d0cf926ed0db04e7849569772916e45">   26</a></span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> uint8_t  <a class="code" href="rtc_8c.html#a0d0cf926ed0db04e7849569772916e45">LY</a>[] = {0U, 31U, 29U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 31U, 30U, 31U};</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> uint8_t  LY[] = {0U, 31U, 29U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 31U, 30U, 31U};</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">// Number of days from begin of the non Leap-year</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="rtc_8c.html#a2d1d051a553e9e686ac8b550c406c38a">   28</a></span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> uint16_t <a class="code" href="rtc_8c.html#a2d1d051a553e9e686ac8b550c406c38a">MONTH_DAYS</a>[] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 212U, 243U, 273U, 304U, 334U};</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> uint16_t MONTH_DAYS[] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 212U, 243U, 273U, 304U, 334U};</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="rtc_8h.html#a0f2e25987149a5766e0908a34e41d0f4">   34</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a0f2e25987149a5766e0908a34e41d0f4">RTC_QuickInit</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="rtc_8c.html#a0f2e25987149a5766e0908a34e41d0f4">   34</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a0f2e25987149a5766e0908a34e41d0f4">RTC_QuickInit</a>(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="struct_r_t_c___init_type_def.html">RTC_InitTypeDef</a> RTC_InitStruct1;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    RTC_InitStruct1.<a class="code" href="struct_r_t_c___init_type_def.html#ac6248892df5b97d11d54ba5b1294892e">oscLoad</a> = <a class="code" href="rtc_8h.html#a458281a9025134fbdbf90d1868854e0fa5f4b2b1aa976281cfd3e2f1073b2be58">kRTC_OScLoad_8PF</a>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    RTC_InitTypeDef RTC_InitStruct1;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    RTC_InitStruct1.oscLoad = kRTC_OScLoad_8PF;</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="rtc_8c.html#a5ce3baabe19d07a3fc6ca06edfc64045">RTC_Init</a>(&amp;RTC_InitStruct1);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="rtc_8h.html#ac79760d221e75d682b381bd7fc5e5cdb">   48</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="rtc_8c.html#ac79760d221e75d682b381bd7fc5e5cdb">RTC_GetWeekFromYMD</a>(<span class="keywordtype">int</span> year, <span class="keywordtype">int</span> month, <span class="keywordtype">int</span> days)</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="rtc_8c.html#ac79760d221e75d682b381bd7fc5e5cdb">   48</a></span>&#160;<span class="keywordtype">int</span> <a class="code" href="rtc_8c.html#ac79760d221e75d682b381bd7fc5e5cdb">RTC_GetWeekFromYMD</a>(<span class="keywordtype">int</span> year, <span class="keywordtype">int</span> month, <span class="keywordtype">int</span> days)</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;{  </div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> mdays[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 };  </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">int</span> i, y = year - 1;  </div>
@@ -82,28 +82,28 @@
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">return</span> (y+y/4-y/100+y/400+days)%7;  </div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="rtc_8c.html#aa33d1e90c0ff2390c5d17ec18dd361b0">   67</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#aa33d1e90c0ff2390c5d17ec18dd361b0">RTC_DateTimeToSecond</a>(<span class="keyword">const</span> <a class="code" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> * datetime, uint32_t * seconds)</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> RTC_DateTimeToSecond(<span class="keyword">const</span> RTC_DateTime_Type * datetime, uint32_t * seconds)</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;{</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">/* Compute number of days from 1970 till given year*/</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    *seconds = (datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5">year</a> - 1970U) * <a class="code" href="rtc_8c.html#a86ea846ff952e2c09d60d0bacccfb0e0">DAYS_IN_A_YEAR</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    *seconds = (datetime-&gt;year - 1970U) * DAYS_IN_A_YEAR;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="comment">/* Add leap year days */</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    *seconds += ((datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5">year</a> / 4) - (1970U / 4));</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    *seconds += ((datetime-&gt;year / 4) - (1970U / 4));</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="comment">/* Add number of days till given month*/</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    *seconds += <a class="code" href="rtc_8c.html#a2d1d051a553e9e686ac8b550c406c38a">MONTH_DAYS</a>[datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a2b35975dfac711962b75b6eed01a8b76">month</a>];</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    *seconds += MONTH_DAYS[datetime-&gt;month];</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="comment">/* Add days in given month*/</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    *seconds += datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#aaac4cc80ac84d626e36efc43f2260660">day</a>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    *seconds += datetime-&gt;day;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="comment">/* For leap year if month less than or equal to Febraury, decrement day counter*/</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">if</span> ((!(datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5">year</a> &amp; 3U)) &amp;&amp; (datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a2b35975dfac711962b75b6eed01a8b76">month</a> &lt;= 2U))</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordflow">if</span> ((!(datetime-&gt;year &amp; 3U)) &amp;&amp; (datetime-&gt;month &lt;= 2U))</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    {</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        (*seconds)--;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    }</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    *seconds = ((*seconds) * <a class="code" href="rtc_8c.html#a6508df70318d3f264c21b2df2dfe0417">SECONDS_IN_A_DAY</a>) + (datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a15b134f80414a70a78c4b2f683cace39">hour</a> * <a class="code" href="rtc_8c.html#a89f27ac647907366a71f2c8cc17bc779">SECONDS_IN_A_HOUR</a>) + </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;               (datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#aa9bb52078cb5c647a0dfef243db183d6">minute</a> * <a class="code" href="rtc_8c.html#a2d4507f6669e33be61a692bf2a927465">SECONDS_IN_A_MIN</a>) + datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a8459fc4e94de7eefc74991e41779c8fc">second</a>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    *seconds = ((*seconds) * SECONDS_IN_A_DAY) + (datetime-&gt;hour * SECONDS_IN_A_HOUR) + </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;               (datetime-&gt;minute * SECONDS_IN_A_MIN) + datetime-&gt;second;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    (*seconds)++;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="rtc_8c.html#a46ea6f4d85f28a7424e106f44de40a96">   94</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a46ea6f4d85f28a7424e106f44de40a96">RTC_SecondToDateTime</a>(<span class="keyword">const</span> uint32_t * seconds, <a class="code" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> * datetime)</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> RTC_SecondToDateTime(<span class="keyword">const</span> uint32_t * seconds, RTC_DateTime_Type * datetime)</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;{</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    uint32_t x;</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    uint32_t Seconds, Days, Days_in_year;</div>
@@ -111,49 +111,49 @@
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="comment">/* Start from 1970-01-01*/</span></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    Seconds = *seconds;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="comment">/* days*/</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    Days = Seconds / <a class="code" href="rtc_8c.html#a6508df70318d3f264c21b2df2dfe0417">SECONDS_IN_A_DAY</a>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    Days = Seconds / SECONDS_IN_A_DAY;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="comment">/* seconds left*/</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    Seconds = Seconds % <a class="code" href="rtc_8c.html#a6508df70318d3f264c21b2df2dfe0417">SECONDS_IN_A_DAY</a>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    Seconds = Seconds % SECONDS_IN_A_DAY;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="comment">/* hours*/</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a15b134f80414a70a78c4b2f683cace39">hour</a> = Seconds / <a class="code" href="rtc_8c.html#a89f27ac647907366a71f2c8cc17bc779">SECONDS_IN_A_HOUR</a>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    datetime-&gt;hour = Seconds / SECONDS_IN_A_HOUR;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="comment">/* seconds left*/</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    Seconds = Seconds % <a class="code" href="rtc_8c.html#a89f27ac647907366a71f2c8cc17bc779">SECONDS_IN_A_HOUR</a>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    Seconds = Seconds % SECONDS_IN_A_HOUR;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="comment">/* minutes*/</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#aa9bb52078cb5c647a0dfef243db183d6">minute</a> = Seconds / <a class="code" href="rtc_8c.html#a2d4507f6669e33be61a692bf2a927465">SECONDS_IN_A_MIN</a>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    datetime-&gt;minute = Seconds / SECONDS_IN_A_MIN;</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="comment">/* seconds*/</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a8459fc4e94de7eefc74991e41779c8fc">second</a> = Seconds % <a class="code" href="rtc_8c.html#a2d4507f6669e33be61a692bf2a927465">SECONDS_IN_A_MIN</a>;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    datetime-&gt;second = Seconds % SECONDS_IN_A_MIN;</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="comment">/* year*/</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5">year</a> = 1970;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    Days_in_year = <a class="code" href="rtc_8c.html#a86ea846ff952e2c09d60d0bacccfb0e0">DAYS_IN_A_YEAR</a>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    datetime-&gt;year = 1970;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    Days_in_year = DAYS_IN_A_YEAR;</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">while</span> (Days &gt; Days_in_year)</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    {</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        Days -= Days_in_year;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5">year</a>++;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">if</span>  (datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5">year</a> &amp; 3U)</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        datetime-&gt;year++;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordflow">if</span>  (datetime-&gt;year &amp; 3U)</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        {</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            Days_in_year = <a class="code" href="rtc_8c.html#a86ea846ff952e2c09d60d0bacccfb0e0">DAYS_IN_A_YEAR</a>;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            Days_in_year = DAYS_IN_A_YEAR;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        }</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        {</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            Days_in_year = <a class="code" href="rtc_8c.html#ac74e4ed694402638591a210c9100528e">DAYS_IN_A_LEAP_YEAR</a>;    </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            Days_in_year = DAYS_IN_A_LEAP_YEAR;    </div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        }</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    }</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">if</span>  (datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5">year</a> &amp; 3U)</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">if</span>  (datetime-&gt;year &amp; 3U)</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    {</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        Days_in_month = <a class="code" href="rtc_8c.html#a23efa45b94ae21abe595d59a0a6610c5">ULY</a>;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        Days_in_month = ULY;</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    }</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    {</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        Days_in_month = <a class="code" href="rtc_8c.html#a0d0cf926ed0db04e7849569772916e45">LY</a>;    </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        Days_in_month = LY;    </div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    }</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="keywordflow">for</span> (x=1U; x &lt;= 12U; x++)</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    {</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="keywordflow">if</span> (Days &lt;= (*(Days_in_month + x)))</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        {</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;            datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#a2b35975dfac711962b75b6eed01a8b76">month</a> = x;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;            datetime-&gt;month = x;</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        }</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keywordflow">else</span></div>
@@ -161,20 +161,20 @@
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            Days -= (*(Days_in_month + x));</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        }</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    }</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    datetime-&gt;<a class="code" href="struct_r_t_c___date_time___type.html#aaac4cc80ac84d626e36efc43f2260660">day</a> = Days;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    datetime-&gt;day = Days;</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;}</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
-<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="rtc_8h.html#a48e388cc670748b2f7f9b1427eb29113">  165</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a48e388cc670748b2f7f9b1427eb29113">RTC_GetDateTime</a>(<a class="code" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> * datetime)</div>
+<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="rtc_8c.html#a48e388cc670748b2f7f9b1427eb29113">  165</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a48e388cc670748b2f7f9b1427eb29113">RTC_GetDateTime</a>(RTC_DateTime_Type * datetime)</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;{</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="keywordflow">if</span>(!datetime)</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    {</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    }</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    uint32_t i = RTC-&gt;TSR;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <a class="code" href="rtc_8c.html#a46ea6f4d85f28a7424e106f44de40a96">RTC_SecondToDateTime</a>(&amp;i, datetime);</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    RTC_SecondToDateTime(&amp;i, datetime);</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;}</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
-<div class="line"><a name="l00188"></a><span class="lineno"><a class="line" href="rtc_8h.html#a2f6966685fa28c050b66f5d519611055">  188</a></span>&#160;uint32_t <a class="code" href="rtc_8c.html#a2f6966685fa28c050b66f5d519611055">RTC_IsTimeValid</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00188"></a><span class="lineno"><a class="line" href="rtc_8c.html#a2f6966685fa28c050b66f5d519611055">  188</a></span>&#160;uint32_t <a class="code" href="rtc_8c.html#a2f6966685fa28c050b66f5d519611055">RTC_IsTimeValid</a>(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;{</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keywordflow">if</span>(RTC-&gt;TSR)</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    {</div>
@@ -183,18 +183,18 @@
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;}</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
-<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="rtc_8h.html#a3e606742e83a253f4dc1f48e1731dd47">  202</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a3e606742e83a253f4dc1f48e1731dd47">RTC_SetAlarm</a>(<a class="code" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> * datetime)</div>
+<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="rtc_8c.html#a3e606742e83a253f4dc1f48e1731dd47">  202</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a3e606742e83a253f4dc1f48e1731dd47">RTC_SetAlarm</a>(RTC_DateTime_Type * datetime)</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;{</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    uint32_t i;</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="keywordflow">if</span>(!datetime)</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    {</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    }</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <a class="code" href="rtc_8c.html#aa33d1e90c0ff2390c5d17ec18dd361b0">RTC_DateTimeToSecond</a>(datetime, &amp;i);</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    RTC_DateTimeToSecond(datetime, &amp;i);</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    RTC-&gt;TAR = i-1;</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;}</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;</div>
-<div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="rtc_8h.html#a866ad8e1eabe3168a66d9be0eb82697f">  236</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a866ad8e1eabe3168a66d9be0eb82697f">RTC_SetCompensation</a>(uint32_t compensationInterval, uint32_t timeCompensation)</div>
+<div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="rtc_8c.html#a866ad8e1eabe3168a66d9be0eb82697f">  236</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a866ad8e1eabe3168a66d9be0eb82697f">RTC_SetCompensation</a>(uint32_t compensationInterval, uint32_t timeCompensation)</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;{</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    RTC-&gt;TCR &amp;= ~RTC_TCR_CIR_MASK;</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    RTC-&gt;TCR &amp;= ~RTC_TCR_TCR_MASK;</div>
@@ -202,7 +202,7 @@
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    RTC-&gt;TCR |= RTC_TCR_TCR(timeCompensation);</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;}</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    </div>
-<div class="line"><a name="l00249"></a><span class="lineno"><a class="line" href="rtc_8h.html#a5ce3baabe19d07a3fc6ca06edfc64045">  249</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a5ce3baabe19d07a3fc6ca06edfc64045">RTC_Init</a>(<a class="code" href="struct_r_t_c___init_type_def.html">RTC_InitTypeDef</a> * RTC_InitStruct)</div>
+<div class="line"><a name="l00249"></a><span class="lineno"><a class="line" href="rtc_8c.html#a5ce3baabe19d07a3fc6ca06edfc64045">  249</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a5ce3baabe19d07a3fc6ca06edfc64045">RTC_Init</a>(RTC_InitTypeDef * RTC_InitStruct)</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;{</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keyword">volatile</span> uint32_t i;</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    SIM-&gt;SCGC6 |= SIM_SCGC6_RTC_MASK;</div>
@@ -216,18 +216,18 @@
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    RTC-&gt;CR &amp;= ~RTC_CR_OSCE_MASK;</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    </div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="comment">/* OSC load config */</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keywordflow">switch</span>(RTC_InitStruct-&gt;<a class="code" href="struct_r_t_c___init_type_def.html#ac6248892df5b97d11d54ba5b1294892e">oscLoad</a>)</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keywordflow">switch</span>(RTC_InitStruct-&gt;oscLoad)</div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    {</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="rtc_8h.html#a458281a9025134fbdbf90d1868854e0fa4168abc34e197e037426dabcd0fdda45">kRTC_OScLoad_2PF</a>:</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keywordflow">case</span> kRTC_OScLoad_2PF:</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            RTC-&gt;CR |= RTC_CR_SC2P_MASK;</div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="rtc_8h.html#a458281a9025134fbdbf90d1868854e0fa383c832813c4fc585060fbda4916e9a7">kRTC_OScLoad_4PF</a>:</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keywordflow">case</span> kRTC_OScLoad_4PF:</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            RTC-&gt;CR |= RTC_CR_SC4P_MASK;</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="rtc_8h.html#a458281a9025134fbdbf90d1868854e0fa5f4b2b1aa976281cfd3e2f1073b2be58">kRTC_OScLoad_8PF</a>:</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">case</span> kRTC_OScLoad_8PF:</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            RTC-&gt;CR |= RTC_CR_SC8P_MASK;</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="rtc_8h.html#a458281a9025134fbdbf90d1868854e0fabbc4dc86ed942788dd9eeaca4c5ee4c7">kRTC_OScLoad_16PF</a>:</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">case</span> kRTC_OScLoad_16PF:</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            RTC-&gt;CR |= RTC_CR_SC16P_MASK;</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordflow">default</span>:</div>
@@ -242,7 +242,7 @@
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    RTC-&gt;SR |= RTC_SR_TCE_MASK;</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;}</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
-<div class="line"><a name="l00294"></a><span class="lineno"><a class="line" href="rtc_8h.html#a55bf4b4faeb7cdf6a439755030657d19">  294</a></span>&#160;uint32_t <a class="code" href="rtc_8c.html#a55bf4b4faeb7cdf6a439755030657d19">RTC_GetTSR</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00294"></a><span class="lineno"><a class="line" href="rtc_8c.html#a55bf4b4faeb7cdf6a439755030657d19">  294</a></span>&#160;uint32_t <a class="code" href="rtc_8c.html#a55bf4b4faeb7cdf6a439755030657d19">RTC_GetTSR</a>(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;{</div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keywordflow">return</span> RTC-&gt;TSR;</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;}</div>
@@ -252,28 +252,28 @@
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keywordflow">return</span> RTC-&gt;TAR;</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;}</div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;</div>
-<div class="line"><a name="l00314"></a><span class="lineno"><a class="line" href="rtc_8h.html#a3ba9fbfac547a868112f3bd726439f61">  314</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a3ba9fbfac547a868112f3bd726439f61">RTC_SetDateTime</a>(<a class="code" href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a> * datetime)</div>
+<div class="line"><a name="l00314"></a><span class="lineno"><a class="line" href="rtc_8c.html#a3ba9fbfac547a868112f3bd726439f61">  314</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a3ba9fbfac547a868112f3bd726439f61">RTC_SetDateTime</a>(RTC_DateTime_Type * datetime)</div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;{</div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    uint32_t i;</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keywordflow">if</span>(!datetime)</div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    {</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    }</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <a class="code" href="rtc_8c.html#aa33d1e90c0ff2390c5d17ec18dd361b0">RTC_DateTimeToSecond</a>(datetime, &amp;i);</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <a class="code" href="common_8h.html#ab725342e4bb14e632cad12a1871ff064">LIB_TRACE</a>(<span class="stringliteral">&quot;Reconfig:%d  %s\r\n&quot;</span>, i, __func__);</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    RTC_DateTimeToSecond(datetime, &amp;i);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    LIB_TRACE(<span class="stringliteral">&quot;Reconfig:%d  %s\r\n&quot;</span>, i, __func__);</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    RTC-&gt;SR &amp;= ~RTC_SR_TCE_MASK;</div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    RTC-&gt;TSR = RTC_TSR_TSR(i);</div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    RTC-&gt;SR |= RTC_SR_TCE_MASK;</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;}</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
-<div class="line"><a name="l00333"></a><span class="lineno"><a class="line" href="rtc_8h.html#a2990d6de1d5f4f0fbd424a7ff7db1c0c">  333</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a2990d6de1d5f4f0fbd424a7ff7db1c0c">RTC_SetTSR</a>(uint32_t val)</div>
+<div class="line"><a name="l00333"></a><span class="lineno"><a class="line" href="rtc_8c.html#a2990d6de1d5f4f0fbd424a7ff7db1c0c">  333</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a2990d6de1d5f4f0fbd424a7ff7db1c0c">RTC_SetTSR</a>(uint32_t val)</div>
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;{</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    RTC-&gt;SR &amp;= ~RTC_SR_TCE_MASK;</div>
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    RTC-&gt;TSR = RTC_TSR_TSR(val);</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    RTC-&gt;SR |= RTC_SR_TCE_MASK;  </div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;}</div>
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;</div>
-<div class="line"><a name="l00354"></a><span class="lineno"><a class="line" href="rtc_8h.html#ab40ae2572ca2383ef06c36beef625479">  354</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#ab40ae2572ca2383ef06c36beef625479">RTC_ITDMAConfig</a>(<a class="code" href="rtc_8h.html#a92307d03f065927ecbe577d96025af61">RTC_ITDMAConfig_Type</a> config, <span class="keywordtype">bool</span> status)</div>
+<div class="line"><a name="l00354"></a><span class="lineno"><a class="line" href="rtc_8c.html#ab40ae2572ca2383ef06c36beef625479">  354</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#ab40ae2572ca2383ef06c36beef625479">RTC_ITDMAConfig</a>(RTC_ITDMAConfig_Type config, <span class="keywordtype">bool</span> status)</div>
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;{</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="keywordflow">if</span>(status)</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    {</div>
@@ -282,12 +282,12 @@
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    </div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    <span class="keywordflow">switch</span>(config)</div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    {</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="rtc_8h.html#a92307d03f065927ecbe577d96025af61a4809cbada7f49017d095fe157b4ef928">kRTC_IT_TimeOverflow</a>:</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        <span class="keywordflow">case</span> kRTC_IT_TimeOverflow:</div>
 <div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;            (status)?</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;            (RTC-&gt;IER |= RTC_IER_TOIE_MASK):</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            (RTC-&gt;IER &amp;= ~RTC_IER_TOIE_MASK);</div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;            <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="rtc_8h.html#a92307d03f065927ecbe577d96025af61af86432519a378f208431ec430a696adb">kRTC_IT_TimeAlarm</a>:</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        <span class="keywordflow">case</span> kRTC_IT_TimeAlarm:</div>
 <div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;            (status)?</div>
 <div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;            (RTC-&gt;IER |= RTC_IER_TAIE_MASK):</div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            (RTC-&gt;IER &amp;= ~RTC_IER_TAIE_MASK);</div>
@@ -297,18 +297,18 @@
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    }</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;}</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;</div>
-<div class="line"><a name="l00384"></a><span class="lineno"><a class="line" href="rtc_8h.html#a2907938f4a07d731fcc2b31772882a21">  384</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a2907938f4a07d731fcc2b31772882a21">RTC_CallbackInstall</a>(<a class="code" href="rtc_8h.html#abd5529150f07b298e1af8095886bdd42">RTC_CallBackType</a> AppCBFun)</div>
+<div class="line"><a name="l00384"></a><span class="lineno"><a class="line" href="rtc_8c.html#a2907938f4a07d731fcc2b31772882a21">  384</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#a2907938f4a07d731fcc2b31772882a21">RTC_CallbackInstall</a>(RTC_CallBackType AppCBFun)</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;{</div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="keywordflow">if</span>(AppCBFun != NULL)</div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    {</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        <a class="code" href="rtc_8c.html#ace29156b6a4d29cff3dc22ba7f921d37">RTC_CallBackTable</a>[0] = AppCBFun;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        RTC_CallBackTable[0] = AppCBFun;</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    }</div>
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;}</div>
 <div class="line"><a name="l00395"></a><span class="lineno"><a class="line" href="rtc_8c.html#ab86b9dd0d7b4eacfe38086e1fa4c2312">  395</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="rtc_8c.html#ab86b9dd0d7b4eacfe38086e1fa4c2312">RTC_IRQHandler</a>(<span class="keywordtype">void</span>)</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;{</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="rtc_8c.html#ace29156b6a4d29cff3dc22ba7f921d37">RTC_CallBackTable</a>[0])</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keywordflow">if</span>(RTC_CallBackTable[0])</div>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    {</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        <a class="code" href="rtc_8c.html#ace29156b6a4d29cff3dc22ba7f921d37">RTC_CallBackTable</a>[0]();</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        RTC_CallBackTable[0]();</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    }</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    <span class="comment">/* clear pending bit if not cleared */</span></div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    <span class="keywordflow">if</span>((RTC-&gt;IER &amp; RTC_IER_TOIE_MASK) &amp;&amp; (RTC-&gt;SR &amp; RTC_SR_TOF_MASK))</div>
@@ -322,50 +322,19 @@
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;}</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;</div>
 <div class="ttc" id="rtc_8c_html_a5ce3baabe19d07a3fc6ca06edfc64045"><div class="ttname"><a href="rtc_8c.html#a5ce3baabe19d07a3fc6ca06edfc64045">RTC_Init</a></div><div class="ttdeci">void RTC_Init(RTC_InitTypeDef *RTC_InitStruct)</div><div class="ttdoc">RTC模块初始化配置，用来配置内部的电容参数 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00249">rtc.c:249</a></div></div>
-<div class="ttc" id="rtc_8h_html"><div class="ttname"><a href="rtc_8h.html">rtc.h</a></div><div class="ttdoc">www.beyondcore.net http://upcmcu.taobao.com </div></div>
-<div class="ttc" id="rtc_8c_html_a46ea6f4d85f28a7424e106f44de40a96"><div class="ttname"><a href="rtc_8c.html#a46ea6f4d85f28a7424e106f44de40a96">RTC_SecondToDateTime</a></div><div class="ttdeci">static void RTC_SecondToDateTime(const uint32_t *seconds, RTC_DateTime_Type *datetime)</div><div class="ttdoc">由秒计算出日期 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00094">rtc.c:94</a></div></div>
-<div class="ttc" id="struct_r_t_c___date_time___type_html"><div class="ttname"><a href="struct_r_t_c___date_time___type.html">RTC_DateTime_Type</a></div><div class="ttdoc">RTC初始化结构 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00020">rtc.h:20</a></div></div>
-<div class="ttc" id="struct_r_t_c___date_time___type_html_a15b134f80414a70a78c4b2f683cace39"><div class="ttname"><a href="struct_r_t_c___date_time___type.html#a15b134f80414a70a78c4b2f683cace39">RTC_DateTime_Type::hour</a></div><div class="ttdeci">uint16_t hour</div><div class="ttdoc">时Range from 0 to 23. </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00025">rtc.h:25</a></div></div>
-<div class="ttc" id="rtc_8h_html_a458281a9025134fbdbf90d1868854e0fabbc4dc86ed942788dd9eeaca4c5ee4c7"><div class="ttname"><a href="rtc_8h.html#a458281a9025134fbdbf90d1868854e0fabbc4dc86ed942788dd9eeaca4c5ee4c7">kRTC_OScLoad_16PF</a></div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00040">rtc.h:40</a></div></div>
-<div class="ttc" id="rtc_8c_html_a86ea846ff952e2c09d60d0bacccfb0e0"><div class="ttname"><a href="rtc_8c.html#a86ea846ff952e2c09d60d0bacccfb0e0">DAYS_IN_A_YEAR</a></div><div class="ttdeci">#define DAYS_IN_A_YEAR</div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00021">rtc.c:21</a></div></div>
-<div class="ttc" id="struct_r_t_c___date_time___type_html_aa9bb52078cb5c647a0dfef243db183d6"><div class="ttname"><a href="struct_r_t_c___date_time___type.html#aa9bb52078cb5c647a0dfef243db183d6">RTC_DateTime_Type::minute</a></div><div class="ttdeci">uint16_t minute</div><div class="ttdoc">分Range from 0 to 59. </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00026">rtc.h:26</a></div></div>
 <div class="ttc" id="rtc_8c_html_a2f6966685fa28c050b66f5d519611055"><div class="ttname"><a href="rtc_8c.html#a2f6966685fa28c050b66f5d519611055">RTC_IsTimeValid</a></div><div class="ttdeci">uint32_t RTC_IsTimeValid(void)</div><div class="ttdoc">判断当前RTC时钟模块时间是否有效 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00188">rtc.c:188</a></div></div>
-<div class="ttc" id="rtc_8c_html_a6508df70318d3f264c21b2df2dfe0417"><div class="ttname"><a href="rtc_8c.html#a6508df70318d3f264c21b2df2dfe0417">SECONDS_IN_A_DAY</a></div><div class="ttdeci">#define SECONDS_IN_A_DAY</div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00018">rtc.c:18</a></div></div>
-<div class="ttc" id="rtc_8c_html_ac74e4ed694402638591a210c9100528e"><div class="ttname"><a href="rtc_8c.html#ac74e4ed694402638591a210c9100528e">DAYS_IN_A_LEAP_YEAR</a></div><div class="ttdeci">#define DAYS_IN_A_LEAP_YEAR</div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00022">rtc.c:22</a></div></div>
-<div class="ttc" id="rtc_8c_html_a89f27ac647907366a71f2c8cc17bc779"><div class="ttname"><a href="rtc_8c.html#a89f27ac647907366a71f2c8cc17bc779">SECONDS_IN_A_HOUR</a></div><div class="ttdeci">#define SECONDS_IN_A_HOUR</div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00019">rtc.c:19</a></div></div>
 <div class="ttc" id="rtc_8c_html_a2990d6de1d5f4f0fbd424a7ff7db1c0c"><div class="ttname"><a href="rtc_8c.html#a2990d6de1d5f4f0fbd424a7ff7db1c0c">RTC_SetTSR</a></div><div class="ttdeci">void RTC_SetTSR(uint32_t val)</div><div class="ttdoc">设置RTC的Time Seconds Register </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00333">rtc.c:333</a></div></div>
-<div class="ttc" id="struct_r_t_c___date_time___type_html_aaac4cc80ac84d626e36efc43f2260660"><div class="ttname"><a href="struct_r_t_c___date_time___type.html#aaac4cc80ac84d626e36efc43f2260660">RTC_DateTime_Type::day</a></div><div class="ttdeci">uint16_t day</div><div class="ttdoc">日Range from 1 to 31 (depending on month). </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00024">rtc.h:24</a></div></div>
-<div class="ttc" id="rtc_8h_html_a92307d03f065927ecbe577d96025af61af86432519a378f208431ec430a696adb"><div class="ttname"><a href="rtc_8h.html#a92307d03f065927ecbe577d96025af61af86432519a378f208431ec430a696adb">kRTC_IT_TimeAlarm</a></div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00058">rtc.h:58</a></div></div>
-<div class="ttc" id="rtc_8c_html_ace29156b6a4d29cff3dc22ba7f921d37"><div class="ttname"><a href="rtc_8c.html#ace29156b6a4d29cff3dc22ba7f921d37">RTC_CallBackTable</a></div><div class="ttdeci">static RTC_CallBackType RTC_CallBackTable[1]</div><div class="ttdoc">< Callback function slot </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00016">rtc.c:16</a></div></div>
 <div class="ttc" id="rtc_8c_html_a0f2e25987149a5766e0908a34e41d0f4"><div class="ttname"><a href="rtc_8c.html#a0f2e25987149a5766e0908a34e41d0f4">RTC_QuickInit</a></div><div class="ttdeci">void RTC_QuickInit(void)</div><div class="ttdoc">RTC模块快速初始化配置，设定内部电容为8pF. </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00034">rtc.c:34</a></div></div>
 <div class="ttc" id="rtc_8c_html_a48e388cc670748b2f7f9b1427eb29113"><div class="ttname"><a href="rtc_8c.html#a48e388cc670748b2f7f9b1427eb29113">RTC_GetDateTime</a></div><div class="ttdeci">void RTC_GetDateTime(RTC_DateTime_Type *datetime)</div><div class="ttdoc">获得RTC的时间 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00165">rtc.c:165</a></div></div>
-<div class="ttc" id="rtc_8h_html_a92307d03f065927ecbe577d96025af61a4809cbada7f49017d095fe157b4ef928"><div class="ttname"><a href="rtc_8h.html#a92307d03f065927ecbe577d96025af61a4809cbada7f49017d095fe157b4ef928">kRTC_IT_TimeOverflow</a></div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00059">rtc.h:59</a></div></div>
 <div class="ttc" id="rtc_8c_html_ac79760d221e75d682b381bd7fc5e5cdb"><div class="ttname"><a href="rtc_8c.html#ac79760d221e75d682b381bd7fc5e5cdb">RTC_GetWeekFromYMD</a></div><div class="ttdeci">int RTC_GetWeekFromYMD(int year, int month, int days)</div><div class="ttdoc">由年月日计算出周数 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00048">rtc.c:48</a></div></div>
 <div class="ttc" id="rtc_8c_html_ad536fad9607cef0dba9f32d932aa1a78"><div class="ttname"><a href="rtc_8c.html#ad536fad9607cef0dba9f32d932aa1a78">RTC_GetTAR</a></div><div class="ttdeci">uint32_t RTC_GetTAR(void)</div><div class="ttdoc">获得Time Alarm值 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00304">rtc.c:304</a></div></div>
 <div class="ttc" id="rtc_8c_html_ab86b9dd0d7b4eacfe38086e1fa4c2312"><div class="ttname"><a href="rtc_8c.html#ab86b9dd0d7b4eacfe38086e1fa4c2312">RTC_IRQHandler</a></div><div class="ttdeci">void RTC_IRQHandler(void)</div><div class="ttdoc">系统中断处理函数，调用用户定义的回调函数，此函数用户无需使用 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00395">rtc.c:395</a></div></div>
-<div class="ttc" id="struct_r_t_c___init_type_def_html_ac6248892df5b97d11d54ba5b1294892e"><div class="ttname"><a href="struct_r_t_c___init_type_def.html#ac6248892df5b97d11d54ba5b1294892e">RTC_InitTypeDef::oscLoad</a></div><div class="ttdeci">RTC_OscLoad_Type oscLoad</div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00049">rtc.h:49</a></div></div>
-<div class="ttc" id="rtc_8h_html_a458281a9025134fbdbf90d1868854e0fa5f4b2b1aa976281cfd3e2f1073b2be58"><div class="ttname"><a href="rtc_8h.html#a458281a9025134fbdbf90d1868854e0fa5f4b2b1aa976281cfd3e2f1073b2be58">kRTC_OScLoad_8PF</a></div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00039">rtc.h:39</a></div></div>
 <div class="ttc" id="rtc_8c_html_a3ba9fbfac547a868112f3bd726439f61"><div class="ttname"><a href="rtc_8c.html#a3ba9fbfac547a868112f3bd726439f61">RTC_SetDateTime</a></div><div class="ttdeci">void RTC_SetDateTime(RTC_DateTime_Type *datetime)</div><div class="ttdoc">设置RTC的时间 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00314">rtc.c:314</a></div></div>
 <div class="ttc" id="rtc_8c_html_ab40ae2572ca2383ef06c36beef625479"><div class="ttname"><a href="rtc_8c.html#ab40ae2572ca2383ef06c36beef625479">RTC_ITDMAConfig</a></div><div class="ttdeci">void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config, bool status)</div><div class="ttdoc">设置RTC中断功能 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00354">rtc.c:354</a></div></div>
 <div class="ttc" id="rtc_8c_html_a3e606742e83a253f4dc1f48e1731dd47"><div class="ttname"><a href="rtc_8c.html#a3e606742e83a253f4dc1f48e1731dd47">RTC_SetAlarm</a></div><div class="ttdeci">void RTC_SetAlarm(RTC_DateTime_Type *datetime)</div><div class="ttdoc">设置闹钟时间 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00202">rtc.c:202</a></div></div>
-<div class="ttc" id="struct_r_t_c___date_time___type_html_a57ca98d8f6d4baf0fe41c583c7dcb0d5"><div class="ttname"><a href="struct_r_t_c___date_time___type.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5">RTC_DateTime_Type::year</a></div><div class="ttdeci">uint16_t year</div><div class="ttdoc">年Range from 200 to 2099. </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00022">rtc.h:22</a></div></div>
-<div class="ttc" id="rtc_8c_html_a2d4507f6669e33be61a692bf2a927465"><div class="ttname"><a href="rtc_8c.html#a2d4507f6669e33be61a692bf2a927465">SECONDS_IN_A_MIN</a></div><div class="ttdeci">#define SECONDS_IN_A_MIN</div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00020">rtc.c:20</a></div></div>
-<div class="ttc" id="rtc_8h_html_a458281a9025134fbdbf90d1868854e0fa4168abc34e197e037426dabcd0fdda45"><div class="ttname"><a href="rtc_8h.html#a458281a9025134fbdbf90d1868854e0fa4168abc34e197e037426dabcd0fdda45">kRTC_OScLoad_2PF</a></div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00037">rtc.h:37</a></div></div>
-<div class="ttc" id="rtc_8c_html_a23efa45b94ae21abe595d59a0a6610c5"><div class="ttname"><a href="rtc_8c.html#a23efa45b94ae21abe595d59a0a6610c5">ULY</a></div><div class="ttdeci">static const uint8_t ULY[]</div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00024">rtc.c:24</a></div></div>
-<div class="ttc" id="struct_r_t_c___date_time___type_html_a2b35975dfac711962b75b6eed01a8b76"><div class="ttname"><a href="struct_r_t_c___date_time___type.html#a2b35975dfac711962b75b6eed01a8b76">RTC_DateTime_Type::month</a></div><div class="ttdeci">uint16_t month</div><div class="ttdoc">月Range from 1 to 12. </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00023">rtc.h:23</a></div></div>
-<div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div><div class="ttdoc">www.beyondcore.net http://upcmcu.taobao.com </div></div>
-<div class="ttc" id="rtc_8c_html_a2d1d051a553e9e686ac8b550c406c38a"><div class="ttname"><a href="rtc_8c.html#a2d1d051a553e9e686ac8b550c406c38a">MONTH_DAYS</a></div><div class="ttdeci">static const uint16_t MONTH_DAYS[]</div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00028">rtc.c:28</a></div></div>
-<div class="ttc" id="rtc_8c_html_aa33d1e90c0ff2390c5d17ec18dd361b0"><div class="ttname"><a href="rtc_8c.html#aa33d1e90c0ff2390c5d17ec18dd361b0">RTC_DateTimeToSecond</a></div><div class="ttdeci">static void RTC_DateTimeToSecond(const RTC_DateTime_Type *datetime, uint32_t *seconds)</div><div class="ttdoc">由日期计算出秒 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00067">rtc.c:67</a></div></div>
 <div class="ttc" id="rtc_8c_html_a2907938f4a07d731fcc2b31772882a21"><div class="ttname"><a href="rtc_8c.html#a2907938f4a07d731fcc2b31772882a21">RTC_CallbackInstall</a></div><div class="ttdeci">void RTC_CallbackInstall(RTC_CallBackType AppCBFun)</div><div class="ttdoc">注册中断回调函数 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00384">rtc.c:384</a></div></div>
-<div class="ttc" id="rtc_8h_html_a92307d03f065927ecbe577d96025af61"><div class="ttname"><a href="rtc_8h.html#a92307d03f065927ecbe577d96025af61">RTC_ITDMAConfig_Type</a></div><div class="ttdeci">RTC_ITDMAConfig_Type</div><div class="ttdoc">RTC interrupt and DMA select. </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00056">rtc.h:56</a></div></div>
-<div class="ttc" id="common_8h_html_ab725342e4bb14e632cad12a1871ff064"><div class="ttname"><a href="common_8h.html#ab725342e4bb14e632cad12a1871ff064">LIB_TRACE</a></div><div class="ttdeci">#define LIB_TRACE(...)</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00093">common.h:93</a></div></div>
-<div class="ttc" id="rtc_8c_html_a0d0cf926ed0db04e7849569772916e45"><div class="ttname"><a href="rtc_8c.html#a0d0cf926ed0db04e7849569772916e45">LY</a></div><div class="ttdeci">static const uint8_t LY[]</div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00026">rtc.c:26</a></div></div>
 <div class="ttc" id="rtc_8c_html_a55bf4b4faeb7cdf6a439755030657d19"><div class="ttname"><a href="rtc_8c.html#a55bf4b4faeb7cdf6a439755030657d19">RTC_GetTSR</a></div><div class="ttdeci">uint32_t RTC_GetTSR(void)</div><div class="ttdoc">获得TSR值 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00294">rtc.c:294</a></div></div>
 <div class="ttc" id="rtc_8c_html_a866ad8e1eabe3168a66d9be0eb82697f"><div class="ttname"><a href="rtc_8c.html#a866ad8e1eabe3168a66d9be0eb82697f">RTC_SetCompensation</a></div><div class="ttdeci">void RTC_SetCompensation(uint32_t compensationInterval, uint32_t timeCompensation)</div><div class="ttdoc">设置RTC补偿寄存器 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8c_source.html#l00236">rtc.c:236</a></div></div>
-<div class="ttc" id="rtc_8h_html_a458281a9025134fbdbf90d1868854e0fa383c832813c4fc585060fbda4916e9a7"><div class="ttname"><a href="rtc_8h.html#a458281a9025134fbdbf90d1868854e0fa383c832813c4fc585060fbda4916e9a7">kRTC_OScLoad_4PF</a></div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00038">rtc.h:38</a></div></div>
-<div class="ttc" id="struct_r_t_c___date_time___type_html_a8459fc4e94de7eefc74991e41779c8fc"><div class="ttname"><a href="struct_r_t_c___date_time___type.html#a8459fc4e94de7eefc74991e41779c8fc">RTC_DateTime_Type::second</a></div><div class="ttdeci">uint8_t second</div><div class="ttdoc">秒Range from 0 to 59. </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00027">rtc.h:27</a></div></div>
-<div class="ttc" id="struct_r_t_c___init_type_def_html"><div class="ttname"><a href="struct_r_t_c___init_type_def.html">RTC_InitTypeDef</a></div><div class="ttdoc">OSC 电容负载 </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00047">rtc.h:47</a></div></div>
-<div class="ttc" id="rtc_8h_html_abd5529150f07b298e1af8095886bdd42"><div class="ttname"><a href="rtc_8h.html#abd5529150f07b298e1af8095886bdd42">RTC_CallBackType</a></div><div class="ttdeci">void(* RTC_CallBackType)(void)</div><div class="ttdoc">API functions. </div><div class="ttdef"><b>Definition:</b> <a href="rtc_8h_source.html#l00063">rtc.h:63</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

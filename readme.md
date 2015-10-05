@@ -9,11 +9,10 @@
 请按步骤逐步学习本固件库及Kinetis,先看免费入门视频教程.该教材包含了你想要的全部内容，从整体知识介绍到工具软件下载到入门提高。
 
 1. [中文入门视频](http://www.moore8.com/courses/87)
-2. [参考手册](http://git.oschina.net/yandld/CH-K-Lib/wikis/home)  
-3. [答疑论坛](http://beyondcore.net)
-4. [固件库源代码包下载](http://git.oschina.net/yandld/CH-K-Lib/repository/archive?ref=master)
+2. [答疑论坛](http://beyondcore.net)
+3. [固件库源代码包下载](http://git.oschina.net/yandld/CH-K-Lib/)
 
-## 所支持的IDE[下载](http://pan.baidu.com/s/1kTgJLaf)
+## 所支持的IDE
 * Keil(MDK) V5.00 以上版本 
 * IAR 7.2 以上版本
 

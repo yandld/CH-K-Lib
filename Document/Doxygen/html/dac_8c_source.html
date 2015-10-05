@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.10"/>
+<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/dac.c 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">CH Kinetis library for K series
+   &#160;<span id="projectnumber">V2.5</span>
+   </div>
+   <div id="projectbrief">Kinetis driver library  for K series</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.10 -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>全局定义</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">dac.c</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="dac_8c.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="dac_8h.html">dac.h</a>&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="common_8h.html">common.h</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#if defined(DAC0)</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#if (!defined(DAC_BASES))</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#ifdef DAC0</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="dac_8c.html#aad3bd138b185ee4a6897c8e0e39373be">   18</a></span>&#160;<span class="preprocessor">    #define DAC_BASES   {DAC0}</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#elif  DAC1</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">    #define DAC_BASES   {DAC0, DAC1}</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">/* global vars */</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">   26</a></span>&#160;<span class="keyword">static</span> DAC_Type * <span class="keyword">const</span> <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[] = <a class="code" href="dac_8c.html#aad3bd138b185ee4a6897c8e0e39373be">DAC_BASES</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="dac_8c.html#aac10bb5ef00a968c5763ca4e2d45fa17">   27</a></span>&#160;<span class="keyword">static</span> <a class="code" href="dac_8h.html#ad407a6d9d77443ce6c5e6e8c12a76c53">DAC_CallBackType</a> <a class="code" href="dac_8c.html#aac10bb5ef00a968c5763ca4e2d45fa17">DAC_CallBackTable</a>[<a class="code" href="common_8h.html#a6242a25f9d996f0cc4f4cdb911218b75">ARRAY_SIZE</a>(<a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>)] = {NULL};</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="dac_8c.html#a3b54518d5bfb2095f7a2dd34b3da7919">   28</a></span>&#160;<span class="keyword">static</span> <span class="keyword">const</span> IRQn_Type <a class="code" href="dac_8c.html#a3b54518d5bfb2095f7a2dd34b3da7919">DAC_IRQnTable</a>[] = </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    DAC0_IRQn,</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#ifdef DAC1</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    DAC1_IRQn,</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;};</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="dac_8h.html#a857dca200a9174a257aaf7bba49961bc">   49</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="dac_8c.html#a857dca200a9174a257aaf7bba49961bc">DAC_Init</a>(<a class="code" href="struct_d_a_c___init_type_def.html">DAC_InitTypeDef</a>* DAC_InitStruct)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;{</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    SIM-&gt;SCGC2 |= SIM_SCGC2_DAC0_MASK;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">/* trigger select */</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">switch</span>(DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#ab3261a2474f4c87a7fb34696a3008130">triggerMode</a>)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2c73f6035ccfc32fc64afdecb4363deca52a975eec31313fce098892f5104d720">kDAC_TriggerSoftware</a>:</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C0 |= DAC_C0_DACTRGSEL_MASK;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2c73f6035ccfc32fc64afdecb4363deca3091b096821c11b026079e62ff3ea733">kDAC_TriggerHardware</a>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C0 &amp;= ~DAC_C0_DACTRGSEL_MASK;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    }</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">/* buffer mode */</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">switch</span>(DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a0cd67a025af375a74a651e49a856c46f">bufferMode</a>)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a475291f6fafffd3ab30e6f20298b32efa104a263049203183a64d230a98095803">kDAC_Buffer_Disable</a>:</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 &amp;= ~DAC_C1_DACBFEN_MASK;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a475291f6fafffd3ab30e6f20298b32efa2f940761e21a1a0bd569958e6fc7f9f8">kDAC_Buffer_Normal</a>:</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 |= DAC_C1_DACBFEN_MASK;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 &amp;= ~DAC_C1_DACBFMD_MASK;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 |= DAC_C1_DACBFMD(0);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a475291f6fafffd3ab30e6f20298b32efa4f2e836455259e900f66da9fa2cd9b92">kDAC_Buffer_Swing</a>:</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 |= DAC_C1_DACBFEN_MASK;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 &amp;= ~DAC_C1_DACBFMD_MASK;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 |= DAC_C1_DACBFMD(1);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a475291f6fafffd3ab30e6f20298b32efa1f405ae5bd373e56f505ae2ce63dda90">kDAC_Buffer_OneTimeScan</a>:</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 |= DAC_C1_DACBFEN_MASK;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 &amp;= ~DAC_C1_DACBFMD_MASK;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C1 |= DAC_C1_DACBFMD(2);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="comment">/* reference */</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordflow">switch</span>(DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#af4100aa04b01c821683cc02476c3cd81">referenceMode</a>)</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#adcaef8a2010a83fb77f8780892b106a1a696f2596eba16eb0925e4f2117e6dd87">kDAC_Reference_1</a>:</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C0 &amp;= ~DAC_C0_DACRFS_MASK;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#adcaef8a2010a83fb77f8780892b106a1a66ea0e6477ec2d5bcd1f2f5e84bb731f">kDAC_Reference_2</a>:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C0 |= DAC_C0_DACRFS_MASK;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="comment">/* clear flags */</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;SR &amp;= ~DAC_SR_DACBFRPBF_MASK;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;SR &amp;= ~DAC_SR_DACBFRPTF_MASK;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;SR &amp;= ~DAC_SR_DACBFWMF_MASK;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="comment">/* enable module */</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[DAC_InitStruct-&gt;<a class="code" href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a>]-&gt;C0 |= DAC_C0_DACEN_MASK;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;}</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="dac_8h.html#a09a8880157a2a35dcf05bceb5bc6952d">  116</a></span>&#160;uint32_t <a class="code" href="dac_8c.html#a09a8880157a2a35dcf05bceb5bc6952d">DAC_GetBufferReadPointer</a>(uint32_t instance)</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;{</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordflow">return</span> (<a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C2 &amp; DAC_C2_DACBFRP_MASK) &gt;&gt; DAC_C2_DACBFRP_SHIFT;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;}</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="dac_8h.html#a3756a8dcdcfb0f46aa5b6cbc2038f5ed">  129</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="dac_8c.html#a3756a8dcdcfb0f46aa5b6cbc2038f5ed">DAC_SetBufferReadPointer</a>(uint32_t instance, uint32_t value)</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;{</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C2 &amp;= ~DAC_C2_DACBFRP_MASK;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C2 |= DAC_C2_DACBFRP(value);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
+<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="dac_8h.html#aac8ce2b4b4b24f8ef40bdca9be74b9dd">  147</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="dac_8c.html#aac8ce2b4b4b24f8ef40bdca9be74b9dd">DAC_SetBufferUpperLimit</a>(uint32_t instance, uint32_t value)</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;{</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C2 &amp;= ~DAC_C2_DACBFUP_MASK;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C2 |= DAC_C2_DACBFUP(value);</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;}</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="dac_8h.html#a5cff593b5067d68a7546be4210a5db34">  170</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="dac_8c.html#a5cff593b5067d68a7546be4210a5db34">DAC_ITDMAConfig</a>(uint32_t instance, <a class="code" href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9">DAC_ITDMAConfig_Type</a> config)</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;{</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="keywordflow">switch</span>(config)</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    {</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9a257b7be302004bc451726ea6bd9d6c6e">kDAC_IT_Disable</a>:</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            NVIC_DisableIRQ(<a class="code" href="dac_8c.html#a3b54518d5bfb2095f7a2dd34b3da7919">DAC_IRQnTable</a>[instance]);</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9adc59f95ff1aa715dcf0aa9090353943a">kDAC_DMA_Disable</a>:</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C1 &amp;= ~DAC_C1_DMAEN_MASK;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9a1032beab6e7c93dd19b230b604b10a6e">kDAC_IT_BufferPointer_WaterMark</a>:</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C0 |= DAC_C0_DACBWIEN_MASK;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            NVIC_EnableIRQ(<a class="code" href="dac_8c.html#a3b54518d5bfb2095f7a2dd34b3da7919">DAC_IRQnTable</a>[instance]);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9ada6d1184642df749d1115fa269ec6132">kDAC_IT_BufferPointer_TopFlag</a>:</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C0 |= DAC_C0_DACBTIEN_MASK;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            NVIC_EnableIRQ(<a class="code" href="dac_8c.html#a3b54518d5bfb2095f7a2dd34b3da7919">DAC_IRQnTable</a>[instance]);</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9a68ae16ceaa811d224e94a0734ec5ff06">kDAC_IT_BufferPointer_BottomFlag</a>:</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C0 |= DAC_C0_DACBBIEN_MASK;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            NVIC_EnableIRQ(<a class="code" href="dac_8c.html#a3b54518d5bfb2095f7a2dd34b3da7919">DAC_IRQnTable</a>[instance]);</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9ad44301ae5b2df027679223487ac67e50">kDAC_DMA_BufferPointer_WaterMark</a>:</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C0 |= DAC_C0_DACBWIEN_MASK;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C1 |= DAC_C1_DMAEN_MASK;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9a6f81b17f4680a599ffe6ac525e94d15b">kDAC_DMA_BufferPointer_TopFlag</a>:</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C0 |= DAC_C0_DACBTIEN_MASK;</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C1 |= DAC_C1_DMAEN_MASK;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9ab5e8a1e27d9864a789cf0f5c4ee544f0">kDAC_DMA_BufferPointer_BottomFlag</a>:</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C0 |= DAC_C0_DACBBIEN_MASK;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C1 |= DAC_C1_DMAEN_MASK;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    }</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;}</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
+<div class="line"><a name="l00221"></a><span class="lineno"><a class="line" href="dac_8h.html#a7a06395a2b7ad1efa14c40d99dd57814">  221</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="dac_8c.html#a7a06395a2b7ad1efa14c40d99dd57814">DAC_SoftwareStartConversion</a>(uint32_t instance)</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;{</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C0 |= DAC_C0_DACSWTRG_MASK;</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;}</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;</div>
+<div class="line"><a name="l00234"></a><span class="lineno"><a class="line" href="dac_8h.html#a38fdceecd0259dc3602fae7a87956723">  234</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="dac_8c.html#a38fdceecd0259dc3602fae7a87956723">DAC_SetWaterMark</a>(uint32_t instance, <a class="code" href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773">DAC_WaterMarkMode_Type</a> value)</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;{</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C1 &amp;= ~DAC_C1_DACBFWM_MASK;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keywordflow">switch</span>(value)</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    {</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773a8a3d6cbd078566b16f0893a1f1c98389">kDAC_WaterMark_1Word</a>:</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C1 |= DAC_C1_DACBFWM(0);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773a7c011a7ad329c951c72ac9781e24d328">kDAC_WaterMark_2Word</a>:</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C1 |= DAC_C1_DACBFWM(1);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773afefa476ffd6f7b8f68443eee17a77254">kDAC_WaterMark_3Word</a>:</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C1 |= DAC_C1_DACBFWM(2);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773acfe8e4f03879ca295dc37637400d0161">kDAC_WaterMark_4Word</a>:</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C1 |= DAC_C1_DACBFWM(3);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="keywordflow">default</span>:<span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    }</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;}</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;</div>
+<div class="line"><a name="l00270"></a><span class="lineno"><a class="line" href="dac_8h.html#ac85cbf70d9d25bbb78a35af2998c2def">  270</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="dac_8c.html#ac85cbf70d9d25bbb78a35af2998c2def">DAC_SetBufferValue</a>(uint32_t instance, uint16_t* buf, uint8_t len)</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;{</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    uint8_t i;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    <span class="keywordflow">for</span>(i = 0; i &lt; len; i++)</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    {</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;DAT[i].DATL = (buf[i] &amp; 0x00FF);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;DAT[i].DATH = (buf[i] &amp; 0xFF00)&gt;&gt;8;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    }                       </div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;}</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;</div>
+<div class="line"><a name="l00289"></a><span class="lineno"><a class="line" href="dac_8h.html#ada9b3599eeb7b04a5c23929480ddca79">  289</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="dac_8c.html#ada9b3599eeb7b04a5c23929480ddca79">DAC_CallbackInstall</a>(uint8_t instance, <a class="code" href="dac_8h.html#ad407a6d9d77443ce6c5e6e8c12a76c53">DAC_CallBackType</a> AppCBFun)</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;{</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    <span class="keywordflow">if</span>(AppCBFun != NULL)</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    {</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <a class="code" href="dac_8c.html#aac10bb5ef00a968c5763ca4e2d45fa17">DAC_CallBackTable</a>[instance] = AppCBFun;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    }</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;}</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
+<div class="line"><a name="l00302"></a><span class="lineno"><a class="line" href="dac_8c.html#aa3f5587020a4cab9cd9cc6ec3fd20d1d">  302</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="dac_8c.html#aa3f5587020a4cab9cd9cc6ec3fd20d1d">DAC_IRQHandler</a>(uint32_t instance)</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;{</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="comment">/* clear IT pending bit */</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    uint32_t C0 = <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;C0;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keywordflow">if</span>(C0 &amp; DAC_C0_DACBWIEN_MASK)</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    {</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;SR &amp;= ~DAC_SR_DACBFWMF_MASK;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    }</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <span class="keywordflow">if</span>(C0 &amp; DAC_C0_DACBBIEN_MASK)</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    {</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;SR &amp;= ~DAC_SR_DACBFRPBF_MASK;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    }</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="keywordflow">if</span>(C0 &amp; DAC_C0_DACBTIEN_MASK)</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    {</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <a class="code" href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a>[instance]-&gt;SR &amp;= ~DAC_SR_DACBFRPTF_MASK;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    }</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="comment">/* call back */</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    <span class="keywordflow">if</span>(<a class="code" href="dac_8c.html#aac10bb5ef00a968c5763ca4e2d45fa17">DAC_CallBackTable</a>[instance] != NULL)</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    {</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <a class="code" href="dac_8c.html#aac10bb5ef00a968c5763ca4e2d45fa17">DAC_CallBackTable</a>[instance]();</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    }   </div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;}</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;</div>
+<div class="line"><a name="l00330"></a><span class="lineno"><a class="line" href="dac_8c.html#a28152888205e94cb859cdd5914762dfc">  330</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="dac_8c.html#a28152888205e94cb859cdd5914762dfc">DAC0_IRQHandler</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;{</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <a class="code" href="dac_8c.html#aa3f5587020a4cab9cd9cc6ec3fd20d1d">DAC_IRQHandler</a>(<a class="code" href="dac_8h.html#a42ae0694955f24833f17bfd9dff5693e">HW_DAC0</a>);</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;}</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="preprocessor">#if defined(DAC1)</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="keywordtype">void</span> DAC1_IRQHandler(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;{</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <a class="code" href="dac_8c.html#aa3f5587020a4cab9cd9cc6ec3fd20d1d">DAC_IRQHandler</a>(<a class="code" href="dac_8h.html#ac26aad339051a1b6db5674bfb1888977">HW_DAC1</a>);</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;}</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="dac_8c_html_aab85e68c23fa44547b1c74dccd5ef994"><div class="ttname"><a href="dac_8c.html#aab85e68c23fa44547b1c74dccd5ef994">DAC_InstanceTable</a></div><div class="ttdeci">static DAC_Type *const DAC_InstanceTable[]</div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00026">dac.c:26</a></div></div>
+<div class="ttc" id="dac_8c_html_a38fdceecd0259dc3602fae7a87956723"><div class="ttname"><a href="dac_8c.html#a38fdceecd0259dc3602fae7a87956723">DAC_SetWaterMark</a></div><div class="ttdeci">void DAC_SetWaterMark(uint32_t instance, DAC_WaterMarkMode_Type value)</div><div class="ttdoc">设置DAC Buffer的水位 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00234">dac.c:234</a></div></div>
+<div class="ttc" id="dac_8c_html_ada9b3599eeb7b04a5c23929480ddca79"><div class="ttname"><a href="dac_8c.html#ada9b3599eeb7b04a5c23929480ddca79">DAC_CallbackInstall</a></div><div class="ttdeci">void DAC_CallbackInstall(uint8_t instance, DAC_CallBackType AppCBFun)</div><div class="ttdoc">注册中断回调函数 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00289">dac.c:289</a></div></div>
+<div class="ttc" id="dac_8h_html_a4d3d23c50a66fd8bbade2c707ee59773"><div class="ttname"><a href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773">DAC_WaterMarkMode_Type</a></div><div class="ttdeci">DAC_WaterMarkMode_Type</div><div class="ttdoc">DAC Buffer Watermark Select(1–4 words away from the upper limit) </div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00087">dac.h:87</a></div></div>
+<div class="ttc" id="dac_8h_html_ac26aad339051a1b6db5674bfb1888977"><div class="ttname"><a href="dac_8h.html#ac26aad339051a1b6db5674bfb1888977">HW_DAC1</a></div><div class="ttdeci">#define HW_DAC1</div><div class="ttdoc">DAC 回调函数定义 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00017">dac.h:17</a></div></div>
+<div class="ttc" id="struct_d_a_c___init_type_def_html_a0cd67a025af375a74a651e49a856c46f"><div class="ttname"><a href="struct_d_a_c___init_type_def.html#a0cd67a025af375a74a651e49a856c46f">DAC_InitTypeDef::bufferMode</a></div><div class="ttdeci">DAC_BufferMode_Type bufferMode</div><div class="ttdoc">缓存类型 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00063">dac.h:63</a></div></div>
+<div class="ttc" id="dac_8c_html_a5cff593b5067d68a7546be4210a5db34"><div class="ttname"><a href="dac_8c.html#a5cff593b5067d68a7546be4210a5db34">DAC_ITDMAConfig</a></div><div class="ttdeci">void DAC_ITDMAConfig(uint32_t instance, DAC_ITDMAConfig_Type config)</div><div class="ttdoc">设置DAC模块中断和DMA </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00170">dac.c:170</a></div></div>
+<div class="ttc" id="dac_8h_html_a2041f1ab8c0c19d6a129dc87620802a9ad44301ae5b2df027679223487ac67e50"><div class="ttname"><a href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9ad44301ae5b2df027679223487ac67e50">kDAC_DMA_BufferPointer_WaterMark</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00078">dac.h:78</a></div></div>
+<div class="ttc" id="dac_8h_html_a2c73f6035ccfc32fc64afdecb4363deca52a975eec31313fce098892f5104d720"><div class="ttname"><a href="dac_8h.html#a2c73f6035ccfc32fc64afdecb4363deca52a975eec31313fce098892f5104d720">kDAC_TriggerSoftware</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00029">dac.h:29</a></div></div>
+<div class="ttc" id="dac_8h_html_a2041f1ab8c0c19d6a129dc87620802a9a6f81b17f4680a599ffe6ac525e94d15b"><div class="ttname"><a href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9a6f81b17f4680a599ffe6ac525e94d15b">kDAC_DMA_BufferPointer_TopFlag</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00079">dac.h:79</a></div></div>
+<div class="ttc" id="dac_8h_html_a42ae0694955f24833f17bfd9dff5693e"><div class="ttname"><a href="dac_8h.html#a42ae0694955f24833f17bfd9dff5693e">HW_DAC0</a></div><div class="ttdeci">#define HW_DAC0</div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00016">dac.h:16</a></div></div>
+<div class="ttc" id="dac_8h_html_a2041f1ab8c0c19d6a129dc87620802a9a68ae16ceaa811d224e94a0734ec5ff06"><div class="ttname"><a href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9a68ae16ceaa811d224e94a0734ec5ff06">kDAC_IT_BufferPointer_BottomFlag</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00077">dac.h:77</a></div></div>
+<div class="ttc" id="dac_8h_html_a2041f1ab8c0c19d6a129dc87620802a9ab5e8a1e27d9864a789cf0f5c4ee544f0"><div class="ttname"><a href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9ab5e8a1e27d9864a789cf0f5c4ee544f0">kDAC_DMA_BufferPointer_BottomFlag</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00080">dac.h:80</a></div></div>
+<div class="ttc" id="dac_8c_html_a3756a8dcdcfb0f46aa5b6cbc2038f5ed"><div class="ttname"><a href="dac_8c.html#a3756a8dcdcfb0f46aa5b6cbc2038f5ed">DAC_SetBufferReadPointer</a></div><div class="ttdeci">void DAC_SetBufferReadPointer(uint32_t instance, uint32_t value)</div><div class="ttdoc">设置DAC模块buffer的指针 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00129">dac.c:129</a></div></div>
+<div class="ttc" id="dac_8h_html_a2041f1ab8c0c19d6a129dc87620802a9a1032beab6e7c93dd19b230b604b10a6e"><div class="ttname"><a href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9a1032beab6e7c93dd19b230b604b10a6e">kDAC_IT_BufferPointer_WaterMark</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00075">dac.h:75</a></div></div>
+<div class="ttc" id="dac_8h_html_a2041f1ab8c0c19d6a129dc87620802a9"><div class="ttname"><a href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9">DAC_ITDMAConfig_Type</a></div><div class="ttdeci">DAC_ITDMAConfig_Type</div><div class="ttdoc">DAC中断及DMA配置选择 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00071">dac.h:71</a></div></div>
+<div class="ttc" id="struct_d_a_c___init_type_def_html_ab3261a2474f4c87a7fb34696a3008130"><div class="ttname"><a href="struct_d_a_c___init_type_def.html#ab3261a2474f4c87a7fb34696a3008130">DAC_InitTypeDef::triggerMode</a></div><div class="ttdeci">DAC_TriggerSelect_Type triggerMode</div><div class="ttdoc">DAC触发模式 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00062">dac.h:62</a></div></div>
+<div class="ttc" id="dac_8h_html_a4d3d23c50a66fd8bbade2c707ee59773a7c011a7ad329c951c72ac9781e24d328"><div class="ttname"><a href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773a7c011a7ad329c951c72ac9781e24d328">kDAC_WaterMark_2Word</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00090">dac.h:90</a></div></div>
+<div class="ttc" id="dac_8h_html_ad407a6d9d77443ce6c5e6e8c12a76c53"><div class="ttname"><a href="dac_8h.html#ad407a6d9d77443ce6c5e6e8c12a76c53">DAC_CallBackType</a></div><div class="ttdeci">void(* DAC_CallBackType)(void)</div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00021">dac.h:21</a></div></div>
+<div class="ttc" id="dac_8h_html_a4d3d23c50a66fd8bbade2c707ee59773a8a3d6cbd078566b16f0893a1f1c98389"><div class="ttname"><a href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773a8a3d6cbd078566b16f0893a1f1c98389">kDAC_WaterMark_1Word</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00089">dac.h:89</a></div></div>
+<div class="ttc" id="dac_8c_html_aac8ce2b4b4b24f8ef40bdca9be74b9dd"><div class="ttname"><a href="dac_8c.html#aac8ce2b4b4b24f8ef40bdca9be74b9dd">DAC_SetBufferUpperLimit</a></div><div class="ttdeci">void DAC_SetBufferUpperLimit(uint32_t instance, uint32_t value)</div><div class="ttdoc">设置DAC模块读取buffer指针时的最高上限值 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00147">dac.c:147</a></div></div>
+<div class="ttc" id="dac_8h_html_a2041f1ab8c0c19d6a129dc87620802a9adc59f95ff1aa715dcf0aa9090353943a"><div class="ttname"><a href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9adc59f95ff1aa715dcf0aa9090353943a">kDAC_DMA_Disable</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00073">dac.h:73</a></div></div>
+<div class="ttc" id="dac_8h_html_a4d3d23c50a66fd8bbade2c707ee59773acfe8e4f03879ca295dc37637400d0161"><div class="ttname"><a href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773acfe8e4f03879ca295dc37637400d0161">kDAC_WaterMark_4Word</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00092">dac.h:92</a></div></div>
+<div class="ttc" id="dac_8h_html_adcaef8a2010a83fb77f8780892b106a1a696f2596eba16eb0925e4f2117e6dd87"><div class="ttname"><a href="dac_8h.html#adcaef8a2010a83fb77f8780892b106a1a696f2596eba16eb0925e4f2117e6dd87">kDAC_Reference_1</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00051">dac.h:51</a></div></div>
+<div class="ttc" id="struct_d_a_c___init_type_def_html_a9ed36c4f5392e9f1819ec7c9eb9aff80"><div class="ttname"><a href="struct_d_a_c___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">DAC_InitTypeDef::instance</a></div><div class="ttdeci">uint32_t instance</div><div class="ttdoc">DAC模块号0~1. </div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00061">dac.h:61</a></div></div>
+<div class="ttc" id="dac_8c_html_ac85cbf70d9d25bbb78a35af2998c2def"><div class="ttname"><a href="dac_8c.html#ac85cbf70d9d25bbb78a35af2998c2def">DAC_SetBufferValue</a></div><div class="ttdeci">void DAC_SetBufferValue(uint32_t instance, uint16_t *buf, uint8_t len)</div><div class="ttdoc">填充DAC 缓冲区数据 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00270">dac.c:270</a></div></div>
+<div class="ttc" id="dac_8c_html_a7a06395a2b7ad1efa14c40d99dd57814"><div class="ttname"><a href="dac_8c.html#a7a06395a2b7ad1efa14c40d99dd57814">DAC_SoftwareStartConversion</a></div><div class="ttdeci">void DAC_SoftwareStartConversion(uint32_t instance)</div><div class="ttdoc">软件触发DAC开始工作 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00221">dac.c:221</a></div></div>
+<div class="ttc" id="struct_d_a_c___init_type_def_html"><div class="ttname"><a href="struct_d_a_c___init_type_def.html">DAC_InitTypeDef</a></div><div class="ttdoc">DAC初始化结构 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00059">dac.h:59</a></div></div>
+<div class="ttc" id="struct_d_a_c___init_type_def_html_af4100aa04b01c821683cc02476c3cd81"><div class="ttname"><a href="struct_d_a_c___init_type_def.html#af4100aa04b01c821683cc02476c3cd81">DAC_InitTypeDef::referenceMode</a></div><div class="ttdeci">DAC_ReferenceSelect_Type referenceMode</div><div class="ttdoc">参考源选择 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00064">dac.h:64</a></div></div>
+<div class="ttc" id="dac_8h_html"><div class="ttname"><a href="dac_8h.html">dac.h</a></div><div class="ttdoc">www.beyondcore.net http://upcmcu.taobao.com </div></div>
+<div class="ttc" id="dac_8h_html_a475291f6fafffd3ab30e6f20298b32efa2f940761e21a1a0bd569958e6fc7f9f8"><div class="ttname"><a href="dac_8h.html#a475291f6fafffd3ab30e6f20298b32efa2f940761e21a1a0bd569958e6fc7f9f8">kDAC_Buffer_Normal</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00040">dac.h:40</a></div></div>
+<div class="ttc" id="dac_8h_html_a4d3d23c50a66fd8bbade2c707ee59773afefa476ffd6f7b8f68443eee17a77254"><div class="ttname"><a href="dac_8h.html#a4d3d23c50a66fd8bbade2c707ee59773afefa476ffd6f7b8f68443eee17a77254">kDAC_WaterMark_3Word</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00091">dac.h:91</a></div></div>
+<div class="ttc" id="dac_8c_html_aac10bb5ef00a968c5763ca4e2d45fa17"><div class="ttname"><a href="dac_8c.html#aac10bb5ef00a968c5763ca4e2d45fa17">DAC_CallBackTable</a></div><div class="ttdeci">static DAC_CallBackType DAC_CallBackTable[ARRAY_SIZE(DAC_InstanceTable)]</div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00027">dac.c:27</a></div></div>
+<div class="ttc" id="dac_8c_html_a09a8880157a2a35dcf05bceb5bc6952d"><div class="ttname"><a href="dac_8c.html#a09a8880157a2a35dcf05bceb5bc6952d">DAC_GetBufferReadPointer</a></div><div class="ttdeci">uint32_t DAC_GetBufferReadPointer(uint32_t instance)</div><div class="ttdoc">获得DAC模块buffer的指针 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00116">dac.c:116</a></div></div>
+<div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div><div class="ttdoc">www.beyondcore.net http://upcmcu.taobao.com </div></div>
+<div class="ttc" id="dac_8c_html_aa3f5587020a4cab9cd9cc6ec3fd20d1d"><div class="ttname"><a href="dac_8c.html#aa3f5587020a4cab9cd9cc6ec3fd20d1d">DAC_IRQHandler</a></div><div class="ttdeci">static void DAC_IRQHandler(uint32_t instance)</div><div class="ttdoc">中断处理函数 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00302">dac.c:302</a></div></div>
+<div class="ttc" id="common_8h_html_a6242a25f9d996f0cc4f4cdb911218b75"><div class="ttname"><a href="common_8h.html#a6242a25f9d996f0cc4f4cdb911218b75">ARRAY_SIZE</a></div><div class="ttdeci">#define ARRAY_SIZE(x)</div><div class="ttdef"><b>Definition:</b> <a href="common_8h_source.html#l00125">common.h:125</a></div></div>
+<div class="ttc" id="dac_8c_html_aad3bd138b185ee4a6897c8e0e39373be"><div class="ttname"><a href="dac_8c.html#aad3bd138b185ee4a6897c8e0e39373be">DAC_BASES</a></div><div class="ttdeci">#define DAC_BASES</div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00018">dac.c:18</a></div></div>
+<div class="ttc" id="dac_8h_html_a475291f6fafffd3ab30e6f20298b32efa1f405ae5bd373e56f505ae2ce63dda90"><div class="ttname"><a href="dac_8h.html#a475291f6fafffd3ab30e6f20298b32efa1f405ae5bd373e56f505ae2ce63dda90">kDAC_Buffer_OneTimeScan</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00042">dac.h:42</a></div></div>
+<div class="ttc" id="dac_8h_html_a2041f1ab8c0c19d6a129dc87620802a9a257b7be302004bc451726ea6bd9d6c6e"><div class="ttname"><a href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9a257b7be302004bc451726ea6bd9d6c6e">kDAC_IT_Disable</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00074">dac.h:74</a></div></div>
+<div class="ttc" id="dac_8c_html_a28152888205e94cb859cdd5914762dfc"><div class="ttname"><a href="dac_8c.html#a28152888205e94cb859cdd5914762dfc">DAC0_IRQHandler</a></div><div class="ttdeci">void DAC0_IRQHandler(void)</div><div class="ttdoc">中断处理函数入口 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00330">dac.c:330</a></div></div>
+<div class="ttc" id="dac_8h_html_a2041f1ab8c0c19d6a129dc87620802a9ada6d1184642df749d1115fa269ec6132"><div class="ttname"><a href="dac_8h.html#a2041f1ab8c0c19d6a129dc87620802a9ada6d1184642df749d1115fa269ec6132">kDAC_IT_BufferPointer_TopFlag</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00076">dac.h:76</a></div></div>
+<div class="ttc" id="dac_8h_html_adcaef8a2010a83fb77f8780892b106a1a66ea0e6477ec2d5bcd1f2f5e84bb731f"><div class="ttname"><a href="dac_8h.html#adcaef8a2010a83fb77f8780892b106a1a66ea0e6477ec2d5bcd1f2f5e84bb731f">kDAC_Reference_2</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00052">dac.h:52</a></div></div>
+<div class="ttc" id="dac_8h_html_a475291f6fafffd3ab30e6f20298b32efa104a263049203183a64d230a98095803"><div class="ttname"><a href="dac_8h.html#a475291f6fafffd3ab30e6f20298b32efa104a263049203183a64d230a98095803">kDAC_Buffer_Disable</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00039">dac.h:39</a></div></div>
+<div class="ttc" id="dac_8h_html_a2c73f6035ccfc32fc64afdecb4363deca3091b096821c11b026079e62ff3ea733"><div class="ttname"><a href="dac_8h.html#a2c73f6035ccfc32fc64afdecb4363deca3091b096821c11b026079e62ff3ea733">kDAC_TriggerHardware</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00030">dac.h:30</a></div></div>
+<div class="ttc" id="dac_8c_html_a857dca200a9174a257aaf7bba49961bc"><div class="ttname"><a href="dac_8c.html#a857dca200a9174a257aaf7bba49961bc">DAC_Init</a></div><div class="ttdeci">void DAC_Init(DAC_InitTypeDef *DAC_InitStruct)</div><div class="ttdoc">初始化DAC模块 </div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00049">dac.c:49</a></div></div>
+<div class="ttc" id="dac_8h_html_a475291f6fafffd3ab30e6f20298b32efa4f2e836455259e900f66da9fa2cd9b92"><div class="ttname"><a href="dac_8h.html#a475291f6fafffd3ab30e6f20298b32efa4f2e836455259e900f66da9fa2cd9b92">kDAC_Buffer_Swing</a></div><div class="ttdef"><b>Definition:</b> <a href="dac_8h_source.html#l00041">dac.h:41</a></div></div>
+<div class="ttc" id="dac_8c_html_a3b54518d5bfb2095f7a2dd34b3da7919"><div class="ttname"><a href="dac_8c.html#a3b54518d5bfb2095f7a2dd34b3da7919">DAC_IRQnTable</a></div><div class="ttdeci">static const IRQn_Type DAC_IRQnTable[]</div><div class="ttdef"><b>Definition:</b> <a href="dac_8c_source.html#l00028">dac.c:28</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.10
+</small></address>
+</body>
+</html>

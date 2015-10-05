@@ -1,0 +1,1346 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.10"/>
+<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/ftm.c 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">CH Kinetis library for K series
+   &#160;<span id="projectnumber">V2.5</span>
+   </div>
+   <div id="projectbrief">Kinetis driver library  for K series</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.10 -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>全局定义</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">宏定义</a> &#124;
+<a href="#enum-members">枚举</a> &#124;
+<a href="#func-members">函数</a> &#124;
+<a href="#var-members">变量</a>  </div>
+  <div class="headertitle">
+<div class="title">ftm.c 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a>  
+<a href="#details">更多...</a></p>
+<div class="textblock"><code>#include &lt;math.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="ftm_8h_source.html">ftm.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gpio_8h_source.html">gpio.h</a>&quot;</code><br />
+</div>
+<p><a href="ftm_8c_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+宏定义</h2></td></tr>
+<tr class="memitem:a79eaf0c291fdd1608f3fc62b6dd0e7c7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a79eaf0c291fdd1608f3fc62b6dd0e7c7">FTM_BASES</a>&#160;&#160;&#160;{FTM0, FTM1, FTM2}</td></tr>
+<tr class="separator:a79eaf0c291fdd1608f3fc62b6dd0e7c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a699ef33c9bb4a9a27db251537eda74a2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a699ef33c9bb4a9a27db251537eda74a2">FTM_COMBINE_CHAN_CTRL_WIDTH</a>&#160;&#160;&#160;(8)</td></tr>
+<tr class="separator:a699ef33c9bb4a9a27db251537eda74a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+枚举</h2></td></tr>
+<tr class="memitem:a896c0ae8ac2782d9335fd56717003513"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513">FTM_DualChlConfig_Type</a> { <br />
+&#160;&#160;<a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513a8728e2edf2096a38929811b7629796d1">kFTM_Combine</a>, 
+<a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513af7dde57ee9622ffd94ae5a54906c685d">kFTM_Complementary</a>, 
+<a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513a6c89bc0136701d1b95a57bec31bfec6e">kFTM_DualEdgeCapture</a>, 
+<a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513aa2f132498bb59d03f6ee99269d4834aa">kFTM_DeadTime</a>, 
+<br />
+&#160;&#160;<a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513acde744444d37502ae140e1de523381b8">kFTM_Sync</a>, 
+<a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513a3dabe7c6ed5f1c97a8aa6b08f16e4793">kFTM_FaultControl</a>
+<br />
+ }<tr class="memdesc:a896c0ae8ac2782d9335fd56717003513"><td class="mdescLeft">&#160;</td><td class="mdescRight">FTM dual pin mode select.  <a href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513">更多...</a><br /></td></tr>
+<tr class="separator:a896c0ae8ac2782d9335fd56717003513"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</td></tr>
+<tr class="memitem:a057a2cbbd422fe91cf7831f7d7878908"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908">FTM_Mode_Type</a> { <br />
+&#160;&#160;<a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908af310d59425b22ef603524699fef165a1">kFTM_Mode_EdgeAligned</a>, 
+<a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908ad4142e9536b597b2573985e69b87b8d5">kFTM_Mode_CenterAligned</a>, 
+<a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908a6b891f4e4467ad7be45ef975ac97989f">kFTM_Mode_Combine</a>, 
+<a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908a1514ec2e2d188f0d78752f2b90d90e7d">kFTM_Mode_Complementary</a>, 
+<br />
+&#160;&#160;<a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908af924e08483d1bb4ba007722ae35177dc">kFTM_Mode_InputCapture</a>, 
+<a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908aaeba1d9385cdb16305b69fd8bfe6c9c1">kFTM_Mode_QuadratureDecoder</a>
+<br />
+ }<tr class="memdesc:a057a2cbbd422fe91cf7831f7d7878908"><td class="mdescLeft">&#160;</td><td class="mdescRight">internal use, FTM mode select  <a href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908">更多...</a><br /></td></tr>
+<tr class="separator:a057a2cbbd422fe91cf7831f7d7878908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ac9605f926203cbce41725746b4674798"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#ac9605f926203cbce41725746b4674798">FTM_SetMode</a> (uint32_t instance, uint8_t chl, <a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908">FTM_Mode_Type</a> mode)</td></tr>
+<tr class="memdesc:ac9605f926203cbce41725746b4674798"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置FTM工作模式，内部函数，用户无需调用  <a href="#ac9605f926203cbce41725746b4674798">更多...</a><br /></td></tr>
+<tr class="separator:ac9605f926203cbce41725746b4674798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5683fcf7a206f3f12f097ab4ad85c2ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a5683fcf7a206f3f12f097ab4ad85c2ba">FTM_PWM_InvertPolarity</a> (uint32_t instance, uint8_t chl, uint32_t config)</td></tr>
+<tr class="memdesc:a5683fcf7a206f3f12f097ab4ad85c2ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">翻转FTM极性，内部函数，用户无需调用  <a href="#a5683fcf7a206f3f12f097ab4ad85c2ba">更多...</a><br /></td></tr>
+<tr class="separator:a5683fcf7a206f3f12f097ab4ad85c2ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c1eb50f71856275d35eaca38d277ada"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a4c1eb50f71856275d35eaca38d277ada">_FTM_InitBasic</a> (uint32_t instance, uint32_t modulo, <a class="el" href="ftm_8h.html#aed5471af8a4c90a05d0ae3456d458a04">FTM_ClockDiv_Type</a> ps)</td></tr>
+<tr class="memdesc:a4c1eb50f71856275d35eaca38d277ada"><td class="mdescLeft">&#160;</td><td class="mdescRight">FTM初始化，内部调用，用户无需使用  <a href="#a4c1eb50f71856275d35eaca38d277ada">更多...</a><br /></td></tr>
+<tr class="separator:a4c1eb50f71856275d35eaca38d277ada"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03ab9227ccf923f2fac84098c59a6998"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a03ab9227ccf923f2fac84098c59a6998">FTM_QD_QuickInit</a> (uint32_t MAP, <a class="el" href="ftm_8h.html#af798c38c98400053f04fcd535d1556b9">FTM_QD_PolarityMode_Type</a> polarity, <a class="el" href="ftm_8h.html#a8df93fd1bd59bc91b66c6a2c1173e56d">FTM_QD_Mode_Type</a> mode)</td></tr>
+<tr class="memdesc:a03ab9227ccf923f2fac84098c59a6998"><td class="mdescLeft">&#160;</td><td class="mdescRight">快速配置初始化FTM模块实现正交解码功能  <a href="#a03ab9227ccf923f2fac84098c59a6998">更多...</a><br /></td></tr>
+<tr class="separator:a03ab9227ccf923f2fac84098c59a6998"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b75f2484fe35cf492e8fc1a5fe77bbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a7b75f2484fe35cf492e8fc1a5fe77bbd">FTM_QD_GetData</a> (uint32_t instance, int *value, uint8_t *direction)</td></tr>
+<tr class="memdesc:a7b75f2484fe35cf492e8fc1a5fe77bbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得正交解码的数据  <a href="#a7b75f2484fe35cf492e8fc1a5fe77bbd">更多...</a><br /></td></tr>
+<tr class="separator:a7b75f2484fe35cf492e8fc1a5fe77bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ef0f18f9ee3f34093b1805c0168627c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a9ef0f18f9ee3f34093b1805c0168627c">FTM_QD_ClearCount</a> (uint32_t instance)</td></tr>
+<tr class="memdesc:a9ef0f18f9ee3f34093b1805c0168627c"><td class="mdescLeft">&#160;</td><td class="mdescRight">复位FTM模块的计数值（清零）  <a href="#a9ef0f18f9ee3f34093b1805c0168627c">更多...</a><br /></td></tr>
+<tr class="separator:a9ef0f18f9ee3f34093b1805c0168627c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab936659ac944b3875c3b3d66c38c6d46"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#ab936659ac944b3875c3b3d66c38c6d46">get_chl_pair_index</a> (uint8_t chl)</td></tr>
+<tr class="memdesc:ab936659ac944b3875c3b3d66c38c6d46"><td class="mdescLeft">&#160;</td><td class="mdescRight">内部函数，用户无需调用  <a href="#ab936659ac944b3875c3b3d66c38c6d46">更多...</a><br /></td></tr>
+<tr class="separator:ab936659ac944b3875c3b3d66c38c6d46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c5914617676c95c15f4a0b81750b31d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a5c5914617676c95c15f4a0b81750b31d">FTM_DualChlConfig</a> (uint32_t instance, uint8_t chl, <a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513">FTM_DualChlConfig_Type</a> mode, <a class="el" href="common_8h.html#ac9a7e9a35d2513ec15c3b537aaa4fba1">FunctionalState</a> newState)</td></tr>
+<tr class="memdesc:a5c5914617676c95c15f4a0b81750b31d"><td class="mdescLeft">&#160;</td><td class="mdescRight">内部函数，用户无需调用  <a href="#a5c5914617676c95c15f4a0b81750b31d">更多...</a><br /></td></tr>
+<tr class="separator:a5c5914617676c95c15f4a0b81750b31d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0340cb1af7ac0d6da42b4405e01078bf"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a0340cb1af7ac0d6da42b4405e01078bf">FTM_PWM_QuickInit</a> (uint32_t MAP, <a class="el" href="ftm_8h.html#a1591751049222d6b10bd42ef30a77a9a">FTM_PWM_Mode_Type</a> mode, uint32_t req)</td></tr>
+<tr class="memdesc:a0340cb1af7ac0d6da42b4405e01078bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">快速配置初始化FTM模块实现PWM功能  <a href="#a0340cb1af7ac0d6da42b4405e01078bf">更多...</a><br /></td></tr>
+<tr class="separator:a0340cb1af7ac0d6da42b4405e01078bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71cfc506b453ae6ae25f46bd903276a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a71cfc506b453ae6ae25f46bd903276a0">FTM_PWM_ChangeDuty</a> (uint32_t instance, uint8_t chl, uint32_t pwmDuty)</td></tr>
+<tr class="memdesc:a71cfc506b453ae6ae25f46bd903276a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">更改指定引脚的PWM波形占空比  <a href="#a71cfc506b453ae6ae25f46bd903276a0">更多...</a><br /></td></tr>
+<tr class="separator:a71cfc506b453ae6ae25f46bd903276a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6830b9e8a5a29080c0d89671d9ac8e67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a6830b9e8a5a29080c0d89671d9ac8e67">FTM_IC_QuickInit</a> (uint32_t MAP, <a class="el" href="ftm_8h.html#aed5471af8a4c90a05d0ae3456d458a04">FTM_ClockDiv_Type</a> ps)</td></tr>
+<tr class="memdesc:a6830b9e8a5a29080c0d89671d9ac8e67"><td class="mdescLeft">&#160;</td><td class="mdescRight">初始化FTM 输入捕捉功能  <a href="#a6830b9e8a5a29080c0d89671d9ac8e67">更多...</a><br /></td></tr>
+<tr class="separator:a6830b9e8a5a29080c0d89671d9ac8e67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af832bfd1f1a956546a58ebd566ad5f0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#af832bfd1f1a956546a58ebd566ad5f0d">FTM_IC_SetTriggerMode</a> (uint32_t instance, uint32_t chl, <a class="el" href="ftm_8h.html#a4b4d1f6855a8d6d34508961d84ae4b02">FTM_IC_Mode_Type</a> mode)</td></tr>
+<tr class="memdesc:af832bfd1f1a956546a58ebd566ad5f0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置输入捕捉触发模式  <a href="#af832bfd1f1a956546a58ebd566ad5f0d">更多...</a><br /></td></tr>
+<tr class="separator:af832bfd1f1a956546a58ebd566ad5f0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbf7f2a03244b1a2dab3a670817639ab"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#afbf7f2a03244b1a2dab3a670817639ab">FTM_GetChlCounter</a> (uint32_t instance, uint32_t chl)</td></tr>
+<tr class="memdesc:afbf7f2a03244b1a2dab3a670817639ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得FTM通道计数值  <a href="#afbf7f2a03244b1a2dab3a670817639ab">更多...</a><br /></td></tr>
+<tr class="separator:afbf7f2a03244b1a2dab3a670817639ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad654613f4bde51ed555bd7f5610d0081"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#ad654613f4bde51ed555bd7f5610d0081">FTM_SetMoudleCounter</a> (uint32_t instance, uint32_t val)</td></tr>
+<tr class="memdesc:ad654613f4bde51ed555bd7f5610d0081"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置FTM主计数Counter值  <a href="#ad654613f4bde51ed555bd7f5610d0081">更多...</a><br /></td></tr>
+<tr class="separator:ad654613f4bde51ed555bd7f5610d0081"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec78fe97f8df9f98360b82d0445fa60c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#aec78fe97f8df9f98360b82d0445fa60c">FTM_CallbackInstall</a> (uint32_t instance, <a class="el" href="ftm_8h.html#ae8ba2ef63b5440ffeab4bd337a49872f">FTM_CallBackType</a> AppCBFun)</td></tr>
+<tr class="memdesc:aec78fe97f8df9f98360b82d0445fa60c"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置FTM回调函数  <a href="#aec78fe97f8df9f98360b82d0445fa60c">更多...</a><br /></td></tr>
+<tr class="separator:aec78fe97f8df9f98360b82d0445fa60c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e9f2707730fa2bc5844fc5d74ed3ba8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a5e9f2707730fa2bc5844fc5d74ed3ba8">FTM_ITDMAConfig</a> (uint32_t instance, <a class="el" href="ftm_8h.html#a4c4a6fbef0052fee77560b9a284c8cc8">FTM_ITDMAConfig_Type</a> config, bool flag)</td></tr>
+<tr class="memdesc:a5e9f2707730fa2bc5844fc5d74ed3ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">FTM中断DMA控制  <a href="#a5e9f2707730fa2bc5844fc5d74ed3ba8">更多...</a><br /></td></tr>
+<tr class="separator:a5e9f2707730fa2bc5844fc5d74ed3ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a413b257915ccf92e44262ba9a7a86b75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a413b257915ccf92e44262ba9a7a86b75">FTM0_IRQHandler</a> (void)</td></tr>
+<tr class="memdesc:a413b257915ccf92e44262ba9a7a86b75"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统FTM0中断函数，用户无需使用  <a href="#a413b257915ccf92e44262ba9a7a86b75">更多...</a><br /></td></tr>
+<tr class="separator:a413b257915ccf92e44262ba9a7a86b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a888cd99bf386ddc106c0fb5d19955f0b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a888cd99bf386ddc106c0fb5d19955f0b">FTM1_IRQHandler</a> (void)</td></tr>
+<tr class="memdesc:a888cd99bf386ddc106c0fb5d19955f0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统FTM1中断函数，用户无需使用  <a href="#a888cd99bf386ddc106c0fb5d19955f0b">更多...</a><br /></td></tr>
+<tr class="separator:a888cd99bf386ddc106c0fb5d19955f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+变量</h2></td></tr>
+<tr class="memitem:a3104828e36795dfd32ac5ee432a8e675"><td class="memItemLeft" align="right" valign="top">static FTM_Type *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a3104828e36795dfd32ac5ee432a8e675">FTM_InstanceTable</a> [] = <a class="el" href="ftm_8c.html#a79eaf0c291fdd1608f3fc62b6dd0e7c7">FTM_BASES</a></td></tr>
+<tr class="separator:a3104828e36795dfd32ac5ee432a8e675"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f3eacd0d61b53f015dd8b1c3e23e66c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="ftm_8h.html#ae8ba2ef63b5440ffeab4bd337a49872f">FTM_CallBackType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a8f3eacd0d61b53f015dd8b1c3e23e66c">FTM_CallBackTable</a> [<a class="el" href="common_8h.html#a6242a25f9d996f0cc4f4cdb911218b75">ARRAY_SIZE</a>(<a class="el" href="ftm_8c.html#a3104828e36795dfd32ac5ee432a8e675">FTM_InstanceTable</a>)] = {NULL}</td></tr>
+<tr class="separator:a8f3eacd0d61b53f015dd8b1c3e23e66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b09ce447e353b8a31c7b622bf5d206e"><td class="memItemLeft" align="right" valign="top">static const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a1b09ce447e353b8a31c7b622bf5d206e">FTM_ChlMaxTable</a> [] = {8,2,2}</td></tr>
+<tr class="separator:a1b09ce447e353b8a31c7b622bf5d206e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49610ccccc760877fabb9302484e063f"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="struct_reg__t.html">Reg_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a49610ccccc760877fabb9302484e063f">SIM_FTMClockGateTable</a> []</td></tr>
+<tr class="separator:a49610ccccc760877fabb9302484e063f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8de255f45f1897303b45fca35df01ee2"><td class="memItemLeft" align="right" valign="top">static const IRQn_Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ftm_8c.html#a8de255f45f1897303b45fca35df01ee2">FTM_IRQnTable</a> []</td></tr>
+<tr class="separator:a8de255f45f1897303b45fca35df01ee2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a> </p>
+<dl class="section author"><dt>作者</dt><dd>YANDLD </dd></dl>
+<dl class="section version"><dt>版本</dt><dd>V2.5 </dd></dl>
+<dl class="section date"><dt>日期</dt><dd>2014.3.25 </dd>
+<dd>
+2015.9.26 FreeXc 完善了ftm.c &amp; <a class="el" href="ftm_8h.html" title="www.beyondcore.net http://upcmcu.taobao.com ">ftm.h</a> 文件的注释 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>此文件为芯片FTM模块的底层功能函数 </dd></dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 中定义.</p>
+</div><h2 class="groupheader">宏定义说明</h2>
+<a class="anchor" id="a79eaf0c291fdd1608f3fc62b6dd0e7c7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTM_BASES&#160;&#160;&#160;{FTM0, FTM1, FTM2}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00024">24</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a699ef33c9bb4a9a27db251537eda74a2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTM_COMBINE_CHAN_CTRL_WIDTH&#160;&#160;&#160;(8)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00237">237</a> 行定义.</p>
+
+</div>
+</div>
+<h2 class="groupheader">枚举类型说明</h2>
+<a class="anchor" id="a896c0ae8ac2782d9335fd56717003513"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513">FTM_DualChlConfig_Type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>FTM dual pin mode select. </p>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a class="anchor" id="a896c0ae8ac2782d9335fd56717003513a8728e2edf2096a38929811b7629796d1"></a>kFTM_Combine&#160;</td><td class="fielddoc">
+<p>级联 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a896c0ae8ac2782d9335fd56717003513af7dde57ee9622ffd94ae5a54906c685d"></a>kFTM_Complementary&#160;</td><td class="fielddoc">
+<p>互补 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a896c0ae8ac2782d9335fd56717003513a6c89bc0136701d1b95a57bec31bfec6e"></a>kFTM_DualEdgeCapture&#160;</td><td class="fielddoc">
+<p>双边沿捕捉 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a896c0ae8ac2782d9335fd56717003513aa2f132498bb59d03f6ee99269d4834aa"></a>kFTM_DeadTime&#160;</td><td class="fielddoc">
+<p>deadtime insertion </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a896c0ae8ac2782d9335fd56717003513acde744444d37502ae140e1de523381b8"></a>kFTM_Sync&#160;</td><td class="fielddoc">
+<p>PWM synchronization </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a896c0ae8ac2782d9335fd56717003513a3dabe7c6ed5f1c97a8aa6b08f16e4793"></a>kFTM_FaultControl&#160;</td><td class="fielddoc">
+<p>fault control </p>
+</td></tr>
+</table>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00064">64</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a057a2cbbd422fe91cf7831f7d7878908"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908">FTM_Mode_Type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>internal use, FTM mode select </p>
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a class="anchor" id="a057a2cbbd422fe91cf7831f7d7878908af310d59425b22ef603524699fef165a1"></a>kFTM_Mode_EdgeAligned&#160;</td><td class="fielddoc">
+<p>边沿对齐 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a057a2cbbd422fe91cf7831f7d7878908ad4142e9536b597b2573985e69b87b8d5"></a>kFTM_Mode_CenterAligned&#160;</td><td class="fielddoc">
+<p>中心对齐 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a057a2cbbd422fe91cf7831f7d7878908a6b891f4e4467ad7be45ef975ac97989f"></a>kFTM_Mode_Combine&#160;</td><td class="fielddoc">
+<p>级联 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a057a2cbbd422fe91cf7831f7d7878908a1514ec2e2d188f0d78752f2b90d90e7d"></a>kFTM_Mode_Complementary&#160;</td><td class="fielddoc">
+<p>互补 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a057a2cbbd422fe91cf7831f7d7878908af924e08483d1bb4ba007722ae35177dc"></a>kFTM_Mode_InputCapture&#160;</td><td class="fielddoc">
+<p>输入捕捉 </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a057a2cbbd422fe91cf7831f7d7878908aaeba1d9385cdb16305b69fd8bfe6c9c1"></a>kFTM_Mode_QuadratureDecoder&#160;</td><td class="fielddoc">
+<p>正交解码 </p>
+</td></tr>
+</table>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00078">78</a> 行定义.</p>
+
+</div>
+</div>
+<h2 class="groupheader">函数说明</h2>
+<a class="anchor" id="a4c1eb50f71856275d35eaca38d277ada"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void _FTM_InitBasic </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>modulo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8h.html#aed5471af8a4c90a05d0ae3456d458a04">FTM_ClockDiv_Type</a>&#160;</td>
+          <td class="paramname"><em>ps</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>FTM初始化，内部调用，用户无需使用 </p>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00095">95</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a413b257915ccf92e44262ba9a7a86b75"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM0_IRQHandler </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>系统FTM0中断函数，用户无需使用 </p>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00734">734</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a888cd99bf386ddc106c0fb5d19955f0b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM1_IRQHandler </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>系统FTM1中断函数，用户无需使用 </p>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00759">759</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="aec78fe97f8df9f98360b82d0445fa60c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM_CallbackInstall </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8h.html#ae8ba2ef63b5440ffeab4bd337a49872f">FTM_CallBackType</a>&#160;</td>
+          <td class="paramname"><em>AppCBFun</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>设置FTM回调函数 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;       // 注册FTM1模块的中断回调函数FTM1_ISR,名字可任取</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;       static void FTM1_ISR(void)</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;*　　　{</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;           ;//用户程序</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;       }</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;       FTM_CallbackInstall(HW_FTM1, FTM1_ISR);</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>模块号 　　　 　 <ul>
+<li>HW_FTM0 FTM0模块 　　　 　 </li>
+<li>HW_FTM1 FTM1模块 　　　 　 </li>
+<li>HW_FTM2 FTM2模块 　　　 　 </li>
+<li>HW_FTM3 FTM3模块 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>instance的可输入的参数视不同芯片而定 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">AppCBFun</td><td>回调函数指针 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00674">674</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5c5914617676c95c15f4a0b81750b31d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void FTM_DualChlConfig </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8c.html#a896c0ae8ac2782d9335fd56717003513">FTM_DualChlConfig_Type</a>&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="common_8h.html#ac9a7e9a35d2513ec15c3b537aaa4fba1">FunctionalState</a>&#160;</td>
+          <td class="paramname"><em>newState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>内部函数，用户无需调用 </p>
+<p>enable FTM peripheral timer chl pair output combine mode. </p><dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>The FTM peripheral instance number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">chl</td><td>The FTM peripheral chl number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>双通道模式配置 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">newState</td><td>true to enable channle pair to combine, false to disable <ul>
+<li>0 disanble </li>
+<li>1 enable </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00249">249</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="afbf7f2a03244b1a2dab3a670817639ab"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t FTM_GetChlCounter </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>chl</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>获得FTM通道计数值 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// 获得FTM1模块通道1的计数值</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;uint32_t InputCaptureValue;</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;InputCaptureValue = FTM_GetChlCounter(HW_FTM1, HW_FTM_CH1);</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>模块号 　　　 　 <ul>
+<li>HW_FTM0 FTM0模块 　　　 　 </li>
+<li>HW_FTM1 FTM1模块 　　　 　 </li>
+<li>HW_FTM2 FTM2模块 　　　 　 </li>
+<li>HW_FTM3 FTM3模块 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>instance的可输入的参数视不同芯片而定，例如K60没有FTM3模块 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">chl</td><td>通道 　　　 　 <ul>
+<li>HW_FTM_CH0 通道0 　　　 　 </li>
+<li>HW_FTM_CH1 通道1 　　　 　 </li>
+<li>HW_FTM_CH2 通道2 　　　 　 </li>
+<li>HW_FTM_CH3 通道3 　　　 　 </li>
+<li>HW_FTM_CH4 通道4 　　　 　 </li>
+<li>HW_FTM_CH5 通道5 　　　 　 </li>
+<li>HW_FTM_CH6 通道6 　　　 　 </li>
+<li>HW_FTM_CH7 通道7 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>chl的可输入的参数视不同芯片而定,例如FTM1模块就没有通道7 </dd></dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">通道Counter值</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00630">630</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6830b9e8a5a29080c0d89671d9ac8e67"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM_IC_QuickInit </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>MAP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8h.html#aed5471af8a4c90a05d0ae3456d458a04">FTM_ClockDiv_Type</a>&#160;</td>
+          <td class="paramname"><em>ps</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>初始化FTM 输入捕捉功能 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// 快速初始化FTM1模块通道1的输入捕捉功能，128分频</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;FTM_IC_QuickInit(FTM1_CH1_PA09, kFTM_ClockDiv128);</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">MAP</td><td>快速初始化通道列表 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ps</td><td>分频,详细请见FTM_ClockDiv_Type枚举类型 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00534">534</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="af832bfd1f1a956546a58ebd566ad5f0d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM_IC_SetTriggerMode </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>chl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8h.html#a4b4d1f6855a8d6d34508961d84ae4b02">FTM_IC_Mode_Type</a>&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>设置输入捕捉触发模式 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// 设置FTM1模块通道1的输入捕捉模式为下降沿中断</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;FTM_IC_SetTriggerMode(HW_FTM1, HW_FTM_CH1, kFTM_IC_FallingEdge);</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>模块号 　　　 　 <ul>
+<li>HW_FTM0 FTM0模块 　　　 　 </li>
+<li>HW_FTM1 FTM1模块 　　　 　 </li>
+<li>HW_FTM2 FTM2模块 　　　 　 </li>
+<li>HW_FTM3 FTM3模块 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>instance的可输入的参数视不同芯片而定，例如K60没有FTM3模块 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">chl</td><td>通道 　　　 　 <ul>
+<li>HW_FTM_CH0 通道0 　　　 　 </li>
+<li>HW_FTM_CH1 通道1 　　　 　 </li>
+<li>HW_FTM_CH2 通道2 　　　 　 </li>
+<li>HW_FTM_CH3 通道3 　　　 　 </li>
+<li>HW_FTM_CH4 通道4 　　　 　 </li>
+<li>HW_FTM_CH5 通道5 　　　 　 </li>
+<li>HW_FTM_CH6 通道6 　　　 　 </li>
+<li>HW_FTM_CH7 通道7 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>chl的可输入的参数视不同芯片而定,例如FTM1模块就没有通道7 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>触发模式 <ul>
+<li>kFTM_IC_FallingEdge 下降沿触发 </li>
+<li>kFTM_IC_RisingEdge 上升沿触发 </li>
+<li>kFTM_IC_RisingFallingEdge 跳变沿触发 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00583">583</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5e9f2707730fa2bc5844fc5d74ed3ba8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM_ITDMAConfig </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8h.html#a4c4a6fbef0052fee77560b9a284c8cc8">FTM_ITDMAConfig_Type</a>&#160;</td>
+          <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>flag</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>FTM中断DMA控制 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>模块号 　　　 　 <ul>
+<li>HW_FTM0 FTM0模块 　　　 　 </li>
+<li>HW_FTM1 FTM1模块 　　　 　 </li>
+<li>HW_FTM2 FTM2模块 　　　 　 </li>
+<li>HW_FTM3 FTM3模块 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>instance的可输入的参数视不同芯片而定 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">config</td><td>控制参数，详细请见FTM_ITDMAConfig_Type的枚举类型 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">flag</td><td>中断/DMA使能或者禁止 <ul>
+<li>0 disable </li>
+<li>1 enable </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00696">696</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a71cfc506b453ae6ae25f46bd903276a0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM_PWM_ChangeDuty </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>pwmDuty</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>更改指定引脚的PWM波形占空比 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;//设置FTM0模块的3通道的PWM波形占空比为50%</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;FTM_PWM_ChangeDuty(HW_FTM0, HW_FTM_CH3, 5000); </div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>模块号 　　　 　 <ul>
+<li>HW_FTM0 FTM0模块 　　　 　 </li>
+<li>HW_FTM1 FTM1模块 　　　 　 </li>
+<li>HW_FTM2 FTM2模块 　　　 　 </li>
+<li>HW_FTM3 FTM3模块 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>instance的可输入的参数视不同芯片而定，例如K60没有FTM3模块 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">chl</td><td>通道 　　　 　 <ul>
+<li>HW_FTM_CH0 通道0 　　　 　 </li>
+<li>HW_FTM_CH1 通道1 　　　 　 </li>
+<li>HW_FTM_CH2 通道2 　　　 　 </li>
+<li>HW_FTM_CH3 通道3 　　　 　 </li>
+<li>HW_FTM_CH4 通道4 　　　 　 </li>
+<li>HW_FTM_CH5 通道5 　　　 　 </li>
+<li>HW_FTM_CH6 通道6 　　　 　 </li>
+<li>HW_FTM_CH7 通道7 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>chl的可输入的参数视不同芯片而定,例如FTM1模块就没有通道7 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pwmDuty</td><td>占空比 = pwmDuty/10000*100% </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00499">499</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5683fcf7a206f3f12f097ab4ad85c2ba"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM_PWM_InvertPolarity </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>config</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>翻转FTM极性，内部函数，用户无需调用 </p>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00374">374</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0340cb1af7ac0d6da42b4405e01078bf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t FTM_PWM_QuickInit </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>MAP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8h.html#a1591751049222d6b10bd42ef30a77a9a">FTM_PWM_Mode_Type</a>&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>req</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>快速配置初始化FTM模块实现PWM功能 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;//设置FTM0模块的3通道在PTA6引脚中产生1000HZ的pwm波形，默认50%占空比</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;FTM_PWM_QuickInit(FTM0_CH3_PA06, kPWM_EdgeAligned, 1000);</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">MAP</td><td>FTM工作在PWM模式下的编码，详见ftm.h文件 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>PWM波形输出模式 <ul>
+<li>kPWM_EdgeAligned 边沿对齐 最常用 </li>
+<li>kPWM_Combine 组合模式 </li>
+<li>kPWM_Complementary 互补模式 类似组合模式 但是Chl(n) 和 Chl(n+1) 是互补输出 </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">req</td><td>FTM工作频率设置 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00406">406</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9ef0f18f9ee3f34093b1805c0168627c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM_QD_ClearCount </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>复位FTM模块的计数值（清零） </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>FTM模块号 　　　 　 <ul>
+<li>HW_FTM0 FTM0模块 　　　 　 </li>
+<li>HW_FTM1 FTM1模块 　　　 　 </li>
+<li>HW_FTM2 FTM2模块 　　　 　 </li>
+<li>HW_FTM3 FTM3模块 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>instance的可输入的参数视不同芯片而定，例如K60没有FTM3模块 </dd></dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00205">205</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7b75f2484fe35cf492e8fc1a5fe77bbd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM_QD_GetData </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>direction</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>获得正交解码的数据 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>FTM模块号 　　　 　 <ul>
+<li>HW_FTM0 FTM0模块 　　　 　 </li>
+<li>HW_FTM1 FTM1模块 　　　 　 </li>
+<li>HW_FTM2 FTM2模块 　　　 　 </li>
+<li>HW_FTM3 FTM3模块 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>instance的可输入的参数视不同芯片而定，例如K60没有FTM3模块 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">value</td><td>脉冲数据存储地址 </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">direction</td><td>脉冲方向存储地址 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00189">189</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a03ab9227ccf923f2fac84098c59a6998"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t FTM_QD_QuickInit </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>MAP</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8h.html#af798c38c98400053f04fcd535d1556b9">FTM_QD_PolarityMode_Type</a>&#160;</td>
+          <td class="paramname"><em>polarity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8h.html#a8df93fd1bd59bc91b66c6a2c1173e56d">FTM_QD_Mode_Type</a>&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>快速配置初始化FTM模块实现正交解码功能 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">MAP</td><td>FTM工作在正交解码模式下的编码，详见ftm.h文件 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">polarity</td><td>QD 正交解码设置 <ul>
+<li>kFTM_QD_NormalPolarity 正常极性 </li>
+<li>kFTM_QD_InvertedPolarity 反正极性 </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>QD模式选择 <ul>
+<li>kQD_PHABEncoding 使用AB相编码器 </li>
+<li>kQD_CountDirectionEncoding 使用方向-脉冲型编码器 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>返回</dt><dd>FTM模块号 </dd></dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00130">130</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac9605f926203cbce41725746b4674798"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void FTM_SetMode </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ftm_8c.html#a057a2cbbd422fe91cf7831f7d7878908">FTM_Mode_Type</a>&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>设置FTM工作模式，内部函数，用户无需调用 </p>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00281">281</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad654613f4bde51ed555bd7f5610d0081"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FTM_SetMoudleCounter </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>设置FTM主计数Counter值 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// reset the value of the FTM1 counter</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;FTM_SetMoudleCounter(HW_FTM1, 0);</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">instance</td><td>模块号 　　　 　 <ul>
+<li>HW_FTM0 FTM0模块 　　　 　 </li>
+<li>HW_FTM1 FTM1模块 　　　 　 </li>
+<li>HW_FTM2 FTM2模块 　　　 　 </li>
+<li>HW_FTM3 FTM3模块 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section attention"><dt>注意</dt><dd>instance的可输入的参数视不同芯片而定 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>counter value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00650">650</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab936659ac944b3875c3b3d66c38c6d46"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint32_t get_chl_pair_index </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>内部函数，用户无需调用 </p>
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00217">217</a> 行定义.</p>
+
+</div>
+</div>
+<h2 class="groupheader">变量说明</h2>
+<a class="anchor" id="a8f3eacd0d61b53f015dd8b1c3e23e66c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="ftm_8h.html#ae8ba2ef63b5440ffeab4bd337a49872f">FTM_CallBackType</a> FTM_CallBackTable[<a class="el" href="common_8h.html#a6242a25f9d996f0cc4f4cdb911218b75">ARRAY_SIZE</a>(<a class="el" href="ftm_8c.html#a3104828e36795dfd32ac5ee432a8e675">FTM_InstanceTable</a>)] = {NULL}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00036">36</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1b09ce447e353b8a31c7b622bf5d206e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const uint32_t FTM_ChlMaxTable[] = {8,2,2}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00039">39</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3104828e36795dfd32ac5ee432a8e675"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">FTM_Type* const FTM_InstanceTable[] = <a class="el" href="ftm_8c.html#a79eaf0c291fdd1608f3fc62b6dd0e7c7">FTM_BASES</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00035">35</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8de255f45f1897303b45fca35df01ee2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const IRQn_Type FTM_IRQnTable[]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>初始值:</b><div class="fragment"><div class="line">= </div>
+<div class="line">{</div>
+<div class="line">    FTM0_IRQn,</div>
+<div class="line">    FTM1_IRQn,</div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line">}</div>
+</div><!-- fragment -->
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00051">51</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a49610ccccc760877fabb9302484e063f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="struct_reg__t.html">Reg_t</a> SIM_FTMClockGateTable[]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>初始值:</b><div class="fragment"><div class="line">=</div>
+<div class="line">{</div>
+<div class="line">    {(<span class="keywordtype">void</span>*)&amp;(SIM-&gt;SCGC6), SIM_SCGC6_FTM0_MASK},</div>
+<div class="line">    {(<span class="keywordtype">void</span>*)&amp;(SIM-&gt;SCGC6), SIM_SCGC6_FTM1_MASK},</div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line">  </div>
+<div class="line">}</div>
+</div><!-- fragment -->
+<p>在文件 <a class="el" href="ftm_8c_source.html">ftm.c</a> 第 <a class="el" href="ftm_8c_source.html#l00040">40</a> 行定义.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.10
+</small></address>
+</body>
+</html>

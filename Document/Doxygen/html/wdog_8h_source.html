@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.10"/>
+<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/wdog.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">CH Kinetis library for K series
+   &#160;<span id="projectnumber">V2.5</span>
+   </div>
+   <div id="projectbrief">Kinetis driver library  for K series</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.10 -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>全局定义</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">wdog.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="wdog_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#ifndef __CH_LIB_WDOG_H__</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#define __CH_LIB_WDOG_H__</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="common_8h.html">common.h</a>&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cf">   21</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;{</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cfaa4ddbdc308f5088ee560550b1b18a02d">   23</a></span>&#160;    <a class="code" href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cfaa4ddbdc308f5088ee560550b1b18a02d">kWDOG_Mode_Normal</a>,            </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cfa217893e65ba5ad4c90d5231187969418">   24</a></span>&#160;    <a class="code" href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cfa217893e65ba5ad4c90d5231187969418">kWDOG_Mode_Window</a>,            </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;}<a class="code" href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cf">WDOG_Mode_Type</a>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="struct_w_d_o_g___init_type_def.html">   31</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="struct_w_d_o_g___init_type_def.html#ac94e97174c514e388b8c2ad34fe1806b">   33</a></span>&#160;    <a class="code" href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cf">WDOG_Mode_Type</a>      <a class="code" href="struct_w_d_o_g___init_type_def.html#ac94e97174c514e388b8c2ad34fe1806b">mode</a>;                   </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="struct_w_d_o_g___init_type_def.html#abeba18ccd36b61a844445cd7e053b36c">   34</a></span>&#160;    uint32_t            <a class="code" href="struct_w_d_o_g___init_type_def.html#abeba18ccd36b61a844445cd7e053b36c">timeOutInMs</a>;            </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="struct_w_d_o_g___init_type_def.html#a036a2f1c9d391b123e96d0d22d453914">   35</a></span>&#160;    uint32_t            <a class="code" href="struct_w_d_o_g___init_type_def.html#a036a2f1c9d391b123e96d0d22d453914">windowInMs</a>;             </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;}<a class="code" href="struct_w_d_o_g___init_type_def.html">WDOG_InitTypeDef</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/* Callback Type */</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="wdog_8h.html#ab42a122dd6ae01fffdb3c6146f5143da">   39</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="wdog_8h.html#ab42a122dd6ae01fffdb3c6146f5143da">WDOG_CallBackType</a>)(void);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">/* API functions */</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">void</span> <a class="code" href="wdog_8h.html#a6e39f18a669b2fa52a9a935a9113743a">WDOG_QuickInit</a>(uint32_t timeInUs);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keywordtype">void</span> <a class="code" href="wdog_8h.html#af6ec4ebc504c3e423083dbfa0c526a2e">WDOG_Init</a>(<a class="code" href="struct_w_d_o_g___init_type_def.html">WDOG_InitTypeDef</a>* WDOG_InitStruct);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keywordtype">void</span> <a class="code" href="wdog_8h.html#a46e58039d2802a9981a1e12acdde74eb">WDOG_ITDMAConfig</a>(<span class="keywordtype">bool</span> status);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">void</span> <a class="code" href="wdog_8h.html#a875d069cfbb230fb17bc14c247fb973b">WDOG_CallbackInstall</a>(<a class="code" href="wdog_8h.html#ab42a122dd6ae01fffdb3c6146f5143da">WDOG_CallBackType</a> AppCBFun);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;uint32_t <a class="code" href="wdog_8h.html#a2ee0ba78fa9dacc4c3079c9b4eadf0dc">WDOG_GetResetCounter</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keywordtype">void</span> <a class="code" href="wdog_8h.html#a6f3f20d9ff179cf0fc424e56e2e80fae">WDOG_ClearResetCounter</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keywordtype">void</span> <a class="code" href="wdog_8h.html#aacbb6e5a5f2e51a887d186fae74e9246">WDOG_Refresh</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;uint32_t <a class="code" href="wdog_8h.html#ab18031d2079aa04769420bbbb26c947d">WDOG_GetCurrentCounter</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="ttc" id="wdog_8h_html_af6ec4ebc504c3e423083dbfa0c526a2e"><div class="ttname"><a href="wdog_8h.html#af6ec4ebc504c3e423083dbfa0c526a2e">WDOG_Init</a></div><div class="ttdeci">void WDOG_Init(WDOG_InitTypeDef *WDOG_InitStruct)</div><div class="ttdoc">看门狗详细初始化配置 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8c_source.html#l00058">wdog.c:58</a></div></div>
+<div class="ttc" id="struct_w_d_o_g___init_type_def_html_ac94e97174c514e388b8c2ad34fe1806b"><div class="ttname"><a href="struct_w_d_o_g___init_type_def.html#ac94e97174c514e388b8c2ad34fe1806b">WDOG_InitTypeDef::mode</a></div><div class="ttdeci">WDOG_Mode_Type mode</div><div class="ttdoc">WDOG 工作模式选择 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8h_source.html#l00033">wdog.h:33</a></div></div>
+<div class="ttc" id="wdog_8h_html_ab42a122dd6ae01fffdb3c6146f5143da"><div class="ttname"><a href="wdog_8h.html#ab42a122dd6ae01fffdb3c6146f5143da">WDOG_CallBackType</a></div><div class="ttdeci">void(* WDOG_CallBackType)(void)</div><div class="ttdef"><b>Definition:</b> <a href="wdog_8h_source.html#l00039">wdog.h:39</a></div></div>
+<div class="ttc" id="wdog_8h_html_af67f9fc8c027866ad66328ba9a8de0cfa217893e65ba5ad4c90d5231187969418"><div class="ttname"><a href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cfa217893e65ba5ad4c90d5231187969418">kWDOG_Mode_Window</a></div><div class="ttdef"><b>Definition:</b> <a href="wdog_8h_source.html#l00024">wdog.h:24</a></div></div>
+<div class="ttc" id="struct_w_d_o_g___init_type_def_html_abeba18ccd36b61a844445cd7e053b36c"><div class="ttname"><a href="struct_w_d_o_g___init_type_def.html#abeba18ccd36b61a844445cd7e053b36c">WDOG_InitTypeDef::timeOutInMs</a></div><div class="ttdeci">uint32_t timeOutInMs</div><div class="ttdoc">WDOG 最大喂狗时限 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8h_source.html#l00034">wdog.h:34</a></div></div>
+<div class="ttc" id="wdog_8h_html_a6f3f20d9ff179cf0fc424e56e2e80fae"><div class="ttname"><a href="wdog_8h.html#a6f3f20d9ff179cf0fc424e56e2e80fae">WDOG_ClearResetCounter</a></div><div class="ttdeci">void WDOG_ClearResetCounter(void)</div><div class="ttdoc">清除看门狗计数器的数值 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8c_source.html#l00149">wdog.c:149</a></div></div>
+<div class="ttc" id="wdog_8h_html_a2ee0ba78fa9dacc4c3079c9b4eadf0dc"><div class="ttname"><a href="wdog_8h.html#a2ee0ba78fa9dacc4c3079c9b4eadf0dc">WDOG_GetResetCounter</a></div><div class="ttdeci">uint32_t WDOG_GetResetCounter(void)</div><div class="ttdoc">读取看门狗计数器的数值 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8c_source.html#l00136">wdog.c:136</a></div></div>
+<div class="ttc" id="wdog_8h_html_ab18031d2079aa04769420bbbb26c947d"><div class="ttname"><a href="wdog_8h.html#ab18031d2079aa04769420bbbb26c947d">WDOG_GetCurrentCounter</a></div><div class="ttdeci">uint32_t WDOG_GetCurrentCounter(void)</div><div class="ttdoc">读取看门狗当前定时器的输出值 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8c_source.html#l00158">wdog.c:158</a></div></div>
+<div class="ttc" id="struct_w_d_o_g___init_type_def_html_a036a2f1c9d391b123e96d0d22d453914"><div class="ttname"><a href="struct_w_d_o_g___init_type_def.html#a036a2f1c9d391b123e96d0d22d453914">WDOG_InitTypeDef::windowInMs</a></div><div class="ttdeci">uint32_t windowInMs</div><div class="ttdoc">WDOG 开窗起始时间 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8h_source.html#l00035">wdog.h:35</a></div></div>
+<div class="ttc" id="wdog_8h_html_a875d069cfbb230fb17bc14c247fb973b"><div class="ttname"><a href="wdog_8h.html#a875d069cfbb230fb17bc14c247fb973b">WDOG_CallbackInstall</a></div><div class="ttdeci">void WDOG_CallbackInstall(WDOG_CallBackType AppCBFun)</div><div class="ttdoc">WDOG注册中断回调函数 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8c_source.html#l00119">wdog.c:119</a></div></div>
+<div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div><div class="ttdoc">www.beyondcore.net http://upcmcu.taobao.com </div></div>
+<div class="ttc" id="wdog_8h_html_a6e39f18a669b2fa52a9a935a9113743a"><div class="ttname"><a href="wdog_8h.html#a6e39f18a669b2fa52a9a935a9113743a">WDOG_QuickInit</a></div><div class="ttdeci">void WDOG_QuickInit(uint32_t timeInUs)</div><div class="ttdoc">看门狗快速初始化配置 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8c_source.html#l00037">wdog.c:37</a></div></div>
+<div class="ttc" id="wdog_8h_html_aacbb6e5a5f2e51a887d186fae74e9246"><div class="ttname"><a href="wdog_8h.html#aacbb6e5a5f2e51a887d186fae74e9246">WDOG_Refresh</a></div><div class="ttdeci">void WDOG_Refresh(void)</div><div class="ttdoc">喂狗 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8c_source.html#l00173">wdog.c:173</a></div></div>
+<div class="ttc" id="struct_w_d_o_g___init_type_def_html"><div class="ttname"><a href="struct_w_d_o_g___init_type_def.html">WDOG_InitTypeDef</a></div><div class="ttdoc">WDOG初始化结构 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8h_source.html#l00031">wdog.h:31</a></div></div>
+<div class="ttc" id="wdog_8h_html_af67f9fc8c027866ad66328ba9a8de0cfaa4ddbdc308f5088ee560550b1b18a02d"><div class="ttname"><a href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cfaa4ddbdc308f5088ee560550b1b18a02d">kWDOG_Mode_Normal</a></div><div class="ttdef"><b>Definition:</b> <a href="wdog_8h_source.html#l00023">wdog.h:23</a></div></div>
+<div class="ttc" id="wdog_8h_html_af67f9fc8c027866ad66328ba9a8de0cf"><div class="ttname"><a href="wdog_8h.html#af67f9fc8c027866ad66328ba9a8de0cf">WDOG_Mode_Type</a></div><div class="ttdeci">WDOG_Mode_Type</div><div class="ttdoc">WDOG mode select. </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8h_source.html#l00021">wdog.h:21</a></div></div>
+<div class="ttc" id="wdog_8h_html_a46e58039d2802a9981a1e12acdde74eb"><div class="ttname"><a href="wdog_8h.html#a46e58039d2802a9981a1e12acdde74eb">WDOG_ITDMAConfig</a></div><div class="ttdeci">void WDOG_ITDMAConfig(bool status)</div><div class="ttdoc">看门狗中断配置 </div><div class="ttdef"><b>Definition:</b> <a href="wdog_8c_source.html#l00101">wdog.c:101</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.10
+</small></address>
+</body>
+</html>

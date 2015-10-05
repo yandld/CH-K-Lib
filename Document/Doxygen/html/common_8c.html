@@ -1,0 +1,602 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.10"/>
+<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/common.c 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">CH Kinetis library for K series
+   &#160;<span id="projectnumber">V2.5</span>
+   </div>
+   <div id="projectbrief">Kinetis driver library  for K series</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.10 -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>全局定义</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">宏定义</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">common.c 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a>  
+<a href="#details">更多...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
+<code>#include &lt;string.h&gt;</code><br />
+</div>
+<p><a href="common_8c_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+宏定义</h2></td></tr>
+<tr class="memitem:a35143e8e9c5ac3f4df9097cb0cf1e742"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a35143e8e9c5ac3f4df9097cb0cf1e742">MCGOUT_TO_CORE_DIVIDER</a>&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV1_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)</td></tr>
+<tr class="separator:a35143e8e9c5ac3f4df9097cb0cf1e742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a079fcc12451b55fc5805a30ddb5f69ca"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a079fcc12451b55fc5805a30ddb5f69ca">MCGOUT_TO_SYSTEM_DIVIDER</a>&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV1_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)</td></tr>
+<tr class="separator:a079fcc12451b55fc5805a30ddb5f69ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7fe74f9955322bb112bdd612becd3c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#aa7fe74f9955322bb112bdd612becd3c0">MCGOUT_TO_BUS_DIVIDER</a>&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV2_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV2_SHIFT) + 1)</td></tr>
+<tr class="separator:aa7fe74f9955322bb112bdd612becd3c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9788a96c0c4d0ca33c4ddd8e3644def"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#ae9788a96c0c4d0ca33c4ddd8e3644def">MCGOUT_TO_PERIPHERAL_DIVIDER</a>&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV2_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV2_SHIFT) + 1)</td></tr>
+<tr class="separator:ae9788a96c0c4d0ca33c4ddd8e3644def"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaf094c5487d8aadad5a72d01e482a80"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#abaf094c5487d8aadad5a72d01e482a80">MCGOUT_TO_FLEXBUS_DIVIDER</a>&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV3_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV3_SHIFT) + 1)</td></tr>
+<tr class="separator:abaf094c5487d8aadad5a72d01e482a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28db3666fe2c736ef68eb00a5ff8cf8e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a28db3666fe2c736ef68eb00a5ff8cf8e">MCGOUT_TO_FLASH_DIVIDER</a>&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV4_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)</td></tr>
+<tr class="separator:a28db3666fe2c736ef68eb00a5ff8cf8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:a729b6f2e085ac19b06d846024fc870db"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a729b6f2e085ac19b06d846024fc870db">GetClock</a> (<a class="el" href="common_8h.html#accce41f196e729af6b1839e3747d87dd">Clock_t</a> clockName)</td></tr>
+<tr class="memdesc:a729b6f2e085ac19b06d846024fc870db"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得系统各个总线时钟的频率  <a href="#a729b6f2e085ac19b06d846024fc870db">更多...</a><br /></td></tr>
+<tr class="separator:a729b6f2e085ac19b06d846024fc870db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9195ba540ad1dd95dcf31dcaf1fda4f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a9195ba540ad1dd95dcf31dcaf1fda4f2">EnterSTOPMode</a> (bool enSleepOnExit)</td></tr>
+<tr class="memdesc:a9195ba540ad1dd95dcf31dcaf1fda4f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">进入低功耗模式  <a href="#a9195ba540ad1dd95dcf31dcaf1fda4f2">更多...</a><br /></td></tr>
+<tr class="separator:a9195ba540ad1dd95dcf31dcaf1fda4f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acce8348eeb1e5ee90b94918fc3a76a7c"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#acce8348eeb1e5ee90b94918fc3a76a7c">QuickInitEncode</a> (<a class="el" href="structmap__t.html">map_t</a> *type)</td></tr>
+<tr class="memdesc:acce8348eeb1e5ee90b94918fc3a76a7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">编码快速初始化结构 用户不需调用  <a href="#acce8348eeb1e5ee90b94918fc3a76a7c">更多...</a><br /></td></tr>
+<tr class="separator:acce8348eeb1e5ee90b94918fc3a76a7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6c7ead5fca2ad6e86ab75ea208d65a7"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#ab6c7ead5fca2ad6e86ab75ea208d65a7">GetUID</a> (void)</td></tr>
+<tr class="memdesc:ab6c7ead5fca2ad6e86ab75ea208d65a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">获得芯片UID信息(全球唯一识别码)  <a href="#ab6c7ead5fca2ad6e86ab75ea208d65a7">更多...</a><br /></td></tr>
+<tr class="separator:ab6c7ead5fca2ad6e86ab75ea208d65a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8934ea62dc13afd977af4649bad5147a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a8934ea62dc13afd977af4649bad5147a">QuickInitDecode</a> (uint32_t map, <a class="el" href="structmap__t.html">map_t</a> *type)</td></tr>
+<tr class="memdesc:a8934ea62dc13afd977af4649bad5147a"><td class="mdescLeft">&#160;</td><td class="mdescRight">解码快速初始化结构 用户不需调用  <a href="#a8934ea62dc13afd977af4649bad5147a">更多...</a><br /></td></tr>
+<tr class="separator:a8934ea62dc13afd977af4649bad5147a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a556684f4f9b781173562e27c309f7b93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a556684f4f9b781173562e27c309f7b93">DWT_DelayInit</a> (void)</td></tr>
+<tr class="memdesc:a556684f4f9b781173562e27c309f7b93"><td class="mdescLeft">&#160;</td><td class="mdescRight">DWT delay function.  <a href="#a556684f4f9b781173562e27c309f7b93">更多...</a><br /></td></tr>
+<tr class="separator:a556684f4f9b781173562e27c309f7b93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c3541175a89a4a3449625cb23d2f78e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a2c3541175a89a4a3449625cb23d2f78e">DWT_DelayUs</a> (uint32_t us)</td></tr>
+<tr class="memdesc:a2c3541175a89a4a3449625cb23d2f78e"><td class="mdescLeft">&#160;</td><td class="mdescRight">DWT微秒级延时  <a href="#a2c3541175a89a4a3449625cb23d2f78e">更多...</a><br /></td></tr>
+<tr class="separator:a2c3541175a89a4a3449625cb23d2f78e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45adf9b82be77af3b8d1f7e29a9ef7d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a45adf9b82be77af3b8d1f7e29a9ef7d8">DWT_DelayMs</a> (uint32_t ms)</td></tr>
+<tr class="memdesc:a45adf9b82be77af3b8d1f7e29a9ef7d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">DWT毫秒级延时  <a href="#a45adf9b82be77af3b8d1f7e29a9ef7d8">更多...</a><br /></td></tr>
+<tr class="separator:a45adf9b82be77af3b8d1f7e29a9ef7d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65743698bd6b9165406d7033e6a28a86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a65743698bd6b9165406d7033e6a28a86">DelayInit</a> (void)</td></tr>
+<tr class="memdesc:a65743698bd6b9165406d7033e6a28a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">延时初始化函数  <a href="#a65743698bd6b9165406d7033e6a28a86">更多...</a><br /></td></tr>
+<tr class="separator:a65743698bd6b9165406d7033e6a28a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3a1c1a7a5024cf50a2e8672927f40cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#ae3a1c1a7a5024cf50a2e8672927f40cc">DelayMs</a> (uint32_t ms)</td></tr>
+<tr class="memdesc:ae3a1c1a7a5024cf50a2e8672927f40cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">抽象毫秒级的延时设置函数  <a href="#ae3a1c1a7a5024cf50a2e8672927f40cc">更多...</a><br /></td></tr>
+<tr class="separator:ae3a1c1a7a5024cf50a2e8672927f40cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbc8d6282711c03a59088b8c9afcb036"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#afbc8d6282711c03a59088b8c9afcb036">DelayUs</a> (uint32_t us)</td></tr>
+<tr class="memdesc:afbc8d6282711c03a59088b8c9afcb036"><td class="mdescLeft">&#160;</td><td class="mdescRight">抽象微秒级的延时设置函数  <a href="#afbc8d6282711c03a59088b8c9afcb036">更多...</a><br /></td></tr>
+<tr class="separator:afbc8d6282711c03a59088b8c9afcb036"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ad7a5e3ee69cb6db6a6b9111ba898bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8c.html#a6ad7a5e3ee69cb6db6a6b9111ba898bc">NMI_Handler</a> (void)</td></tr>
+<tr class="memdesc:a6ad7a5e3ee69cb6db6a6b9111ba898bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">非可屏蔽中断 non maskable interrupt  <a href="#a6ad7a5e3ee69cb6db6a6b9111ba898bc">更多...</a><br /></td></tr>
+<tr class="separator:a6ad7a5e3ee69cb6db6a6b9111ba898bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a> </p>
+<dl class="section author"><dt>作者</dt><dd>YANDLD </dd></dl>
+<dl class="section version"><dt>版本</dt><dd>V2.5 </dd></dl>
+<dl class="section date"><dt>日期</dt><dd>2013.12.25 </dd>
+<dd>
+2015.10.04 FreeXc完善了common.h &amp; common.c文件的注释 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>此文件为内部文件，用户无需调用和修改 </dd></dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 中定义.</p>
+</div><h2 class="groupheader">宏定义说明</h2>
+<a class="anchor" id="aa7fe74f9955322bb112bdd612becd3c0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MCGOUT_TO_BUS_DIVIDER&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV2_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV2_SHIFT) + 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00018">18</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a35143e8e9c5ac3f4df9097cb0cf1e742"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MCGOUT_TO_CORE_DIVIDER&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV1_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00016">16</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a28db3666fe2c736ef68eb00a5ff8cf8e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MCGOUT_TO_FLASH_DIVIDER&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV4_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV4_SHIFT) + 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00021">21</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="abaf094c5487d8aadad5a72d01e482a80"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MCGOUT_TO_FLEXBUS_DIVIDER&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV3_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV3_SHIFT) + 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00020">20</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae9788a96c0c4d0ca33c4ddd8e3644def"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MCGOUT_TO_PERIPHERAL_DIVIDER&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV2_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV2_SHIFT) + 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00019">19</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a079fcc12451b55fc5805a30ddb5f69ca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MCGOUT_TO_SYSTEM_DIVIDER&#160;&#160;&#160;(((SIM-&gt;CLKDIV1 &amp; SIM_CLKDIV1_OUTDIV1_MASK)&gt;&gt;SIM_CLKDIV1_OUTDIV1_SHIFT) + 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00017">17</a> 行定义.</p>
+
+</div>
+</div>
+<h2 class="groupheader">函数说明</h2>
+<a class="anchor" id="a65743698bd6b9165406d7033e6a28a86"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DelayInit </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>延时初始化函数 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// 完成延时初始化配置，</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;//使用内核的Systick模块实现延时功能</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;DelayInit();</div>
+</div><!-- fragment --> <dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00178">178</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae3a1c1a7a5024cf50a2e8672927f40cc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DelayMs </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ms</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>抽象毫秒级的延时设置函数 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// 实现500ms的延时功能</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;DelayMs(500);</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ms</td><td>需要延时的时间，单位毫秒 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>首先需要完成延时初始化配置 </dd></dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00194">194</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="afbc8d6282711c03a59088b8c9afcb036"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DelayUs </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>us</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>抽象微秒级的延时设置函数 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// 实现500us的延时功能</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;DelayUs(500);</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">us</td><td>需要延时的时间，单位微秒 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>首先需要完成延时初始化配置 </dd></dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00210">210</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a556684f4f9b781173562e27c309f7b93"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DWT_DelayInit </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>DWT delay function. </p>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00126">126</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a45adf9b82be77af3b8d1f7e29a9ef7d8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DWT_DelayMs </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ms</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>DWT毫秒级延时 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ms</td><td>延时毫秒数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00163">163</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2c3541175a89a4a3449625cb23d2f78e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DWT_DelayUs </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>us</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>DWT微秒级延时 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">us</td><td>延时微秒数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>DWT(Data and Address Watchpoints)具有一个Core Clock的计数器，通过该计数器来实现us级延时 </dd></dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00141">141</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9195ba540ad1dd95dcf31dcaf1fda4f2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EnterSTOPMode </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>enSleepOnExit</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>进入低功耗模式 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">enSleepOnExit</td><td>在系统唤醒时候 是否继续进入低功耗 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>任何中断 都可以唤醒CPU </dd></dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00069">69</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a729b6f2e085ac19b06d846024fc870db"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t GetClock </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="common_8h.html#accce41f196e729af6b1839e3747d87dd">Clock_t</a>&#160;</td>
+          <td class="paramname"><em>clockName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>获得系统各个总线时钟的频率 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;//获得总线时钟频率</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;printf(&quot;BusClock:%dHz\r\n&quot;, GetClock(kBusClock));</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">clockName</td><td>时钟名称 <ul>
+<li>kCoreClock 内核时钟 </li>
+<li>kSystemClock 系统时钟 = 内核时钟 </li>
+<li>kBusClock 总线时钟 </li>
+<li>kFlexBusClock Flexbus总线时钟 </li>
+<li>kFlashClock Flash总线时钟 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">0</td><td>成功 </td></tr>
+    <tr><td class="paramname">非0</td><td>错误 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00038">38</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab6c7ead5fca2ad6e86ab75ea208d65a7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t GetUID </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>获得芯片UID信息(全球唯一识别码) </p>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">UID信息</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00100">100</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6ad7a5e3ee69cb6db6a6b9111ba898bc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NMI_Handler </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>非可屏蔽中断 non maskable interrupt </p>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00235">235</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8934ea62dc13afd977af4649bad5147a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QuickInitDecode </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>map</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structmap__t.html">map_t</a> *&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>解码快速初始化结构 用户不需调用 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">map</td><td>32位快速初始化编码 </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">type</td><td>快速初始化结构指针 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00116">116</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="acce8348eeb1e5ee90b94918fc3a76a7c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t QuickInitEncode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structmap__t.html">map_t</a> *&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>编码快速初始化结构 用户不需调用 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>快速初始化结构体指针 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">32位快速初始化编码</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="common_8c_source.html">common.c</a> 第 <a class="el" href="common_8c_source.html#l00091">91</a> 行定义.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.10
+</small></address>
+</body>
+</html>

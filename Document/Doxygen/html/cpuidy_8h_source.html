@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.10"/>
+<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/cpuidy.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">CH Kinetis library for K series
+   &#160;<span id="projectnumber">V2.5</span>
+   </div>
+   <div id="projectbrief">Kinetis driver library  for K series</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.10 -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>全局定义</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">cpuidy.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="cpuidy_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#ifndef __CH_LIB_CPUIDY_H__</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define __CH_LIB_CPUIDY_H__</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61">   20</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a14053bfed78eb5a308635cf5a76376e4">   22</a></span>&#160;    <a class="code" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a14053bfed78eb5a308635cf5a76376e4">kPFlashSizeInKB</a>,   </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a196ea15c05af5fa1cefd4d898448c176">   23</a></span>&#160;    <a class="code" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a196ea15c05af5fa1cefd4d898448c176">kDFlashSizeInKB</a>,   </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a6b5ea41a6cf1a642116e2653da51c4d4">   24</a></span>&#160;    <a class="code" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a6b5ea41a6cf1a642116e2653da51c4d4">kFlexNVMSizeInKB</a>,  </div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61aa18571cc7206e27376c79306e606a83e">   25</a></span>&#160;    <a class="code" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61aa18571cc7206e27376c79306e606a83e">kEEPROMSizeInByte</a>, </div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61acbbf82e4135fde16286291673f31e367">   26</a></span>&#160;    <a class="code" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61acbbf82e4135fde16286291673f31e367">kRAMSizeInKB</a>,      </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a6fe0be244aac51585c0d1a1c2d99b907">   27</a></span>&#160;    <a class="code" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a6fe0be244aac51585c0d1a1c2d99b907">kMemNameCount</a>,     </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;}<a class="code" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61">CPUIDY_MemSize_Type</a>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">/* API functions */</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">char</span> *<a class="code" href="cpuidy_8h.html#af839b2783d0b60ec6e2f005561b23f90">CPUIDY_GetFamID</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;uint32_t <a class="code" href="cpuidy_8h.html#ab36f3d27b5ca3737f1de08f4e437befb">CPUIDY_GetPinCount</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;uint32_t <a class="code" href="cpuidy_8h.html#a9dc5f2606368ab03ecb4721b3df579eb">CPUIDY_GetMemSize</a>(<a class="code" href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61">CPUIDY_MemSize_Type</a> memSizeName);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cpuidy_8h.html#a1b68300ca5fd5f304da6da81075c4bf5">CPUIDY_GetUID</a>(uint32_t * UIDArray);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="ttc" id="cpuidy_8h_html_aada9fb080347f39c6c8b8b70d1744a61a196ea15c05af5fa1cefd4d898448c176"><div class="ttname"><a href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a196ea15c05af5fa1cefd4d898448c176">kDFlashSizeInKB</a></div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8h_source.html#l00023">cpuidy.h:23</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_af839b2783d0b60ec6e2f005561b23f90"><div class="ttname"><a href="cpuidy_8h.html#af839b2783d0b60ec6e2f005561b23f90">CPUIDY_GetFamID</a></div><div class="ttdeci">char * CPUIDY_GetFamID(void)</div><div class="ttdoc">获得芯片的系列ID </div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8c_source.html#l00057">cpuidy.c:57</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_aada9fb080347f39c6c8b8b70d1744a61acbbf82e4135fde16286291673f31e367"><div class="ttname"><a href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61acbbf82e4135fde16286291673f31e367">kRAMSizeInKB</a></div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8h_source.html#l00026">cpuidy.h:26</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_aada9fb080347f39c6c8b8b70d1744a61a14053bfed78eb5a308635cf5a76376e4"><div class="ttname"><a href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a14053bfed78eb5a308635cf5a76376e4">kPFlashSizeInKB</a></div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8h_source.html#l00022">cpuidy.h:22</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_ab36f3d27b5ca3737f1de08f4e437befb"><div class="ttname"><a href="cpuidy_8h.html#ab36f3d27b5ca3737f1de08f4e437befb">CPUIDY_GetPinCount</a></div><div class="ttdeci">uint32_t CPUIDY_GetPinCount(void)</div><div class="ttdoc">获得芯片的引脚数 </div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8c_source.html#l00073">cpuidy.c:73</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_aada9fb080347f39c6c8b8b70d1744a61a6fe0be244aac51585c0d1a1c2d99b907"><div class="ttname"><a href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a6fe0be244aac51585c0d1a1c2d99b907">kMemNameCount</a></div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8h_source.html#l00027">cpuidy.h:27</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_aada9fb080347f39c6c8b8b70d1744a61"><div class="ttname"><a href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61">CPUIDY_MemSize_Type</a></div><div class="ttdeci">CPUIDY_MemSize_Type</div><div class="ttdoc">芯片信息 </div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8h_source.html#l00020">cpuidy.h:20</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_aada9fb080347f39c6c8b8b70d1744a61aa18571cc7206e27376c79306e606a83e"><div class="ttname"><a href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61aa18571cc7206e27376c79306e606a83e">kEEPROMSizeInByte</a></div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8h_source.html#l00025">cpuidy.h:25</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_a1b68300ca5fd5f304da6da81075c4bf5"><div class="ttname"><a href="cpuidy_8h.html#a1b68300ca5fd5f304da6da81075c4bf5">CPUIDY_GetUID</a></div><div class="ttdeci">void CPUIDY_GetUID(uint32_t *UIDArray)</div><div class="ttdoc">获得芯片UID信息(全球唯一识别码) </div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8c_source.html#l00135">cpuidy.c:135</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_aada9fb080347f39c6c8b8b70d1744a61a6b5ea41a6cf1a642116e2653da51c4d4"><div class="ttname"><a href="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a6b5ea41a6cf1a642116e2653da51c4d4">kFlexNVMSizeInKB</a></div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8h_source.html#l00024">cpuidy.h:24</a></div></div>
+<div class="ttc" id="cpuidy_8h_html_a9dc5f2606368ab03ecb4721b3df579eb"><div class="ttname"><a href="cpuidy_8h.html#a9dc5f2606368ab03ecb4721b3df579eb">CPUIDY_GetMemSize</a></div><div class="ttdeci">uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName)</div><div class="ttdoc">获得芯片ROM/RAM 大小 </div><div class="ttdef"><b>Definition:</b> <a href="cpuidy_8c_source.html#l00094">cpuidy.c:94</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.10
+</small></address>
+</body>
+</html>

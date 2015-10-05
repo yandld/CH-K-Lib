@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.10"/>
+<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/vref.c 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">CH Kinetis library for K series
+   &#160;<span id="projectnumber">V2.5</span>
+   </div>
+   <div id="projectbrief">Kinetis driver library  for K series</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.10 -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>全局定义</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">vref.c</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="vref_8c.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor"> #include &quot;<a class="code" href="vref_8h.html">vref.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor"> #include &quot;<a class="code" href="common_8h.html">common.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="vref_8h.html#ab7187f2aba5c643774ce45ac6a6d16e8">   20</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="vref_8c.html#ab7187f2aba5c643774ce45ac6a6d16e8">VREF_Init</a>(<a class="code" href="struct_v_r_e_f___init_type_def.html">VREF_InitTypeDef</a> *VREF_InitStruct)</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="comment">/* open clock gate */</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    SIM-&gt;SCGC4 |= SIM_SCGC4_VREF_MASK;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="comment">/* enable moudle */</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">    #ifdef VREF_SC_ICOMPEN_MASK</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    VREF-&gt;SC = VREF_SC_VREFEN_MASK | VREF_SC_REGEN_MASK | VREF_SC_ICOMPEN_MASK | VREF_SC_MODE_LV(VREF_InitStruct-&gt;<a class="code" href="struct_v_r_e_f___init_type_def.html#aec4712aacbe4a37bf84c5a4287017986">bufferMode</a>);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    VREF-&gt;TRM |= VREF_TRM_CHOPEN_MASK;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">    #else</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    VREF-&gt;SC = VREF_SC_VREFEN_MASK | VREF_SC_REGEN_MASK  | VREF_SC_MODE_LV(VREF_InitStruct-&gt;<a class="code" href="struct_v_r_e_f___init_type_def.html#aec4712aacbe4a37bf84c5a4287017986">bufferMode</a>);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">    #endif </span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="vref_8h.html#af3c294c351194818ecfd8e578724c7bf">   39</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="vref_8c.html#af3c294c351194818ecfd8e578724c7bf">VREF_QuickInit</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;{</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="struct_v_r_e_f___init_type_def.html">VREF_InitTypeDef</a>  VREF_InitStruct1;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    VREF_InitStruct1.<a class="code" href="struct_v_r_e_f___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">instance</a> = 0;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    VREF_InitStruct1.<a class="code" href="struct_v_r_e_f___init_type_def.html#aec4712aacbe4a37bf84c5a4287017986">bufferMode</a> = <a class="code" href="vref_8h.html#aaab4b29c84ab5c16c346208bd49282b1a05e8fa1f2c6e397679500a20d2bc707d">kVREF_BufferMode_Lv1</a>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="vref_8c.html#ab7187f2aba5c643774ce45ac6a6d16e8">VREF_Init</a>(&amp;VREF_InitStruct1);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="vref_8h.html#ad156323e2f5489baa9d323b7753004a7">   51</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="vref_8c.html#ad156323e2f5489baa9d323b7753004a7">VREF_DeInit</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;{</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    SIM-&gt;SCGC4 &amp;= ~SIM_SCGC4_VREF_MASK;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    VREF-&gt;SC = 0;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="vref_8h.html#aa6d1e5144a780df20c3d0ddeb3dc3beb">   64</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="vref_8c.html#aa6d1e5144a780df20c3d0ddeb3dc3beb">VREF_SetTrimValue</a>(uint32_t val)</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;{</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    VREF-&gt;TRM &amp;= ~VREF_TRM_TRIM_MASK;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    VREF-&gt;TRM |= VREF_TRM_TRIM(val);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="ttc" id="vref_8c_html_af3c294c351194818ecfd8e578724c7bf"><div class="ttname"><a href="vref_8c.html#af3c294c351194818ecfd8e578724c7bf">VREF_QuickInit</a></div><div class="ttdeci">void VREF_QuickInit(void)</div><div class="ttdoc">快速初始化VREF模块 </div><div class="ttdef"><b>Definition:</b> <a href="vref_8c_source.html#l00039">vref.c:39</a></div></div>
+<div class="ttc" id="vref_8c_html_ad156323e2f5489baa9d323b7753004a7"><div class="ttname"><a href="vref_8c.html#ad156323e2f5489baa9d323b7753004a7">VREF_DeInit</a></div><div class="ttdeci">void VREF_DeInit(void)</div><div class="ttdoc">恢复VREF到默认状态 </div><div class="ttdef"><b>Definition:</b> <a href="vref_8c_source.html#l00051">vref.c:51</a></div></div>
+<div class="ttc" id="struct_v_r_e_f___init_type_def_html"><div class="ttname"><a href="struct_v_r_e_f___init_type_def.html">VREF_InitTypeDef</a></div><div class="ttdoc">VREF init struct. </div><div class="ttdef"><b>Definition:</b> <a href="vref_8h_source.html#l00031">vref.h:31</a></div></div>
+<div class="ttc" id="struct_v_r_e_f___init_type_def_html_a9ed36c4f5392e9f1819ec7c9eb9aff80"><div class="ttname"><a href="struct_v_r_e_f___init_type_def.html#a9ed36c4f5392e9f1819ec7c9eb9aff80">VREF_InitTypeDef::instance</a></div><div class="ttdeci">uint32_t instance</div><div class="ttdoc">模块号 </div><div class="ttdef"><b>Definition:</b> <a href="vref_8h_source.html#l00033">vref.h:33</a></div></div>
+<div class="ttc" id="vref_8h_html"><div class="ttname"><a href="vref_8h.html">vref.h</a></div><div class="ttdoc">www.beyondcore.net http://upcmcu.taobao.com </div></div>
+<div class="ttc" id="vref_8h_html_aaab4b29c84ab5c16c346208bd49282b1a05e8fa1f2c6e397679500a20d2bc707d"><div class="ttname"><a href="vref_8h.html#aaab4b29c84ab5c16c346208bd49282b1a05e8fa1f2c6e397679500a20d2bc707d">kVREF_BufferMode_Lv1</a></div><div class="ttdef"><b>Definition:</b> <a href="vref_8h_source.html#l00023">vref.h:23</a></div></div>
+<div class="ttc" id="struct_v_r_e_f___init_type_def_html_aec4712aacbe4a37bf84c5a4287017986"><div class="ttname"><a href="struct_v_r_e_f___init_type_def.html#aec4712aacbe4a37bf84c5a4287017986">VREF_InitTypeDef::bufferMode</a></div><div class="ttdeci">VREF_BufferMode_Type bufferMode</div><div class="ttdoc">输出模式 </div><div class="ttdef"><b>Definition:</b> <a href="vref_8h_source.html#l00034">vref.h:34</a></div></div>
+<div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div><div class="ttdoc">www.beyondcore.net http://upcmcu.taobao.com </div></div>
+<div class="ttc" id="vref_8c_html_aa6d1e5144a780df20c3d0ddeb3dc3beb"><div class="ttname"><a href="vref_8c.html#aa6d1e5144a780df20c3d0ddeb3dc3beb">VREF_SetTrimValue</a></div><div class="ttdeci">void VREF_SetTrimValue(uint32_t val)</div><div class="ttdoc">设置VREF校准值 </div><div class="ttdef"><b>Definition:</b> <a href="vref_8c_source.html#l00064">vref.c:64</a></div></div>
+<div class="ttc" id="vref_8c_html_ab7187f2aba5c643774ce45ac6a6d16e8"><div class="ttname"><a href="vref_8c.html#ab7187f2aba5c643774ce45ac6a6d16e8">VREF_Init</a></div><div class="ttdeci">void VREF_Init(VREF_InitTypeDef *VREF_InitStruct)</div><div class="ttdoc">初始化VREF 模块 </div><div class="ttdef"><b>Definition:</b> <a href="vref_8c_source.html#l00020">vref.c:20</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.10
+</small></address>
+</body>
+</html>

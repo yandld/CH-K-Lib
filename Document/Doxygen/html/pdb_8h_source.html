@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.10"/>
+<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/pdb.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">CH Kinetis library for K series
+   &#160;<span id="projectnumber">V2.5</span>
+   </div>
+   <div id="projectbrief">Kinetis driver library  for K series</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.10 -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>全局定义</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">pdb.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="pdb_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#ifndef __CH_LIB_PDB_H__</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#define __CH_LIB_PDB_H__</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; <span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;     </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="common_8h.html">common.h</a>&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;     </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">/* PDB外设模块号 */</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="pdb_8h.html#a79837e57f139272b1ad255f520cc0c41">   21</a></span>&#160;<span class="preprocessor">#define HW_PDB_CH0 </span><span class="comment">/* PDB外设模块channel 0，依次类推 */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="pdb_8h.html#a1cb546cec59b581c389a571ef7fb543f">   22</a></span>&#160;<span class="preprocessor">#define HW_PDB_CH1</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;     </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="pdb_8h.html#a4976a7d5733e2c931b2fcead0813ae1b">   24</a></span>&#160;<span class="preprocessor">#define HW_PDB_TRIG_CH0</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="pdb_8h.html#aa004ad3a22ed501ebf3bf13d80f5e4cd">   25</a></span>&#160;<span class="preprocessor">#define HW_PDB_TRIG_CH1</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;     </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="pdb_8h.html#a2ddfb9a713dd79117e545463a74afd72">   28</a></span>&#160;<span class="keyword">typedef</span> void (*<a class="code" href="pdb_8h.html#a2ddfb9a713dd79117e545463a74afd72">PDB_CallBackType</a>)(void);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163">   35</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;{</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163ae5f66c7f9f1d1e2d9dcfcd28532634e6">   37</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163ae5f66c7f9f1d1e2d9dcfcd28532634e6">kPDB_TriggerSrc0</a>,       </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a0fc28e8203e73054ceac416648b4c745">   38</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a0fc28e8203e73054ceac416648b4c745">kPDB_TriggerSrc1</a>,       </div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a2b4204885c837ead025888abad2a6b5c">   39</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a2b4204885c837ead025888abad2a6b5c">kPDB_TriggerSrc2</a>,       </div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163ac773520d5c3546185b09e1d17dc47f7a">   40</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163ac773520d5c3546185b09e1d17dc47f7a">kPDB_TriggerSrc3</a>,       </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a2727df2fcfaeb9d36a11207e87bc3db9">   41</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a2727df2fcfaeb9d36a11207e87bc3db9">kPDB_TriggerSrc4</a>,       </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163aa7b6d67508dbe8b695d5227feb93c654">   42</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163aa7b6d67508dbe8b695d5227feb93c654">kPDB_TriggerSrc5</a>,       </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a0ed6947fe59ddedd2da4ea2f90a36b1e">   43</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a0ed6947fe59ddedd2da4ea2f90a36b1e">kPDB_TriggerSrc6</a>,       </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163acfa3fe74748fc78a4ff999471815b4f0">   44</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163acfa3fe74748fc78a4ff999471815b4f0">kPDB_TriggerSrc7</a>,       </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a18a4bb4276b7e77344765992f7b26777">   45</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a18a4bb4276b7e77344765992f7b26777">kPDB_TriggerSrc8</a>,       </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a8b3f20bb62ff844c234352c198b18d7f">   46</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a8b3f20bb62ff844c234352c198b18d7f">kPDB_TriggerSrc9</a>,       </div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a4834029cde5e16159f8aadd2adac5409">   47</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a4834029cde5e16159f8aadd2adac5409">kPDB_TriggerSrc10</a>,      </div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a20800724056e3de9f81a6b48cd31e9c8">   48</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a20800724056e3de9f81a6b48cd31e9c8">kPDB_TriggerSrc11</a>,      </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163af0fc39e0ab4aa611e9667892f6fc4a05">   49</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163af0fc39e0ab4aa611e9667892f6fc4a05">kPDB_TriggerSrc12</a>,      </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a785c1363d0be1d2ee828360d693f46b9">   50</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a785c1363d0be1d2ee828360d693f46b9">kPDB_TriggerSrc13</a>,      </div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163ac20985091d94d498a28257feeffdb4ee">   51</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163ac20985091d94d498a28257feeffdb4ee">kPDB_TriggerSrc14</a>,      </div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a9a9ec5a32a52ed34acc67f89ddb05597">   52</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a9a9ec5a32a52ed34acc67f89ddb05597">kPDB_SoftwareTrigger</a>,   </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;}<a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163">PDB_TriggerSrc_Type</a>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9a">   59</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;{</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9aa9e529b50dfb0c394a287c6f9e0ccf03a">   61</a></span>&#160;    <a class="code" href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9aa9e529b50dfb0c394a287c6f9e0ccf03a">kPWM_EdgeAligned</a>,           </div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9aaf816d6de84fb61f17d81d79f21a1083d">   62</a></span>&#160;    <a class="code" href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9aaf816d6de84fb61f17d81d79f21a1083d">kPWM_Combine</a>,               </div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9aaf13b809249686047f1355ccdfc506c33">   63</a></span>&#160;    <a class="code" href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9aaf13b809249686047f1355ccdfc506c33">kPWM_Complementary</a>,         </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;}<a class="code" href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9a">FTM_PWM_Mode_Type</a>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;     </div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="struct_p_d_b___init_type_def.html">   70</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;{</div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="struct_p_d_b___init_type_def.html#a8d4ff27bdb6e086868abb8b8a7404130">   72</a></span>&#160;    uint32_t                <a class="code" href="struct_p_d_b___init_type_def.html#a8d4ff27bdb6e086868abb8b8a7404130">srcClock</a>;           </div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="struct_p_d_b___init_type_def.html#a5826592f8b92bc6cde1af605f463d98e">   73</a></span>&#160;    <a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163">PDB_TriggerSrc_Type</a>     <a class="code" href="struct_p_d_b___init_type_def.html#a5826592f8b92bc6cde1af605f463d98e">inputTrigSource</a>;    </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="struct_p_d_b___init_type_def.html#a6ae04f6d5608c9d1b4a259e5ccbfed6e">   74</a></span>&#160;    <span class="keywordtype">bool</span>                    <a class="code" href="struct_p_d_b___init_type_def.html#a6ae04f6d5608c9d1b4a259e5ccbfed6e">isContinuesMode</a>;    </div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="struct_p_d_b___init_type_def.html#afcd9bfc9e390b713ac5e7314850c012b">   75</a></span>&#160;    uint32_t                <a class="code" href="struct_p_d_b___init_type_def.html#afcd9bfc9e390b713ac5e7314850c012b">timeInUs</a>;           </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;}<a class="code" href="struct_p_d_b___init_type_def.html">PDB_InitTypeDef</a>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101">   82</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;{</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a702424d3e89c996860c81643f36de7ff">   84</a></span>&#160;    <a class="code" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a702424d3e89c996860c81643f36de7ff">kPDB_IT_CF</a>,         </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a467a435fc408409442696224fe8fb329">   85</a></span>&#160;    <a class="code" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a467a435fc408409442696224fe8fb329">kPDB_DMA_CF</a>,        </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}<a class="code" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101">PDB_ITDMAConfig_Type</a>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">/* API functions */</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8h.html#ad6ee10c143cf1441cac69e519e0cf792">PDB_QuickInit</a>(<a class="code" href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163">PDB_TriggerSrc_Type</a> triggerSrc, uint32_t timeInUs);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8h.html#ab0c79ef7707094d516c8d5ab81aacd45">PDB_Init</a>(<a class="code" href="struct_p_d_b___init_type_def.html">PDB_InitTypeDef</a> * PDB_InitStruct);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8h.html#a6f4366d65744be532b6738e435a78d52">PDB_SoftwareTrigger</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8h.html#a4b922d1f231c19b401d4a29cc51693fe">PDB_ITDMAConfig</a>(<a class="code" href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101">PDB_ITDMAConfig_Type</a> config, <span class="keywordtype">bool</span> status);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8h.html#a1fecbc99c84396f594f5ea59eecc520f">PDB_CallbackInstall</a>(<a class="code" href="pdb_8h.html#a2ddfb9a713dd79117e545463a74afd72">PDB_CallBackType</a> AppCBFun);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;uint32_t <a class="code" href="pdb_8h.html#aaa2e846617f30b2ced1b3da050ba3ab3">PDB_GetMODValue</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment">/* ADC trigger function */</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8h.html#af50ae5345f28c2c5e9ace7fffbe1923f">PDB_SetADCPreTrigger</a>(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue, <span class="keywordtype">bool</span> status);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keywordtype">void</span> <a class="code" href="pdb_8h.html#a749578c5f573f31e23ebcfa66fa2bb86">PDB_SetBackToBackMode</a>(uint32_t adcInstance, uint32_t adcMux, <span class="keywordtype">bool</span> status);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="ttc" id="struct_p_d_b___init_type_def_html"><div class="ttname"><a href="struct_p_d_b___init_type_def.html">PDB_InitTypeDef</a></div><div class="ttdoc">PDB初始化结构 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00070">pdb.h:70</a></div></div>
+<div class="ttc" id="pdb_8h_html_a749578c5f573f31e23ebcfa66fa2bb86"><div class="ttname"><a href="pdb_8h.html#a749578c5f573f31e23ebcfa66fa2bb86">PDB_SetBackToBackMode</a></div><div class="ttdeci">void PDB_SetBackToBackMode(uint32_t adcInstance, uint32_t adcMux, bool status)</div><div class="ttdoc">PDB ADC pre-trigger operation as back-to-back mode. </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00170">pdb.c:170</a></div></div>
+<div class="ttc" id="struct_p_d_b___init_type_def_html_afcd9bfc9e390b713ac5e7314850c012b"><div class="ttname"><a href="struct_p_d_b___init_type_def.html#afcd9bfc9e390b713ac5e7314850c012b">PDB_InitTypeDef::timeInUs</a></div><div class="ttdeci">uint32_t timeInUs</div><div class="ttdoc">us delay </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00075">pdb.h:75</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163af0fc39e0ab4aa611e9667892f6fc4a05"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163af0fc39e0ab4aa611e9667892f6fc4a05">kPDB_TriggerSrc12</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00049">pdb.h:49</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a18a4bb4276b7e77344765992f7b26777"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a18a4bb4276b7e77344765992f7b26777">kPDB_TriggerSrc8</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00045">pdb.h:45</a></div></div>
+<div class="ttc" id="pdb_8h_html_a2ddfb9a713dd79117e545463a74afd72"><div class="ttname"><a href="pdb_8h.html#a2ddfb9a713dd79117e545463a74afd72">PDB_CallBackType</a></div><div class="ttdeci">void(* PDB_CallBackType)(void)</div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00028">pdb.h:28</a></div></div>
+<div class="ttc" id="pdb_8h_html_af50ae5345f28c2c5e9ace7fffbe1923f"><div class="ttname"><a href="pdb_8h.html#af50ae5345f28c2c5e9ace7fffbe1923f">PDB_SetADCPreTrigger</a></div><div class="ttdeci">void PDB_SetADCPreTrigger(uint32_t adcInstance, uint32_t adcMux, uint32_t dlyValue, bool status)</div><div class="ttdoc">设置PDB触发ADC </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00143">pdb.c:143</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad6ee10c143cf1441cac69e519e0cf792"><div class="ttname"><a href="pdb_8h.html#ad6ee10c143cf1441cac69e519e0cf792">PDB_QuickInit</a></div><div class="ttdeci">void PDB_QuickInit(PDB_TriggerSrc_Type triggerSrc, uint32_t timeInUs)</div><div class="ttdoc">PDB快速初始化 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00084">pdb.c:84</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163ac773520d5c3546185b09e1d17dc47f7a"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163ac773520d5c3546185b09e1d17dc47f7a">kPDB_TriggerSrc3</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00040">pdb.h:40</a></div></div>
+<div class="ttc" id="pdb_8h_html_a1fecbc99c84396f594f5ea59eecc520f"><div class="ttname"><a href="pdb_8h.html#a1fecbc99c84396f594f5ea59eecc520f">PDB_CallbackInstall</a></div><div class="ttdeci">void PDB_CallbackInstall(PDB_CallBackType AppCBFun)</div><div class="ttdoc">PDB注册中断回调函数 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00221">pdb.c:221</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163ac20985091d94d498a28257feeffdb4ee"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163ac20985091d94d498a28257feeffdb4ee">kPDB_TriggerSrc14</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00051">pdb.h:51</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a0fc28e8203e73054ceac416648b4c745"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a0fc28e8203e73054ceac416648b4c745">kPDB_TriggerSrc1</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00038">pdb.h:38</a></div></div>
+<div class="ttc" id="struct_p_d_b___init_type_def_html_a8d4ff27bdb6e086868abb8b8a7404130"><div class="ttname"><a href="struct_p_d_b___init_type_def.html#a8d4ff27bdb6e086868abb8b8a7404130">PDB_InitTypeDef::srcClock</a></div><div class="ttdeci">uint32_t srcClock</div><div class="ttdoc">时钟源频率 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00072">pdb.h:72</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163acfa3fe74748fc78a4ff999471815b4f0"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163acfa3fe74748fc78a4ff999471815b4f0">kPDB_TriggerSrc7</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00044">pdb.h:44</a></div></div>
+<div class="ttc" id="pdb_8h_html_aaa2e846617f30b2ced1b3da050ba3ab3"><div class="ttname"><a href="pdb_8h.html#aaa2e846617f30b2ced1b3da050ba3ab3">PDB_GetMODValue</a></div><div class="ttdeci">uint32_t PDB_GetMODValue(void)</div><div class="ttdoc">获得PDB Mod 寄存器 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00069">pdb.c:69</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a9a9ec5a32a52ed34acc67f89ddb05597"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a9a9ec5a32a52ed34acc67f89ddb05597">kPDB_SoftwareTrigger</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00052">pdb.h:52</a></div></div>
+<div class="ttc" id="pdb_8h_html_ab0c79ef7707094d516c8d5ab81aacd45"><div class="ttname"><a href="pdb_8h.html#ab0c79ef7707094d516c8d5ab81aacd45">PDB_Init</a></div><div class="ttdeci">void PDB_Init(PDB_InitTypeDef *PDB_InitStruct)</div><div class="ttdoc">PDB模块初始化 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00104">pdb.c:104</a></div></div>
+<div class="ttc" id="pdb_8h_html_a1591751049222d6b10bd42ef30a77a9aaf816d6de84fb61f17d81d79f21a1083d"><div class="ttname"><a href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9aaf816d6de84fb61f17d81d79f21a1083d">kPWM_Combine</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00062">pdb.h:62</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a4834029cde5e16159f8aadd2adac5409"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a4834029cde5e16159f8aadd2adac5409">kPDB_TriggerSrc10</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00047">pdb.h:47</a></div></div>
+<div class="ttc" id="pdb_8h_html_a1591751049222d6b10bd42ef30a77a9aa9e529b50dfb0c394a287c6f9e0ccf03a"><div class="ttname"><a href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9aa9e529b50dfb0c394a287c6f9e0ccf03a">kPWM_EdgeAligned</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00061">pdb.h:61</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a20800724056e3de9f81a6b48cd31e9c8"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a20800724056e3de9f81a6b48cd31e9c8">kPDB_TriggerSrc11</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00048">pdb.h:48</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a2727df2fcfaeb9d36a11207e87bc3db9"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a2727df2fcfaeb9d36a11207e87bc3db9">kPDB_TriggerSrc4</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00041">pdb.h:41</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163ae5f66c7f9f1d1e2d9dcfcd28532634e6"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163ae5f66c7f9f1d1e2d9dcfcd28532634e6">kPDB_TriggerSrc0</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00037">pdb.h:37</a></div></div>
+<div class="ttc" id="pdb_8h_html_a1591751049222d6b10bd42ef30a77a9a"><div class="ttname"><a href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9a">FTM_PWM_Mode_Type</a></div><div class="ttdeci">FTM_PWM_Mode_Type</div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00059">pdb.h:59</a></div></div>
+<div class="ttc" id="pdb_8h_html_a8891838cba96b171efaeb75b0f022101a467a435fc408409442696224fe8fb329"><div class="ttname"><a href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a467a435fc408409442696224fe8fb329">kPDB_DMA_CF</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00085">pdb.h:85</a></div></div>
+<div class="ttc" id="pdb_8h_html_a4b922d1f231c19b401d4a29cc51693fe"><div class="ttname"><a href="pdb_8h.html#a4b922d1f231c19b401d4a29cc51693fe">PDB_ITDMAConfig</a></div><div class="ttdeci">void PDB_ITDMAConfig(PDB_ITDMAConfig_Type config, bool status)</div><div class="ttdoc">PDB中断及DMA功能开关函数 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00187">pdb.c:187</a></div></div>
+<div class="ttc" id="pdb_8h_html_a6f4366d65744be532b6738e435a78d52"><div class="ttname"><a href="pdb_8h.html#a6f4366d65744be532b6738e435a78d52">PDB_SoftwareTrigger</a></div><div class="ttdeci">void PDB_SoftwareTrigger(void)</div><div class="ttdoc">软件触发PDB开始转换一次 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8c_source.html#l00020">pdb.c:20</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163">PDB_TriggerSrc_Type</a></div><div class="ttdeci">PDB_TriggerSrc_Type</div><div class="ttdoc">PDB 触发源 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00035">pdb.h:35</a></div></div>
+<div class="ttc" id="struct_p_d_b___init_type_def_html_a6ae04f6d5608c9d1b4a259e5ccbfed6e"><div class="ttname"><a href="struct_p_d_b___init_type_def.html#a6ae04f6d5608c9d1b4a259e5ccbfed6e">PDB_InitTypeDef::isContinuesMode</a></div><div class="ttdeci">bool isContinuesMode</div><div class="ttdoc">是否是连续触发模式 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00074">pdb.h:74</a></div></div>
+<div class="ttc" id="pdb_8h_html_a8891838cba96b171efaeb75b0f022101"><div class="ttname"><a href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101">PDB_ITDMAConfig_Type</a></div><div class="ttdeci">PDB_ITDMAConfig_Type</div><div class="ttdoc">PDB中断及DMA配置选择 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00082">pdb.h:82</a></div></div>
+<div class="ttc" id="common_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div><div class="ttdoc">www.beyondcore.net http://upcmcu.taobao.com </div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163aa7b6d67508dbe8b695d5227feb93c654"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163aa7b6d67508dbe8b695d5227feb93c654">kPDB_TriggerSrc5</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00042">pdb.h:42</a></div></div>
+<div class="ttc" id="pdb_8h_html_a1591751049222d6b10bd42ef30a77a9aaf13b809249686047f1355ccdfc506c33"><div class="ttname"><a href="pdb_8h.html#a1591751049222d6b10bd42ef30a77a9aaf13b809249686047f1355ccdfc506c33">kPWM_Complementary</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00063">pdb.h:63</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a8b3f20bb62ff844c234352c198b18d7f"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a8b3f20bb62ff844c234352c198b18d7f">kPDB_TriggerSrc9</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00046">pdb.h:46</a></div></div>
+<div class="ttc" id="pdb_8h_html_a8891838cba96b171efaeb75b0f022101a702424d3e89c996860c81643f36de7ff"><div class="ttname"><a href="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a702424d3e89c996860c81643f36de7ff">kPDB_IT_CF</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00084">pdb.h:84</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a0ed6947fe59ddedd2da4ea2f90a36b1e"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a0ed6947fe59ddedd2da4ea2f90a36b1e">kPDB_TriggerSrc6</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00043">pdb.h:43</a></div></div>
+<div class="ttc" id="struct_p_d_b___init_type_def_html_a5826592f8b92bc6cde1af605f463d98e"><div class="ttname"><a href="struct_p_d_b___init_type_def.html#a5826592f8b92bc6cde1af605f463d98e">PDB_InitTypeDef::inputTrigSource</a></div><div class="ttdeci">PDB_TriggerSrc_Type inputTrigSource</div><div class="ttdoc">输入输入触发源 </div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00073">pdb.h:73</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a2b4204885c837ead025888abad2a6b5c"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a2b4204885c837ead025888abad2a6b5c">kPDB_TriggerSrc2</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00039">pdb.h:39</a></div></div>
+<div class="ttc" id="pdb_8h_html_ad3b961b50f6790b857bdde1e8bf50163a785c1363d0be1d2ee828360d693f46b9"><div class="ttname"><a href="pdb_8h.html#ad3b961b50f6790b857bdde1e8bf50163a785c1363d0be1d2ee828360d693f46b9">kPDB_TriggerSrc13</a></div><div class="ttdef"><b>Definition:</b> <a href="pdb_8h_source.html#l00050">pdb.h:50</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.10
+</small></address>
+</body>
+</html>

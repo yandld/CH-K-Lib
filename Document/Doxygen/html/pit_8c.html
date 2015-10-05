@@ -1,0 +1,613 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.10"/>
+<title>CH Kinetis library for K series: E:/workspace/Git_github/testZone/pit.c 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">CH Kinetis library for K series
+   &#160;<span id="projectnumber">V2.5</span>
+   </div>
+   <div id="projectbrief">Kinetis driver library  for K series</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.10 -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>文件列表</span></a></li>
+      <li><a href="globals.html"><span>全局定义</span></a></li>
+    </ul>
+  </div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_7839475d28e1d4babd69f9d638c0d233.html">testZone</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">函数</a> &#124;
+<a href="#var-members">变量</a>  </div>
+  <div class="headertitle">
+<div class="title">pit.c 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a>  
+<a href="#details">更多...</a></p>
+<div class="textblock"><code>#include &quot;<a class="el" href="pit_8h_source.html">pit.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="common_8h_source.html">common.h</a>&quot;</code><br />
+</div>
+<p><a href="pit_8c_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ab0cb83cebc9297217fa32b323e27e6af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#ab0cb83cebc9297217fa32b323e27e6af">PIT_Init</a> (<a class="el" href="struct_p_i_t___init_type_def.html">PIT_InitTypeDef</a> *PIT_InitStruct)</td></tr>
+<tr class="memdesc:ab0cb83cebc9297217fa32b323e27e6af"><td class="mdescLeft">&#160;</td><td class="mdescRight">详细初始化PIT模块 推荐使用PIT_QuickInit函数  <a href="#ab0cb83cebc9297217fa32b323e27e6af">更多...</a><br /></td></tr>
+<tr class="separator:ab0cb83cebc9297217fa32b323e27e6af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac40cdeb3ba49ba91389d8488bdacf11f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#ac40cdeb3ba49ba91389d8488bdacf11f">PIT_QuickInit</a> (uint8_t chl, uint32_t timeInUs)</td></tr>
+<tr class="memdesc:ac40cdeb3ba49ba91389d8488bdacf11f"><td class="mdescLeft">&#160;</td><td class="mdescRight">PIT模块快速初始化配置  <a href="#ac40cdeb3ba49ba91389d8488bdacf11f">更多...</a><br /></td></tr>
+<tr class="separator:ac40cdeb3ba49ba91389d8488bdacf11f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15e557faf4a31bea48cffadd01e64203"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#a15e557faf4a31bea48cffadd01e64203">PIT_ITDMAConfig</a> (uint8_t chl, <a class="el" href="pit_8h.html#a6c1db8329baa8eb601644cf4662c8cd5">PIT_ITDMAConfig_Type</a> config, bool flag)</td></tr>
+<tr class="memdesc:a15e557faf4a31bea48cffadd01e64203"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置PIT模块是否开启中断功能  <a href="#a15e557faf4a31bea48cffadd01e64203">更多...</a><br /></td></tr>
+<tr class="separator:a15e557faf4a31bea48cffadd01e64203"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c1b2829a09f3fdd8fad7542e732e346"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#a4c1b2829a09f3fdd8fad7542e732e346">PIT_ResetCounter</a> (uint8_t chl)</td></tr>
+<tr class="memdesc:a4c1b2829a09f3fdd8fad7542e732e346"><td class="mdescLeft">&#160;</td><td class="mdescRight">PIT定时器Counter清到LOAD值 (重新开始新一次CountDown计时)  <a href="#a4c1b2829a09f3fdd8fad7542e732e346">更多...</a><br /></td></tr>
+<tr class="separator:a4c1b2829a09f3fdd8fad7542e732e346"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6466c8df1abdfb8d51195a51827177d4"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#a6466c8df1abdfb8d51195a51827177d4">PIT_GetCounterValue</a> (uint8_t chl)</td></tr>
+<tr class="memdesc:a6466c8df1abdfb8d51195a51827177d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">读取Counter值  <a href="#a6466c8df1abdfb8d51195a51827177d4">更多...</a><br /></td></tr>
+<tr class="separator:a6466c8df1abdfb8d51195a51827177d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab44772575390b92083b25644cf486040"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#ab44772575390b92083b25644cf486040">PIT_CallbackInstall</a> (uint8_t chl, <a class="el" href="pit_8h.html#a09fd94943732a65c1e513be200e2ef54">PIT_CallBackType</a> AppCBFun)</td></tr>
+<tr class="memdesc:ab44772575390b92083b25644cf486040"><td class="mdescLeft">&#160;</td><td class="mdescRight">注册中断回调函数  <a href="#ab44772575390b92083b25644cf486040">更多...</a><br /></td></tr>
+<tr class="separator:ab44772575390b92083b25644cf486040"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21a36c591d140397ef08fa8b783e5fe8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#a21a36c591d140397ef08fa8b783e5fe8">PIT_IRQHandler</a> (uint32_t instance)</td></tr>
+<tr class="memdesc:a21a36c591d140397ef08fa8b783e5fe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">PIT中断触发用户定义的回调函数，此函数用户不需要修改  <a href="#a21a36c591d140397ef08fa8b783e5fe8">更多...</a><br /></td></tr>
+<tr class="separator:a21a36c591d140397ef08fa8b783e5fe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dfd4bc4a7e7b9e424b84ee0f5a3cd8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#a5dfd4bc4a7e7b9e424b84ee0f5a3cd8a">PIT0_IRQHandler</a> (void)</td></tr>
+<tr class="memdesc:a5dfd4bc4a7e7b9e424b84ee0f5a3cd8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统PIT0中断函数，用户无需使用  <a href="#a5dfd4bc4a7e7b9e424b84ee0f5a3cd8a">更多...</a><br /></td></tr>
+<tr class="separator:a5dfd4bc4a7e7b9e424b84ee0f5a3cd8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1931820047be5ff16999a3adf57ec6c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#a1931820047be5ff16999a3adf57ec6c5">PIT1_IRQHandler</a> (void)</td></tr>
+<tr class="memdesc:a1931820047be5ff16999a3adf57ec6c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统PIT1中断函数，用户无需使用  <a href="#a1931820047be5ff16999a3adf57ec6c5">更多...</a><br /></td></tr>
+<tr class="separator:a1931820047be5ff16999a3adf57ec6c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabec6b614d8bcbece5209f939f228342"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#aabec6b614d8bcbece5209f939f228342">PIT2_IRQHandler</a> (void)</td></tr>
+<tr class="memdesc:aabec6b614d8bcbece5209f939f228342"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统PIT2中断函数，用户无需使用  <a href="#aabec6b614d8bcbece5209f939f228342">更多...</a><br /></td></tr>
+<tr class="separator:aabec6b614d8bcbece5209f939f228342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f4f7b8a220662724aac507fa87caf3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#af8f4f7b8a220662724aac507fa87caf3">PIT3_IRQHandler</a> (void)</td></tr>
+<tr class="memdesc:af8f4f7b8a220662724aac507fa87caf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">系统PIT3中断函数，用户无需使用  <a href="#af8f4f7b8a220662724aac507fa87caf3">更多...</a><br /></td></tr>
+<tr class="separator:af8f4f7b8a220662724aac507fa87caf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+变量</h2></td></tr>
+<tr class="memitem:a762111373f1071cdb582b5dff1bf22c8"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#a762111373f1071cdb582b5dff1bf22c8">fac_us</a></td></tr>
+<tr class="memdesc:a762111373f1071cdb582b5dff1bf22c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">&lt; Internal vars  <a href="#a762111373f1071cdb582b5dff1bf22c8">更多...</a><br /></td></tr>
+<tr class="separator:a762111373f1071cdb582b5dff1bf22c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa46b04c3a441300061f1b53579a5787d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="pit_8h.html#a09fd94943732a65c1e513be200e2ef54">PIT_CallBackType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#aa46b04c3a441300061f1b53579a5787d">PIT_CallBackTable</a> [4] = {NULL}</td></tr>
+<tr class="separator:aa46b04c3a441300061f1b53579a5787d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3901b51a78bdc2107a40a8f564aaeee"><td class="memItemLeft" align="right" valign="top">static const IRQn_Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pit_8c.html#ac3901b51a78bdc2107a40a8f564aaeee">PIT_IRQnTable</a> []</td></tr>
+<tr class="separator:ac3901b51a78bdc2107a40a8f564aaeee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>www.beyondcore.net <a href="http://upcmcu.taobao.com">http://upcmcu.taobao.com</a> </p>
+<dl class="section author"><dt>作者</dt><dd>YANDLD </dd></dl>
+<dl class="section version"><dt>版本</dt><dd>V2.5 </dd></dl>
+<dl class="section date"><dt>日期</dt><dd>2014.3.24 </dd>
+<dd>
+2015.10.03 FreeXc 完善了对 <a class="el" href="pit_8c.html" title="www.beyondcore.net http://upcmcu.taobao.com ">pit.c</a> and pit.h文件的注释 </dd></dl>
+<dl class="section note"><dt>注解</dt><dd>此文件为芯片PIT模块的底层功能函数 </dd></dl>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 中定义.</p>
+</div><h2 class="groupheader">函数说明</h2>
+<a class="anchor" id="a5dfd4bc4a7e7b9e424b84ee0f5a3cd8a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PIT0_IRQHandler </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>系统PIT0中断函数，用户无需使用 </p>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00199">199</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1931820047be5ff16999a3adf57ec6c5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PIT1_IRQHandler </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>系统PIT1中断函数，用户无需使用 </p>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00207">207</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="aabec6b614d8bcbece5209f939f228342"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PIT2_IRQHandler </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>系统PIT2中断函数，用户无需使用 </p>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00215">215</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="af8f4f7b8a220662724aac507fa87caf3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PIT3_IRQHandler </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>系统PIT3中断函数，用户无需使用 </p>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00222">222</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab44772575390b92083b25644cf486040"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PIT_CallbackInstall </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="pit_8h.html#a09fd94943732a65c1e513be200e2ef54">PIT_CallBackType</a>&#160;</td>
+          <td class="paramname"><em>AppCBFun</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>注册中断回调函数 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">chl</td><td>通道号 <ul>
+<li>HW_PIT0_CH0 0通道入口 </li>
+<li>HW_PIT0_CH1 1通道入口 </li>
+<li>HW_PIT0_CH2 2通道入口 </li>
+<li>HW_PIT0_CH3 3通道入口 </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">AppCBFun</td><td>回调函数指针入口 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>注解</dt><dd>对于此函数的具体应用请查阅应用实例 </dd></dl>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00175">175</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6466c8df1abdfb8d51195a51827177d4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t PIT_GetCounterValue </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>读取Counter值 </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">chl</td><td>通道号 <ul>
+<li>HW_PIT0_CH0 0通道 </li>
+<li>HW_PIT0_CH1 1通道 </li>
+<li>HW_PIT0_CH2 2通道 </li>
+<li>HW_PIT0_CH3 3通道 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">Counter值</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00158">158</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab0cb83cebc9297217fa32b323e27e6af"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PIT_Init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_p_i_t___init_type_def.html">PIT_InitTypeDef</a> *&#160;</td>
+          <td class="paramname"><em>PIT_InitStruct</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>详细初始化PIT模块 推荐使用PIT_QuickInit函数 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// 配置PIT0模块的0通道，时间周期为1ms</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;PIT_InitTypeDef PIT_InitStruct1; //申请一个结构变量</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;PIT_InitStruct1.chl = 0;         //选择0通道</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;PIT_InitStruct1.timeInUs = 1000  //1ms</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;PIT_Init(&amp;PIT_InitStruct1);</div>
+</div><!-- fragment --> <dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">PIT_InitStruct</td><td>pit模块工作配置数据 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00039">39</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a21a36c591d140397ef08fa8b783e5fe8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void PIT_IRQHandler </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>instance</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>PIT中断触发用户定义的回调函数，此函数用户不需要修改 </p>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00187">187</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a15e557faf4a31bea48cffadd01e64203"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PIT_ITDMAConfig </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="pit_8h.html#a6c1db8329baa8eb601644cf4662c8cd5">PIT_ITDMAConfig_Type</a>&#160;</td>
+          <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>flag</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>设置PIT模块是否开启中断功能 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// 初始化PIT模块 0 通道 产生100MS中断 并开启中断 注册回调函数 在回调函数中打印调试信息</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;//声明中断回调函数</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;static void PIT0_CallBack(void);</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;//初始化PIT</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;PIT_QuickInit(HW_PIT_CH0, 100000);</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;PIT_CallbackInstall(HW_PIT0_CH0, PIT0_CallBack); //注册回调函数</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF,ENABLE); //开启模块0通道中断</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;//中断回调函数编写</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;static void PIT0_CallBack(void)</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    printf(&quot;Enter PIT0 INt\r\n&quot;);    </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;}</div>
+</div><!-- fragment --> <dl class="section attention"><dt>注意</dt><dd>在中断函数中尽量不要放置会导致阻塞的函数，比如printf等，上述实例程序仅作 </dd>
+<dd>
+参考，建议实际应用中不加入printf函数 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">chl</td><td>通道号 <ul>
+<li>HW_PIT0_CH0 0通道 </li>
+<li>HW_PIT0_CH1 1通道 </li>
+<li>HW_PIT0_CH2 2通道 </li>
+<li>HW_PIT0_CH3 3通道 </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">config</td><td>是否打开中断 <ul>
+<li>kPIT_IT_Disable 关闭中断 </li>
+<li>kPIT_IT_TOF 定时器溢出中断 </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">flag</td><td>是否使能PIT中断 <ul>
+<li>ENABLE 使能 </li>
+<li>DISABLE 不使能 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00116">116</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac40cdeb3ba49ba91389d8488bdacf11f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PIT_QuickInit </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>timeInUs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>PIT模块快速初始化配置 </p>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;// 初始化PIT模块 0 通道 产生100MS中断 并开启中断 注册回调函数 在回调函数中打印调试信息</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;//声明中断回调函数</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;static void PIT0_CallBack(void);</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;//初始化PIT模块的0通道，产生100ms中断</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;PIT_QuickInit(HW_PIT_CH0, 100000);</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;PIT_CallbackInstall(HW_PIT_CH0, PIT0_CallBack); //注册回调函数</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF,ENABLE); //开启模块0通道中断</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;//中断回调函数</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;static void PIT0_CallBack(void)</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    printf(&quot;Enter PIT0 INt\r\n&quot;);    </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;}</div>
+</div><!-- fragment --> <dl class="section attention"><dt>注意</dt><dd>在中断函数中尽量不要放置会导致阻塞的函数，比如printf等，上述实例程序仅作 </dd>
+<dd>
+参考，建议实际应用中不加入printf函数 </dd></dl>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">chl</td><td>通道号 <ul>
+<li>HW_PIT_CH0 </li>
+<li>HW_PIT_CH1 </li>
+<li>HW_PIT_CH2 </li>
+<li>HW_PIT_CH3 </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">timeInUs</td><td>产生中断的周期 \单位US </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00077">77</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4c1b2829a09f3fdd8fad7542e732e346"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PIT_ResetCounter </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>chl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>PIT定时器Counter清到LOAD值 (重新开始新一次CountDown计时) </p>
+<dl class="params"><dt>参数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">chl</td><td>通道号 <ul>
+<li>HW_PIT0_CH0 0通道 </li>
+<li>HW_PIT0_CH1 1通道 </li>
+<li>HW_PIT0_CH2 2通道 </li>
+<li>HW_PIT0_CH3 3通道 </li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>返回值</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00144">144</a> 行定义.</p>
+
+</div>
+</div>
+<h2 class="groupheader">变量说明</h2>
+<a class="anchor" id="a762111373f1071cdb582b5dff1bf22c8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t fac_us</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>&lt; Internal vars </p>
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00016">16</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa46b04c3a441300061f1b53579a5787d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="pit_8h.html#a09fd94943732a65c1e513be200e2ef54">PIT_CallBackType</a> PIT_CallBackTable[4] = {NULL}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00018">18</a> 行定义.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac3901b51a78bdc2107a40a8f564aaeee"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const IRQn_Type PIT_IRQnTable[]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>初始值:</b><div class="fragment"><div class="line">= </div>
+<div class="line">{</div>
+<div class="line">    PIT0_IRQn,</div>
+<div class="line">    PIT1_IRQn,</div>
+<div class="line">    PIT2_IRQn,</div>
+<div class="line">    PIT3_IRQn,</div>
+<div class="line">}</div>
+</div><!-- fragment -->
+<p>在文件 <a class="el" href="pit_8c_source.html">pit.c</a> 第 <a class="el" href="pit_8c_source.html#l00019">19</a> 行定义.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.10
+</small></address>
+</body>
+</html>

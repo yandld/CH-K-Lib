@@ -29,6 +29,8 @@ gpio_8c_source.html
 gpio_8h_source.html
 lptmr_8c_source.html
 lptmr_8h_source.html
+nfc_8c_source.html
+nfc_8h_source.html
 pdb_8c_source.html
 pdb_8h_source.html
 pit_8c_source.html
@@ -57,6 +59,8 @@ gpio_8c.html
 gpio_8h.html
 lptmr_8c.html
 lptmr_8h.html
+nfc_8c.html
+nfc_8h.html
 pdb_8c.html
 pdb_8h.html
 pit_8c.html
@@ -76,6 +80,7 @@ struct_g_p_i_o___init_type_def.html
 struct_l_p_t_m_r___p_c___init_type_def.html
 struct_l_p_t_m_r___t_c___init_type_def.html
 structmap__t.html
+struct_n_f_c___init_type_def.html
 struct_p_d_b___init_type_def.html
 struct_p_i_t___init_type_def.html
 struct_reg__t.html

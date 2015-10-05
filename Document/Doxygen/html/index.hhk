@@ -396,6 +396,7 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="cpuidy_8c.html#afb79bebd74ec0f70b4af2793ac4be223"><param name="Name" value="CPUIDY_PFlashSizeTable"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="cpuidy_8c.html#a5453f2f82c350ee14e1886556a7baf69"><param name="Name" value="CPUIDY_PinCountTable"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="cpuidy_8c.html#a4fbb63b9b0a5fa3d24360a984337bda3"><param name="Name" value="CPUIDY_RAMSizeTable"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_n_f_c___init_type_def.html#a8519dc239502dfcbac171b3128dc7054"><param name="Name" value="cs"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="dac_8c.html"><param name="Name" value="dac.c"></OBJECT>
   <UL>
     <LI><OBJECT type="text/sitemap"><param name="Local" value="dac_8c.html#a28152888205e94cb859cdd5914762dfc"><param name="Name" value="DAC0_IRQHandler"></OBJECT>
@@ -1262,6 +1263,8 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="lptmr_8h.html#a815a64769e151e3da3479668996f4bf1a71d56eb5dd43eaa03f7c890cde342538"><param name="Name" value="kLPTMR_PC_PinPolarity_RigsingEdge"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="common_8h.html#accce41f196e729af6b1839e3747d87dda803878438de87f3db4e99b42b49dbf76"><param name="Name" value="kMCGOutClock"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="cpuidy_8h.html#aada9fb080347f39c6c8b8b70d1744a61a6fe0be244aac51585c0d1a1c2d99b907"><param name="Name" value="kMemNameCount"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a05c27062940e5adb5fa76e67140a2baea10cc17ed77ec99f03c9d4cab0669bc66"><param name="Name" value="kNFC_Width16Bit"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a05c27062940e5adb5fa76e67140a2baead44f71a303f74ab61af3082de62c9536"><param name="Name" value="kNFC_Width8Bit"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="gpio_8h.html#a625e2fc329d0ee69dab8dbcdbbc72d0ba1aeceb4d8bf67a4d84e082604da2cffd"><param name="Name" value="kOutput"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a467a435fc408409442696224fe8fb329"><param name="Name" value="kPDB_DMA_CF"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="pdb_8h.html#a8891838cba96b171efaeb75b0f022101a702424d3e89c996860c81643f36de7ff"><param name="Name" value="kPDB_IT_CF"></OBJECT>
@@ -1438,6 +1441,31 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_r_t_c___date_time___type.html#a2b35975dfac711962b75b6eed01a8b76"><param name="Name" value="month"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="rtc_8c.html#a2d1d051a553e9e686ac8b550c406c38a"><param name="Name" value="MONTH_DAYS"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="structmap__t.html#a1bbf5452e9391aa9e0786a521374f5fa"><param name="Name" value="mux"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html"><param name="Name" value="nfc.h"></OBJECT>
+  <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a05c27062940e5adb5fa76e67140a2baea10cc17ed77ec99f03c9d4cab0669bc66"><param name="Name" value="kNFC_Width16Bit"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a05c27062940e5adb5fa76e67140a2baead44f71a303f74ab61af3082de62c9536"><param name="Name" value="kNFC_Width8Bit"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a072909a0b772cdc4388ba0d1612a9023"><param name="Name" value="NFC_BlockErase"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a2ef765d404fcd872172a8139a4afe47b"><param name="Name" value="NFC_GetBufAddr"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a208298642b7126e2b4eb7462f58a255f"><param name="Name" value="NFC_Init"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#ae5de243400886f47339260c2c09dfe02"><param name="Name" value="NFC_PageProgram"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a1a9e93466811fda7f63344d12207a6e8"><param name="Name" value="NFC_PageRead"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a6fc9abd6c729448eb6502d6380dff779"><param name="Name" value="NFC_ReadFlashID"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a741ae742eb67bbdc42cd75cc534363c6"><param name="Name" value="NFC_SendResetCmd"></OBJECT>
+  </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a072909a0b772cdc4388ba0d1612a9023"><param name="Name" value="NFC_BlockErase"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a2ef765d404fcd872172a8139a4afe47b"><param name="Name" value="NFC_GetBufAddr"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a208298642b7126e2b4eb7462f58a255f"><param name="Name" value="NFC_Init"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_n_f_c___init_type_def.html"><param name="Name" value="NFC_InitTypeDef"></OBJECT>
+  <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_n_f_c___init_type_def.html#a8519dc239502dfcbac171b3128dc7054"><param name="Name" value="cs"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_n_f_c___init_type_def.html#a0531bf8e2d0ac7dbf0d6af9b74a6ae0f"><param name="Name" value="sectorSize"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_n_f_c___init_type_def.html#af80af257986da475179166f48729f049"><param name="Name" value="width"></OBJECT>
+  </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#ae5de243400886f47339260c2c09dfe02"><param name="Name" value="NFC_PageProgram"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a1a9e93466811fda7f63344d12207a6e8"><param name="Name" value="NFC_PageRead"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a6fc9abd6c729448eb6502d6380dff779"><param name="Name" value="NFC_ReadFlashID"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="nfc_8h.html#a741ae742eb67bbdc42cd75cc534363c6"><param name="Name" value="NFC_SendResetCmd"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="common_8c.html#a6ad7a5e3ee69cb6db6a6b9111ba898bc"><param name="Name" value="NMI_Handler"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="flash_8c.html#a972c5b48742782d70fd233c09826fc96"><param name="Name" value="NORMAL_LEVEL"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="common_8h.html#aeac0cf537f65d17bc19aee2410b2b60e"><param name="Name" value="NVIC_PriorityGroup_0"></OBJECT>
@@ -1836,6 +1864,7 @@
   <LI><OBJECT type="text/sitemap"><param name="Local" value="rtc_8c.html#a6508df70318d3f264c21b2df2dfe0417"><param name="Name" value="SECONDS_IN_A_DAY"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="rtc_8c.html#a89f27ac647907366a71f2c8cc17bc779"><param name="Name" value="SECONDS_IN_A_HOUR"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="rtc_8c.html#a2d4507f6669e33be61a692bf2a927465"><param name="Name" value="SECONDS_IN_A_MIN"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_n_f_c___init_type_def.html#a0531bf8e2d0ac7dbf0d6af9b74a6ae0f"><param name="Name" value="sectorSize"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="flash_8c.html#ac85b8b0feaf464d5ef6bbee095dfc0c5"><param name="Name" value="SETRAM"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_reg__t.html#ae94a7e9e52306e4a9b768d55ffb25bc4"><param name="Name" value="shift"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="adc_8c.html#a0dd4dfdd64b8f911ab11ccd14b63339e"><param name="Name" value="SIM_ADCClockGateTable"></OBJECT>
@@ -2037,6 +2066,7 @@
     <LI><OBJECT type="text/sitemap"><param name="Local" value="wdog_8h.html#aacbb6e5a5f2e51a887d186fae74e9246"><param name="Name" value="wdog.h"></OBJECT>
   </UL>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="wdog_8c.html#a6f8956faf940dd69bf86766f46ac1ade"><param name="Name" value="WDOG_Unlock"></OBJECT>
+  <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_n_f_c___init_type_def.html#af80af257986da475179166f48729f049"><param name="Name" value="width"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_w_d_o_g___init_type_def.html#a036a2f1c9d391b123e96d0d22d453914"><param name="Name" value="windowInMs"></OBJECT>
   <LI><OBJECT type="text/sitemap"><param name="Local" value="struct_r_t_c___date_time___type.html#a57ca98d8f6d4baf0fe41c583c7dcb0d5"><param name="Name" value="year"></OBJECT>
 </UL>

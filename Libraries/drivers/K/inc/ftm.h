@@ -33,6 +33,34 @@
 #define HW_FTM_CH7 (0x07)
 
 /**
+ * \enum FTM_DualChlConfig_Type
+ * \brief FTM dual pin mode select
+ */
+typedef enum
+{
+	kFTM_Combine,                   /**<级联*/
+    kFTM_Complementary,             /**<互补*/
+    kFTM_DualEdgeCapture,           /**<双边沿捕捉*/
+    kFTM_DeadTime,                  /**<deadtime insertion*/
+    kFTM_Sync,                      /**<PWM synchronization*/
+    kFTM_FaultControl,              /**<fault control*/
+}FTM_DualChlConfig_Type;
+
+/**
+ * \enum FTM_Mode_Type
+ * \brief internal use, FTM mode select
+ */
+typedef enum
+{
+    kFTM_Mode_EdgeAligned,          /**<边沿对齐*/
+    kFTM_Mode_CenterAligned,        /**<中心对齐*/
+    kFTM_Mode_Combine,              /**<级联*/
+    kFTM_Mode_Complementary,        /**<互补*/
+    kFTM_Mode_InputCapture,         /**<输入捕捉*/
+    kFTM_Mode_QuadratureDecoder,    /**<正交解码*/
+}FTM_Mode_Type;
+
+/**
  * \enum FTM_PWM_Mode_Type
  * \brief PWM Mode Select
  */

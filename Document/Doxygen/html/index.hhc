@@ -51,6 +51,12 @@
     <LI><OBJECT type="text/sitemap"><param name="Name" value="pin_start"><param name="Local" value="structmap__t.html#a894538dd1231c95fa27a124d2f1a1934"><param name="ImageNumber" value="11"></OBJECT>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="reserved"><param name="Local" value="structmap__t.html#aa43c4c21b173ada1b6b7568956f0d650"><param name="ImageNumber" value="11"></OBJECT>
     </UL>
+  <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_InitTypeDef"><param name="Local" value="struct_n_f_c___init_type_def.html"><param name="ImageNumber" value="1"></OBJECT>
+    <UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="cs"><param name="Local" value="struct_n_f_c___init_type_def.html#a8519dc239502dfcbac171b3128dc7054"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="sectorSize"><param name="Local" value="struct_n_f_c___init_type_def.html#a0531bf8e2d0ac7dbf0d6af9b74a6ae0f"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="width"><param name="Local" value="struct_n_f_c___init_type_def.html#af80af257986da475179166f48729f049"><param name="ImageNumber" value="11"></OBJECT>
+    </UL>
   <LI><OBJECT type="text/sitemap"><param name="Name" value="PDB_InitTypeDef"><param name="Local" value="struct_p_d_b___init_type_def.html"><param name="ImageNumber" value="1"></OBJECT>
     <UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="inputTrigSource"><param name="Local" value="struct_p_d_b___init_type_def.html#a5826592f8b92bc6cde1af605f463d98e"><param name="ImageNumber" value="11"></OBJECT>
@@ -850,6 +856,28 @@
       <LI><OBJECT type="text/sitemap"><param name="Name" value="LPTMR_PC_QuickInit"><param name="Local" value="lptmr_8h.html#a2dad21e6251a1165ff527c5bfc4d9b7d"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="LPTMR_PC_ReadCounter"><param name="Local" value="lptmr_8h.html#a1cf9a3658080af4110c6ca99823ade99"><param name="ImageNumber" value="11"></OBJECT>
       <LI><OBJECT type="text/sitemap"><param name="Name" value="LPTMR_TC_Init"><param name="Local" value="lptmr_8h.html#ac0849657788cab1fd6029d319ea4f2a6"><param name="ImageNumber" value="11"></OBJECT>
+      </UL>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="nfc.c"><param name="Local" value="nfc_8c.html"><param name="ImageNumber" value="11"></OBJECT>
+    <LI><OBJECT type="text/sitemap"><param name="Name" value="nfc.h"><param name="Local" value="nfc_8h.html"><param name="ImageNumber" value="1"></OBJECT>
+      <UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_InitTypeDef"><param name="Local" value="struct_n_f_c___init_type_def.html"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="cs"><param name="Local" value="struct_n_f_c___init_type_def.html#a8519dc239502dfcbac171b3128dc7054"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="sectorSize"><param name="Local" value="struct_n_f_c___init_type_def.html#a0531bf8e2d0ac7dbf0d6af9b74a6ae0f"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="width"><param name="Local" value="struct_n_f_c___init_type_def.html#af80af257986da475179166f48729f049"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_Width_Type"><param name="Local" value="nfc_8h.html#a05c27062940e5adb5fa76e67140a2bae"><param name="ImageNumber" value="1"></OBJECT>
+        <UL>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="kNFC_Width8Bit"><param name="Local" value="nfc_8h.html#a05c27062940e5adb5fa76e67140a2baead44f71a303f74ab61af3082de62c9536"><param name="ImageNumber" value="11"></OBJECT>
+        <LI><OBJECT type="text/sitemap"><param name="Name" value="kNFC_Width16Bit"><param name="Local" value="nfc_8h.html#a05c27062940e5adb5fa76e67140a2baea10cc17ed77ec99f03c9d4cab0669bc66"><param name="ImageNumber" value="11"></OBJECT>
+        </UL>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_BlockErase"><param name="Local" value="nfc_8h.html#a072909a0b772cdc4388ba0d1612a9023"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_GetBufAddr"><param name="Local" value="nfc_8h.html#a2ef765d404fcd872172a8139a4afe47b"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_Init"><param name="Local" value="nfc_8h.html#a208298642b7126e2b4eb7462f58a255f"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_PageProgram"><param name="Local" value="nfc_8h.html#ae5de243400886f47339260c2c09dfe02"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_PageRead"><param name="Local" value="nfc_8h.html#a1a9e93466811fda7f63344d12207a6e8"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_ReadFlashID"><param name="Local" value="nfc_8h.html#a6fc9abd6c729448eb6502d6380dff779"><param name="ImageNumber" value="11"></OBJECT>
+      <LI><OBJECT type="text/sitemap"><param name="Name" value="NFC_SendResetCmd"><param name="Local" value="nfc_8h.html#a741ae742eb67bbdc42cd75cc534363c6"><param name="ImageNumber" value="11"></OBJECT>
       </UL>
     <LI><OBJECT type="text/sitemap"><param name="Name" value="pdb.c"><param name="Local" value="pdb_8c.html"><param name="ImageNumber" value="1"></OBJECT>
       <UL>

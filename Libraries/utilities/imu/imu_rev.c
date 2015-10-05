@@ -10,6 +10,7 @@ enum input_status
     STATUS_SOF,
     STATUS_LEN,
     STATUS_DATA,
+    STATUS_FCS,
 };
 
 void imu_rev_init(imu_rev_init_t installer)
@@ -72,18 +73,28 @@ void imu_rev_process(char ch, enum imu_rev_mode mode)
             break;
         case STATUS_LEN:
             len = ch;
-            status = STATUS_DATA;
+            if(len > sizeof(rev_buf))
+            {
+                status = STATUS_IDLE;
+            }
+            else
+            {
+                status = STATUS_DATA;
+            }
             i = 0;
             break;
         case STATUS_DATA:
             
             if(i == len)
             {
-                status = STATUS_IDLE;
+                status = STATUS_FCS;
                 g_hander->handler();
                 break;
             }
             rev_buf[i++] = ch;
+            break;
+        case STATUS_FCS:
+            status = STATUS_IDLE;
             break;
         default:
             break;

@@ -20,8 +20,9 @@
 #include "calibration.h"
 #include "mq.h"
 
-#define VERSION             (201)
+#define VERSION             (202)
 #define MPU9250_INT_PIN     (18)
+
 #define DMA_TX_CH      (HW_DMA_CH0)
 #define DMA_RX_CH      (HW_DMA_CH1)
 
@@ -138,6 +139,7 @@ static void ShowInfo(void)
 
 void HWInit(void)
 {
+
     DelayInit();
     GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
     GPIO_Init(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Mode_IFT);
@@ -177,6 +179,9 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf);
 
 int main(void)
 {
+#if defined(BOOTLOADER)
+    SCB->VTOR = 0x5000;
+#endif
     int i;
 
     int16_t adata[3], gdata[3], mdata[3];
@@ -218,9 +223,9 @@ int main(void)
     }
     ShowInfo();
     
-    KalmanSimple1D(&KState[0], 1, 30);
-    KalmanSimple1D(&KState[1], 1, 30);
-    KalmanSimple1D(&KState[2], 1, 30);
+    KalmanSimple1D(&KState[0], 1, 10);
+    KalmanSimple1D(&KState[1], 1, 10);
+    KalmanSimple1D(&KState[2], 1, 10);
     
     while(1)
     {

@@ -4,8 +4,9 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+  * \date    2015.10.06 FreeXc 完善了对 i2c 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ���ļ�ΪоƬIICģ��ĵײ㹦�ܺ���
+  * @note    此文件为芯片IIC模块的底层功能函数
   ******************************************************************************
   */
   
@@ -31,6 +32,17 @@ typedef struct
 
 static i2c_gpio i2c;
 
+/**
+ * @brief  I2C快速初始化函数
+ * \code 
+ *   //PE00\PE01初始化为i2c功能，波特率为
+ *   uint32_t instance;
+ *   instance = I2C_QuickInit(I2C1_SCL_PE01_SDA_PE00,1000);
+ * \endcode
+ * @param[in] MAP  I2C引脚配置缩略图,详见i2c.h
+ * \param[in] baudrate 波特率(函数中暂未配置，取为默认)
+ * @retval i2c模块号
+ */
 uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
 {
     uint8_t i;
@@ -86,16 +98,28 @@ uint8_t I2C_QuickInit(uint32_t MAP, uint32_t baudrate)
     return pq->ip;
 }
 
+/**
+ * \brief I2C 初始化(待定义)
+ * \param[in] I2C_InitStruct 指向I2C结构体的指针 
+ */
 void I2C_Init(I2C_InitTypeDef* I2C_InitStruct)
 {
     
 }
 
+/**
+ * \brief 读取I2C上SDA数据，Internal function
+ * \return SDA上的数据(1 bit)
+ */
 static inline uint8_t SDA_IN(void)
 {
     return GPIO_ReadBit(i2c.instace, i2c.sda_pin);
 }
 
+/**
+ * \brief I2C Start，Internal function
+ * \retval true
+ */
 static bool I2C_Start(void)
 {
     SDA_DDR_OUT();
@@ -108,6 +132,10 @@ static bool I2C_Start(void)
     return true;
 }
 
+/**
+ * \brief I2C Stop，Internal function
+ * \retval None
+ */
 static void I2C_Stop(void)
 {
     SCL_L();
@@ -118,6 +146,10 @@ static void I2C_Stop(void)
     I2C_DELAY();
 }
 
+/**
+ * \brief I2C Ack，Internal function
+ * \retval None
+ */
 static void I2C_Ack(void)
 {
     SCL_L();
@@ -129,6 +161,10 @@ static void I2C_Ack(void)
     I2C_DELAY();
 }
 
+/**
+ * \brief I2C Not Ack，Internal function
+ * \retval None
+ */
 static void I2C_NAck(void)
 {
     SCL_L();
@@ -141,6 +177,10 @@ static void I2C_NAck(void)
     I2C_DELAY();
 }
 
+/**
+ * \brief I2C Wait Ack，Internal function
+ * \return 应答信号
+ */
 static bool I2C_WaitAck(void)
 {
     uint8_t ack;
@@ -157,6 +197,11 @@ static bool I2C_WaitAck(void)
     return ack;
 }
 
+/**
+ * \brief I2C 发送一个字节数据，Internal function
+ * \param[in] data 待发送的数据(字节)
+ * \retval None
+ */
 static void I2C_SendByte(uint8_t data)
 {
     volatile uint8_t i;
@@ -175,6 +220,10 @@ static void I2C_SendByte(uint8_t data)
 
 }
 
+/**
+ * \brief I2C 接收一个字节数据，Internal function
+ * \return 待接收的数据(字节)
+ */
 static uint8_t I2C_GetByte(void)
 {
     uint8_t i,byte;
@@ -198,13 +247,14 @@ static uint8_t I2C_GetByte(void)
 
 /**
  * @brief  I2C write mutiple data
- * @param  instance: instance of i2c moudle
- *         @arg chipAddr   : i2c slave addr
- *         @arg addr       : i2c slave register offset
- *         @arg addrLen    : len of slave register addr(in byte)
- *         @arg buf        : data buf
- *         @arg buf        : read len
- * @note 
+ * @param[in]  instance instance of i2c moudle
+ * \param[in]  chipAddr    i2c slave addr
+ * \param[in]  addr        i2c slave register offset
+ * \param[in]  addrLen     len of slave register addr(in byte)
+ * \param[in]  buf         data buf
+ * \param[in]  len         data length
+ * \retval 0 success
+ * \retval 1 failure
  */
 int I2C_BurstWrite(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
 {
@@ -237,11 +287,13 @@ int I2C_BurstWrite(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t 
 
 /**
  * @brief  write single register value
- * @param  instance: instance of i2c moudle
- *         @arg chipAddr   : i2c slave addr
- *         @arg addr       : i2c slave register offset
- *         @arg pData      : data pointer
+ * \param[in]  instance    instance of i2c module
+ * \param[in]  chipAddr    i2c slave addr
+ * \param[in]  addr        i2c slave register offset
+ * \param[in]  data        data to write 
  * @note   usually used on i2c sensor devices
+ * \retval 0 success
+ * \retval 1 failure
  */
 int I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t data)
 {
@@ -250,13 +302,14 @@ int I2C_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, u
 
 /**
  * @brief  I2C read mutiple data
- * @param  instance: instance of i2c moudle
- *         @arg chipAddr   : i2c slave addr
- *         @arg addr       : i2c slave register offset
- *         @arg addrLen    : len of slave register addr(in byte)
- *         @arg buf        : data buf
- *         @arg buf        : read len
- * @note 
+ * \param[in]  instance    instance of i2c moudle
+ * \param[in]  chipAddr    i2c slave addr
+ * \param[in]  addr        i2c slave register offset
+ * \param[in]  addrLen     len of slave register addr(in byte)
+ * \param[out] buf         data buf
+ * \param[in]  len         data length
+ * \retval 0 success
+ * \retval 1 failure
  */
 int I2C_BurstRead(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t addrLen, uint8_t *buf, uint32_t len)
 {
@@ -298,9 +351,11 @@ int I2C_BurstRead(uint32_t instance ,uint8_t chipAddr, uint32_t addr, uint32_t a
 
 /**
  * @brief  proble i2c bus
- * @param  instance: instance of i2c moudle
- *         @arg chipAddr   : i2c slave addr
+ * @param[in]  instance instance of i2c moudle
+ * \param[in]  chipAddr i2c slave addr
  * @note   see if it's available i2c slave on the bus
+ * \retval 0 success
+ * \retval 1 failure
  */
 int I2C_Probe(uint32_t instance, uint8_t chipAddr)
 {
@@ -318,18 +373,29 @@ int I2C_Probe(uint32_t instance, uint8_t chipAddr)
 
 /**
  * @brief  read single register value
- * @param  instance: instance of i2c moudle
- *         @arg chipAddr   : i2c slave addr
- *         @arg addr       : i2c slave register offset
- *         @arg pData      : data pointer
+ * \param[in]  instance   instance of i2c moudle
+ * \param[in]  chipAddr   i2c slave addr
+ * \param[in]  addr       i2c slave register offset
+ * \param[out] data       data pointer
  * @note   usually used on i2c sensor devices
+ * \retval 0 success
+ * \retval 1 failure
  */
 int I2C_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t *data)
 {
     return I2C_BurstRead(instance, chipAddr, addr, 1, data, 1);
 }
 
-
+/**
+ * @brief  SCCB(protocol,the same as i2c) read single register value
+ * \param[in]  instance   instance of i2c moudle
+ * \param[in]  chipAddr   i2c slave addr
+ * \param[in]  addr       i2c slave register offset
+ * \param[out] data       data pointer
+ * @note   usually used on i2c sensor devices
+ * \retval 0 success
+ * \retval 1 failure
+ */
 int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t* data)
 {
     uint8_t err;
@@ -367,7 +433,16 @@ int SCCB_ReadSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, u
     return err;
 }
 
-
+/**
+ * @brief  SCCB(protocol,the same as i2c) write single register value
+ * \param[in]  instance    instance of i2c module
+ * \param[in]  chipAddr    i2c slave addr
+ * \param[in]  addr        i2c slave register offset
+ * \param[in]  data        data to write 
+ * @note   usually used on i2c sensor devices
+ * \retval 0 success
+ * \retval 1 failure
+ */
 int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, uint8_t data)
 {
     uint8_t err;
@@ -387,7 +462,11 @@ int SCCB_WriteSingleRegister(uint32_t instance, uint8_t chipAddr, uint8_t addr, 
 }
 
 
-/* i2c bus scan test */
+/**
+ * \brief i2c bus scan test
+ * @param[in] MAP  I2C引脚配置缩略图,详见i2c.h
+ * \retval None
+ */
 void I2C_Scan(uint32_t MAP)
 {
     uint8_t i;
@@ -403,8 +482,3 @@ void I2C_Scan(uint32_t MAP)
         }
     }
 }
-
-
-
-
-

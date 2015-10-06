@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ���ļ�ΪоƬIICģ��ĵײ㹦�ܺ���
+  * @note    此文件为芯片IIC模块的底层功能函数
   ******************************************************************************
   */
 #ifndef __CH_LIB_I2C_H__
@@ -17,20 +17,23 @@
 	 
 #include <stdint.h>
 
-     
+/**
+ * \struct I2C_InitTypeDef
+ * \brief I2C初始化结构
+ */     
 typedef struct
 {
-    uint32_t instance;    //!< I2C pin select
-    uint32_t baudrate;   //!< baudrate some common baudrate: 48000Hz 76000Hz 96000Hz 376000Hz
+    uint32_t instance;    ///< I2C pin select
+    uint32_t baudrate;    ///< baudrate some common baudrate: 48000Hz 76000Hz 96000Hz 376000Hz
 }I2C_InitTypeDef;
 
-
-#define HW_I2C0         (0x00U)
+/* I2C模块号 */
+#define HW_I2C0         (0x00U)   /* I2C模块0，以下依次类推 */
 #define HW_I2C1         (0x01U)
 #define HW_I2C2         (0x02U)
 
 
-//!< I2C QuickInit macro
+/* I2C QuickInit macro */
 #define I2C1_SCL_PE01_SDA_PE00  (0X000081A1U)
 #define I2C0_SCL_PE19_SDA_PE18  (0X0000A520U)
 #define I2C0_SCL_PF22_SDA_PF23  (0X0000ACA8U)
@@ -41,23 +44,32 @@ typedef struct
 #define I2C0_SCL_PE24_SDA_PE25  (0X0000B160U)
 #define I2C1_SCL_PC01_SDA_PC02  (0X00008291U)
 #define I2Cx_SCL_PC14_SDA_PC15  (0X00009C50U)
+
+/**
+ * \enum I2C_Direction_Type
+ * \brief I2C 读写设置
+ */
 typedef enum
 {
-    kI2C_Read,                  //!< I2C Master Read Data
-    kI2C_Write,                 //!< I2C Master Write Data
+    kI2C_Read,                  /**< I2C Master Read Data */
+    kI2C_Write,                 /**< I2C Master Write Data */
     kI2C_DirectionNameCount,
 }I2C_Direction_Type; 
 
+/**
+ * \enum I2C_ITDMAConfig_Type
+ * \brief I2C 中断DMA配置
+ */
 typedef enum
 {
-    kI2C_IT_Disable,        //!< Disable Interrupt
-    kI2C_DMA_Disable,       //!< Disable DMA
-    kI2C_IT_BTC,            //!< Byte Transfer Complete Interrupt
-    kI2C_DMA_BTC,           //!< DMA Trigger On Byte Transfer Complete
+    kI2C_IT_Disable,        /**< Disable Interrupt */
+    kI2C_DMA_Disable,       /**< Disable DMA */
+    kI2C_IT_BTC,            /**< Byte Transfer Complete Interrupt */
+    kI2C_DMA_BTC,           /**< DMA Trigger On Byte Transfer Complete */
 }I2C_ITDMAConfig_Type;
 
 
-//!< I2C CallBack Type
+/* I2C CallBack Type */
 typedef void (*I2C_CallBackType)(void);
 
 

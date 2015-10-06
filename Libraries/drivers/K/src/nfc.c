@@ -4,6 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2015.3.5
+  * \date    2015.10.04 FreeXc完善了nfc模块的注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -40,15 +41,19 @@ static volatile uint32_t NFCBufAddr[4] =
     (NFC_BASE + 0x00003000),
 };
 
-
+/**
+ * \brief get buffer address of NFC
+ * \param[in] nfcbufNum buffer num
+ * \return buffer address
+ */
 uint32_t NFC_GetBufAddr(uint8_t nfcbufNum)
 {
     return NFCBufAddr[nfcbufNum];
 }
 
- /**
- * @brief  ��ʼ��VREF ģ��
- * @param  DAC_InitTypeDef: ��ʼ���ṹ
+/**
+ * @brief  initialize NFC struct
+ * @param[in]  NFC_InitStruct 指向NFC初始化结构体指针
  * @retval None
  */
 void NFC_Init(NFC_InitTypeDef *NFC_InitStruct)
@@ -152,7 +157,10 @@ void NFC_Init(NFC_InitTypeDef *NFC_InitStruct)
     
 }
 
-
+/**
+ * \brief send NFC reset cmd
+ * \retval None
+ */
 void NFC_SendResetCmd(void) 
 {
     /* Clear all status and error bits in the NFC_ISR register */
@@ -170,6 +178,13 @@ void NFC_SendResetCmd(void)
     while (NFC->CMD2 & NFC_CMD2_BUSY_START_MASK);
 }
 
+/**
+ * \brief read NFC flash 
+ * \param[in] nfcBufNum     first NFC internal buffer to program to the NAND (auto increment will be used )
+ * \param[out] id0 store the NFC flash ID0(SR1)
+ * \param[out] id1 store the NFC flash ID1(SR2)
+ * \retval None
+ */
 void NFC_ReadFlashID(uint8_t nfcBufNum, uint32_t* id0, uint32_t* id1) 
 {
     /* Clear all status and error bits in the NFC_ISR register */
@@ -193,20 +208,17 @@ void NFC_ReadFlashID(uint8_t nfcBufNum, uint32_t* id0, uint32_t* id1)
     *((volatile uint32_t *)(id1)) = NFC->SR2;
 }
 
-/********************************************************************/
-/* Erases the NFC block containing the specified address. This function
- * will only erase one block at a time. If multiple blocks need to be
- * erased, then the function should be called once per block to erase.
+/**
+ * \brief Erase NFC block
+ * \details Erases the NFC block containing the specified address. This function
+ *          will only erase one block at a time. If multiple blocks need to be
+ *          erased, then the function should be called once per block to erase.
  *
- * Parameters:
- *  row_addr   NAND flash row addr for the block to erase (up to 24 bits)
+ * \param[in] cs chip select
+ * \param[in] row_addr   NAND flash row addr for the block to erase (up to 24 bits) 
+ * \note  raw_addr: how many page in this chip, there is no block addr meaning, so in blockerase fun:, raw_addr[0:5] is ignored
+ *        coloum_addr: how many byte in a page,
  */
-
-/* 
-    raw_addr: how many page in this chip, there is no block addr meaning, so in blockerase fun:, raw_addr[0:5] is ignored
-    coloum_addr: how many byte in a page,
-*/
-
 void NFC_BlockErase(uint32_t cs, uint32_t row_addr)
 {
     /* Clear all status and error bits in the NFC_ISR register */
@@ -252,20 +264,20 @@ void NFC_BlockErase(uint32_t cs, uint32_t row_addr)
 }
 
 
-/********************************************************************/
-/* Programs a single page worth of data from the NFC into the NAND
- * flash memory at the specified NFC address. This function will only
- * program one NAND page at a time. If multiple pages need to be
- * programmed, then the function should be called once per page to
- * write. Data must be loaded into the NFC's buffers before calling
- * this function.
+/**
+ * \brief NFC page prpgram
+ * \details Programs a single page worth of data from the NFC into the NAND
+ *          flash memory at the specified NFC address. This function will only
+ *          program one NAND page at a time. If multiple pages need to be
+ *          programmed, then the function should be called once per page to
+ *          write. Data must be loaded into the NFC's buffers before calling
+ *          this function.
  *
- * Parameters:
- *  flash_bufno first NFC internal buffer to program to the NAND (auto increment will be used )
- *  row_addr    NAND flash row addr for the block to program (up to 24 bits)
- *  col_addr    NAND flash col addr for the page to program (up to 16 bits)
- *
- * NOTE: the column address should be aligned to the NAND page size
+ * \param[in] cs            chip select
+ * \param[in] nfcbufNum     first NFC internal buffer to program to the NAND (auto increment will be used )
+ * \param[in] row_addr      NAND flash row addr for the block to program (up to 24 bits)
+ * \param[in] col_addr      NAND flash col addr for the page to program (up to 16 bits)
+ * \note the column address should be aligned to the NAND page size
  */
 
 void NFC_PageProgram(uint8_t cs, uint8_t nfcbufNum, uint32_t row_addr, uint16_t col_addr)
@@ -312,20 +324,20 @@ void NFC_PageProgram(uint8_t cs, uint8_t nfcbufNum, uint32_t row_addr, uint16_t 
     /* Wait for start/busy bit to clear indicating command is done */ 
     while (NFC->CMD2 & NFC_CMD2_BUSY_START_MASK);  
 }
-/********************************************************************/
-/* Reads a single page worth of data from the NAND flash at the 
- * specified address into the NFC's buffers. This function will only
- * read one NAND page at a time. If multiple pages need to be
- * read, then the function should be called once per page to
- * read. Data will be loaded into the NFC's buffers after the function
- * completes.
+/** 
+ * \brief NFC page read
+ * \details Reads a single page worth of data from the NAND flash at the 
+ *          specified address into the NFC's buffers. This function will only
+ *          read one NAND page at a time. If multiple pages need to be
+ *          read, then the function should be called once per page to
+ *          read. Data will be loaded into the NFC's buffers after the function
+ *          completes.
  *
- * Parameters:
- *  flash_bufno first NFC internal buffer to load data to (auto increment will be used )
- *  row_addr    NAND flash row addr for the block to program (up to 24 bits)
- *  col_addr    NAND flash col addr for the page to program (up to 16 bits)
- *
- * NOTE: the column address should be aligned to the NAND page size
+ * \param[in] cs            chip select
+ * \param[in] nfcBufNum     first NFC internal buffer to program to the NAND (auto increment will be used )
+ * \param[in] row_addr      NAND flash row addr for the block to program (up to 24 bits)
+ * \param[in] col_addr      NAND flash col addr for the page to program (up to 16 bits)
+ * \note the column address should be aligned to the NAND page size
  */
 void NFC_PageRead(uint8_t cs, uint8_t nfcBufNum, uint32_t row_addr, uint16_t col_addr)
 {
@@ -372,7 +384,4 @@ void NFC_PageRead(uint8_t cs, uint8_t nfcBufNum, uint32_t row_addr, uint16_t col
     while (NFC->CMD2 & NFC_CMD2_BUSY_START_MASK);  
 }
 
-
-
 #endif
-

@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.25
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬UARTÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡UARTæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #ifndef __CH_LIB_UART_H__
@@ -20,16 +20,16 @@
 #include <stdio.h>
 
 
-/*!< UART Ó²¼şÄ£¿éºÅ */
-#define HW_UART0  (0x00U)  /* Ğ¾Æ¬µÄUART0¶Ë¿Ú */
+/* UART ç¡¬ä»¶æ¨¡å—å· */
+#define HW_UART0  (0x00U)  /* èŠ¯ç‰‡çš„UART0ç«¯å£ï¼Œä¾æ¬¡ç±»æ¨ */
 #define HW_UART1  (0x01U)
 #define HW_UART2  (0x02U)
 #define HW_UART3  (0x03U)
 #define HW_UART4  (0x04U)
 #define HW_UART5  (0x05U)
 
-/*!< UART ¿ìËÙ³õÊ¼»¯ºê */                      
-#define UART1_RX_PE01_TX_PE00   (0x80E1U) //Ğ¾Æ¬µÄUART1¶Ë¿Ú£¬Ê¹ÓÃPTE1Òı½ÅÎª½ÓÊÕÒı½Å£¬Ê¹ÓÃPTE0Òı½ÅÎª·¢ËÍÒı½Å
+/* UART å¿«é€Ÿåˆå§‹åŒ–å® */                      
+#define UART1_RX_PE01_TX_PE00   (0x80E1U) /* èŠ¯ç‰‡çš„UART1ç«¯å£ï¼Œä½¿ç”¨PTE1å¼•è„šä¸ºæ¥æ”¶å¼•è„šï¼Œä½¿ç”¨PTE0å¼•è„šä¸ºå‘é€å¼•è„šï¼Œä¾æ¬¡ç±»æ¨*/
 #define UART0_RX_PF17_TX_PF18   (0xA528U)
 #define UART3_RX_PE05_TX_PE04   (0x88E3U)
 #define UART5_RX_PF19_TX_PF20   (0xA72DU)
@@ -46,48 +46,60 @@
 #define UART2_RX_PD02_TX_PD03   (0x84DAU)
 #define UART0_RX_PD06_TX_PD07   (0x8CD8U)
 #define UART2_RX_PF13_TX_PF14   (0x9B2AU) 
-#define UART5_RX_PD08_TX_PD09   (0x90DDU) //Ğ¾Æ¬µÄUART5¶Ë¿Ú£¬Ê¹ÓÃPTD8Òı½ÅÎª½ÓÊÕÒı½Å£¬Ê¹ÓÃPTD9Òı½ÅÎª·¢ËÍÒı½Å
+#define UART5_RX_PD08_TX_PD09   (0x90DDU) 
 #define UART5_RX_PE08_TX_PE09   (0X90E5U)
-/*!< parity Ñ¡Ôñ */
+
+/**
+ * \enum UART_ParityMode_Type
+ * \brief UART parity é€‰æ‹©
+ */
 typedef enum
 {
-    kUART_ParityDisabled = 0x0,  // Ğ£ÑéÎ»½ûÖ¹
-    kUART_ParityEven     = 0x2,  // 1Î» ÆæĞ£Ñé 
-    kUART_ParityOdd      = 0x3,  // 1Î» Å¼Ğ£Ñé 
+    kUART_ParityDisabled = 0x0,  /**< æ ¡éªŒä½ç¦æ­¢ */
+    kUART_ParityEven     = 0x2,  /**< 1ä½ å¥‡æ ¡éªŒ */
+    kUART_ParityOdd      = 0x3,  /**< 1ä½ å¶æ ¡éªŒ */
 } UART_ParityMode_Type;
 
-/*!< Ã¿Ö¡Êı¾İÎ»¸öÊı */
+/**
+ * \enum UART_BitPerChar_Type
+ * \brief UARTæ¯å¸§æ•°æ®ä½ä¸ªæ•°
+ */
 typedef enum 
 {
-    kUART_8BitsPerChar  = 0,   // 8-bit Êı¾İ ²»°üÀ¨Ğ£ÑéÎ» 
-    kUART_9BitsPerChar  = 1,   // 9-bit Êı¾İ ²»°üÀ¨Ğ£ÑéÎ» 
+    kUART_8BitsPerChar  = 0,   /**< 8-bit æ•°æ® ä¸åŒ…æ‹¬æ ¡éªŒä½ */
+    kUART_9BitsPerChar  = 1,   /**< 9-bit æ•°æ® ä¸åŒ…æ‹¬æ ¡éªŒä½ */
 } UART_BitPerChar_Type;
 
-/*!< ÖĞ¶Ï¼°DMAÅäÖÃ */
+/**
+ * \enum UART_ITDMAConfig_Type
+ * \brief UARTä¸­æ–­åŠDMAé…ç½®
+ */
 typedef enum
 {
-    kUART_IT_Tx,                // ¿ªÆôÃ¿·¢ËÍÒ»Ö¡´«ÊäÍê³ÉÖĞ¶Ï 
-    kUART_DMA_Tx,               // ¿ªÆôÃ¿·¢ËÍÒ»Ö¡´«ÊäÍê³É´¥·¢DMA 
-    kUART_IT_Rx,                // ¿ªÆôÃ¿½ÓÊÕÒ»Ö¡´«ÊäÍê³ÉÖĞ¶Ï 
-    kUART_DMA_Rx,               // ¿ªÆôÃ¿½ÓÊÕÒ»Ö¡´«ÊäÍê³É´¥·¢DMA 
+    kUART_IT_Tx,                /**< å¼€å¯æ¯å‘é€ä¸€å¸§ä¼ è¾“å®Œæˆä¸­æ–­ */
+    kUART_DMA_Tx,               /**< å¼€å¯æ¯å‘é€ä¸€å¸§ä¼ è¾“å®Œæˆè§¦å‘DMA */
+    kUART_IT_Rx,                /**< å¼€å¯æ¯æ¥æ”¶ä¸€å¸§ä¼ è¾“å®Œæˆä¸­æ–­ */
+    kUART_DMA_Rx,               /**< å¼€å¯æ¯æ¥æ”¶ä¸€å¸§ä¼ è¾“å®Œæˆè§¦å‘DMA */
 }UART_ITDMAConfig_Type;
 
-/*!< UART³õÊ¼»¯½á¹¹ */
+/**
+ * \struct PIT_InitTypeDef
+ * \brief UARTåˆå§‹åŒ–ç»“æ„
+ */
 typedef struct
 {
-    uint32_t                srcClock;       // Ê±ÖÓÔ´ÆµÂÊ
-    uint8_t                 instance;       // UART Ä£¿éºÅ HW_UART0~HW_UART5
-    uint32_t                baudrate;       // UART ²¨ÌØÂÊ 
-    UART_ParityMode_Type    parityMode;     // UART Ğ£ÑéÎ» 
-    UART_BitPerChar_Type    bitPerChar;     // UART Ã¿Ò»Ö¡º¬¶àÉÙÎ»Êı¾İ 
+    uint32_t                srcClock;       ///< æ—¶é’Ÿæºé¢‘ç‡
+    uint8_t                 instance;       ///< UART æ¨¡å—å· HW_UART0~HW_UART5
+    uint32_t                baudrate;       ///< UART æ³¢ç‰¹ç‡ 
+    UART_ParityMode_Type    parityMode;     ///< UART æ ¡éªŒä½ 
+    UART_BitPerChar_Type    bitPerChar;     ///< UART æ¯ä¸€å¸§å«å¤šå°‘ä½æ•°æ® 
 }UART_InitTypeDef;
 
-/*!< UART »Øµ÷º¯ÊıÉùÃ÷ */
+/* UART å›è°ƒå‡½æ•°å£°æ˜ */
 typedef void (*UART_CallBackTxType)(uint16_t * pbyteToSend);
 typedef void (*UART_CallBackRxType)(uint16_t byteReceived);
 
-/*!< API functions */
-
+/* API functions */
 uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate);
 void UART_Init(UART_InitTypeDef * UART_InitStruct);
 void UART_DeInit(uint32_t instance);
@@ -125,7 +137,7 @@ void UART_DMASendData(uint32_t instance, uint8_t *buf, uint32_t len);
 void UART_DMAGetRemain(uint32_t instacne, uint32_t dir);
 #endif
 
-//!< param check
+/* param check */
 #define IS_UART_ALL_INSTANCE(INSTANCE)  (INSTANCE < ARRAY_SIZE(UART_InstanceTable))
 
 #ifdef __cplusplus

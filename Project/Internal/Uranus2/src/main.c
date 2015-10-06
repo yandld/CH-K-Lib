@@ -20,7 +20,7 @@
 #include "calibration.h"
 #include "mq.h"
 
-#define VERSION             (202)
+#define VERSION             (203)
 #define MPU9250_INT_PIN     (18)
 
 #define DMA_TX_CH      (HW_DMA_CH0)
@@ -243,6 +243,7 @@ int main(void)
                         dcal_output(&dcal);
                         GPIO_PinToggle(HW_GPIOC, 3);
                     }
+                    dcal_ginput(&dcal, rgdata);
                     /* bmp read */
                     ret = bmp180_conversion_process(&dummy, &temperature);
                     if(!ret)

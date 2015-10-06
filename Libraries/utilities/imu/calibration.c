@@ -15,7 +15,11 @@
 
 #include "calibration.h"
 
-#define CAL_MAGIC       (0x5ACB)
+#define CAL_MAGIC           (0x5ACB)
+
+#define CAL_GYRO_INIT               (0x00)
+#define CAL_GYRO_COUNT              (0x02)
+#define CAL_GYRO_FINISH             (0x03)
 
 void dcal_print(struct dcal_t * dc)
 {
@@ -44,6 +48,68 @@ void dcal_init(struct dcal_t *dc)
 {
     
 }
+
+#define GYRO_SAMPLE_COUNT       (64)
+#define GYRO_STILL_LIMIT        (30)
+static int32_t gsum[3];
+
+void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
+{
+    static int states = CAL_GYRO_INIT;
+    static int still_count = 0;
+    switch(states)
+    {
+        case CAL_GYRO_INIT:
+            if((gdata[0] < GYRO_STILL_LIMIT) && (gdata[1] < GYRO_STILL_LIMIT) && (gdata[2] < GYRO_STILL_LIMIT))
+            {
+                still_count++;
+            }
+            else
+            {
+                still_count = 0;
+                states = CAL_GYRO_INIT;
+            }
+            if(still_count > 20)
+            {
+                states = CAL_GYRO_COUNT;
+                still_count = 0;
+                gsum[0] = 0;
+                gsum[1] = 0;
+                gsum[2] = 0;
+            }
+            break;
+        case CAL_GYRO_COUNT:
+            if((gdata[0] < GYRO_STILL_LIMIT) && (gdata[1] < GYRO_STILL_LIMIT) && (gdata[2] < GYRO_STILL_LIMIT))
+            {
+                //printf("! %d %d %d\r\n", gdata[0], gdata[1], gdata[2]);
+                gsum[0] += gdata[0];
+                gsum[1] += gdata[1];
+                gsum[2] += gdata[2];
+                still_count++;
+            }
+            else
+            {
+                states = CAL_GYRO_INIT;
+            }
+
+            if(still_count == GYRO_SAMPLE_COUNT)
+            {
+                states = CAL_GYRO_FINISH;
+            }
+            break;
+        case CAL_GYRO_FINISH:
+            dc->go[0] = gsum[0]/GYRO_SAMPLE_COUNT;
+            dc->go[1] = gsum[1]/GYRO_SAMPLE_COUNT;   
+            dc->go[2] = gsum[2]/GYRO_SAMPLE_COUNT;   
+            //printf("data output complete ! %d %d %d\r\n", gsum[0]/GYRO_SAMPLE_COUNT, gsum[1]/GYRO_SAMPLE_COUNT, gsum[2]/GYRO_SAMPLE_COUNT);
+            states = CAL_GYRO_INIT;
+            break;
+        default:
+            break;
+    }
+    
+}
+
 
 
 /* this function must be called every 100 ms */

@@ -4,8 +4,9 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+  * \date    2015.10.08 FreeXc å®Œå–„äº†å¯¹ dma æ¨¡å—çš„ç›¸å…³æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬DMAÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡DMAæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 
@@ -25,8 +26,8 @@ static uint32_t DMAChlMAP;
 uint32_t _DMA_ChlAlloc(void);
 void DMA_ChlFree(uint32_t chl);
 
-/* DMAÖĞ¶ÏÏòÁ¿Èë¿Ú */
-/* Ä¬ÈÏµÚÒ»¸öDMAÖĞ¶ÏÏòÁ¿Èë¿ÚÎª0 */
+/* DMAä¸­æ–­å‘é‡å…¥å£ */
+/* é»˜è®¤ç¬¬ä¸€ä¸ªDMAä¸­æ–­å‘é‡å…¥å£ä¸º0 */
 static const IRQn_Type DMA_IRQnTable[] = 
 {
     (IRQn_Type)(0 + 0),
@@ -49,9 +50,9 @@ static const IRQn_Type DMA_IRQnTable[] =
 
 
 /**
- * @brief  ³õÊ¼»¯DMAÄ£¿é
- * @param  DMA_InitStruct :DMA³õÊ¼»¯ÅäÖÃ½á¹¹Ìå£¬Ïê¼ûdma.h
- * @retval ·ÖÅäµ½µÄDMA Í¨µÀ
+ * @brief  åˆå§‹åŒ–DMAæ¨¡å—
+ * @param[in]  DMA_InitStruct æŒ‡å‘DMAåˆå§‹åŒ–é…ç½®ç»“æ„ä½“çš„æŒ‡é’ˆï¼Œè¯¦è§dma.h
+ * @return åˆ†é…åˆ°çš„DMAé€šé“
  */
 uint32_t DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
 {
@@ -116,6 +117,15 @@ uint32_t DMA_Init(DMA_InitTypeDef *DMA_InitStruct)
     return chl;
 }
 
+/**
+ * \brief DMAé€šé“åˆ†é…
+ * \code 
+ *   // init DMA 
+ *   uint8_t dma_chl;
+ *ã€€ dma_chl = DMA_ChlAlloc();
+ * \endcode
+ * \return dma channel
+ */
 uint32_t DMA_ChlAlloc(void)
 {
     uint32_t i;
@@ -136,19 +146,24 @@ uint32_t DMA_ChlAlloc(void)
     return 0;
 } 
 
+/**
+ * \brief DMAé€šé“é‡Šæ”¾
+ * \param[in] chl DMAé€šé“å·
+ * \return None
+ */
 void DMA_ChlFree(uint32_t chl)
 {
     DMAChlMAP &= ~(1<<chl);
 }
 
 /**
- * @brief  »ñµÃ DMA MajorLoopCount ¼ÆÊıÖµ
- * @param  chl: DMAÍ¨µÀºÅ
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
- * @retval ¼ÆÊıÖµ
+ * @brief  è·å¾— DMA MajorLoopCount è®¡æ•°å€¼
+ * @param[in]  chl DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * @retval è®¡æ•°å€¼
  */
 uint32_t DMA_GetMajorLoopCount(uint8_t chl)
 {
@@ -156,14 +171,15 @@ uint32_t DMA_GetMajorLoopCount(uint8_t chl)
 }
 
 /**
- * @brief  ÉèÖÃ DMA MajorLoopCount ¼ÆÊıÖµ
- * @param  chl: DMAÍ¨µÀºÅ
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
+ * @brief  è®¾ç½® DMA MajorLoopCount è®¡æ•°å€¼
+ * @param[in]  chl  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * \param[in]  val è®¡æ•°å€¼
  * @retval None
- * @note   ÊıÖµ²»ÄÜ³¬¹ı DMA_CITER_ELINKNO_CITER_MASK
+ * @note   æ•°å€¼ä¸èƒ½è¶…è¿‡ DMA_CITER_ELINKNO_CITER_MASK
  */
 void DMA_SetMajorLoopCounter(uint8_t chl, uint32_t val)
 {
@@ -173,16 +189,16 @@ void DMA_SetMajorLoopCounter(uint8_t chl, uint32_t val)
 
 
 /**
- * @brief  Ê¹ÄÜÍ¨µÀÏìÓ¦´«Êä
+ * @brief  ä½¿èƒ½é€šé“å“åº”ä¼ è¾“
  * @code
- *     //¿ªÆôDMA µÄ0Í¨µÀ½øĞĞÊı¾İ´«Êä
+ *     //å¼€å¯DMA çš„0é€šé“è¿›è¡Œæ•°æ®ä¼ è¾“
  *     DMA_EnableRequest(HW_DMA_CH0);
  * @endcode
- * @param  chl: DMAÍ¨µÀºÅ
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
+ * @param[in]  chl  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
  * @retval None
  */
 void DMA_EnableRequest(uint8_t chl)
@@ -191,16 +207,16 @@ void DMA_EnableRequest(uint8_t chl)
 }
 
 /**
- * @brief  ½ûÖ¹Í¨µÀÏìÓ¦´«Êä
+ * @brief  ç¦æ­¢é€šé“å“åº”ä¼ è¾“
  * @code
- *     //¿ªÆôDMA µÄ0Í¨µÀ½øĞĞÊı¾İ´«Êä
- *     DMA_EnableRequest(HW_DMA_CH0);
+ *     //ç¦æ­¢DMA çš„0é€šé“å“åº”ä¼ è¾“
+ *     DMA_DisableRequest(HW_DMA_CH0);
  * @endcode
- * @param  chl: DMAÍ¨µÀºÅ
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
+ * @param[in]  chl  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
  * @retval None
  */
 void DMA_DisableRequest(uint8_t chl)
@@ -209,7 +225,15 @@ void DMA_DisableRequest(uint8_t chl)
 }
 
 /**
- * @brief  ÔÚMajloop ½áÊøºó  ÊÇ·ñ×Ô¶¯¹Ø±ÕRequest
+ * @brief  åœ¨Majloop ç»“æŸå  æ˜¯å¦è‡ªåŠ¨å…³é—­Request
+ * @param[in]  chl  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * \param[in] flag enable or disable
+ * 							\arg 0 not affect
+ *     					\arg 1 automatically clear
  */
 void DMA_EnableAutoDisableRequest(uint8_t chl , bool flag)
 {
@@ -224,11 +248,17 @@ void DMA_EnableAutoDisableRequest(uint8_t chl , bool flag)
 }
 
 /**
- * @brief  Ê¹ÄÜMajor LoopLink ¹¦ÄÜ
- * @note   µ±Ò»¸öÍ¨µÀ½áÊøMajorLoopLinkºó ×Ô¶¯¿ªÊ¼ÁíÒ»¸öÍ¨µÀµÄ´«Êä
- * @param  chl: DMAÍ¨µÀºÅ
- * @param  linkChl: ĞèÒªÁ¬½Óµ½Í¨µÀºÅ
- * @param  flag Ê¹ÄÜ»òÕß¹Ø±Õ
+ * @brief  ä½¿èƒ½Major LoopLink åŠŸèƒ½
+ * @note   å½“ä¸€ä¸ªé€šé“ç»“æŸMajorLoopLinkå è‡ªåŠ¨å¼€å§‹å¦ä¸€ä¸ªé€šé“çš„ä¼ è¾“
+ * @param[in]  chl  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * @param[in]  linkChl éœ€è¦è¿æ¥åˆ°é€šé“å·
+ * \param[in] flag enable or disable
+ * 							\arg 0 disable
+ *     					\arg 1 enable
  * @retval None
  */
 void DMA_EnableMajorLink(uint8_t chl , uint8_t linkChl, bool flag)
@@ -248,20 +278,24 @@ void DMA_EnableMajorLink(uint8_t chl , uint8_t linkChl, bool flag)
 }
 
 /**
- * @brief  ÉèÖÃDMA´«ÊäÍê³ÉÖĞ¶Ï
+ * @brief  è®¾ç½®DMAä¼ è¾“å®Œæˆä¸­æ–­
  * @code
- *     //¿ªÆôDMA µÄ0Í¨µÀµÄ´«ÊäÍê³ÉÖĞ¶Ï¹¦ÄÜ
+ *     //å¼€å¯DMA çš„0é€šé“çš„ä¼ è¾“å®Œæˆä¸­æ–­åŠŸèƒ½
  *     DMA_StartTransfer(HW_DMA_CH0);
- * @param  chl: DMAÍ¨µÀºÅ
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
- * @param config: ÅäÖÃÄ£Ê½
- *         @arg kDMA_IT_Half_Disable ½ûÖ¹DMA´«ÊäÒ»°ëÖĞ¶Ï´¥·¢
- *         @arg kDMA_IT_Major_Disable ½ûÖ¹DMA´«ÊäÍê³ÉÖĞ¶Ï´¥·¢
- *         @arg kDMA_IT_Half ¿ªÆôDMA´«ÊäÒ»°ëÖĞ¶Ï´¥·¢
- *         @arg kDMA_IT_Major ¿ªÆôDMA´«ÊÀÍê³ÉÖĞ¶Ï´¥·¢
+ * \endcode
+ * @param[in]  chl  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * @param[in] config é…ç½®æ¨¡å¼
+ *         			@arg kDMA_IT_Half_Disable ç¦æ­¢DMAä¼ è¾“ä¸€åŠä¸­æ–­è§¦å‘
+ *         			@arg kDMA_IT_Major_Disable ç¦æ­¢DMAä¼ è¾“å®Œæˆä¸­æ–­è§¦å‘
+ *         			@arg kDMA_IT_Half å¼€å¯DMAä¼ è¾“ä¸€åŠä¸­æ–­è§¦å‘
+ *         			@arg kDMA_IT_Major å¼€å¯DMAä¼ ä¸–å®Œæˆä¸­æ–­è§¦å‘
+ * \param[in] status enable or disable
+ * 							\arg 0 disable
+ *     					\arg 1 enable
  * @retval None
  */
 void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config, bool status)
@@ -288,13 +322,13 @@ void DMA_ITConfig(uint8_t chl, DMA_ITConfig_Type config, bool status)
 }
 
 /**
- * @brief  ×¢²áÖĞ¶Ï»Øµ÷º¯Êı
- * @param  chl: DMAÍ¨µÀºÅ
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
- * @param AppCBFun: »Øµ÷º¯ÊıÖ¸Õë
+ * @brief  æ³¨å†Œä¸­æ–­å›è°ƒå‡½æ•°
+ * @param[in]  chl  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * @param[in] AppCBFun å›è°ƒå‡½æ•°æŒ‡é’ˆ
  * @retval None
  */
 void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun)
@@ -306,16 +340,18 @@ void DMA_CallbackInstall(uint8_t chl, DMA_CallBackType AppCBFun)
 }
 
 /**
- * @brief  ¼ì²âDMA´«ÊäÊÇ·ñÍê³É
+ * @brief  æ£€æµ‹DMAä¼ è¾“æ˜¯å¦å®Œæˆ
  * @code
- *     //¼ì²âDMAµÄ0Í¨µÀÊÇ·ñÍê³ÉÊı¾İ´«Êä
+ *     //æ£€æµ‹DMAçš„0é€šé“æ˜¯å¦å®Œæˆæ•°æ®ä¼ è¾“
  *     status = IsMajorLoopComplete(HW_DMA_CH0);
- * @param  chl: DMAÍ¨µÀºÅ
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
- * @retval 0:Êı¾İ´«ÊäÍê³É 1:Êı¾İ´«ÊäÎ´Íê³É
+ * \endcode
+ * @param[in]  chl  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * @retval 0 æ•°æ®ä¼ è¾“å®Œæˆ 
+ * \retval 1 æ•°æ®ä¼ è¾“æœªå®Œæˆ
  */
 
 uint8_t DMA_IsMajorLoopComplete(uint8_t chl)
@@ -339,13 +375,13 @@ uint8_t DMA_IsMajorLoopComplete(uint8_t chl)
 }
 
 /**
- * @brief  ÉèÖÃDMAÄ£¿éÖ¸¶¨Í¨µÀµÄÄ¿±êµØÖ·
- * @param  chl: DMAÍ¨µÀºÅ
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
- * @param address: 32Î»µÄÄ¿±êÊı¾İµØÖ·
+ * @brief  è®¾ç½®DMAæ¨¡å—æŒ‡å®šé€šé“çš„ç›®æ ‡åœ°å€
+ * @param[in]  ch  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * @param[in] address 32ä½çš„ç›®æ ‡æ•°æ®åœ°å€
  * @retval None
  */
 void DMA_SetDestAddress(uint8_t ch, uint32_t address)
@@ -353,19 +389,28 @@ void DMA_SetDestAddress(uint8_t ch, uint32_t address)
     DMA0->TCD[ch].DADDR = address;
 }
 
+/**
+ * @brief  è·å–DMAæ¨¡å—æŒ‡å®šé€šé“çš„ç›®æ ‡åœ°å€
+ * @param[in]  ch  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * @retval 32ä½çš„ç›®æ ‡æ•°æ®åœ°å€
+ */
 uint32_t DMA_GetDestAddress(uint8_t ch)
 {
     return DMA0->TCD[ch].DADDR;
 }
 
 /**
- * @brief  ÉèÖÃDMAÄ£¿éÖ¸¶¨Í¨µÀµÄÔ´µØÖ·
- * @param  chl: DMAÍ¨µÀºÅ
- *         @arg HW_DMA_CH0
- *         @arg HW_DMA_CH1
- *         @arg HW_DMA_CH2
- *         @arg HW_DMA_CH3
- * @param address: 32Î»µÄÔ´Êı¾İµØÖ·
+ * @brief  è®¾ç½®DMAæ¨¡å—æŒ‡å®šé€šé“çš„æºåœ°å€
+ * @param[in]  ch  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * @param[in] address 32ä½çš„æºæ•°æ®åœ°å€
  * @retval None
  */
 void DMA_SetSourceAddress(uint8_t ch, uint32_t address)
@@ -373,14 +418,22 @@ void DMA_SetSourceAddress(uint8_t ch, uint32_t address)
     DMA0->TCD[ch].SADDR = address;
 }
 
+/**
+ * @brief  è·å–DMAæ¨¡å—æŒ‡å®šé€šé“çš„æºåœ°å€
+ * @param[in]  ch  DMAé€šé“å·
+ *         			@arg HW_DMA_CH0
+ *         			@arg HW_DMA_CH1
+ *         			@arg HW_DMA_CH2
+ *         			@arg HW_DMA_CH3
+ * @retval 32ä½çš„æºæ•°æ®åœ°å€
+ */
 uint32_t DMA_GetSourceAddress(uint8_t ch)
 {
     return DMA0->TCD[ch].SADDR;
 }
 
 /**
- * @brief  È¡ÏûDMAÄ£¿éÖ¸¶¨Í¨µÀµÄÊı¾İ´«Êä
- * @param  None
+ * @brief  å–æ¶ˆDMAæ¨¡å—æŒ‡å®šé€šé“çš„æ•°æ®ä¼ è¾“
  * @retval None
  */
 void DMA_CancelTransfer(void)
@@ -388,7 +441,10 @@ void DMA_CancelTransfer(void)
     DMA0->CR |= DMA_CR_CX_MASK;
 }
 
-
+/**
+ * @brief  DMAä¸­æ–­ï¼ŒInternal function
+ * @retval None
+ */
 static void DMA_IRQHandler(uint32_t instance)
 {
     DMA0->CINT = DMA_CINT_CINT(instance);

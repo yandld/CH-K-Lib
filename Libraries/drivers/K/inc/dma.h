@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬DMAÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡DMAæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #ifndef __CH_LIB_DMA_H__
@@ -14,7 +14,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-//!< DMA ´¥·¢Ô´Ñ¡Ôñ
+/* DMA è§¦å‘æºé€‰æ‹© */
 #define DISABLE_DMAREQ          0
 #define UART0_REV_DMAREQ        2
 #define UART0_TRAN_DMAREQ       3
@@ -77,28 +77,37 @@
 #define MUX2_DMAREQ             60
 #define MUX3_DMAREQ             61
 
-//!< DMAÍ¨µÀ
-#define HW_DMA_CH0    (0x00)  //DMA0Í¨µÀ
-#define HW_DMA_CH1    (0x01)  //DMA1Í¨µÀ
-#define HW_DMA_CH2    (0x02)  //DMA2Í¨µÀ
-#define HW_DMA_CH3    (0x03)  //DMA3Í¨µÀ
+/* DMAé€šé“ */
+#define HW_DMA_CH0    (0x00)  /* DMA0é€šé“ï¼Œä»¥ä¸‹ä¸€æ¬¡ç±»æ¨ */
+#define HW_DMA_CH1    (0x01)  
+#define HW_DMA_CH2    (0x02)  
+#define HW_DMA_CH3    (0x03)  
 
-//!< ´¥·¢Ä£Ê½Ñ¡Ôñ
+/**
+ * \enum DMA_TriggerSource_Type
+ * \brief DMA è§¦å‘æ¨¡å¼é€‰æ‹©
+ */
 typedef enum
 {
-    kDMA_TriggerSource_Normal,    //Õı³£Ä£Ê½
-    kDMA_TriggerSource_Periodic,  //ÖÜÆÚ´¥·¢Ä£Ê½
+    kDMA_TriggerSource_Normal,    /**< æ­£å¸¸æ¨¡å¼ */
+    kDMA_TriggerSource_Periodic,  /**< å‘¨æœŸè§¦å‘æ¨¡å¼ */
 }DMA_TriggerSource_Type;
 
-//!< DMA°áÔËÊı¾İ¶Ë¿ÚÎ»¿íÉèÖÃ
+/**
+ * \enum DMA_DataWidthBit_Type
+ * \brief DMAæ¬è¿æ•°æ®ç«¯å£ä½å®½è®¾ç½®
+ */
 typedef enum
 {
-    kDMA_DataWidthBit_8,   /* 8 bit data width */
-    kDMA_DataWidthBit_16,  /* 16 bit data width */
-    kDMA_DataWidthBit_32,  /* 32 bit data width*/
+    kDMA_DataWidthBit_8,   /**< 8 bit data width */
+    kDMA_DataWidthBit_16,  /**< 16 bit data width */
+    kDMA_DataWidthBit_32,  /**< 32 bit data width */
 }DMA_DataWidthBit_Type; 
 
-//!< DMA Moduluo ÉèÖÃ
+/**
+ * \enum DMA_Modulo_Type
+ * \brief DMA Moduluo è®¾ç½®
+ */
 typedef enum 
 {
     kDMA_ModuloDisable = 0x0U,
@@ -135,21 +144,24 @@ typedef enum
     kDMA_Modulo2Gbytes = 0x1fU
 } DMA_Modulo_Type;
 
-//!< ³õÊ¼»¯½á¹¹Ìå
+/**
+ * \struct DMA_InitTypeDef
+ * \brief DMA åˆå§‹åŒ–ç»“æ„
+ */
 typedef struct 
 {
-    uint8_t                     chl;                                /* DMAÍ¨µÀºÅ0~15 */       
-    uint8_t                     chlTriggerSource;                   /* DMA´¥·¢Ô´Ñ¡Ôñ */
-    uint16_t                    minorLoopByteCnt;                   /* MINOR LOOP ÖĞÒ»´Î´«ÊäµÄ×Ö½ÚÊı */
-    uint16_t                    majorLoopCnt;                       /* MAJOR LOOP Ñ­»·´ÎÊı */
-    DMA_TriggerSource_Type      triggerSourceMode;                  /* ´¥·¢Ä£Ê½Ñ¡Ôñ */
-    /* Ô´µØÖ·ÅäÖÃ */
-    int32_t                     sAddrOffset;                /* DMAÃ¿´Î¶ÁÈ¡sAddrÖ®ºó sAddrµÄÆ«ÒÆÁ¿ ¿ÉÕı¿É¸º */
-    uint32_t                    sAddr;                      /* Êı¾İÔ´µØÖ· */
-    DMA_DataWidthBit_Type       sDataWidth;                 /* Êı¾İÔ´µØÖ·Êı¾İ¿í¶È 8 16 32 */
-    int32_t                     sLastAddrAdj;               /* ËùÓĞMAJOR LOOPÑ­»·Íê³Éºó Ô´µØÖ·Æ«ÒÆÁ¿ */
-    DMA_Modulo_Type             sMod;                       /* Modulo ÉèÖÃ ²Î¼û AN2898 */
-    /* Ä¿±êµØÖ·ÊôĞÔÅäÖÃ */
+    uint8_t                     chl;                                ///< DMAé€šé“å·0~15      
+    uint8_t                     chlTriggerSource;                   ///< DMAè§¦å‘æºé€‰æ‹© 
+    uint16_t                    minorLoopByteCnt;                   ///< MINOR LOOP ä¸­ä¸€æ¬¡ä¼ è¾“çš„å­—èŠ‚æ•° 
+    uint16_t                    majorLoopCnt;                       ///< MAJOR LOOP å¾ªç¯æ¬¡æ•° 
+    DMA_TriggerSource_Type      triggerSourceMode;                  ///< è§¦å‘æ¨¡å¼é€‰æ‹© 
+    /* æºåœ°å€é…ç½® */
+    int32_t                     sAddrOffset;                ///< DMAæ¯æ¬¡è¯»å–sAddrä¹‹å sAddrçš„åç§»é‡ å¯æ­£å¯è´Ÿ 
+    uint32_t                    sAddr;                      ///< æ•°æ®æºåœ°å€ 
+    DMA_DataWidthBit_Type       sDataWidth;                 ///< æ•°æ®æºåœ°å€æ•°æ®å®½åº¦ 8 16 32 
+    int32_t                     sLastAddrAdj;               ///< æ‰€æœ‰MAJOR LOOPå¾ªç¯å®Œæˆå æºåœ°å€åç§»é‡ 
+    DMA_Modulo_Type             sMod;                       ///< Modulo è®¾ç½® å‚è§ AN2898 
+    /* ç›®æ ‡åœ°å€å±æ€§é…ç½® */
     int32_t                     dAddrOffset;                
     uint32_t                    dAddr;                      
     DMA_DataWidthBit_Type       dDataWidth;                 
@@ -157,18 +169,20 @@ typedef struct
     DMA_Modulo_Type             dMod;                       
 }DMA_InitTypeDef;
 
-
-//!< interrupt select
+/**
+ * \enum DMA_ITConfig_Type
+ * \brief DMA interrupt select
+ */
 typedef enum
 {
-    kDMA_IT_Half,               //´«ÊäÒ»°ëÖĞ¶Ï¿ªÆô
-    kDMA_IT_Major,              //´«ÊäÍê³ÉÖĞ¶Ï¿ªÆô
+    kDMA_IT_Half,               /**< ä¼ è¾“ä¸€åŠä¸­æ–­å¼€å¯ */
+    kDMA_IT_Major,              /**< ä¼ è¾“å®Œæˆä¸­æ–­å¼€å¯ */
 }DMA_ITConfig_Type;  
 
-//!< Callback Type
+/* Callback Type */
 typedef void (*DMA_CallBackType)(void);
 
-//!< API functions
+/* API functions */
 uint32_t DMA_ChlAlloc(void);
 void DMA_ChlFree(uint32_t chl);
 uint32_t DMA_Init(DMA_InitTypeDef *DMA_InitStruct);

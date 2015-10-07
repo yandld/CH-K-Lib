@@ -289,6 +289,10 @@ int main(void)
                         fadata[i] = (float)adata[i]*ares;
                         fgdata[i] = ((float)gdata[i])*gres;
                         fmdata[i] = (float)mdata[i]*mres;
+                        if((fgdata[i] < 1) && (fgdata[i] > -1))
+                        {
+                            fgdata[i] = 0;
+                        }
                     }
                     
                     ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);

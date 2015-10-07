@@ -15,7 +15,7 @@
 
 #include "calibration.h"
 
-#define CAL_MAGIC           (0x5ACB)
+#define CAL_MAGIC                   (0x5ACB)
 
 #define CAL_GYRO_INIT               (0x00)
 #define CAL_GYRO_COUNT              (0x02)
@@ -49,7 +49,7 @@ void dcal_init(struct dcal_t *dc)
     
 }
 
-#define GYRO_SAMPLE_COUNT       (64)
+#define GYRO_SAMPLE_COUNT       (100)
 #define GYRO_STILL_LIMIT        (30)
 static int32_t gsum[3];
 
@@ -69,7 +69,7 @@ void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
                 still_count = 0;
                 states = CAL_GYRO_INIT;
             }
-            if(still_count > 20)
+            if(still_count > 30)
             {
                 states = CAL_GYRO_COUNT;
                 still_count = 0;

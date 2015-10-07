@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬SPIÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡SPIæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 
@@ -15,20 +15,25 @@
 #include <stdint.h>
 #include <stdbool.h>
   
-//!< SPIÄ£¿éÉè±¸
-#define HW_SPI0     (0x00)
+/* SPIæ¨¡å—è®¾å¤‡ */
+#define HW_SPI0     (0x00)  /* SPIæ¨¡å—è®¾å¤‡0,ä»¥ä¸‹ä¾æ¬¡ç±»æ¨ */
 #define HW_SPI1     (0x01)
 #define HW_SPI2     (0x02)
 
-#define HW_CTAR0    (0x00)  
+/* Clock and Transfer Attributes Register */
+#define HW_CTAR0    (0x00)  /* CTAR 0å·å¯„å­˜å™¨ */
 #define HW_CTAR1    (0x01)  
 
+/* SPI Chip select */
 #define HW_SPI_CS0  (0x00)
 #define HW_SPI_CS1  (0x01)
 #define HW_SPI_CS2  (0x02)
 #define HW_SPI_CS3  (0x03)
 
-//!< SPIÖ¡¸ñÊ½Ñ¡Ôñ
+/**
+ * \enum SPI_FrameFormat_Type
+ * \brief SPIå¸§æ ¼å¼é€‰æ‹©
+ */
 typedef enum
 {
     kSPI_CPOL0_CPHA0,
@@ -37,47 +42,63 @@ typedef enum
     kSPI_CPOL1_CPHA1
 }SPI_FrameFormat_Type;
 
+/**
+ * \enum SPI_Mode_Type
+ * \brief SPI ä¸»ä»è®¾ç½®
+ */
 typedef enum
 {
-    kSPI_Master,
-    kSPI_Slave,
+    kSPI_Master,        /**< master device */
+    kSPI_Slave,         /**< slave device */
 } SPI_Mode_Type;
 
-//!< interrupt and DMA select
+/**
+ * \enum SPI_ITDMAConfig_Type
+ * \brief SPI interrupt and DMA select
+ */
 typedef enum
 {
-    kSPI_IT_TCF,            //!< SPI´«ÊäÒ»´ÎÍê³ÉÖĞ¶ÏÊ¹ÄÜ
-    kSPI_DMA_TFFF,          //!< transmit FIFO full
-    kSPI_DMA_RFDF,          //!< receive FIFO drain
+    kSPI_IT_TCF,            /**< SPIä¼ è¾“ä¸€æ¬¡å®Œæˆä¸­æ–­ä½¿èƒ½ */
+    kSPI_DMA_TFFF,          /**< transmit FIFO full */
+    kSPI_DMA_RFDF,          /**< receive FIFO drain */
 }SPI_ITDMAConfig_Type;
 
-/*!< Ã¿Ö¡Êı¾İÎ»¸öÊı */
+/**
+ * \enum SPI_PCS_Type
+ * \brief SPI ä¼ è¾“å®ŒæˆåCSä¿¡å·æ˜¯å¦ä¿æŒé€‰ä¸­çŠ¶æ€
+ */
 typedef enum 
 {
-    kSPI_PCS_ReturnInactive  = 0,   //!< ´«ÊäÍê³ÉºóCSĞÅºÅ±£³ÖÎ´Ñ¡ÖĞ×´Ì¬(Í¨³£Îª·µ»Ø¸ßµçÆ½)
-    kSPI_PCS_KeepAsserted  = 1,     //!< ´«ÊäÍê³ÉºóCSĞÅºÅ±£³ÖÆ¬Ñ¡ÖĞ×´Ì¬(Í¨³£ÎªÀ­µÍ)
+    kSPI_PCS_ReturnInactive  = 0,   /**< ä¼ è¾“å®ŒæˆåCSä¿¡å·ä¿æŒæœªé€‰ä¸­çŠ¶æ€(é€šå¸¸ä¸ºè¿”å›é«˜ç”µå¹³) */
+    kSPI_PCS_KeepAsserted  = 1,     /**< ä¼ è¾“å®ŒæˆåCSä¿¡å·ä¿æŒç‰‡é€‰ä¸­çŠ¶æ€(é€šå¸¸ä¸ºæ‹‰ä½) */
 }SPI_PCS_Type;
 
+/**
+ * \enum SPI_BitOlder_Type
+ * \brief SPI LSB or MSB
+ */
 typedef enum
 {
-    kSPI_MSB,      //!< ÏÈ·¢ËÍ×î¸ßÎ»
-    kSPI_LSB,      //!< ÏÈ·¢ËÍ×îµÍÎ»
+    kSPI_MSB,      /**< å…ˆå‘é€æœ€é«˜ä½ */
+    kSPI_LSB,      /**< å…ˆå‘é€æœ€ä½ä½ */
 } SPI_BitOlder_Type;
 
-//!< ³õÊ¼»¯½á¹¹
+/**
+ * \struct SPI_InitTypeDef
+ * \brief SPIåˆå§‹åŒ–ç»“æ„
+ */
 typedef struct
 {
-    uint32_t                instance;               //!< Ä£¿éºÅ
-	SPI_Mode_Type           mode;                   //!< Ö÷´ÓÄ£Ê½
-    uint8_t                 dataSize;               //!< Ã¿Ö¡Êı¾İÓĞ¶àÉÙÎ» Í¨³£Îª8»ò16
-    SPI_BitOlder_Type       bitOrder;               //!< ÏÈ·¢¸ßÎ»»¹ÊÇÏÈ·¢µØÎ»
-    SPI_FrameFormat_Type    frameFormat;            //!< ËÄÖÖÖ¡¸ñÊ½Ñ¡Ôñ
-    uint32_t                baudrate;               //!< ËÙÂÊ
-    uint32_t                ctar;                   //!< Ö¡¸ñÊ½¼Ä´æÆ÷Ñ¡Ôñ 
+    uint32_t                instance;               ///< æ¨¡å—å·
+	SPI_Mode_Type           mode;                   ///< ä¸»ä»æ¨¡å¼
+    uint8_t                 dataSize;               ///< æ¯å¸§æ•°æ®æœ‰å¤šå°‘ä½ é€šå¸¸ä¸º8æˆ–16
+    SPI_BitOlder_Type       bitOrder;               ///< å…ˆå‘é«˜ä½è¿˜æ˜¯å…ˆå‘åœ°ä½
+    SPI_FrameFormat_Type    frameFormat;            ///< å››ç§å¸§æ ¼å¼é€‰æ‹©
+    uint32_t                baudrate;               ///< é€Ÿç‡
+    uint32_t                ctar;                   ///< å¸§æ ¼å¼å¯„å­˜å™¨é€‰æ‹© 
 }SPI_InitTypeDef;
 
-//!< ¿ìËÙ³õÊ¼»¯½á¹¹
-
+/* å¿«é€Ÿåˆå§‹åŒ–ç»“æ„ */
 #define SPI0_SCK_PC05_SOUT_PC06_SIN_PC07   (0xca90U)
 #define SPI0_SCK_PD01_SOUT_PD02_SIN_PD03   (0xc298U)
 #define SPI1_SCK_PE02_SOUT_PE01_SIN_PE03   (0xc2a1U)
@@ -85,10 +106,10 @@ typedef struct
 #define SPI2_SCK_PB21_SOUT_PB22_SIN_PB23   (0xea8aU)
 #define SPI2_SCK_PD12_SOUT_PD13_SIN_PD14   (0xd89aU)
 
-//!< Callback Type
+/* Callback Type */
 typedef void (*SPI_CallBackType)(void);
 
-//!< API functions
+/* API functions */
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct);
 uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, SPI_PCS_Type csState);
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status);

@@ -4,8 +4,9 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+  * \date    2015.10.07 FreeXc å®Œå–„äº†å¯¹ spi æ¨¡å—çš„ç›¸å…³æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼þÎªÐ¾Æ¬SPIÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êý
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡SPIæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #include "spi.h"
@@ -71,16 +72,14 @@ static const IRQn_Type SPI_IRQnTable[] =
 static const uint32_t s_baudratePrescaler[] = { 2, 3, 5, 7 };
 static const uint32_t s_baudrateScaler[] = { 2, 4, 6, 8, 16, 32, 64, 128, 256, 512, 1024, 2048,
                                            4096, 8192, 16384, 32768 };
-/*FUNCTION**********************************************************************
- *
- * Function Name : dspi_hal_set_baud
- * Description   : Set the DSPI baud rate in bits per second.
- * This function will take in the desired bitsPerSec (baud rate) and will calculate the nearest
- * possible baud rate without exceeding the desired baud rate, and will return the calculated
- * baud rate in bits-per-second. It requires that the caller also provide the frequency of the
- * module source clock (in Hz).
- *
- *END**************************************************************************/
+/**
+ * \brief 	dspi_hal_set_baud,Internal function
+ * \details Set the DSPI baud rate in bits per second.
+ * 					This function will take in the desired bitsPerSec (baud rate) and will calculate the nearest
+ * 					possible baud rate without exceeding the desired baud rate, and will return the calculated
+ * 					baud rate in bits-per-second. It requires that the caller also provide the frequency of the
+ * 					module source clock (in Hz).
+ */
 static uint32_t dspi_hal_set_baud(uint32_t instance, uint8_t whichCtar, uint32_t bitsPerSec, uint32_t sourceClockInHz)                    
 {
     uint32_t prescaler, bestPrescaler;
@@ -150,10 +149,10 @@ static uint32_t dspi_hal_set_baud(uint32_t instance, uint8_t whichCtar, uint32_t
 }
 
 /**
- * @brief  ³õÊ¼»¯SPIÄ£¿é
- * @note ÐèÒªÆäËüº¯ÊýÅäºÏÊ¹ÓÃ
- * @param  SPI_InitStruct :SPI³õÊ¼»¯ÅäÖÃ½á¹¹Ìå
- * @retval None
+ * @brief  åˆå§‹åŒ–SPIæ¨¡å—
+ * @note éœ€è¦å…¶å®ƒå‡½æ•°é…åˆä½¿ç”¨ï¼Œå…·ä½“å¯å‚è€ƒSPI_QuickInitå†…éƒ¨å®šä¹‰
+ * @param[in]  SPI_InitStruct æŒ‡å‘SPIåˆå§‹åŒ–é…ç½®ç»“æž„ä½“çš„æŒ‡é’ˆ
+ * @return None
  */
 void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
 {
@@ -206,8 +205,25 @@ void SPI_Init(SPI_InitTypeDef * SPI_InitStruct)
 
  
 /**
- * @brief  SPI ²¨ÌØÂÊ¼°´«Êä¿ØÖÆ¼Ä´æÆ÷ÅäÖÃ
- * @retval None
+ * @brief  SPI æ³¢ç‰¹çŽ‡åŠä¼ è¾“æŽ§åˆ¶å¯„å­˜å™¨é…ç½®
+ * @param[in]  instance      èŠ¯ç‰‡SPIç«¯å£
+ *              @arg HW_SPI0 èŠ¯ç‰‡çš„SPI0ç«¯å£
+ *              @arg HW_SPI1 èŠ¯ç‰‡çš„SPI1ç«¯å£
+ *              @arg HW_SPI2 èŠ¯ç‰‡çš„SPI2ç«¯å£
+ * @param[in]  ctar SPIé€šä¿¡é€šé“é€‰æ‹©
+ *          		@arg HW_CTAR0  0é…ç½®å¯„å­˜å™¨
+ *          		@arg HW_CTAR1  1é…ç½®å¯„å­˜å™¨
+ * @param[in]  frameFormat SPIé€šä¿¡æ—¶çš„ç›¸ä½å’Œæžæ€§çš„å…³ç³»
+ *         			@arg kSPI_CPOL0_CPHA0
+ *         			@arg kSPI_CPOL1_CPHA0
+ *         			@arg kSPI_CPOL0_CPHA1
+ *         			@arg kSPI_CPOL1_CPHA1
+ * \param[in]  dataSize æ•°æ®å¤§å°
+ * \param[in]  bitOrder LSB First
+ *  						\arg 0 Data is transferred MSB first
+ * 							\arg 1 Data is transferred LSB first
+ * @param[in]  baudrate SPIé€šä¿¡é€Ÿåº¦è®¾ç½®
+ * @return None
  */
 void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frameFormat, uint8_t dataSize, uint8_t bitOrder, uint32_t baudrate)
 {
@@ -266,19 +282,19 @@ void SPI_CTARConfig(uint32_t instance, uint32_t ctar, SPI_FrameFormat_Type frame
 }
 
 /**
- * @brief  ¿ìËÙ³õÊ¼»¯SPIÄ£¿é
+ * @brief  å¿«é€Ÿåˆå§‹åŒ–SPIæ¨¡å—
  * @code
- *     //Ê¹ÓÃSPIµÄ1Ä£¿éSCK-PE02 SOUT-PE01 SIN-PE03 Í¨ÐÅËÙ¶ÈÎª48000hz ¼«ÐÔºÍÏàÎ»¶¼ÊÇ0 
+ *     //ä½¿ç”¨SPIçš„1æ¨¡å—SCK-PE02 SOUT-PE01 SIN-PE03 é€šä¿¡é€Ÿåº¦ä¸º48000hz æžæ€§å’Œç›¸ä½éƒ½æ˜¯0 
  *     SPI_QuickInit(SPI1_SCK_PE02_SOUT_PE01_SIN_PE03, kSPI_CPOL0_CPHA0, 48000);
  * @endcode
- * @param  MAP :SPIÍ¨ÐÅ¿ìËÙÅäÖÃÒý½ÅÔ¤¶¨Òå£¬Ïê¼ûspi.hÎÄ¼þ
- * @param  frameFormat: SPIÍ¨ÐÅÊ±µÄÏàÎ»ºÍ¼«ÐÔµÄ¹ØÏµ
- *         @arg kSPI_CPOL0_CPHA0
- *         @arg kSPI_CPOL1_CPHA0
- *         @arg kSPI_CPOL0_CPHA1
- *         @arg kSPI_CPOL1_CPHA1
- * @param  baudrate :SPIÍ¨ÐÅËÙ¶ÈÉèÖÃ
- * @retval None
+ * @param[in]  MAP SPIé€šä¿¡å¿«é€Ÿé…ç½®å¼•è„šé¢„å®šä¹‰ï¼Œè¯¦è§spi.hæ–‡ä»¶
+ * @param[in]  frameFormat SPIé€šä¿¡æ—¶çš„ç›¸ä½å’Œæžæ€§çš„å…³ç³»
+ *         			@arg kSPI_CPOL0_CPHA0
+ *         			@arg kSPI_CPOL1_CPHA0
+ *         			@arg kSPI_CPOL0_CPHA1
+ *         			@arg kSPI_CPOL1_CPHA1
+ * @param[in]  baudrate SPIé€šä¿¡é€Ÿåº¦è®¾ç½®
+ * @return SPIæ¨¡å—å·
  */
 uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t baudrate)
 {
@@ -302,6 +318,17 @@ uint32_t SPI_QuickInit(uint32_t MAP, SPI_FrameFormat_Type frameFormat, uint32_t 
     return pq->ip;
 }
 
+/**
+ * @brief  ä½¿èƒ½SPIå‘é€çš„FIFOåŠŸèƒ½
+ * @param[in]  instance      èŠ¯ç‰‡SPIç«¯å£
+ *              @arg HW_SPI0 èŠ¯ç‰‡çš„SPI0ç«¯å£
+ *              @arg HW_SPI1 èŠ¯ç‰‡çš„SPI1ç«¯å£
+ *              @arg HW_SPI2 èŠ¯ç‰‡çš„SPI2ç«¯å£
+ * \param[in] status enable or disable Tx FIFO
+ *              \arg 0 disable
+ *              \arg 1  enable
+ * @retval None
+ */
 void SPI_EnableTxFIFO(uint32_t instance, bool status)
 {
     /* enable SPI clock */
@@ -312,6 +339,17 @@ void SPI_EnableTxFIFO(uint32_t instance, bool status)
     (SPI_InstanceTable[instance]->MCR |= SPI_MCR_DIS_TXF_MASK);
 }
 
+/**
+ * @brief  ä½¿èƒ½SPIæŽ¥æ”¶çš„FIFOåŠŸèƒ½
+ * @param[in]  instance      èŠ¯ç‰‡SPIç«¯å£
+ *              @arg HW_SPI0 èŠ¯ç‰‡çš„SPI0ç«¯å£
+ *              @arg HW_SPI1 èŠ¯ç‰‡çš„SPI1ç«¯å£
+ *              @arg HW_SPI2 èŠ¯ç‰‡çš„SPI2ç«¯å£
+ * \param[in] status enable or disable Tx FIFO
+ *              \arg 0 disable
+ *              \arg 1  enable
+ * @retval None
+ */
 void SPI_EnableRxFIFO(uint32_t instance, bool status)
 {
     /* enable SPI clock */
@@ -325,17 +363,22 @@ void SPI_EnableRxFIFO(uint32_t instance, bool status)
 
 
 /**
- * @brief  SPIÄ£¿é ÖÐ¶ÏºÍDMA¹¦ÄÜÅäÖÃ
+ * @brief  SPIæ¨¡å— ä¸­æ–­å’ŒDMAåŠŸèƒ½é…ç½®
  * @code
- *     //Ê¹ÓÃSPIµÄ1Ä£¿é·¢ËÍÍê³ÉÖÐ¶Ï
+ *     //ä½¿ç”¨SPIçš„1æ¨¡å—å‘é€å®Œæˆä¸­æ–­
  *     SPI_ITDMAConfig(HW_SPI1, kSPI_IT_TCF, true);
  * @endcode
- * @param  instance :SPIÍ¨ÐÅÄ£¿éºÅ HW_SPI0~2
- * @param  SPI_ITDMAConfig_Type: SPIÖÐ¶ÏÀàÐÍ
- *         @arg kSPI_IT_TCF          :¿ªÆô·¢ËÍÍê³ÉÖÐ¶Ï
- *         @arg kSPI_DMA_TFFF        :TxFIFO ¿Õ DMAÇëÇó
- *         @arg kSPI_DMA_RFDF        :RxFIFO ¿Õ DMAÇëÇó
- * @param  baudrate :SPIÍ¨ÐÅËÙ¶ÈÉèÖÃ
+ * @param[in]  instance      èŠ¯ç‰‡SPIç«¯å£
+ *              @arg HW_SPI0 èŠ¯ç‰‡çš„SPI0ç«¯å£
+ *              @arg HW_SPI1 èŠ¯ç‰‡çš„SPI1ç«¯å£
+ *              @arg HW_SPI2 èŠ¯ç‰‡çš„SPI2ç«¯å£
+ * @param[in]  config SPIä¸­æ–­ç±»åž‹
+ *         			@arg kSPI_IT_TCF          å¼€å¯å‘é€å®Œæˆä¸­æ–­
+ *         			@arg kSPI_DMA_TFFF        TxFIFO ç©º DMAè¯·æ±‚
+ *         			@arg kSPI_DMA_RFDF        RxFIFO ç©º DMAè¯·æ±‚
+ * \param[in] status enable or disable IT/DMA
+ *              \arg 0 disable
+ *              \arg 1  enable
  * @retval None
  */
 void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status)
@@ -374,11 +417,14 @@ void SPI_ITDMAConfig(uint32_t instance, SPI_ITDMAConfig_Type config, bool status
 }
 
 /**
- * @brief  ×¢²áÖÐ¶Ï»Øµ÷º¯Êý
- * @param  instance :SPIÍ¨ÐÅÄ£¿éºÅ HW_SPI0~2
- * @param  AppCBFun: »Øµ÷º¯ÊýÖ¸ÕëÈë¿Ú
+ * @brief  æ³¨å†Œä¸­æ–­å›žè°ƒå‡½æ•°
+ * @param[in]  instance      èŠ¯ç‰‡SPIç«¯å£
+ *              @arg HW_SPI0 èŠ¯ç‰‡çš„SPI0ç«¯å£
+ *              @arg HW_SPI1 èŠ¯ç‰‡çš„SPI1ç«¯å£
+ *              @arg HW_SPI2 èŠ¯ç‰‡çš„SPI2ç«¯å£
+ * @param[in]  AppCBFun å›žè°ƒå‡½æ•°æŒ‡é’ˆå…¥å£
  * @retval None
- * @note ¶ÔÓÚ´Ëº¯ÊýµÄ¾ßÌåÓ¦ÓÃÇë²éÔÄÓ¦ÓÃÊµÀý
+ * @note å¯¹äºŽæ­¤å‡½æ•°çš„å…·ä½“åº”ç”¨è¯·æŸ¥é˜…åº”ç”¨å®žä¾‹
  */
 void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
 {
@@ -389,21 +435,24 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
 }
 
 /**
- * @brief  SPI¶ÁÐ´Ò»×Ö½ÚÊý¾Ý
+ * @brief  SPIè¯»å†™ä¸€å­—èŠ‚æ•°æ®
  * @code
- *     //Ê¹ÓÃSPIµÄ1Ä£¿éµÄ1Æ¬Ñ¡ÐÅºÅÐ´Ò»×Ö½ÚµÄÊý¾Ý0x55£¬Æ¬Ñ¡ÐÅºÅ×îºóÎªÑ¡ÖÐ×´Ì¬
+ *     //ä½¿ç”¨SPIçš„1æ¨¡å—çš„1ç‰‡é€‰ä¿¡å·å†™ä¸€å­—èŠ‚çš„æ•°æ®0x55ï¼Œç‰‡é€‰ä¿¡å·æœ€åŽä¸ºé€‰ä¸­çŠ¶æ€
  *    SPI_ReadWriteByte(HW_SPI1, HW_CTAR0, 0x55, 1, kSPI_PCS_ReturnInactive);
  * @endcode
- * @param  instance :SPIÍ¨ÐÅÄ£¿éºÅ HW_SPI0~2
- * @param  ctar :SPIÍ¨ÐÅÍ¨µÀÑ¡Ôñ
- *          @arg HW_CTAR0  :0ÅäÖÃ¼Ä´æÆ÷
- *          @arg HW_CTAR1  :1ÅäÖÃ¼Ä´æÆ÷
- * @param  data    : Òª·¢ËÍµÄÒ»×Ö½ÚÊý¾Ý
- * @param  CSn     : Æ¬Ñ¡ÐÅºÅ¶Ë¿ÚÑ¡Ôñ
- * @param  csState : Æ¬Ñ¡ÐÅºÅ×îºóµÄ×´Ì¬
- *          @arg kSPI_PCS_ReturnInactive  :×îºó´¦ÓÚÑ¡ÖÐ×´Ì¬
- *          @arg kSPI_PCS_KeepAsserted    :×îºó±£³ÖÎ´Ñ¡ÖÐ×´Ì¬
- * @retval ¶ÁÈ¡µ½µÄÊý¾Ý
+ * @param[in]  instance      èŠ¯ç‰‡SPIç«¯å£
+ *              @arg HW_SPI0 èŠ¯ç‰‡çš„SPI0ç«¯å£
+ *              @arg HW_SPI1 èŠ¯ç‰‡çš„SPI1ç«¯å£
+ *              @arg HW_SPI2 èŠ¯ç‰‡çš„SPI2ç«¯å£
+ * @param[in]  ctar SPIé€šä¿¡é€šé“é€‰æ‹©
+ *          		@arg HW_CTAR0  0é…ç½®å¯„å­˜å™¨
+ *          		@arg HW_CTAR1  1é…ç½®å¯„å­˜å™¨
+ * @param[in]  data     è¦å‘é€çš„ä¸€å­—èŠ‚æ•°æ®
+ * @param[in]  CSn      ç‰‡é€‰ä¿¡å·ç«¯å£é€‰æ‹©
+ * @param[in]  csState  ç‰‡é€‰ä¿¡å·æœ€åŽçš„çŠ¶æ€
+ *          		@arg kSPI_PCS_ReturnInactive  æœ€åŽå¤„äºŽé€‰ä¸­çŠ¶æ€
+ *          		@arg kSPI_PCS_KeepAsserted    æœ€åŽä¿æŒæœªé€‰ä¸­çŠ¶æ€
+ * @return è¯»å–åˆ°çš„æ•°æ®
  */
 uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, SPI_PCS_Type csState)
 {
@@ -436,6 +485,9 @@ void SPI_WaitSync(uint32_t instance)
 }
 */
 
+/**
+ * @brief  ç³»ç»Ÿä¸­æ–­å‡½æ•°ï¼Œè¯¥å‡½æ•°è°ƒç”¨ç”¨æˆ·æ³¨å†Œçš„å›žè°ƒå‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 static void SPI_IRQHandler(uint32_t instance)
 {
     SPI_InstanceTable[instance]->SR |= SPI_SR_TCF_MASK ;
@@ -445,17 +497,26 @@ static void SPI_IRQHandler(uint32_t instance)
     }
 }
 
+/**
+ * @brief  ç³»ç»ŸSPI0ä¸­æ–­å‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void SPI0_IRQHandler(void)
 {
     SPI_IRQHandler(HW_SPI0);
 }
 
+/**
+ * @brief  ç³»ç»ŸSPI1ä¸­æ–­å‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void SPI1_IRQHandler(void)
 {
     SPI_IRQHandler(HW_SPI1);
 }
 
 #if defined(SPI2)
+/**
+ * @brief  ç³»ç»ŸSPI2ä¸­æ–­å‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void SPI2_IRQHandler(void)
 {
     SPI_IRQHandler(HW_SPI2);

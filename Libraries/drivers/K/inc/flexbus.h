@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬FlexBusÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡FlexBusæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #ifndef __CH_LIB_FLEXBUS_H__
@@ -14,38 +14,41 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-//!< Flexbus Êı¾İ¶ÔÆä·½Ê½Ñ¡Ôñ
-#define kFLEXBUS_DataLeftAligned   (0x00)  //Êı¾İ×ó¶ÔÆë
-#define kFLEXBUS_DataRightAligned  (0x01)  //Êı¾İÓÒ¶ÔÆë
+//!< Flexbus æ•°æ®å¯¹å…¶æ–¹å¼é€‰æ‹©
+#define kFLEXBUS_DataLeftAligned   (0x00)  //æ•°æ®å·¦å¯¹é½
+#define kFLEXBUS_DataRightAligned  (0x01)  //æ•°æ®å³å¯¹é½
 
-//!< Flexbus ×Ô¶¯Ó¦´ğĞÅºÅÊ¹ÄÜ
-#define kFLEXBUS_AutoAckEnable     (0x00)  //×Ô¶¯Ó¦´ğÊ¹ÄÜ
-#define kFLEXBUS_AutoAckDisable    (0x01)  //¹Ø±Õ×Ô¶¯Ó¦´ğ
+//!< Flexbus è‡ªåŠ¨åº”ç­”ä¿¡å·ä½¿èƒ½
+#define kFLEXBUS_AutoAckEnable     (0x00)  //è‡ªåŠ¨åº”ç­”ä½¿èƒ½
+#define kFLEXBUS_AutoAckDisable    (0x01)  //å…³é—­è‡ªåŠ¨åº”ç­”
 
-//!< Flexbus ¶Ë¿ÚÎ»¿íÑ¡Ôñ
-#define kFLEXBUS_PortSize_8Bit     (0x01)  //¶Ë¿ÚÊı¾İ¿í¶È£º8Î»
-#define kFLEXBUS_PortSize_16Bit    (0x02)  //¶Ë¿ÚÊı¾İ¿í¶È£º16Î»
-#define kFLEXBUS_PortSize_32Bit    (0x00)  //¶Ë¿ÚÊı¾İ¿í¶È£º32Î»
+//!< Flexbus ç«¯å£ä½å®½é€‰æ‹©
+#define kFLEXBUS_PortSize_8Bit     (0x01)  //ç«¯å£æ•°æ®å®½åº¦ï¼š8ä½
+#define kFLEXBUS_PortSize_16Bit    (0x02)  //ç«¯å£æ•°æ®å®½åº¦ï¼š16ä½
+#define kFLEXBUS_PortSize_32Bit    (0x00)  //ç«¯å£æ•°æ®å®½åº¦ï¼š32ä½
 
-//!< Flexbus Æ¬Ñ¡ĞÅºÅÑ¡Ôñ 
-#define kFLEXBUS_CS0               (0x00)  //0ºÅÆ¬Ñ¡ĞÅºÅ
-#define kFLEXBUS_CS1               (0x01)  //1ºÅÆ¬Ñ¡ĞÅºÅ
-#define kFLEXBUS_CS2               (0x02)  //2ºÅÆ¬Ñ¡ĞÅºÅ
-#define kFLEXBUS_CS3               (0x03)  //3ºÅÆ¬Ñ¡ĞÅºÅ
-#define kFLEXBUS_CS4               (0x04)  //4ºÅÆ¬Ñ¡ĞÅºÅ
-#define kFLEXBUS_CS5               (0x05)  //5ºÅÆ¬Ñ¡ĞÅºÅ
+//!< Flexbus ç‰‡é€‰ä¿¡å·é€‰æ‹© 
+#define kFLEXBUS_CS0               (0x00)  //0å·ç‰‡é€‰ä¿¡å·
+#define kFLEXBUS_CS1               (0x01)  //1å·ç‰‡é€‰ä¿¡å·
+#define kFLEXBUS_CS2               (0x02)  //2å·ç‰‡é€‰ä¿¡å·
+#define kFLEXBUS_CS3               (0x03)  //3å·ç‰‡é€‰ä¿¡å·
+#define kFLEXBUS_CS4               (0x04)  //4å·ç‰‡é€‰ä¿¡å·
+#define kFLEXBUS_CS5               (0x05)  //5å·ç‰‡é€‰ä¿¡å·
 
-//!< Flexbus Æ¬Ñ¡·¶Î§ ²Î¿¼Ñ¡Ôñ
-#define kFLEXBUS_ADSpace_64KByte        (0x00) //Íâ¹ÒSRAM³ß´ç 64k
-#define kFLEXBUS_ADSpace_128KByte       (0x01) //Íâ¹ÒSRAM³ß´ç 128k
-#define kFLEXBUS_ADSpace_512KByte       (0x07) //Íâ¹ÒSRAM³ß´ç 512k
-#define kFLEXBUS_ADSpace_1MByte         (0x0F) //Íâ¹ÒSRAM³ß´ç 1m
+//!< Flexbus ç‰‡é€‰èŒƒå›´ å‚è€ƒé€‰æ‹©
+#define kFLEXBUS_ADSpace_64KByte        (0x00) //å¤–æŒ‚SRAMå°ºå¯¸ 64k
+#define kFLEXBUS_ADSpace_128KByte       (0x01) //å¤–æŒ‚SRAMå°ºå¯¸ 128k
+#define kFLEXBUS_ADSpace_512KByte       (0x07) //å¤–æŒ‚SRAMå°ºå¯¸ 512k
+#define kFLEXBUS_ADSpace_1MByte         (0x0F) //å¤–æŒ‚SRAMå°ºå¯¸ 1m
 
-//!< Flexbus BEĞÅºÅ¿ØÖÆÄ£Ê½Ñ¡Ôñ
-#define kFLEXBUS_BE_AssertedWrite       (0x00) //BEĞÅºÅ¹¦ÄÜ£ºĞ´
-#define kFLEXBUS_BE_AssertedReadWrite   (0x01) //BEĞÅºÅ¹¦ÄÜ£º¶ÁĞ´
+//!< Flexbus BEä¿¡å·æ§åˆ¶æ¨¡å¼é€‰æ‹©
+#define kFLEXBUS_BE_AssertedWrite       (0x00) //BEä¿¡å·åŠŸèƒ½ï¼šå†™
+#define kFLEXBUS_BE_AssertedReadWrite   (0x01) //BEä¿¡å·åŠŸèƒ½ï¼šè¯»å†™
 
-
+/**
+ * \enum FLEXBUS_PortMultiplexingSelect_Type
+ * \brief FLEXBUS ç«¯å£å¤ç”¨é€‰æ‹©
+ */
 typedef enum
 {
     kFLEXBUS_CSPMCR_Group1,
@@ -55,7 +58,7 @@ typedef enum
     kFLEXBUS_CSPMCR_Group5,    
 }FLEXBUS_PortMultiplexingSelect_Type;
 
-//!< Flexus ¿ØÖÆĞÅºÅ¸´ÓÃÑ¡Ôñ
+//!< Flexus æ§åˆ¶ä¿¡å·å¤ç”¨é€‰æ‹©
 #define kFLEXBUS_CSPMCR_GROUP1_ALE      (0x00)
 #define kFLEXBUS_CSPMCR_GROUP1_CS1      (0x01)
 #define kFLEXBUS_CSPMCR_GROUP1_TS       (0x02)
@@ -72,20 +75,26 @@ typedef enum
 #define kFLEXBUS_CSPMCR_GROUP5_CS3      (0x01)
 #define kFLEXBUS_CSPMCR_GROUP5_BE_7_0   (0x02)
 
-//!< FLEXBUS³õÊ¼»¯½á¹¹Ìå
+/**
+ * \struct FLEXBUS_InitTypeDef
+ * \brief FLEXBUSåˆå§‹åŒ–ç»“æ„ä½“
+ */
 typedef struct
 {
-    uint32_t div;             //×ÜÏßËÙ¶È·ÖÆµ
-    uint32_t dataWidth;       //Êı¾İ×ÜÏßÊı¾İ¿í¶È
-    uint32_t baseAddress;     //Éè±¸»ùµØÖ·
-    uint32_t ADSpaceMask;     //Éè±¸´æ´¢¿Õ¼ä
-    uint32_t dataAlignMode;   //Êı¾İ¶ÔÆë·½Ê½
-    uint32_t autoAckMode;     //×Ô¶¯Ó¦´ğÄ£Ê½
-    uint32_t ByteEnableMode;  //BEÊ¹ÄÜÄ£Ê½
-    uint32_t CSn;             //Æ¬Ñ¡ĞÅºÅÍ¨µÀ
+    uint32_t div;             ///< æ€»çº¿é€Ÿåº¦åˆ†é¢‘
+    uint32_t dataWidth;       ///< æ•°æ®æ€»çº¿æ•°æ®å®½åº¦
+    uint32_t baseAddress;     ///< è®¾å¤‡åŸºåœ°å€
+    uint32_t ADSpaceMask;     ///< è®¾å¤‡å­˜å‚¨ç©ºé—´
+    uint32_t dataAlignMode;   ///< æ•°æ®å¯¹é½æ–¹å¼
+    uint32_t autoAckMode;     ///< è‡ªåŠ¨åº”ç­”æ¨¡å¼
+    uint32_t ByteEnableMode;  ///< BEä½¿èƒ½æ¨¡å¼
+    uint32_t CSn;             ///< ç‰‡é€‰ä¿¡å·é€šé“
 }FLEXBUS_InitTypeDef;
 
-//!< ¸ß¼¶ÅäÖÃÑ¡Ïî
+/**
+ * \struct FLEXBUS_AdvancedConfigTypeDef
+ * \brief FLEXBUS é«˜çº§é…ç½®é€‰é¡¹
+ */
 typedef struct
 {
     bool kFLEXBUS_brustWriteEnable;
@@ -97,7 +106,7 @@ typedef struct
     uint32_t kFLEXBUS_WS:6;    
 }FLEXBUS_AdvancedConfigTypeDef;
 
-//!< API functions
+/* API functions */
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct);
 void FLEXBUS_PortMuxConfig(FLEXBUS_PortMultiplexingSelect_Type group, uint32_t config);
 void FLEXBUS_AdvancedConfig(uint32_t CS, FLEXBUS_AdvancedConfigTypeDef* FLEXBUS_AdvancedConfigStruct);

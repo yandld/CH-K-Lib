@@ -4,8 +4,9 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+  * \date    2015.10.08 FreeXc å®Œå–„äº†å¯¹ flexbus æ¨¡å—çš„ç›¸å…³æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬FlexBusÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡FlexBusæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #include "flexbus.h"
@@ -14,9 +15,9 @@
 #if (defined(FB))
 
 /**
- * @brief  ³õÊ¼»¯FlexBusÄ£¿é
- * @note   ¾ßÌåµÄÅäÖÃÓ¦ÓÃÏê¼û¹ØÓÚFlexBusµÄÊ¹ÓÃÀı³Ì  
- * @param  FLEXBUS_InitStruct :FlexBus³õÊ¼»¯ÅäÖÃ½á¹¹Ìå£¬Ïê¼ûFlexBus.h
+ * @brief  åˆå§‹åŒ–FlexBusæ¨¡å—
+ * @note   å…·ä½“çš„é…ç½®åº”ç”¨è¯¦è§å…³äºFlexBusçš„ä½¿ç”¨ä¾‹ç¨‹  
+ * @param[in]  FLEXBUS_InitStruct æŒ‡å‘FlexBusåˆå§‹åŒ–é…ç½®ç»“æ„ä½“çš„æŒ‡é’ˆï¼Œè¯¦è§FlexBus.h
  * @retval None
  */
 void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
@@ -70,7 +71,12 @@ void FLEXBUS_Init(FLEXBUS_InitTypeDef* FLEXBUS_InitStruct)
    FB->CS[FLEXBUS_InitStruct->CSn].CSCR |= FB_CSCR_WS(1);
 }
 
-
+/**
+ * \brief ç®¡è„šå¤ç”¨é…ç½®
+ * \param[in] group ç»„å·
+ * \param[in] config multiplex control config
+ * \see Reference manual --> Chip select port multiplexing control register (FB_CSPMCR)
+ */
 void FLEXBUS_PortMuxConfig(FLEXBUS_PortMultiplexingSelect_Type group, uint32_t config)
 {
     /* CS Port Multiplexing Cotrol */
@@ -102,9 +108,10 @@ void FLEXBUS_PortMuxConfig(FLEXBUS_PortMultiplexingSelect_Type group, uint32_t c
 }
 
 /**
- * @brief  ¸ß¼¶Flexbus ÅäÖÃÑ¡Ïî
- * @note   ¾ßÌåµÄÅäÖÃÓ¦ÓÃÏê¼û¹ØÓÚFlexBusµÄÊ¹ÓÃÀı³Ì  
- * @param  FLEXBUS_AdvancedConfigStruct
+ * @brief  é«˜çº§Flexbus é…ç½®é€‰é¡¹
+ * @note   å…·ä½“çš„é…ç½®åº”ç”¨è¯¦è§å…³äºFlexBusçš„ä½¿ç”¨ä¾‹ç¨‹
+ * \param[in] CS ç‰‡é€‰é€šé“ä¿¡å·
+ * @param[in] FLEXBUS_AdvancedConfigStruct
  * @retval None
  */
 void FLEXBUS_AdvancedConfig(uint32_t CS, FLEXBUS_AdvancedConfigTypeDef* FLEXBUS_AdvancedConfigStruct)
@@ -149,7 +156,3 @@ void FLEXBUS_AdvancedConfig(uint32_t CS, FLEXBUS_AdvancedConfigTypeDef* FLEXBUS_
 }
 
 #endif
-
-
-
-

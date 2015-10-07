@@ -1,9 +1,20 @@
+/**
+  ******************************************************************************
+  * @file    crc.c
+  * @author  YANDLD
+  * @version V2.5
+  * @date    2014.3.26
+  * \date    2015.10.08 FreeXc å®Œå–„äº†å¯¹ crc æ¨¡å—çš„ç›¸å…³æ³¨é‡Š
+  * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡IICæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
+  ******************************************************************************
+  */
 #include "crc.h"
 #include "common.h"
 
- /* 
+/* 
  * FIXME
- * CRCÖ»ÄÜÔÚMK64ÉÏÑéÖ¤Í¨¹ı, K60ÉÏ½á¹û²»¶Ô
+ * CRCåªèƒ½åœ¨MK64ä¸ŠéªŒè¯é€šè¿‡, K60ä¸Šç»“æœä¸å¯¹
  */
  
 /* common CRC protrool define */
@@ -48,8 +59,8 @@ uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len)
 #endif
 
 /**
- * @brief  ³õÊ¼»¯CRCÓ²¼şÄ£¿é  
- * @param  CRC_InitStruct  : CRC³õÊ¼»¯½á¹¹
+ * @brief  åˆå§‹åŒ–CRCç¡¬ä»¶æ¨¡å—  
+ * @param[in]  CRC_InitStruct  æŒ‡å‘CRCåˆå§‹åŒ–ç»“æ„ä½“çš„æŒ‡é’ˆ
  * @retval None
  */
 void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
@@ -87,8 +98,8 @@ void CRC_Init(CRC_InitTypeDef * CRC_InitStruct)
 }
 
 /**
- * @brief  ¿ìËÙ³õÊ¼»¯CRCÓ²¼şÄ£¿é  
- * @param  type  : CRCĞ­ÒéÀàĞÍ
+ * @brief  å¿«é€Ÿåˆå§‹åŒ–CRCç¡¬ä»¶æ¨¡å—  
+ * @param[in]  type  CRCåè®®ç±»å‹ï¼Œè¯¦ç»†è¯·è§crc.hæ–‡ä»¶ä¸­çš„å®šä¹‰
  * @retval None
  */
 void CRC_QuickInit(CRC_ProtocolType type)
@@ -96,6 +107,10 @@ void CRC_QuickInit(CRC_ProtocolType type)
     CRC_Init(&CRCProtocolAttrTable[type]);
 }
 
+/**
+ * \brief  CRC_HAL_GetCrcResult,Internal function
+ * \return Crc result
+ */
 static uint32_t CRC_HAL_GetCrcResult(void)
 {
     uint32_t result = 0;
@@ -135,10 +150,10 @@ static uint32_t CRC_HAL_GetCrcResult(void)
 }
 
 /**
- * @brief  ¼ÆËã²¢²úÉúCRCÔËËã½á¹û 
- * @param  data  : Êı¾İÖ¸Õë
- * @param  len   : Êı¾İ³¤¶È
- * @retval CRC¼ÆËã½á¹û
+ * @brief  è®¡ç®—å¹¶äº§ç”ŸCRCè¿ç®—ç»“æœ 
+ * @param[in]  data  æ•°æ®æŒ‡é’ˆ
+ * @param[in]  len   æ•°æ®é•¿åº¦
+ * @return CRCè®¡ç®—ç»“æœ
  */
 uint32_t CRC_Generate(uint8_t* data, uint32_t len)
 {
@@ -219,6 +234,3 @@ uint32_t CRC_Generate(uint8_t* data, uint32_t len)
 
     return result;
 }
-
-
-

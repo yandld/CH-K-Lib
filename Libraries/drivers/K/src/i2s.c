@@ -4,6 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2015.7.23
+  * \date    2015.10.08 FreeXc 完善了对 i2s 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -68,6 +69,14 @@ void SAI_HAL_SetMclkDiv(uint32_t instance, uint32_t mclk, uint32_t src_clk)
     while(I2S0->MCR & I2S_MCR_DUF_MASK) {};
 }
 
+/**
+ * \brief I2S Transmitter Enable and Bit Clock Enable
+ * \param[in] instance I2S instance
+ * \param[in] val enable or disable
+ *   						\arg 0 disable
+ * 							\arg 1  enable
+ * \return None
+ */
 void I2S_SetTxCmd(uint32_t instance, bool val)
 {
     if(val)
@@ -82,8 +91,12 @@ void I2S_SetTxCmd(uint32_t instance, bool val)
     }
 }
 
-
-        
+/**
+ * \brief I2S Transmitter Protocol Config
+ * \param[in] instance I2S instance
+ * \param[in] protocol 协议，详见i2s.h文件
+ * \return None
+ */  
 void I2S_TxSetProtocol(uint32_t instance, I2S_Protocol_t protocol)
 {
     switch (protocol)
@@ -145,7 +158,13 @@ void I2S_TxSetProtocol(uint32_t instance, I2S_Protocol_t protocol)
         }
 }  
 
-
+/**
+ * \brief I2S Sample Bit Config
+ * \param[in] instance I2S instance
+ * \param[in] protocol 协议，详见i2s.h文件
+ * \param[in] bits width
+ * \return None
+ */  
 void I2S_SetSampleBit(uint32_t instance, I2S_Protocol_t protocol, uint32_t bits)
 {
     if ((protocol == kSaiBusI2SLeft) ||(protocol == kSaiBusI2SRight) ||(protocol == kSaiBusI2SType))
@@ -156,6 +175,15 @@ void I2S_SetSampleBit(uint32_t instance, I2S_Protocol_t protocol, uint32_t bits)
     I2S0->TCR5 = I2S_TCR5_WNW(bits - 1) | I2S_TCR5_W0W(bits - 1) | I2S_TCR5_FBT(bits - 1);
 }
 
+/**
+ * \brief I2S Interrupt Mode Config
+ * \param[in] instance I2S instance
+ * \param[in] mode 中断模式，详见i2s.h文件
+ * \param[in] val enable or disable
+ *   						\arg 0 disable
+ * 							\arg 1  enable
+ * \return None
+ */  
 void I2S_SetIntMode(uint32_t instance, I2S_Int_t mode, bool val)
 {   
     if(val)
@@ -175,6 +203,12 @@ void I2S_SetIntMode(uint32_t instance, I2S_Int_t mode, bool val)
     }
 }
 
+/**
+ * \brief I2S Sync Mode config
+ * \param[in] instance I2S instance
+ * \param[in] mode 同步模式，详见i2s.h文件
+ * \return None
+ */  
 void I2S_TxSetSyncMode(uint32_t instance, SAI_SyncMode_t mode)
 {
     I2S0->TCR2 &= ~I2S_TCR2_SYNC_MASK;
@@ -197,6 +231,15 @@ void I2S_TxSetSyncMode(uint32_t instance, SAI_SyncMode_t mode)
     }
 }
 
+/**
+ * \brief I2S Send Data
+ * \param[in] instance I2S instance
+ * \param[in] sampleBit 
+ * \param[in] chl 通道选择
+ * \param[in] buf data pointer
+ * \param[in] len data length
+ * \return None
+ */  
 void I2S_SendData(uint32_t instance, uint32_t sampleBit, uint32_t chl, uint8_t *buf, uint32_t len)
 {
     uint32_t i, j, data;
@@ -219,7 +262,11 @@ void I2S_SendData(uint32_t instance, uint32_t sampleBit, uint32_t chl, uint8_t *
     I2S_SetTxCmd(instance, false);
 }
 
-
+/**
+ * \brief I2S 初始化
+ * \param[in] Init 指向I2S初始化结构体的指针 
+ * \return None
+ */
 void I2S_Init(I2S_InitTypeDef *Init)
 {
     /* clock gate */
@@ -290,13 +337,3 @@ void I2S_Init(I2S_InitTypeDef *Init)
     I2S_TxSetSyncMode(Init->instance, kSaiModeAsync);
 
 }
-
-
-
-
-
-
-
-
-
-

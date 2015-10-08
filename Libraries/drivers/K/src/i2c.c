@@ -23,12 +23,7 @@
 #define SCL_L()             do {GPIO_WriteBit(i2c.instace, i2c.scl_pin, 0);}while(0)
 #define I2C_DELAY()         DelayUs(1)
 
-typedef struct
-{
-    uint32_t instace;
-    uint32_t sda_pin;
-    uint32_t scl_pin;
-}i2c_gpio;
+
 
 static i2c_gpio i2c;
 

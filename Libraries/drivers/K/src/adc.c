@@ -215,7 +215,7 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
     ADC_Calibration(ADC_InitStruct->instance);
 }
 
-/*
+/**
  * @brief  AD采集硬件/软件触发选择
  * @param[in]  instance ADC 模块号
  *              @arg HW_ADC0  ADC0模块

@@ -23,31 +23,6 @@ static const Reg_t ClkTbl[] =
 #endif
 };
 
-typedef struct 
-{
-    uint32_t attribute;
-    uint32_t *address;
-}adma2_t;
-
-
-typedef struct 
-{
-  uint32_t cmd;
-  uint32_t arg;
-  uint32_t blkSize;
-  uint32_t blkCount;
-  uint32_t resp[4];
-}SDHC_Cmd_t;
-
-struct sd_card_handler
-{
-    uint32_t card_type;  
-    uint32_t OCR;
-    uint32_t CID[4];
-    uint32_t CSD[4];
-    uint16_t RCA;
-    uint32_t CSR[2];
-};     
 
 static struct sd_card_handler sdh;
 

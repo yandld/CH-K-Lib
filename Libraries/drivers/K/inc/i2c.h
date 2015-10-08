@@ -27,6 +27,17 @@ typedef struct
     uint32_t baudrate;    ///< baudrate some common baudrate: 48000Hz 76000Hz 96000Hz 376000Hz
 }I2C_InitTypeDef;
 
+/** 
+ * \struct i2c_gpio
+ * \brief i2c sda and scl
+ */
+typedef struct
+{
+    uint32_t instace;		///< I2C 模块号
+    uint32_t sda_pin;		///< I2C 数据线
+    uint32_t scl_pin;		///< I2C 时钟线
+}i2c_gpio;
+
 /* I2C模块号 */
 #define HW_I2C0         (0x00U)   /* I2C模块0，以下依次类推 */
 #define HW_I2C1         (0x01U)

@@ -6,21 +6,25 @@
 #include "rtt_drv.h"
 
 #define SYS_HEAP_SIZE           (1024*32)
-volatile static uint8_t SYSHEAP[SYS_HEAP_SIZE];
+
 extern void rt_system_comonent_init(void);
 
-void init_thread_entry(void* parameter)
+
+void rt_heap_init(void)
 {
     rt_err_t err;
-    rt_thread_t tid;
-    
+    volatile static uint8_t SYSHEAP[SYS_HEAP_SIZE];
     SRAM_Init();
     err = SRAM_SelfTest();
     if(err)
         rt_system_heap_init((void*)SYSHEAP, (void*)(SYS_HEAP_SIZE + (uint32_t)SYSHEAP));
     else
         rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-    
+}
+
+void init_thread(void* parameter)
+{
+    rt_err_t err;
     rt_system_comonent_init();
     rt_thread_delay(1);
     
@@ -31,22 +35,7 @@ void init_thread_entry(void* parameter)
     finsh_system_init();
     
     rt_hw_dflash_init("dflash0");
-    
-    if(dfs_mount("sf0", "/", "elm", 0, 0))
-    {
-        dfs_mkfs("elm", "sf0");
-        err = dfs_mount("sf0", "/", "elm", 0, 0);
-    }
-    
-    if(err)
-    {
-        if(dfs_mount("dflash0", "/", "elm", 0, 0))
-        {
-            dfs_mkfs("elm", "dflash0");
-            dfs_mount("dflash0", "/", "elm", 0, 0);
-        }
-    }
-
+    dfs_mount("dflash0", "/", "elm", 0, 0);
     rt_hw_enet_phy_init();
     
     rt_kprintf("waitting for connection...");
@@ -54,7 +43,12 @@ void init_thread_entry(void* parameter)
     /* tcp server demp */
     tcpserv();
 
-    tid = rt_thread_self();
-    rt_thread_delete(tid); 
+}
+
+void rt_application_init(void* parameter)
+{
+    rt_thread_t tid;
+    tid = rt_thread_create("init", init_thread, RT_NULL, 1024, 8, 20);
+    rt_thread_startup(tid);
 }
 

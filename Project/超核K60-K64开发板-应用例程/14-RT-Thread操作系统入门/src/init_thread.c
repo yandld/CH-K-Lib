@@ -29,14 +29,18 @@ void t2_thread_entry(void* parameter)
     } 
 }
 
+void rt_heap_init(void)
+{
+    rt_system_heap_init((void*)0x1FFF0000, (void*)(0x10000+0x1FFF0000));  
+}
+
 /*  RTT 入口函数 相当于无操作系统下的 main 函数
     RTT 成功启动后 会自动执行 init_thread_entry 这个线程
 */
-void init_thread_entry(void* parameter)
+void rt_application_init(void* parameter)
 {
 
     rt_thread_t tid;
-    rt_system_heap_init((void*)0x1FFF0000, (void*)(0x10000+0x1FFF0000));
     /* 创建线程 t1 堆栈大小256 优先级0x24 时间片为20ms */
     tid = rt_thread_create("t1", t1_thread_entry, RT_NULL, 256, 0x24, 20);
     if (tid != RT_NULL)
@@ -49,12 +53,5 @@ void init_thread_entry(void* parameter)
     
     rt_hw_uart_init("uart0", HW_UART0);
     rt_console_set_device("uart0");
-    
-    rt_kprintf("hello rt-thread!\r\n");
-    
-
-    /* 删除 init_thread_entry 这个线程 */
-    tid = rt_thread_self();
-    rt_thread_delete(tid); 
 }
 

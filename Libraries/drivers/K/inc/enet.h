@@ -5,10 +5,9 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬ENETÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı£¬¾ßÌåÓ¦ÓÃÇë²é¿´ÊµÀı³ÌĞò
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡ENETæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°ï¼Œå…·ä½“åº”ç”¨è¯·æŸ¥çœ‹å®ä¾‹ç¨‹åº
   ******************************************************************************
-  */
-  
+  */ 
 #ifndef __CH_LIB_ENET_H__
 #define __CH_LIB_ENET_H__
 
@@ -21,7 +20,7 @@
 #include <stdbool.h>
    
 
-/* TX»º³åÇøÃèÊö·ûÎ»¶¨Òå */
+/* TXç¼“å†²åŒºæè¿°ç¬¦ä½å®šä¹‰ */
 #define TX_BD_R			0x0080
 #define TX_BD_TO1		0x0040
 #define TX_BD_W			0x0020
@@ -30,7 +29,7 @@
 #define TX_BD_TC		0x0004
 #define TX_BD_ABC		0x0002
 
-/* TXÔöÇ¿ĞÍ»º³åÇøÃèÊö·ûÎ»¶¨Òå */
+/* TXå¢å¼ºå‹ç¼“å†²åŒºæè¿°ç¬¦ä½å®šä¹‰ */
 #define TX_BD_INT       0x00000040 
 #define TX_BD_TS        0x00000020 
 #define TX_BD_PINS      0x00000010 
@@ -45,8 +44,8 @@
 
 #define TX_BD_BDU       0x00000080    
 
-/* RX»º³åÇøÃèÊö·ûÎ»¶¨Òå */
-// 0Æ«ÒÆ±êÖ¾ - ×´Ì¬:´ó¶Ë¸ñÊ½
+/* RXç¼“å†²åŒºæè¿°ç¬¦ä½å®šä¹‰ */
+// 0åç§»æ ‡å¿— - çŠ¶æ€:å¤§ç«¯æ ¼å¼
 #define RX_BD_E			0x0080
 #define RX_BD_R01		0x0040
 #define RX_BD_W			0x0020
@@ -61,7 +60,7 @@
 #define RX_BD_OV		0x0200
 #define RX_BD_TR		0x0100
 
-/* RXÔöÇ¿ĞÍ»º³åÇøÃèÊö·ûÎ»¶¨Òå */
+/* RXå¢å¼ºå‹ç¼“å†²åŒºæè¿°ç¬¦ä½å®šä¹‰ */
 #define RX_BD_ME               0x00000080    
 #define RX_BD_PE               0x00000004    
 #define RX_BD_CE               0x00000002    
@@ -77,20 +76,23 @@
 
 #define RX_BD_BDU              0x00000080   
 
-/* MII½Ó¿Ú³¬Ê± */
+/* MIIæ¥å£è¶…æ—¶ */
 #define MII_TIMEOUT		0x1FFFF
 
-/* ÒÔÌ«Ö¡Ïà¹Ø¶¨Òå */
-#define CFG_NUM_ENET_TX_BUFFERS     1     //·¢ËÍ»º³åÇø¸öÊı
-#define CFG_NUM_ENET_RX_BUFFERS     1     //½ÓÊÕ»º³åÇø¸öÊı  Çı¶¯³ÌĞòÉè¶¨±ØĞëÎª1ÁË ¸ÄÁË¾Í»á³ö´í
-#define CFG_ENET_BUFFER_SIZE        1518    //ÒÔÌ«·¢ËÍÖ¡»º³åÇø³¤¶È
+/* ä»¥å¤ªå¸§ç›¸å…³å®šä¹‰ */
+#define CFG_NUM_ENET_TX_BUFFERS     1     /* å‘é€ç¼“å†²åŒºä¸ªæ•° */
+#define CFG_NUM_ENET_RX_BUFFERS     1     /* æ¥æ”¶ç¼“å†²åŒºä¸ªæ•°  é©±åŠ¨ç¨‹åºè®¾å®šå¿…é¡»ä¸º1äº† æ”¹äº†å°±ä¼šå‡ºé”™ */
+#define CFG_ENET_BUFFER_SIZE        1518    /* ä»¥å¤ªå‘é€å¸§ç¼“å†²åŒºé•¿åº¦ */
 
-/* »º³åÇøÃèÊö·û½á¹¹Ìå */
+/**
+ * \struct NBUF
+ * \brief ç¼“å†²åŒºæè¿°ç¬¦ç»“æ„ä½“
+ */
 typedef struct
 {
-    uint16_t status;	            /* control and status */
-  	uint16_t length;	            /* transfer length */
-    uint8_t  *data;	                /* buffer address */
+    uint16_t status;	            ///< control and status 
+  	uint16_t length;	            ///< transfer length 
+    uint8_t  *data;	                ///< buffer address 
   	uint32_t ebd_status;
   	uint16_t length_proto_type;
   	uint16_t payload_checksum;
@@ -100,14 +102,20 @@ typedef struct
   	uint32_t reserverd_word2;
 } NBUF;
 
+/**
+ * \enum ENET_RMII_SpeedType
+ * \brief ENET RMIIé€Ÿåº¦è®¾ç½®
+ */
 typedef enum
 {
-    kENET_RMII_10M,
-    kENET_RMII_100M,
+    kENET_RMII_10M,     /**< 10M */
+    kENET_RMII_100M,    /**< 100M */
 }ENET_RMII_SpeedType;
 
-
-//!< ÒÔÌ«Íø³õÊ¼»¯½á¹¹
+/**
+ * \struct ENET_InitTypeDef
+ * \brief ä»¥å¤ªç½‘åˆå§‹åŒ–ç»“æ„
+ */
 typedef struct
 {
     uint8_t* pMacAddress;
@@ -115,19 +123,22 @@ typedef struct
     bool isHalfDuplex;
 }ENET_InitTypeDef;
      
+/**
+ * \enum ENET_ITDMAConfig_Type
+ * \brief ENET ä¸­æ–­DMAé…ç½®
+ */
 typedef enum
 {
-    kENET_IT_TXF_Disable,   //!< ½ûÖ¹·¢ËÍÒ»Ö¡ºó²úÉúÖĞ¶Ï     
-    kENET_IT_RXF_Disable,   //!< ½ûÖ¹½ÓÊÕÒ»Ö¡ºó²úÉúÖĞ¶Ï    
-    kENET_IT_TXF,           //!< ¿ªÆôENET·¢ËÍÒ»Ö¡ÖĞ¶Ï    
-    kENET_IT_RXF,           //!< ¿ªÆôENET½ÓÊÕÒ»Ö¡ÖĞ¶Ï
+    kENET_IT_TXF_Disable,   /**< ç¦æ­¢å‘é€ä¸€å¸§åäº§ç”Ÿä¸­æ–­ */  
+    kENET_IT_RXF_Disable,   /**< ç¦æ­¢æ¥æ”¶ä¸€å¸§åäº§ç”Ÿä¸­æ–­ */  
+    kENET_IT_TXF,           /**< å¼€å¯ENETå‘é€ä¸€å¸§ä¸­æ–­ */ 
+    kENET_IT_RXF,           /**< å¼€å¯ENETæ¥æ”¶ä¸€å¸§ä¸­æ–­ */
 }ENET_ITDMAConfig_Type;
 
-//!< ENET CallBack Type
+/* ENET CallBack Type */
 typedef void (*ENET_CallBackTxType)(void);
 typedef void (*ENET_CallBackRxType)(void);
 
-//!< API functions
 
 /* RMII API */
 void ENET_MII_Init(void);

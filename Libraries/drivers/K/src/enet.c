@@ -4,6 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+  * @date    2015.10.08 FreeXc å®Œå–„äº†enetæ¨¡å—çš„ç›¸å…³æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -29,8 +30,8 @@ static ENET_CallBackRxType ENET_CallBackRxTable[1] = {0};
 static uint8_t ucENETRxBuffers[ ( CFG_NUM_ENET_RX_BUFFERS * CFG_ENET_BUFFER_SIZE ) + 16 ];
 
 /**
- * @brief ³õÊ¼»¯ÒÔÌ«ÍøÃèÊö·û»º³åÇø
- * @note  ÒÔÌ«ÍøÄ£¿éÎªÌáÉıËÙ¶È Í¨¹ınentÄÚ²¿DMA°áÔËÓÃ»§×Ô¶¨ÒåÄÚ´æÇø Ã¿¸öÄÚ´æÇø»¹Òª·ÖÅäÃèÊö·û
+ * @brief åˆå§‹åŒ–ä»¥å¤ªç½‘æè¿°ç¬¦ç¼“å†²åŒºï¼Œå†…éƒ¨å‡½æ•°
+ * @note  ä»¥å¤ªç½‘æ¨¡å—ä¸ºæå‡é€Ÿåº¦ é€šè¿‡nentå†…éƒ¨DMAæ¬è¿ç”¨æˆ·è‡ªå®šä¹‰å†…å­˜åŒº æ¯ä¸ªå†…å­˜åŒºè¿˜è¦åˆ†é…æè¿°ç¬¦
  * @retval None
  */
 static void ENET_BDInit(void)
@@ -86,9 +87,10 @@ static void ENET_BDInit(void)
 }
 
 /**
- * @brief ¼ÆËã¹şÏ£Ğ£ÑéÖµ
- * @note  ¸¨Öúº¯Êı
- * @retval HashÖµ
+ * @brief è®¡ç®—å“ˆå¸Œæ ¡éªŒå€¼
+ * @note  è¾…åŠ©å‡½æ•°
+ * \param[in] addr åœ°å€æŒ‡é’ˆ
+ * @retval Hashå€¼
  */
 static uint8_t ENET_HashAddress(const uint8_t* addr)
 {
@@ -115,8 +117,9 @@ static uint8_t ENET_HashAddress(const uint8_t* addr)
 }
 
 /**
- * @brief   ÉèÖÃENETÄ£¿éµÄ½ÓÊÕMACµØÖ·
- * @param   MACµØÖ·
+ * @brief   è®¾ç½®ENETæ¨¡å—çš„æ¥æ”¶MACåœ°å€
+ * @note  	å†…éƒ¨å‡½æ•°
+ * @param[in] pa  MACåœ°å€
  * @retval  None
  */
 static void ENET_SetAddress(const uint8_t *pa)
@@ -132,8 +135,7 @@ static void ENET_SetAddress(const uint8_t *pa)
 }
 
 /**
- * @brief  ³õÊ¼»¯ÒÔÌ«Íø MIIÅäÖÃ²ã½Ó¿Ú
- * @param  None
+ * @brief  åˆå§‹åŒ–ä»¥å¤ªç½‘ MIIé…ç½®å±‚æ¥å£
  * @retval None
  */
 void ENET_MII_Init(void)
@@ -151,11 +153,12 @@ void ENET_MII_Init(void)
 }
 
 /**
- * @brief  Ğ´ÈëÒÔÌ«ÍøMIIÅäÖÃ²ãÊı¾İ
- * @param   phy_addr  :PHYĞ¾Æ¬µØÖ·
- * @param   reg_addr  :¼Ä´æÆ÷ÔÚPHYÄÚ²¿µÄÆ«ÒÆµØÖ·
- * @param   data      :ĞèÒªĞ´ÈëµÄÊı¾İ
- * @retval  0 :³É¹¦ ÆäËü :Ê§°Ü
+ * @brief  å†™å…¥ä»¥å¤ªç½‘MIIé…ç½®å±‚æ•°æ®
+ * @param[in]   phy_addr  PHYèŠ¯ç‰‡åœ°å€
+ * @param[in]   reg_addr  å¯„å­˜å™¨åœ¨PHYå†…éƒ¨çš„åç§»åœ°å€
+ * @param[in]   data      éœ€è¦å†™å…¥çš„æ•°æ®
+ * @retval  0     æˆåŠŸ 
+ * \retval  å…¶å®ƒ  å¤±è´¥
  */
 bool ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
 {
@@ -196,11 +199,12 @@ bool ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data)
 }
 
 /**
- * @brief  ¶ÁÒÔÌ«ÍøMIIÅäÖÃ²ãÊı¾İ
- * @param   phy_addr    :PHYĞ¾Æ¬µØÖ·
- * @param   reg_addr    :¼Ä´æÆ÷ÔÚPHYÄÚ²¿µÄÆ«ÒÆµØÖ·
- * @param   data        :ĞèÒª¶ÁÈëµÄÊı¾İµØÖ·
- * @retval  true or false
+ * @brief  è¯»ä»¥å¤ªç½‘MIIé…ç½®å±‚æ•°æ®
+ * @param[in]   phy_addr    PHYèŠ¯ç‰‡åœ°å€
+ * @param[in]   reg_addr    å¯„å­˜å™¨åœ¨PHYå†…éƒ¨çš„åç§»åœ°å€
+ * @param[in]   data        éœ€è¦è¯»å…¥çš„æ•°æ®åœ°å€
+ * @retval  true 
+ * \retval  false
  */
 bool ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
 {
@@ -243,9 +247,9 @@ bool ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
 }
 
 /**
- * @brief   ³õÊ¼»¯ÒÔÌ«ÍøÄ£¿é
- * @note    ÓÃ»§µ÷ÓÃº¯Êı
- * @param   ENET_InitStrut   :ÒÔÌ«Íø³õÊ¼»¯½á¹¹Ö¸Õë£¬Ïê¼ûÓ¦ÓÃÀı³Ì
+ * @brief   åˆå§‹åŒ–ä»¥å¤ªç½‘æ¨¡å—
+ * @note    ç”¨æˆ·è°ƒç”¨å‡½æ•°
+ * @param[in]   ENET_InitStrut   ä»¥å¤ªç½‘åˆå§‹åŒ–ç»“æ„æŒ‡é’ˆï¼Œè¯¦è§åº”ç”¨ä¾‹ç¨‹
  * @retval  None
  */
 void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
@@ -278,19 +282,19 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 #endif
     
     
-    /* ¸ù¾İĞ­ÉÌ½á¹ûÉèÖÃENETÄ£¿é */
+    /* æ ¹æ®åå•†ç»“æœè®¾ç½®ENETæ¨¡å— */
     usData = 0;	
     
-    /* Çå³ıµ¥¶ÀºÍ×éµØÖ·¹şÏ£¼Ä´æÆ÷ */
+    /* æ¸…é™¤å•ç‹¬å’Œç»„åœ°å€å“ˆå¸Œå¯„å­˜å™¨ */
     ENET->IALR = 0;
     ENET->IAUR = 0;
     ENET->GALR = 0;
     ENET->GAUR = 0;
-    //ÉèÖÃENETÄ£¿éMACµØÖ·
+    //è®¾ç½®ENETæ¨¡å—MACåœ°å€
     ENET_SetAddress(ENET_InitStrut->pMacAddress);
-    //ÉèÖÃ½ÓÊÕ¿ØÖÆ¼Ä´æÆ÷£¬×î´ó³¤¶È¡¢RMIIÄ£Ê½¡¢½ÓÊÕCRCĞ£ÑéµÈ
+    //è®¾ç½®æ¥æ”¶æ§åˆ¶å¯„å­˜å™¨ï¼Œæœ€å¤§é•¿åº¦ã€RMIIæ¨¡å¼ã€æ¥æ”¶CRCæ ¡éªŒç­‰
     ENET->RCR = ENET_RCR_MAX_FL(1518) | ENET_RCR_MII_MODE_MASK | ENET_RCR_CRCFWD_MASK | ENET_RCR_RMII_MODE_MASK;
-    //Çå³ı·¢ËÍ½ÓÊÕ¿ØÖÆ
+    //æ¸…é™¤å‘é€æ¥æ”¶æ§åˆ¶
     ENET->TCR = 0;
     
     if(ENET_InitStrut->isHalfDuplex)
@@ -318,7 +322,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
     }
 
     
-    /* Ê¹ÓÃÔöÇ¿ĞÍ»º³åÇøÃèÊö·û */
+    /* ä½¿ç”¨å¢å¼ºå‹ç¼“å†²åŒºæè¿°ç¬¦ */
     ENET->ECR = ENET_ECR_EN1588_MASK;
     
     /* max receiced packet size */
@@ -339,10 +343,10 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 }
 
 /**
- * @brief  ·¢ËÍÒ»Ö¡ÒÔÌ«Ö¡Êı¾İ
- * @note    ÓÃ»§µ÷ÓÃº¯Êı
- * @param   data    :·¢ËÍÊı¾İÖ¸Õë
- * @param   len     :Êı¾İ³¤¶È (< 1500×Ö½Ú)
+ * @brief  å‘é€ä¸€å¸§ä»¥å¤ªå¸§æ•°æ®
+ * @note    ç”¨æˆ·è°ƒç”¨å‡½æ•°
+ * @param[in]   data    å‘é€æ•°æ®æŒ‡é’ˆ
+ * @param[in]   len     æ•°æ®é•¿åº¦ (< 1500å­—èŠ‚)
  * @retval  None
  */
 void ENET_MacSendData(uint8_t *data, uint16_t len)
@@ -363,10 +367,10 @@ void ENET_MacSendData(uint8_t *data, uint16_t len)
 }
 
 /**
- * @brief  ½ÓÊÕÒ»Ö¡ÒÔÌ«Ö¡Êı¾İ
- * @note    ÓÃ»§µ÷ÓÃº¯Êı
- * @param   data    :Êı¾İÖ¸Õë
- * @retval  ½ÓÊÕµ½µÄÊı¾İ³¤¶È
+ * @brief  æ¥æ”¶ä¸€å¸§ä»¥å¤ªå¸§æ•°æ®
+ * @note    ç”¨æˆ·è°ƒç”¨å‡½æ•°
+ * @param[in]   data    æ•°æ®æŒ‡é’ˆ
+ * @retval  æ¥æ”¶åˆ°çš„æ•°æ®é•¿åº¦
  */
 uint16_t ENET_MacReceiveData(uint8_t *data)
 {
@@ -384,17 +388,17 @@ uint16_t ENET_MacReceiveData(uint8_t *data)
 		pxENETRxDescriptors[0].status |= RX_BD_E;
 		ENET->RDAR = ENET_RDAR_RDAR_MASK;
         return len;
-	}
-	return 0;
+	  }
+	  return 0;
 }
 
 /**
- * @brief  ÅäÖÃENETÄ£¿éµÄÖĞ¶Ï»òÕßDMAÊôĞÔ
- * @param  config     :Ä£Ê½Ñ¡Ôñ
- *         @arg kENET_IT_TXF_Disable:½ûÖ¹·¢ËÍÒ»Ö¡ÒÔÌ«ÍøÊı¾İÖ¡ÖĞ¶Ï
- *         @arg kENET_IT_RXF_Disable:½ûÖ¹½ÓÊÕÒ»Ö¡ÒÔÌ«ÍøÊı¾İÖ¡ÖĞ¶Ï
- *         @arg kENET_IT_TXF        :·¢ËÍÒ»Ö¡ÒÔÌ«ÍøÊı¾İÖĞ¶Ï
- *         @arg kENET_IT_RXF        :½ÓÊÕÒ»Ö¡ÒÔÌ«ÍøÊı¾İÖĞ¶Ï
+ * @brief  é…ç½®ENETæ¨¡å—çš„ä¸­æ–­æˆ–è€…DMAå±æ€§
+ * @param[in]  config     æ¨¡å¼é€‰æ‹©
+ *         			@arg kENET_IT_TXF_Disable ç¦æ­¢å‘é€ä¸€å¸§ä»¥å¤ªç½‘æ•°æ®å¸§ä¸­æ–­
+ *         			@arg kENET_IT_RXF_Disable ç¦æ­¢æ¥æ”¶ä¸€å¸§ä»¥å¤ªç½‘æ•°æ®å¸§ä¸­æ–­
+ *         			@arg kENET_IT_TXF         å‘é€ä¸€å¸§ä»¥å¤ªç½‘æ•°æ®ä¸­æ–­
+ *         			@arg kENET_IT_RXF         æ¥æ”¶ä¸€å¸§ä»¥å¤ªç½‘æ•°æ®ä¸­æ–­
  * @retval None
  */
 void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config)
@@ -420,11 +424,9 @@ void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config)
     }
 }
 
-
-
 /**
- * @brief  ÉèÖÃENET·¢ËÍÖĞ¶Ï»Øµ÷º¯Êı
- * @param  AppCBFun: »Øµ÷º¯ÊıÖ¸Õë
+ * @brief  è®¾ç½®ENETå‘é€ä¸­æ–­å›è°ƒå‡½æ•°
+ * @param[in]  AppCBFun å›è°ƒå‡½æ•°æŒ‡é’ˆ
  * @retval None
  */
 void ENET_CallbackTxInstall(ENET_CallBackTxType AppCBFun)
@@ -436,8 +438,8 @@ void ENET_CallbackTxInstall(ENET_CallBackTxType AppCBFun)
 }
 
 /**
- * @brief  ÉèÖÃENET½ÓÊÕÖĞ¶Ï»Øµ÷º¯Êı
- * @param  AppCBFun: »Øµ÷º¯ÊıÖ¸Õë
+ * @brief  è®¾ç½®ENETæ¥æ”¶ä¸­æ–­å›è°ƒå‡½æ•°
+ * @param[in]  AppCBFun å›è°ƒå‡½æ•°æŒ‡é’ˆ
  * @retval None
  */
 void ENET_CallbackRxInstall(ENET_CallBackRxType AppCBFun)
@@ -449,10 +451,10 @@ void ENET_CallbackRxInstall(ENET_CallBackRxType AppCBFun)
 }
 
 /**
- * @brief  ²é¿´ÒÔÌ«Ö¡·ñ·¢ËÍÍê³É
- * @retval 0:Íê³É 1:Î´Íê³É
+ * @brief  æŸ¥çœ‹ä»¥å¤ªå¸§å¦å‘é€å®Œæˆ
+ * @retval 0 å®Œæˆ 
+ * \retval 1 æœªå®Œæˆ
  */
-
 bool ENET_IsTxTransferComplete(void)
 {
     if(ENET->EIR & ENET_EIMR_TXF_MASK)
@@ -463,6 +465,10 @@ bool ENET_IsTxTransferComplete(void)
     return false;
 }
 
+/**
+ * @brief  ENETå‘é€ä¸­æ–­å¤„ç†å‡½æ•°
+ * @note   æ­¤å‡½æ•°å†…éƒ¨ç”¨äºè°ƒç”¨æ³¨å†Œçš„å›è°ƒå‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
+ */
 void ENET_Transmit_IRQHandler(void)
 {
 	ENET->EIR |= ENET_EIMR_TXF_MASK;
@@ -473,9 +479,8 @@ void ENET_Transmit_IRQHandler(void)
 }
 
 /**
- * @brief  ÖĞ¶Ï´¦Àíº¯ÊıÈë¿Ú
- * @param  ENET_Receive_IRQHandler :ÒÔÌ«ÍøÖĞ¶Ï½ÓÊÕº¯ÊıÈë¿Ú
- * @note º¯ÊıÄÚ²¿ÓÃÓÚÖĞ¶ÏÊÂ¼ş´¦Àí
+ * @brief  ENETæ¥æ”¶ä¸­æ–­å¤„ç†å‡½æ•°
+ * @note   æ­¤å‡½æ•°å†…éƒ¨ç”¨äºè°ƒç”¨æ³¨å†Œçš„å›è°ƒå‡½æ•°ï¼Œç”¨æˆ·æ— éœ€ä½¿ç”¨
  */
 void ENET_Receive_IRQHandler(void)
 {

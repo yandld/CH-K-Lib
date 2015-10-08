@@ -70,7 +70,7 @@ static rt_err_t configure(struct rt_spi_device* device, struct rt_spi_configurat
 
 static rt_uint32_t xfer(struct rt_spi_device* device, struct rt_spi_message* message)
 {
-    struct rt_spi_configuration * config = &device->config;
+    //struct rt_spi_configuration * config = &device->config;
     rt_uint32_t size = message->length;
     const rt_uint8_t * send_ptr = message->send_buf;
     rt_uint8_t * recv_ptr = message->recv_buf;

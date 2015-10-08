@@ -139,3 +139,4 @@ void CPUIDY_GetUID(uint32_t * UIDArray)
     UIDArray[2] = SIM->UIDMH;
     UIDArray[3] = SIM->UIDH;
 }
+

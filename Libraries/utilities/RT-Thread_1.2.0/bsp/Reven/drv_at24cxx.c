@@ -4,7 +4,7 @@
 #include "drivers/i2c.h"
 #include "rtt_drv.h"
 
-#define AT24CXX_DEBUG;
+//#define AT24CXX_DEBUG
 
 #ifdef AT24CXX_DEBUG
 #define AT24CXX_TRACE         rt_kprintf

@@ -9,6 +9,7 @@
   */
 
 #include "enet_phy.h"
+#include "common.h"
 #include "enet.h"
 
 /* MII¼Ä´æÆ÷µØÖ· */

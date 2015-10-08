@@ -406,7 +406,7 @@ void telnet_process_close(struct telnet_session* telnet, struct netconn *conn)
 /* telnet server thread entry */
 void telnet_thread(void* parameter)
 {
-    rt_err_t result,err;
+    volatile rt_err_t result,err;
     rt_uint32_t event;
     struct netbuf *buf;
     struct netconn *conn, *newconn;

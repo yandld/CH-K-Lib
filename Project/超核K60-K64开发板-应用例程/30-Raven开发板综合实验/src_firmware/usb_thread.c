@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include "rl_usb.h"
 
-static rt_device_t dev;
 
 /* init */
 void usbd_msc_init (void)
@@ -122,3 +121,4 @@ static int udisk(int argc, char** argv)
 MSH_CMD_EXPORT(udisk, udisk sd0);
 
 #endif
+

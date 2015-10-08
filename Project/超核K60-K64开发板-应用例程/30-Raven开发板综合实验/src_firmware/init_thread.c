@@ -7,18 +7,35 @@
 #include "pin.h"
 
 
-
+void rt_system_comonent_init(void);
 void usb_thread_entry(void* parameter);
 
 
-void init_thread_entry(void* parameter)
+//static uint8_t INIT_STACK[1024*13];
+
+void rt_heap_init(void)
+{
+    int ret;
+    SRAM_Init();
+    ret = SRAM_SelfTest();
+    if(ret)
+    {
+    //    rt_system_heap_init((void*)INIT_STACK, (void*)(sizeof(INIT_STACK) + (uint32_t)INIT_STACK));
+    }
+    else
+    {
+        rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
+    }
+}
+
+void init_thread(void* parameter)
 {
     rt_thread_t tid;
 
     rt_system_comonent_init();
     rt_hw_uart_init("uart0", 0);
     rt_console_set_device("uart0");
-    rt_hw_sd_init();
+    rt_hw_sd_init("sd0");
     rt_hw_rtc_init();
     rt_hw_spi_init();
     rt_hw_pin_init("gpio");
@@ -41,34 +58,17 @@ void init_thread_entry(void* parameter)
     {
         printf("addr:0x%X has no application\r\n", 0x60000);
     }
-
-
-
     rt_hw_enet_phy_init();
 
     tid = rt_thread_self();
     rt_thread_delete(tid); 
-    //MainTask();
-    //GUI_TOUCH_Exec();
 }
 
 
 void rt_application_init(void)
 {
-    int ret;
     rt_thread_t tid;
-    SRAM_Init();
-    ret = SRAM_SelfTest();
-    if(ret)
-    {
-        //rt_system_heap_init((void*)SYSHEAP, (void*)(sizeof(SYSHEAP) + (uint32_t)SYSHEAP));
-    }
-    else
-    {
-        rt_system_heap_init((void*)(SRAM_ADDRESS_BASE), (void*)(SRAM_ADDRESS_BASE + SRAM_SIZE));
-    }
-
-    tid = rt_thread_create("init", init_thread_entry, RT_NULL, 1024, 20, 20);
+    tid = rt_thread_create("init", init_thread, RT_NULL, 1024, 20, 20);
     rt_thread_startup(tid);
 }
 

@@ -9,6 +9,7 @@ extern int Image$$RW_IRAM1$$RW$$Limit;
 extern int Image$$ER_IROM1$$RO$$Limit;
 
 void rt_application_init(void);
+void rt_heap_init(void);
 
 void rtthread_startup(void)
 {
@@ -19,6 +20,7 @@ void rtthread_startup(void)
     rt_device_init_all();
     rt_system_timer_thread_init();
     rt_thread_idle_init();
+    rt_heap_init();
     rt_application_init();
     rt_system_scheduler_start();
 }
@@ -28,20 +30,6 @@ int fputc(int ch,FILE *f)
 {
     rt_kprintf("%c", ch);
     return ch;
-}
-
-void _init_entry(void* parameter)
-{
-    init_thread_entry(RT_NULL);
-}
-
-static uint8_t INIT_STACK[2048];
-__weak void rt_application_init(void)
-{
-    rt_thread_t tid;
-    rt_system_heap_init((void*)INIT_STACK, (void*)(INIT_STACK + sizeof(INIT_STACK)));
-    tid = rt_thread_create("init", _init_entry, RT_NULL, 512, 20, 20);
-    rt_thread_startup(tid);
 }
 
 

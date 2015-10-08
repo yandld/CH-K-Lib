@@ -16,7 +16,7 @@ static rt_err_t rt_sd_init (rt_device_t dev)
 static rt_err_t rt_sd_open(rt_device_t dev, rt_uint16_t oflag)
 {
     rt_mutex_take(mutex, RT_WAITING_FOREVER);
-    if(SD_QuickInit(20*1000*1000))
+    if(SD_QuickInit(10*1000*1000))
     {
         return RT_EIO;
     }
@@ -78,16 +78,16 @@ static rt_err_t rt_sd_control(rt_device_t dev, rt_uint8_t cmd, void *args)
     rt_memset(&geometry, 0, sizeof(geometry));
 	switch (cmd)
 	{
-	case RT_DEVICE_CTRL_BLK_GETGEOME:
-		geometry.block_size = 512;
-		geometry.bytes_per_sector = 512;
-        size = SD_GetSizeInMB();
-        
-		geometry.sector_count = size*1024*2;
-		rt_memcpy(args, &geometry, sizeof(struct rt_device_blk_geometry));
-		break;
-	default: 
-		break;
+        case RT_DEVICE_CTRL_BLK_GETGEOME:
+            geometry.block_size = 512;
+            geometry.bytes_per_sector = 512;
+            size = SD_GetSizeInMB();
+            
+            geometry.sector_count = size*1024*2;
+            rt_memcpy(args, &geometry, sizeof(struct rt_device_blk_geometry));
+            break;
+        default: 
+            break;
 	}
 	return RT_EOK;
 
@@ -98,7 +98,7 @@ rt_err_t rt_sd_txcomplete(rt_device_t dev, void *buffer)
 	return RT_EOK;
 }
 
-void rt_hw_sd_init(void)
+void rt_hw_sd_init(const char *name)
 {
 
 	sd_device.type 		= RT_Device_Class_Block;
@@ -112,7 +112,7 @@ void rt_hw_sd_init(void)
 	sd_device.control 	= rt_sd_control;
 	sd_device.user_data	= RT_NULL;
 
-    rt_device_register(&sd_device, "sd0", RT_DEVICE_FLAG_RDWR  | RT_DEVICE_FLAG_REMOVABLE|RT_DEVICE_FLAG_STANDALONE);
+    rt_device_register(&sd_device, name, RT_DEVICE_FLAG_RDWR  | RT_DEVICE_FLAG_REMOVABLE|RT_DEVICE_FLAG_STANDALONE);
 }
 
     

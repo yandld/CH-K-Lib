@@ -52,7 +52,7 @@ struct at24cxx_device
 int rt_hw_i2c_bit_ops_bus_init(const char *name);
 int rt_hw_uart_init(const char *name, uint32_t instance);
 void rt_hw_spi_init(void);
-void rt_hw_sd_init(void);
+void rt_hw_sd_init(const char *name);
 int rt_hw_spi_bus_init(void);
 int rt_hw_rtc_init(void);
 rt_err_t at24cxx_init(const char * device_name, const char * i2c_bus_name);
@@ -61,7 +61,7 @@ int rt_hw_dflash_init(const char *name);
 int rt_hw_lcd_init(const char *name);
 int rt_hw_pin_init(const char *name);
 rt_err_t rt_hw_ads7843_init(const char * name, const char * spi_device_name);
-
+rt_err_t w25qxx_init(const char * flash_device_name, const char * spi_device_name);
 
 
 #endif

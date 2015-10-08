@@ -451,21 +451,69 @@ static void DMA_IRQHandler(uint32_t instance)
     if(DMA_CallBackTable[instance]) DMA_CallBackTable[instance]();
 }
 
+/**
+ * \brief DMA0中断函数入口，用户无需使用
+ */
 void DMA0_IRQHandler(void) {DMA_IRQHandler(0);}
+/**
+ * \brief DMA1中断函数入口，用户无需使用
+ */
 void DMA1_IRQHandler(void) {DMA_IRQHandler(1);}
+/**
+ * \brief DMA2中断函数入口，用户无需使用
+ */
 void DMA2_IRQHandler(void) {DMA_IRQHandler(2);}
+/**
+ * \brief DMA3中断函数入口，用户无需使用
+ */
 void DMA3_IRQHandler(void) {DMA_IRQHandler(3);}
+/**
+ * \brief DMA4中断函数入口，用户无需使用
+ */
 void DMA4_IRQHandler(void) {DMA_IRQHandler(4);}
+/**
+ * \brief DMA5中断函数入口，用户无需使用
+ */
 void DMA5_IRQHandler(void) {DMA_IRQHandler(5);}
+/**
+ * \brief DMA6中断函数入口，用户无需使用
+ */
 void DMA6_IRQHandler(void) {DMA_IRQHandler(6);}
+/**
+ * \brief DMA7中断函数入口，用户无需使用
+ */
 void DMA7_IRQHandler(void) {DMA_IRQHandler(7);}
+/**
+ * \brief DMA8中断函数入口，用户无需使用
+ */
 void DMA8_IRQHandler(void) {DMA_IRQHandler(8);}
+/**
+ * \brief DMA9中断函数入口，用户无需使用
+ */
 void DMA9_IRQHandler(void) {DMA_IRQHandler(9);}
+/**
+ * \brief DMA10中断函数入口，用户无需使用
+ */
 void DMA10_IRQHandler(void) {DMA_IRQHandler(10);}
+/**
+ * \brief DMA11中断函数入口，用户无需使用
+ */
 void DMA11_IRQHandler(void) {DMA_IRQHandler(11);}
+/**
+ * \brief DMA12中断函数入口，用户无需使用
+ */
 void DMA12_IRQHandler(void) {DMA_IRQHandler(12);}
+/**
+ * \brief DMA13中断函数入口，用户无需使用
+ */
 void DMA13_IRQHandler(void) {DMA_IRQHandler(13);}
+/**
+ * \brief DMA14中断函数入口，用户无需使用
+ */
 void DMA14_IRQHandler(void) {DMA_IRQHandler(14);}
+/**
+ * \brief DMA15中断函数入口，用户无需使用
+ */
 void DMA15_IRQHandler(void) {DMA_IRQHandler(15);}
 
 

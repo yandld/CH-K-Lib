@@ -35,6 +35,9 @@ static CRC_InitTypeDef CRCProtocolAttrTable[] =
 
 
 #if 0
+/**
+ * \brief not use
+ */
 uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len)
 {
     uint32_t crc = 0;

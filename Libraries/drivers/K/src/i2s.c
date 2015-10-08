@@ -13,6 +13,9 @@
 #include "common.h"
 
 
+/**
+ * /brief internal function
+ */
 void SAI_HAL_SetMclkDiv(uint32_t instance, uint32_t mclk, uint32_t src_clk)
 {
     uint32_t freq = src_clk;

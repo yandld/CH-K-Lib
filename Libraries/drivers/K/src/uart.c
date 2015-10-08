@@ -369,6 +369,9 @@ void UART_DeInit(uint32_t instance)
 }
 
 #pragma weak UART_SelectDebugInstance
+/**
+ * \brief UART 选择作为调试模块来使用
+ */
 void UART_SelectDebugInstance(uint32_t instance)
 {
     UART_DebugInstance = instance;

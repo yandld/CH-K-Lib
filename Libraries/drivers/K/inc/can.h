@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    can.c
+  * @file    can.h
   * @author  YANDLD
   * @version V2.5
   * @date    2014.4.10
@@ -18,53 +18,62 @@
 #include <stdint.h>
 #include "common.h"  
 
-//!< hardware instances
-#define HW_CAN0  (0x00U)  //CAN0Ä£¿é
-#define HW_CAN1  (0x01U)  //CAN1Ä£¿é  
+/* hardware instances */
+#define HW_CAN0  (0x00U)  /* CAN0æ¨¡å—ï¼Œä»¥ä¸‹ä¾æ¬¡ç±»æŽ¨ */
+#define HW_CAN1  (0x01U)    
      
-//!< RX FIFO
+/* RX FIFO */
 /* when FIFO is enabled, MB5 interrupt is RXFIFO interrupt */
 #define CAN_RX_FIFO_MB      (0x05)
      
-//CAN×ÜÏßËÙ¶ÈÑ¡Ôñ
+/**
+ * \enum CAN_Baudrate_Type
+ * \brief CANæ€»çº¿é€Ÿåº¦é€‰æ‹©
+ */
 typedef enum 
 {
-	kCAN_25K,
-	kCAN_50K,
-	kCAN_100K,
-	kCAN_125K,
-	kCAN_250K,
-	kCAN_500K,
-	kCAN_1000K,
+	kCAN_25K,       /**< 25K */
+	kCAN_50K,       /**< 50K */
+	kCAN_100K,      /**< 100K */
+	kCAN_125K,      /**< 125K */
+	kCAN_250K,      /**< 250K */
+	kCAN_500K,      /**< 500K */
+	kCAN_1000K,     /**< 1000K */
 }CAN_Baudrate_Type;
 
+/**
+ * \struct CAN_InitTypeDef
+ * \brief CAN åˆå§‹åŒ–ç»“æž„
+ */
 typedef struct
 {
-    uint32_t                instance;  //CANÍ¨ÐÅ¶Ë¿Ú HW_CAN0/HW_CAN1
-    CAN_Baudrate_Type       baudrate;  //CANÍ¨ÐÅËÙ¶ÈÉèÖÃ
+    uint32_t                instance;  ///< CANé€šä¿¡ç«¯å£ HW_CAN0/HW_CAN1
+    CAN_Baudrate_Type       baudrate;  ///< CANé€šä¿¡é€Ÿåº¦è®¾ç½®
 }CAN_InitTypeDef;
 
 
-//!< CAN QuickInit macro
-#define CAN1_TX_PE24_RX_PE25   (0xB0A1U)  //CAN1Ä£¿é ·¢ËÍÒý½ÅÎªPTE24 ½ÓÊÕÒý½ÅÎªPTE25
-#define CAN0_TX_PA12_RX_PA13   (0x9880U)  //CAN0Ä£¿é ·¢ËÍÒý½ÅÎªPTA12 ½ÓÊÕÒý½ÅÎªPTA13
-#define CAN0_TX_PB18_RX_PB19   (0xA488U)  //CAN0Ä£¿é ·¢ËÍÒý½ÅÎªPTB18 ½ÓÊÕÒý½ÅÎªPTB19
-#define CAN1_TX_PC17_RX_PC16   (0xA091U)  //CAN1Ä£¿é ·¢ËÍÒý½ÅÎªPTC17 ½ÓÊÕÒý½ÅÎªPTC16
+/* CAN QuickInit macro */
+#define CAN1_TX_PE24_RX_PE25   (0xB0A1U)  //CAN1æ¨¡å— å‘é€å¼•è„šä¸ºPTE24 æŽ¥æ”¶å¼•è„šä¸ºPTE25
+#define CAN0_TX_PA12_RX_PA13   (0x9880U)  //CAN0æ¨¡å— å‘é€å¼•è„šä¸ºPTA12 æŽ¥æ”¶å¼•è„šä¸ºPTA13
+#define CAN0_TX_PB18_RX_PB19   (0xA488U)  //CAN0æ¨¡å— å‘é€å¼•è„šä¸ºPTB18 æŽ¥æ”¶å¼•è„šä¸ºPTB19
+#define CAN1_TX_PC17_RX_PC16   (0xA091U)  //CAN1æ¨¡å— å‘é€å¼•è„šä¸ºPTC17 æŽ¥æ”¶å¼•è„šä¸ºPTC16
 
-
-/*!< ÖÐ¶Ï¼°DMAÅäÖÃ */
+/**
+ * \enum CAN_ITDMAConfig_Type
+ * \brief CAN ä¸­æ–­DMAé…ç½®
+ */
 typedef enum
 {
-    kCAN_IT_Tx_Disable,  //¹Ø±Õ·¢ËÍÖÐ¶Ï
-    kCAN_IT_Rx_Disable,  //¹Ø±Õ½ÓÊÕÖÐ¶Ï
-    kCAN_IT_Tx,          //¿ªÆô·¢ËÍÖÐ¶Ï
-    kCAN_IT_RX,          //¿ªÆô·¢ËÍÖÐ¶Ï
+    kCAN_IT_Tx_Disable,  /**< å…³é—­å‘é€ä¸­æ–­ */
+    kCAN_IT_Rx_Disable,  /**< å…³é—­æŽ¥æ”¶ä¸­æ–­ */
+    kCAN_IT_Tx,          /**< å¼€å¯å‘é€ä¸­æ–­ */
+    kCAN_IT_RX,          /**< å¼€å¯å‘é€ä¸­æ–­ */
 }CAN_ITDMAConfig_Type;
 
-/*!< CAN »Øµ÷º¯ÊýÉùÃ÷ */
+/* CAN å›žè°ƒå‡½æ•°å£°æ˜Ž */
 typedef void (*CAN_CallBackType)(void);
 
-//!< API functions
+/* API functions */
 void CAN_SetRxFilterMask(uint32_t instance, uint32_t mb, uint32_t mask);
 uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf, uint8_t len);
 uint32_t CAN_WriteRemote(uint32_t instance, uint32_t mb, uint32_t id, uint8_t len);

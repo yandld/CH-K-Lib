@@ -25,7 +25,28 @@
 /* RX FIFO */
 /* when FIFO is enabled, MB5 interrupt is RXFIFO interrupt */
 #define CAN_RX_FIFO_MB      (0x05)
-     
+    
+/* CAN MB Type */
+typedef enum
+{
+    kFlexCanTX_Inactive  = 0x08, 	/*!< MB is not active.*/
+    kFlexCanTX_Abort     = 0x09, 	/*!< MB is aborted.*/
+    kFlexCanTX_Data      = 0x0C, 	/*!< MB is a TX Data Frame(MB RTR must be 0).*/
+    kFlexCanTX_Remote    = 0x1C, 	/*!< MB is a TX Remote Request Frame (MB RTR must be 1).*/
+    kFlexCanTX_Tanswer   = 0x0E, 	/*!< MB is a TX Response Request Frame from.*/
+																	/*!  an incoming Remote Request Frame.*/
+    kFlexCanTX_NotUsed   = 0xF,  	/*!< Not used*/
+    kFlexCanRX_Inactive  = 0x0, 	/*!< MB is not active.*/
+    kFlexCanRX_Full      = 0x2, 	/*!< MB is full.*/
+    kFlexCanRX_Empty     = 0x4, 	/*!< MB is active and empty.*/
+    kFlexCanRX_Overrun   = 0x6, 	/*!< MB is overwritten into a full buffer.*/
+    //kFlexCanRX_Busy      = 0x8, /*!< FlexCAN is updating the contents of the MB.*/
+																	/*!  The CPU must not access the MB.*/
+    kFlexCanRX_Ranswer   = 0xA, 	/*!< A frame was configured to recognize a Remote Request Frame*/
+																	/*!  and transmit a Response Frame in return.*/
+    kFlexCanRX_NotUsed   = 0xF, 	/*!< Not used*/
+}CAN_MBCode_Type;
+
 /**
  * \enum CAN_Baudrate_Type
  * \brief CAN总线速度选择

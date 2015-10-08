@@ -5,7 +5,7 @@
   * @version V2.5
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬TSIÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡TSIæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
 #ifndef __CH_LIB_TSI_H__
@@ -16,15 +16,18 @@
 #endif
      
 #include <stdint.h>
-  
-/* TSI ´¥·¢Ä£Ê½Ñ¡Ôñ */
+
+/**
+ * \enum TSI_TriggerMode_Type
+ * \brief TSI è§¦å‘æ¨¡å¼é€‰æ‹©
+ */
 typedef enum
 {
-    kTSI_TriggerSoftware,               /* Èí¼ş´¥·¢ */
-    kTSI_TriggerPeriodicalScan,         /* Ó²¼şÖÜÆÚĞÔÉ¨Ãè */
+    kTSI_TriggerSoftware,               /**< è½¯ä»¶è§¦å‘ */
+    kTSI_TriggerPeriodicalScan,         /**< ç¡¬ä»¶å‘¨æœŸæ€§æ‰«æ */
 } TSI_TriggerMode_Type;
   
-#define HW_TSI_CH0      (0x00)  /* ´¥¿ØµÄ0Í¨µÀ */
+#define HW_TSI_CH0      (0x00)  /* è§¦æ§çš„0é€šé“ï¼Œä»¥ä¸‹ä¾æ¬¡ç±»æ¨ */
 #define HW_TSI_CH1      (0x01)
 #define HW_TSI_CH2      (0x02)
 #define HW_TSI_CH3      (0x03)
@@ -41,15 +44,21 @@ typedef enum
 #define HW_TSI_CH14     (0x0E)
 #define HW_TSI_CH15     (0x0F)
 
-
-/* TSI ÖĞ¶ÏDMAÅäÖÃ */
+/**
+ * \enum TSI_ITDMAConfig_Type
+ * \brief TSI ä¸­æ–­DMAé…ç½®
+ */
 typedef enum
 {
-    kTSI_IT_Disable,        /* ¹Ø±ÕÖĞ¶Ï */
-    kTSI_IT_OutOfRange,     /* Òç³öÖĞ¶Ï */
-    kTSI_IT_EndOfScan,      /* É¨Ãè½áÊøÖĞ¶Ï */
+    kTSI_IT_Disable,        /**< å…³é—­ä¸­æ–­ */
+    kTSI_IT_OutOfRange,     /**< æº¢å‡ºä¸­æ–­ */
+    kTSI_IT_EndOfScan,      /**< æ‰«æç»“æŸä¸­æ–­ */
 }TSI_ITDMAConfig_Type;
 
+/**
+ * \enum TSI_EletrodeOscPs_Type
+ * \brief TSI Electrode Oscillator åˆ†é¢‘
+ */
 typedef enum
 {
     kTSI_EletrodeOscDiv_1,
@@ -62,6 +71,10 @@ typedef enum
     kTSI_EletrodeOscDiv_128,
 }TSI_EletrodeOscPs_Type;
 
+/**
+ * \enum TSI_ChargeCurrent_Type
+ * \brief TSI charge current
+ */
 typedef enum
 {
     kTSI_ChargeCurrent_2uA,
@@ -83,20 +96,23 @@ typedef enum
 }TSI_ChargeCurrent_Type;
 
 
-
+/**
+ * \struct TSI_InitTypeDef
+ * \brief TSIåˆå§‹åŒ–ç»“æ„
+ */
 typedef struct
 {
-    uint32_t                chl;                                    /* Í¨µÀºÅ1~15 */
-    TSI_TriggerMode_Type    triggerMode;                            /* ´¥·¢Ä£Ê½Ñ¡Ôñ */
+    uint32_t                chl;                                    /* é€šé“å·1~15 */
+    TSI_TriggerMode_Type    triggerMode;                            /* è§¦å‘æ¨¡å¼é€‰æ‹© */
     TSI_EletrodeOscPs_Type  electrodeOSCPrescaler;
     uint32_t                consecutiveScanTimes;                   /* number of consecutive scans per electrode */
-    uint32_t                threshld;                               /* ·¢Éú³¬·¶Î§ÖĞ¶ÏÊ±µÄÅĞ¶Ï·§Öµ */
-    TSI_ChargeCurrent_Type  refChargeCurrent;                       /* ²Î¿¼ OSC ³äµçµçÁ÷ */
-    TSI_ChargeCurrent_Type  extChargeCurrent;                       /* Íâ²¿ OSC ³äµçµçÁ÷ */
+    uint32_t                threshld;                               /* å‘ç”Ÿè¶…èŒƒå›´ä¸­æ–­æ—¶çš„åˆ¤æ–­é˜€å€¼ */
+    TSI_ChargeCurrent_Type  refChargeCurrent;                       /* å‚è€ƒ OSC å……ç”µç”µæµ */
+    TSI_ChargeCurrent_Type  extChargeCurrent;                       /* å¤–éƒ¨ OSC å……ç”µç”µæµ */
 }TSI_InitTypeDef;
 
-//!< TSI QuickInit macro
-#define TSI0_CH0_PB00   (0x00004008)  //0Í¨µÀµÄPTB0Òı½Å ÒÔÏÂÀàÍÆ
+/* TSI QuickInit macro */
+#define TSI0_CH0_PB00   (0x00004008)  /* TSI 0é€šé“çš„PTB0å¼•è„š ä»¥ä¸‹ç±»æ¨ */
 #define TSI0_CH1_PA00   (0x00084000)  
 #define TSI0_CH2_PA01   (0x00104200)
 #define TSI0_CH3_PA02   (0x00184400)
@@ -114,10 +130,10 @@ typedef struct
 #define TSI0_CH15_PC02  (0x00784410)
 
 
-/*!< TSI CallBack Type */
+/* TSI CallBack Type */
 typedef void (*TSI_CallBackType)(void);
 
-/*!< API functions */
+/* API functions */
 uint32_t TSI_QuickInit(uint32_t MAP);
 uint32_t TSI_GetCounter(uint32_t chl);
 void TSI_ITDMAConfig(TSI_ITDMAConfig_Type config);
@@ -129,4 +145,3 @@ void TSI_CallbackInstall(TSI_CallBackType AppCBFun);
 #endif
 
 #endif
-

@@ -4,8 +4,9 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.26
+	* \date    2015.10.08 FreeXc å®Œå–„äº†å¯¹ tsi æ¨¡å—çš„ç›¸å…³æ³¨é‡Š
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
-  * @note    ´ËÎÄ¼şÎªĞ¾Æ¬TSIÄ£¿éµÄµ×²ã¹¦ÄÜº¯Êı
+  * @note    æ­¤æ–‡ä»¶ä¸ºèŠ¯ç‰‡TSIæ¨¡å—çš„åº•å±‚åŠŸèƒ½å‡½æ•°
   ******************************************************************************
   */
   
@@ -38,9 +39,9 @@ static const uint16_t * TSI_ChlCNTRTable[] =
 };
 
 /**
- * @brief  »ñµÃÖ¸¶¨Í¨µÀµÄÊıÖµ
- * @param  chl :tsiÄ£¿éµÄÍ¨µÀ1~15
- * @retval ¸ÃÍ¨µÀµÄÊı¾İÖµ
+ * @brief  è·å¾—æŒ‡å®šé€šé“çš„æ•°å€¼
+ * @param[in]  chl tsiæ¨¡å—çš„é€šé“1~15ï¼Œè¯¦ç»†è¯·è§tsi.hæ–‡ä»¶
+ * @retval è¯¥é€šé“çš„æ•°æ®å€¼
  */
 uint32_t TSI_GetCounter(uint32_t chl)
 {
@@ -48,10 +49,10 @@ uint32_t TSI_GetCounter(uint32_t chl)
 }
 
 /**
- * @brief  TSIÍ¨µÀĞ£Ñéº¯Êı
- * @param  chl      :tsiÄ£¿éµÄÍ¨µÀ1~15
- * @param  threshld :ĞŞÕıĞ£ÑéÖµ
- * @retval ¸ÃÍ¨µÀµÄÊı¾İÖµ
+ * @brief  TSIé€šé“æ ¡éªŒå‡½æ•°ï¼Œå†…éƒ¨å‡½æ•°
+ * @param[in]  chl      tsiæ¨¡å—çš„é€šé“1~15
+ * @param[in]  threshld ä¿®æ­£æ ¡éªŒå€¼
+ * @retval None
  */
 static void TSI_Calibration(uint32_t chl, uint32_t threshld)
 {
@@ -68,16 +69,16 @@ static void TSI_Calibration(uint32_t chl, uint32_t threshld)
 }
 
 /**
- * @brief  TSI³õÊ¼»¯ÅäÖÃ
+ * @brief  TSIåˆå§‹åŒ–é…ç½®
  * @code
- *    //³õÊ¼»¯ÅäÖÃTSIÄ£¿éµÄ1Í¨µÀÎªÖÜÆÚ´¥·¢·½Ê½£¬ÅĞ¶Ï·§ÖµÎª200
- *    TSI_InitTypeDef  TSI_InitStruct1;      //ÉêÇëÒ»¸ö½á¹¹±äÁ¿
- *    TSI_InitStruct1.chl = 1;   //Ñ¡ÔñÍ¨µÀ
- *    TSI_InitStruct1.triggerMode = kTSI_TriggerPeriodicalScan; //Ó²¼şÖÜÆÚÉ¨Ãè
- *    TSI_InitStruct1.threshld = 200;   //ÉèÖÃ·§ÖµÎª200
+ *    //åˆå§‹åŒ–é…ç½®TSIæ¨¡å—çš„1é€šé“ä¸ºå‘¨æœŸè§¦å‘æ–¹å¼ï¼Œåˆ¤æ–­é˜€å€¼ä¸º200
+ *    TSI_InitTypeDef  TSI_InitStruct1;      //ç”³è¯·ä¸€ä¸ªç»“æ„å˜é‡
+ *    TSI_InitStruct1.chl = 1;   //é€‰æ‹©é€šé“
+ *    TSI_InitStruct1.triggerMode = kTSI_TriggerPeriodicalScan; //ç¡¬ä»¶å‘¨æœŸæ‰«æ
+ *    TSI_InitStruct1.threshld = 200;   //è®¾ç½®é˜€å€¼ä¸º200
  *    TSI_Init(&TSI_InitStruct1);
  * @endcode
- * @param  TSI_InitStruct: TSI³õÊ¼»¯½á¹¹Ìå,´æ´¢Í¨µÀµÄ¹¤×÷×´Ì¬
+ * @param[in]  TSI_InitStruct æŒ‡å‘TSIåˆå§‹åŒ–ç»“æ„ä½“çš„æŒ‡é’ˆ,å­˜å‚¨é€šé“çš„å·¥ä½œçŠ¶æ€
  * @retval None
  */
 void TSI_Init(TSI_InitTypeDef* TSI_InitStruct)
@@ -124,13 +125,13 @@ void TSI_Init(TSI_InitTypeDef* TSI_InitStruct)
 }
 
 /**
- * @brief  TSI¿ìËÙ³õÊ¼»¯ÅäÖÃ
+ * @brief  TSIå¿«é€Ÿåˆå§‹åŒ–é…ç½®
  * @code
- *    //¿ìËÙ³õÊ¼»¯ÅäÖÃTSIÄ£¿éµÄ1Í¨µÀµÄPTA0Òı½Å×öÄ¬ÈÏ´¥¿ØÒı½Å
+ *    //å¿«é€Ÿåˆå§‹åŒ–é…ç½®TSIæ¨¡å—çš„1é€šé“çš„PTA0å¼•è„šåšé»˜è®¤è§¦æ§å¼•è„š
  *    TSI_QuickInit(TSI0_CH1_PA00);
  * @endcode
- * @param  MAP: TSI³õÊ¼»¯Ô¤¶¨Òå£¬Ïê¼ûtsi.hÎÄ¼ş
- * @retval Í¨µÀºÅ
+ * @param[in]  MAP TSIåˆå§‹åŒ–é¢„å®šä¹‰ï¼Œè¯¦è§tsi.hæ–‡ä»¶
+ * @retval é€šé“å·
  */
 uint32_t TSI_QuickInit(uint32_t MAP)
 {
@@ -155,15 +156,15 @@ uint32_t TSI_QuickInit(uint32_t MAP)
 }
 
 /**
- * @brief  TSIÄ£¿éÖĞ¶ÏÀàĞÍ»òÕßDMA¹¦ÄÜÉèÖÃ
+ * @brief  TSIæ¨¡å—ä¸­æ–­ç±»å‹æˆ–è€…DMAåŠŸèƒ½è®¾ç½®
  * @code
- *      //¿ªÆôÉ¨Ãè½áÊø´¥·¢ÖĞ¶ÏÄ£Ê½
+ *      //å¼€å¯æ‰«æç»“æŸè§¦å‘ä¸­æ–­æ¨¡å¼
  *      TSI_ITDMAConfig(kTSI_IT_EndOfScan); 
  * @endcode
- * @param config: ÖĞ¶ÏÅäÖÃÄ£Ê½
- *         @arg kTSI_IT_Disable ¹Ø±ÕÖĞ¶Ï¹¦ÄÜ
- *         @arg kTSI_IT_OutOfRange ³¬³ö·§Öµ´¥·¢ÖĞ¶Ï
- *         @arg kTSI_IT_EndOfScan É¨Ãè½áÊø´¥·¢ÖĞ¶Ï
+ * @param[in] config ä¸­æ–­é…ç½®æ¨¡å¼
+ *         		@arg kTSI_IT_Disable å…³é—­ä¸­æ–­åŠŸèƒ½
+ *         		@arg kTSI_IT_OutOfRange è¶…å‡ºé˜€å€¼è§¦å‘ä¸­æ–­
+ *         		@arg kTSI_IT_EndOfScan æ‰«æç»“æŸè§¦å‘ä¸­æ–­
  * @retval None
  */
 void TSI_ITDMAConfig(TSI_ITDMAConfig_Type config)
@@ -189,10 +190,10 @@ void TSI_ITDMAConfig(TSI_ITDMAConfig_Type config)
 }
 
 /**
- * @brief  ×¢²áÖĞ¶Ï»Øµ÷º¯Êı
- * @param AppCBFun: »Øµ÷º¯ÊıÖ¸ÕëÈë¿Ú
+ * @brief  æ³¨å†Œä¸­æ–­å›è°ƒå‡½æ•°
+ * @param[in] AppCBFun å›è°ƒå‡½æ•°æŒ‡é’ˆå…¥å£
  * @retval None
- * @note ¶ÔÓÚ´Ëº¯ÊıµÄ¾ßÌåÓ¦ÓÃÇë²éÔÄÓ¦ÓÃÊµÀı
+ * @note å¯¹äºæ­¤å‡½æ•°çš„å…·ä½“åº”ç”¨è¯·æŸ¥é˜…åº”ç”¨å®ä¾‹
  */
 void TSI_CallbackInstall(TSI_CallBackType AppCBFun)
 {
@@ -202,9 +203,8 @@ void TSI_CallbackInstall(TSI_CallBackType AppCBFun)
     }
 }
 /**
- * @brief  ÖĞ¶Ï´¦Àíº¯ÊıÈë¿Ú
- * @param  TSI0_IRQHandler  :Ğ¾Æ¬µÄTSIÄ£¿éÖĞ¶Ïº¯ÊıÈë¿Ú
- * @note º¯ÊıÄÚ²¿ÓÃÓÚÖĞ¶ÏÊÂ¼ş´¦Àí
+ * @brief  ä¸­æ–­å¤„ç†å‡½æ•°å…¥å£
+ * @note å‡½æ•°å†…éƒ¨ç”¨äºä¸­æ–­äº‹ä»¶å¤„ç†(è°ƒç”¨ç”¨æˆ·æ³¨å†Œçš„å›è°ƒå‡½æ•°)
  */
 void TSI0_IRQHandler(void)
 {
@@ -242,5 +242,3 @@ void TSI0_IRQHandler(void)
     { 0, 2, 0, 2, 1,15},    //TSI0_CH15_PC02
 };
 */
-
-

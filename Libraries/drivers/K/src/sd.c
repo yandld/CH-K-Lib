@@ -4,6 +4,7 @@
   * @author  YANDLD
   * @version V2.5
   * @date    2014.3.24
+  * @date    2015.10.04 FreeXc 完善了 sd 模块的相关注释
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -154,6 +155,10 @@ uint32_t SD_StatusWait (uint32_t mask);
 //    }
 //}
 
+/**
+ * \brief SDHC wait function
+ * \note internal function
+ */
 static void SDHC_WaitCommandLineIdle(void)
 {
     volatile uint32_t timeout = 0;
@@ -167,6 +172,9 @@ static void SDHC_WaitCommandLineIdle(void)
 
 /**
  * @brief Set SDHC baud rate
+ * \param[in] clock 时钟频率
+ * \param[in] baudrate 波特率设置
+ * \return None
  */                                                            
 static void SD_SetBaudRate(uint32_t clock, uint32_t baudrate)
 {
@@ -199,6 +207,12 @@ static void SD_SetBaudRate(uint32_t clock, uint32_t baudrate)
 	SDHC->SYSCTL |= SDHC_SYSCTL_SDCLKEN_MASK;
 } 
 
+/**
+ * @brief Set SDHC baud rate
+ * \param[in] cmd 指令指针
+ * \retval   0     ESDHC_OK
+ * \retval other error code
+ */                                                            
 uint32_t SDHC_SendCmd(SDHC_Cmd_t *cmd)
 {
     uint32_t xfertyp;
@@ -258,7 +272,13 @@ uint32_t SDHC_SendCmd(SDHC_Cmd_t *cmd)
     return ESDHC_OK;
 }
 
-  
+/**
+ * @brief SDHC initialize card
+ * \note internal function
+ * \param[in] cmd 指令指针
+ * \retval   0     ESDHC_OK
+ * \retval other error code
+ */                                                            
 static uint8_t SD_InitCard(void)
 {
 	volatile uint32_t delay_cnt = 0;
@@ -395,6 +415,12 @@ static uint8_t SD_InitCard(void)
 	return ESDHC_OK;	
 }
 
+/**
+ * @brief SDHC quick initialize
+ * \param[in] baudrate 波特率
+ * \retval   0     ESDHC_OK
+ * \retval other error code
+ */                                                            
 uint32_t SD_QuickInit(uint32_t baudrate)
 {
     SD_InitTypeDef Init;
@@ -419,7 +445,12 @@ uint32_t SD_QuickInit(uint32_t baudrate)
     return SD_InitCard();
 }
 
-
+/**
+ * @brief SDHC complete initialize
+ * \param[in] Init SD初始化结构体指针
+ * \retval   0     ESDHC_OK
+ * \retval other error code
+ */                                                            
 uint8_t SD_Init(SD_InitTypeDef* Init)
 {
     uint32_t clock;
@@ -453,6 +484,14 @@ uint8_t SD_Init(SD_InitTypeDef* Init)
 	return ESDHC_OK;
 }
 
+/**
+ * @brief SDHC 块读操作
+ * \param[in] sector 块
+ * \param[out] buf 数据的存放地址
+ * \param[in] len 个数
+ * \retval   0     ESDHC_OK
+ * \retval other error code
+ */                                                            
 uint8_t SDHC_ReadBlock(uint32_t sector, uint8_t *buf, uint32_t len)
 {
     uint32_t ret, i,j;
@@ -502,6 +541,14 @@ uint8_t SDHC_ReadBlock(uint32_t sector, uint8_t *buf, uint32_t len)
     return ESDHC_OK;
 }
 
+/**
+ * @brief SDHC 块写操作
+ * \param[in] sector 块
+ * \param[in] buf 待写入数据的地址
+ * \param[in] len 个数
+ * \retval   0     ESDHC_OK
+ * \retval other error code
+ */                                                            
 uint8_t SDHC_WriteBlock(uint32_t sector, uint8_t *buf, uint32_t len)
 {
     uint16_t ret, i, j;
@@ -575,12 +622,25 @@ uint8_t SDHC_WriteBlock(uint32_t sector, uint8_t *buf, uint32_t len)
    return ESDHC_OK;
 }
 
-
+/**
+ * \brief read SD single block data
+ * \param[in] sector 块
+ * \param[out] buf 数据的存放地址
+ * \retval   0     ESDHC_OK
+ * \retval other error code
+ */ 
 uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buf)
 {
     return SDHC_ReadBlock(sector, buf, 1);
 }
-													  
+
+/**
+ * \brief write SD single block data
+ * \param[in] sector 块
+ * \param[in] buf 待写入数据的地址
+ * \retval   0     ESDHC_OK
+ * \retval other error code
+ */ 
 uint8_t SD_WriteSingleBlock(uint32_t sector, uint8_t *buf)
 {
     return SDHC_WriteBlock(sector, buf, 1);
@@ -619,6 +679,11 @@ uint32_t SD_GetSizeInMB(void)
 	}
 }
 
+/**
+ * \brief 等待状态位
+ * \param[in] mask 相关标志位
+ * \return 相对应的状态
+ */
 uint32_t SD_StatusWait (uint32_t  mask)
 {
     volatile uint32_t timeout;
@@ -638,6 +703,7 @@ uint32_t SD_StatusWait (uint32_t  mask)
 
 /**
  * @brief SD_ReadMultiBlock legcy support
+ * \note this function is same as SDHC_ReadBlock(...)
  */ 		
 uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len)
 {
@@ -646,6 +712,7 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len)
 
 /**
  * @brief SD_WriteMultiBlock legcy support
+ * \note this function is same as SDHC_WriteBlock(...)
  */ 	
 uint8_t SD_WriteMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len)
 {
@@ -653,4 +720,3 @@ uint8_t SD_WriteMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len)
 }
 
 #endif
-

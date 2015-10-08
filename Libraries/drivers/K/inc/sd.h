@@ -6,15 +6,14 @@
   * @date    2014.3.26
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
-  */
-  
+  */  
 #ifndef __CH_LIB_SD_H__
 #define __CH_LIB_SD_H__
 
 #include <stdint.h>
 
 
-//SD¿¨ÀàĞÍ¶¨Òå
+/* SDå¡ç±»å‹å®šä¹‰ */
 #define SD_CARD_TYPE_NONE      (0)
 #define SD_CARD_TYPE_UNKNOW    (1)
 #define SD_CARD_TYPE_SD        (2)
@@ -25,10 +24,13 @@
 #define SD_CARD_TYPE_MMC       (7)
 #define SD_CARD_CEATA          (8)   
 
-//SD³õÊ¼»¯½á¹¹Ìå
+/**
+ * \struct SD_InitTypeDef
+ * \brief SDåˆå§‹åŒ–ç»“æ„ä½“
+ */
 typedef struct 
 {
-    uint32_t baudrate; //Í¨ĞÅËÙ¶È
+    uint32_t baudrate; //é€šä¿¡é€Ÿåº¦
 }SD_InitTypeDef;
 
 
@@ -40,7 +42,7 @@ typedef struct
 #define ESDHC_ERROR_INVALID_BUS_WIDTH       (5)
 
 
-//!< API funtctions
+/* API funtctions */
 uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct);
 uint32_t SD_GetSizeInMB(void);
 uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buf);

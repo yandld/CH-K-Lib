@@ -221,7 +221,7 @@ void ADC_Init(ADC_InitTypeDef* ADC_InitStruct)
  *              @arg HW_ADC0  ADC0模块
  *              @arg HW_ADC1  ADC1模块
  *              @arg HW_ADC2  ADC2模块
- * \param[in]  Conversion trigger select
+ * \param[in]  status Conversion trigger select
  *              \arg 0 Software trigger selected
  *              \arg 1 Hardware trigger selected
  * \retval  None

@@ -3,7 +3,6 @@
 #include "rtt_drv.h"
 #include "shell.h"
 
-extern void rt_system_comonent_init(void);
 
 /* 线程1 入口 */
 void t1_thread_entry(void* parameter)

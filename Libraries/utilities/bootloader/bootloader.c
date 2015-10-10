@@ -18,7 +18,7 @@ typedef struct
 {
     uint8_t  cmd;
     uint16_t currentPkgNo;
-    uint8_t content[4096];
+    uint8_t content[4096+30];
 } DataFrame_t;
 
 
@@ -48,7 +48,7 @@ typedef struct
 typedef struct
 {
     uint8_t cmd;
-    uint8_t content[4096];
+    uint8_t content[4096+30];
 } GenericRecvFrame_t;
 
 

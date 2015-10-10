@@ -26,7 +26,7 @@ static 	msg_t m_Msg;
 */
 void GetData(uint8_t data)
 {
-    static uint8_t RevBuf[4096];
+    static uint8_t RevBuf[4096+30];
     static int i, length;
     static uint8_t fcs;
     static States_t States = INIT_STATE;

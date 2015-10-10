@@ -8,11 +8,8 @@
 static struct eth_device device;
 static uint8_t gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
 static rt_uint8_t *gTxBuf;
-static rt_uint8_t *gRxBuf;
 
 
-
-static enet_phy_data phy_data;
 
 void ENET_ISR(void)
 {
@@ -89,7 +86,7 @@ static rt_err_t rt_enet_phy_control(rt_device_t dev, rt_uint8_t cmd, void *args)
         else return -RT_ERROR;
         break;
     case NIOCTL_GET_PHY_DATA:
-        if (args) rt_memcpy(args, &phy_data, sizeof(phy_data));
+//        if (args) rt_memcpy(args, &phy_data, sizeof(phy_data));
         break;
     default :
         break;
@@ -99,70 +96,57 @@ static rt_err_t rt_enet_phy_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 
 struct pbuf *rt_enet_phy_rx(rt_device_t dev)
 {
-    struct pbuf* p;
-    rt_uint32_t i;
-    rt_uint32_t rx_len;
+    struct pbuf* p = RT_NULL;
+    rt_uint32_t len;
     
-    /* init p pointer */
-    p = RT_NULL;
-    i = 0;
-    rx_len = ENET_MacReceiveData(gRxBuf);
-    if(rx_len)
+    len = ENET_GetReceiveLen();
+//    len = ENET_MacReceiveData(gRxBuf);
+    if(len)
     {
-        phy_data.rx_fcnt++;
-        phy_data.rx_dcnt+= rx_len;
-        p = pbuf_alloc(PBUF_LINK, rx_len, PBUF_RAM);
-        if (p != RT_NULL)
-        {
-            struct pbuf* q;  
-            for (q = p; q != RT_NULL; q = q->next)
-            {
-                rt_memcpy((rt_uint8_t*)q->payload, (rt_uint8_t*)&gRxBuf[i], q->len);
-            }
-            rx_len = 0;
-        }
-        else
-        {
-            return NULL;
-        }
+        p = pbuf_alloc(PBUF_LINK, len, PBUF_RAM);
+        ENET_MacReceiveData(p->payload);
+//        if (p != RT_NULL)
+//        {
+//            struct pbuf* q;  
+//            for (q = p; q != RT_NULL; q = q->next)
+//            {
+//                rt_memcpy((rt_uint8_t*)q->payload, (rt_uint8_t*)&gRxBuf[i], q->len);
+//            }
+//            len = 0;
+//        }
+//        else
+//        {
+//            return NULL;
+//        }
     }
     return p;
 }
 
 rt_err_t rt_enet_phy_tx( rt_device_t dev, struct pbuf* p)
 {
-
-    rt_uint32_t tx_len;
+    bool islink;
+    rt_uint32_t len;
     struct pbuf *q;
     
-    tx_len = 0;
+    islink = enet_phy_is_linked();
+    eth_device_linkchange(&device, islink);
+    
     for (q = p; q != RT_NULL; q = q->next)
     {
-        rt_memcpy((rt_uint8_t*)&gTxBuf[tx_len], (rt_uint8_t*)q->payload, q->len);
-        tx_len += q->len;
+       // rt_uint8_t *pData = rt_malloc(q->len);
+        if(islink)
+        {
+            rt_memcpy(gTxBuf, q->payload, q->len);
+            ENET_MacSendData(gTxBuf, q->len);
+        }
+       // rt_free(pData);
     }
     
-    /* check if still linked */
-    if(!enet_phy_is_linked())
+    if(islink)
     {
-        eth_device_linkchange(&device, false);
-        return RT_ERROR;
+        return RT_EOK;
     }
-    else
-    {
-        eth_device_linkchange(&device, true);
-    }
-    
-    //rt_enter_critical();
-    DisableInterrupts();
-    ENET_MacSendData(gTxBuf, tx_len);
-    EnableInterrupts();
-    phy_data.tx_fcnt++;
-    phy_data.tx_dcnt+= tx_len;
-
-    //rt_exit_critical();
-
-    return RT_EOK;
+    return RT_EIO;
 }
 
 
@@ -183,13 +167,6 @@ int rt_hw_enet_phy_init(void)
     gTxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE+16);
     gTxBuf = (rt_uint8_t*)(uint32_t)RT_ALIGN((uint32_t)gTxBuf, 16);
     if(!gTxBuf)
-    {
-        return RT_ENOMEM;
-    }
-    
-    gRxBuf = rt_malloc(CFG_ENET_BUFFER_SIZE+16);
-    gRxBuf = (rt_uint8_t*)(uint32_t)RT_ALIGN((uint32_t)gRxBuf, 16);
-    if(!gRxBuf)
     {
         return RT_ENOMEM;
     }

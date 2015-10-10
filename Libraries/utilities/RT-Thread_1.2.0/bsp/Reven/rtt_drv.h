@@ -21,16 +21,6 @@ struct kinetis_spi_cs
     uint32_t ch;
 };
 
-
-typedef struct
-{
-    rt_uint32_t tx_fcnt;
-    rt_uint32_t tx_dcnt;
-    rt_uint32_t rx_fcnt;
-    rt_uint32_t rx_dcnt;
-}enet_phy_data;
-
-
 struct at24cxx_attr
 {
     const char* name;

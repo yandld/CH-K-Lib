@@ -351,7 +351,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
  */
 void ENET_MacSendData(uint8_t *data, uint16_t len)
 {
-    
+    ENET->EIR = ENET_EIMR_TXF_MASK;
     /* check if buffer is readly */
     //while( pxENETTxDescriptor->status & TX_BD_R ) {};
         
@@ -364,6 +364,16 @@ void ENET_MacSendData(uint8_t *data, uint16_t len)
         
     /* enable transmit */
     ENET->TDAR = ENET_TDAR_TDAR_MASK;
+    while(ENET->EIR & ENET_EIMR_TXF_MASK);
+}
+
+uint32_t ENET_GetReceiveLen(void)
+{
+    if((pxENETRxDescriptors[0].status & RX_BD_E ) == 0)
+    {
+		return  __REVSH(pxENETRxDescriptors[0].length);
+    }  
+    return 0;
 }
 
 /**
@@ -413,11 +423,11 @@ void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config)
             break;
         case kENET_IT_TXF:
             NVIC_EnableIRQ(ENET_Transmit_IRQn);
-            ENET->EIMR |= ENET_EIMR_TXF_MASK;
+            ENET->EIMR = ENET_EIMR_TXF_MASK;
             break;
         case kENET_IT_RXF:
             NVIC_EnableIRQ(ENET_Receive_IRQn);
-            ENET->EIMR |= ENET_EIMR_RXF_MASK;
+            ENET->EIMR = ENET_EIMR_RXF_MASK;
             break;
         default:
             break;

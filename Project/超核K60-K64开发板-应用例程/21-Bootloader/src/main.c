@@ -8,7 +8,7 @@
 
 static uint32_t send(uint8_t *buf, uint32_t len)
 {
-    int i;
+    volatile int i;
     for(i=0; i<len; i++)
     {
         UART_WriteByte(HW_UART0, *buf++);

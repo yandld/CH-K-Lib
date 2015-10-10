@@ -194,16 +194,11 @@ static void ProcessTransDataMsg(msg_t* pMsg)
             Bootloader.flash_erase(M_Control.write_addr);
             if(Bootloader.flash_write(M_Control.write_addr, pDataFrame->content, Bootloader.FlashPageSize) == BL_FLASH_OK)
             {
-                if(memcmp((void*)M_Control.write_addr, pDataFrame->content, Bootloader.FlashPageSize) == 0)
-                {
-                    M_Control.op_state = RCV_OK;
-                }
-                else
-                {
-                    M_Control.op_state = RCV_ERR;
-                    M_Control.retryCnt++;
-                }
                 M_Control.op_state = RCV_OK;
+            }
+            else
+            {
+                M_Control.op_state = RCV_ERR;
             }
 
             if(M_Control.op_state == RCV_OK)
@@ -224,32 +219,23 @@ static void ProcessTransDataMsg(msg_t* pMsg)
         }
 
         Resp.pkg_no = pDataFrame->currentPkgNo;
-        if(M_Control.retryCnt < 3)
-        {
-            SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
-        }
-    }
-    //如果收到的包号不连续
-    else
-    {
-        
+        SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
     }
 }
 
 static void ProcessAppVerificationMsg(msg_t* pMsg)
 {
     ResponseFrame_t Resp = {CMD_VERIFICATION, 0, RCV_OK};
-    msg_t m_Msg = {CMD_APP_CHECK, 0, 0, &m_Msg};
-
     SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
+    SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
+    
+    msg_t m_Msg = {CMD_APP_CHECK, 0, 0, &m_Msg};
     mq_push(m_Msg);
 }
 
 /* 检测程序是否有效，如果有效， 则跳转到应用程序执行 */
 static void ProccessAppCheckMsg(msg_t* pMsg)
 {
-    ResponseFrame_t Resp = {CMD_VERIFICATION, 0, RCV_OK};
-    SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
     if(*(uint32_t*)Bootloader.AppStartAddr != 0xFFFFFFFF)
     {
         GoToUserApp( Bootloader.AppStartAddr);

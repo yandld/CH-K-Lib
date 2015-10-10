@@ -111,7 +111,6 @@ void GetData(uint8_t data)
                 States = INIT_STATE;
             }
             break;
-
         case END_HS_STATE:
             if(0xFF == data)
             {

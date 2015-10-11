@@ -61,7 +61,6 @@ static pFuncCallback pExecFun;      /* 回调函数变量 */
 uint32_t SysTimeOut;
 
 
-
 /* 命令解析函数 */
 static pFuncCallback MsgCallbackFind(msg_t* pMsg);
 
@@ -80,11 +79,8 @@ static void ProcessAppVerificationMsg(msg_t* pMsg);
 /* 应用程序检查函数 */
 static void ProccessAppCheckMsg(msg_t* pMsg);
 
-/* 超时事件处理函数 */
- void ProcessTimeOutEvt(void);
-
 /* Tick处理函数 */
- void TickProcess(void);
+static void TickProcess(void);
 
 static void ProcessChipInfoMsg(msg_t* pMsg);
 void GoToUserApp(uint32_t app_start_addr);
@@ -137,7 +133,7 @@ static void ProcessUartMsg(msg_t* pMsg)
     msg_t m_Msg;
 
     pRcvFrame = (GenericRecvFrame_t *)(((uint8_t*)pMsg->pMessage)) ;
-    M_Control.IsBootMode = true;
+    MainControl.IsBootMode = true;
 
     m_Msg.cmd = pRcvFrame->cmd;
     m_Msg.pMessage = pRcvFrame;
@@ -159,12 +155,11 @@ static void ProcessChipInfoMsg(msg_t* pMsg)
 
 static void ProcessAppInfoMsg(msg_t* pMsg)
 {
+    MainControl.write_addr = Bootloader.AppStartAddr;
+    MainControl.currentPkgNo = 0;
+    MainControl.retryCnt = 0;
+
     ResponseFrame_t Resp = {CMD_APP_INFO, 0, RCV_OK};
-
-    M_Control.write_addr = Bootloader.AppStartAddr;
-    M_Control.currentPkgNo = 0;
-    M_Control.retryCnt = 0;
-
     SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
 }
 
@@ -177,41 +172,33 @@ static void ProcessTransDataMsg(msg_t* pMsg)
     pDataFrame = (DataFrame_t*)pMsg->pMessage;
     Resp.cmd = CMD_TRANS_DATA;
     //如果是下一包或者是重复包
-    if((M_Control.currentPkgNo == (pDataFrame->currentPkgNo-1)) || (M_Control.currentPkgNo == pDataFrame->currentPkgNo))
+    if((MainControl.currentPkgNo == (pDataFrame->currentPkgNo-1)) || (MainControl.currentPkgNo == pDataFrame->currentPkgNo))
     {
-        if(M_Control.currentPkgNo != pDataFrame->currentPkgNo)
+        if(MainControl.currentPkgNo != pDataFrame->currentPkgNo)
         {
             needWrite = 1;
-            M_Control.write_addr = Bootloader.AppStartAddr + (pDataFrame->currentPkgNo-1)*Bootloader.FlashPageSize;
+            MainControl.write_addr = Bootloader.AppStartAddr + (pDataFrame->currentPkgNo-1)*Bootloader.FlashPageSize;
         }
-        else if(M_Control.op_state != RCV_OK)
+        else if(MainControl.op_state != RCV_OK)
         {
             needWrite = 1;
-            M_Control.write_addr = Bootloader.AppStartAddr + pDataFrame->currentPkgNo*Bootloader.FlashPageSize;
+            MainControl.write_addr = Bootloader.AppStartAddr + pDataFrame->currentPkgNo*Bootloader.FlashPageSize;
         }
         if(needWrite)
         {
-            Bootloader.flash_erase(M_Control.write_addr);
-            if(Bootloader.flash_write(M_Control.write_addr, pDataFrame->content, Bootloader.FlashPageSize) == BL_FLASH_OK)
+            Bootloader.flash_erase(MainControl.write_addr);
+            if(Bootloader.flash_write(MainControl.write_addr, pDataFrame->content, Bootloader.FlashPageSize) == BL_FLASH_OK)
             {
-                M_Control.op_state = RCV_OK;
+                MainControl.retryCnt = 0;
+                MainControl.currentPkgNo = pDataFrame->currentPkgNo;
+                MainControl.op_state = RCV_OK;
             }
             else
             {
-                M_Control.op_state = RCV_ERR;
+                MainControl.op_state = RCV_ERR;
+                MainControl.retryCnt++;
             }
-
-            if(M_Control.op_state == RCV_OK)
-            {
-                M_Control.retryCnt = 0;
-                M_Control.currentPkgNo = pDataFrame->currentPkgNo;
-            }
-            else
-            {
-                M_Control.retryCnt++;
-            }
-
-            Resp.status = M_Control.op_state;
+            Resp.status = MainControl.op_state;
         }
         else
         {
@@ -256,7 +243,7 @@ static void TickProcess(void)
 {
     if(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)
     {
-        ++M_Control.timeout;
+        ++MainControl.timeout;
     }
 }
 
@@ -299,13 +286,41 @@ void BootloaderProc(void)
         }
     }
 
-    if((M_Control.timeout >= SysTimeOut) && (!M_Control.IsBootMode))
+    if((MainControl.timeout >= SysTimeOut) && (!MainControl.IsBootMode))
     {
         msg_t m_Msg = {CMD_APP_CHECK,0, 0, &m_Msg};
-        M_Control.timeout = 0;
+        MainControl.timeout = 0;
         mq_push(m_Msg);
     }
     
     TickProcess();
+}
+
+void SendResp(uint8_t* content, uint8_t cipherFlg,  uint16_t len)
+{
+    uint8_t header[5] = {0xFF, 0xFF, 0, 0, 0};
+    uint8_t footer[3] = {0, 0xFF, 0xFE};
+    uint8_t fcs = 0;
+    int i;
+
+    header[3] = (uint8_t)(len & 0xFF);
+    header[4] = (uint8_t)((len>>8) & 0xFF);
+
+    /* cipter */
+    if(cipherFlg == 1)
+    {
+
+    }
+
+    /* make checksum */
+    for(i=0; i<len; i++)
+    {
+        fcs += content[i];
+    }
+    footer[0] = fcs;
+    
+    Bootloader.send(header, sizeof(header));
+    Bootloader.send(content, len);
+    Bootloader.send(footer, sizeof(footer));
 }
 

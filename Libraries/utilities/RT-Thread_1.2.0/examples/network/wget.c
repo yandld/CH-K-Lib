@@ -79,13 +79,22 @@ int wget(int argc, char** argv)
     char shost[256];
     char sname[256];
     
+    rt_memset(shost, 0, sizeof(shost));
+    rt_memset(sname, 0, sizeof(sname));
+    
     if(argv[1] == RT_NULL)
     {
+        rt_kprintf("bad url\r\n");
         return -1;
     }
     char *url = argv[1];
     
     http_parse_request_url((char*)url, shost, &port, sname);
+    if((!shost[0]) || (!sname[0]))
+    {
+        rt_kprintf("bad url\r\n");
+        return -1;
+    }
     rt_kprintf("host:%s | name:%s\r\n", shost, sname);
     host = gethostbyname(shost);
     

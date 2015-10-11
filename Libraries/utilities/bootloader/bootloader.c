@@ -31,8 +31,9 @@ typedef struct
     uint32_t    FCFG2;
     uint32_t    SDID;
     uint32_t    FlashPageSize;
+    uint32_t    AppStartAddr;
 } ChipInfo_t;
-
+       
 //回应帧数据部分格式
 #pragma pack(1)
 typedef struct
@@ -167,47 +168,61 @@ static void ProcessTransDataMsg(msg_t* pMsg)
 {
     DataFrame_t* pDataFrame;
     ResponseFrame_t Resp;
-    uint8_t needWrite = 0;
 
     pDataFrame = (DataFrame_t*)pMsg->pMessage;
     Resp.cmd = CMD_TRANS_DATA;
     //如果是下一包或者是重复包
-    if((MainControl.currentPkgNo == (pDataFrame->currentPkgNo-1)) || (MainControl.currentPkgNo == pDataFrame->currentPkgNo))
+    MainControl.write_addr = Bootloader.AppStartAddr + (pDataFrame->currentPkgNo-1)*Bootloader.FlashPageSize;
+    Bootloader.flash_erase(MainControl.write_addr);
+    if(Bootloader.flash_write(MainControl.write_addr, pDataFrame->content, Bootloader.FlashPageSize) == BL_FLASH_OK)
     {
-        if(MainControl.currentPkgNo != pDataFrame->currentPkgNo)
-        {
-            needWrite = 1;
-            MainControl.write_addr = Bootloader.AppStartAddr + (pDataFrame->currentPkgNo-1)*Bootloader.FlashPageSize;
-        }
-        else if(MainControl.op_state != RCV_OK)
-        {
-            needWrite = 1;
-            MainControl.write_addr = Bootloader.AppStartAddr + pDataFrame->currentPkgNo*Bootloader.FlashPageSize;
-        }
-        if(needWrite)
-        {
-            Bootloader.flash_erase(MainControl.write_addr);
-            if(Bootloader.flash_write(MainControl.write_addr, pDataFrame->content, Bootloader.FlashPageSize) == BL_FLASH_OK)
-            {
-                MainControl.retryCnt = 0;
-                MainControl.currentPkgNo = pDataFrame->currentPkgNo;
-                MainControl.op_state = RCV_OK;
-            }
-            else
-            {
-                MainControl.op_state = RCV_ERR;
-                MainControl.retryCnt++;
-            }
-            Resp.status = MainControl.op_state;
-        }
-        else
-        {
-            Resp.status = RCV_OK;
-        }
+        MainControl.retryCnt = 0;
+        MainControl.currentPkgNo = pDataFrame->currentPkgNo;
+        MainControl.op_state = RCV_OK;
+    }
+    else
+    {
+        MainControl.op_state = RCV_ERR;
+        MainControl.retryCnt++;
+    }
+    Resp.status = MainControl.op_state;
+            
+//    if((MainControl.currentPkgNo == (pDataFrame->currentPkgNo-1)) || (MainControl.currentPkgNo == pDataFrame->currentPkgNo))
+//    {
+//        if(MainControl.currentPkgNo != pDataFrame->currentPkgNo)
+//        {
+//            needWrite = 1;
+//            MainControl.write_addr = Bootloader.AppStartAddr + (pDataFrame->currentPkgNo-1)*Bootloader.FlashPageSize;
+//        }
+//        else if(MainControl.op_state != RCV_OK)
+//        {
+//            needWrite = 1;
+//            MainControl.write_addr = Bootloader.AppStartAddr + pDataFrame->currentPkgNo*Bootloader.FlashPageSize;
+//        }
+//        if(needWrite)
+//        {
+//            Bootloader.flash_erase(MainControl.write_addr);
+//            if(Bootloader.flash_write(MainControl.write_addr, pDataFrame->content, Bootloader.FlashPageSize) == BL_FLASH_OK)
+//            {
+//                MainControl.retryCnt = 0;
+//                MainControl.currentPkgNo = pDataFrame->currentPkgNo;
+//                MainControl.op_state = RCV_OK;
+//            }
+//            else
+//            {
+//                MainControl.op_state = RCV_ERR;
+//                MainControl.retryCnt++;
+//            }
+//            Resp.status = MainControl.op_state;
+//        }
+//        else
+//        {
+//            Resp.status = RCV_OK;
+//        }
 
         Resp.pkg_no = pDataFrame->currentPkgNo;
         SendResp((uint8_t*)&Resp, 0, sizeof(Resp));
-    }
+//    }
 }
 
 static void ProcessAppVerificationMsg(msg_t* pMsg)
@@ -223,10 +238,7 @@ static void ProcessAppVerificationMsg(msg_t* pMsg)
 /* 检测程序是否有效，如果有效， 则跳转到应用程序执行 */
 static void ProccessAppCheckMsg(msg_t* pMsg)
 {
-    if(*(uint32_t*)Bootloader.AppStartAddr != 0xFFFFFFFF)
-    {
-        GoToUserApp( Bootloader.AppStartAddr);
-    }
+    GoToUserApp( Bootloader.AppStartAddr);
 }
 
 static void SysTick_Cfg(uint32_t ticks)
@@ -255,7 +267,7 @@ void GoToUserApp(uint32_t app_start_addr)
     jump_addr = *(uint32_t*)(app_start_addr + 4);  //RESET中断
     
     //由于采用了bootloader, 故程序的jump_addr地址应该在 (0x5000, END_ADDR] 范围内
-    if(app_start_addr != 0xFFFFFFFFUL && (jump_addr > Bootloader.AppStartAddr))
+    if(*((uint32_t*)app_start_addr) != 0xFFFFFFFFUL && (jump_addr > Bootloader.AppStartAddr))
     {
         jump_to_application = (pFunction)jump_addr;
         __set_MSP(*(uint32_t*)app_start_addr); //栈地址
@@ -285,14 +297,12 @@ void BootloaderProc(void)
             pExecFun = NULL;
         }
     }
-
     if((MainControl.timeout >= SysTimeOut) && (!MainControl.IsBootMode))
     {
         msg_t m_Msg = {CMD_APP_CHECK,0, 0, &m_Msg};
         MainControl.timeout = 0;
         mq_push(m_Msg);
     }
-    
     TickProcess();
 }
 

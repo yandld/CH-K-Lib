@@ -27,7 +27,6 @@
  UART5_RX_PD08_TX_PD09   
 */
 
-const uint8_t Data[1024*150] = {0};
  
 int main(void)
 {
@@ -36,7 +35,6 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     /* 初始化一个串口 使用UART0端口的PTD6引脚和PTD7引脚作为接收和发送，默认设置 baud 115200 */
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    printf(Data);
     printf("HelloWorld!\r\n");
     while(1)
     {

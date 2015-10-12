@@ -35,7 +35,7 @@ void CAN_ISR(void)
 void udp_echo_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct 
 ip_addr *addr, u16_t port)
 {
-    char buffer[512];
+    uint8_t buffer[512];
     if (p != NULL) 
     {
         if(pbuf_copy_partial(p, buffer, p->tot_len,0) != p->tot_len) 

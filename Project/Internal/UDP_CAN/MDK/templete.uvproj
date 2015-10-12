@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10 CLOCK_SETUP=4</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\utilities\lwip;..\..\..\..\Libraries\utilities\lwip\lwip-1.4.1\include;..\..\..\..\Libraries\utilities\lwip\lwip-1.4.1\include\ipv4;..\..\..\..\Libraries\utilities\lwip\lwip-1.4.1\include\lwip;..\..\..\..\Libraries\utilities\lwip\lwip-1.4.1\netif;..\..\..\..\Libraries\utilities\lwip\arch;..\..\..\..\Libraries\utilities\USBStack\inc</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\utilities\inc;..\..\..\..\Libraries\devices\inc;..\src;..\..\..\..\Libraries\utilities\lwip;..\..\..\..\Libraries\utilities\lwip\lwip-1.4.1\include;..\..\..\..\Libraries\utilities\lwip\lwip-1.4.1\include\ipv4;..\..\..\..\Libraries\utilities\lwip\lwip-1.4.1\include\lwip;..\..\..\..\Libraries\utilities\lwip\lwip-1.4.1\netif;..\..\..\..\Libraries\utilities\lwip\arch;..\..\..\..\Libraries\utilities\USBStack\inc;..\..\..\..\Libraries\utilities\fatfs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -438,6 +438,11 @@
               <FileName>udisk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\udisk.c</FilePath>
+            </File>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\diskio.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -753,6 +758,16 @@
               <FileName>usbd_msc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\USBStack\src\usbd_msc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>fatfs</GroupName>
+          <Files>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\utilities\fatfs\ff.c</FilePath>
             </File>
           </Files>
         </Group>

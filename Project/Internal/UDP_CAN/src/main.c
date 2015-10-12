@@ -21,6 +21,10 @@
 
 #include "can.h"
 #include "rl_usb.h"
+#include "ff.h"
+
+/* 打印操作结果 */
+#define ERROR_TRACE(rc)     do {if(rc != 0){printf("fatfs error:%d\r\n", rc);}} while(0)
 
 #define CAN_TX_ID  0x10
 #define CAN_RX_ID  0x56
@@ -100,7 +104,7 @@ int main(void)
     ENET_ITDMAConfig(kENET_IT_RXF);
 
     ip_addr_t fsl_netif0_ipaddr, fsl_netif0_netmask, fsl_netif0_gw;
-
+    
     lwip_init();
 
 #if LWIP_DHCP					 // DHCP
@@ -154,6 +158,39 @@ int main(void)
     
 #endif
 
+    /* File System */
+    uint8_t buf[512];
+    FRESULT rc;
+    FATFS fs_sd;
+    FIL fil;
+    FATFS *fs;
+    fs = &fs_sd;
+    UINT bw,br; /* bw = byte writted br = byte readed */
+    DWORD fre_clust, fre_sect, tot_sect;
+    /* 挂载文件系统 */
+    rc = f_mount(fs, "0:", 0);
+    ERROR_TRACE(rc);
+    rc = f_getfree("0:", &fre_clust, &fs);
+    ERROR_TRACE(rc);
+    /* 计算磁盘空间及剩余空间 */
+    tot_sect = (fs->n_fatent - 2) * fs->csize;
+    fre_sect = fre_clust * fs->csize;
+    printf("%d KB total drive space.\r\n%d KB available.\r\n", tot_sect*2, fre_sect*2);
+    
+    /* 读取文件 */
+    rc = f_open(&fil, "0:/config.ini", FA_READ);
+    ERROR_TRACE(rc);
+    printf("file size:%d\r\n", f_size(&fil));
+    printf("file contents:\r\n");
+    while(1)
+    {
+        rc = f_read(&fil, buf, sizeof(buf), &br);
+        if(rc || !br ) break;
+        printf("%s", buf);
+    }
+    rc = f_close(&fil);
+    ERROR_TRACE(rc);
+    
     
     /* USB */
     printf("usbd hid msc(udisk) demo\r\n");

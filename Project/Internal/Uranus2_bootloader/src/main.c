@@ -56,7 +56,6 @@ int main(void)
 
     
     UART_Init(UART0_RX_PA01_TX_PA02, 115200);
-    UART_SetIntMode(HW_UART0, kUART_IntRx, true);
     FLASH_Init();
     
     Boot.AppStartAddr = 0x5000;
@@ -67,7 +66,7 @@ int main(void)
     Boot.flash_write = flash_write;
     
     BootloaderInit(&Boot);
-    
+    UART_SetIntMode(HW_UART0, kUART_IntRx, true);
     while(1)
     {
         BootloaderProc();
@@ -90,6 +89,7 @@ void UART0_IRQHandler(void)
     */
     if(UART0->S1 & UART_S1_OR_MASK)
     {
+        UART0->S1 |= UART_S1_OR_MASK;
         ch = UART0->D;
     }
 }

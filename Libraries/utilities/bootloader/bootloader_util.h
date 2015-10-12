@@ -25,7 +25,7 @@ typedef struct
 } RunType_t;
 
 
-extern RunType_t M_Control;
+extern RunType_t MainControl;
 
 //!< API functions
 void SendResp(uint8_t* content, uint8_t cipherFlg,  uint16_t len);

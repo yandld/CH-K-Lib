@@ -8,7 +8,7 @@
 
 static uint32_t send(uint8_t *buf, uint32_t len)
 {
-    int i;
+    volatile int i;
     for(i=0; i<len; i++)
     {
         UART_WriteByte(HW_UART0, *buf++);
@@ -53,8 +53,9 @@ int main(void)
 {
     DelayInit();
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    printf("CHBootloader\r\n");
+    
     UART_CallbackRxInstall(HW_UART0, UART_ISR);
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     FLASH_Init();
     
     Boot.AppStartAddr = 0x5000;
@@ -65,6 +66,8 @@ int main(void)
     Boot.flash_write = flash_write;
     
     BootloaderInit(&Boot);
+    
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     
     while(1)
     {

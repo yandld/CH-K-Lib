@@ -15,9 +15,7 @@ typedef enum
     END_STATE
 }States_t;
 
-
-
-RunType_t M_Control;
+RunType_t MainControl;
 static 	msg_t m_Msg;
 
 /**
@@ -30,12 +28,12 @@ void GetData(uint8_t data)
     static int i, length;
     static uint8_t fcs;
     static States_t States = INIT_STATE;
-    if(M_Control.timeout > 500)
+    if(MainControl.timeout > 500)
     {
         States = INIT_STATE;
     }
 
-    M_Control.timeout = 0;
+    MainControl.timeout = 0;
 
     switch(States)
     {
@@ -111,7 +109,6 @@ void GetData(uint8_t data)
                 States = INIT_STATE;
             }
             break;
-
         case END_HS_STATE:
             if(0xFF == data)
             {
@@ -137,34 +134,5 @@ void GetData(uint8_t data)
 
 }
 
-extern Boot_t Bootloader;
-
-void SendResp(uint8_t* content, uint8_t cipherFlg,  uint16_t len)
-{
-    uint8_t header[5] = {0xFF, 0xFF, 0, 0, 0};
-    uint8_t footer[3] = {0, 0xFF, 0xFE};
-    uint8_t fcs = 0;
-    int i;
-
-    header[3] = (uint8_t)(len & 0xFF);
-    header[4] = (uint8_t)((len>>8) & 0xFF);
-
-    /* cipter */
-    if(cipherFlg == 1)
-    {
-
-    }
-
-    /* make checksum */
-    for(i=0; i<len; i++)
-    {
-        fcs += content[i];
-    }
-    footer[0] = fcs;
-    
-    Bootloader.send(header, sizeof(header));
-    Bootloader.send(content, len);
-    Bootloader.send(footer, sizeof(footer));
-}
 
 

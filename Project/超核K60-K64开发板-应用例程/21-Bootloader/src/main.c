@@ -6,6 +6,15 @@
 #include "flash.h"
 #include "bootloader.h"
 
+
+/*
+1. download this program to chip, pay attation to UART you use.
+2. open Kinetis_BootLoader.exe, reset chip, then press Connect within 2S.
+3. the App need to be linked at 0x5000, you can use 0-template as bootloader project template. swtich project option to flash_bootlaoder.
+4. then find the bin/hex file your bootloader project generaterd. then select bin file and download.
+*/
+
+
 static uint32_t send(uint8_t *buf, uint32_t len)
 {
     volatile int i;

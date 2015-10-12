@@ -39,7 +39,7 @@ void usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
     {
         for(i=0;i<num_of_blocks;i++)
         {
-            memcpy(buf, p, num_of_blocks * USBD_MSC_BlockSize);
+            memcpy(buf, p, USBD_MSC_BlockSize);
             p += USBD_MSC_BlockSize;
         }
     }
@@ -58,7 +58,8 @@ void usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
         for(i=0;i<num_of_blocks;i++)
         {
             FLASH_EraseSector((uint32_t)p);
-            FLASH_WriteSector((uint32_t)p, buf, FLASH_GetSectorSize());
+            FLASH_WriteSector((uint32_t)p, buf, USBD_MSC_BlockSize);
+            p += USBD_MSC_BlockSize;
         }
     }
 }

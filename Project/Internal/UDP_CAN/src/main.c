@@ -79,7 +79,7 @@ extern void udp_echo_init(void);
 
 int main(void)
 {
-    int ret;
+    int ret,i;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
@@ -147,13 +147,22 @@ int main(void)
     
 #if LWIP_DHCP	
     printf("dhcp start getting addr...\r\n");
+    
     dhcp_start(&fsl_netif0);
+    i = sys_now();
     while((fsl_netif0.dhcp->offered_ip_addr.addr == 0) || (fsl_netif0.dhcp->offered_gw_addr.addr == 0) || (fsl_netif0.dhcp->offered_sn_mask.addr == 0))
     {
+        
         if(gEnetRev)
         {
             ethernetif_input(&fsl_netif0); 
             gEnetRev = false;
+        }
+        if(sys_now()-i > 5000)
+        {
+            i = sys_now();
+            printf("dhcp restart\r\n");
+            dhcp_start(&fsl_netif0);
         }
     }
     

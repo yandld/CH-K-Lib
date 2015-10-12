@@ -1,15 +1,14 @@
 /**
+  ******************************************************************************
   * @file    flash.c
   * @author  YANDLD
-  * @version V2.5
-  * @date    2014.3.26
-  * @date    2015.10.05 FreeXc 完善了flash模块中API函数的注释
+  * @version V3.0.0
+  * @date    2015.8.28
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
+  ******************************************************************************
   */
-  
 #include "flash.h"
 #include "common.h"
-
 
 /* flash commands */
 #define RD1BLK    0x00  /* read 1 block */
@@ -31,13 +30,12 @@
 #define NORMAL_LEVEL 0x0
 
 
-
-
-/* disable interrupt before launch command */
+/* disable interrupt before lunch command */
 #define CCIF    (1<<7)
 #define ACCERR  (1<<5)
 #define FPVIOL  (1<<4)
 #define MGSTAT0 (1<<0)
+
 
 #if defined(FTFL)
 #define FTF    FTFL
@@ -53,58 +51,36 @@
 #define FTF    FTFA
 #endif
 
-/**
- * \brief luanch command
- * \note Internal function, user needn't use
- * \retval 0x00 launch successfully
- * \retval 0x04 launch failure
- */
-static uint8_t _CommandLaunch(void)
+static inline uint8_t FlashCmdStart(void)
 {
-    /* Clear command result flags */
+    /* clear command result flags */
     FTF->FSTAT = ACCERR | FPVIOL;
-
-    /* Launch Command */
     FTF->FSTAT = CCIF;
-
-    /* wait command end */
     while(!(FTF->FSTAT & CCIF));
-
-    /*check for errors*/
     if(FTF->FSTAT & (ACCERR | FPVIOL | MGSTAT0)) return FLASH_ERROR;
-
-    /*No errors retur OK*/
     return FLASH_OK;
-
 }
 
-/**
- * \brief get the flash sector size
- * \return sector size
- */
 uint32_t FLASH_GetSectorSize(void)
 {
     return SECTOR_SIZE;
 }
 
-/**
- * \brief Flash Initialization
- * \note clear the flags : Flash Access Error Flag &Flash Protection Violation Flag
- * \retval None
- */
 void FLASH_Init(void)
 {
-    /* Clear status */
+    /* clear status */
     FTF->FSTAT = ACCERR | FPVIOL;
 }
 
-/**
- * \brief erase Flash sector
- * \param[in] addr 待擦除块的地址
- * \retval None
+ /**
+ * @brief  flash erase sector
+ * @note   this function will erase a flash sector
+ * @param  addr: start addr
+ * @retval Flash return code
  */
 uint8_t FLASH_EraseSector(uint32_t addr)
 {
+    int ret;
 	union
 	{
 		uint32_t  word;
@@ -117,28 +93,24 @@ uint8_t FLASH_EraseSector(uint32_t addr)
 	FTF->FCCOB1 = dest.byte[2];
 	FTF->FCCOB2 = dest.byte[1];
 	FTF->FCCOB3 = dest.byte[0];
-		
-	if(FLASH_OK == _CommandLaunch())
-	{
-		return FLASH_OK;
-	}
-	else
-	{
-		return FLASH_ERROR;
-	}
+    __disable_irq();
+    ret = FlashCmdStart();
+    __enable_irq();
+    
+    return ret;
 }
-/**
- * \brief Flash块写入操作
- * \param[in] addr 写入的目的地址
- * \param[in] buf 字符串指针
- * \param[in] len 写入大小
- * \retval 0x00 FLASH_OK
- * \retval 0x04 FLASH_ERROR
+
+ /**
+ * @brief  flash write sector
+ * @note   len must = sector size
+ * @param  addr: start addr
+ * @param  buf : buffer pointer
+ * @param  len : len
+ * @retval Flash return code
  */
 uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
 {
-	uint16_t i;
-    uint16_t step;
+    uint16_t step, ret, i;
 	union
 	{
 		uint32_t  word;
@@ -184,7 +156,11 @@ uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
 
 		dest.word += step; buf += step;
 
-		if(FLASH_OK != _CommandLaunch()) 
+        __disable_irq();
+        ret = FlashCmdStart();
+        __enable_irq();
+        
+		if(FLASH_OK != ret) 
         {
             return FLASH_ERROR;
         }
@@ -192,4 +168,45 @@ uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
     return FLASH_OK;
 }
 
+static uint8_t buf[SECTOR_SIZE];
 
+uint32_t FLASH_Test(uint32_t startAddr, uint32_t len)
+{
+    int addr, i,err;
+    
+    uint8_t *p;
+
+    FLASH_Init();
+    
+    for(i=0;i<SECTOR_SIZE;i++)
+    {
+        buf[i] = i % 0xFF;
+    }
+    
+    for (addr = startAddr; addr<len; addr+=SECTOR_SIZE)
+    {
+        LIB_TRACE("program addr:0x%X ...", addr);
+        err = FLASH_EraseSector(addr);
+        err += FLASH_WriteSector(addr, buf, SECTOR_SIZE);
+        if(err)
+        {
+            LIB_TRACE("issue command failed\r\n");
+            return 1;
+        }
+        p = (uint8_t*)addr;
+        LIB_TRACE("varify addr:0x%X ...", addr);
+        for(i=0;i<SECTOR_SIZE;i++)
+        {
+            if(*p++ != (i%0xFF))
+            {
+                err++;
+                LIB_TRACE("ERR:[%d]:0x%02X ", i, *p);
+            }
+        }
+        if(!err)
+            LIB_TRACE("OK\r\n");
+        else
+            LIB_TRACE("ERR\r\n");
+    }
+    return err;
+}

@@ -50,55 +50,6 @@ uint32_t ano_encode_fwinfo(fw_info_t* fwinfo, uint8_t* buf)
     return (len+4);
 }
 
-uint32_t ano_encode_packet(payload_t* payload, uint8_t* buf)
-{
-    int i;
-    uint8_t sum = 0;
-    uint8_t len;
-    uint8_t *p = buf;
-    
-    len = sizeof(payload_t);
-    
-    buf[0] = 0x88;
-    buf[1] = kPTL_DATA_OUTPUT;
-    buf[2] = len;
-    buf[3] = (payload->acc[0])>>8;
-    buf[4] = (payload->acc[0])>>0;
-    buf[5] = (payload->acc[1])>>8;
-    buf[6] = (payload->acc[1])>>0;
-    buf[7] = (payload->acc[2])>>8;
-    buf[8] = (payload->acc[2])>>0;
-    buf[9] = (payload->gyo[0])>>8;
-    buf[10] = (payload->gyo[0])>>0;
-    buf[11] = (payload->gyo[1])>>8;
-    buf[12] = (payload->gyo[1])>>0;
-    buf[13] = (payload->gyo[2])>>8;
-    buf[14] = (payload->gyo[2])>>0;
-    buf[15] = (payload->mag[0])>>8;
-    buf[16] = (payload->mag[0])>>0;
-    buf[17] = (payload->mag[1])>>8;
-    buf[18] = (payload->mag[1])>>0;
-    buf[19] = (payload->mag[2])>>8;
-    buf[20] = (payload->mag[2])>>0;
-    buf[21] = (payload->P)>>8;
-    buf[22] = (payload->P)>>0;
-    buf[23] = (payload->R)>>8;
-    buf[24] = (payload->R)>>0;
-    buf[25] = (payload->Y)>>8;
-    buf[26] = (payload->Y)>>0;
-    
-    buf[27] = (payload->pressure)>>0;
-    buf[28] = (payload->pressure)>>8;
-    buf[29] = (payload->pressure)>>16;
-    buf[30] = (payload->pressure)>>24;
-    
-    for(i = 0; i < len+3;i++)
-    {
-      sum += *p++;
-    }
-    buf[len+3] = sum;
-    return (len+4);
-}
 
 uint32_t ano_encode_offset_packet(offset_t* offset, uint8_t* buf)
 {

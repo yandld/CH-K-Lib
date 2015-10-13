@@ -28,16 +28,6 @@ enum
 };
 
 
-typedef __packed struct
-{
-    int16_t acc[3];
-    int16_t gyo[3];
-    int16_t mag[3];
-    int16_t R;
-    int16_t P;
-    int16_t Y;
-    int32_t pressure;
-}payload_t;
 
 typedef __packed struct
 {
@@ -65,7 +55,6 @@ typedef void (*callback_t)(rev_data_t *rd);
 
 //!< API
 
-uint32_t ano_encode_packet(payload_t* data, uint8_t* buf);
 uint32_t ano_encode_fwinfo(fw_info_t* fwinfo, uint8_t* buf);
 uint32_t ano_encode_offset_packet(offset_t* offset, uint8_t* buf);
 int ano_rec(rev_data_t *rd, uint8_t *buf, uint32_t len);

@@ -38,23 +38,52 @@ enum
     kMSG_CMD_DATA_REV,
 };
 
-static uint32_t encode_data_packet(uint8_t *buf, attitude_t *angle, int16_t *adata, int16_t *gdata, int16_t *mdata, int32_t pressure)
+static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, int16_t *gyo, int16_t *mag, int32_t pressure)
 {
     int i;
-    static payload_t payload;
+    uint8_t sum = 0;
+    uint8_t len;
     
-    for(i=0;i<3;i++)
+    
+    buf[0] = 0x88;
+    buf[1] = 0xAF;
+    buf[2] = 28;
+    buf[3] = (acc[0])>>8;
+    buf[4] = (acc[0])>>0;
+    buf[5] = (acc[1])>>8;
+    buf[6] = (acc[1])>>0;
+    buf[7] = (acc[2])>>8;
+    buf[8] = (acc[2])>>0;
+    buf[9] = (gyo[0])>>8;
+    buf[10] = (gyo[0])>>0;
+    buf[11] = (gyo[1])>>8;
+    buf[12] = (gyo[1])>>0;
+    buf[13] = (gyo[2])>>8;
+    buf[14] = (gyo[2])>>0;
+    buf[15] = (mag[0])>>8;
+    buf[16] = (mag[0])>>0;
+    buf[17] = (mag[1])>>8;
+    buf[18] = (mag[1])>>0;
+    buf[19] = (mag[2])>>8;
+    buf[20] = (mag[2])>>0;
+    buf[21] = ((int16_t)(angle->P)*100)>>8;
+    buf[22] = ((int16_t)(angle->P)*100)>>0;
+    buf[23] = ((int16_t)(angle->R)*100)>>8;
+    buf[24] = ((int16_t)(angle->R)*100)>>0;
+    buf[25] = ((180+(int16_t)(angle->Y))*10)>>8;
+    buf[26] = ((180+(int16_t)(angle->Y))*10)>>0;
+    
+    buf[27] = (pressure)>>0;
+    buf[28] = (pressure)>>8;
+    buf[29] = (pressure)>>16;
+    buf[30] = (pressure)>>24;
+
+    for(i=0;i<30;i++)
     {
-        payload.acc[i] = adata[i];
-        payload.gyo[i] = gdata[i];
-        payload.mag[i] = mdata[i];
+        sum += buf[i];
     }
-    payload.P = (int16_t)(angle->P*100);
-    payload.R = (int16_t)(angle->R*100);
-    payload.Y = (180 + (angle->Y))*10;
-    payload.pressure = pressure;
-    /* set buffer */
-    return ano_encode_packet(&payload, buf);
+    buf[31] = sum;
+    return 32;
 }
 
 int sensor_init(void)
@@ -309,7 +338,7 @@ int main(void)
                         adata[i] = (adata[i]*ares*1000);
                     }
                     
-                    len = encode_data_packet(buf, &angle, adata, gdata, rmdata, (int32_t)pressure);
+                    len = ano_make_packet(buf, &angle, adata, gdata, rmdata, (int32_t)pressure);
                     
                     if(RunState != kPTL_REQ_MODE_CAL)
                     {

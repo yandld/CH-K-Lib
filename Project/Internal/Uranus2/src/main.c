@@ -20,13 +20,14 @@
 #include "calibration.h"
 #include "mq.h"
 
-#define VERSION             (203)
+#define VERSION             (204)
 #define MPU9250_INT_PIN     (18)
 
 #define DMA_TX_CH      (HW_DMA_CH0)
 #define DMA_RX_CH      (HW_DMA_CH1)
 
-KalmanState_t KState[3];
+KalmanState_t KAState[3], KGState[3], KMState[3];
+
 static uint8_t gRevBuf[64];
 struct dcal_t dcal;
 int RunState;
@@ -66,19 +67,19 @@ static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, i
     buf[18] = (mag[1])>>0;
     buf[19] = (mag[2])>>8;
     buf[20] = (mag[2])>>0;
-    buf[21] = ((int16_t)(angle->P)*100)>>8;
-    buf[22] = ((int16_t)(angle->P)*100)>>0;
-    buf[23] = ((int16_t)(angle->R)*100)>>8;
-    buf[24] = ((int16_t)(angle->R)*100)>>0;
-    buf[25] = ((180+(int16_t)(angle->Y))*10)>>8;
-    buf[26] = ((180+(int16_t)(angle->Y))*10)>>0;
+    buf[21] = ((int16_t)((angle->P)*100))>>8;
+    buf[22] = ((int16_t)((angle->P)*100))>>0;
+    buf[23] = ((int16_t)((angle->R)*100))>>8;
+    buf[24] = ((int16_t)((angle->R)*100))>>0;
+    buf[25] = (int16_t)((180+(angle->Y))*10)>>8;
+    buf[26] = (int16_t)((180+(angle->Y))*10)>>0;
     
     buf[27] = (pressure)>>0;
     buf[28] = (pressure)>>8;
     buf[29] = (pressure)>>16;
     buf[30] = (pressure)>>24;
 
-    for(i=0;i<30;i++)
+    for(i=0; i<30; i++)
     {
         sum += buf[i];
     }
@@ -252,9 +253,15 @@ int main(void)
     }
     ShowInfo();
     
-    KalmanSimple1D(&KState[0], 1, 10);
-    KalmanSimple1D(&KState[1], 1, 10);
-    KalmanSimple1D(&KState[2], 1, 10);
+    KalmanSimple1D(&KAState[0], 1, 10);
+    KalmanSimple1D(&KAState[1], 1, 10);
+    KalmanSimple1D(&KAState[2], 1, 10);
+    KalmanSimple1D(&KGState[0], 1, 10);
+    KalmanSimple1D(&KGState[1], 1, 10);
+    KalmanSimple1D(&KGState[2], 1, 10);
+    KalmanSimple1D(&KMState[0], 1, 10);
+    KalmanSimple1D(&KMState[1], 1, 10);
+    KalmanSimple1D(&KMState[2], 1, 10);  
     
     while(1)
     {
@@ -285,24 +292,36 @@ int main(void)
                     mpu9250_read_accel_raw(radata);
                     mpu9250_read_gyro_raw(rgdata);
                     ret = mpu9250_read_mag_raw(rmdata);
-                    if(ret)
+                    if(ret && (RunState == kPTL_REQ_MODE_9AXIS))
                     {
                         break;
                     }
                     
                     for(i=0; i<3; i++)
                     {
+                        KalmanRun(&KAState[i], radata[i]);
+                        radata[i] = KAState[i].State;
+                        
+                        KalmanRun(&KGState[i], rgdata[i]);
+                        rgdata[i] = KGState[i].State;
+                        
+                        KalmanRun(&KMState[i], rmdata[i]);
+                        rmdata[i] = KMState[i].State;
+                        
                         adata[i] = radata[i];
                         gdata[i] = rgdata[i];
                         mdata[i] = rmdata[i];
-                        
+
                         adata[i] = adata[i] - dcal.ao[i];
                         gdata[i] = gdata[i] - dcal.go[i];
                         mdata[i] = (mdata[i] - dcal.mo[i])/dcal.mg[i];
+                        
+
                         if(RunState == kPTL_REQ_MODE_6AXIS)
                         {
                             mdata[i] = 0;
                         }
+
                     }
 
                     /* set timer */
@@ -312,7 +331,6 @@ int main(void)
                     time = load_val - time;
                     time /= fac_us;
 
-                    /* low pass filter */
                     for(i=0;i<3;i++)
                     {
                         fadata[i] = (float)adata[i]*ares;
@@ -325,13 +343,7 @@ int main(void)
                     }
                     
                     ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
-                    halfT = ((float)time)/1000/2000;
-                    
-                    KalmanRun(&KState[0], angle.P);
-                    angle.P = KState[0].State;
-    
-                    KalmanRun(&KState[1], angle.R);
-                    angle.R = KState[1].State;
+                    halfT = ((float)time)/1000/2000; 
                         
                     for(i=0;i<3;i++)
                     {

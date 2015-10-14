@@ -15,8 +15,13 @@
 /* memory size filed */
 #define PFLASH_SIZE_FIELD           ((SIM->FCFG1 & SIM_FCFG1_PFSIZE_MASK)>>SIM_FCFG1_PFSIZE_SHIFT)
 #define DFLASH_SIZE_FIELD           ((SIM->FCFG1 & SIM_FCFG1_PFSIZE_MASK)>>SIM_FCFG1_PFSIZE_SHIFT)
+#if defined(SIM_FCFG1_NVMSIZE_MASK)
 #define FLEXNVM_SIZE_FIELD          ((SIM->FCFG1 & SIM_FCFG1_NVMSIZE_MASK)>>SIM_FCFG1_NVMSIZE_SHIFT)
-#define EEPROM_SIZE_FIELD           ((SIM->FCFG1 & SIM_FCFG1_EESIZE_MASK)>>SIM_FCFG1_EESIZE_SHIFT)  
+#endif
+
+#if defined(SIM_FCFG1_EESIZE_MASK)
+#define EEPROM_SIZE_FIELD           ((SIM->FCFG1 & SIM_FCFG1_EESIZE_MASK)>>SIM_FCFG1_EESIZE_SHIFT) 
+#endif
 #define RAM_SIZE_FIELD              ((SIM->SOPT1 & SIM_SOPT1_RAMSIZE_MASK)>>SIM_SOPT1_RAMSIZE_SHIFT)
 
 /* memory size table */
@@ -103,10 +108,14 @@ uint32_t CPUIDY_GetMemSize(CPUIDY_MemSize_Type memSizeName)
             ret_value = 0;
             break;
         case kFlexNVMSizeInKB:
+            #if defined(SIM_FCFG1_NVMSIZE_MASK)
             ret_value = CPUIDY_NVMSizeTable[FLEXNVM_SIZE_FIELD];
+            #endif
             break;
         case kEEPROMSizeInByte:
+            #if defined(SIM_FCFG1_EESIZE_MASK)
             ret_value = CPUIDY_EEPROMSizeTable[EEPROM_SIZE_FIELD];
+            #endif
             break;
         case kRAMSizeInKB:
             ret_value = CPUIDY_RAMSizeTable[RAM_SIZE_FIELD];

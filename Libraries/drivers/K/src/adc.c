@@ -33,9 +33,13 @@ static ADC_CallBackType ADC_CallBackTable[ARRAY_SIZE(ADC_InstanceTable)] = {NULL
 static const Reg_t SIM_ADCClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC0_MASK},
-#ifdef ADC1
+#ifdef SIM_SCGC3_ADC1_MASK
     {(void*)&(SIM->SCGC3), SIM_SCGC3_ADC1_MASK},
 #endif
+#ifdef SIM_SCGC6_ADC1_MASK
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_ADC1_MASK},
+#endif
+    
 #ifdef ADC2
     {(void*)&(SIM->SCGC3), SIM_SCGC6_ADC2_MASK},
 #endif

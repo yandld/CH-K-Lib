@@ -41,12 +41,19 @@ static const Reg_t SIM_FTMClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM0_MASK},
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM1_MASK},
-#ifdef FTM2
+#ifdef SIM_SCGC3_FTM2_MASK
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM2_MASK},
 #endif
-#ifdef FTM3
+#ifdef SIM_SCGC6_FTM2_MASK
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM2_MASK},
+#endif
+    
+#ifdef SIM_SCGC3_FTM3_MASK
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM3_MASK},
-#endif  
+#endif
+#ifdef SIM_SCGC6_FTM3_MASK
+    {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM3_MASK},
+#endif 
 };
 static const IRQn_Type FTM_IRQnTable[] = 
 {

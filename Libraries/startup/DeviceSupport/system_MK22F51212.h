@@ -98,7 +98,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-
+#include "MK22F51212.h"
 
 #ifndef DISABLE_WDOG
   #define DISABLE_WDOG                 1
@@ -115,6 +115,9 @@ extern "C" {
 #define MCG_MODE_PBE                   6U
 #define MCG_MODE_PEE                   7U
 
+#ifndef CLOCK_SETUP
+#define CLOCK_SETUP     4
+#endif
 /* Predefined clock setups
    0 ... Default  part configuration
          Multipurpose Clock Generator (MCG) in FEI mode.

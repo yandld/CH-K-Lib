@@ -34,9 +34,12 @@ int main(void)
 
     GPIO_QuickInit(HW_GPIOA, 1, kGPIO_Mode_OPP);
     UART_QuickInit(UART1_RX_PE01_TX_PE00, 115200);
+    printf("CoreClock:%dHz\r\n", GetClock(kCoreClock));
+    printf("BusClock:%dHz\r\n", GetClock(kBusClock));
     while(1)
     {
-        printf("HelloWorld!!!\r\n"); 
+        printf("HelloWorld!!!\r\n");
+
         GPIO_ToggleBit(HW_GPIOA, 1);
         DelayMs(500);
     }

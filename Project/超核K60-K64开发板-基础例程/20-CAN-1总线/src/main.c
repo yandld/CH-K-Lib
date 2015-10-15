@@ -27,7 +27,7 @@ void CAN_ISR(void)
     uint32_t id;
     if(CAN_ReadData(HW_CAN1, 3, &id, buf, &len) == 0)
     {
-        printf("DataReceived:%d ", cnt++);
+        printf("DataReceived:id 0x%x ", (id>>CAN_ID_STD_SHIFT));
         while(len--)
         {
             printf("[%d]:0x%X ", len, buf[len]);

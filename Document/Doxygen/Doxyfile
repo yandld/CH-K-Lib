@@ -775,7 +775,8 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ../../Libraries/drivers/K/src
+INPUT                  = ../../Libraries/drivers/K/src \
+                         ../../Document/Doxygen/mainpage
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1306,7 +1307,7 @@ GENERATE_HTMLHELP      = YES
 # written to the html output directory.
 # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
 
-CHM_FILE               = CH_K_Manual.chm
+CHM_FILE               = ../../../../CH_K_Manual.chm
 
 # The HHC_LOCATION tag can be used to specify the location (absolute path
 # including file name) of the HTML help compiler (hhc.exe). If non-empty,

@@ -21,7 +21,6 @@
 /* CAN通信 中断回调函数，在中断中处理接收到的数据 */
 void CAN_ISR(void)
 {
-    static uint32_t cnt;
     uint8_t buf[8];
     uint8_t len;
     uint32_t id;

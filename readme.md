@@ -10,7 +10,6 @@
 
 1. [中文入门视频](http://www.moore8.com/courses/87)
 2. [答疑论坛](http://beyondcore.net)
-3. [固件库源代码包下载](http://git.oschina.net/yandld/CH-K-Lib/)
 
 ## 所支持的IDE
 * Keil(MDK) V5.00 以上版本 
@@ -19,6 +18,7 @@
 ## 适用型号
 `MK60DNxxx` `MK64F12xxx` `MK10DN32xxx` `MKL25Zxxx` `MKL46Zxxx` `MK10DZ10` `MK20DZ10` `MK70F12` `MK70F15` `MK22F12`
 * xxx代表任意
+* 超核固件库并不仅仅限于以上型号，只要经过简单的移植。出色的兼容性架构设计可以让超核固件库可以运行在几乎所有Kinetis系列芯片上。如需移植服务，请到答疑论坛联系我们
 
 ## 文件说明
 

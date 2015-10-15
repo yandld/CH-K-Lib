@@ -89,7 +89,7 @@ struct ethernetif {
 static void
 low_level_init(struct netif *netif)
 {
-  struct ethernetif *ethernetif = netif->state;
+//  struct ethernetif *ethernetif = netif->state;
   
   /* set MAC hardware address length */
   netif->hwaddr_len = ETHARP_HWADDR_LEN;
@@ -132,9 +132,9 @@ low_level_init(struct netif *netif)
 static err_t
 low_level_output(struct netif *netif, struct pbuf *p)
 {
-  struct ethernetif *ethernetif = netif->state;
+//  struct ethernetif *ethernetif = netif->state;
   struct pbuf *q;
-  uint32_t i;
+//  uint32_t i;
   u32_t tx_len;
   tx_len = 0;
     
@@ -179,7 +179,7 @@ low_level_output(struct netif *netif, struct pbuf *p)
 static struct pbuf *
 low_level_input(struct netif *netif)
 {
-    struct ethernetif *ethernetif = netif->state;
+//    struct ethernetif *ethernetif = netif->state;
     struct pbuf *p, *q;
     u16_t len, rx_len;
 

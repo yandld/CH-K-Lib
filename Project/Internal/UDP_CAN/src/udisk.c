@@ -1,5 +1,6 @@
 #include "flash.h"
 #include "rl_usb.h"
+#include <string.h>
 
 extern int Image$$ER_IROM1$$RO$$Limit;
 

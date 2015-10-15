@@ -74,7 +74,6 @@ DRESULT disk_read (
 {
     
 	DRESULT res;
-	int i;
 
 	switch (pdrv)
     {

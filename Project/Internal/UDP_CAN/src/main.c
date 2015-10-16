@@ -69,10 +69,12 @@ int main(void)
     printf("This demo will receive UDP data and transmit it back to UDP and also copy data to CAN and UART\r\n");
     
     printf("CAN init\r\n");
-    CAN_QuickInit(CAN1_TX_PE24_RX_PE25, kCAN_125K);
+    CAN_QuickInit(CAN1_TX_PE24_RX_PE25, 20*1000);
     CAN_CallbackInstall(HW_CAN1, CAN_ISR);
     CAN_ITDMAConfig(HW_CAN1,3, kCAN_IT_RX);
     CAN_SetRxMB(HW_CAN1, 3, CAN_RX_ID);
+    
+    CAN_WriteData(HW_CAN1, 2, CAN_TX_ID, "CAN OK  ", 8);
     
     /* enable PinMux */
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);

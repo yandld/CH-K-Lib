@@ -32,7 +32,6 @@
 
 bool gEnetRev = false;
 
-
 struct netif fsl_netif0;
 extern err_t ethernetif_init(struct netif *netif);
 extern err_t ethernetif_input(struct netif *netif);
@@ -53,28 +52,27 @@ void ENET_ISR(void)
 void CAN_ISR(void);
 extern void udp_echo_init(void);
 
-int main(void)
+
+void HW_Init(void)
 {
-    int ret,i;
+    int ret;
     DelayInit();
+    DelayMs(10);
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200); 
+    printf("UART initialized!\r\n");
     
     PIT_QuickInit(0, 1000*10);
     PIT_CallbackInstall(0, PIT_ISR);
     PIT_ITDMAConfig(0, kPIT_IT_TOF, true);
+    printf("PIT initialized!\r\n");
     
-    printf("ENET LwIP CAN test!\r\n");
-    printf("Connect to router (Not PC)!, IP will be display on terimal, UDP PORT=7\r\n");
-    printf("This demo will receive UDP data and transmit it back to UDP and also copy data to CAN and UART\r\n");
-    
-    printf("CAN init\r\n");
     CAN_QuickInit(CAN1_TX_PE24_RX_PE25, 20*1000);
     CAN_CallbackInstall(HW_CAN1, CAN_ISR);
     CAN_ITDMAConfig(HW_CAN1,3, kCAN_IT_RX);
     CAN_SetRxMB(HW_CAN1, 3, CAN_RX_ID);
-    
-    CAN_WriteData(HW_CAN1, 2, CAN_TX_ID, "CAN OK  ", 8);
+    printf("CAN initialized!\r\n");
     
     /* enable PinMux */
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);
@@ -104,7 +102,17 @@ int main(void)
     ENET_Init(&ENET_InitStruct1);
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);
-
+    printf("ENET initialized!\r\n");
+}
+int main(void)
+{
+    int i;
+    
+    HW_Init();
+    printf("ENET LwIP CAN test!\r\n");
+    printf("Connect to router (Not PC)!, IP will be display on terimal, UDP PORT=7\r\n");
+    printf("This demo will receive UDP data and transmit it back to UDP and also copy data to CAN and UART\r\n");
+    
     ip_addr_t fsl_netif0_ipaddr, fsl_netif0_netmask, fsl_netif0_gw;
     
     lwip_init();
@@ -130,11 +138,10 @@ int main(void)
     i = sys_now();
     while((fsl_netif0.dhcp->offered_ip_addr.addr == 0) || (fsl_netif0.dhcp->offered_gw_addr.addr == 0) || (fsl_netif0.dhcp->offered_sn_mask.addr == 0))
     {
-        
         if(gEnetRev)
         {
-            ethernetif_input(&fsl_netif0); 
             gEnetRev = false;
+            ethernetif_input(&fsl_netif0); 
         }
         if(sys_now()-i > 5000)
         {
@@ -160,30 +167,29 @@ int main(void)
     
 #endif
 
-    /* File System */
+    /* FAT32 file system */
     uint8_t buf[512];
     FRESULT rc;
     FATFS fs_sd;
     FIL fil;
     FATFS *fs;
     fs = &fs_sd;
-    UINT bw,br; /* bw = byte writted br = byte readed */
+    UINT br; /* bw = byte writted br = byte readed */
     DWORD fre_clust, fre_sect, tot_sect;
-    /* 挂载文件系统 */
     rc = f_mount(fs, "0:", 0);
     ERROR_TRACE(rc);
     rc = f_getfree("0:", &fre_clust, &fs);
     ERROR_TRACE(rc);
-    /* 计算磁盘空间及剩余空间 */
+
     tot_sect = (fs->n_fatent - 2) * fs->csize;
     fre_sect = fre_clust * fs->csize;
     printf("%d KB total drive space.\r\n%d KB available.\r\n", tot_sect*2, fre_sect*2);
     
-    /* 读取文件 */
     rc = f_open(&fil, "0:/config.ini", FA_READ);
     ERROR_TRACE(rc);
     printf("file size:%d\r\n", f_size(&fil));
     printf("file contents:\r\n");
+    
     while(1)
     {
         rc = f_read(&fil, buf, sizeof(buf), &br);
@@ -191,15 +197,13 @@ int main(void)
         printf("%s", buf);
     }
     rc = f_close(&fil);
-    ERROR_TRACE(rc);
-    
     
     /* USB */
-    printf("usbd hid msc(udisk) demo\r\n");
+    printf("start usb msd\r\n");
     usbd_init();                          /* USB Device Initialization          */
     usbd_connect(__TRUE);                 /* USB Device Connect                 */
-    while (!usbd_configured ());          /* Wait for device to configure        */
-    printf("usbd configure complete\r\n");
+    //while (!usbd_configured ());          /* Wait for device to configure        */
+    //printf("usbd configure complete\r\n");
     
     udp_echo_init();
     while(1)

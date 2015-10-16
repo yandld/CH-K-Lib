@@ -45,7 +45,7 @@ ip_addr *addr, u16_t port)
         else 
         {
             buffer[p->tot_len] = '\0';
-            LWIP_DEBUGF(LWIP_DBG_ON, ("UDP %s\r\n", buffer));
+            LWIP_DEBUGF(LWIP_DBG_ON, ("UDP got data:%s\r\n", buffer));
             CAN_WriteData(HW_CAN1, 2, CAN_TX_ID, buffer, 8);
         }
         // send received packet back to sender

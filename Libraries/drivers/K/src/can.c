@@ -295,11 +295,8 @@ uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf
     
     CANx = CANBase[instance];
     
-    if(is_mb_idle(instance, mb))
-    {
-        return 2;
-    }
-    
+    while(is_mb_idle(instance, mb) != 0);
+
     /* setting data */
 	for(i = 0; i < len; i++)
 	{

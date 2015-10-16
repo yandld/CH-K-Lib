@@ -61,83 +61,42 @@ static CAN_CallBackType CAN_CallBackTable[ARRAY_SIZE(CANBase)] = {NULL};
  * @retval 0             ok
  * \retval other error code
  */
-static uint32_t CAN_SetBaudrate(CAN_Type *CANx, CAN_Baudrate_Type baudrate)
+static uint32_t CAN_SetBaudrate(CAN_Type *CANx, uint32_t baudrate)
 {
-    switch(baudrate)
+    uint32_t ps ,p1, p2, pd;
+    uint32_t sclock = GetClock(kBusClock)/baudrate;
+    uint32_t time_seg1, time_seg2, total_tq;
+
+    for(pd=0xFF; pd>0; pd--)
     {
-        case kCAN_25K:
-			 // 50M/125 = 400k sclock, 16Tq
-			 // PROPSEG = 5, LOM = 0x0, LBUF = 0x0, TSYNC = 0x0, SAMP = 1
-			 // RJW = 3, PSEG1 = 5, PSEG2 = 5,PRESDIV = 125
-			CANx->CTRL1 |= (0 | CAN_CTRL1_PROPSEG(4) 
-							 | CAN_CTRL1_RJW(2)
-							 | CAN_CTRL1_PSEG1(4) 
-							 | CAN_CTRL1_PSEG2(4)
-							 | CAN_CTRL1_PRESDIV(119));
-            break;
-		case kCAN_50K:
-			 // 50M/100= 500K sclock, 10Tq
-			 // PROPSEG = 3, LOM = 0x0, LBUF = 0x0, TSYNC = 0x0, SAMP = 1
-			 // RJW = 3, PSEG1 = 3, PSEG2 = 3, PRESDIV = 100
-			CANx->CTRL1 |= (0 | CAN_CTRL1_PROPSEG(2) 
-							 | CAN_CTRL1_RJW(2)
-							 | CAN_CTRL1_PSEG1(2) 
-							 | CAN_CTRL1_PSEG2(2)
-							 | CAN_CTRL1_PRESDIV(99));	
-            break;
-		case kCAN_100K:
-			 // 50M/50= 1M sclock, 10Tq
-			 // PROPSEG = 3, LOM = 0x0, LBUF = 0x0, TSYNC = 0x0, SAMP = 1
-			 // RJW = 3, PSEG1 = 3, PSEG2 = 3, PRESDIV = 50
-			CANx->CTRL1 |= (0 | CAN_CTRL1_PROPSEG(2) 
-							 | CAN_CTRL1_RJW(2)
-							 | CAN_CTRL1_PSEG1(2) 
-							 | CAN_CTRL1_PSEG2(2)
-							 | CAN_CTRL1_PRESDIV(49));	
-            break;
-		case kCAN_125K:
-			 // 50M/25 = 2000k sclock, 16Tq
-			 // PROPSEG = 5, LOM = 0x0, LBUF = 0x0, TSYNC = 0x0, SAMP = 1
-			 // RJW = 3, PSEG1 = 5, PSEG2 = 5,PRESDIV = 25
-			CANx->CTRL1 |= (0 | CAN_CTRL1_PROPSEG(4) 
-							 | CAN_CTRL1_RJW(2)
-							 | CAN_CTRL1_PSEG1(4) 
-							 | CAN_CTRL1_PSEG2(4)
-							 | CAN_CTRL1_PRESDIV(24));	
-            break;
-		case kCAN_250K:
-			 // 50M/20= 2500K sclock, 10Tq
-			 // PROPSEG = 3, LOM = 0x0, LBUF = 0x0, TSYNC = 0x0, SAMP = 1
-			 // RJW = 3, PSEG1 = 3, PSEG2 = 3, PRESDIV = 20
-			CANx->CTRL1 |= (0 | CAN_CTRL1_PROPSEG(2) 
-							 | CAN_CTRL1_RJW(2)
-							 | CAN_CTRL1_PSEG1(2) 
-							 | CAN_CTRL1_PSEG2(2)
-							 | CAN_CTRL1_PRESDIV(19));			
-            break;
-		case kCAN_500K:
-			 // 50M/10= 5000K sclock, 10Tq
-			 // PROPSEG = 3, LOM = 0x0, LBUF = 0x0, TSYNC = 0x0, SAMP = 1
-			 // RJW = 3, PSEG1 = 3, PSEG2 = 3, PRESDIV = 20
-			CANx->CTRL1 |= (0 | CAN_CTRL1_PROPSEG(2) 
-							 | CAN_CTRL1_RJW(2)
-							 | CAN_CTRL1_PSEG1(2) 
-							 | CAN_CTRL1_PSEG2(2)
-							 | CAN_CTRL1_PRESDIV(9));				
-            break;
-		case kCAN_1000K:
-			 // 50M/5= 10000K sclock, 10Tq
-			 // PROPSEG = 2, LOM = 0x0, LBUF = 0x0, TSYNC = 0x0, SAMP = 1
-			 // RJW = 2, PSEG1 = 3, PSEG2 = 3, PRESDIV = 20
-			CANx->CTRL1 |= (0 | CAN_CTRL1_PROPSEG(2) 
-							 | CAN_CTRL1_RJW(2)
-							 | CAN_CTRL1_PSEG1(2) 
-							 | CAN_CTRL1_PSEG2(2)
-							 | CAN_CTRL1_PRESDIV(4));	
-            break;
-		default: 
-            return 1;
-	}
+        for(ps=1; ps<8; ps++)
+        {
+            for(p1=1; p1<8; p1++)
+            {
+                for(p2=1; p2<8; p2++)
+                {
+                    time_seg1 = ps+p1+2;
+                    time_seg2 = p2+1;
+                    total_tq = time_seg1+time_seg2+1;
+
+                    if(ABS((int32_t)(total_tq*(pd+1) - sclock)) < 2)
+                    {
+                        if((time_seg1 < (time_seg2+8)) && ((time_seg2+2) > time_seg1))
+                        {
+                            CANx->CTRL1 &= ~(CAN_CTRL1_PROPSEG_MASK | CAN_CTRL1_RJW_MASK | CAN_CTRL1_PSEG1_MASK | CAN_CTRL1_PSEG2_MASK | CAN_CTRL1_PRESDIV_MASK);
+                            CANx->CTRL1 |=  CAN_CTRL1_PROPSEG(ps) 
+                                            | CAN_CTRL1_RJW(2)
+                                            | CAN_CTRL1_PSEG1(p1) 
+                                            | CAN_CTRL1_PSEG2(p2)
+                                            | CAN_CTRL1_PRESDIV(pd);
+                            //printf("Get baudrate param! pd %d ps %d p1 %d p2 %d\r\n", pd, ps,p1,p2);
+                            return 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
 	return 0;
 }
 
@@ -278,7 +237,7 @@ void CAN_Init(CAN_InitTypeDef* Init)
  * @param[in]  baudrate  CAN通信波特率
  * @retval CAN模块号0或1
  */
-uint32_t CAN_QuickInit(uint32_t CANxMAP, CAN_Baudrate_Type baudrate)
+uint32_t CAN_QuickInit(uint32_t CANxMAP, uint32_t baudrate)
 {
 	uint32_t i;
     map_t * pq = (map_t*)&(CANxMAP); 

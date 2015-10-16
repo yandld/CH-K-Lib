@@ -47,20 +47,7 @@ typedef enum
     kFlexCanRX_NotUsed   = 0xF, 	/*!< Not used*/
 }CAN_MBCode_Type;
 
-/**
- * \enum CAN_Baudrate_Type
- * \brief CAN总线速度选择
- */
-typedef enum 
-{
-	kCAN_25K,       /**< 25K */
-	kCAN_50K,       /**< 50K */
-	kCAN_100K,      /**< 100K */
-	kCAN_125K,      /**< 125K */
-	kCAN_250K,      /**< 250K */
-	kCAN_500K,      /**< 500K */
-	kCAN_1000K,     /**< 1000K */
-}CAN_Baudrate_Type;
+
 
 /**
  * \struct CAN_InitTypeDef
@@ -69,7 +56,7 @@ typedef enum
 typedef struct
 {
     uint32_t                instance;  ///< CAN通信端口 HW_CAN0/HW_CAN1
-    CAN_Baudrate_Type       baudrate;  ///< CAN通信速度设置
+    uint32_t       baudrate;  ///< CAN通信速度设置
 }CAN_InitTypeDef;
 
 
@@ -99,7 +86,7 @@ void CAN_SetRxFilterMask(uint32_t instance, uint32_t mb, uint32_t mask);
 uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf, uint8_t len);
 uint32_t CAN_WriteRemote(uint32_t instance, uint32_t mb, uint32_t id, uint8_t len);
 uint32_t CAN_ReadData(uint32_t instance, uint32_t mb, uint32_t *id, uint8_t *buf, uint8_t *len);
-uint32_t CAN_QuickInit(uint32_t CANxMAP, CAN_Baudrate_Type baudrate);
+uint32_t CAN_QuickInit(uint32_t CANxMAP, uint32_t baudrate);
 void CAN_ITDMAConfig(uint32_t instance, uint32_t mb, CAN_ITDMAConfig_Type config);
 void CAN_SetRxMB(uint32_t instance, uint32_t mb, uint32_t id);
 void CAN_CallbackInstall(uint32_t instance, CAN_CallBackType AppCBFun);

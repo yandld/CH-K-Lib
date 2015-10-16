@@ -44,7 +44,7 @@ int main(void)
     
     printf("CAN test\r\n");
     /* 初始化 CAN 使用CAN1模块的PTE24/25引脚，通信速度为125k*/
-    CAN_QuickInit(CAN1_TX_PE24_RX_PE25, kCAN_125K);
+    CAN_QuickInit(CAN1_TX_PE24_RX_PE25, 125*1000);
     
     /* 设置接收中断 安装回调函数 */
     CAN_CallbackInstall(HW_CAN1, CAN_ISR);

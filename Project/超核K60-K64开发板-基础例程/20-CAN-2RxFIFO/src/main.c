@@ -51,7 +51,7 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("CAN test\r\n");
-    CAN_QuickInit(CAN1_TX_PE24_RX_PE25, kCAN_125K);
+    CAN_QuickInit(CAN1_TX_PE24_RX_PE25, 125*1000);
     
     /* FIFO deep is 0+6 = 6 
     Once FIFO is enabled, MB0-5 cannot used as normal MB, MB0-5 used as RxFIFO and they automaically configed as Rx MB 

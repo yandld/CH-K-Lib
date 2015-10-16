@@ -15,8 +15,8 @@
 #define MMC		1
 #define USB		2
 
-#define FLASH_START_ADDR    (100*1024)
-#define UDISK_SIZE          (300*1024)
+#define FLASH_START_ADDR    (200*1024)
+#define UDISK_SIZE          (100*1024)
 
 /*-----------------------------------------------------------------------*/
 /* Inidialize a Drive                                                    */

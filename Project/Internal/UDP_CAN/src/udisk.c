@@ -9,11 +9,11 @@ extern int Image$$ER_IROM1$$RO$$Limit;
 #endif
 
 
-#define FLASH_START_ADDR    (100*1024)
-#define UDISK_SIZE          (300*1024)
+#define FLASH_START_ADDR    (200*1024)
+#define UDISK_SIZE          (100*1024)
 
 
-U8 BlockBuf[4096];
+U8 BlockBuf[2048];
 
 /* init */
 void usbd_msc_init ()

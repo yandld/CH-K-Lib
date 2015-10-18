@@ -20,10 +20,11 @@ static uint32_t fac_ms = 0;     //!< msDelay Mut
  /**
  * @brief  初始化SysTick时钟
  * @code
- *     // 初始化SysTick时钟 设定中断周期为10000us(10ms)
- *      SYSTICK_Init(10000);
+ *   // 初始化SysTick时钟 设定中断周期为10000us(10ms)
+ *   SYSTICK_Init(10000);
  * @endcode
  * @param[in]  timeInUs 中断周期,单位us
+ * \note systick属于cm4内核中的模块，在RTOS中可作为其时钟节拍
  * @retval None
  */
 void SYSTICK_Init(uint32_t timeInUs)
@@ -56,12 +57,13 @@ void SYSTICK_DelayInit(void)
  /**
  * @brief  开启或者停止SysTick时钟
  * @code
- *      //开启时钟
- *      SYSTICK_Cmd(true);
+ *   //开启时钟
+ *   SYSTICK_Cmd(true);
  * @endcode
  * @param[in]  NewState 使能或者关闭
  *              @arg true 使能
  *              @arg false 停止
+ * \attention  当给微控制器移植OS后，需要开启systick时钟以及中断，不然OS创建的任务无法工作
  * @retval None
  */
 void SYSTICK_Cmd(bool NewState)
@@ -78,6 +80,7 @@ void SYSTICK_Cmd(bool NewState)
  * @param[in]  NewState 使能或者关闭
  *              @arg true  使能
  *              @arg false 禁止
+ * \attention  当给微控制器移植OS后，需要开启systick时钟以及中断，不然OS创建的任务无法工作
  * @retval None
  */
 void SYSTICK_ITConfig(bool NewState)

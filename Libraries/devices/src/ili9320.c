@@ -409,9 +409,9 @@ int ili9320_init(void)
     /* reset */
     gpio_instance = GPIO_QuickInit(HW_GPIOC, 19, kGPIO_Mode_OPP);
     GPIO_WriteBit(gpio_instance, 19, 0); 
-    DelayMs(1);
+    DelayMs(5);
     GPIO_WriteBit(gpio_instance, 19, 1);
-    DelayMs(1);
+    DelayMs(5);
     
     lcd_dev.id = ili9320_get_id();
     switch(lcd_dev.id)
@@ -511,7 +511,7 @@ int ili9320_init(void)
             WR_CMD(PIXSET); 
             WR_DATA(0x05);
             WR_CMD(SLPOUT);
-            DelayMs(20);
+            DelayMs(50);
             WR_CMD(DISPON);
             break;
         case 0x9320:

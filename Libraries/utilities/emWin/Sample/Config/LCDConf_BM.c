@@ -134,6 +134,9 @@ void LCD_X_Config(void) {
        case 0x8989:
            pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, GUICC_M565, 0, 0);
            break;
+       case 0x9341:
+           pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, GUICC_M565, 0, 0);
+           break;
        default:
            break;
    }
@@ -165,6 +168,9 @@ void LCD_X_Config(void) {
            break;
        case 0x8989:
             GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66702, GUIDRV_FLEXCOLOR_M16C0B16);
+           break;
+       case 0x9341:
+            GUIDRV_FlexColor_SetFunc(pDevice, &PortAPI, GUIDRV_FLEXCOLOR_F66709, GUIDRV_FLEXCOLOR_M16C0B16);
            break;
        default:
            break;

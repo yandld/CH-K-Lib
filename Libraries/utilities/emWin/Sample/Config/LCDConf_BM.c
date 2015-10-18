@@ -84,7 +84,10 @@ static void LcdReadDataMultiple(U16 * pData, int NumItems)
     {
         *pData = GUI_LCD_DATA_ADDRESS; /* dummy read */
     }
-  
+    if(gLCDCode == 0x9341)
+    {
+        *pData = GUI_LCD_DATA_ADDRESS; /* dummy read */
+    }
     while (NumItems--)
     {
         *pData++=GUI_LCD_DATA_ADDRESS;
@@ -135,7 +138,7 @@ void LCD_X_Config(void) {
            pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, GUICC_M565, 0, 0);
            break;
        case 0x9341:
-           pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, GUICC_M565, 0, 0);
+           pDevice = GUI_DEVICE_CreateAndLink(DISPLAY_DRIVER, GUICC_565, 0, 0);
            break;
        default:
            break;

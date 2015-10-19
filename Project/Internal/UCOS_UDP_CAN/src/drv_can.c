@@ -43,9 +43,12 @@ uint32_t OSCAN_Init(void)
 
 uint32_t OSCAN_Send(uint32_t instance, uint32_t id, uint8_t *buf, uint32_t len)
 {
+    OS_CPU_SR cpu_sr;
     uint8_t err;
     OSMutexPend(CAN_Mutex, 0, &err);
+    OS_ENTER_CRITICAL();
     CAN_WriteData(instance, CAN_TX_MB, id, buf, len);
+    OS_EXIT_CRITICAL();
     OSMutexPost(CAN_Mutex);
     return 0;
 }

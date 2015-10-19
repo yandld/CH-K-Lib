@@ -32,7 +32,7 @@ void test_thread(void *pdata)
     while(1)
     {
         printf("BB\r\n");
-        //OSCAN_Send(HW_CAN1, 5, "BBBBBBBB", 8);
+        OSCAN_Send(HW_CAN1, 5, "BBBBBBBB", 8);
         OSTimeDlyHMSM(0, 0, 0, 500);
     }
 }
@@ -43,9 +43,9 @@ void start_thread_entry(void *pdata)
     uint8_t err;
     pdata = pdata;
     
-   // OSCAN_Init();
-	OSTaskCreate(test_thread, (void *)0, (OS_STK*)(APP_CAN_STK + sizeof(APP_CAN_STK)-1), 6);
-
+    OSCAN_Init();
+    printf("CAN initialized!\r\n");
+    
     ip_addr_t fsl_netif0_ipaddr, fsl_netif0_netmask, fsl_netif0_gw;
     
     tcpip_init(NULL, NULL);
@@ -95,11 +95,13 @@ void start_thread_entry(void *pdata)
     ip = (u8_t*)&fsl_netif0.dhcp->offered_gw_addr;
     printf("dhcp new net gw: %u.%u.%u.%u \r\n",ip[0], ip[1],ip[2], ip[3]);
     
-#endif    
+
+#endif  
+
+    OSTaskCreate(test_thread, (void *)0, (OS_STK*)(APP_CAN_STK + sizeof(APP_CAN_STK)-1), 6);
+    udp_sever();
     while(1)
     {
-    //    OSCAN_Send(HW_CAN1, 8, "AAAAAAAA", 8);
-        printf("AA\r\n");
         OSTimeDlyHMSM(0, 0, 0, 500);
     }
 }

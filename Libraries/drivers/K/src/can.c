@@ -262,15 +262,15 @@ uint32_t CAN_QuickInit(uint32_t CANxMAP, uint32_t baudrate)
  * @param[in]  mb      CAN通信接收邮箱0~15
  * \return 
  */
-static uint32_t is_mb_idle(uint32_t instance, uint32_t mb)
+static bool is_mb_idle(uint32_t instance, uint32_t mb)
 {
     uint32_t code;
     code = CAN_GET_MB_CODE(CANBase[instance]->MB[mb].CS);
     if((code == kFlexCanTX_Inactive) || (code == kFlexCanRX_Inactive) || (code == kFlexCanRX_Empty))
     {
-        return 0;
+        return true;
     }
-    return code;
+    return false;
 }
 
 
@@ -295,7 +295,7 @@ uint32_t CAN_WriteData(uint32_t instance, uint32_t mb, uint32_t id, uint8_t* buf
     
     CANx = CANBase[instance];
     
-    while(is_mb_idle(instance, mb) != 0);
+    while(is_mb_idle(instance, mb) == false);
 
     /* setting data */
 	for(i = 0; i < len; i++)

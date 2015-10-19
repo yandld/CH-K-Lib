@@ -57,6 +57,8 @@
  * LWIP_SOCKET==1: Enable Socket API (require to use sockets.c)
  */
 #define LWIP_SOCKET                     1
+#define LWIP_COMPAT_MUTEX               1
+#define LWIP_SO_RCVTIMEO                1
 
 #else
 /**

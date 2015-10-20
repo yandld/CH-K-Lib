@@ -509,6 +509,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\udp_demo.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_enet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\drv_enet.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1480,6 +1485,11 @@
               <FileName>udp_demo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\udp_demo.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_enet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\drv_enet.c</FilePath>
             </File>
           </Files>
         </Group>

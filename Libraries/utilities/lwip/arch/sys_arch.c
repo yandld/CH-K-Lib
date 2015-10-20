@@ -48,46 +48,48 @@
 const void * const pvNullPointer = (mem_ptr_t*)0xffffffff;
  
 
-//创建一个消息邮箱
-//*mbox:消息邮箱
-//size:邮箱大小
-//返回值:ERR_OK,创建成功
-//         其他,创建失败
 err_t sys_mbox_new( sys_mbox_t *mbox, int size)
 {
-	(*mbox) = malloc(sizeof(TQ_DESCR));	//为消息邮箱申请内存
-	memset((*mbox),0,sizeof(TQ_DESCR)); 		//清除mbox的内存
-	if(*mbox)//内存分配成功
+    (*mbox) = malloc(sizeof(TQ_DESCR));
+    memset((*mbox),0,sizeof(TQ_DESCR));
+    
+	if(*mbox)
 	{
-		if(size>MAX_QUEUE_ENTRIES)size=MAX_QUEUE_ENTRIES;		//消息队列最多容纳MAX_QUEUE_ENTRIES消息数目 
- 		(*mbox)->pQ=OSQCreate(&((*mbox)->pvQEntries[0]),size);  //使用UCOS创建一个消息队列
+		if(size > MAX_QUEUE_ENTRIES)
+        {
+            size=MAX_QUEUE_ENTRIES;
+        }
+ 		(*mbox)->pQ = OSQCreate(&((*mbox)->pvQEntries[0]), size);  //使用UCOS创建一个消息队列
 		LWIP_ASSERT("OSQCreate",(*mbox)->pQ!=NULL); 
-		if((*mbox)->pQ!=NULL)return ERR_OK;  //返回ERR_OK,表示消息队列创建成功 ERR_OK=0
+		if((*mbox)->pQ != NULL)
+        {
+            return ERR_OK;
+        }
 		else
 		{ 
 			free((*mbox));
-			return ERR_MEM;  		//消息队列创建错误
+			return ERR_MEM;
 		}
-	}else return ERR_MEM; 			//消息队列创建错误 
+	}
+    else return ERR_MEM;
 } 
-//释放并删除一个消息邮箱
-//*mbox:要删除的消息邮箱
+
 void sys_mbox_free(sys_mbox_t * mbox)
 {
 	u8_t ucErr;
-	sys_mbox_t m_box=*mbox;   
-	(void)OSQDel(m_box->pQ,OS_DEL_ALWAYS,&ucErr);
+	(void)OSQDel((*mbox)->pQ, OS_DEL_ALWAYS, &ucErr);
 	LWIP_ASSERT( "OSQDel ",ucErr == OS_ERR_NONE ); 
-	free(m_box); 
+	free((*mbox)); 
 	*mbox=NULL;
 }
-//向消息邮箱中发送一条消息(必须发送成功)
-//*mbox:消息邮箱
-//*msg:要发送的消息
+
 void sys_mbox_post(sys_mbox_t *mbox,void *msg)
 {    
-	if(msg==NULL)msg=(void*)&pvNullPointer;//当msg为空时 msg等于pvNullPointer指向的值 
-	while(OSQPost((*mbox)->pQ,msg)!=OS_ERR_NONE);//死循环等待消息发送成功 
+	if(msg == NULL)
+    {
+        msg=(void*)&pvNullPointer;//当msg为空时 msg等于pvNullPointer指向的值 
+    }
+    while(OSQPost((*mbox)->pQ,msg) != OS_ERR_NONE);
 }
 //尝试向一个消息邮箱发送消息
 //此函数相对于sys_mbox_post函数只发送一次消息，
@@ -98,8 +100,14 @@ void sys_mbox_post(sys_mbox_t *mbox,void *msg)
 // 	     ERR_MEM,发送失败
 err_t sys_mbox_trypost(sys_mbox_t *mbox, void *msg)
 { 
-	if(msg==NULL)msg=(void*)&pvNullPointer;//当msg为空时 msg等于pvNullPointer指向的值 
-	if((OSQPost((*mbox)->pQ, msg))!=OS_ERR_NONE)return ERR_MEM;
+	if(msg == NULL)
+    {
+        msg=(void*)&pvNullPointer;//当msg为空时 msg等于pvNullPointer指向的值 
+    }
+	if((OSQPost((*mbox)->pQ, msg)) != OS_ERR_NONE)
+    {
+       return ERR_MEM;
+    }
 	return ERR_OK;
 }
 
@@ -138,34 +146,26 @@ u32_t sys_arch_mbox_fetch(sys_mbox_t *mbox, void **msg, u32_t timeout)
 	}
 	return timeout; 
 }
-//尝试获取消息
-//*mbox:消息邮箱
-//*msg:消息
-//返回值:等待消息所用的时间/SYS_ARCH_TIMEOUT
+
 u32_t sys_arch_mbox_tryfetch(sys_mbox_t *mbox, void **msg)
 {
-	return sys_arch_mbox_fetch(mbox,msg,1);//尝试获取一个消息
+	return sys_arch_mbox_fetch(mbox, msg, 1);
 }
-//检查一个消息邮箱是否有效
-//*mbox:消息邮箱
-//返回值:1,有效.
-//      0,无效
+
 int sys_mbox_valid(sys_mbox_t *mbox)
 {  
-	sys_mbox_t m_box=*mbox;
 	u8_t ucErr;
 	int ret;
 	OS_Q_DATA q_data;
-	memset(&q_data,0,sizeof(OS_Q_DATA));
-	ucErr=OSQQuery (m_box->pQ,&q_data);
-	ret=(ucErr<2&&(q_data.OSNMsgs<q_data.OSQSize))?1:0;
+	memset(&q_data, 0, sizeof(OS_Q_DATA));
+	ucErr = OSQQuery ((*mbox)->pQ,&q_data);
+	ret=(ucErr<2 && (q_data.OSNMsgs<q_data.OSQSize))?1:0;
 	return ret; 
 } 
-//设置一个消息邮箱为无效
-//*mbox:消息邮箱
+
 void sys_mbox_set_invalid(sys_mbox_t *mbox)
 {
-	*mbox=NULL;
+	*mbox = NULL;
 } 
 //创建一个信号量
 //*sem:创建的信号量
@@ -175,9 +175,12 @@ void sys_mbox_set_invalid(sys_mbox_t *mbox)
 err_t sys_sem_new(sys_sem_t * sem, u8_t count)
 {  
 	u8_t err; 
-	*sem=OSSemCreate((u16_t)count);
-	if(*sem==NULL)return ERR_MEM; 
-	OSEventNameSet(*sem,"LWIP Sem",&err);
+	*sem = OSSemCreate((u16_t)count);
+	if(*sem == NULL)
+    {
+        return ERR_MEM; 
+    }
+	OSEventNameSet(*sem, "LWIP Sem", &err);
 	LWIP_ASSERT("OSSemCreate ",*sem != NULL );
 	return ERR_OK;
 } 
@@ -236,20 +239,15 @@ int sys_sem_valid(sys_sem_t *sem)
 //sem:信号量指针
 void sys_sem_set_invalid(sys_sem_t *sem)
 {
-	*sem=NULL;
+	*sem = NULL;
 } 
 //arch初始化
 void sys_init(void)
 { 
-    //这里,我们在该函数,不做任何事情
+
 } 
 OS_STK TCPIP_THREAD_TASK_STK[1024];//TCP IP内核任务堆栈,在lwip_comm函数定义
-//创建一个新进程
-//*name:进程名称
-//thred:进程任务函数
-//*arg:进程任务函数的参数
-//stacksize:进程任务的堆栈大小
-//prio:进程任务的优先级
+
 sys_thread_t sys_thread_new(const char *name, lwip_thread_fn thread, void *arg, int stacksize, int prio)
 {
 	OS_CPU_SR cpu_sr;
@@ -262,17 +260,11 @@ sys_thread_t sys_thread_new(const char *name, lwip_thread_fn thread, void *arg, 
 	return 0;
 } 
 
-//获取系统时间,LWIP1.4.1增加的函数
-//返回值:当前系统时间(单位:毫秒)
+
 u32_t sys_now(void)
 {
-	u32_t ucos_time, lwip_time;
-	ucos_time=OSTimeGet();	//获取当前系统时间 得到的是UCSO的节拍数
-	lwip_time=(ucos_time*1000/OS_TICKS_PER_SEC+1);//将节拍数转换为LWIP的时间MS
-	return lwip_time; 		//返回lwip_time;
+	return (OSTimeGet()*1000/OS_TICKS_PER_SEC+1);
 }
-
-
 
 #else
 

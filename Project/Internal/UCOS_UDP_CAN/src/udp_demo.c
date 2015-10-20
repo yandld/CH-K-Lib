@@ -1,4 +1,3 @@
-//#include "udp_demo.h"
 #include "includes.h"
 #include <lwip/sockets.h>
 #include <stdint.h>
@@ -12,13 +11,11 @@ OS_STK UDP_TASK_STK[UDP_STK_SIZE];
 #define UDP_PORT                7
 #define BUFSZ                   64
 uint8_t udp_demo_recvbuf[BUFSZ];
-const uint8_t *udp_demo_sendbuf="Explorer STM32F407 NETCONN UDP demo send data\r\n";
 
 
 //udpÈÎÎñº¯Êý
 static void udp_thread(void *arg)
 {
-    printf("%s\r\n", udp_demo_sendbuf);
     
     int sock;
     int bytes_read;
@@ -68,7 +65,7 @@ static void udp_thread(void *arg)
        printf("\n(%s , %d) said : ",inet_ntoa(client_addr.sin_addr),
                   ntohs(client_addr.sin_port));
        printf("%s", recv_data);
-
+        OSCAN_Send(1, 5, "ASDDD", 5);
 
        if (strcmp(recv_data, "exit") == 0)
        {
@@ -83,7 +80,7 @@ static void udp_thread(void *arg)
 }
 
 
-uint8_t udp_sever(void)
+uint8_t udp_server(void)
 {
 	INT8U res;
 	OS_CPU_SR cpu_sr;

@@ -52,6 +52,8 @@
 #include "MK22F25612.h"
 #elif MK22F51212
 #include "MK22F51212.h"
+#elif MK22F12810
+#include "MK22F12810.h"
 #else
 #error "No CPU defined! please define CPU Type in Preprocessor Symbols, eg: MK60D10"
 #endif

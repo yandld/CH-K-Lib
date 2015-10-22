@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    w25qxx.h
   * @author  YANDLD
-  * @version V2.5
-  * @date    2013.12.25
+  * @version V3.0
+  * @date    2015.10.8
   * @brief   www.beyondcore.net   http://upcmcu.taobao.com 
   ******************************************************************************
   */
@@ -13,8 +13,8 @@
 
 #include <stdint.h>
 
-//基本概念
-// page :256byte 写入的最小单位 并且必须保证 写入前全部是0xFF
+//?ù±?????
+// page :256byte D′è?μ?×?D?μ￥?? 2￠?ò±?D?±￡?¤ D′è??°è?2?ê?0xFF
 // sectoer: 4KBbyte
 // block:   64KBbyte
 
@@ -22,6 +22,9 @@
 #ifndef ARRAY_SIZE
 #define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 #endif
+
+#define W25QXX_SECTOR_SIZE  (4096)
+
 
 struct w25qxx_init_t
 {
@@ -32,10 +35,9 @@ struct w25qxx_init_t
 
 //!< API functions
 int w25qxx_init(struct w25qxx_init_t* init);
-int w25qxx_write(uint32_t addr, uint8_t *buf, uint32_t len);
 int w25qxx_read(uint32_t addr, uint8_t *buf, uint32_t len);
-int w25qxx_write_page(uint32_t addr, uint8_t *buf, uint32_t len);
 int w25qxx_erase_sector(uint32_t addr);
+int w25qxx_write_sector(uint32_t addr, uint8_t *buf, uint32_t len);
 int w25qxx_erase_chip(void);
 int w25qxx_get_id(void);
 

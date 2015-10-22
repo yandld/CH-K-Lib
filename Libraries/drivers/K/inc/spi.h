@@ -69,8 +69,8 @@ typedef enum
  */
 typedef enum 
 {
-    kSPI_PCS_ReturnInactive  = 0,   /**< 传输完成后CS信号保持未选中状态(通常为返回高电平) */
-    kSPI_PCS_KeepAsserted  = 1,     /**< 传输完成后CS信号保持片选中状态(通常为拉低) */
+    kSPI_PCS_ReturnInactive  = 0,   /**< after sending complete, return CS line to 1 */
+    kSPI_PCS_KeepAsserted  = 1,     /**< after sending complete, keep CS line to 0 */
 }SPI_PCS_Type;
 
 /**

@@ -17,14 +17,14 @@ int main(void)
     I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
     
 
-    ret = at24cxx_init(0);
+    ret = eep_init(0);
     if(ret)
     {
         printf("at24cxx not found\r\n");
         while(1);
     }
 
-    if(at24cxx_self_test())
+    if(eep_self_test(0, 256))
     {
         printf("at24cxx self test failed\r\n");
         return 1;  

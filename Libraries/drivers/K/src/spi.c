@@ -454,7 +454,7 @@ void SPI_CallbackInstall(uint32_t instance, SPI_CallBackType AppCBFun)
  *          		@arg kSPI_PCS_KeepAsserted    最后保持未选中状态
  * @return 读取到的数据
  */
-uint16_t SPI_ReadWriteByte(uint32_t instance,uint32_t ctar, uint16_t data, uint16_t CSn, SPI_PCS_Type csState)
+uint16_t SPI_ReadWriteByte(uint32_t instance, uint32_t ctar, uint16_t data, uint16_t CSn, SPI_PCS_Type csState)
 {
 	SPI_InstanceTable[instance]->PUSHR = (((uint32_t)(((csState))<<SPI_PUSHR_CONT_SHIFT))&SPI_PUSHR_CONT_MASK) 
             | SPI_PUSHR_CTAS(ctar)      

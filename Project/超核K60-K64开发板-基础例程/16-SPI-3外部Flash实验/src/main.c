@@ -16,31 +16,31 @@
 
 #include <string.h>
 
-static int w25qxx_test(void)
+
+static int w25qxx_test(uint32_t begin, uint32_t end)
 {
-    uint32_t i, block, buf_size,j;
-    static uint8_t buf[4*1024];
+    uint32_t i, total_sector, j;
+    static uint8_t buf[W25QXX_SECTOR_SIZE];
     
     printf("spi flash id:0x%X\r\n", w25qxx_get_id());
-    buf_size = sizeof(buf);
     
-    block = 512;
+    total_sector = (end - begin)/W25QXX_SECTOR_SIZE;
     
     /* erase chip */
     printf("erase all chips...\r\n");
     w25qxx_erase_chip();
     printf("erase complete\r\n");
     
-    for(i=0; i<block; i++)
+    for(i=begin/W25QXX_SECTOR_SIZE; i<total_sector; i++)
     {
-        printf("verify addr:0x%X(%d)...\r\n", i*buf_size, i);
+        printf("verify addr:0x%X(%d)...\r\n", i*W25QXX_SECTOR_SIZE, i);
         for(j=0;j<sizeof(buf);j++)
         {
             buf[j] = j % 0xFF;
         }
-        w25qxx_write(i*block, buf, buf_size);
-        memset(buf, buf_size, 0);
-        w25qxx_read(i*block, buf, buf_size);
+        w25qxx_write_sector(i*W25QXX_SECTOR_SIZE, buf, W25QXX_SECTOR_SIZE);
+        memset(buf, 0, W25QXX_SECTOR_SIZE);
+        w25qxx_read(i*W25QXX_SECTOR_SIZE, buf, W25QXX_SECTOR_SIZE);
         
         /* varify */
         for(j=0;j<sizeof(buf);j++)
@@ -54,35 +54,58 @@ static int w25qxx_test(void)
     return 0;
 }
 
+
 static uint32_t _get_reamin(void)
 {
     return 0;
 }
 
+
+
+
 static uint32_t xfer(uint8_t *buf_in, uint8_t *buf_out, uint32_t len, uint8_t cs_state)
 {
-    uint8_t dummy_in;
-    
-    if(!buf_in)
-        buf_in = &dummy_in;
-    
+    //GPIO_WriteBit(BOARD_SPI_CS_PORT, BOARD_SPI_CS_PIN, 0);
     while(len--)
     {
-        if(len == 0)
+        if(len)
         {
-            *buf_in = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, *buf_out, 1, (SPI_PCS_Type)!cs_state); 
+            if(!buf_in)
+            {
+                SPI_ReadWriteByte(HW_SPI2 , HW_CTAR0, *buf_out++, 1, kSPI_PCS_KeepAsserted); 
+            }
+            else if(!buf_out)
+            {
+                *buf_in++ = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, 0xFF, 1, kSPI_PCS_KeepAsserted); 
+            }
+            else
+            {
+                *buf_in++ = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, *buf_out++, 1, kSPI_PCS_KeepAsserted);   
+            }
         }
         else
         {
-            *buf_in = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, *buf_out, 1, kSPI_PCS_KeepAsserted); 
+            if(!buf_in)
+            {
+                SPI_ReadWriteByte(HW_SPI2 , HW_CTAR0, *buf_out++, 1, (SPI_PCS_Type)!cs_state); 
+            }
+            else if(!buf_out)
+            {
+                *buf_in++ = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, 0xFF, 1, (SPI_PCS_Type)!cs_state); 
+            }
+            else
+            {
+                *buf_in++ = SPI_ReadWriteByte(HW_SPI2, HW_CTAR0, *buf_out++, 1, (SPI_PCS_Type)!cs_state);   
+            }
         }
-        if(buf_out)
-            buf_out++;
-        if(buf_in != &dummy_in)
-            buf_in++;
+
     }
+    //GPIO_WriteBit(BOARD_SPI_CS_PORT, BOARD_SPI_CS_PIN, cs_state);
     return len;
 }
+
+
+    
 
 int main(void)
 {
@@ -114,7 +137,7 @@ int main(void)
         printf("spi_flash found id:0x%X\r\n", w25qxx_get_id());
     }
 
-    w25qxx_test();
+    w25qxx_test(0, 2*1024*1024);
     
     printf("w252qxx test complete\r\n");
     

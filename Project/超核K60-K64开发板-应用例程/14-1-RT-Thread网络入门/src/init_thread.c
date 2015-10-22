@@ -1,14 +1,17 @@
 #include <rtthread.h>
-#include "board.h"
-#include "components.h"
-#include "chlib_k.h"
+#include <dfs_fs.h>
+#include <dfs_init.h>
+#include <dfs_elm.h>
+#include <shell.h>
+#include <lwip/sys.h>
+#include <netif/ethernetif.h>
+extern void lwip_system_init(void);
 #include "IS61WV25616.h"
 #include "rtt_drv.h"
 
 #define SYS_HEAP_SIZE           (1024*32)
 
 extern void rt_system_comonent_init(void);
-
 
 void rt_heap_init(void)
 {
@@ -24,9 +27,11 @@ void rt_heap_init(void)
 
 void init_thread(void* parameter)
 {
-    rt_err_t err;
-    rt_system_comonent_init();
-    rt_thread_delay(1);
+	eth_system_device_init();
+	lwip_system_init();
+    
+    dfs_init();
+    elm_init();
     
     rt_hw_uart_init("uart0", 0);
     rt_console_set_device("uart0");
@@ -40,9 +45,10 @@ void init_thread(void* parameter)
     
     rt_kprintf("waitting for connection...");
     
-    /* tcp server demp */
-    tcpserv();
-
+    /* tcp server demo */
+    extern void tcpserv(void* parameter);
+    tcpserv(RT_NULL);
+    
 }
 
 void rt_application_init(void* parameter)

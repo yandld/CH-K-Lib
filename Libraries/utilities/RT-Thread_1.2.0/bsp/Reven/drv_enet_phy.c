@@ -1,8 +1,9 @@
 #include <rtthread.h>
-#include "chlib_k.h"
-#include "rtt_drv.h"
-#include <rtdevice.h>
 #include <netif/ethernetif.h>
+#include "common.h"
+#include "enet.h"
+#include "gpio.h"
+#include "rtt_drv.h"
 #include "enet_phy.h"
 
 static struct eth_device device;
@@ -125,7 +126,6 @@ struct pbuf *rt_enet_phy_rx(rt_device_t dev)
 rt_err_t rt_enet_phy_tx( rt_device_t dev, struct pbuf* p)
 {
     bool islink;
-    rt_uint32_t len;
     struct pbuf *q;
     
     islink = enet_phy_is_linked();

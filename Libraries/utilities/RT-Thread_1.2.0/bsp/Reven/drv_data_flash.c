@@ -1,7 +1,5 @@
-#include <rthw.h>
 #include <rtthread.h>
 #include "flash.h"
-#include "rtt_drv.h"
 
 #if defined(MK60D10)
 #define FLASH_SIZE          (512*1024)
@@ -33,20 +31,7 @@ static rt_err_t rt_dflash_init (rt_device_t dev)
     return RT_EOK;
 }
 
-static rt_err_t rt_dflash_open(rt_device_t dev, rt_uint16_t oflag)
-{
-	return RT_EOK;
-}
 
-static rt_err_t rt_dflash_close(rt_device_t dev)
-{
-	return RT_EOK;
-}
-
-static rt_err_t rt_dflash_indicate(rt_device_t dev, rt_size_t size)
-{
-    return RT_EOK;
-}
 
 static rt_size_t rt_dflash_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_size_t size)
 {
@@ -101,10 +86,6 @@ static rt_err_t rt_dflash_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 	return RT_EOK;
 }
 
-rt_err_t rt_dflash_txcomplete(rt_device_t dev, void *buffer)
-{
-	return RT_EOK;
-}
 
 int rt_hw_dflash_init(const char *name)
 {
@@ -123,10 +104,10 @@ int rt_hw_dflash_init(const char *name)
     }
     
 	dev->rtdev.type         = RT_Device_Class_Block;
-	dev->rtdev.rx_indicate  = rt_dflash_indicate;
+	dev->rtdev.rx_indicate  = RT_NULL;
 	dev->rtdev.init         = rt_dflash_init;
-	dev->rtdev.open         = rt_dflash_open;
-	dev->rtdev.close		= rt_dflash_close;
+	dev->rtdev.open         = RT_NULL;
+	dev->rtdev.close		= RT_NULL;
 	dev->rtdev.read 		= rt_dflash_read;
 	dev->rtdev.write        = rt_dflash_write;
 	dev->rtdev.control      = rt_dflash_control;

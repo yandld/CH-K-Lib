@@ -28,11 +28,8 @@
  */
 
 #include <rtthread.h>
-#include <rtdevice.h>
 
 #include "uart.h"
-#include "gpio.h"
-#include "rtt_drv.h"
 #include "board.h"
 
 struct uart_device

@@ -9,8 +9,8 @@
   */
 
 #include "enet_phy.h"
-#include "common.h"
 #include "enet.h"
+#include "common.h"
 
 /* MII¼Ä´æÆ÷µØÖ· */
 #define PHY_BMCR                    (0x00) /* Basic Control */

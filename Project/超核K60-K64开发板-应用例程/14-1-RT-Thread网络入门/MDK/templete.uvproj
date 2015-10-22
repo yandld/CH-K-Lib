@@ -361,7 +361,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>MK60D10 RAVEN</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src\gui;..\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\nfs;..\..\..\..\Libraries\utilities\emWin\Include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include\drivers;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\spi;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\init;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\arch\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\ipv4;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\netif;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\filesystems\romfs;..\src\webserver;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\drivers\K\src\usb\src\descriptor\msd;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\init;..\..\..\..\Libraries\utilities\emWin\Sample\GUIDemo;..\src\webnet</IncludePath>
+              <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\K\inc;..\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include\ipv4;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\arch\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\lib\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\bsp\Reven;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\net\lwip-1.4.1\src\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -520,26 +520,6 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\pit.c</FilePath>
             </File>
             <File>
-              <FileName>cpuidy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
-            </File>
-            <File>
-              <FileName>adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>ftm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
-            </File>
-            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
@@ -578,11 +558,6 @@
               <FileName>sd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>lptmr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\lptmr.c</FilePath>
             </File>
             <File>
               <FileName>flash.c</FileName>
@@ -1317,26 +1292,6 @@
               <FilePath>..\..\..\..\Libraries\drivers\K\src\pit.c</FilePath>
             </File>
             <File>
-              <FileName>cpuidy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\cpuidy.c</FilePath>
-            </File>
-            <File>
-              <FileName>adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>ftm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\ftm.c</FilePath>
-            </File>
-            <File>
-              <FileName>i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\i2c.c</FilePath>
-            </File>
-            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\spi.c</FilePath>
@@ -1375,11 +1330,6 @@
               <FileName>sd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>lptmr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\Libraries\drivers\K\src\lptmr.c</FilePath>
             </File>
             <File>
               <FileName>flash.c</FileName>

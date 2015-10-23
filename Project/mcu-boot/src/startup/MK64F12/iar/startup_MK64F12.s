@@ -331,7 +331,6 @@ __vector_table_0x1c
         DCD     0xFFFFFFFF                                    ; Reserved for user TRIM value
 __Vectors_End
 
-        SECTION FlashConfig:CODE
 __FlashConfig
       	DCD	0xFFFFFFFF
       	DCD	0xFFFFFFFF

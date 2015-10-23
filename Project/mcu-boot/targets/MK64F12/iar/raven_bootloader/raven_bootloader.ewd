@@ -1452,7 +1452,7 @@
         </option>
         <option>
           <name>OCDynDriverList</name>
-          <state>PEMICRO_ID</state>
+          <state>JLINK_ID</state>
         </option>
         <option>
           <name>OCLastSavedByProductVersion</name>
@@ -2623,7 +2623,7 @@
       <name>XDS100_ID</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>2</version>
+        <version>4</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>

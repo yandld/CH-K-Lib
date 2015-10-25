@@ -15,6 +15,10 @@
 
 #include "calibration.h"
 
+#ifndef ABS
+#define ABS(a)         (((a) < 0) ? (-(a)) : (a))
+#endif
+
 #define CAL_MAGIC                   (0x5ACB)
 
 #define CAL_GYRO_INIT               (0x00)
@@ -60,7 +64,7 @@ void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
     switch(states)
     {
         case CAL_GYRO_INIT:
-            if((gdata[0] < GYRO_STILL_LIMIT) && (gdata[1] < GYRO_STILL_LIMIT) && (gdata[2] < GYRO_STILL_LIMIT))
+            if((ABS(gdata[0]) < GYRO_STILL_LIMIT) && (ABS(gdata[1]) < GYRO_STILL_LIMIT) && (ABS(gdata[2]) < GYRO_STILL_LIMIT))
             {
                 still_count++;
             }
@@ -79,7 +83,7 @@ void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
             }
             break;
         case CAL_GYRO_COUNT:
-            if((gdata[0] < GYRO_STILL_LIMIT) && (gdata[1] < GYRO_STILL_LIMIT) && (gdata[2] < GYRO_STILL_LIMIT))
+            if((ABS(gdata[0]) < GYRO_STILL_LIMIT) && (ABS(gdata[1]) < GYRO_STILL_LIMIT) && (ABS(gdata[2]) < GYRO_STILL_LIMIT))
             {
                 //printf("! %d %d %d\r\n", gdata[0], gdata[1], gdata[2]);
                 gsum[0] += gdata[0];
@@ -89,6 +93,7 @@ void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
             }
             else
             {
+                still_count = 0;
                 states = CAL_GYRO_INIT;
             }
 
@@ -102,6 +107,7 @@ void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
             dc->go[1] = gsum[1]/GYRO_SAMPLE_COUNT;   
             dc->go[2] = gsum[2]/GYRO_SAMPLE_COUNT;   
             //printf("data output complete ! %d %d %d\r\n", gsum[0]/GYRO_SAMPLE_COUNT, gsum[1]/GYRO_SAMPLE_COUNT, gsum[2]/GYRO_SAMPLE_COUNT);
+            still_count = 0;
             states = CAL_GYRO_INIT;
             break;
         default:

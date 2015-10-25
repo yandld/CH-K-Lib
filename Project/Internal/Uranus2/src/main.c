@@ -20,7 +20,7 @@
 #include "calibration.h"
 #include "mq.h"
 
-#define VERSION             (204)
+#define VERSION             (205)
 #define MPU9250_INT_PIN     (18)
 
 #define DMA_TX_CH      (HW_DMA_CH0)

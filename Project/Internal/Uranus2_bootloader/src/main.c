@@ -58,6 +58,7 @@ int main(void)
     UART_Init(UART0_RX_PA01_TX_PA02, 115200);
     FLASH_Init();
     
+    Boot.name = "Uranus";
     Boot.AppStartAddr = 0x5000;
     Boot.TimeOut = 2000;
     Boot.FlashPageSize = FLASH_GetSectorSize();

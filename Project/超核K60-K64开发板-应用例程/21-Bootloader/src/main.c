@@ -67,6 +67,7 @@ int main(void)
     UART_CallbackRxInstall(HW_UART0, UART_ISR);
     FLASH_Init();
     
+    Boot.name = "MK6xDN1M(512)VLQ12";
     Boot.AppStartAddr = 0x5000;
     Boot.TimeOut = 2000;
     Boot.FlashPageSize = FLASH_GetSectorSize();

@@ -27,9 +27,7 @@ typedef struct
 typedef struct
 {
     uint8_t     cmd;
-    uint32_t    FCFG1;
-    uint32_t    FCFG2;
-    uint32_t    SDID;
+    uint8_t     name[32];
     uint32_t    FlashPageSize;
     uint32_t    AppStartAddr;
 } ChipInfo_t;
@@ -147,9 +145,14 @@ static void ProcessChipInfoMsg(msg_t* pMsg)
     ChipInfo_t info;
 
     info.cmd = CMD_CHIPINFO;
-    info.FCFG1 = SIM->FCFG1;
-    info.FCFG2 = SIM->FCFG2;
-    info.SDID  = SIM->SDID;
+    if(!strlen(Bootloader.name))
+    {
+        memcpy(info.name, "Unknown Devices", strlen("Unknown Devices"));
+    }
+    else
+    {
+        memcpy(info.name, Bootloader.name, strlen(Bootloader.name));
+    }
     info.FlashPageSize = Bootloader.FlashPageSize;
     SendResp((uint8_t*)&info, 0, sizeof(info));
 }

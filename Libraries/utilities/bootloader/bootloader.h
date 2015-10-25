@@ -20,6 +20,7 @@ typedef struct
     
     /* settings */
     uint32_t TimeOut;
+    const char *name;
 }Boot_t;
 
 //!< API 

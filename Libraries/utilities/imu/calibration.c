@@ -54,7 +54,12 @@ void dcal_init(struct dcal_t *dc)
 }
 
 #define GYRO_SAMPLE_COUNT       (100)
+#if defined(SP_10Hz)
+#define GYRO_STILL_LIMIT        (200)
+#else
 #define GYRO_STILL_LIMIT        (30)
+#endif
+
 static int32_t gsum[3];
 
 void dcal_ginput(struct dcal_t *dc, int16_t *gdata)

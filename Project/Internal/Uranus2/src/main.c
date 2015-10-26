@@ -110,8 +110,8 @@ int sensor_init(void)
     
     struct mpu_config config;
     
-    config.afs = AFS_16G;
-    config.gfs = GFS_2000DPS;
+    config.afs = AFS_2G;
+    config.gfs = GFS_250DPS;
     config.mfs = MFS_14BITS;
     config.aenable_self_test = false;
     config.genable_self_test = false;
@@ -357,7 +357,17 @@ int main(void)
                         GPIO_PinToggle(HW_GPIOC, 3);
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
+                            #if defined(SP_10Hz)
+                            static uint8_t cnt;
+                            cnt ++; cnt %= 20;
+                            if(!cnt)
+                            {
+                                UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
+                            }
+                            #else
                             UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
+                            #endif
+                            
                         }
                     }
                 break;

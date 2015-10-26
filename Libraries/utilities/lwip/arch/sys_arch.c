@@ -167,11 +167,7 @@ void sys_mbox_set_invalid(sys_mbox_t *mbox)
 {
 	*mbox = NULL;
 } 
-//创建一个信号量
-//*sem:创建的信号量
-//count:信号量值
-//返回值:ERR_OK,创建OK
-// 	     ERR_MEM,创建失败
+
 err_t sys_sem_new(sys_sem_t * sem, u8_t count)
 {  
 	u8_t err; 
@@ -180,8 +176,6 @@ err_t sys_sem_new(sys_sem_t * sem, u8_t count)
     {
         return ERR_MEM; 
     }
-	OSEventNameSet(*sem, "LWIP Sem", &err);
-	LWIP_ASSERT("OSSemCreate ",*sem != NULL );
 	return ERR_OK;
 } 
 //等待一个信号量
@@ -211,51 +205,46 @@ u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
 	}
 	return timeout;
 }
-//发送一个信号量
-//sem:信号量指针
+
 void sys_sem_signal(sys_sem_t *sem)
 {
 	OSSemPost(*sem);
 }
-//释放并删除一个信号量
-//sem:信号量指针
+
 void sys_sem_free(sys_sem_t *sem)
 {
 	u8_t ucErr;
-	(void)OSSemDel(*sem,OS_DEL_ALWAYS,&ucErr );
-	if(ucErr!=OS_ERR_NONE)LWIP_ASSERT("OSSemDel ",ucErr==OS_ERR_NONE);
+	(void)OSSemDel(*sem,OS_DEL_ALWAYS,&ucErr);
+	if(ucErr != OS_ERR_NONE)
+    {
+        LWIP_ASSERT("OSSemDel ",ucErr==OS_ERR_NONE);
+    }
 	*sem = NULL;
 } 
-//查询一个信号量的状态,无效或有效
-//sem:信号量指针
-//返回值:1,有效.
-//      0,无效
+
 int sys_sem_valid(sys_sem_t *sem)
 {
 	OS_SEM_DATA  sem_data;
 	return (OSSemQuery (*sem,&sem_data) == OS_ERR_NONE )? 1:0;              
 } 
-//设置一个信号量无效
-//sem:信号量指针
+
 void sys_sem_set_invalid(sys_sem_t *sem)
 {
 	*sem = NULL;
 } 
-//arch初始化
+
 void sys_init(void)
 { 
 
-} 
-OS_STK TCPIP_THREAD_TASK_STK[1024];//TCP IP内核任务堆栈,在lwip_comm函数定义
+}
 
+OS_STK TCPIP_THREAD_TASK_STK[1024];
 sys_thread_t sys_thread_new(const char *name, lwip_thread_fn thread, void *arg, int stacksize, int prio)
 {
 	OS_CPU_SR cpu_sr;
-	if(strcmp(name,TCPIP_THREAD_NAME)==0)//创建TCP IP内核任务
+	if(strcmp(name,TCPIP_THREAD_NAME) == 0)
 	{
-		OS_ENTER_CRITICAL();  //进入临界区 
 		OSTaskCreate(thread,arg,(OS_STK*)&TCPIP_THREAD_TASK_STK[stacksize-1],prio);//创建TCP IP内核任务 
-		OS_EXIT_CRITICAL();  //退出临界区
 	} 
 	return 0;
 } 

@@ -2,15 +2,8 @@
 #include "common.h"
 #include "uart.h"
 
-#include <string.h>
+#include <atp.h>
 
-enum ATPStates
-{
-    kAT_CMDA,
-    kAT_CMDT,
-    kAT_DATA,
-    kAT_END1,
-};
 
 /*
 ¸´Î»
@@ -32,16 +25,10 @@ AT+SAVE
 
 */
 
-typedef struct  
-{
-    char		*name;
-    int         (*cmd)(int argc, char * const argv[]);
-}ATCMD_t;
-
-
 int ATRST(int argc, char * const argv[])
 {
     NVIC_SystemReset();
+    return 0;
 }
 
 int AT(int argc, char * const argv[])
@@ -51,12 +38,12 @@ int AT(int argc, char * const argv[])
 
 int INFO(int argc, char * const argv[])
 {
-    printf("INFO\r\n");
-    return 1;
+    printf("UID(MAC):0x%X\r\n", GetUID());
+    printf("Version:%d\r\n", 201);
+    return 0;
 }
 
 
-    
 ATCMD_t ATCMD[] = 
 {
     {"",        AT      },
@@ -66,74 +53,26 @@ ATCMD_t ATCMD[] =
 
 
 
-
-
-void ATP_Get(uint8_t ch)
-{
-    static enum ATPStates States = kAT_CMDA;
-    static char buf[64];
-    static uint32_t i;
-    uint32_t j;
-    int ret;
-    
-    switch(States)
-    {
-        case kAT_CMDA:
-            if(ch == 'A')
-            {
-                States = kAT_CMDT;
-            }
-            break;
-        case kAT_CMDT:
-            (ch == 'T')?(States = kAT_DATA):(States = kAT_CMDA);
-            i = 0;
-            break;
-        case kAT_DATA:
-            ((ch == '\r') || (ch == '\n') || (i == sizeof(buf)))?(States = kAT_END1):(buf[i++] = ch);
-            break;
-        case kAT_END1:
-            if((ch == '\r') || (ch == '\n'))
-            {
-                buf[i] = 0;
-                for(j=0; j<ARRAY_SIZE(ATCMD); j++)
-                {
-                    if(strchr(buf, '='))
-                    {
-                        i = (uint32_t)(strchr(buf, '=') - buf);
-                    }
-                    
-                    if(!strncmp(ATCMD[j].name, buf, i))
-                    {
-                        ret = ATCMD[j].cmd(NULL, NULL);
-                        (ret)?(printf("ERR\r\n")):(printf("OK\r\n"));
-                        break;
-                    }
-                }
-            }
-            States = kAT_CMDA;
-            break;
-    }
-}
-
 static void UART_RX_ISR(uint16_t byteReceived)
 {
-    ATP_Get(byteReceived);
-    //UART_WriteByte(HW_UART0, byteReceived);
+    ATP_Put(byteReceived);
 }
 
  
 int main(void)
 {
     DelayInit();
+    DelayMs(10);
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     
     UART_QuickInit(UART0_RX_PB16_TX_PB17 , 115200);
     
-    printf("type any character which will echo...\r\n");
+    printf("ATCMD test\r\n");
 
     UART_CallbackRxInstall(HW_UART0, UART_RX_ISR);
     UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     
+    ATP_Init(ATCMD, ARRAY_SIZE(ATCMD));
     while(1)
     {
         GPIO_ToggleBit(HW_GPIOE, 6);

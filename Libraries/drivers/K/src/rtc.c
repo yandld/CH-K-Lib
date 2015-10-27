@@ -34,7 +34,7 @@ static const uint16_t MONTH_DAYS[] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 2
 void RTC_QuickInit(void)
 {
     RTC_InitTypeDef RTC_InitStruct1;
-    RTC_InitStruct1.oscLoad = kRTC_OScLoad_8PF;
+    RTC_InitStruct1.oscLoad = kRTC_OScLoad_2PF;
     RTC_Init(&RTC_InitStruct1);
 }
 

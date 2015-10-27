@@ -359,10 +359,21 @@ int main(void)
                         {
                             #if defined(SP_10Hz)
                             static uint8_t cnt;
+                            static float angle_sum[3], angle_sum_temp[3];
+                            angle_sum[0] += angle.P;
+                            angle_sum[1] += angle.R;
+                            angle_sum[2] += angle.Y;
+ 
                             cnt ++; cnt %= 20;
                             if(!cnt)
                             {
+                                angle_sum_temp[0] = angle_sum[0]/20;
+                                angle_sum_temp[1] = angle_sum[1]/20;
+                                angle_sum_temp[2] = angle_sum[2]/20;
                                 UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
+                                angle_sum[0] = 0;
+                                angle_sum[1] = 0;
+                                angle_sum[2] = 0;
                             }
                             #else
                             UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
@@ -503,7 +514,7 @@ void PIT_IRQHandler(void)
 
 void PORTA_IRQHandler(void)
 {
-    PORTA->ISFR |= (1<<MPU9250_INT_PIN);
+    PORTA->ISFR |= (1 << MPU9250_INT_PIN);
     msg_t msg;
     msg.cmd = kMSG_CMD_SENSOR_DATA_READY;
     mq_push(msg);

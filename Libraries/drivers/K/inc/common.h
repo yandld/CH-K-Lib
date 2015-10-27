@@ -138,6 +138,18 @@ typedef enum
     #define BSWAP_16(x)     (uint16_t)((((x) & 0xFF00) >> 0x8) | (((x) & 0xFF) << 0x8))
 #endif
 
+#ifndef ALIGN
+/* Compiler Related Definitions */
+#ifdef __CC_ARM                         /* ARM Compiler */
+    #define ALIGN(n)                    __attribute__((aligned(n)))
+#elif defined (__IAR_SYSTEMS_ICC__)     /* for IAR Compiler */
+    #define PRAGMA(x)                   _Pragma(#x)
+    #define ALIGN(n)                    PRAGMA(data_alignment=n)
+#elif defined (__GNUC__)                /* GNU GCC Compiler */
+    #define ALIGN(n)                    __attribute__((aligned(n)))
+#endif /* Compiler Related Definitions */
+#endif
+    
 #define IP_CLK_ENABLE(x)        (*((uint32_t*) ClkTbl[x].addr) |= ClkTbl[x].mask)
 #define IP_CLK_DISABLE(x)       (*((uint32_t*) ClkTbl[x].addr) &= ~ClkTbl[x].mask)
 

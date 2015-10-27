@@ -185,13 +185,13 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
  * @retval 0  有效 
  * \retval !0 无效
  */
-uint32_t RTC_IsTimeValid(void)
+bool RTC_IsTimeValid(void)
 {
     if(RTC->TSR)
     {
-        return 0;
+        return true;
     }
-    return 1;
+    return false;
 }
 
 /**

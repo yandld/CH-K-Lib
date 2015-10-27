@@ -13,7 +13,7 @@ int main(void)
 {
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     
     /* 声明一个时间结构 */
     RTC_DateTime_Type td = {0};
@@ -26,13 +26,14 @@ int main(void)
     printf("RTC alarm test\r\n");
     
     RTC_QuickInit();
-    if(RTC_IsTimeValid() == 0)
+    if(RTC_IsTimeValid() == false)
     {
+        printf("bad time, reset!\r\n");
         RTC_SetDateTime(&td);
     }
     /* 开启中断 */
     RTC_CallbackInstall(RTC_ISR);
-    RTC_ITDMAConfig(kRTC_IT_TimeAlarm, true);
+ RTC_ITDMAConfig(kRTC_IT_TimeAlarm, true);
     
     /* 设置闹钟在当前3秒后 */
     RTC_GetDateTime(&td);

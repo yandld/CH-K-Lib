@@ -178,7 +178,7 @@ int ili9320_read_pixel(int x, int y)
 void ili9320_clear(int c)
 {
 	int i;
-    ili9320_set_window(0, 0, 50, 100);
+    ili9320_set_window(0, 0, 240, 320);
     WR_CMD(lcd_dev.cmd_gram);
 	for(i = 0; i < (LCD_X_MAX * LCD_Y_MAX); i++)
 	{

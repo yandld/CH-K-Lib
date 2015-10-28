@@ -17,6 +17,9 @@ del *.crf /s
 del *.o /s
 del *.d /s
 del *.axf /s
+del *.uvgui /s
+del *.uvgui* /s
+del *.bak /s
 del *.tra /s
 del *.dep /s           
 del JLinkLog.txt /s

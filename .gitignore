@@ -31,6 +31,7 @@
 *.ini
 *.Scr
 *.lst
+*.uvgui*
 output
 Doc
 settings

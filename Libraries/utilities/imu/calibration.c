@@ -50,7 +50,19 @@ void dcal_reset_mag(struct dcal_t *dc)
 
 void dcal_init(struct dcal_t *dc)
 {
-    
+    uint8_t i;
+    if(dc->magic != CAL_MAGIC)
+    {
+        for(i=0; i<3; i++)
+        {
+            dc->ao[i] = 0;
+            dc->go[i] = 0;
+            dc->mo[i] = 0;
+            dc->mg[i] = 1;
+            dc->m_max[i] = 0;
+            dc->m_min[i] = 0;  
+        }
+    }
 }
 
 #define GYRO_SAMPLE_COUNT       (100)

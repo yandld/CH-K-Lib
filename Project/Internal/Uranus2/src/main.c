@@ -189,6 +189,8 @@ void HWInit(void)
     mq_init();
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
     sensor_init();
+    
+    dcal_init(&dcal);
     UART_SetIntMode(HW_UART0, kUART_IntIdleLine, true);
 }
 

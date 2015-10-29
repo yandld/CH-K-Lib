@@ -20,31 +20,20 @@
 #include "calibration.h"
 #include "mq.h"
 
-#define VERSION             (205)
-#define MPU9250_INT_PIN     (18)
+#include "appdef.h"
 
-#define DMA_TX_CH      (HW_DMA_CH0)
-#define DMA_RX_CH      (HW_DMA_CH1)
+
 
 KalmanState_t KAState[3], KGState[3], KMState[3];
 
-static uint8_t gRevBuf[64];
+uint8_t gRevBuf[64];
 struct dcal_t dcal;
 int RunState;
-    
-enum 
-{
-    kMSG_CMD_TIMER,
-    kMSG_CMD_SENSOR_DATA_READY,
-    kMSG_CMD_DATA_REV,
-};
 
 static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, int16_t *gyo, int16_t *mag, int32_t pressure)
 {
     int i;
     uint8_t sum = 0;
-    uint8_t len;
-    
     
     buf[0] = 0x88;
     buf[1] = 0xAF;
@@ -212,6 +201,7 @@ int main(void)
 #if defined(BOOTLOADER)
     SCB->VTOR = 0x5000;
 #endif
+    
     int i;
 
     int16_t adata[3], gdata[3], mdata[3];
@@ -357,28 +347,7 @@ int main(void)
                         GPIO_PinToggle(HW_GPIOC, 3);
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
-                            #if defined(SP_10Hz)
-                            static uint8_t cnt;
-                            static float angle_sum[3], angle_sum_temp[3];
-                            angle_sum[0] += angle.P;
-                            angle_sum[1] += angle.R;
-                            angle_sum[2] += angle.Y;
- 
-                            cnt ++; cnt %= 20;
-                            if(!cnt)
-                            {
-                                angle_sum_temp[0] = angle_sum[0]/20;
-                                angle_sum_temp[1] = angle_sum[1]/20;
-                                angle_sum_temp[2] = angle_sum[2]/20;
-                                UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
-                                angle_sum[0] = 0;
-                                angle_sum[1] = 0;
-                                angle_sum[2] = 0;
-                            }
-                            #else
                             UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
-                            #endif
-                            
                         }
                     }
                 break;
@@ -469,53 +438,3 @@ void ano_callback(rev_data_t *rd)
     mq_push(msg);
 }
 
-void UART0_IRQHandler(void)
-{
-    static uint8_t buf[64];
-    uint32_t len;
-    static rev_data_t rd;
-    if((UART0->S1 & UART_S1_RDRF_MASK) && (UART0->C2 & UART_C2_RIE_MASK))
-    {
-       // gRevBuf[i++] = UART0->D;
-    }
-    
-    if(UART0->S1 & UART_S1_IDLE_MASK)
-    {
-        UART0->S1 |=  UART_S1_IDLE_MASK;
-        
-        len = 9999 - DMA_GetTransCnt(DMA_RX_CH);
-        memcpy(buf, gRevBuf, len);
-        DMA_SetDestAddr(DMA_RX_CH, (uint32_t)gRevBuf);
-        DMA_SetTransCnt(DMA_RX_CH, 9999);
-        ano_rec(&rd, buf, len);
-    }
-    
-    /**
-        this is very important because in real applications
-        OR usually occers, the RDRF will block when OR is asserted 
-    */
-    if(UART0->S1 & UART_S1_OR_MASK)
-    {
-      //  ch = UART0->D;
-    }
-    
-}
-
-void PIT_IRQHandler(void)
-{
-    if(PIT->CHANNEL[0].TFLG)
-    {
-        PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
-        msg_t msg;
-        msg.cmd = kMSG_CMD_TIMER;
-        mq_push(msg);
-    }
-}
-
-void PORTA_IRQHandler(void)
-{
-    PORTA->ISFR |= (1 << MPU9250_INT_PIN);
-    msg_t msg;
-    msg.cmd = kMSG_CMD_SENSOR_DATA_READY;
-    mq_push(msg);
-}

@@ -347,7 +347,16 @@ int main(void)
                         GPIO_PinToggle(HW_GPIOC, 3);
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
+                            #ifdef SP_50Hz
+                            static uint8_t cnt;
+                            cnt++; cnt%=4;
+                            if(cnt == 0)
+                            {
+                                UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
+                            }
+                            #else
                             UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
+                            #endif
                         }
                     }
                 break;

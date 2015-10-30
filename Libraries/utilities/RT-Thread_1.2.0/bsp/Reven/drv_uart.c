@@ -32,11 +32,13 @@
 #include "uart.h"
 #include "board.h"
 
+#define UART_BUF_SIZE               (64)
+
 struct uart_device
 {
     struct rt_device                rtdev;
     struct rt_mutex                 lock;
-    char                            rx_buf[32];
+    char                            rx_buf[UART_BUF_SIZE];
     uint32_t                        rx_len;
     uint32_t                        hw_instance;
     void (*hw_isr)(uint16_t data);
@@ -120,15 +122,7 @@ static void UART4_ISR(uint16_t byteReceived)
     }
 }
 
-static rt_err_t rt_uart_open(rt_device_t dev, rt_uint16_t oflag)
-{
-	return RT_EOK;
-}
 
-static rt_err_t rt_uart_close(rt_device_t dev)
-{
-	return RT_EOK;
-}
 
 static rt_err_t rt_uart_init (rt_device_t dev)
 {
@@ -155,10 +149,10 @@ static rt_err_t rt_uart_init (rt_device_t dev)
             uart_dev->hw_isr = UART2_ISR;
             break;   
         case 3:
-            uart_dev->hw_isr = UART2_ISR;
+            uart_dev->hw_isr = UART3_ISR;
             break; 
         case 4:
-            uart_dev->hw_isr = UART2_ISR;
+            uart_dev->hw_isr = UART4_ISR;
             break; 
     }
     return RT_EOK;
@@ -229,8 +223,8 @@ int rt_hw_uart_init(const char *name, uint32_t instance)
 	dev->rtdev.rx_indicate  = RT_NULL;
 	dev->rtdev.tx_complete  = RT_NULL;
 	dev->rtdev.init 		= rt_uart_init;
-	dev->rtdev.open         = rt_uart_open;
-	dev->rtdev.close		= rt_uart_close;
+	dev->rtdev.open         = RT_NULL;
+	dev->rtdev.close		= RT_NULL;
 	dev->rtdev.read 		= rt_uart_read;
 	dev->rtdev.write        = rt_uart_write;
 	dev->rtdev.control      = rt_uart_control;

@@ -29,21 +29,21 @@ int main(void)
     if(RTC_IsTimeValid() == false)
     {
         printf("bad time, reset!\r\n");
-        RTC_SetDateTime(&td);
+        RTC_SetTime(&td);
     }
     /* 开启中断 */
     RTC_CallbackInstall(RTC_ISR);
- RTC_ITDMAConfig(kRTC_IT_TimeAlarm, true);
+    RTC_ITDMAConfig(kRTC_IT_TimeAlarm, true);
     
     /* 设置闹钟在当前3秒后 */
-    RTC_GetDateTime(&td);
+    RTC_GetTime(&td);
     td.second += 3;
     RTC_SetAlarm(&td);
 
     while(1)
     {
         /* 获得时间 */
-        RTC_GetDateTime(&td);//获得时间
+        RTC_GetTime(&td);//获得时间
         printf("%d-%d-%d %d:%d:%d\r\n", td.year, td.month, td.day, td.hour, td.minute, td.second);
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(1000);

@@ -29,12 +29,12 @@ int main(void)
     if(RTC_IsTimeValid())
     {
         printf("time invalid, reset time!\r\n");
-        RTC_SetDateTime(&td);
+        RTC_SetTime(&td);
     }
     while(1)
     {
         /* 获得时间 */
-        RTC_GetDateTime(&td);//获得时间
+        RTC_GetTime(&td);//获得时间
         printf("%d-%d-%d %d:%d:%d\r\n", td.year, td.month, td.day, td.hour, td.minute, td.second);
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(1000);

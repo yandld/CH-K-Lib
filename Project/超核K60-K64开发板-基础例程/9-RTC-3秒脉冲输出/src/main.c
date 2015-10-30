@@ -27,7 +27,7 @@ int main(void)
     RTC_QuickInit();
     if(RTC_IsTimeValid() != 0)
     {
-        RTC_SetDateTime(&td);
+        RTC_SetTime(&td);
     }
     /* ¿ªÆôÖÐ¶Ï */
     RTC_CallbackInstall(RTC_ISR);
@@ -39,7 +39,7 @@ int main(void)
     
     while(1)
     {
-        RTC_GetDateTime(&td);
+        RTC_GetTime(&td);
         printf("%d-%d-%d %d:%d:%d\r\n", td.year, td.month, td.day, td.hour, td.minute, td.second);
         GPIO_ToggleBit(HW_GPIOE, 6);
         DelayMs(1000);

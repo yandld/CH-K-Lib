@@ -40,7 +40,14 @@ void init_thread(void* parameter)
     finsh_system_init();
     
     rt_hw_dflash_init("dflash0");
+    if(dfs_mount("dflash0", "/", "elm", 0, 0) != RT_EOK)
+    {
+        rt_kprintf("mount dflash0 failed. format file system...\r\n");
+        dfs_mkfs("elm", "dflash0");
+    }
+    
     dfs_mount("dflash0", "/", "elm", 0, 0);
+    
     rt_hw_enet_phy_init();
     
     rt_kprintf("waitting for connection...");

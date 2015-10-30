@@ -717,6 +717,7 @@
       <TargetName>mk64f12</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060020::V5.06 (build 20)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>MK64FN1M0xxx12</Device>
@@ -955,7 +956,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>0</Im2Chk>
+            <Im2Chk>1</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -1112,7 +1113,7 @@
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc>--keep __rtmsym_*   --keep __fsym_* --keep __vsym_*   --keep __rt_init*</Misc>
+            <Misc>--keep __fsym_* --keep __vsym_*</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>

@@ -8,22 +8,6 @@
 static const char http_req_hdr_tmpl[] = "GET /%s HTTP/1.1\r\nHost: %s\r\nConnection: Close\r\n\r\n"; /* 发送用到的数据 */
 
 
-static int  _httpGetFileLen(char *revbuf)
-{
-    char *p1 = NULL, *p2 = NULL;
-    int HTTP_Body = 0;//内容体长度
-
-    p1 = strstr(revbuf,"Content-Length");
-    if(p1 == NULL)
-        return -1;
-    else
-    {
-        p2 = p1+strlen("Content-Length")+ 2; 
-        HTTP_Body = atoi(p2);
-        return HTTP_Body;
-    }
-}
-
 void http_parse_request_url(char *buf, char *host, 
                             unsigned short *port, char *file_name)
 {
@@ -95,14 +79,16 @@ int wget(int argc, char** argv)
         rt_kprintf("bad url\r\n");
         return -1;
     }
-    rt_kprintf("host:%s | name:%s\r\n", shost, sname);
+    rt_kprintf("host name:%s", shost);
+    rt_kprintf("file name:%s", sname);
+
     host = gethostbyname(shost);
     
     /* 分配用于存放接收数据的缓冲 */
     recv_data = rt_malloc(BUFSZ);
     if (recv_data == RT_NULL)
     {
-        rt_kprintf("No memory\n");
+        rt_kprintf("not enough memory!\r\n");
         return -1;
     }
 
@@ -151,7 +137,7 @@ int wget(int argc, char** argv)
     bytes_received = recv(sock, recv_data, BUFSZ, 0);
     
     /* get web file size */
-    rt_kprintf("got data:%d %s\r\n", bytes_received, recv_data);
+    rt_kprintf("header:%d %s\r\n", bytes_received, recv_data);
 //    file_size = _httpGetFileLen(recv_data);
 //    if(file_size <=0)
 //    {
@@ -166,21 +152,21 @@ int wget(int argc, char** argv)
     
     /* get start pointer */
     p = strstr(recv_data,"\r\n\r\n");
-    if(p == NULL)
-    {
-        /* rev again */
-        bytes_received = recv(sock, recv_data, BUFSZ, 0);
-        p = strstr(recv_data,"\r\n\r\n");
-        if(p == NULL)
-        {
-            rt_kprintf("cannot find file content!\n");
-            lwip_close(sock); 
-        
-            /*释放接收缓冲 */
-            rt_free(recv_data);
-            return -1;
-        }
-    }
+//    if(p == NULL)
+//    {
+//        /* rev again */
+//        bytes_received = recv(sock, recv_data, BUFSZ, 0);
+//        p = strstr(recv_data,"\r\n\r\n");
+//        if(p == NULL)
+//        {
+//            rt_kprintf("cannot find file content!\n");
+//            lwip_close(sock); 
+//        
+//            /*释放接收缓冲 */
+//            rt_free(recv_data);
+//            return -1;
+//        }
+//    }
     
     p +=4; /* scape /r/n/r/n */
     offset = p - recv_data;

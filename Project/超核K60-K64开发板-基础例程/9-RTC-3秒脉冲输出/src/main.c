@@ -25,7 +25,7 @@ int main(void)
     printf("RTC clk out test, second pulse in on PE26\r\n");
     
     RTC_QuickInit();
-    if(RTC_IsTimeValid() != 0)
+    if(RTC_IsTimeValid() == false)
     {
         RTC_SetTime(&td);
     }

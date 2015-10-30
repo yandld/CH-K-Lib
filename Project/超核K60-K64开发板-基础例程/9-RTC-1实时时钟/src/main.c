@@ -26,7 +26,7 @@ int main(void)
     printf("RTC test\r\n");
     RTC_QuickInit();
     /* 当时间无效(从来未执行过RTC时) 初始化时间 */
-    if(RTC_IsTimeValid())
+    if(RTC_IsTimeValid() == false)
     {
         printf("time invalid, reset time!\r\n");
         RTC_SetTime(&td);

@@ -70,7 +70,7 @@ int main(void)
     static const char String1[] = "This string is send via DMA\r\n";
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     printf("DMA UART transmit test\r\n");
     /* 打开UART0 DMA发送使能 */
     UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx, true);

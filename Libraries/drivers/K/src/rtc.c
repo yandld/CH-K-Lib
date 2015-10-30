@@ -27,16 +27,7 @@ static const uint8_t  LY[] = {0U, 31U, 29U, 31U, 30U, 31U, 30U, 31U, 31U, 30U, 3
 // Number of days from begin of the non Leap-year
 static const uint16_t MONTH_DAYS[] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 212U, 243U, 273U, 304U, 334U};
 
-/**
- * @brief  RTC模块快速初始化配置，设定内部电容为8pF
- * @retval None
- */
-void RTC_QuickInit(void)
-{
-    RTC_InitTypeDef RTC_InitStruct1;
-    RTC_InitStruct1.oscLoad = kRTC_OScLoad_2PF;
-    RTC_Init(&RTC_InitStruct1);
-}
+
 
 /**
  * @brief  由年月日计算出周数
@@ -45,7 +36,7 @@ void RTC_QuickInit(void)
  * @param[in]   days  日
  * @retval 返回计算出来的周期数
  */
-int RTC_GetWeekFromYMD(int year, int month, int days)
+int RTC_GetWeek(int year, int month, int days)
 {  
     static int mdays[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 };  
     int i, y = year - 1;  
@@ -157,12 +148,12 @@ static void RTC_SecondToDateTime(const uint32_t * seconds, RTC_DateTime_Type * d
  * @code
  *      //获得RTC的时间
  *      RTC_DateTime_Type ts;    //申请一个结构体
- *      RTC_GetDateTime(&ts);    //将日期存储到ts中
+ *      RTC_GetTime(&ts);    //将日期存储到ts中
  * @endcode
  * @param  datetime  返回出来的年月日等信息结构体
  * @retval None
  */
-void RTC_GetDateTime(RTC_DateTime_Type * datetime)
+void RTC_GetTime(RTC_DateTime_Type * datetime)
 {
     if(!datetime)
     {
@@ -179,7 +170,7 @@ void RTC_GetDateTime(RTC_DateTime_Type * datetime)
  *    if(RTC_IsTimeValid())
  *    {
  *       printf("time invalid, reset time!\r\n");
- *       RTC_SetDateTime(&td);
+ *       RTC_SetTime(&td);
  *    }
  * \endcode
  * @retval 0  有效 
@@ -287,6 +278,17 @@ void RTC_Init(RTC_InitTypeDef * RTC_InitStruct)
 }
 
 /**
+ * @brief  RTC模块快速初始化配置，设定内部电容为8pF
+ * @retval None
+ */
+void RTC_QuickInit(void)
+{
+    RTC_InitTypeDef RTC_InitStruct1;
+    RTC_InitStruct1.oscLoad = kRTC_OScLoad_2PF;
+    RTC_Init(&RTC_InitStruct1);
+}
+
+/**
  * @brief  获得TSR值
  * @retval  0  unvalid
  * \retval !0 valid
@@ -311,7 +313,7 @@ uint32_t RTC_GetTAR(void)
  * @param[in]  datetime  指向时间的结构体指针
  * @retval None
  */
-void RTC_SetDateTime(RTC_DateTime_Type * datetime)
+void RTC_SetTime(RTC_DateTime_Type * datetime)
 {
     uint32_t i;
     if(!datetime)

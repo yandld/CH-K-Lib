@@ -420,11 +420,16 @@ int ili9320_init(void)
             lcd_dev.cmd_setx = 0x2A;
             lcd_dev.cmd_sety = 0x2B;  
             lcd_dev.cmd_gram = 0x2C;  
-            
             WR_CMD(PWCTLB);
             WR_DATA(0x00);
             WR_DATA(0x81);
             WR_DATA(0x30);
+            /* this setttings fix the ILI9341 bad color line bug */
+            WR_CMD(0xCF); 
+            WR_DATA (0x00);
+            WR_DATA (0xC2);
+            WR_DATA (0X30);
+
             WR_CMD(PWONSCTL);
             WR_DATA(0x64);
             WR_DATA(0x03);

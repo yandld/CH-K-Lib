@@ -571,6 +571,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\components\finsh\symbol.c</FilePath>
             </File>
+            <File>
+              <FileName>msh_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\finsh\msh_file.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

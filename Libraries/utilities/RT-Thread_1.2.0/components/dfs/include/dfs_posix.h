@@ -114,6 +114,8 @@ int closedir(DIR* d);
 #include <sys/stat.h>
 #endif
 
+struct stat;
+
 /* file api*/
 int open(const char *file, int flags, int mode);
 int close(int d);

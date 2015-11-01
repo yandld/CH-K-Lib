@@ -79,8 +79,8 @@ int wget(int argc, char** argv)
         rt_kprintf("bad url\r\n");
         return -1;
     }
-    rt_kprintf("host name:%s", shost);
-    rt_kprintf("file name:%s", sname);
+    rt_kprintf("host name:%s\r\n", shost);
+    rt_kprintf("file name:%s\r\n", sname);
 
     host = gethostbyname(shost);
     

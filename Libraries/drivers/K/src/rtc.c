@@ -372,6 +372,11 @@ void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config, bool status)
             (RTC->IER |= RTC_IER_TAIE_MASK):
             (RTC->IER &= ~RTC_IER_TAIE_MASK);
             break;
+        case kRTC_IT_TimeSeconds:
+            NVIC_EnableIRQ(RTC_Seconds_IRQn);
+            (status)?(RTC->IER |= RTC_IER_TSIE_MASK):(RTC->IER &= ~RTC_IER_TSIE_MASK);
+            break;
+
         default:
             break;
     }

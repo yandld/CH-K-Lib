@@ -56,7 +56,8 @@ typedef struct
 typedef enum
 {
     kRTC_IT_TimeAlarm,             /**< 开启闹钟中断 */
-    kRTC_IT_TimeOverflow,          /**< 开启时间溢出中断 */    
+    kRTC_IT_TimeOverflow,          /**< 开启时间溢出中断 */ 
+    kRTC_IT_TimeSeconds,
 }RTC_ITDMAConfig_Type;
 
 //!< CallbackType

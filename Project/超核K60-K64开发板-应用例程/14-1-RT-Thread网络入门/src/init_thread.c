@@ -51,7 +51,10 @@ void init_thread(void* parameter)
     rt_hw_enet_phy_init();
     
     rt_kprintf("waitting for connection...");
+   
     
+    extern void websrv();
+    websrv();
     /* tcp server demo */
     extern void tcpserv(void* parameter);
     tcpserv(RT_NULL);

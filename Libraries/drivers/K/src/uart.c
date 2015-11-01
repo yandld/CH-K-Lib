@@ -202,7 +202,7 @@ static void printn(unsigned int n, unsigned int b)
 /**
  * \brief UART printf function
  */
-int UART_printf(const char *fmt, ...)
+int UART_printf(uint32_t instance, const char *fmt, ...)
 {
     char c;
     unsigned int *adx = (unsigned int*)(void*)&fmt + 1;
@@ -210,7 +210,7 @@ _loop:
     while((c = *fmt++) != '%')
     {
         if (c == '\0') return 0;
-        UART_WriteByte(UART_DebugInstance, c);
+        UART_WriteByte(instance, c);
     }
     c = *fmt++;
     if (c == 'd' || c == 'l')
@@ -223,7 +223,7 @@ _loop:
     }
     if (c == 's')
     {
-        UART_putstr(UART_DebugInstance, (char*)*adx);
+        UART_putstr(instance, (char*)*adx);
     }
     adx++;
     goto _loop;
@@ -633,6 +633,12 @@ void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool stat
             (UARTBase[instance]->C5 |= UART_C5_RDMAS_MASK):
             (UARTBase[instance]->C5 &= ~UART_C5_RDMAS_MASK);
             break;
+        case kUART_IT_IdleLine:
+            (status)?
+            (UARTBase[instance]->C2 |= UART_C2_ILIE_MASK):
+            (UARTBase[instance]->C2 &= ~UART_C2_ILIE_MASK);
+            NVIC_EnableIRQ(UART_IRQnTable[instance]);
+            break;
         default:
             break;
     }
@@ -730,6 +736,7 @@ uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate)
 static void UART_IRQ_Handler(uint32_t instance)
 {
     uint16_t ch;
+    volatile uint32_t dummy;
     /* Tx */
     if((UARTBase[instance]->S1 & UART_S1_TDRE_MASK) && (UARTBase[instance]->C2 & UART_C2_TIE_MASK))
     {
@@ -748,11 +755,23 @@ static void UART_IRQ_Handler(uint32_t instance)
             UART_CallBackRxTable[instance](ch);
         }
     }
+    
     if(UARTBase[instance]->S1 & UART_S1_OR_MASK)
     {
-        volatile uint32_t dummy;
         dummy = UARTBase[instance]->D;
     }
+    
+    if(UARTBase[instance]->S1 & UART_S1_IDLE_MASK)
+    {
+        dummy = UARTBase[instance]->D;
+        if(UART_CallBackRxTable[instance])
+        {
+            UART_CallBackRxTable[instance](0xFFFF);
+        }  
+    }
+    
+
+        
 }
 /**
  * @brief  系统UART0接收和发送的中断函数，用户无需使用

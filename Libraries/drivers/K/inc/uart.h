@@ -80,6 +80,7 @@ typedef enum
     kUART_DMA_Tx,               /**< 开启每发送一帧传输完成触发DMA */
     kUART_IT_Rx,                /**< 开启每接收一帧传输完成中断 */
     kUART_DMA_Rx,               /**< 开启每接收一帧传输完成触发DMA */
+    kUART_IT_IdleLine,
 }UART_ITDMAConfig_Type;
 
 /**
@@ -103,7 +104,7 @@ typedef void (*UART_CallBackRxType)(uint16_t byteReceived);
 uint8_t UART_QuickInit(uint32_t MAP, uint32_t baudrate);
 void UART_Init(UART_InitTypeDef * UART_InitStruct);
 void UART_DeInit(uint32_t instance);
-int UART_printf(const char *format,...);
+int UART_printf(uint32_t instance, const char *format,...);
 uint8_t UART_ReadByte(uint32_t instance, uint16_t *ch);
 void UART_WriteByte(uint32_t instance, uint16_t ch);
 void UART_SelectDebugInstance(uint32_t instance);
@@ -120,7 +121,6 @@ void UART_SetRxFIFOWatermark(uint32_t instance, uint32_t size);
 void UART_CallbackTxInstall(uint32_t instance, UART_CallBackTxType AppCBFun);
 void UART_CallbackRxInstall(uint32_t instance, UART_CallBackRxType AppCBFun);
 void UART_ITDMAConfig(uint32_t instance, UART_ITDMAConfig_Type config, bool status);
-int UART_printf(const char *fmt, ...);
 
 
 /* DMA support */
@@ -131,7 +131,7 @@ uint32_t UART_Config();
 void UART_SendData();
 uint8_t UART_GetData();
 */
-int UART_printf(const char *format,...);
+
 void UART_DMASetCmd(uint32_t instance, uint32_t dir, bool status);
 void UART_DMASendData(uint32_t instance, uint8_t *buf, uint32_t len);
 void UART_DMAGetRemain(uint32_t instacne, uint32_t dir);

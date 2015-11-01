@@ -62,7 +62,7 @@ void rtt_set_sys_time(rt_uint32_t t)
  * SNTP_DEBUG: Enable debugging for SNTP.
  */
 #ifndef SNTP_DEBUG
-#define SNTP_DEBUG                  LWIP_DBG_OFF
+#define SNTP_DEBUG                  LWIP_DBG_ON
 #endif
 
 /** SNTP server port */
@@ -72,7 +72,7 @@ void rtt_set_sys_time(rt_uint32_t t)
 
 /** SNTP server address as IPv4 address in "u32_t" format */
 #ifndef SNTP_SERVER_ADDRESS
-#define SNTP_SERVER_ADDRESS         inet_addr("133.100.11.8") /* pool.ntp.org */
+#define SNTP_SERVER_ADDRESS         inet_addr("202.120.2.101")
 #endif
 
 /** SNTP receive timeout - in milliseconds */
@@ -82,7 +82,7 @@ void rtt_set_sys_time(rt_uint32_t t)
 
 /** SNTP update delay - in milliseconds */
 #ifndef SNTP_UPDATE_DELAY
-#define SNTP_UPDATE_DELAY           100
+#define SNTP_UPDATE_DELAY           500
 #endif
 
 /** SNTP macro to change system time and/or the update the RTC clock */

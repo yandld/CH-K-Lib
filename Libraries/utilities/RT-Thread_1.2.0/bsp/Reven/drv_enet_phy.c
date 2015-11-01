@@ -127,21 +127,24 @@ rt_err_t rt_enet_phy_tx( rt_device_t dev, struct pbuf* p)
 {
     bool islink;
     struct pbuf *q;
+    uint32_t len;
     
     islink = enet_phy_is_linked();
     eth_device_linkchange(&device, islink);
     
+    len = 0;
+    
     for (q = p; q != RT_NULL; q = q->next)
     {
-       // rt_uint8_t *pData = rt_malloc(q->len);
-        if(islink)
-        {
-            rt_memcpy(gTxBuf, q->payload, q->len);
-            ENET_MacSendData(gTxBuf, q->len);
-        }
-       // rt_free(pData);
+            rt_memcpy(gTxBuf + len, q->payload, q->len);
+            len += q->len;
     }
-    
+
+    if(islink)
+    {
+        ENET_MacSendData(gTxBuf, len);
+    }
+
     if(islink)
     {
         return RT_EOK;

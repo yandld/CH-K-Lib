@@ -61,8 +61,8 @@ void udpserv(void* paramemter)
        recv_data[bytes_read] = '\0'; /* 把末端清零 */
 
        /* 输出接收的数据 */
-       rt_kprintf("\n(%s , %d) said : ",inet_ntoa(client_addr.sin_addr),
-                  ntohs(client_addr.sin_port));
+       rt_kprintf("\n(%s , %d %d) said : ",inet_ntoa(client_addr.sin_addr),
+                  ntohs(client_addr.sin_port), bytes_read);
        rt_kprintf("%s", recv_data);
 
        /* 如果接收数据是exit，退出 */

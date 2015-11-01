@@ -15,7 +15,7 @@
 //#define RT_USING_MODULE
 
 #define RT_USING_OVERFLOW_CHECK
-#define RT_USING_HOOK
+#define RT_USING_HOOK 
 #define IDLE_THREAD_STACK_SIZE      512
 
 /* Using Software Timer */

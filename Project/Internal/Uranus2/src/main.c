@@ -340,9 +340,10 @@ int main(void)
                     for(i=0;i<3;i++)
                     {
                         adata[i] = (adata[i]*ares*1000);
+                        mdata[i] = (mdata[i]*mres);
                     }
                     
-                    len = ano_make_packet(buf, &angle, adata, gdata, rmdata, (int32_t)pressure);
+                    len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);
                     
                     if(RunState != kPTL_REQ_MODE_CAL)
                     {

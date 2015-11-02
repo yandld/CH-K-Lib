@@ -3,14 +3,22 @@
 #include "uart.h"
 #include "dma.h"
 
+#ifdef __CC_ARM /* Keil */
 int test(void) __attribute__((section(".ARM.__at_0x8000")));
-int test(void)
+int test(void) 
+#elif __ICCARM__ /* IAR */
+int test(void) @".myfun"
+#endif
 {
     printf("I am test function\r\n");
+    return 0;
 }
 
+#ifdef __CC_ARM
 const char var __attribute__((section(".ARM.__at_0x8100")));
-
+#elif __ICCARM__
+__no_init char var@0x20000000;
+#endif
 int main(void)
 {
 

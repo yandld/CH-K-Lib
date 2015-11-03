@@ -300,19 +300,11 @@ int main(void)
                         KalmanRun(&KMState[i], rmdata[i]);
                         rmdata[i] = KMState[i].State;
                         
-                        adata[i] = radata[i];
-                        gdata[i] = rgdata[i];
-                        mdata[i] = rmdata[i];
-                        
                         /* turn fine raw data from cal data */
-                        adata[i] = adata[i] - dcal.ao[i];
-                        gdata[i] = gdata[i] - dcal.go[i];
-                        mdata[i] = (mdata[i] - dcal.mo[i])/dcal.mg[i];
-                        
-                        if(RunState == kPTL_REQ_MODE_6AXIS)
-                        {
-                            mdata[i] = 0;
-                        }
+                        adata[i] = radata[i] - dcal.ao[i];
+                        gdata[i] = rgdata[i] - dcal.go[i];
+                        mdata[i] = (rmdata[i] - dcal.mo[i])/dcal.mg[i];
+
                     }
 
                     /* set timer */
@@ -335,9 +327,12 @@ int main(void)
                         {
                             fgdata[i] = 0;
                         }
+                        if(RunState == kPTL_REQ_MODE_6AXIS)
+                        {
+                            fgdata[i] = 0;
+                        }
                     }
                     
-                    /* procossing */
                     ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
                     halfT = ((float)time)/1000/2000; 
                         
@@ -345,6 +340,7 @@ int main(void)
                     {
                         adata[i] = (adata[i]*ares*1000);
                         mdata[i] = (mdata[i]*mres);
+                        gdata[i] -= gadj[i];
                     }
 
                     if(RunState != kPTL_REQ_MODE_CAL)

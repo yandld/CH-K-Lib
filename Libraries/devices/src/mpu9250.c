@@ -276,12 +276,14 @@ int mpu9250_config(struct mpu_config *config)
     switch(config->mfs)
     {
         case MFS_14BITS:
-            mpu_dev.mRes = 10.0*4219.0/8190.0; // Proper scale to return milliGauss
+            mpu_dev.mRes = 10*0.6; // Proper scale to return milliGauss
             break;
         case MFS_16BITS:
-            mpu_dev.mRes = 10.0*4219.0/32760.0; // Proper scale to return milliGauss
+            mpu_dev.mRes = 10*0.15; // Proper scale to return milliGauss
             break;
     }
+    
+
     
     /* Set gyro sample rate to 1 kHz and DLPF to 92 Hz */
     write_reg(MPU9250_CONFIG, 0x02);

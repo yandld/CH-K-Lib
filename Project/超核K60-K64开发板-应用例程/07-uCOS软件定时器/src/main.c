@@ -6,6 +6,7 @@
  *  				1.在启动定时器3s之后，每隔1秒在串口调试助手窗口输出定时器tmr1调用的次数
  * 修改记录：
  *					1.2015.11.03 FreeXc 跟进了新版的UART_printf调用方式
+ *															系统初始化完成之后挂起AppStartTask
  */
 
 #include "chlib_k.h"
@@ -51,6 +52,12 @@ void AppStartTask(void *pdata)
 	   */
 		tmr1 = OSTmrCreate(3*OS_TMR_CFG_TICKS_PER_SEC,1*OS_TMR_CFG_TICKS_PER_SEC,OS_TMR_OPT_PERIODIC,(OS_TMR_CALLBACK)tmr1_callback,0, (INT8U*)"tmr1",&err);
 		OSTmrStart(tmr1,&err);	
+	
+		for(;;)
+		{
+				//初始化完成之后挂起任务
+				err = OSTaskSuspend(OS_PRIO_SELF);
+		}
 }
 
 int main(void)
@@ -58,14 +65,15 @@ int main(void)
     DelayInit();
     
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    
 		printf("OS:uc/os-II,test timer interrupt and start after three seconds\r\n");
+	
 		//初始化uc/os-II
     OSInit();
+		//创建一个起始任务，用于初始化系统和启动其他任务
 		OSTaskCreate(AppStartTask,(void *)0,
 								&APP_START_STK[TASK_STK_SIZE-1],
 								APP_START_TASK_PRIO);
-    //开始任务的调度
+    //开始任务的调度，永远不会返回
     OSStart();
 //    while(1);
 }

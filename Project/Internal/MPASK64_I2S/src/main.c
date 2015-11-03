@@ -43,11 +43,11 @@ int main(void)
     int i;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PA01_TX_PA02, 115200);
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
      /** print message before mode change*/
     printf("i2s MAPSK64 test\r\n");
-    I2C_QuickInit(I2C0_SCL_PE24_SDA_PE25, 100*1000);
+    I2C_QuickInit(I2C0_SCL_PB02_SDA_PB03, 100*1000);
    // I2C_Scan(I2C0_SCL_PE24_SDA_PE25);
     wm8960_init(0);
     wm8960_format_config(44100, 16);
@@ -56,11 +56,11 @@ int main(void)
     
     I2S_InitTypeDef Init;
     Init.instance = 0;
-    Init.isStereo = true;
+    Init.isStereo = false;
     Init.isMaster = true;
     Init.protocol = kSaiBusI2SLeft;
     Init.sampleBit = 16;
-    Init.sampleRate = 44100;
+    Init.sampleRate = 11025;
     Init.chl = 0;
     I2S_Init(&Init);
     
@@ -73,7 +73,7 @@ int main(void)
     
     while(1)
     {
-        I2S_SendData(0, 16, 0, (uint8_t*)music_44100_16_2, sizeof(music_44100_16_2));
+        I2S_SendData(0, 16, 0, (uint8_t*)music_11025_16_1, sizeof(music_11025_16_1));
         printf("complete\r\n");
       //  DelayMs(500);
     }

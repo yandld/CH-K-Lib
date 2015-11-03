@@ -1,28 +1,37 @@
+/*
+ * 实验名称：uc/os-II 软件定时实验
+ * 实验平台：渡鸦开发板
+ * 板载芯片：MK60DN512ZVLQ10
+ * 实验效果：
+ *  				1.在启动定时器3s之后，每隔1秒在串口调试助手窗口输出定时器tmr1调用的次数
+ * 修改记录：
+ *					1.2015.11.03 FreeXc 跟进了新版的UART_printf调用方式
+ */
+
 #include "chlib_k.h"
 //uCOS
 #include "includes.h"
 
-/* �����ջ��С */
+/* 任务堆栈大小 */
 #define TASK_STK_SIZE              (128)
 
-/* �����������ȼ� */
+/* 各个任务优先级 */
 #define APP_START_TASK_PRIO        (4)
 #define APP_LED_TASK_PRIO          (6)
 #define APP_WDOG_TASK_PRIO         (20)
 
-/* ���������ջ */
+/* 各个任务堆栈 */
 OS_STK  APP_START_STK[TASK_STK_SIZE];
 OS_STK  APP_LED_STK[TASK_STK_SIZE];
 OS_STK  APP_WDOG_STK[TASK_STK_SIZE];
 
-/* ������ʱ����� */
+/* 软件定时器句柄 */
 OS_TMR   * tmr1;
-
-			  	   
+ 	   
 void tmr1_callback(OS_TMR *ptmr,void *p_arg) 
 {	
     static uint32_t counter;
-    UART_printf("Enter tmr1_callback:%d times\r\n", counter);
+    UART_printf(HW_UART0,"Enter tmr1_callback : %d times\r\n", counter);
     counter++;	
 }
 
@@ -30,31 +39,35 @@ void AppStartTask(void *pdata)
 {
     uint8_t err;
     pdata = pdata;
-    
-    /* ��ʼ����ʱ�� 1S��ʼ �Ժ�ÿ200MS����һ�� */    
- 	tmr1=OSTmrCreate(1000,200,OS_TMR_OPT_PERIODIC,(OS_TMR_CALLBACK)tmr1_callback,0, (INT8U*)"tmr1",&err);
-	OSTmrStart(tmr1,&err);	
+		//安装并启动uc/os-II的时钟节拍中断
+    SYSTICK_Init(1000*1000/OS_TICKS_PER_SEC);
+    SYSTICK_ITConfig(true);
+		SYSTICK_Cmd(true);
+	
+  	/* 初始化名为“tmr1”定时器 3S后开始 以后每1000MS触发一次 */    
+	  /* OS_TMR_OPT_PERIODIC表示定时器在开始循环模式前等待第一次启动超时模式
+		 * dly 		: 延时时间（单位：（1/OS_TMR_CFG_TICKS_PER_SEC）秒）
+		 * period : 周期中断时间（单位：（1/OS_TMR_CFG_TICKS_PER_SEC）秒）
+	   */
+		tmr1 = OSTmrCreate(3*OS_TMR_CFG_TICKS_PER_SEC,1*OS_TMR_CFG_TICKS_PER_SEC,OS_TMR_OPT_PERIODIC,(OS_TMR_CALLBACK)tmr1_callback,0, (INT8U*)"tmr1",&err);
+		OSTmrStart(tmr1,&err);	
 }
 
 int main(void)
 {
     DelayInit();
-    SYSTICK_Init(1000*1000/OS_TICKS_PER_SEC);
-    SYSTICK_ITConfig(true);
     
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
-    printf("uCOSII test\r\n");
-
+		printf("OS:uc/os-II,test timer interrupt and start after three seconds\r\n");
+		//初始化uc/os-II
     OSInit();
-	OSTaskCreate(AppStartTask,(void *)0,
-							&APP_START_STK[TASK_STK_SIZE-1],
-							APP_START_TASK_PRIO);
-    
-    SYSTICK_Cmd(true);
-    
+		OSTaskCreate(AppStartTask,(void *)0,
+								&APP_START_STK[TASK_STK_SIZE-1],
+								APP_START_TASK_PRIO);
+    //开始任务的调度
     OSStart();
-    while(1);
+//    while(1);
 }
 
 

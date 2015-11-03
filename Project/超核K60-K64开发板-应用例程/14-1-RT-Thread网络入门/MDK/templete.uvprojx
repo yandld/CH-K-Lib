@@ -15,7 +15,7 @@
         <TargetCommonOption>
           <Device>MK60DN512xxx10</Device>
           <Vendor>Freescale</Vendor>
-          <PackID>Keil.Kinetis_K60_DFP.1.0.1</PackID>
+          <PackID>Keil.Kinetis_K60_DFP.1.4.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x00000000,0x80000) IRAM(0x20000000,0x10000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -511,14 +511,9 @@
           <GroupName>application</GroupName>
           <Files>
             <File>
-              <FileName>init_thread.c</FileName>
+              <FileName>application.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\init_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>websrv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\websrv.c</FilePath>
+              <FilePath>..\src\application.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -717,6 +712,41 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>webnet</GroupName>
+          <Files>
+            <File>
+              <FileName>mimetype.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\mimetype.c</FilePath>
+            </File>
+            <File>
+              <FileName>module.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\module.c</FilePath>
+            </File>
+            <File>
+              <FileName>request.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\request.c</FilePath>
+            </File>
+            <File>
+              <FileName>session.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\session.c</FilePath>
+            </File>
+            <File>
+              <FileName>util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\util.c</FilePath>
+            </File>
+            <File>
+              <FileName>webnet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\webnet.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -728,7 +758,7 @@
         <TargetCommonOption>
           <Device>MK64FN1M0xxx12</Device>
           <Vendor>Freescale</Vendor>
-          <PackID>Keil.Kinetis_K60_DFP.1.0.1</PackID>
+          <PackID>Keil.Kinetis_K60_DFP.1.4.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x00000000,0x100000) IRAM(0x20000000,0x30000) IRAM2(0x1FFF0000,0x10000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -1308,14 +1338,9 @@
           <GroupName>application</GroupName>
           <Files>
             <File>
-              <FileName>init_thread.c</FileName>
+              <FileName>application.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\init_thread.c</FilePath>
-            </File>
-            <File>
-              <FileName>websrv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\websrv.c</FilePath>
+              <FilePath>..\src\application.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1558,6 +1583,41 @@
               <FileName>msh_cmd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>webnet</GroupName>
+          <Files>
+            <File>
+              <FileName>mimetype.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\mimetype.c</FilePath>
+            </File>
+            <File>
+              <FileName>module.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\module.c</FilePath>
+            </File>
+            <File>
+              <FileName>request.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\request.c</FilePath>
+            </File>
+            <File>
+              <FileName>session.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\session.c</FilePath>
+            </File>
+            <File>
+              <FileName>util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\util.c</FilePath>
+            </File>
+            <File>
+              <FileName>webnet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\webnet\webnet.c</FilePath>
             </File>
           </Files>
         </Group>

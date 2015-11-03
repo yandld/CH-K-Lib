@@ -4,6 +4,7 @@
 #include <dfs_elm.h>
 #include <shell.h>
 #include <lwip/sys.h>
+#include <dfs_posix.h>
 #include <netif/ethernetif.h>
 extern void lwip_system_init(void);
 #include "IS61WV25616.h"
@@ -48,16 +49,19 @@ void init_thread(void* parameter)
     
     dfs_mount("dflash0", "/", "elm", 0, 0);
     
+    mkdir("/webnet", 0);
+    int fd = open("/webnet/index.htm", O_RDWR | O_CREAT | O_TRUNC, 0);
+    write(fd, "Hello!", 6);
+    close(fd);
+
     rt_hw_enet_phy_init();
     
     rt_kprintf("waitting for connection...");
    
-    
-    extern void websrv();
-    websrv();
     /* tcp server demo */
-    extern void tcpserv(void* parameter);
-    tcpserv(RT_NULL);
+    //extern void tcpserv(void* parameter);
+    //tcpserv(RT_NULL);
+    webnet_init();
     
 }
 

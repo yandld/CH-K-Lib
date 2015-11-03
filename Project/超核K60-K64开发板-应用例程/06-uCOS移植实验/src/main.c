@@ -1,13 +1,13 @@
 /*
- * ÊµÑéÃû³Æ£ºuc/os-II ÒÆÖ²ÊµÑé
- * ÊµÑéÆ½Ì¨£º¶ÉÑ»¿ª·¢°å
- * °åÔØÐ¾Æ¬£ºMK60DN512ZVQ10
- * ÊµÑéÐ§¹û£º
- *  				1.ÔÚ´®¿ÚÉÏÊä³ö½»Ìæ³öÏÖµÄLED1ÈÎÎñºÍLED2ÈÎÎñ
- *					2.ÏÔÊ¾µ±Ç°uc/os-IIµÄ°æ±¾
- * 					3.Ã¿ÃëÏÔÊ¾CPUµÄÊ¹ÓÃÂÊ(%),´ó¼Ò¿ÉÒÔÔÚAppLED1TaskÖÐÔö¼ÓprintfµÄ¸öÊýÀ´¹Û²ìCPUÕ¼ÓÃÂÊµÄÇé¿ö
- * ÐÞ¸Ä¼ÇÂ¼£º
- *					1.2015.10.31 FreeXc ½«Ê±ÖÓ½ÚÅÄÖÐ¶ÏÒÆÖÁOSStart()º¯ÊýÖ®ºó£¬Ôö¼ÓÁË°æ±¾ÏÔÊ¾ÒÔ¼°CPUÕ¼ÓÃÂÊµÄÏÔÊ¾
+ * å®žéªŒåç§°ï¼šuc/os-II ç§»æ¤å®žéªŒ
+ * å®žéªŒå¹³å°ï¼šæ¸¡é¸¦å¼€å‘æ¿
+ * æ¿è½½èŠ¯ç‰‡ï¼šMK60DN512ZVLQ10
+ * å®žéªŒæ•ˆæžœï¼š
+ *  				1.åœ¨ä¸²å£ä¸Šè¾“å‡ºäº¤æ›¿å‡ºçŽ°çš„LED1ä»»åŠ¡å’ŒLED2ä»»åŠ¡
+ *					2.æ˜¾ç¤ºå½“å‰uc/os-IIçš„ç‰ˆæœ¬
+ * 					3.æ¯ç§’æ˜¾ç¤ºCPUçš„ä½¿ç”¨çŽ‡(%),å¤§å®¶å¯ä»¥åœ¨AppLED1Taskä¸­å¢žåŠ printfçš„ä¸ªæ•°æ¥è§‚å¯ŸCPUå ç”¨çŽ‡çš„æƒ…å†µ
+ * ä¿®æ”¹è®°å½•ï¼š
+ *					1.2015.10.31 FreeXc å°†æ—¶é’ŸèŠ‚æ‹ä¸­æ–­ç§»è‡³OSStart()å‡½æ•°ä¹‹åŽï¼Œå¢žåŠ äº†ç‰ˆæœ¬æ˜¾ç¤ºä»¥åŠCPUå ç”¨çŽ‡çš„æ˜¾ç¤º
  */
 
 #include "gpio.h"
@@ -19,20 +19,20 @@
 
 
 
-//ÈÎÎñ¶ÑÕ»´óÐ¡
+//ä»»åŠ¡å †æ ˆå¤§å°
 #define TASK_STK_SIZE              (128)
-//¶¨ÒåÈÎÎñÓÅÏÈ¼¶
+//å®šä¹‰ä»»åŠ¡ä¼˜å…ˆçº§
 #define APP_START_TASK_PRIO        (4)
 #define APP_LED1_TASK_PRIO         (5)
 #define APP_LED0_TASK_PRIO         (7)
-//ÉùÃ÷ÈÎÎñ¶ÑÕ»
+//å£°æ˜Žä»»åŠ¡å †æ ˆ
 OS_STK  APP_START_STK[TASK_STK_SIZE];
 OS_STK  APP_LED1_STK[TASK_STK_SIZE];
 OS_STK  APP_LED0_STK[TASK_STK_SIZE];
-//LEDÐ¡µÆÈÎÎñ
+//LEDå°ç¯ä»»åŠ¡
 void AppLED1Task(void *pdata)
 {
-    pdata = pdata; //·ÀÖ¹±àÒëÆ÷³ö´í ÎÞÊµ¼ÊÒâÒå
+    pdata = pdata; //é˜²æ­¢ç¼–è¯‘å™¨å‡ºé”™ æ— å®žé™…æ„ä¹‰
 	while(1)
 	{
 		printf("LED1 Task!\r\n");
@@ -44,7 +44,7 @@ void AppLED1Task(void *pdata)
 
 void AppLED0Task(void *pdata)
 {
-    pdata = pdata; //·ÀÖ¹±àÒëÆ÷³ö´í ÎÞÊµ¼ÊÒâÒå
+    pdata = pdata; //é˜²æ­¢ç¼–è¯‘å™¨å‡ºé”™ æ— å®žé™…æ„ä¹‰
 	while(1)
 	{
 		printf("LED2 Task!\r\n");
@@ -55,12 +55,12 @@ void AppLED0Task(void *pdata)
 void TaskStart(void *pdata)
 {
 	pdata = pdata;
-	//¸ºÔð³õÊ¼»¯ºÍÆô¶¯Ê±ÖÓ½ÚÅÄ£¬ÔÚOSStart()Ö®ºóÆô¶¯Ê±ÖÓ½ÚÅÄÊÇÒòÎªÍ¨³£Çé¿öÏÂ£¬ÓÃ»§²»Ï£ÍûÔÚ¶àÈÎÎñ»¹Ã»ÓÐ¿ªÊ¼Ê±
-	//¾Í½ÓÊÕµ½Ê±ÖÓ½ÚÅÄÖÐ¶Ï
+	//è´Ÿè´£åˆå§‹åŒ–å’Œå¯åŠ¨æ—¶é’ŸèŠ‚æ‹ï¼Œåœ¨OSStart()ä¹‹åŽå¯åŠ¨æ—¶é’ŸèŠ‚æ‹æ˜¯å› ä¸ºé€šå¸¸æƒ…å†µä¸‹ï¼Œç”¨æˆ·ä¸å¸Œæœ›åœ¨å¤šä»»åŠ¡è¿˜æ²¡æœ‰å¼€å§‹æ—¶
+	//å°±æŽ¥æ”¶åˆ°æ—¶é’ŸèŠ‚æ‹ä¸­æ–­
 	SYSTICK_Init((1000*1000)/OS_TICKS_PER_SEC);
   SYSTICK_ITConfig(true);
   SYSTICK_Cmd(true);
-	//³õÊ¼»¯Í³¼ÆÈÎÎñ
+	//åˆå§‹åŒ–ç»Ÿè®¡ä»»åŠ¡
 	OSStatInit();
   while(1)
 	{
@@ -81,9 +81,9 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
 		versionNum = OSVersion();
-    printf("uCOSII test£¬the current uc/os-II version is v%d.%d%d\r\n",versionNum/100,versionNum/10%10,versionNum%10);
+    printf("uCOSII testï¼Œthe current uc/os-II version is v%d.%d%d\r\n",versionNum/100,versionNum/10%10,versionNum%10);
 
-    OSInit();  //OS³õÊ¼»¯
+    OSInit();  //OSåˆå§‹åŒ–
 	
 		OSTaskCreate(TaskStart,(void *)0,
                 &APP_START_STK[TASK_STK_SIZE - 1],
@@ -91,12 +91,12 @@ int main(void)
 
     OSTaskCreate(AppLED1Task,(void *)0,
                 &APP_LED1_STK[TASK_STK_SIZE - 1],
-                APP_LED1_TASK_PRIO); //½¨Á¢LED1 ÈÎÎñ
+                APP_LED1_TASK_PRIO); //å»ºç«‹LED1 ä»»åŠ¡
     OSTaskCreate(AppLED0Task,(void *)0,
                 &APP_LED0_STK[TASK_STK_SIZE - 1],
-                APP_LED0_TASK_PRIO); //½¨Á¢LED0 ÈÎÎñ
+                APP_LED0_TASK_PRIO); //å»ºç«‹LED0 ä»»åŠ¡
         
-    /* ¿ØÖÆÈ¨½»¸ø²Ù×÷ÏµÍ³,ÔÚÖ´ÐÐOSStart()Ö®ºó²Ù×÷ÏµÍ³¿ªÊ¼½øÐÐÈÎÎñµ÷¶È */
+    /* æŽ§åˆ¶æƒäº¤ç»™æ“ä½œç³»ç»Ÿ,åœ¨æ‰§è¡ŒOSStart()ä¹‹åŽæ“ä½œç³»ç»Ÿå¼€å§‹è¿›è¡Œä»»åŠ¡è°ƒåº¦ */
     OSStart();
-		/* ³ÌÐòÓÀÔ¶²»»áÔËÐÐµ½Õâ */
+		/* ç¨‹åºæ°¸è¿œä¸ä¼šè¿è¡Œåˆ°è¿™ */
 }

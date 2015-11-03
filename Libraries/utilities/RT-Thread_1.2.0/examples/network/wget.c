@@ -83,6 +83,11 @@ int wget(int argc, char** argv)
     rt_kprintf("file name:%s\r\n", sname);
 
     host = gethostbyname(shost);
+    if(host == RT_NULL)
+    {
+        printf("gethostbyname error!\r\n");
+        return -1; 
+    }
     
     /* 分配用于存放接收数据的缓冲 */
     recv_data = rt_malloc(BUFSZ);
@@ -137,7 +142,9 @@ int wget(int argc, char** argv)
     bytes_received = recv(sock, recv_data, BUFSZ, 0);
     
     /* get web file size */
-    rt_kprintf("header:%d %s\r\n", bytes_received, recv_data);
+    rt_kprintf("header:%d bytes\r\n", bytes_received);
+    rt_kprintf("%s\r\n", recv_data);
+    
 //    file_size = _httpGetFileLen(recv_data);
 //    if(file_size <=0)
 //    {
@@ -218,12 +225,12 @@ int wget(int argc, char** argv)
         total_transfered += bytes_received;
         if(!((total_transfered/1024) % 40))
         {
+            //rt_kprintf(">");
             rt_kprintf("%dKB transfered   \r", total_transfered/1024);
         }
         write(fd, recv_data, bytes_received);
     }
-    rt_kprintf("%dKB transfered   \r", total_transfered/1024);
-    rt_kprintf("\r\n");
+    rt_kprintf("%d bytes transfered \r\n", total_transfered);
     return 0;
 }
 

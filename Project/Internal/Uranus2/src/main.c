@@ -271,7 +271,7 @@ int main(void)
                         dcal_output(&dcal);
                         GPIO_PinToggle(HW_GPIOC, 3);
                     }
-                    dcal_ginput(&dcal, rgdata);
+                    dcal_ginput(gdata);
                     /* bmp read */
                     ret = bmp180_conversion_process(&dummy, &temperature);
                     if(!ret)
@@ -303,17 +303,16 @@ int main(void)
                         adata[i] = radata[i];
                         gdata[i] = rgdata[i];
                         mdata[i] = rmdata[i];
-
+                        
+                        /* turn fine raw data from cal data */
                         adata[i] = adata[i] - dcal.ao[i];
                         gdata[i] = gdata[i] - dcal.go[i];
                         mdata[i] = (mdata[i] - dcal.mo[i])/dcal.mg[i];
                         
-
                         if(RunState == kPTL_REQ_MODE_6AXIS)
                         {
                             mdata[i] = 0;
                         }
-
                     }
 
                     /* set timer */
@@ -323,10 +322,14 @@ int main(void)
                     time = load_val - time;
                     time /= fac_us;
 
+                    /* trun raw data input fine turned data */
+                    int16_t gadj[3];
+                    dcal_get_gadj(gadj);
+                    
                     for(i=0;i<3;i++)
                     {
                         fadata[i] = (float)adata[i]*ares;
-                        fgdata[i] = ((float)gdata[i])*gres;
+                        fgdata[i] = ((float)(gdata[i] - gadj[i]))*gres;
                         fmdata[i] = (float)mdata[i]*mres;
                         if((fgdata[i] < 1) && (fgdata[i] > -1))
                         {
@@ -334,6 +337,7 @@ int main(void)
                         }
                     }
                     
+                    /* procossing */
                     ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
                     halfT = ((float)time)/1000/2000; 
                         
@@ -342,14 +346,13 @@ int main(void)
                         adata[i] = (adata[i]*ares*1000);
                         mdata[i] = (mdata[i]*mres);
                     }
-                    
-                    len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);
-                    
+
                     if(RunState != kPTL_REQ_MODE_CAL)
                     {
                         GPIO_PinToggle(HW_GPIOC, 3);
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
+                            len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);
                             #if defined(SP_50Hz)
                             static uint8_t cnt;
                             cnt++; cnt%=4;

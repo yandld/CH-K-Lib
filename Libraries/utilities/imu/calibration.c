@@ -12,8 +12,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
-
 #include "calibration.h"
+
+static int16_t gadj[3];
 
 #ifndef ABS
 #define ABS(a)         (((a) < 0) ? (-(a)) : (a))
@@ -68,10 +69,10 @@ void dcal_init(struct dcal_t *dc)
 #define GYRO_SAMPLE_COUNT       (100)
 #define GYRO_STILL_LIMIT        (30)
 
-static int32_t gsum[3];
 
-void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
+void dcal_ginput(int16_t *gdata)
 {
+    static  int32_t temp_sum[3];
     static int states = CAL_GYRO_INIT;
     static int still_count = 0;
     switch(states)
@@ -90,18 +91,18 @@ void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
             {
                 states = CAL_GYRO_COUNT;
                 still_count = 0;
-                gsum[0] = 0;
-                gsum[1] = 0;
-                gsum[2] = 0;
+                temp_sum[0] = 0;
+                temp_sum[1] = 0;
+                temp_sum[2] = 0;
             }
             break;
         case CAL_GYRO_COUNT:
             if((ABS(gdata[0]) < GYRO_STILL_LIMIT) && (ABS(gdata[1]) < GYRO_STILL_LIMIT) && (ABS(gdata[2]) < GYRO_STILL_LIMIT))
             {
                 //printf("! %d %d %d\r\n", gdata[0], gdata[1], gdata[2]);
-                gsum[0] += gdata[0];
-                gsum[1] += gdata[1];
-                gsum[2] += gdata[2];
+                temp_sum[0] += gdata[0];
+                temp_sum[1] += gdata[1];
+                temp_sum[2] += gdata[2];
                 still_count++;
             }
             else
@@ -116,9 +117,9 @@ void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
             }
             break;
         case CAL_GYRO_FINISH:
-            dc->go[0] = gsum[0]/GYRO_SAMPLE_COUNT;
-            dc->go[1] = gsum[1]/GYRO_SAMPLE_COUNT;   
-            dc->go[2] = gsum[2]/GYRO_SAMPLE_COUNT;   
+            gadj[0] = temp_sum[0]/GYRO_SAMPLE_COUNT;
+            gadj[1] = temp_sum[1]/GYRO_SAMPLE_COUNT;   
+            gadj[2] = temp_sum[2]/GYRO_SAMPLE_COUNT;   
             //printf("data output complete ! %d %d %d\r\n", gsum[0]/GYRO_SAMPLE_COUNT, gsum[1]/GYRO_SAMPLE_COUNT, gsum[2]/GYRO_SAMPLE_COUNT);
             still_count = 0;
             states = CAL_GYRO_INIT;
@@ -126,9 +127,14 @@ void dcal_ginput(struct dcal_t *dc, int16_t *gdata)
         default:
             break;
     }
-    
 }
 
+void dcal_get_gadj(int16_t *adj)
+{
+    adj[0] = gadj[0];
+    adj[1] = gadj[1];
+    adj[1] = gadj[2];
+}
 
 
 /* this function must be called every 100 ms */

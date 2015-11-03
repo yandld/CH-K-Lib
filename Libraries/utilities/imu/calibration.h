@@ -35,8 +35,8 @@ void dcal_minput(struct dcal_t *dc, int16_t *mdata);
 void dcal_output(struct dcal_t *dc);
 void dcal_print(struct dcal_t * dc);
 void dcal_reset_mag(struct dcal_t *dc);
-void dcal_ginput(struct dcal_t *dc, int16_t *gdata);
-
+void dcal_ginput(int16_t *gdata);
+void dcal_get_gadj(int16_t *gadj);
 
 #endif
 

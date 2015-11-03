@@ -48,13 +48,17 @@
 #define SNTP_SYSTEM_TIME(t)   rtt_set_sys_time(t)
 
 
-void rtt_set_sys_time(rt_uint32_t t)
+void rtt_set_sys_time(time_t t)
 {
     rt_device_t rtc;
     rtc = rt_device_find("rtc");
     if(rtc)
     {
         rt_device_control(rtc, RT_DEVICE_CTRL_RTC_SET_TIME, &t);
+    }
+    else
+    {
+        rt_kprintf("rtc device not found! time:%s\r\n", ctime(&t));
     }
 }
 

@@ -1062,7 +1062,7 @@
       </Groups>
     </Target>
     <Target>
-      <TargetName>mkl26z4_50Hz</TargetName>
+      <TargetName>mkl26z4_only_eular</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060020::V5.06 (build 20)::ARMCC</pCCUsed>
@@ -1102,7 +1102,7 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\flash\</OutputDirectory>
+          <OutputDirectory>.\custom\</OutputDirectory>
           <OutputName>templete</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
@@ -1233,7 +1233,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -1426,7 +1426,7 @@
             <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>MKL26Z4 CLOCK_SETUP=0 URANUS2 CHLIB_DMA_SUPPORT=1 SP_50Hz</Define>
+              <Define>MKL26Z4 CLOCK_SETUP=0 URANUS2 CHLIB_DMA_SUPPORT=1 ONLY_EULAR</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\imu;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\utilities\veep;..\src</IncludePath>
             </VariousControls>

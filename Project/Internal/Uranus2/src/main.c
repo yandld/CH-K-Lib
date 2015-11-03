@@ -30,6 +30,7 @@ uint8_t gRevBuf[64];
 struct dcal_t dcal;
 int RunState;
 
+#if !defined(ONLY_EULAR)
 static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, int16_t *gyo, int16_t *mag, int32_t pressure)
 {
     int i;
@@ -75,6 +76,30 @@ static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, i
     buf[31] = sum;
     return 32;
 }
+#else
+static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, int16_t *gyo, int16_t *mag, int32_t pressure)
+{
+    int i;
+    uint8_t sum = 0;
+    
+    buf[0] = 0x88;
+    buf[1] = 0xAF;
+    buf[2] = 9;
+    buf[3] = ((int16_t)((angle->P)*100))>>8;
+    buf[4] = ((int16_t)((angle->P)*100))>>0;
+    buf[5] = ((int16_t)((angle->R)*100))>>8;
+    buf[6] = ((int16_t)((angle->R)*100))>>0;
+    buf[7] = (int16_t)((180+(angle->Y))*10)>>8;
+    buf[8] = (int16_t)((180+(angle->Y))*10)>>0;
+    for(i=0; i<8; i++)
+    {
+        sum += buf[i];
+    }
+    buf[9] = sum;
+    return 10;
+}
+
+#endif
 
 int sensor_init(void)
 {
@@ -329,7 +354,7 @@ int main(void)
                         }
                         if(RunState == kPTL_REQ_MODE_6AXIS)
                         {
-                            fgdata[i] = 0;
+                            fmdata[i] = 0;
                         }
                     }
                     
@@ -349,16 +374,7 @@ int main(void)
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
                             len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);
-                            #if defined(SP_50Hz)
-                            static uint8_t cnt;
-                            cnt++; cnt%=4;
-                            if(cnt == 0)
-                            {
-                                UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
-                            }
-                            #else
                             UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
-                            #endif
                         }
                     }
                 break;

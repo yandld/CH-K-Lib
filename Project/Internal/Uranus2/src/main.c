@@ -449,7 +449,6 @@ void ano_callback(rev_data_t *rd)
     msg.type = rd->cmd;
     msg.msg_len = rd->len;
     memcpy(msg.payload, rd->buf, rd->len);
-    msg.msg = msg.payload;
     mq_push(msg);
 }
 

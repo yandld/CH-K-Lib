@@ -365,7 +365,7 @@ int main(void)
                     {
                         adata[i] = (adata[i]*ares*1000);
                         mdata[i] = (mdata[i]*mres);
-                        gdata[i] -= gadj[i];
+                        rgdata[i] = gdata[i] - gadj[i];
                     }
 
                     if(RunState != kPTL_REQ_MODE_CAL)
@@ -373,7 +373,7 @@ int main(void)
                         GPIO_PinToggle(HW_GPIOC, 3);
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
-                            len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);
+                            len = ano_make_packet(buf, &angle, adata, rgdata, mdata, (int32_t)pressure);
                             UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
                         }
                     }

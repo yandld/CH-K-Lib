@@ -54,12 +54,20 @@ void AppLED0Task(void *pdata)
 
 void TaskStart(void *pdata)
 {
+#if OS_CRITICAL_METHOD == 3
+	OS_CPU_SR cpu_sr;
+#endif
 	pdata = pdata;
+	
+	//临界代码段
+	OS_ENTER_CRITICAL();
 	//负责初始化和启动时钟节拍，在OSStart()之后启动时钟节拍是因为通常情况下，用户不希望在多任务还没有开始时
 	//就接收到时钟节拍中断
 	SYSTICK_Init((1000*1000)/OS_TICKS_PER_SEC);
   SYSTICK_ITConfig(true);
-  SYSTICK_Cmd(true);
+  SYSTICK_Cmd(true);	
+	OS_EXIT_CRITICAL();
+	
 	//初始化统计任务
 	OSStatInit();
   while(1)

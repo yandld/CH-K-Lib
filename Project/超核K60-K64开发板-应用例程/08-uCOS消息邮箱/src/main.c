@@ -77,6 +77,10 @@ void AppSEMTask(void *pdata)
 
 static void AppStartTask(void *pdata)
 {
+#if OS_CRITICAL_METHOD == 3
+		OS_CPU_SR cpu_sr;
+#endif
+	
 		pdata = pdata; 		  
 		msg_test = OSMboxCreate((void*)0);	//创建空消息邮箱
 		sem_test = OSSemCreate(0);		//创建信号量	
@@ -91,10 +95,12 @@ static void AppStartTask(void *pdata)
 									&APP_POST_STK[TASK_STK_SIZE-1],
 									APP_POST_TASK_PRIO); //建立邮箱，信号量投递任务
 		
+		OS_ENTER_CRITICAL();
 		//开启时钟节拍中断
 	  SYSTICK_Init(1000*1000/OS_TICKS_PER_SEC);
     SYSTICK_ITConfig(true);
     SYSTICK_Cmd(true);
+		OS_EXIT_CRITICAL();
 
 		printf("uCOSII MBox&Sem DemoTest\r\n");
 		for(;;)

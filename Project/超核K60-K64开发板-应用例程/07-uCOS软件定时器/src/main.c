@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 实验名称：uc/os-II 软件定时实验
  * 实验平台：渡鸦开发板
  * 板载芯片：MK60DN512ZVLQ10
@@ -38,12 +38,19 @@ void tmr1_callback(OS_TMR *ptmr,void *p_arg)
 
 void AppStartTask(void *pdata)
 {
+#if OS_CRITICAL_METHOD == 3
+		OS_CPU_SR cpu_sr;
+#endif
+	
     uint8_t err;
     pdata = pdata;
+	
+		OS_ENTER_CRITICAL();
 		//安装并启动uc/os-II的时钟节拍中断
     SYSTICK_Init(1000*1000/OS_TICKS_PER_SEC);
     SYSTICK_ITConfig(true);
 		SYSTICK_Cmd(true);
+		OS_EXIT_CRITICAL();
 	
   	/* 初始化名为“tmr1”定时器 3S后开始 以后每1000MS触发一次 */    
 	  /* OS_TMR_OPT_PERIODIC表示定时器在开始循环模式前等待第一次启动超时模式

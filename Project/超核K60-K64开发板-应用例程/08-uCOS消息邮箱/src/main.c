@@ -1,116 +1,122 @@
+/*
+ * å®éªŒåç§°ï¼šuc/os-II æ¶ˆæ¯é‚®ç®±å’Œä¿¡å·é‡åŸºç¡€å®éªŒ
+ * å®éªŒå¹³å°ï¼šæ¸¡é¸¦å¼€å‘æ¿
+ * æ¿è½½èŠ¯ç‰‡ï¼šMK60DN512ZVLQ10
+ * å®éªŒæ•ˆæœï¼š
+ *  				1.å¼€å¯uC/OS 3ä¸ªä»»åŠ¡ ä¸€ä¸ªå‘é€ä¿¡å·é‡å’Œé‚®ç®±  å¦å¤–ä¸€ä¸ªæ¥æ”¶ä¿¡å·é‡å¹¶æ˜¾ç¤º 
+ *						å¦å¤–ä¸€ä¸ªæ¥æ”¶æ¶ˆæ¯é‚®ç®±å¹¶æ˜¾ç¤ºé‚®ç®±ä¸­çš„ä¿¡æ¯ï¼ˆâ€˜Aâ€™~â€˜Zâ€™ï¼‰
+ */
+ 
 #include "chlib_k.h"
 //uCOS
 #include "includes.h"
 
 
-/*
-* ÈëÃÅÖªÊ¶:
-* 1- ¿ªÆôuCOS 3¸öÈÎÎñ Ò»¸ö·¢ËÍĞÅºÅÁ¿ºÍÓÊÏä  ÁíÍâÒ»¸ö½ÓÊÕĞÅºÅÁ¿²¢ÏÔÊ¾ ÁíÍâÒ»¸ö½ÓÊÕÏûÏ¢ÓÊÏä²¢ÏÔÊ¾Ïà¹ØĞÅÏ¢ 
-*/
-
-#define TASK_STK_SIZE              (128)  //ËùÓĞÈÎÎñÍ³Ò»Ê¹ÓÃ128×Ö½Ú¶ÑÕ»µØÖ·
-//¶¨ÒåÈÎÎñÓÅÏÈ¼¶
-#define APP_START_TASK_PRIO        (4)  //¿ªÊ¼ÈÎÎñ
-#define APP_MBOX_TASK_PRIO         (8)  //ÓÊÏä½ÓÊÕÏÔÊ¾ÈÎÎñ
-#define APP_SEM_TASK_PRIO          (9)  //ĞÅºÅÁ¿½ÓÊÕÏÔÊ¾ÈÎÎñ
-#define APP_POST_TASK_PRIO         (10) //ÓÊÏä ĞÅºÅÁ¿Í¶µİÈÎÎñ
-//ÉùÃ÷ÈÎÎñ¶ÑÕ»
+#define TASK_STK_SIZE              (128)  //æ‰€æœ‰ä»»åŠ¡ç»Ÿä¸€ä½¿ç”¨128å­—èŠ‚å¤§å°çš„å †æ ˆåœ°å€
+//å®šä¹‰ä»»åŠ¡ä¼˜å…ˆçº§
+#define APP_START_TASK_PRIO        (4)  //å¼€å§‹ä»»åŠ¡
+#define APP_MBOX_TASK_PRIO         (8)  //é‚®ç®±æ¥æ”¶æ˜¾ç¤ºä»»åŠ¡
+#define APP_SEM_TASK_PRIO          (9)  //ä¿¡å·é‡æ¥æ”¶æ˜¾ç¤ºä»»åŠ¡
+#define APP_POST_TASK_PRIO         (10) //é‚®ç®± ä¿¡å·é‡æŠ•é€’ä»»åŠ¡
+//å£°æ˜ä»»åŠ¡å †æ ˆ
 OS_STK  APP_START_STK[TASK_STK_SIZE];
 OS_STK  APP_LED_STK[TASK_STK_SIZE];
 OS_STK  APP_MBOX_STK[TASK_STK_SIZE];
 OS_STK  APP_SEM_STK[TASK_STK_SIZE];
 OS_STK  APP_POST_STK[TASK_STK_SIZE];
 
-OS_EVENT * msg_test;		//°´¼üÓÊÏäÊÂ¼ş¿éÖ¸Õë
-OS_EVENT * sem_test;		//·äÃùÆ÷ĞÅºÅÁ¿Ö¸Õë		  	   
+OS_EVENT * msg_test;		//æŒ‰é”®é‚®ç®±äº‹ä»¶å—æŒ‡é’ˆ
+OS_EVENT * sem_test;		//èœ‚é¸£å™¨ä¿¡å·é‡æŒ‡é’ˆ		  	   
 
-
-
-//ÓÊÏäÍ¶µİ£¬ĞÅºÅÁ¿Í¶µİÈÎÎñ
+//é‚®ç®±æŠ•é€’ï¼Œä¿¡å·é‡æŠ•é€’ä»»åŠ¡
 void AppPostTask(void *pdata)
 {
-	static uint8_t key='A';
-	uint16_t task_counter=0;
-	while(1)
-	{
-		key++;
-		task_counter++;
-		if(key > 'Z') key='A';            //¸Ä±äÓÊÏäÍ¶µİµÄÊı¾İ
-		OSMboxPost(msg_test, &key);  //·¢ËÍÏûÏ¢
-		OSSemPost(sem_test);              //·¢ËÍĞÅºÅÁ¿
+		static uint8_t key = 'A';
+		uint16_t task_counter = 0;
+		while(1)
+		{
+				key++;
+				task_counter++;
+				if(key > 'Z') key='A';            //æ”¹å˜é‚®ç®±æŠ•é€’çš„æ•°æ®
+				OSMboxPost(msg_test, &key);  //å‘é€æ¶ˆæ¯
+				OSSemPost(sem_test);              //å‘é€ä¿¡å·é‡
 
         printf("App Post Message&Sem:%d times\r\n", task_counter);
-		OSTimeDlyHMSM(0, 0, 0, 300);
-	}
+				OSTimeDlyHMSM(0, 0, 0, 300);
+		}
 }
 
-//ÓÊÏä½ÓÊÕº¯ÊıÈÎÎñ
+//é‚®ç®±æ¥æ”¶å‡½æ•°ä»»åŠ¡
 void AppMBOXTask(void *pdata)
 {
-	uint8_t* key;
-	uint8_t err;
-	uint16_t TaskCtr=0;
-    pdata = pdata; //·ÀÖ¹±àÒëÆ÷³ö´í ÎŞÊµ¼ÊÒâÒå
-	while(1)
-	{
-        key = OSMboxPend(msg_test,0,&err);  //µÈ´ıÏûÏ¢ÓÊÏä
+		uint8_t* key;
+		uint8_t err;
+		uint16_t TaskCtr = 0;
+    pdata = pdata; //é˜²æ­¢ç¼–è¯‘å™¨å‡ºé”™ æ— å®é™…æ„ä¹‰
+		while(1)
+		{
+        key = OSMboxPend(msg_test,0,&err);  //ç­‰å¾…æ¶ˆæ¯é‚®ç®±ï¼Œè¿”å›æ¥æ”¶åˆ°çš„æ¶ˆæ¯
         TaskCtr++;
-        printf("Received MBox:%d \r\n", *key);
-	}
+        printf("Received MBox:%c \r\n", *key);
+		}
 }
-//ĞÅºÅÁ¿²âÊÔ£¬ÏÔÊ¾º¯Êı
+//ä¿¡å·é‡æµ‹è¯•ï¼Œæ˜¾ç¤ºå‡½æ•°
 void AppSEMTask(void *pdata)
 {
-	uint8_t err;
-	uint16_t TaskCtr=0;
-    pdata=pdata; //·ÀÖ¹±àÒëÆ÷³ö´í ÎŞÊµ¼ÊÒâÒå
-	while(1)
-	{
-		OSSemPend(sem_test,0,&err); //µÈ´ıĞÅºÅÁ¿
-		TaskCtr++;
-		printf("Received Sem:%d  \r\n", TaskCtr);
-	}
+		uint8_t err;
+		uint16_t TaskCtr = 0;
+    pdata = pdata; //é˜²æ­¢ç¼–è¯‘å™¨å‡ºé”™ æ— å®é™…æ„ä¹‰
+		while(1)
+		{
+				OSSemPend(sem_test,0,&err); //æŒç»­åœ°ç­‰å¾…ä¿¡å·é‡
+				TaskCtr++;
+				printf("Received Sem:%d  \r\n", TaskCtr);
+		}
 }
 
 
 static void AppStartTask(void *pdata)
 {
-	pdata = pdata; 		  
-	msg_test=OSMboxCreate((void*)0);	//´´½¨ÏûÏ¢ÓÊÏä
-	sem_test=OSSemCreate(0);		//´´½¨ĞÅºÅÁ¿	
-    
-    OSTaskCreate(AppMBOXTask,(void *)0,
-                &APP_MBOX_STK[TASK_STK_SIZE-1],
-                APP_MBOX_TASK_PRIO); //½¨Á¢ÓÊÏä½ÓÊÕÏÔÊ¾ÈÎÎñ
-    OSTaskCreate(AppSEMTask,(void *)0,
-                &APP_SEM_STK[TASK_STK_SIZE-1],
-                APP_SEM_TASK_PRIO); //½¨Á¢ĞÅºÅÁ¿½ÓÊÕÏÔÊ¾ÈÎÎñ
-    OSTaskCreate(AppPostTask,(void *)0,
-                &APP_POST_STK[TASK_STK_SIZE-1],
-                APP_POST_TASK_PRIO); //½¨Á¢ÓÊÏä£¬ĞÅºÅÁ¿Í¶µİÈÎÎñ
-    printf("uCOSII MBox&Sem DemoTest\r\n");
- 	OSTaskSuspend(APP_START_TASK_PRIO);	//¹ÒÆğÆğÊ¼ÈÎÎñ.
+		pdata = pdata; 		  
+		msg_test = OSMboxCreate((void*)0);	//åˆ›å»ºç©ºæ¶ˆæ¯é‚®ç®±
+		sem_test = OSSemCreate(0);		//åˆ›å»ºä¿¡å·é‡	
+			
+		OSTaskCreate(AppMBOXTask,(void *)0,
+									&APP_MBOX_STK[TASK_STK_SIZE-1],
+									APP_MBOX_TASK_PRIO); //å»ºç«‹é‚®ç®±æ¥æ”¶æ˜¾ç¤ºä»»åŠ¡
+		OSTaskCreate(AppSEMTask,(void *)0,
+									&APP_SEM_STK[TASK_STK_SIZE-1],
+									APP_SEM_TASK_PRIO); //å»ºç«‹ä¿¡å·é‡æ¥æ”¶æ˜¾ç¤ºä»»åŠ¡
+		OSTaskCreate(AppPostTask,(void *)0,
+									&APP_POST_STK[TASK_STK_SIZE-1],
+									APP_POST_TASK_PRIO); //å»ºç«‹é‚®ç®±ï¼Œä¿¡å·é‡æŠ•é€’ä»»åŠ¡
+		
+		//å¼€å¯æ—¶é’ŸèŠ‚æ‹ä¸­æ–­
+	  SYSTICK_Init(1000*1000/OS_TICKS_PER_SEC);
+    SYSTICK_ITConfig(true);
+    SYSTICK_Cmd(true);
+
+		printf("uCOSII MBox&Sem DemoTest\r\n");
+		for(;;)
+		{
+				OSTaskSuspend(APP_START_TASK_PRIO);	//æŒ‚èµ·èµ·å§‹ä»»åŠ¡.
+		}
 }
 
 int main(void)
 {
     DelayInit();
-    SYSTICK_Init(1000*1000/OS_TICKS_PER_SEC);
-    SYSTICK_ITConfig(true);
     
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    
     printf("uCOSII test\r\n");
 
     OSInit();
-	OSTaskCreate(AppStartTask,(void *)0,
-							&APP_START_STK[TASK_STK_SIZE-1],
-							APP_START_TASK_PRIO);
-    
-    SYSTICK_Cmd(true);
-    
+		OSTaskCreate(AppStartTask,(void *)0,
+								&APP_START_STK[TASK_STK_SIZE-1],
+								APP_START_TASK_PRIO);
+     
     OSStart();
-    while(1);
+//    while(1);
 }
 
 

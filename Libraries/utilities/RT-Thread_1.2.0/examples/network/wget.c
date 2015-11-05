@@ -159,21 +159,13 @@ int wget(int argc, char** argv)
     
     /* get start pointer */
     p = strstr(recv_data,"\r\n\r\n");
-//    if(p == NULL)
-//    {
-//        /* rev again */
-//        bytes_received = recv(sock, recv_data, BUFSZ, 0);
-//        p = strstr(recv_data,"\r\n\r\n");
-//        if(p == NULL)
-//        {
-//            rt_kprintf("cannot find file content!\n");
-//            lwip_close(sock); 
-//        
-//            /*释放接收缓冲 */
-//            rt_free(recv_data);
-//            return -1;
-//        }
-//    }
+    if(p == NULL)
+    {
+        rt_kprintf("\r\ncannot find file start point!\n");
+        lwip_close(sock); 
+        rt_free(recv_data);
+        return -1;
+    }
     
     p +=4; /* scape /r/n/r/n */
     offset = p - recv_data;
@@ -205,13 +197,14 @@ int wget(int argc, char** argv)
         rt_free(recv_data);
         return -1;
     }
-
+    
     write(fd, recv_data+offset, bytes_received - offset);
  
     while(1)
     {
         /* 从sock连接中接收最大BUFSZ - 1字节数据 */
         bytes_received = recv(sock, recv_data, BUFSZ, 0);
+        
         if (bytes_received <= 0)
         {
             /* 接收失败，关闭这个连接 */

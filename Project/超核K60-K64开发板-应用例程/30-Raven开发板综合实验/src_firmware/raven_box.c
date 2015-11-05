@@ -69,19 +69,19 @@ static int mount(int argc, char** argv)
 
 MSH_CMD_EXPORT(mount, mount nfs e0 /nfs 192.168.1.100:/);
 
-static int cpufreq(int argc, char** argv)
+static int clock(int argc, char** argv)
 {
     uint32_t clock, tick;
     clock = GetClock(kCoreClock);
-    rt_kprintf("CoreClock:%dHz\r\n", clock);
+    rt_kprintf("core:%dHz\r\n", clock);
     clock = GetClock(kBusClock);
-    rt_kprintf("BusClock:%dHz\r\n", clock);
+    rt_kprintf("bus :%dHz\r\n", clock);
     
-    tick = rt_tick_get();
-    rt_kprintf("tick:%d | time:%ds\r\n", tick, tick/RT_TICK_PER_SECOND);
+    //tick = rt_tick_get();
+    //rt_kprintf("tick:%d | time:%ds\r\n", tick, tick/RT_TICK_PER_SECOND);
     return 0;
 }
-MSH_CMD_EXPORT(cpufreq, cpufreq);
+MSH_CMD_EXPORT(clock, clock);
 
 #endif
 

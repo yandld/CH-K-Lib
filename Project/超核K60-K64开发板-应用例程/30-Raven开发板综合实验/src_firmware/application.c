@@ -7,11 +7,10 @@
 #include "pin.h"
 
 
+
 void rt_system_comonent_init(void);
 void usb_thread_entry(void* parameter);
 
-
-//static uint8_t INIT_STACK[1024*13];
 
 void rt_heap_init(void)
 {
@@ -20,6 +19,8 @@ void rt_heap_init(void)
     ret = SRAM_SelfTest();
     if(ret)
     {
+        printf("system SRAM check failed!\r\n");
+        while(1);
     //    rt_system_heap_init((void*)INIT_STACK, (void*)(sizeof(INIT_STACK) + (uint32_t)INIT_STACK));
     }
     else
@@ -35,6 +36,9 @@ void init_thread(void* parameter)
     rt_system_comonent_init();
     rt_hw_uart_init("uart0", 0);
     rt_console_set_device("uart0");
+    
+    rt_show_version();
+    
     rt_hw_sd_init("sd0");
     rt_hw_rtc_init();
     rt_hw_spi_init();
@@ -46,6 +50,22 @@ void init_thread(void* parameter)
     rt_hw_lcd_init("lcd0");
     
     finsh_system_init();
+    
+    rt_hw_enet_phy_init();
+    
+    /* mount file system */
+    if(dfs_mount("sf0", "/", "elm", 0, 0) != RT_EOK)
+    {
+        rt_kprintf("mount %s failed. format file system...\r\n", "sf0");
+        dfs_mkfs("elm", "sf0");
+    }
+    dfs_mount("sf0", "/", "elm", 0, 0);
+
+    
+    /* services */
+    sntp_init();
+    
+    
  //   tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, 1024, 9, 20);
    // rt_thread_startup(tid);
     
@@ -58,8 +78,7 @@ void init_thread(void* parameter)
     {
         printf("addr:0x%X has no application\r\n", 0x60000);
     }
-    rt_hw_enet_phy_init();
-
+    
     tid = rt_thread_self();
     rt_thread_delete(tid); 
 }

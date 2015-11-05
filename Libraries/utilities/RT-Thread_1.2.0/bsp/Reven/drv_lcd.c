@@ -2,6 +2,7 @@
 #include <rtthread.h>
 #include "ili9320.h"
 #include "rtt_drv.h"
+#include "finsh.h"
 
 struct lcd_device
 {
@@ -11,13 +12,13 @@ struct lcd_device
 };
 
 
-static rt_err_t _init (rt_device_t dev)
+static rt_err_t rt_lcd_init (rt_device_t dev)
 {
     return ili9320_init();
 }
 
 
-static rt_err_t _control(rt_device_t dev, rt_uint8_t cmd, void *args)
+static rt_err_t rt_lcd_control(rt_device_t dev, rt_uint8_t cmd, void *args)
 {
     
 	switch (cmd)
@@ -50,12 +51,12 @@ int rt_hw_lcd_init(const char *name)
     
 	dev->rtdev.type         = RT_Device_Class_Graphic;
 	dev->rtdev.rx_indicate  = RT_NULL;
-	dev->rtdev.init         = _init;
+	dev->rtdev.init         = rt_lcd_init;
 	dev->rtdev.open         = RT_NULL;
 	dev->rtdev.close		= RT_NULL;
 	dev->rtdev.read 		= RT_NULL;
 	dev->rtdev.write        = RT_NULL;
-	dev->rtdev.control      = _control;
+	dev->rtdev.control      = rt_lcd_control;
 	dev->rtdev.user_data	= RT_NULL;
 
     /* initialize mutex */
@@ -64,4 +65,17 @@ int rt_hw_lcd_init(const char *name)
     return RT_EOK;
 }
 
+int  lcd_info(int argc, char** argv)
+{
+    uint32_t id;
+    rt_device_t lcd = rt_device_find("lcd0");
     
+    rt_lcd_init(RT_NULL);
+    rt_lcd_control(RT_NULL, RTGRAPHIC_CTRL_GET_INFO, &id);
+    rt_kprintf("lcd controllor:0x%X\r\n", id);
+    rt_kprintf("lcd size:%dx%d\r\n", LCD_X_MAX, LCD_Y_MAX);
+    return RT_EOK;
+}
+
+MSH_CMD_EXPORT(lcd_info, lcd_info);
+

@@ -329,7 +329,6 @@ int main(void)
                         adata[i] = radata[i] - dcal.ao[i];
                         gdata[i] = rgdata[i] - dcal.go[i];
                         mdata[i] = (rmdata[i] - dcal.mo[i])/dcal.mg[i];
-
                     }
 
                     /* set timer */
@@ -361,19 +360,19 @@ int main(void)
                     ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
                     halfT = ((float)time)/1000/2000; 
                         
-                    for(i=0;i<3;i++)
+                    for(i=0; i<3; i++)
                     {
                         adata[i] = (adata[i]*ares*1000);
                         mdata[i] = (mdata[i]*mres);
-                        rgdata[i] = gdata[i] - gadj[i];
+                        gdata[i] -= gadj[i];
                     }
-
+                    
                     if(RunState != kPTL_REQ_MODE_CAL)
                     {
                         GPIO_PinToggle(HW_GPIOC, 3);
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
-                            len = ano_make_packet(buf, &angle, adata, rgdata, mdata, (int32_t)pressure);
+                            len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);
                             UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
                         }
                     }

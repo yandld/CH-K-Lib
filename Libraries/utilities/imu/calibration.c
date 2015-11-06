@@ -67,7 +67,7 @@ void dcal_init(struct dcal_t *dc)
 }
 
 #define GYRO_SAMPLE_COUNT       (100)
-#define GYRO_STILL_LIMIT        (30)
+#define GYRO_STILL_LIMIT        (25)
 
 
 void dcal_ginput(int16_t *gdata)
@@ -99,7 +99,7 @@ void dcal_ginput(int16_t *gdata)
         case CAL_GYRO_COUNT:
             if((ABS(gdata[0]) < GYRO_STILL_LIMIT) && (ABS(gdata[1]) < GYRO_STILL_LIMIT) && (ABS(gdata[2]) < GYRO_STILL_LIMIT))
             {
-                //printf("! %d %d %d\r\n", gdata[0], gdata[1], gdata[2]);
+                //printf("gcal sample data: %d %d %d\r\n", gdata[0], gdata[1], gdata[2]);
                 temp_sum[0] += gdata[0];
                 temp_sum[1] += gdata[1];
                 temp_sum[2] += gdata[2];
@@ -120,7 +120,7 @@ void dcal_ginput(int16_t *gdata)
             gadj[0] = temp_sum[0]/GYRO_SAMPLE_COUNT;
             gadj[1] = temp_sum[1]/GYRO_SAMPLE_COUNT;   
             gadj[2] = temp_sum[2]/GYRO_SAMPLE_COUNT;   
-            //printf("data output complete ! %d %d %d\r\n", gsum[0]/GYRO_SAMPLE_COUNT, gsum[1]/GYRO_SAMPLE_COUNT, gsum[2]/GYRO_SAMPLE_COUNT);
+            //printf("data output complete ! %d %d %d\r\n", gadj[0], gadj[1], gadj[2]);
             still_count = 0;
             states = CAL_GYRO_INIT;
             break;
@@ -133,7 +133,7 @@ void dcal_get_gadj(int16_t *adj)
 {
     adj[0] = gadj[0];
     adj[1] = gadj[1];
-    adj[1] = gadj[2];
+    adj[2] = gadj[2];
 }
 
 

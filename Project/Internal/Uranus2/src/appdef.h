@@ -2,7 +2,7 @@
 #define __APPDEF_H__
 
 
-#define VERSION             (206)
+#define VERSION             (207)
 #define MPU9250_INT_PIN     (18)
 
 #define DMA_TX_CH      (HW_DMA_CH0)

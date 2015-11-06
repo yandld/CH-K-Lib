@@ -64,6 +64,7 @@ void init_thread(void* parameter)
     
     /* services */
     sntp_init();
+    ftpd_start();
     
     
  //   tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, 1024, 9, 20);

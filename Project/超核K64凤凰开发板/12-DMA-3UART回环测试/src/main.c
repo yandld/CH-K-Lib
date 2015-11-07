@@ -92,7 +92,7 @@ static void UART_DMARevInit(uint32_t uartInstnace, uint8_t dmaChl, uint8_t * rxB
 int main(void)
 {
     DelayInit();
-    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOA, 9, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("DMA UART loop-back test\r\n");
@@ -113,7 +113,7 @@ int main(void)
     
     while(1)
     {
-        GPIO_ToggleBit(HW_GPIOE, 6);
+        GPIO_ToggleBit(HW_GPIOA, 9);
         DelayMs(500);
     }
 }

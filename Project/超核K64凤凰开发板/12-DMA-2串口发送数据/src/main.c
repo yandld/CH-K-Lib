@@ -7,8 +7,8 @@
 
 /*
      实验名称：DMA串口发送数据
-     实验平台：渡鸦开发板
-     板载芯片：MK60DN512ZVQ10
+     实验平台：凤凰开发板
+     板载芯片：MK64FN1MVLQ12
  实验效果：使用串口发送数据，仅仅是使用了DMA功能，处理速度更快
 */
 
@@ -69,8 +69,8 @@ int main(void)
 {
     static const char String1[] = "This string is send via DMA\r\n";
     DelayInit();
-    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
+    GPIO_QuickInit(HW_GPIOA, 9, kGPIO_Mode_OPP);
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     printf("DMA UART transmit test\r\n");
     /* 打开UART0 DMA发送使能 */
     UART_ITDMAConfig(HW_UART0, kUART_DMA_Tx, true);
@@ -82,7 +82,7 @@ int main(void)
         UART_SendWithDMA(HW_DMA_CH2, (const uint8_t*)String1, sizeof(String1));
         /* 等待DMA传输结束 */
         while(DMA_IsMajorLoopComplete(HW_DMA_CH2));
-        GPIO_ToggleBit(HW_GPIOE, 6);
+        GPIO_ToggleBit(HW_GPIOA, 9);
         DelayMs(200);
     }
 }

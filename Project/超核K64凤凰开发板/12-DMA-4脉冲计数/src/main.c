@@ -12,8 +12,8 @@ static uint32_t ChlValue[2];
 
 /*
      实验名称：DMA脉冲计数
-     实验平台：渡鸦开发板
-     板载芯片：MK60DN512ZVQ10
+     实验平台：凤凰开发板
+     板载芯片：MK64FN1MVLQ12
  实验效果：使用DMA模块实现脉冲计数功能，这期间需要使用DMA、PIT模块协同
        使用DMA的0通到连接到PTA5引脚脉冲计数
        使用DMA的1通道连接到PTB23引脚脉冲计数
@@ -86,7 +86,7 @@ static void PIT_ISR(void)
 int main(void)
 {
     DelayInit();
-    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOA, 9, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("DMA pulse count test\r\n");
@@ -108,7 +108,7 @@ int main(void)
     while(1)
     {
         printf("[CH%d]:%4dHz [CH%d]:%4dHz\r\n", 0, ChlValue[0], 1, ChlValue[1]);
-        GPIO_ToggleBit(HW_GPIOE, 6);
+        GPIO_ToggleBit(HW_GPIOA, 9);
         DelayMs(500);
     }
 }

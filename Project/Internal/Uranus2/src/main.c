@@ -250,8 +250,6 @@ int main(void)
     ano_set_callback(ano_callback);
 
     PIT_Init();
-    PIT_SetTime(0, 50*1000);
-    PIT_SetIntMode(0, true);
 
     PIT_SetTime(1, 1000*1000);
 
@@ -279,7 +277,7 @@ int main(void)
     KalmanSimple1D(&KMState[0], 1, 10);
     KalmanSimple1D(&KMState[1], 1, 10);
     KalmanSimple1D(&KMState[2], 1, 10);  
-    
+     
     while(1)
     {
         if(mq_exist())
@@ -389,6 +387,10 @@ int main(void)
                     break;
                 }
             }
+        }
+        else
+        {
+           // EnterSTOPMode(false);
         }
     }
 }

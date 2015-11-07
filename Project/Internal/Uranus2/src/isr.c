@@ -11,18 +11,6 @@
 
 
 
-
-void PIT_IRQHandler(void)
-{
-    if(PIT->CHANNEL[0].TFLG)
-    {
-        PIT->CHANNEL[0].TFLG |= PIT_TFLG_TIF_MASK;
-        msg_t msg;
-        msg.cmd = kMSG_CMD_TIMER;
-        mq_push(msg);
-    }
-}
-
 void UART0_IRQHandler(void)
 {
     static uint8_t buf[64];
@@ -56,13 +44,23 @@ void UART0_IRQHandler(void)
 }
 
 
-
+/* sensor int, should be 200Hz */
 void PORTA_IRQHandler(void)
 {
+    static int counter;
     PORTA->ISFR |= (1 << MPU9250_INT_PIN);
     msg_t msg;
     msg.cmd = kMSG_CMD_SENSOR_DATA_READY;
     mq_push(msg);
+    
+    counter++; 
+    counter %= 10;
+    /* 20Hz timer event */
+    if(counter == 0)
+    {
+        msg.cmd = kMSG_CMD_TIMER;
+        mq_push(msg);
+    }
 }
 
 

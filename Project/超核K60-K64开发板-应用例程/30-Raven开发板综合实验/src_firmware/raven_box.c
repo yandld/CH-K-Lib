@@ -60,9 +60,9 @@ static int mount(int argc, char** argv)
     ret = dfs_mount(device, path, fs, 0, argv[4]);
 
     if(ret)
-        printf("%s mount on %s fail!%d\r\n", device, path, ret);
+        rt_kprintf("%s mount on %s fail!%d\r\n", device, path, ret);
     else
-        printf("%s mount on %s ok!\r\n", device, path);
+        rt_kprintf("%s mount on %s ok!\r\n", device, path);
     
     return ret;
 }

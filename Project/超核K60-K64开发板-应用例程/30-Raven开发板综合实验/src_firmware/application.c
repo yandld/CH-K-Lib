@@ -7,7 +7,6 @@
 
 
 void rt_system_comonent_init(void);
-void usb_thread_entry(void* parameter);
 
 
 void rt_heap_init(void)
@@ -74,7 +73,7 @@ void init_thread(void* parameter)
     }
     else
     {
-        printf("addr:0x%X has no application\r\n", 0x60000);
+        rt_kprintf("addr:0x%X has no application\r\n", 0x60000);
     }
     
     tid = rt_thread_self();

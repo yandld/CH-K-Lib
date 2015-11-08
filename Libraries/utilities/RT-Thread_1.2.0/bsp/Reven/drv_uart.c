@@ -129,7 +129,9 @@ static rt_err_t rt_uart_init (rt_device_t dev)
     struct uart_device * uart_dev;
     uart_dev = (struct uart_device*)dev;
     
-    UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+    uint32_t instance = UART_QuickInit(BOARD_UART_DEBUG_MAP, BOARD_UART_BAUDRATE);
+
+    UART_EnableTxFIFO(instance, true);
     UART_CallbackRxInstall(HW_UART0, UART0_ISR);
     UART_CallbackRxInstall(HW_UART1, UART1_ISR);
     UART_CallbackRxInstall(HW_UART2, UART2_ISR);

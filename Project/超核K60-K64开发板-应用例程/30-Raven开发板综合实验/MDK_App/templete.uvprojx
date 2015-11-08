@@ -1165,7 +1165,7 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\mk64f12\flash\</OutputDirectory>
+          <OutputDirectory>.\mk60d10\flash\</OutputDirectory>
           <OutputName>templete</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
@@ -1491,7 +1491,7 @@
               <MiscControls>--c99</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\src_app;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\..\..\..\Libraries\utilities\emWin\Include;..\..\..\..\Libraries\drivers\K\inc;..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include\drivers;..\src_app\gui;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\include</IncludePath>
+              <IncludePath>..\src_app;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\include;..\..\..\..\Libraries\utilities\emWin\Include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\drivers\include\drivers;..\src_app\gui;..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\dfs\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

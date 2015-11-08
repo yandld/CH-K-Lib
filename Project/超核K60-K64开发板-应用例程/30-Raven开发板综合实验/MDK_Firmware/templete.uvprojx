@@ -521,11 +521,6 @@
               <FilePath>..\src_firmware\usb_lib.c</FilePath>
             </File>
             <File>
-              <FileName>usb_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src_firmware\usb_thread.c</FilePath>
-            </File>
-            <File>
               <FileName>msh_cmd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
@@ -534,6 +529,16 @@
               <FileName>application.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src_firmware\application.c</FilePath>
+            </File>
+            <File>
+              <FileName>ir_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src_firmware\ir_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src_firmware\usbd_thread.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1522,11 +1527,6 @@
               <FilePath>..\src_firmware\usb_lib.c</FilePath>
             </File>
             <File>
-              <FileName>usb_thread.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src_firmware\usb_thread.c</FilePath>
-            </File>
-            <File>
               <FileName>msh_cmd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\utilities\RT-Thread_1.2.0\components\finsh\msh_cmd.c</FilePath>
@@ -1535,6 +1535,16 @@
               <FileName>application.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src_firmware\application.c</FilePath>
+            </File>
+            <File>
+              <FileName>ir_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src_firmware\ir_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src_firmware\usbd_thread.c</FilePath>
             </File>
           </Files>
         </Group>

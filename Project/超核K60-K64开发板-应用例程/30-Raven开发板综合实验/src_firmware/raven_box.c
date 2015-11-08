@@ -73,9 +73,9 @@ static int clock(int argc, char** argv)
 {
     uint32_t clock, tick;
     clock = GetClock(kCoreClock);
-    rt_kprintf("core:%dHz\r\n", clock);
+    rt_kprintf("CoreClock:%dHz\r\n", clock);
     clock = GetClock(kBusClock);
-    rt_kprintf("bus :%dHz\r\n", clock);
+    rt_kprintf("BusClock :%dHz\r\n", clock);
     
     //tick = rt_tick_get();
     //rt_kprintf("tick:%d | time:%ds\r\n", tick, tick/RT_TICK_PER_SECOND);
@@ -83,22 +83,9 @@ static int clock(int argc, char** argv)
 }
 MSH_CMD_EXPORT(clock, clock);
 
+void cpu_usage(void);
+MSH_CMD_EXPORT(cpu_usage, cpu_usage);
+
 #endif
 
 
-
-
-//    rt_kprintf("NETWORK\r\n");
-//    rt_device_t dev;
-//    dev = rt_device_find("e0");
-//    if(dev)
-//    {
-//        enet_phy_data phy_data;
-//        extern void list_if(void);
-//        list_if();
-//        dev->control(dev, NIOCTL_GET_PHY_DATA, &phy_data);
-//        rt_kprintf("\r\n");
-//        rt_kprintf("TX:%05d | %05dKB\r\n", phy_data.tx_fcnt, phy_data.tx_dcnt/1024);
-//        rt_kprintf("RX:%05d | %05dKB\r\n", phy_data.rx_fcnt, phy_data.rx_dcnt/1024);
-//    }
-//    return 0;

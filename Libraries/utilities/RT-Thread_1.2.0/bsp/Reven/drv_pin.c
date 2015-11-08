@@ -10,13 +10,13 @@ static void _pin_mode(struct rt_device *device, rt_base_t pin, rt_base_t mode)
     switch(mode)
     {
         case PIN_MODE_OUTPUT:
-            GPIO_QuickInit(instance, pin%0xFF, kGPIO_Mode_OPP);
+            GPIO_QuickInit(instance, pin & 0xFF, kGPIO_Mode_OPP);
             break;
         case PIN_MODE_INPUT:
-            GPIO_QuickInit(instance, pin%0xFF, kGPIO_Mode_IFT);
+            GPIO_QuickInit(instance, pin & 0xFF, kGPIO_Mode_IFT);
             break;
         case PIN_MODE_INPUT_PULLUP:
-            GPIO_QuickInit(instance, pin%0xFF, kGPIO_Mode_IPU);
+            GPIO_QuickInit(instance, pin & 0xFF, kGPIO_Mode_IPU);
             break;
     }
 }
@@ -25,14 +25,14 @@ static void _pin_write(struct rt_device *device, rt_base_t pin, rt_base_t value)
 {
     uint32_t instance;
     instance = (pin % 0xFF00) >> 8;
-    GPIO_WriteBit(instance, pin%0xFF, value);
+    GPIO_WriteBit(instance, pin&0xFF, value);
 }
 
 static int _pin_read(struct rt_device *device, rt_base_t pin)
 {
     uint32_t instance;
     instance = (pin % 0xFF00) >> 8;
-    return GPIO_ReadBit(instance, pin%0xFF);
+    return GPIO_ReadBit(instance, pin & 0xFF);
 }
     
 static const struct rt_pin_ops _ops =

@@ -2,12 +2,21 @@
 #include <stdint.h>
 #include "rl_usb.h"
 
+typedef struct
+{
+    uint8_t param;
+    void (*exec)(uint8_t param);
+}msd_msg_t;
 
+rt_mq_t msd_mq;
+
+
+#define MSD_DEVICE      "sf0"
 /* init */
 void usbd_msc_init (void)
 {
     rt_device_t sd;
-    sd = rt_device_find("sd0");
+    sd = rt_device_find(MSD_DEVICE);
     rt_device_init(sd);
     rt_device_open(sd, 0);
     struct rt_device_blk_geometry geometry;
@@ -23,45 +32,43 @@ void usbd_msc_init (void)
 void inline usbd_msc_read_sect (U32 block, U8 *buf, U32 num_of_blocks)
 {
     rt_device_t sd;
-    sd = rt_device_find("sd0");
+    sd = rt_device_find(MSD_DEVICE);
     rt_device_read(sd, block, buf, num_of_blocks);
 }
 
 void inline usbd_msc_write_sect (U32 block, U8 *buf, U32 num_of_blocks)
 {
     rt_device_t sd;
-    sd = rt_device_find("sd0");
+    sd = rt_device_find(MSD_DEVICE);
     rt_device_write(sd, block, buf, num_of_blocks);
 }
 
 
-typedef struct
-{
-    uint8_t param;
-    void (*exec)(uint8_t param);
-}msd_msg_t;
-
-rt_mq_t msd_mq;
-rt_sem_t usb_sem;
-
-void usb_thread_entry(void* parameter)
+void usbd_thread(void* parameter)
 {
     msd_msg_t msg;
-    usb_sem = rt_sem_create("sem", 1, RT_IPC_FLAG_FIFO);
-    msd_mq = rt_mq_create("mq", sizeof(msd_msg_t), 20, RT_IPC_FLAG_FIFO);
+    msd_mq = rt_mq_create("mq", sizeof(msd_msg_t), 10, RT_IPC_FLAG_FIFO);
     
     usbd_init();
     usbd_connect(__TRUE);
     
     while(1)
     {
-       //rt_sem_take(usb_sem, RT_WAITING_FOREVER);
         if(rt_mq_recv(msd_mq, &msg, sizeof(msd_msg_t), RT_WAITING_FOREVER) == RT_EOK)
         {
            msg.exec(msg.param);
         }
     }
     
+}
+
+
+
+void rt_usbd_init(void)
+{
+    rt_thread_t tid;
+    tid = rt_thread_create("usbd", usbd_thread, RT_NULL, 512, 28, 20);
+    if (tid != RT_NULL) rt_thread_startup(tid);
 }
 
 #if 0

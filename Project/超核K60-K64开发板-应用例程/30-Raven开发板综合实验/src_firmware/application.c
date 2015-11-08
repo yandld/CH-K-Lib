@@ -1,10 +1,8 @@
 #include <rtthread.h>
 #include "board.h"
 #include "components.h"
-#include "chlib_k.h"
 #include "IS61WV25616.h"
 #include "rtt_drv.h"
-#include "pin.h"
 
 
 
@@ -49,8 +47,8 @@ void init_thread(void* parameter)
     w25qxx_init("sf0", "spi21");
     rt_hw_lcd_init("lcd0");
     
+    cpu_usage_init();
     finsh_system_init();
-    
     rt_hw_enet_phy_init();
     
     /* mount file system */
@@ -62,13 +60,12 @@ void init_thread(void* parameter)
     dfs_mount("sf0", "/", "elm", 0, 0);
 
     
+    
     /* services */
+    rt_usbd_init();
     sntp_init();
     ftpd_start();
     
-    
- //   tid = rt_thread_create("usb", usb_thread_entry, RT_NULL, 1024, 9, 20);
-   // rt_thread_startup(tid);
     
     if((*(uint32_t*)0x60000) != 0xFFFFFFFF)
     {

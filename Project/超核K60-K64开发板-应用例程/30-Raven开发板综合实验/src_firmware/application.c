@@ -48,7 +48,7 @@ void init_thread(void* parameter)
     
     cpu_usage_init();
     finsh_system_init();
-    rt_hw_enet_phy_init();
+    
     
     /* mount file system */
     if(dfs_mount("sf0", "/", "elm", 0, 0) != RT_EOK)
@@ -65,16 +65,17 @@ void init_thread(void* parameter)
     sntp_init();
     ftpd_start();
     
-    
-    if((*(uint32_t*)0x60000) != 0xFFFFFFFF)
+    if((*(uint32_t*)0x32000) != 0xFFFFFFFF)
     {
-        tid = rt_thread_create("init", (void*)(0x60000), RT_NULL, 1024, 8, 20);
+        tid = rt_thread_create("init", (void*)(0x32000), RT_NULL, 1024, 8, 20);
         rt_thread_startup(tid);
     }
     else
     {
-        rt_kprintf("addr:0x%X has no application\r\n", 0x60000);
+        rt_kprintf("addr:0x%X has no application\r\n", 0x32000);
     }
+    
+    rt_hw_enet_phy_init();
     
     tid = rt_thread_self();
     rt_thread_delete(tid); 

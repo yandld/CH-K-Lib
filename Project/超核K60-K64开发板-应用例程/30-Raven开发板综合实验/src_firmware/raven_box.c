@@ -71,7 +71,7 @@ MSH_CMD_EXPORT(mount, mount nfs e0 /nfs 192.168.1.100:/);
 
 static int clock(int argc, char** argv)
 {
-    uint32_t clock, tick;
+    uint32_t clock;
     clock = GetClock(kCoreClock);
     rt_kprintf("CoreClock:%dHz\r\n", clock);
     clock = GetClock(kBusClock);

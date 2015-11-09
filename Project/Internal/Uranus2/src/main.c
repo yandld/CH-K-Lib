@@ -139,6 +139,8 @@ static void ShowInfo(void)
     printf("Uranus %d\r\n", VERSION);
     printf("CoreClock:%dHz\r\n", GetClock(kCoreClock));
     printf("UID:0x%X\r\n", GetUID());
+    printf("Reset Status Code:%d\r\n", GetResetStatus());
+    
     switch(RunState)
     {
         case kPTL_REQ_MODE_9AXIS:

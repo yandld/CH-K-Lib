@@ -119,6 +119,31 @@ void EnterWaitMode(bool enSleepOnExit)
     __ASM("WFI");
 }
 
+uint32_t GetResetStatus(void)
+{
+    uint8_t SRS0, SRS1;
+
+    SRS0 = RCM->SRS0;
+    SRS1 = RCM->SRS1;
+    
+    if(SRS0 & RCM_SRS0_WAKEUP_MASK)
+        return SYSTEM_RESET_WEAKUP;
+    
+    if(SRS0 & RCM_SRS0_LVD_MASK)
+        return SYSTEM_RESET_LVD;
+    
+    if(SRS0 & RCM_SRS0_PIN_MASK)
+        return SYSTEM_RESET_PIN;
+    
+    if(SRS0 & RCM_SRS0_POR_MASK)
+        return SYSTEM_RESET_POR;
+    
+    if(SRS1 & RCM_SRS1_SW_MASK)
+        return SYSTEM_RESET_SW;
+    
+    return 0;
+}
+
 uint32_t EncodeMAP(map_t * type)
 {
     return *(uint32_t*)type;

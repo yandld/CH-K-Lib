@@ -88,6 +88,14 @@
                                    (BSWAP_16((uint32_t)((val) >> 0x10))))
 #endif
 
+
+#define SYSTEM_RESET_POR            (1<<0)
+#define SYSTEM_RESET_PIN            (1<<1)
+#define SYSTEM_RESET_WDOG           (1<<2)
+#define SYSTEM_RESET_LVD            (1<<5)
+#define SYSTEM_RESET_WEAKUP         (1<<6)
+#define SYSTEM_RESET_SW             (1<<9)
+
 /* init type */
 typedef struct
 {
@@ -142,7 +150,7 @@ uint32_t GetClock(Clock_t clock);
 void SetConsole(int (*putc)(uint8_t ch), int (*getc)(void));
 void EnterWaitMode(bool enSleepOnExit);
 uint32_t GetUID(void);
-
+uint32_t GetResetStatus(void);
 
 #endif
 

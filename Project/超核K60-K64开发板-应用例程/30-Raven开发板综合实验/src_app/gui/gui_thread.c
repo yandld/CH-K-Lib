@@ -492,7 +492,7 @@ void gui_thread(void* parameter)
     
     k_StartUp();
     
-    
+    k_InitMenu();
     /* Gui background Task */
     while(1)
     {
@@ -527,7 +527,7 @@ void guit_thread_entry(void* parameter)
 }
 
 
-int ui_startup(int argc, char** argv)
+int ui_startup(void)
 {
     int ret;
     rt_thread_t tid;
@@ -537,13 +537,16 @@ int ui_startup(int argc, char** argv)
     
     GUI_Init();   
   
-  //  WM_MULTIBUF_Enable(1);
-   // GUI_SetLayerVisEx (1, 0);
-  //  GUI_SelectLayer(0);
+  WM_MULTIBUF_Enable(1);
+  GUI_SetLayerVisEx (1, 0);
+  GUI_SelectLayer(0);
   
-    GUI_SetBkColor(GUI_WHITE);
-    GUI_SetColor(GUI_BLACK);
-    GUI_Clear();  
+  GUI_SetBkColor(GUI_WHITE);
+  GUI_Clear();  
+
+   /* Set General Graphical proprieties */
+  k_SetGuiProfile();
+    
     tid = rt_thread_create("gui", gui_thread, RT_NULL, (1024*2), 0x27, 20);                                
     rt_thread_startup(tid);
 

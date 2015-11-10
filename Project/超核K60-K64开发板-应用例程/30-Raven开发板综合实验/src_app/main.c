@@ -46,17 +46,13 @@ void init_data_bss(void)
 int Main(void* param) __attribute__((section("RESET")));
 int Main(void* param)
 {
-    int ret;
     init_data_bss();
     rt_kprintf("app start up!\r\n");
-    rt_device_t gpio;
-    gpio = rt_device_find("gpio");
     rt_pin_mode(PTA6, PIN_MODE_OUTPUT);
-    uint32_t i;
     rt_pin_write(PTA6, 0);
     
-    ui_startup(0, 0);
-    finsh_syscall_append("ui_startup", ui_startup);
+    ui_startup();
+   // finsh_syscall_append("ui_startup", ui_startup);
     return 0;
 }
 

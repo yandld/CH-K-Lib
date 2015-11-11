@@ -31,19 +31,9 @@
 #include <string.h>
 #include <stdio.h>
 #include "gui.h"
-  #include "WM.h"
+#include "WM.h"
 #include "DIALOG.h"
-  #include "CHECKBOX.h"
-  #include "FRAMEWIN.h"
-  #include "PROGBAR.h"
-  #include "TEXT.h"
-  #include "BUTTON.h"
-  #include "SLIDER.h"
-  #include "HEADER.h"
-  #include "GRAPH.h"
-  #include "ICONVIEW.h"
-  #include "LISTVIEW.h"
-  #include "TREEVIEW.h"
+
 
 /** @addtogroup CORE
   * @{
@@ -83,7 +73,7 @@ static void _cbBk(WM_MESSAGE * pMsg) {
   uint32_t NCode, Id;
   static uint8_t sel;
   WM_HWIN   hItem;
-  char tmp[16];
+  char tmp[32];
   
   switch (pMsg->MsgId) 
   {
@@ -101,14 +91,11 @@ static void _cbBk(WM_MESSAGE * pMsg) {
   case WM_TIMER:
     
     hItem = WM_GetDialogItem(pMsg->hWin, ID_FEATURES_CPU);
-  
-    extern void cpu_usage_get(uint8_t *major, uint8_t *minor);
-      
     uint8_t major, minor;
     cpu_usage_get(&major, &minor);
-    sprintf((char *)tmp , "MCU Load : %d.%d%%",  major, minor);
+    rt_sprintf((char *)tmp , "MCU Load : %d.%d%%", major, minor);
     TEXT_SetText(hItem, tmp);
-    rt_kprintf("!!\r\n");
+    
     WM_InvalidateWindow(hItem);
     WM_Update(hItem); 
     WM_RestartTimer(pMsg->Data.v, 1000);

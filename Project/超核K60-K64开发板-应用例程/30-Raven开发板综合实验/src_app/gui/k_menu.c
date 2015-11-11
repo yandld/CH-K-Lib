@@ -29,6 +29,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 #include "gui.h"
   #include "WM.h"
 #include "DIALOG.h"
@@ -100,10 +101,14 @@ static void _cbBk(WM_MESSAGE * pMsg) {
   case WM_TIMER:
     
     hItem = WM_GetDialogItem(pMsg->hWin, ID_FEATURES_CPU);
-    static int i;
-    sprintf((char *)tmp , "MCU Load : %d%%",  i++);
+  
+    extern void cpu_usage_get(uint8_t *major, uint8_t *minor);
+      
+    uint8_t major, minor;
+    cpu_usage_get(&major, &minor);
+    sprintf((char *)tmp , "MCU Load : %d.%d%%",  major, minor);
     TEXT_SetText(hItem, tmp);
-
+    rt_kprintf("!!\r\n");
     WM_InvalidateWindow(hItem);
     WM_Update(hItem); 
     WM_RestartTimer(pMsg->Data.v, 1000);

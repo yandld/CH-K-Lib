@@ -537,17 +537,17 @@ int ui_startup(void)
     
     GUI_Init();   
   
-  WM_MULTIBUF_Enable(1);
-  GUI_SetLayerVisEx (1, 0);
-  GUI_SelectLayer(0);
+    WM_MULTIBUF_Enable(1);
+    GUI_SetLayerVisEx (1, 0);
+    GUI_SelectLayer(0);
   
-  GUI_SetBkColor(GUI_WHITE);
-  GUI_Clear();  
+    GUI_SetBkColor(GUI_WHITE);
+    GUI_Clear();  
 
    /* Set General Graphical proprieties */
-  k_SetGuiProfile();
+    k_SetGuiProfile();
     
-    tid = rt_thread_create("gui", gui_thread, RT_NULL, (1024*2), 0x27, 20);                                
+    tid = rt_thread_create("gui", gui_thread, RT_NULL, (1024*4), 0x07, 20);                                
     rt_thread_startup(tid);
 
 //    tid = rt_thread_create("guit", guit_thread_entry, RT_NULL, (1024*1), 0x26, 20);                                                      

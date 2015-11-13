@@ -8,11 +8,10 @@
   ******************************************************************************
   */
 #include "lptmr.h"
-#include "gpio.h"
-
+#include "common.h"
 
 /* 回调函数 指针 */
-static LPTMR_CallBackType LPTMR_CallBackTable[1] = {NULL};
+
 /* 中断向量入口 */
 static const IRQn_Type LPTMR_IRQnTable[] = 
 {
@@ -166,14 +165,7 @@ void LPTMR_ITDMAConfig(LPTMR_ITDMAConfig_Type config, bool status)
  * @retval None
  * @note 对于此函数的具体应用请查阅应用实例
  */
-void LPTMR_CallbackInstall(LPTMR_CallBackType AppCBFun)
-{
-    SIM->SCGC5 |= SIM_SCGC5_LPTMR_MASK; 
-    if(AppCBFun != NULL)
-    {
-        LPTMR_CallBackTable[0] = AppCBFun;
-    }
-}
+
 
 /**
  * @brief  获取脉冲计数器的脉冲数
@@ -196,10 +188,10 @@ uint32_t LPTMR_PC_ReadCounter(void)
 uint32_t LPTMR_PC_QuickInit(uint32_t MAP)
 {
     uint32_t i;
-    QuickInit_Type * pq = (QuickInit_Type*)&(MAP);
+    map_t * pq = (map_t*)&(MAP);
     LPTMR_PC_InitTypeDef LPTMR_PC_InitStruct1;
     LPTMR_PC_InitStruct1.counterOverflowValue = 0xFFFF;
-    switch(pq->channel)
+    switch(pq->chl)
     {
         case 1:
             LPTMR_PC_InitStruct1.inputSource = kLPTMR_PC_InputSource_ALT1;
@@ -212,13 +204,14 @@ uint32_t LPTMR_PC_QuickInit(uint32_t MAP)
     }
     LPTMR_PC_InitStruct1.pinPolarity = kLPTMR_PC_PinPolarity_RigsingEdge;
     /* init pinmux */
-    for(i = 0; i < pq->io_offset; i++)
+    for(i = 0; i < pq->pin_count; i++)
     {
-        PORT_PinMuxConfig(pq->io_instance, pq->io_base + i, (PORT_PinMux_Type) pq->mux); 
+        SetPinMux(pq->io, pq->pin_start + i, pq->mux); 
     }
+    
     /* init moudle */
     LPTMR_PC_Init(&LPTMR_PC_InitStruct1);
-    return pq->ip_instance;
+    return pq->ip;
 }
 
 /**
@@ -242,14 +235,11 @@ void LPTMR_ClearCounter(void)
  * @param  LPTimer_IRQHandler :LPTM中断处理函数
  * @note 函数内部用于中断事件处理
  */
-void LPTimer_IRQHandler(void)
-{
-    LPTMR0->CSR |= LPTMR_CSR_TCF_MASK;
-    if(LPTMR_CallBackTable[0])
-    {
-        LPTMR_CallBackTable[0]();
-    }
-}
+//void LPTimer_IRQHandler(void)
+//{
+//    LPTMR0->CSR |= LPTMR_CSR_TCF_MASK;
+
+//}
 
 
 #if 0

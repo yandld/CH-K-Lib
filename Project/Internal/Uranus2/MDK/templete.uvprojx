@@ -496,6 +496,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\KL\src\uart.c</FilePath>
             </File>
+            <File>
+              <FileName>lptmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\lptmr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1021,6 +1026,11 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\KL\src\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>lptmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\lptmr.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1550,6 +1560,11 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\KL\src\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>lptmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\KL\src\lptmr.c</FilePath>
             </File>
           </Files>
         </Group>

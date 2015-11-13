@@ -6,6 +6,7 @@
 #include "common.h"
 #include "dma.h"
 #include "pit.h"
+#include "lptmr.h"
 #include "gpio.h"
 #include "uart.h"
 #include "i2c.h"
@@ -193,6 +194,11 @@ void HWInit(void)
     
     UART_Init(UART0_RX_PA01_TX_PA02, 115200);
     UART_SetDMAMode(HW_UART0, kUART_DMARx, true);
+    
+    LPTMR_TC_InitTypeDef init;
+    init.timeInMs = (1000/DATA_OUT_FRQ)-1;
+    LPTMR_TC_Init(&init);
+    
     DMA_Init_t Init;
     Init.chl = DMA_RX_CH;
     Init.chlTrigSrc = UART0_REV_DMAREQ;
@@ -219,6 +225,7 @@ void HWInit(void)
     
     dcal_init(&dcal);
     UART_SetIntMode(HW_UART0, kUART_IntIdleLine, true);
+    LPTMR_ITDMAConfig(kLPTMR_IT_TOF, true);
 }
 
 
@@ -360,6 +367,9 @@ int main(void)
                     ret = imu_get_euler_angle(fadata, fgdata, fmdata, &angle);
                     halfT = ((float)time)/1000/2000; 
                         
+                break;
+                    
+                case kMSG_CMD_DATA_OUT:
                     for(i=0; i<3; i++)
                     {
                         adata[i] = (adata[i]*ares*1000);
@@ -370,13 +380,14 @@ int main(void)
                     if(RunState != kPTL_REQ_MODE_CAL)
                     {
                         GPIO_PinToggle(HW_GPIOC, 3);
+                        len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);                    
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
                             len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);
                             UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
                         }
                     }
-                break;
+                    break;
                 /* data reviecved from PC */
                 case kMSG_CMD_DATA_REV:
                 {

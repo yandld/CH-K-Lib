@@ -90,7 +90,7 @@ static void _cbBk(WM_MESSAGE * pMsg) {
     
   case WM_TIMER:
     
-    hItem = WM_GetDialogItem(pMsg->hWin, ID_FEATURES_CPU);
+    hItem = WM_GetDialogItem(pMsg->hWin, ID_FEATURES_CPU);f
     uint8_t major, minor;
     cpu_usage_get(&major, &minor);
     rt_sprintf((char *)tmp , "MCU Load : %d.%d%%", major, minor);

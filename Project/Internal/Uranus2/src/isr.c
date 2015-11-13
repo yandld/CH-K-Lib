@@ -10,6 +10,14 @@
 
 
 
+void LPTimer_IRQHandler(void)
+{
+    LPTMR0->CSR |= LPTMR_CSR_TCF_MASK;
+    
+    msg_t msg;
+    msg.cmd = kMSG_CMD_DATA_OUT;
+    mq_push(msg);
+}
 
 void UART0_IRQHandler(void)
 {

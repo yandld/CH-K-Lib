@@ -35,6 +35,7 @@ void dcal_print(struct dcal_t * dc)
     printf("Mag Gain:%f %f %f \r\n",    dc->mg[0], dc->mg[1], dc->mg[2]);
     printf("Mag  max:%d %d %d \r\n",     dc->m_max[0], dc->m_max[1], dc->m_max[2]);
     printf("Mag  min:%d %d %d \r\n",     dc->m_min[0], dc->m_min[1], dc->m_min[2]);
+    printf("data out freq:%dHz\r\n", dc->outfrq);
 }
 
 void dcal_reset_mag(struct dcal_t *dc)
@@ -63,6 +64,7 @@ void dcal_init(struct dcal_t *dc)
             dc->m_max[i] = 0;
             dc->m_min[i] = 0;  
         }
+        dc->outfrq = 200;
     }
 }
 

@@ -538,6 +538,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>config</GroupName>
+          <Files>
+            <File>
+              <FileName>appdef.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\appdef.h</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1066,6 +1076,16 @@
               <FileName>bmp180.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\bmp180.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>config</GroupName>
+          <Files>
+            <File>
+              <FileName>appdef.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\appdef.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1600,6 +1620,16 @@
               <FileName>bmp180.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\devices\src\bmp180.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>config</GroupName>
+          <Files>
+            <File>
+              <FileName>appdef.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\appdef.h</FilePath>
             </File>
           </Files>
         </Group>

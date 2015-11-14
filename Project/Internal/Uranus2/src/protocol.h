@@ -21,7 +21,8 @@ enum
     kPTL_DATA_OFS_ACC,
     kPTL_DATA_OFS_GYRO,
     kPTL_DATA_OFS_MAG,
-
+    kPTL_DATA_OUT_FRQ, 
+    
     kPTL_REQ_MODE_6AXIS,
     kPTL_REQ_MODE_9AXIS,
     kPTL_REQ_MODE_CAL,

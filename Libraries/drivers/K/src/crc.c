@@ -34,7 +34,7 @@ static CRC_InitTypeDef CRCProtocolAttrTable[] =
 };
 
 
-#if 0
+
 /**
  * \brief not use
  */
@@ -59,7 +59,7 @@ uint16_t CRC16_GenerateSoftware(const uint8_t *src, uint32_t len)
     }
     return crc;
 }
-#endif
+
 
 /**
  * @brief  初始化CRC硬件模块  

@@ -270,7 +270,7 @@ void ili9320_hline(int xs, int xe, int y, int c)
           //  write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
             break;
         case 0x8989:
-            write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
+            write_reg(0x11,0x6070|(1<<5)|(1<<4)|(0<<3));
             write_reg(0x004e, xs);
             write_reg(0x004f, y);
             WR_CMD(0x0022);
@@ -306,14 +306,14 @@ void ili9320_vline(int ys, int ye, int x, int c)
            // write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
             break;
         case 0x8989:
-            write_reg(0x11,(0<<5)|(0<<4)|(1<<3));
+            write_reg(0x11,0x6070|(0<<5)|(0<<4)|(1<<3));
             write_reg(0x004e, x);
             write_reg(0x004f, ys);
             WR_CMD(0x0022);
             while(ys < ye)
             {
-            WR_DATA(c);
-            ys++;
+				WR_DATA(c);
+				ys++;
             }
           // write_reg(0x11,(1<<5)|(1<<4)|(0<<3));
             break;

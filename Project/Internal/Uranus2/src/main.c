@@ -26,7 +26,6 @@
 
 
 KalmanState_t KAState[3], KGState[3], KMState[3];
-
 uint8_t gRevBuf[64];
 struct dcal_t dcal;
 int RunState;
@@ -188,6 +187,12 @@ void HWInit(void)
 {
 
     DelayInit();
+
+    veep_init();
+    veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
+    dcal_init(&dcal);
+    mq_init();
+    
     GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
     GPIO_Init(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Mode_IFT);
     GPIO_SetIntMode(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Int_RE, true);
@@ -196,7 +201,7 @@ void HWInit(void)
     UART_SetDMAMode(HW_UART0, kUART_DMARx, true);
     
     LPTMR_TC_InitTypeDef init;
-    init.timeInMs = (1000/DATA_OUT_FRQ)-1;
+    init.timeInMs = (1000/dcal.outfrq)-1;
     LPTMR_TC_Init(&init);
     
     DMA_Init_t Init;
@@ -218,12 +223,8 @@ void HWInit(void)
 
     DMA_EnableReq(DMA_RX_CH);
     
-    veep_init();
-    mq_init();
-    veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
     sensor_init();
     
-    dcal_init(&dcal);
     UART_SetIntMode(HW_UART0, kUART_IntIdleLine, true);
     LPTMR_ITDMAConfig(kLPTMR_IT_TOF, true);
 }
@@ -412,6 +413,8 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf)
 {
     int len, i;
     len = 0;
+    LPTMR_TC_InitTypeDef init;
+    
     switch(pMsg->type)
     {
         case kPTL_REQ_FW:
@@ -463,6 +466,12 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf)
         case kPTL_REQ_MODE_CAL:
             dcal_reset_mag(&dcal);
             RunState = pMsg->type;
+            break;
+        case kPTL_DATA_OUT_FRQ:
+            dcal.outfrq = (pMsg->payload[0]<<8) + (pMsg->payload[1]<<0);
+            init.timeInMs = (1000/dcal.outfrq) - 1;
+            LPTMR_TC_Init(&init);
+            LPTMR_ITDMAConfig(kLPTMR_IT_TOF, true);
             break;
     }
     return len;

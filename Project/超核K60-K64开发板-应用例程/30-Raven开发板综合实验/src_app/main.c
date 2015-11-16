@@ -39,17 +39,17 @@ void init_data_bss(void)
         *zi_ram++ = 0;
 }
 
-#define PTA6    ((0<<8) + 6)
+#define BUZZER_PIN    ((0<<8) + 6)
 
-
+extern int ui_startup(void);
 
 int Main(void* param) __attribute__((section("RESET")));
 int Main(void* param)
 {
     init_data_bss();
     rt_kprintf("app start up!\r\n");
-    rt_pin_mode(PTA6, PIN_MODE_OUTPUT);
-    rt_pin_write(PTA6, 0);
+    rt_pin_mode(BUZZER_PIN, PIN_MODE_OUTPUT);
+    rt_pin_write(BUZZER_PIN, 0);
     
     ui_startup();
    // finsh_syscall_append("ui_startup", ui_startup);

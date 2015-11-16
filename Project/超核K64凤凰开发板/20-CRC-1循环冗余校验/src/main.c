@@ -10,9 +10,9 @@ int main(void)
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     /* CRC16 CCITT–≠“È */
-    CRC_QuickInit(kCRC16_CCITT);
-
-    printf("CRC 16 test\r\n");
+    CRC_QuickInit(kCRC16_XMODEM);
+    result = CRC16_GenerateSoftware(buffer, 10);
+    printf("CRC 16 software:0x%04x\r\n", result);
     result = CRC_Generate(buffer, 10);
     printf("crc16 hardware:0x%04x\r\n", result);
     

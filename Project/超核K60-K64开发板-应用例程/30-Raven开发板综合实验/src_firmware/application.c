@@ -67,7 +67,9 @@ void init_thread(void* parameter)
     
     if((*(uint32_t*)0x32000) != 0xFFFFFFFF)
     {
-        tid = rt_thread_create("init", (void*)(0x32000), RT_NULL, 1024, 8, 20);
+        void *app_addr = ((void*)0x32000);
+        rt_kprintf("start app thread...\r\n");
+        tid = rt_thread_create("init", app_addr, RT_NULL, 1024, 8, 20);
         rt_thread_startup(tid);
     }
     else

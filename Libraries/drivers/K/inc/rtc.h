@@ -70,6 +70,7 @@ void RTC_SetTime(RTC_DateTime_Type * datetime);
 void RTC_ITDMAConfig(RTC_ITDMAConfig_Type config, bool status);
 bool RTC_IsTimeValid(void);
 void RTC_CallbackInstall(RTC_CallBackType AppCBFun);
+void RTC_SetTSR(uint32_t val);
 
 int  RTC_GetWeek(int year, int month, int days);
 uint32_t RTC_GetTSR(void);

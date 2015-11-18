@@ -77,7 +77,7 @@ int main(void)
     /* DM0引脚为专门的模拟引脚 ADC时 无需设置复用  DM0也无法当做普通的数字引脚 */
     
     /* 启动一次ADC转换 */
-    ADC_StartConversion(HW_ADC0, 0, kADC_MuxA);
+    ADC_StartConversion(HW_ADC0, 1, kADC_MuxA);
     
     while(1)
     {

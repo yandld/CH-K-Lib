@@ -28,6 +28,7 @@ struct dcal_t
     uint8_t     id;
     uint8_t     mode;
     uint32_t    outfrq;
+    uint32_t    baudrate;
 };
 
 

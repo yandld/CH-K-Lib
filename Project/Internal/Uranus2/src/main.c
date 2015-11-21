@@ -84,7 +84,7 @@ static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, i
     
     buf[0] = 0x88;
     buf[1] = 0xAF;
-    buf[2] = 9;
+    buf[2] = 6;
     buf[3] = ((int16_t)((angle->P)*100))>>8;
     buf[4] = ((int16_t)((angle->P)*100))>>0;
     buf[5] = ((int16_t)((angle->R)*100))>>8;
@@ -113,7 +113,7 @@ int sensor_init(void)
         printf("mpu9250 init:%d\r\n", ret);
         printf("restarting...\r\n");
         DelayMs(300);
-        SystemSoftReset();
+        SystemSoftReset(); 
     }
     
     ret = bmp180_init(0);
@@ -140,7 +140,7 @@ static void ShowInfo(void)
     printf("CoreClock:%dHz\r\n", GetClock(kCoreClock));
     printf("UID:0x%X\r\n", GetUID());
     printf("Reset Status Code:%d\r\n", GetResetStatus());
-    
+    printf("User BaudRate:%d bps\r\n", dcal.baudrate);
     switch(RunState)
     {
         case kPTL_REQ_MODE_9AXIS:
@@ -197,11 +197,11 @@ void HWInit(void)
     GPIO_Init(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Mode_IFT);
     GPIO_SetIntMode(HW_GPIOA, MPU9250_INT_PIN, kGPIO_Int_RE, true);
     
-    UART_Init(UART0_RX_PA01_TX_PA02, 115200);
+    UART_Init(UART0_RX_PA01_TX_PA02, dcal.baudrate);
     UART_SetDMAMode(HW_UART0, kUART_DMARx, true);
     
     LPTMR_TC_InitTypeDef init;
-    init.timeInMs = (1000/dcal.outfrq)-1;
+    init.timeInMs = (1000/dcal.outfrq) -1 ;
     LPTMR_TC_Init(&init);
     
     DMA_Init_t Init;
@@ -240,7 +240,7 @@ int main(void)
 #endif
     
     int i;
-
+    int16_t ta[3], tg[3], tm[3];
     int16_t adata[3], gdata[3], mdata[3];
     int16_t radata[3], rgdata[3], rmdata[3];
     float fadata[3], fgdata[3], fmdata[3];
@@ -373,18 +373,17 @@ int main(void)
                 case kMSG_CMD_DATA_OUT:
                     for(i=0; i<3; i++)
                     {
-                        adata[i] = (adata[i]*ares*1000);
-                        mdata[i] = (mdata[i]*mres);
-                        gdata[i] -= gadj[i];
+                        ta[i] = (adata[i]*ares*1000);
+                        tm[i] = (mdata[i]*mres);
+                        tg[i] = gdata[i] - gadj[i];
                     }
                     
                     if(RunState != kPTL_REQ_MODE_CAL)
                     {
-                        GPIO_PinToggle(HW_GPIOC, 3);
-                        len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);                    
+                        GPIO_PinToggle(HW_GPIOC, 3);                
                         if(UART_DMAGetRemain(HW_UART0) == 0)
                         {
-                            len = ano_make_packet(buf, &angle, adata, gdata, mdata, (int32_t)pressure);
+                            len = ano_make_packet(buf, &angle, ta, tg, tm, (int32_t)pressure);
                             UART_DMASend(HW_UART0, DMA_TX_CH, buf, len);
                         }
                     }
@@ -392,6 +391,7 @@ int main(void)
                 /* data reviecved from PC */
                 case kMSG_CMD_DATA_REV:
                 {
+
                     len = DataRevDecode(pMsg, buf);
                     while(UART_DMAGetRemain(HW_UART0) != 0);
                     for(i=0; i<len; i++)
@@ -413,7 +413,6 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf)
 {
     int len, i;
     len = 0;
-    LPTMR_TC_InitTypeDef init;
     
     switch(pMsg->type)
     {
@@ -469,9 +468,9 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf)
             break;
         case kPTL_DATA_OUT_FRQ:
             dcal.outfrq = (pMsg->payload[0]<<8) + (pMsg->payload[1]<<0);
-            init.timeInMs = (1000/dcal.outfrq) - 1;
-            LPTMR_TC_Init(&init);
-            LPTMR_ITDMAConfig(kLPTMR_IT_TOF, true);
+            dcal.baudrate = (pMsg->payload[2]<<24) + (pMsg->payload[3]<<16) + (pMsg->payload[4]<<8) + (pMsg->payload[5]<<0);
+            UART_SetBaudRate(HW_UART0, dcal.baudrate);
+            LPTMR_SetTime((1000/dcal.outfrq) -1 );
             break;
     }
     return len;

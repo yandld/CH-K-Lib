@@ -65,6 +65,7 @@ void dcal_init(struct dcal_t *dc)
             dc->m_min[i] = 0;  
         }
         dc->outfrq = 200;
+        dc->baudrate = 115200;
     }
 }
 

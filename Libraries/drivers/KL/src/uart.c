@@ -89,25 +89,45 @@ static uint32_t _SetClockSrc(uint32_t instance, void *param)
     return clk;
 }
 
+void UART_SetBaudRate(uint32_t instance, uint32_t baud)
+{
+    uint32_t sbr, clk, osr, calculatedBaud;
+    UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
+    UARTx->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    
+    /* config baudrate */
+    clk = _SetClockSrc(instance, NULL);
+    
+    for(osr=5; osr<32; osr++)
+    {
+        sbr = clk/(baud * osr);
+        calculatedBaud = clk/(osr*sbr);
+        if(ABS((int)calculatedBaud - (int)baud) < (baud*0.03))
+        {
+            break;
+        }
+    }
+//    if ((osr > 3) && (osr < 8))
+//    {
+//        UART0->C5 |= UART0_C5_BOTHEDGE_MASK;
+//    }
+    UARTx->BDH &= ~(UART_BDH_SBR_MASK);
+    UARTx->BDH |= (sbr>>8) & UART_BDH_SBR_MASK;
+    UARTx->BDL = (sbr & UART_BDL_SBR_MASK);
+    UART0->C4 = UART0_C4_OSR(osr-1);
+    UARTx->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+}
+
+
+
 static void _UART_Init(uint32_t instance, uint32_t srcClock, uint32_t baud)
 {
-    uint16_t sbr;
     static bool is_fitst_init = true;
     
     CLK_EN(CLKTbl, instance);
     
-    UART_Type * UARTx = (UART_Type*)UART_IPTbl[instance];
-    UARTx->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
-    UARTx->C2 &= ~((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
+    UART_SetBaudRate(instance, baud);
     
-    /* config baudrate */
-    sbr = srcClock/((baud)*16);
-    UARTx->BDH &= ~(UART_BDH_SBR_MASK);
-    UARTx->BDH |= (sbr>>8) & UART_BDH_SBR_MASK;
-    UARTx->BDL = (sbr & UART_BDL_SBR_MASK);
-    
-    /* enable Tx Rx */
-    UARTx->C2 |= ((UART_C2_TE_MASK)|(UART_C2_RE_MASK));
     if(is_fitst_init)
     {
         UART_DebugInstance = instance;

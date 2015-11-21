@@ -185,6 +185,13 @@ uint32_t LPTMR_PC_ReadCounter(void)
 	return (uint32_t)((LPTMR0->CNR & LPTMR_CNR_COUNTER_MASK) >> LPTMR_CNR_COUNTER_SHIFT); 
 }
 
+void LPTMR_SetTime(uint32_t ms)
+{
+    LPTMR0->CSR &= ~LPTMR_CSR_TEN_MASK; 
+    LPTMR0->CMR = LPTMR_CMR_COMPARE(ms);
+    LPTMR0->CSR |= LPTMR_CSR_TEN_MASK; 
+}
+
 uint32_t LPTMR_PC_QuickInit(uint32_t MAP)
 {
     uint32_t i;

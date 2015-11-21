@@ -52,6 +52,9 @@ uint8_t UART_GetChar(uint32_t instance, uint8_t *ch);
 void UART_PutChar(uint32_t instance, uint8_t ch);
 uint32_t UART_SetIntMode(uint32_t instance, UART_Int_t mode, bool val);
 uint32_t UART_SetDMAMode(uint32_t instance, UART_DMA_t mode, bool val);
+void UART_SetBaudRate(uint32_t instance, uint32_t baud);
+
+
 
 #if (CHLIB_DMA_SUPPORT == 1)
 uint32_t UART_DMASend(uint32_t instance, uint32_t dmaChl, uint8_t *buf, uint32_t len);

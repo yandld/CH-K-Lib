@@ -30,76 +30,74 @@ uint8_t gRevBuf[64];
 struct dcal_t dcal;
 int RunState;
 
-#if !defined(ONLY_EULAR)
 static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, int16_t *gyo, int16_t *mag, int32_t pressure)
 {
+
     int i;
     uint8_t sum = 0;
-    
-    buf[0] = 0x88;
-    buf[1] = 0xAF;
-    buf[2] = 28;
-    buf[3] = (acc[0])>>8;
-    buf[4] = (acc[0])>>0;
-    buf[5] = (acc[1])>>8;
-    buf[6] = (acc[1])>>0;
-    buf[7] = (acc[2])>>8;
-    buf[8] = (acc[2])>>0;
-    buf[9] = (gyo[0])>>8;
-    buf[10] = (gyo[0])>>0;
-    buf[11] = (gyo[1])>>8;
-    buf[12] = (gyo[1])>>0;
-    buf[13] = (gyo[2])>>8;
-    buf[14] = (gyo[2])>>0;
-    buf[15] = (mag[0])>>8;
-    buf[16] = (mag[0])>>0;
-    buf[17] = (mag[1])>>8;
-    buf[18] = (mag[1])>>0;
-    buf[19] = (mag[2])>>8;
-    buf[20] = (mag[2])>>0;
-    buf[21] = ((int16_t)((angle->P)*100))>>8;
-    buf[22] = ((int16_t)((angle->P)*100))>>0;
-    buf[23] = ((int16_t)((angle->R)*100))>>8;
-    buf[24] = ((int16_t)((angle->R)*100))>>0;
-    buf[25] = (int16_t)((180+(angle->Y))*10)>>8;
-    buf[26] = (int16_t)((180+(angle->Y))*10)>>0;
-    
-    buf[27] = (pressure)>>0;
-    buf[28] = (pressure)>>8;
-    buf[29] = (pressure)>>16;
-    buf[30] = (pressure)>>24;
+    if(dcal.out_data_type == 0)
+    {
+        buf[0] = 0x88;
+        buf[1] = 0xAF;
+        buf[2] = 28;
+        buf[3] = (acc[0])>>8;
+        buf[4] = (acc[0])>>0;
+        buf[5] = (acc[1])>>8;
+        buf[6] = (acc[1])>>0;
+        buf[7] = (acc[2])>>8;
+        buf[8] = (acc[2])>>0;
+        buf[9] = (gyo[0])>>8;
+        buf[10] = (gyo[0])>>0;
+        buf[11] = (gyo[1])>>8;
+        buf[12] = (gyo[1])>>0;
+        buf[13] = (gyo[2])>>8;
+        buf[14] = (gyo[2])>>0;
+        buf[15] = (mag[0])>>8;
+        buf[16] = (mag[0])>>0;
+        buf[17] = (mag[1])>>8;
+        buf[18] = (mag[1])>>0;
+        buf[19] = (mag[2])>>8;
+        buf[20] = (mag[2])>>0;
+        buf[21] = ((int16_t)((angle->P)*100))>>8;
+        buf[22] = ((int16_t)((angle->P)*100))>>0;
+        buf[23] = ((int16_t)((angle->R)*100))>>8;
+        buf[24] = ((int16_t)((angle->R)*100))>>0;
+        buf[25] = (int16_t)((180+(angle->Y))*10)>>8;
+        buf[26] = (int16_t)((180+(angle->Y))*10)>>0;
+        
+        buf[27] = (pressure)>>0;
+        buf[28] = (pressure)>>8;
+        buf[29] = (pressure)>>16;
+        buf[30] = (pressure)>>24;
 
-    for(i=0; i<30; i++)
-    {
-        sum += buf[i];
+        for(i=0; i<30; i++)
+        {
+            sum += buf[i];
+        }
+        buf[31] = sum;
+        return 32;
     }
-    buf[31] = sum;
-    return 32;
-}
-#else
-static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, int16_t *gyo, int16_t *mag, int32_t pressure)
-{
-    int i;
-    uint8_t sum = 0;
-    
-    buf[0] = 0x88;
-    buf[1] = 0xAF;
-    buf[2] = 6;
-    buf[3] = ((int16_t)((angle->P)*100))>>8;
-    buf[4] = ((int16_t)((angle->P)*100))>>0;
-    buf[5] = ((int16_t)((angle->R)*100))>>8;
-    buf[6] = ((int16_t)((angle->R)*100))>>0;
-    buf[7] = (int16_t)((180+(angle->Y))*10)>>8;
-    buf[8] = (int16_t)((180+(angle->Y))*10)>>0;
-    for(i=0; i<8; i++)
+    else
     {
-        sum += buf[i];
+        buf[0] = 0x88;
+        buf[1] = 0xAF;
+        buf[2] = 6;
+        buf[3] = ((int16_t)((angle->P)*100))>>8;
+        buf[4] = ((int16_t)((angle->P)*100))>>0;
+        buf[5] = ((int16_t)((angle->R)*100))>>8;
+        buf[6] = ((int16_t)((angle->R)*100))>>0;
+        buf[7] = (int16_t)((180+(angle->Y))*10)>>8;
+        buf[8] = (int16_t)((180+(angle->Y))*10)>>0;
+        for(i=0; i<8; i++)
+        {
+            sum += buf[i];
+        }
+        buf[9] = sum;
+        return 10; 
     }
-    buf[9] = sum;
-    return 10;
 }
 
-#endif
+
 
 int sensor_init(void)
 {
@@ -140,7 +138,7 @@ static void ShowInfo(void)
     printf("CoreClock:%dHz\r\n", GetClock(kCoreClock));
     printf("UID:0x%X\r\n", GetUID());
     printf("Reset Status Code:%d\r\n", GetResetStatus());
-    printf("User BaudRate:%d bps\r\n", dcal.baudrate);
+    
     switch(RunState)
     {
         case kPTL_REQ_MODE_9AXIS:
@@ -191,6 +189,12 @@ void HWInit(void)
     veep_init();
     veep_read((uint8_t*)&dcal, sizeof(struct dcal_t));
     dcal_init(&dcal);
+    #if defined(ONLY_EULAR)
+    dcal.out_data_type = 1;
+    #else
+    dcal.out_data_type = 0;
+    #endif
+    
     mq_init();
     
     GPIO_Init(HW_GPIOC, PIN3, kGPIO_Mode_OPP);
@@ -391,7 +395,7 @@ int main(void)
                 /* data reviecved from PC */
                 case kMSG_CMD_DATA_REV:
                 {
-
+                    dcal.out_data_type = 0;
                     len = DataRevDecode(pMsg, buf);
                     while(UART_DMAGetRemain(HW_UART0) != 0);
                     for(i=0; i<len; i++)

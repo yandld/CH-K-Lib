@@ -36,6 +36,8 @@ void dcal_print(struct dcal_t * dc)
     printf("Mag  max:%d %d %d \r\n",     dc->m_max[0], dc->m_max[1], dc->m_max[2]);
     printf("Mag  min:%d %d %d \r\n",     dc->m_min[0], dc->m_min[1], dc->m_min[2]);
     printf("data out freq:%dHz\r\n", dc->outfrq);
+    printf("User BaudRate:%d bps\r\n", dc->baudrate);
+    printf("Out Data Type:%d\r\n", dc->out_data_type);
 }
 
 void dcal_reset_mag(struct dcal_t *dc)

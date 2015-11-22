@@ -531,12 +531,11 @@ int ili9320_init(void)
             write_reg(0x02,0x0700);  //set the line inversion    
             //WR_CMD(0x03,0x1018);  //65536 colors     
             write_reg(0x03,0x1030);   
-            //??
-            #ifdef LCD_USE_HORIZONTAL
-            write_reg(0x03,(0<<5)|(0<<4)|(1<<3)|(1<<12));
-            #else
+#ifdef LCD_USE_HORIZONTAL
+            write_reg(0x03,(1<<5)|(1<<4)|(1<<3)|(1<<12));
+#else
             write_reg(0x03,(1<<5)|(1<<4)|(0<<3)|(1<<12));
-            #endif
+#endif
 
             write_reg(0x04,0x0000);   
             write_reg(0x08,0x0202);  

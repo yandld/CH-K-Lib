@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<ProjectOpt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_opt.xsd">
+<ProjectOpt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_optx.xsd">
 
   <SchemaVersion>1.0</SchemaVersion>
 
@@ -13,6 +13,7 @@
     <tExt>*.txt; *.h; *.inc</tExt>
     <pExt>*.plm</pExt>
     <CppX>*.cpp</CppX>
+    <nMigrate>0</nMigrate>
   </Extensions>
 
   <DaveTm>
@@ -31,6 +32,7 @@
         <BeepAtEnd>1</BeepAtEnd>
         <RunSim>0</RunSim>
         <RunTarget>1</RunTarget>
+        <RunAbUc>0</RunAbUc>
       </OPTTT>
       <OPTHX>
         <HexSelection>1</HexSelection>
@@ -73,57 +75,52 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>0</IsCurrentTarget>
+        <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>14</CpuCode>
       <Books>
         <Book>
           <Number>0</Number>
-          <Title>FRDM-K64F Schematics (FRDM-K64F)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\FRDM-K64F_SCH.pdf</Path>
-        </Book>
-        <Book>
-          <Number>1</Number>
           <Title>User Manual (FRDM-K64F)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\FRDMK64FUG.pdf</Path>
         </Book>
         <Book>
-          <Number>2</Number>
+          <Number>1</Number>
           <Title>Quick Start Guide (FRDM-K64F)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\FRDMK64QSG.pdf</Path>
         </Book>
         <Book>
-          <Number>3</Number>
+          <Number>2</Number>
           <Title>Quick Start Guide (TWR-K60D100M)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100MQSG.pdf</Path>
         </Book>
         <Book>
-          <Number>4</Number>
+          <Number>3</Number>
           <Title>User Manual (TWR-K60D100M)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100M_SCH.pdf</Path>
         </Book>
         <Book>
-          <Number>5</Number>
+          <Number>4</Number>
           <Title>User Manual (TWR-K60D100M)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWRK60D100MUM.pdf</Path>
         </Book>
         <Book>
-          <Number>6</Number>
+          <Number>5</Number>
           <Title>Quick Start Guide (TWR-K64F120M)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWRK64FQSG.pdf</Path>
         </Book>
         <Book>
-          <Number>7</Number>
+          <Number>6</Number>
           <Title>FRDM-K64F Web Page (FRDM-K64F)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=FRDM-K64F</Path>
         </Book>
         <Book>
-          <Number>8</Number>
+          <Number>7</Number>
           <Title>TWR-K60D100M Web Page (TWR-K60D100M)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=TWR-K60D100M</Path>
         </Book>
         <Book>
-          <Number>9</Number>
+          <Number>8</Number>
           <Title>TWR-K64F120M Web Page (TWR-K64F120M)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=TWR-K64F120M</Path>
         </Book>
@@ -148,7 +145,6 @@
         <tRtrace>1</tRtrace>
         <sRSysVw>1</sRSysVw>
         <tRSysVw>1</tRSysVw>
-        <tPdscDbg>1</tPdscDbg>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
         <nTsel>6</nTsel>
@@ -373,6 +369,7 @@
       </DebugFlag>
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
+      <bLintAuto>0</bLintAuto>
     </TargetOption>
   </Target>
 
@@ -387,6 +384,7 @@
         <BeepAtEnd>1</BeepAtEnd>
         <RunSim>0</RunSim>
         <RunTarget>1</RunTarget>
+        <RunAbUc>0</RunAbUc>
       </OPTTT>
       <OPTHX>
         <HexSelection>1</HexSelection>
@@ -431,7 +429,7 @@
         <tvExpOptDlg>0</tvExpOptDlg>
         <IsCurrentTarget>0</IsCurrentTarget>
       </OPTFL>
-      <CpuCode>0</CpuCode>
+      <CpuCode>14</CpuCode>
       <DebugOpt>
         <uSim>0</uSim>
         <uTrg>1</uTrg>
@@ -452,7 +450,6 @@
         <tRtrace>1</tRtrace>
         <sRSysVw>1</sRSysVw>
         <tRSysVw>1</tRSysVw>
-        <tPdscDbg>1</tPdscDbg>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
         <nTsel>6</nTsel>
@@ -613,6 +610,7 @@
       </DebugFlag>
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
+      <bLintAuto>0</bLintAuto>
       <SystemViewers>
         <Entry>
           <Name>System Viewer\FTFA</Name>
@@ -633,6 +631,7 @@
         <BeepAtEnd>1</BeepAtEnd>
         <RunSim>0</RunSim>
         <RunTarget>1</RunTarget>
+        <RunAbUc>0</RunAbUc>
       </OPTTT>
       <OPTHX>
         <HexSelection>1</HexSelection>
@@ -675,7 +674,7 @@
       <OPTFL>
         <tvExp>1</tvExp>
         <tvExpOptDlg>0</tvExpOptDlg>
-        <IsCurrentTarget>1</IsCurrentTarget>
+        <IsCurrentTarget>0</IsCurrentTarget>
       </OPTFL>
       <CpuCode>14</CpuCode>
       <DebugOpt>
@@ -698,7 +697,6 @@
         <tRtrace>1</tRtrace>
         <sRSysVw>1</sRSysVw>
         <tRSysVw>1</tRSysVw>
-        <tPdscDbg>1</tPdscDbg>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
         <nTsel>6</nTsel>
@@ -785,6 +783,7 @@
       </DebugFlag>
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
+      <bLintAuto>0</bLintAuto>
     </TargetOption>
   </Target>
 
@@ -858,7 +857,7 @@
 
   <Group>
     <GroupName>user</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1044,6 +1043,40 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\USBStack\port\usbd_kk.c</PathWithFileName>
       <FilenameWithoutPath>usbd_kk.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>startup_MK64F12</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>18</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\system_MK64F12.c</PathWithFileName>
+      <FilenameWithoutPath>system_MK64F12.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>19</FileNumber>
+      <FileType>2</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\startup\DeviceSupport\MDK-ARM\startup_MK64F12.s</PathWithFileName>
+      <FilenameWithoutPath>startup_MK64F12.s</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

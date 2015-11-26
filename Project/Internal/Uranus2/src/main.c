@@ -62,8 +62,8 @@ static uint32_t ano_make_packet(uint8_t *buf, attitude_t *angle, int16_t *acc, i
         buf[22] = ((int16_t)((angle->P)*100))>>0;
         buf[23] = ((int16_t)((angle->R)*100))>>8;
         buf[24] = ((int16_t)((angle->R)*100))>>0;
-        buf[25] = (int16_t)((180+(angle->Y))*10)>>8;
-        buf[26] = (int16_t)((180+(angle->Y))*10)>>0;
+        buf[25] = (int16_t)((180-(angle->Y))*10)>>8;
+        buf[26] = (int16_t)((180-(angle->Y))*10)>>0;
         
         buf[27] = (pressure)>>0;
         buf[28] = (pressure)>>8;

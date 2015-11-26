@@ -7,14 +7,14 @@
  
 /*
      实验名称：IR红外接收实验
-     实验平台：渡鸦开发板
-     板载芯片：MK60DN512ZVQ10
+     实验平台；凤凰开发板
+     板载芯片：MK64FN1MVLQ12
  实验效果：使用中断方式进行红外解码，通过串口将数据发送出去  
 */
 /* 红外引脚定义PTE28 */
-#define IR_PORT  HW_GPIOE
-#define IR_PIN   (28)
-#define IR_DATA  PEin(IR_PIN)
+#define IR_PORT  HW_GPIOB
+#define IR_PIN   (5)
+#define IR_DATA  PBin(IR_PIN)
 
 /* 红外解码数据 */
 static uint8_t InfraredExec(uint8_t * code)
@@ -63,11 +63,8 @@ void GPIO_ISR(uint32_t pinArray)
     uint8_t code[4];
     if(!InfraredExec(code))
     {
-        /* 接收成功 打印ID 蜂鸣器也响一下 */
+        /* 接收成功 打印ID */
         printf("infrared:0x%02X 0x%02X 0x%02X 0x%02X\r\n", code[0], code[1], code[2], code[3]);
-        GPIO_WriteBit(HW_GPIOA, 6, 1);
-        DelayMs(100);
-        GPIO_WriteBit(HW_GPIOA, 6, 0);
     }
     GPIO_ITDMAConfig(IR_PORT, IR_PIN, kGPIO_IT_FallingEdge, true);
 }
@@ -75,10 +72,8 @@ void GPIO_ISR(uint32_t pinArray)
 int main(void)
 {
     DelayInit();
-    GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
+    GPIO_QuickInit(HW_GPIOA, 9, kGPIO_Mode_OPP);
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    /* 初始化蜂鸣器引脚 */
-    GPIO_QuickInit(HW_GPIOA, 6, kGPIO_Mode_OPP);
     
     printf("Infrared test please press remote key...\r\n");
     
@@ -90,7 +85,7 @@ int main(void)
     
     while(1)
     {
-        GPIO_ToggleBit(HW_GPIOE, 6);
+        GPIO_ToggleBit(HW_GPIOA, 9);
         DelayMs(500);
     }
 }

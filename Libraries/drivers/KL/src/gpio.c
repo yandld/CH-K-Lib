@@ -75,7 +75,7 @@ static const IRQn_Type GPIO_IrqTbl[] =
  *         @arg kOutput  :输出功能选择
  * @retval None
  */
-void GPIO_SetPinDir(uint32_t instance, uint32_t pin, uint32_t dir)
+void inline GPIO_SetPinDir(uint32_t instance, uint32_t pin, uint32_t dir)
 {
     CLK_EN(CLKTbl, instance);
     (dir == 1) ? (GPIO_IPTbl[instance]->PDDR |= (1 << pin)):
@@ -179,7 +179,7 @@ uint32_t GPIO_Init(uint32_t instance, uint32_t pin, GPIO_Mode_t mode)
  *         @arg 1 : 高电平
  * @retval None
  */
-void GPIO_PinWrite(uint32_t instance, uint32_t pin, uint8_t data)
+void inline GPIO_PinWrite(uint32_t instance, uint32_t pin, uint8_t data)
 {
     (data) ? (GPIO_IPTbl[instance]->PSOR |= (1 << pin)):
     (GPIO_IPTbl[instance]->PCOR |= (1 << pin));

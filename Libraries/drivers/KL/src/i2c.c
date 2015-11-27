@@ -26,7 +26,8 @@ static i2c_gpio i2c;
 #define SDA_L()             GPIO_PinWrite(i2c.instace, i2c.sda, 0)
 #define SCL_H()             GPIO_PinWrite(i2c.instace, i2c.scl, 1)
 #define SCL_L()             GPIO_PinWrite(i2c.instace, i2c.scl, 0)
-#define I2C_DELAY()         
+#define SDA_IN()            GPIO_PinRead(i2c.instace, i2c.sda)
+#define I2C_DELAY()         __NOP();
 
 
 uint8_t I2C_Init(uint32_t MAP, uint32_t baudrate)
@@ -83,10 +84,6 @@ uint8_t I2C_Init(uint32_t MAP, uint32_t baudrate)
 }
 
 
-static inline uint8_t SDA_IN(void)
-{
-    return GPIO_PinRead(i2c.instace, i2c.sda);
-}
 
 static bool I2C_Start(void)
 {

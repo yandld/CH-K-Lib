@@ -211,6 +211,16 @@ void ili9320_write_pixel(int x, int y, int c)
             WR_CMD(0x0022);
             WR_DATA(c);
             break;
+        case 0x9341:
+            WR_CMD(0x2A);
+            WR_DATA(x>>8); 
+            WR_DATA(x&0XFF);
+            WR_CMD(0x2B);
+            WR_DATA(y>>8); 
+            WR_DATA(y&0XFF);
+            WR_CMD(0x2C);
+            WR_DATA(c); 
+            break;
         default:
             break;   
     }

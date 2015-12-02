@@ -27,7 +27,7 @@ void start_thread_entry(void *pdata)
     err = OSLwIP_Init();
     printf("LwIP init%d\r\n", err);
     
-    OSTaskCreate(can_thread, (void *)0, (OS_STK*)(APP_CAN_STK + sizeof(APP_CAN_STK)-1), 6);
+    OSTaskCreate(can_thread, (void *)0, &APP_CAN_STK[ARRAY_SIZE(APP_CAN_STK)-1], 6);
     udp_server();
     while(1)
     {

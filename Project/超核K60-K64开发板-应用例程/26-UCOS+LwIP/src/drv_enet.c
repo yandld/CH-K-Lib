@@ -69,6 +69,7 @@ uint32_t OSLwIP_Init(void)
     ip_addr_t fsl_netif0_ipaddr, fsl_netif0_netmask, fsl_netif0_gw;
     
     tcpip_init(NULL, NULL);
+    OSTimeDlyHMSM(0, 0, 0, 100);
     printf("tcp ip init ok!\r\n");
     
 #if LWIP_DHCP					 // DHCP

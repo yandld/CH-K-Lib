@@ -188,7 +188,7 @@ int main(void)
     /* 初始化数据端口 */
     for(i=0;i<8;i++)
     {
-        GPIO_QuickInit(HW_GPIOA, BOARD_OV7620_DATA_OFFSET+i, kGPIO_Mode_IFT);
+        GPIO_QuickInit(HW_GPIOE, BOARD_OV7620_DATA_OFFSET+i, kGPIO_Mode_IFT);
     }
     
     //DMA配置
@@ -198,7 +198,7 @@ int main(void)
     DMA_InitStruct1.minorLoopByteCnt = 1;
     DMA_InitStruct1.majorLoopCnt = ((OV7620_W/8) +1);
     
-    DMA_InitStruct1.sAddr = (uint32_t)&PTA->PDIR + BOARD_OV7620_DATA_OFFSET/8;
+    DMA_InitStruct1.sAddr = (uint32_t)&PTE->PDIR + BOARD_OV7620_DATA_OFFSET/8;
     DMA_InitStruct1.sLastAddrAdj = 0;
     DMA_InitStruct1.sAddrOffset = 0;
     DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;

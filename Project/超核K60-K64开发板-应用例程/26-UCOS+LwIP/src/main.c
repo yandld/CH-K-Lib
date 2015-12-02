@@ -42,7 +42,7 @@ void HW_Init(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
     
 #if defined(MK64F12)
-    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200); 
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200); 
 #else
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200); 
 #endif

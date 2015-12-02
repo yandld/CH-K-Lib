@@ -170,7 +170,6 @@ void sys_mbox_set_invalid(sys_mbox_t *mbox)
 
 err_t sys_sem_new(sys_sem_t * sem, u8_t count)
 {  
-	u8_t err; 
 	*sem = OSSemCreate((u16_t)count);
 	if(*sem == NULL)
     {
@@ -241,10 +240,10 @@ void sys_init(void)
 OS_STK TCPIP_THREAD_TASK_STK[1024];
 sys_thread_t sys_thread_new(const char *name, lwip_thread_fn thread, void *arg, int stacksize, int prio)
 {
-	OS_CPU_SR cpu_sr;
+	//OS_CPU_SR cpu_sr;
 	if(strcmp(name,TCPIP_THREAD_NAME) == 0)
 	{
-		OSTaskCreate(thread,arg,(OS_STK*)&TCPIP_THREAD_TASK_STK[stacksize-1],prio);//创建TCP IP内核任务 
+		OSTaskCreate(thread,arg, &TCPIP_THREAD_TASK_STK[stacksize-1], prio);
 	} 
 	return 0;
 } 

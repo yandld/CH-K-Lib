@@ -25,7 +25,7 @@
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>
-      <CLKADS>12000000</CLKADS>
+      <CLKADS>120000000</CLKADS>
       <OPTTT>
         <gFlags>1</gFlags>
         <BeepAtEnd>1</BeepAtEnd>
@@ -79,43 +79,48 @@
       <Books>
         <Book>
           <Number>0</Number>
+          <Title>Quick Start Guide (FRDM-K64F)</Title>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\FRDMK64QSG.pdf</Path>
+        </Book>
+        <Book>
+          <Number>1</Number>
           <Title>Quick Start Guide (TWR-K60D100M)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100MQSG.pdf</Path>
         </Book>
         <Book>
-          <Number>1</Number>
+          <Number>2</Number>
           <Title>User Manual (TWR-K60D100M)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWR-K60D100M_SCH.pdf</Path>
         </Book>
         <Book>
-          <Number>2</Number>
+          <Number>3</Number>
           <Title>User Manual (TWR-K60D100M)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWRK60D100MUM.pdf</Path>
         </Book>
         <Book>
-          <Number>3</Number>
+          <Number>4</Number>
           <Title>Quick Start Guide (TWR-K64F120M)</Title>
           <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWRK64FQSG.pdf</Path>
         </Book>
         <Book>
-          <Number>4</Number>
+          <Number>5</Number>
           <Title>FRDM-K64F Web Page (FRDM-K64F)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=FRDM-K64F</Path>
         </Book>
         <Book>
-          <Number>5</Number>
+          <Number>6</Number>
           <Title>TWR-K60D100M Web Page (TWR-K60D100M)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=TWR-K60D100M</Path>
         </Book>
         <Book>
-          <Number>6</Number>
+          <Number>7</Number>
           <Title>TWR-K64F120M Web Page (TWR-K64F120M)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=TWR-K64F120M</Path>
         </Book>
       </Books>
       <DllOpt>
         <SimDllName>SARMCM3.DLL</SimDllName>
-        <SimDllArguments></SimDllArguments>
+        <SimDllArguments> </SimDllArguments>
         <SimDlgDllName>DCM.DLL</SimDlgDllName>
         <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
         <TargetDllName>SARMCM3.DLL</TargetDllName>
@@ -161,70 +166,33 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>ARMRTXEVENTFLAGS</Key>
-          <Name>-L70 -Z18 -C0 -M0 -T1</Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
-          <Key>DLGTARM</Key>
-          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)</Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
-          <Key>ARMDBGFLAGS</Key>
-          <Name></Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
-          <Key>DLGUARM</Key>
-          <Name></Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
           <Key>ULP2CM3</Key>
           <Name>ULP2CM3(-O2510 -S0 -C0 -FO15 -FD20000000 -FC4000 -FN1 -FF0MK_P512 -FS00 -FL080000)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
           <Key>JL2CM3</Key>
-          <Name>-U20080643 -O14 -S2 -ZTIFSpeedSel5000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight JTAG-DP") -D00(4BA00477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC1000 -FN1 -FF0MK_P1M0.FLM -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM)</Name>
+          <Name>-U4294967295 -O78 -S0 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(4) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC1000 -FN1 -FF0MK_P1M0 -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
           <Key>UL2CM3</Key>
-          <Name>-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0MK_P1M0 -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM))</Name>
+          <Name>-U -O142 -S0 -C0 -P00 -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20000000 -FC1000 -FN1 -FF0MK_P1M0.FLM -FS00 -FL0100000 -FP0($$Device:MK64FN1M0xxx12$Flash\MK_P1M0.FLM)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>101</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>2024</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\Yandld\Desktop\CH-K-Lib\Project\瓒呮牳K64_K22鍑ゅ嚢寮€鍙戞澘_搴旂敤渚嬬▼\src\main.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\templete\../src/main.c\101</Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
       <DebugFlag>
         <trace>0</trace>
         <periodic>0</periodic>
-        <aLwin>1</aLwin>
+        <aLwin>0</aLwin>
         <aCover>0</aCover>
         <aSer1>0</aSer1>
         <aSer2>0</aSer2>
         <aPa>0</aPa>
-        <viewmode>1</viewmode>
+        <viewmode>0</viewmode>
         <vrSel>0</vrSel>
         <aSym>0</aSym>
         <aTbox>0</aTbox>
@@ -249,7 +217,7 @@
 
   <Group>
     <GroupName>startup_mk64f12</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -259,7 +227,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -275,7 +243,7 @@
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -299,10 +267,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>32</ColumnNumber>
+      <ColumnNumber>5</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>164</TopLine>
-      <CurrentLine>64</CurrentLine>
+      <TopLine>29</TopLine>
+      <CurrentLine>55</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -313,15 +281,15 @@
       <GroupNumber>2</GroupNumber>
       <FileNumber>4</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\src\image_display.c</PathWithFileName>
-      <FilenameWithoutPath>image_display.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\utilities\imu\imu_rev.c</PathWithFileName>
+      <FilenameWithoutPath>imu_rev.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -329,7 +297,7 @@
 
   <Group>
     <GroupName>drivers</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -339,7 +307,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -355,7 +323,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -371,7 +339,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -387,7 +355,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -403,7 +371,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -419,7 +387,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -435,7 +403,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -451,7 +419,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -467,7 +435,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -483,7 +451,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -499,7 +467,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -515,7 +483,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -531,7 +499,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -547,7 +515,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -563,7 +531,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -579,7 +547,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -595,7 +563,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -611,7 +579,7 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
@@ -621,67 +589,99 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
-  </Group>
-
-  <Group>
-    <GroupName>devices</GroupName>
-    <tvExp>1</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>4</GroupNumber>
+      <GroupNumber>3</GroupNumber>
       <FileNumber>23</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\devices\src\ili9320.c</PathWithFileName>
-      <FilenameWithoutPath>ili9320.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\can.c</PathWithFileName>
+      <FilenameWithoutPath>can.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>4</GroupNumber>
+      <GroupNumber>3</GroupNumber>
       <FileNumber>24</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\devices\src\ov7725.c</PathWithFileName>
-      <FilenameWithoutPath>ov7725.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\cmp.c</PathWithFileName>
+      <FilenameWithoutPath>cmp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
-  </Group>
-
-  <Group>
-    <GroupName>utilities</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>5</GroupNumber>
+      <GroupNumber>3</GroupNumber>
       <FileNumber>25</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>48501452</ColumnNumber>
+      <ColumnNumber>2954396</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>0</TopLine>
       <CurrentLine>5</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\Libraries\utilities\chgui\chgui.c</PathWithFileName>
-      <FilenameWithoutPath>chgui.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\crc.c</PathWithFileName>
+      <FilenameWithoutPath>crc.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>3</GroupNumber>
+      <FileNumber>26</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>2954396</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>5</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\dac.c</PathWithFileName>
+      <FilenameWithoutPath>dac.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>3</GroupNumber>
+      <FileNumber>27</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>2954396</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>5</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\pdb.c</PathWithFileName>
+      <FilenameWithoutPath>pdb.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>3</GroupNumber>
+      <FileNumber>28</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>2954396</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>5</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\vref.c</PathWithFileName>
+      <FilenameWithoutPath>vref.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

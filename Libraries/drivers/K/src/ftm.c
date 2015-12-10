@@ -709,6 +709,37 @@ void FTM_ITDMAConfig(uint32_t instance, FTM_ITDMAConfig_Type config, bool flag)
 }
 
 /**
+ * @brief  判断FTM某个通道是否产生中断（输入捕捉模式）
+ * @code
+ *      // 判断FTM0的0通道是否产生中断
+ *      bool flag;
+ *      flag = FTM_IsChnInterupt(HW_FTM0, HW_FTM_CH0)
+ * @endcode
+ * @param[in]  instance     模块号
+ *　　　  　    \arg HW_FTM0 FTM0模块
+ *　　　  　    \arg HW_FTM1 FTM1模块
+ *　　　  　    \arg HW_FTM2 FTM2模块
+ *　　　  　    \arg HW_FTM3 FTM3模块
+ * \attention  instance的可输入的参数视不同芯片而定，例如K60没有FTM3模块
+ * @param[in]  chl          通道
+ *　　　  　    \arg HW_FTM_CH0 通道0
+ *　　　  　    \arg HW_FTM_CH1 通道1
+ *　　　  　    \arg HW_FTM_CH2 通道2
+ *　　　  　    \arg HW_FTM_CH3 通道3
+ *　　　  　    \arg HW_FTM_CH4 通道4
+ *　　　  　    \arg HW_FTM_CH5 通道5
+ *　　　  　    \arg HW_FTM_CH6 通道6
+ *　　　  　    \arg HW_FTM_CH7 通道7
+ * \attention  chl的可输入的参数视不同芯片而定,例如FTM1模块就没有通道7
+ * @retval 0	对应通道没有产生中断
+ * @retval 1	对用通道产生中断
+ */
+bool FTM_IsChnInterupt(uint32_t instance, uint32_t chl)
+{
+    return (bool)((FTM_InstanceTable[instance]->CONTROLS[chl].CnSC & FTM_CnSC_CHF_MASK)>>FTM_CnSC_CHF_SHIFT);
+}
+
+/**
  * \brief 系统FTM0中断函数，用户无需使用
  */
 void FTM0_IRQHandler(void)
@@ -728,7 +759,7 @@ void FTM0_IRQHandler(void)
         if(FTM_InstanceTable[0]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
         {
             FTM_InstanceTable[0]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
-            break;
+            //break;
         }
     }
 }
@@ -753,7 +784,7 @@ void FTM1_IRQHandler(void)
         if(FTM_InstanceTable[1]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
         {
             FTM_InstanceTable[1]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
-            break;
+            //break;
         }
     }
 }
@@ -779,7 +810,7 @@ void FTM2_IRQHandler(void)
         if(FTM_InstanceTable[2]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
         {
             FTM_InstanceTable[2]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
-            break;
+            //break;
         }
     }
 }

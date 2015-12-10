@@ -219,6 +219,7 @@ void FTM_QD_ClearCount(uint32_t instance);
 /* IC functions */
 void FTM_IC_QuickInit(uint32_t MAP, FTM_ClockDiv_Type ps);
 void FTM_IC_SetTriggerMode(uint32_t instance, uint32_t chl, FTM_IC_Mode_Type mode);
+bool FTM_IsChnInterupt(uint32_t instance, uint32_t chl);
 /* IT & DMA config */
 void FTM_ITDMAConfig(uint32_t instance, FTM_ITDMAConfig_Type config, bool flag);
 void FTM_CallbackInstall(uint32_t instance, FTM_CallBackType AppCBFun);

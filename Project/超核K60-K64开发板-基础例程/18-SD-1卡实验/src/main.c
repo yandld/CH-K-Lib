@@ -19,7 +19,7 @@ int main(void)
     uint32_t i;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     printf("SD test\r\n");
     printf("please insert SD card...\r\n");
     //SD卡模块快速初始化，设置速度为20000000

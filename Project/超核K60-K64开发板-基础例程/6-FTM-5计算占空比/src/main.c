@@ -3,9 +3,8 @@
 #include "uart.h"
 #include "ftm.h"
 
-
 static uint32_t InputCaptureValue = 0;
-static uint32_t InputCaptureValue1 = 0;
+static uint32_t InputCaptureValue1 = 0; 
 
 static void FTM0_ISR(void)
 {

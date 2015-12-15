@@ -62,8 +62,8 @@ void PORTA_IRQHandler(void)
     mq_push(msg);
     
     counter++; 
-    counter %= 10;
-    /* 20Hz timer event */
+    counter %= 5;
+    /* 40Hz timer event */
     if(counter == 0)
     {
         msg.cmd = kMSG_CMD_TIMER;

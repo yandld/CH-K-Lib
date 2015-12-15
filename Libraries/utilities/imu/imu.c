@@ -16,8 +16,8 @@
  * Defination
  ******************************************************************************/
 #define PI             3.1415926f
-#define Kp             3.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
-#define Ki             0.0f     /* integral gain governs rate of convergence of gyroscope biases */
+#define Kp             6.0f     /* proportional gain governs rate of convergence to accelerometer/magnetometer */
+#define Ki             0.000f     /* integral gain governs rate of convergence of gyroscope biases */
 
    
 float halfT = 0.002f;

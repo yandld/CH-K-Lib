@@ -302,6 +302,8 @@ int main(void)
             {
                 /* timer event */
                 case kMSG_CMD_TIMER:
+                    mpu9250_read_mag_raw(rmdata);
+
                     if(RunState == kPTL_REQ_MODE_CAL)
                     {
                         dcal_minput(&dcal, rmdata);
@@ -320,11 +322,6 @@ int main(void)
                 case kMSG_CMD_SENSOR_DATA_READY:
                     mpu9250_read_accel_raw(radata);
                     mpu9250_read_gyro_raw(rgdata);
-                    ret = mpu9250_read_mag_raw(rmdata);
-                    if(ret && (RunState == kPTL_REQ_MODE_9AXIS))
-                    {
-                        break;
-                    }
                     
                     for(i=0; i<3; i++)
                     {

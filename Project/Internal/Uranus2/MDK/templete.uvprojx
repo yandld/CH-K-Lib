@@ -371,7 +371,7 @@
             <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>MKL26Z4 CLOCK_SETUP=0 URANUS2 CHLIB_DMA_SUPPORT=1</Define>
+              <Define>MKL26Z4 CLOCK_SETUP=0 URANUS2 CHLIB_DMA_SUPPORT=1 URANUS</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\Libraries\startup\CoreSupport;..\..\..\..\Libraries\startup\DeviceSupport;..\..\..\..\Libraries\drivers\KL\inc;..\..\..\..\Libraries\devices\inc;..\..\..\..\Libraries\utilities\board;..\..\..\..\Libraries\utilities\imu;..\..\..\..\Libraries\drivers\K\src\usb\inc;..\..\..\..\Libraries\utilities\veep;..\src</IncludePath>
             </VariousControls>

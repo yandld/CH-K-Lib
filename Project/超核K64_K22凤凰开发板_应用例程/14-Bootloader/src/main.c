@@ -10,8 +10,8 @@
 /*
 1. download this program to chip, pay attation to UART you use.
 2. open Kinetis_BootLoader.exe, reset chip, then press Connect within 2S.
-3. the App need to be linked at 0x5000, you can use 0-template as bootloader project template. swtich project option to flash_bootlaoder.
-4. then find the bin/hex file your bootloader project generaterd. then select bin file and download.
+3. the App need to be linked at 0x5000, you can use Raven Project -> 0-template as bootloader project template. swtich project option to flash_bootlaoder.
+4. then find the bin/hex file your bootloader project generaterd. then select bin file and download. the bootloader start addr is fiexd at 0x5000
 */
 
 

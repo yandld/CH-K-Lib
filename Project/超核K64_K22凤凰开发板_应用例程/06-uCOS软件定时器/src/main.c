@@ -45,12 +45,12 @@ void AppStartTask(void *pdata)
     uint8_t err;
     pdata = pdata;
 	
-		OS_ENTER_CRITICAL();
-		//安装并启动uc/os-II的时钟节拍中断
+    OS_ENTER_CRITICAL();
+    //安装并启动uc/os-II的时钟节拍中断
     SYSTICK_Init(1000*1000/OS_TICKS_PER_SEC);
     SYSTICK_ITConfig(true);
-		SYSTICK_Cmd(true);
-		OS_EXIT_CRITICAL();
+    SYSTICK_Cmd(true);
+    OS_EXIT_CRITICAL();
 	
   	/* 初始化名为“tmr1”定时器 3S后开始 以后每1000MS触发一次 */    
 	  /* OS_TMR_OPT_PERIODIC表示定时器在开始循环模式前等待第一次启动超时模式
@@ -72,12 +72,12 @@ int main(void)
     DelayInit();
     
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-		printf("OS:uc/os-II,test timer interrupt and start after three seconds\r\n");
+    printf("OS:uc/os-II,test timer interrupt and start after three seconds\r\n");
 	
-		//初始化uc/os-II
+    //初始化uc/os-II
     OSInit();
-		//创建一个起始任务，用于初始化系统和启动其他任务
-		OSTaskCreate(AppStartTask,(void *)0,
+    //创建一个起始任务，用于初始化系统和启动其他任务
+    OSTaskCreate(AppStartTask,(void *)0,
 								&APP_START_STK[TASK_STK_SIZE-1],
 								APP_START_TASK_PRIO);
     //开始任务的调度，永远不会返回

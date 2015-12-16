@@ -1,7 +1,7 @@
 #include <rtthread.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <rthw.h>
-#include "components.h"
 
     
 extern int Image$$RW_IRAM1$$ZI$$Limit;

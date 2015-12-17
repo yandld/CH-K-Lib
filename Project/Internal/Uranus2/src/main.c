@@ -376,7 +376,7 @@ int main(void)
                     {
                         ta[i] = (adata[i]*ares*1000);
                         tm[i] = (mdata[i]*mres);
-                        tg[i] = gdata[i] - gadj[i];
+                        tg[i] = (gdata[i] - gadj[i])*(gres*60);
                     }
                     
                     if(RunState != kPTL_REQ_MODE_CAL)

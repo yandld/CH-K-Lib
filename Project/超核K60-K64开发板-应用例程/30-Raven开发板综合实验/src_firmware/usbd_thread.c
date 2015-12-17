@@ -49,9 +49,14 @@ void usbd_thread(void* parameter)
     msd_msg_t msg;
     msd_mq = rt_mq_create("mq", sizeof(msd_msg_t), 10, RT_IPC_FLAG_FIFO);
     
+    rt_device_t sd = rt_device_find(MSD_DEVICE);
+    if(!sd)
+    {
+         return;  
+    }
+    
     usbd_init();
     usbd_connect(__TRUE);
-    
     while(1)
     {
         if(rt_mq_recv(msd_mq, &msg, sizeof(msd_msg_t), RT_WAITING_FOREVER) == RT_EOK)
@@ -67,7 +72,7 @@ void usbd_thread(void* parameter)
 void rt_usbd_init(void)
 {
     rt_thread_t tid;
-    tid = rt_thread_create("usbd", usbd_thread, RT_NULL, 512, 28, 20);
+    tid = rt_thread_create("usbd", usbd_thread, RT_NULL, 512, 7, 20);
     if (tid != RT_NULL) rt_thread_startup(tid);
 }
 

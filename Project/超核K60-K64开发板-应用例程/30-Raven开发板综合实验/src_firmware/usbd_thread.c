@@ -11,7 +11,7 @@ typedef struct
 rt_mq_t msd_mq;
 
 
-#define MSD_DEVICE      "sf0"
+#define MSD_DEVICE      "sd0"
 /* init */
 void usbd_msc_init (void)
 {
@@ -25,7 +25,7 @@ void usbd_msc_init (void)
     USBD_MSC_BlockSize  = geometry.block_size;
     USBD_MSC_BlockGroup = 8;
     USBD_MSC_BlockCount = geometry.sector_count;
-    USBD_MSC_BlockBuf   = rt_malloc(geometry.block_size*8);
+    USBD_MSC_BlockBuf   = rt_malloc(USBD_MSC_BlockSize*USBD_MSC_BlockGroup);
     USBD_MSC_MediaReady = __TRUE;
 }
 

@@ -73,7 +73,9 @@ void init_thread(void* parameter)
     rt_usbd_init();
     sntp_init();
     ftpd_start();
+    ir_init();
     
+    /* boot app */
     if((*(uint32_t*)0x32000) < 0x100000)
     {
         void *app_addr = ((void*)0x32000);

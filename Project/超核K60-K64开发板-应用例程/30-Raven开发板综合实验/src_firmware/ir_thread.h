@@ -4,12 +4,7 @@
 #include <stdint.h>
 
 
-#define IR_MQ_NAME      "ir_mq"
 
-typedef struct
-{
-    uint8_t data[4];
-}ir_msg;
 
 
 

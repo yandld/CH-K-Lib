@@ -10,6 +10,7 @@
       <TargetName>mk60d10</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060020::V5.06 (build 20)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
           <Device>MK60DN512xxx10</Device>
@@ -362,7 +363,7 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
+            <uC99>1</uC99>
             <useXO>0</useXO>
             <v6Lang>0</v6Lang>
             <v6LangP>0</v6LangP>
@@ -513,6 +514,26 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>bl_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\bl_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>bl_bsp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\bl_bsp.h</FilePath>
+            </File>
+            <File>
+              <FileName>bl_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\bl_cfg.h</FilePath>
+            </File>
+            <File>
+              <FileName>bl_core.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\bl_core.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1150,6 +1171,26 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>bl_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\bl_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>bl_bsp.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\bl_bsp.h</FilePath>
+            </File>
+            <File>
+              <FileName>bl_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\bl_cfg.h</FilePath>
+            </File>
+            <File>
+              <FileName>bl_core.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\bl_core.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -4,18 +4,23 @@
 
 #include "bl_core.h"
 
-void bl_hw_if_write(const uint8_t *buf, uint32_t len)
+uint8_t bl_hw_if_read_byte(void)
 {
-    while(len--)
+    return getchar();
+}
+
+
+void bl_hw_if_write(const uint8_t *buffer, uint32_t length)
+{
+    while(length--)
     {
-        UART_WriteByte(0, *buf++);
+        UART_WriteByte(0, *buffer++);
     }
 }
 
-static void UART_RX_ISR(uint16_t byteReceived)
-{
-    bootloader_data_sink(byteReceived);
-}
+/* 
+blhost.exe -p COM52 ,115200 -- get-property 1
+*/
 
 int main(void)
 {
@@ -25,8 +30,7 @@ int main(void)
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
 
     instance = UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-    UART_CallbackRxInstall(HW_UART0, UART_RX_ISR);
-    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
+
 
   //  bl_hw_init();
     

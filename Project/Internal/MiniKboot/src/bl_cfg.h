@@ -1,6 +1,8 @@
 #ifndef __BL_CFG_H__
 #define __BL_CFG_H__
 
+#include "common.h"
+
 /* Base address of user application */
 #define APPLICATION_BASE                    0x5000UL
 /* UART Buadrate */
@@ -12,7 +14,7 @@
  *
  ****************************************************/
 /* Flash sector size */
-#define BL_FLASH_SECTOR_SIZE    4096
+#define TARGET_FLASH_SECTOR_SIZE    4096
 /* Flash total size */
 #define TARGET_FLASH_SIZE       1024*1024u
 /* SRAM start address */

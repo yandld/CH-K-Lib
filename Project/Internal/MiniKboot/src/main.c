@@ -3,6 +3,7 @@
 #include "uart.h"
 
 #include "bl_core.h"
+#include "bl_cfg.h"
 
 uint8_t bl_hw_if_read_byte(void)
 {
@@ -22,6 +23,20 @@ void bl_hw_if_write(const uint8_t *buffer, uint32_t length)
 blhost.exe -p COM52 ,115200 -- get-property 1
 */
 
+ bool stay_in_bootloader(void)
+{
+    uint32_t *vectorTable = (uint32_t*)APPLICATION_BASE;
+    uint32_t pc = vectorTable[1];
+    if (pc < APPLICATION_BASE || pc > TARGET_FLASH_SIZE)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    } 
+}
+
 int main(void)
 {
     uint32_t instance; /*´æ·Å UART µÄÄ£¿éºÅ */
@@ -34,13 +49,13 @@ int main(void)
 
   //  bl_hw_init();
     
-  //  if (stay_in_bootloader())
+    if (stay_in_bootloader())
     {
         bootloader_run();
     }
- //   else
+    else
     {
-  //      application_run();
+        application_run();
     }
     
     // Should never reach here.

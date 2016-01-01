@@ -2,8 +2,6 @@
 #include "bl_core.h"
 #include "bl_cfg.h"
 
-#include "common.h"
-
 /*
 *
 *  Definitions
@@ -135,6 +133,8 @@ typedef struct
 #define FTFx_FSTAT_ACCERR_MASK      0x20u
 #define FTFx_FSTAT_FPVIOL_MASK      0x10u
 #define FTFx_FSTAT_MGSTAT0_MASK     0x01u
+#define FTFx_FSEC_SEC_MASK          0x03u
+
 
 volatile uint32_t* const kFCCOBx =
 #if defined(FTFE)
@@ -145,12 +145,17 @@ volatile uint32_t* const kFCCOBx =
 (volatile uint32_t*)&FTFA->FCCOB3;
 #endif
 
+const uint8_t s_flash_command_run[] = 
+    {0x00, 0xB5, 0x80, 0x21, 0x01, 0x70, 0x01, 0x78, 0x09, 0x06, 0xFC, 0xD5,0x00, 0xBD};
+static uint32_t s_flash_ram_function[8];
 typedef void (*flash_run_entry_t)(volatile uint8_t *reg);
+flash_run_entry_t s_flash_run_entry;
 static status_t flash_program(uint32_t start, uint32_t *src, uint32_t length);
 static status_t flash_erase(uint32_t start, uint32_t length);
 #if BL_FEATURE_VERIFY
-statis status_t flash_verify_program(uint32_t start, const uint32_t *expectedData, uint32_t length);
+static status_t flash_verify_program(uint32_t start, const uint32_t *expectedData, uint32_t length);
 #endif
+static void flash_init(void);
 
 /*****************************************************************************************
 
@@ -175,13 +180,13 @@ uint16_t calculate_crc(serial_packet_t *packet);
 /*
 *   Local functions
 */
-static void application_run(void);
- uint32_t align_down(uint32_t data, uint32_t base)
+void application_run(void);
+__STATIC_INLINE uint32_t align_down(uint32_t data, uint32_t base)
 {
     return (data & ~(base-1));
 }
 
- uint32_t align_up(uint32_t data, uint32_t base)
+__STATIC_INLINE uint32_t align_up(uint32_t data, uint32_t base)
 {
     return align_down(data + base - 1, base);
 }
@@ -342,14 +347,14 @@ static status_t serial_packet_read(uint8_t packetType)
 //int main(void)
 //{
 //    hardware_init();
-//    uart_init();
-//   // if (stay_in_bootloader())
+//    
+//    if (stay_in_bootloader())
 //    {
 //        bootloader_run();
 //    }
-//  //  else
+//    else
 //    {
-//  //      application_run();
+//        application_run();
 //    }
 
 //    // Should never reach here.
@@ -398,6 +403,10 @@ status_t serial_packet_write(void)
     return kStatus_Fail;
 }
 
+#if BL_FEATURE_FLASH_SECURITY_DISABLE
+    
+#endif
+
 static status_t handle_get_property(void)
 {
     get_property_packet_t *getPropertyPkt = (get_property_packet_t*)&s_readPacket.payload[0];
@@ -423,6 +432,9 @@ static status_t handle_get_property(void)
     case kPropertyTag_FlashSizeInBytes:
         packet->propertyValue[0] = TARGET_FLASH_SIZE;
         break;
+    case kPropertyTag_FlashSectorSize:
+        packet->propertyValue[0] = TARGET_FLASH_SECTOR_SIZE;
+        break;
     case kPropertyTag_AvailableCommands:
         packet->propertyValue[0] = kCommandTag_FlashEraseRegion |
             kCommandTag_WriteMemory |
@@ -439,11 +451,17 @@ static status_t handle_get_property(void)
         packet->propertyValue[2] = 0x20000000;
         packet->propertyValue[3] = 0x200003FF;
         break;
+    case kPropertyTag_ValidateRegions:
+        packet->propertyValue[0] = 1;
+        break;
     case kPropertyTag_RAMStartAddress:
         packet->propertyValue[0] = TARGET_RAM_START;
         break;
     case kPropertyTag_RAMSizeInBytes:
         packet->propertyValue[0] = TARGET_RAM_SIZE;
+        break;
+    case kPropertyTag_SystemDeviceId:
+        packet->propertyValue[0] = SIM->SDID;
         break;
     case kPropertyTag_FlashSecurityState:
         packet->propertyValue[0] = 0;
@@ -471,6 +489,20 @@ status_t send_generic_response(uint32_t commandTag, uint32_t status)
     return serial_packet_write();
 }
 
+void flash_init(void)
+{
+    uint32_t i;
+    uint8_t *ram_func_start = (uint8_t*)&s_flash_ram_function[0];
+    
+    for(i=0; i<sizeof(s_flash_command_run); i++)
+    {
+        *ram_func_start++ = s_flash_command_run[i];
+    }
+    
+    s_flash_run_entry = (flash_run_entry_t)((uint32_t)s_flash_ram_function + 1);
+}
+
+    
 
 status_t flash_command_sequence(void)
 {
@@ -479,10 +511,7 @@ status_t flash_command_sequence(void)
     FTFx->FSTAT = (FTFx_FSTAT_RDCOLERR_MASK | FTFx_FSTAT_ACCERR_MASK | FTFx_FSTAT_FPVIOL_MASK);
     
     __disable_irq();
-    FTFx->FSTAT = FTFx_FSTAT_CCIF_MASK;
-    while(!(FTFx->FSTAT & FTFx_FSTAT_CCIF_MASK))
-    {
-    }
+    s_flash_run_entry(&FTFx->FSTAT);
     __enable_irq();
     
     fstat = FTFx->FSTAT;
@@ -519,8 +548,8 @@ status_t flash_erase(uint32_t start, uint32_t length)
     uint32_t alignedStart;
     uint32_t alignedLength;
     status_t status = kStatus_Success;
-    alignedStart = align_down(start, BL_FLASH_SECTOR_SIZE);
-    alignedLength = align_up(start - alignedStart + length, BL_FLASH_SECTOR_SIZE) >> 2;
+    alignedStart = align_down(start, TARGET_FLASH_SECTOR_SIZE);
+    alignedLength = align_up(start - alignedStart + length, TARGET_FLASH_SECTOR_SIZE) >> 2;
     
     while(alignedLength)
     {
@@ -531,8 +560,8 @@ status_t flash_erase(uint32_t start, uint32_t length)
         {
             break;
         }
-        alignedStart += BL_FLASH_SECTOR_SIZE;
-        alignedLength -= BL_FLASH_SECTOR_SIZE;
+        alignedStart += TARGET_FLASH_SECTOR_SIZE;
+        alignedLength -= (TARGET_FLASH_SECTOR_SIZE >> 2);
     }
 
     return status;
@@ -546,7 +575,7 @@ static status_t flash_verify_program(uint32_t start, const uint32_t *expectedDat
     {
         kFCCOBx[0] = start;
         FTFx->FCCOB0 = FTFx_PROGRAM_CHECK;
-        FTFx->FCCOB4 = 0; // 0-Normal, 1-User, 2-Factory
+        FTFx->FCCOB4 = 1; // 0-Normal, 1-User, 2-Factory
         kFCCOBx[2] = *expectedData;
         
         status = flash_command_sequence();
@@ -568,7 +597,7 @@ static status_t flash_verify_program(uint32_t start, const uint32_t *expectedDat
 static status_t flash_program(uint32_t start, uint32_t *src, uint32_t length)
 {
     status_t status = kStatus_Success;
-    uint8_t *byteSrcStart = (uint8_t*)src;
+    uint8_t *byteSrcStart;
     uint32_t i;
 #if BL_FEATURE_PROGRAM_PHASE
     uint8_t alignmentSize = 8;
@@ -596,6 +625,7 @@ static status_t flash_program(uint32_t start, uint32_t *src, uint32_t length)
         {
             if (length < alignmentSize)
             {
+                byteSrcStart = (uint8_t*)src;
                 for(i=length; i<alignmentSize; i++)
                 {
                     byteSrcStart[i] = 0xFF;
@@ -722,7 +752,7 @@ void bootloader_run(void)
     command_packet_t *commandPkt;
     status_t status;
     bool hasMoreData = false;
-    
+    flash_init();
     while(1)
     {
         // Read data from host

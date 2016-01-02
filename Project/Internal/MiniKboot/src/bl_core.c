@@ -82,7 +82,7 @@ typedef struct
 typedef struct
 {
     command_state_t state;
-
+    bool isActive;
     uint8_t *data;
     uint32_t address;
     uint32_t count;
@@ -746,12 +746,17 @@ static status_t handle_data_phase(bool *hasMoreData)
     return kStatus_Success;
 }
 
+bool bootloader_isActive(void)
+{
+    return bl_ctx.isActive;
+}
 
 void bootloader_run(void)
 {
     command_packet_t *commandPkt;
     status_t status;
     bool hasMoreData = false;
+    bl_ctx.isActive = false;
     flash_init();
     while(1)
     {
@@ -761,6 +766,10 @@ void bootloader_run(void)
         if (status != kStatus_Success)
         {
             continue;
+        }
+        else
+        {
+            bl_ctx.isActive = true;
         }
 
         switch(bl_ctx.state)

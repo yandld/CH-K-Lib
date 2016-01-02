@@ -131,10 +131,6 @@
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
           <Key>ULP2CM3</Key>
           <Name>ULP2CM3(-O2510 -S0 -C0 -FO15 -FD20000000 -FC4000 -FN1 -FF0MK_P512 -FS00 -FL080000)</Name>
         </SetRegEntry>
@@ -326,26 +322,16 @@
       <Books>
         <Book>
           <Number>0</Number>
-          <Title>User Manual (TWR-K60D100M)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWRK60D100MUM.pdf</Path>
-        </Book>
-        <Book>
-          <Number>1</Number>
-          <Title>Quick Start Guide (TWR-K64F120M)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_K60_DFP\1.2.0\Documents\TWRK64FQSG.pdf</Path>
-        </Book>
-        <Book>
-          <Number>2</Number>
           <Title>FRDM-K64F Web Page (FRDM-K64F)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=FRDM-K64F</Path>
         </Book>
         <Book>
-          <Number>3</Number>
+          <Number>1</Number>
           <Title>TWR-K60D100M Web Page (TWR-K60D100M)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=TWR-K60D100M</Path>
         </Book>
         <Book>
-          <Number>4</Number>
+          <Number>2</Number>
           <Title>TWR-K64F120M Web Page (TWR-K64F120M)</Title>
           <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=TWR-K64F120M</Path>
         </Book>
@@ -388,6 +374,10 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z18 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -400,10 +390,6 @@
           <Number>0</Number>
           <Key>ARMDBGFLAGS</Key>
           <Name></Name>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
-          <Key>DLGUARM</Key>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -427,7 +413,7 @@
           <Type>0</Type>
           <LineNumber>552</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2774</Address>
+          <Address>2850</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -657,6 +643,19 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\common.c</PathWithFileName>
       <FilenameWithoutPath>common.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>13</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\..\Libraries\drivers\K\src\systick.c</PathWithFileName>
+      <FilenameWithoutPath>systick.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

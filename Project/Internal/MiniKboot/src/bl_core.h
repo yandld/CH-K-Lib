@@ -136,8 +136,8 @@ typedef struct WriteMemoryPacket
 
 void bootloader_data_sink(uint8_t byte);
 void bootloader_run(void);
-
-
+void application_run(void);
+bool bootloader_isActive();
 
 
 

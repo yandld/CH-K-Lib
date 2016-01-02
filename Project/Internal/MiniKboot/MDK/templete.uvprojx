@@ -555,6 +555,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
             </File>
+            <File>
+              <FileName>systick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -1107,6 +1112,11 @@
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\Libraries\drivers\K\src\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>systick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\Libraries\drivers\K\src\systick.c</FilePath>
             </File>
           </Files>
         </Group>

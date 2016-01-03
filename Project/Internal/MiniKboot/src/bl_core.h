@@ -2,7 +2,7 @@
 #define __BL_CORE_H__
 
 #include <stdint.h>
-
+#include <stdbool.h>
 
 //! @brief Commands codes.
 enum _command_tags {
@@ -133,12 +133,14 @@ typedef struct WriteMemoryPacket
 } write_memory_packet_t;
 
 
-
-void bootloader_data_sink(uint8_t byte);
 void bootloader_run(void);
 void application_run(void);
-bool bootloader_isActive();
+bool bootloader_isActive(void);
+bool IsAppAddrValidate(void);
 
+/* low level interface */
+void bl_hw_if_write(const uint8_t *buffer, uint32_t length);
+uint8_t bl_hw_if_read_byte(void);
 
 
 #endif // __BL_CORE_H__

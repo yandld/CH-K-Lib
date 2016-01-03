@@ -1,4 +1,3 @@
-#include "bl_bsp.h"
 #include "bl_core.h"
 #include "bl_cfg.h"
 
@@ -746,6 +745,7 @@ static status_t handle_data_phase(bool *hasMoreData)
     return kStatus_Success;
 }
 
+
 bool bootloader_isActive(void)
 {
     return bl_ctx.isActive;
@@ -806,6 +806,21 @@ void bootloader_run(void)
     }
 }
 
+bool IsAppAddrValidate(void)
+{
+    uint32_t *vectorTable = (uint32_t*)APPLICATION_BASE;
+    uint32_t pc = vectorTable[1];
+    
+    if (pc < APPLICATION_BASE || pc > TARGET_FLASH_SIZE)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    } 
+}
+
 void application_run(void)
 {
     typedef void(*app_entry_t)(void);
@@ -829,6 +844,7 @@ void application_run(void)
     // Should never reach here.
     __NOP();
 }
+
 
 void HardFault_Handler(void)
 {

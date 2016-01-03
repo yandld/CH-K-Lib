@@ -6,12 +6,20 @@
 #include "bl_core.h"
 #include "bl_cfg.h"
 
+static bool jump = false;
 
 uint8_t bl_hw_if_read_byte(void)
 {
-    return getchar();
+    uint16_t ch;
+    while(UART_ReadByte(0, &ch))
+    {
+        if(jump == true)
+        {
+            application_run();
+        }
+    }
+    return (ch & 0xFF);
 }
-
 
 void bl_hw_if_write(const uint8_t *buffer, uint32_t length)
 {
@@ -25,51 +33,32 @@ void bl_hw_if_write(const uint8_t *buffer, uint32_t length)
 blhost.exe -p COM52 ,115200 -- get-property 1
 */
 
- bool IsAppAddrOK(void)
-{
-    uint32_t *vectorTable = (uint32_t*)APPLICATION_BASE;
-    uint32_t pc = vectorTable[1];
-    
-    if (pc < APPLICATION_BASE || pc > TARGET_FLASH_SIZE)
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    } 
-}
-
 int main(void)
 {
-    int i, ch;
-    uint32_t instance; /*´æ·Å UART µÄÄ£¿éºÅ */
     DelayInit();
     DelayMs(10);
-    SYSTICK_Init(5000*1000);
+    SYSTICK_Init(100*1000);
     SYSTICK_ITConfig(true);
     SYSTICK_Cmd(true);
-    instance = UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
-  //  bl_hw_init();
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     while(1)
     {
-        
         bootloader_run();
     }
-
 }
 
 void SysTick_Handler(void)
 {
     static int timeout;
-    if((bootloader_isActive() == false) && (IsAppAddrOK() == true) && (timeout > 2))
-    {
-        application_run();
-    }
+    
     if(timeout > 2)
     {
         SYSTICK_ITConfig(false);
+        if((bootloader_isActive() == false) && (IsAppAddrValidate() == true))
+        {
+            jump = true;
+        }
     }
     timeout++;
 }

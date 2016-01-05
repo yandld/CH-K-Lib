@@ -119,12 +119,15 @@ typedef struct
 #if defined (FTFE)
 #define FTFx    FTFE
 #define BL_FEATURE_PROGRAM_PHASE    1
+#define TARGET_FLASH_SECTOR_SIZE    4096
 #elif defined (FTFL)
 #define FTFx    FTFL
 #define BL_FEATURE_PROGRAM_PHASE    0
+#define TARGET_FLASH_SECTOR_SIZE    2048
 #elif defined (FTFA)
 #define FTFx    FTFA
 #define BL_FEATURE_PROGRAM_PHASE    0
+#define TARGET_FLASH_SECTOR_SIZE    1024
 #endif //
 
 #define FTFx_FSTAT_CCIF_MASK        0x80u

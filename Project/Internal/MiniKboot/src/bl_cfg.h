@@ -13,8 +13,6 @@
  *    Target specific attributes
  *
  ****************************************************/
-/* Flash sector size */
-#define TARGET_FLASH_SECTOR_SIZE    4096
 /* Flash total size */
 #define TARGET_FLASH_SIZE       1024*1024u
 /* SRAM start address */

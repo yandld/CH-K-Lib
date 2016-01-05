@@ -837,7 +837,9 @@ void application_run(void)
     // Change MSP and PSP
     __set_MSP(s_stackPointer);
     __set_PSP(s_stackPointer);
-
+    
+    SCB->VTOR = APPLICATION_BASE;
+    
     // Jump to application
     s_application();
 

@@ -239,9 +239,6 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf);
 
 int main(void)
 {
-#if defined(BOOTLOADER)
-    SCB->VTOR = 0x5000;
-#endif
     
     int i;
     int16_t ta[3], tg[3], tm[3];
@@ -472,6 +469,9 @@ uint32_t DataRevDecode(msg_t *pMsg, uint8_t *buf)
             dcal.baudrate = (pMsg->payload[2]<<24) + (pMsg->payload[3]<<16) + (pMsg->payload[4]<<8) + (pMsg->payload[5]<<0);
             UART_SetBaudRate(HW_UART0, dcal.baudrate);
             LPTMR_SetTime((1000/dcal.outfrq) -1 );
+            break;
+        case kPTL_REQ_RESET:
+            SystemSoftReset();
             break;
     }
     return len;

@@ -26,6 +26,7 @@ enum
     kPTL_REQ_MODE_6AXIS,
     kPTL_REQ_MODE_9AXIS,
     kPTL_REQ_MODE_CAL,
+    kPTL_REQ_RESET,
 };
 
 

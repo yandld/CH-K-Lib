@@ -205,6 +205,10 @@ uint8_t UART_GetChar(uint32_t instance, uint8_t *ch)
         *ch = (uint8_t)(UARTx->D);	
         return 0; 		  
     }
+    if(UARTx->S1 & UART_S1_OR_MASK)
+    {
+        UARTx->S1 |= UART_S1_OR_MASK;
+    }
     return 1;
 }
 

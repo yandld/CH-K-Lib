@@ -325,6 +325,27 @@ uint32_t GetUID(void)
     return SIM->UIDL ^ SIM->UIDML ^ SIM->UIDMH;
 }
 
+/**
+ * @brief  Systick set interrupt mode
+ * @param  val: enable control
+ * @retval None
+ */
+void SysTick_SetIntMode(bool val)
+{
+    (true == val)?(SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk):(SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk);
+}
+    
+/**
+ * @brief  Systick set time
+ * @param  us
+ * @retval None
+ */
+void SysTick_SetTime(uint32_t us)
+{
+    ((us*fac_us) > 0xFFFFFF)?(SysTick->LOAD = 0xFFFFFF):(SysTick->LOAD = us*fac_us);
+    SysTick->VAL = 0;
+    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk | SysTick_CTRL_CLKSOURCE_Msk;
+}
 
 void NMI_Handler(void)
 {

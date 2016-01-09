@@ -3730,7 +3730,7 @@ typedef struct {
   __IO uint8_t BDL;                                /**< UART Baud Rate Register: Low, offset: 0x1 */
   __IO uint8_t C1;                                 /**< UART Control Register 1, offset: 0x2 */
   __IO uint8_t C2;                                 /**< UART Control Register 2, offset: 0x3 */
-  __I  uint8_t S1;                                 /**< UART Status Register 1, offset: 0x4 */
+  __IO  uint8_t S1;                                 /**< UART Status Register 1, offset: 0x4 */
   __IO uint8_t S2;                                 /**< UART Status Register 2, offset: 0x5 */
   __IO uint8_t C3;                                 /**< UART Control Register 3, offset: 0x6 */
   __IO uint8_t D;                                  /**< UART Data Register, offset: 0x7 */

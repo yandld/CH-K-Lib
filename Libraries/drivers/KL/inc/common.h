@@ -151,6 +151,8 @@ void SetConsole(int (*putc)(uint8_t ch), int (*getc)(void));
 void EnterWaitMode(bool enSleepOnExit);
 uint32_t GetUID(void);
 uint32_t GetResetStatus(void);
+void SysTick_SetIntMode(bool val);
+void SysTick_SetTime(uint32_t us);
 
 #endif
 

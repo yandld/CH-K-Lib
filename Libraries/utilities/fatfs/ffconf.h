@@ -37,11 +37,11 @@
 /* To enable string functions, set _USE_STRFUNC to 1 or 2. */
 
 
-#define	_USE_MKFS		1	/* 0:Disable or 1:Enable */
+#define	_USE_MKFS		0	/* 0:Disable or 1:Enable */
 /* To enable f_mkfs() function, set _USE_MKFS to 1 and set _FS_READONLY to 0 */
 
 
-#define	_USE_FASTSEEK	1	/* 0:Disable or 1:Enable */
+#define	_USE_FASTSEEK	0	/* 0:Disable or 1:Enable */
 /* To enable fast seek feature, set _USE_FASTSEEK to 1. */
 
 
@@ -57,7 +57,7 @@
 / Locale and Namespace Configurations
 /---------------------------------------------------------------------------*/
 
-#define _CODE_PAGE	936
+#define _CODE_PAGE	1
 /* The _CODE_PAGE specifies the OEM code page to be used on the target system.
 /  Incorrect setting of the code page can cause a file open failure.
 /
@@ -112,7 +112,7 @@
 /  functions. */
 
 
-#define _STRF_ENCODE	3	/* 0:ANSI/OEM, 1:UTF-16LE, 2:UTF-16BE, 3:UTF-8 */
+#define _STRF_ENCODE	0	/* 0:ANSI/OEM, 1:UTF-16LE, 2:UTF-16BE, 3:UTF-8 */
 /* When Unicode API is enabled by _LFN_UNICODE option, this option selects the character
 /  encoding on the file to be read/written via string I/O functions, f_gets(), f_putc(),
 /  f_puts and f_printf(). This option has no effect when Unicode API is not enabled. */
@@ -132,7 +132,7 @@
 / Drive/Volume Configurations
 /---------------------------------------------------------------------------*/
 
-#define _VOLUMES	2
+#define _VOLUMES	4
 /* Number of volumes (logical drives) to be used. */
 
 
@@ -152,7 +152,7 @@
 
 
 #define	_MIN_SS		512
-#define	_MAX_SS		4096
+#define	_MAX_SS		512
 /* These options configure the sector size to be supported. (512, 1024, 2048 or 4096)
 /  Always set both 512 for most systems, all memory card and hard disk. But a larger
 /  value may be required for on-board flash memory and some type of optical media.

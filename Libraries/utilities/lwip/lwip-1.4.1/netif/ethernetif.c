@@ -60,8 +60,8 @@
 #define IFNAME0 'e'
 #define IFNAME1 'n'
 
-__align(4) static uint8_t gTxBuf[1520];
-__align(4) static uint8_t gRxBuf[1520];
+__align(8) static uint8_t gTxBuf[1520];
+__align(8) static uint8_t gRxBuf[1520];
 
 /**
  * Helper struct to hold private data used to operate your ethernet interface.

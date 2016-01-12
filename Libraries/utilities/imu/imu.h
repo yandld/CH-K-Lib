@@ -29,4 +29,5 @@ typedef struct
 //!< API functions
 uint32_t imu_get_euler_angle(float *adata, float *gdata, float *mdata, attitude_t *angle);
 extern float halfT;
+extern float sampleFreq;
 #endif

@@ -134,7 +134,8 @@ void MadgwickAHRSupdate(float gx,float gy,float gz,float ax,float ay,float az,fl
 	float hx, hy, bx, bz;
 	float halfvx, halfvy, halfvz, halfwx, halfwy, halfwz;
 	float halfex, halfey, halfez;
-	float qa, qb, qc;
+	float qa, qb, qc, qd;
+	float deltaTheta;
 
 	// Use IMU algorithm if magnetometer measurement invalid (avoids NaN in magnetometer normalisation)
 	if((mx == 0.0f) && (my == 0.0f) && (mz == 0.0f)) {
@@ -212,16 +213,31 @@ void MadgwickAHRSupdate(float gx,float gy,float gz,float ax,float ay,float az,fl
 	}
 
 	// Integrate rate of change of quaternion
-	gx *= (0.5f * (1.0f / sampleFreq));		// pre-multiply common factors
-	gy *= (0.5f * (1.0f / sampleFreq));
-	gz *= (0.5f * (1.0f / sampleFreq));
+//	gx *= (0.5f * (1.0f / sampleFreq));		// pre-multiply common factors
+//	gy *= (0.5f * (1.0f / sampleFreq));
+//	gz *= (0.5f * (1.0f / sampleFreq));
+//	qa = q0;
+//	qb = q1;
+//	qc = q2;
+//	q0 += (-qb * gx - qc * gy - q3 * gz);
+//	q1 += (qa * gx + qc * gz - q3 * gy);
+//	q2 += (qa * gy - qb * gz + q3 * gx);
+//	q3 += (qa * gz + qb * gy - qc * gx);
+	
+	gx *= (0.5f * (1.0f / sampleFreq));		// half delatThetaX
+	gy *= (0.5f * (1.0f / sampleFreq));		// half delatThetaY
+	gz *= (0.5f * (1.0f / sampleFreq));		// half delatThetaZ
+	deltaTheta = (gx*gx + gy*gy + gz*gz)/2.0;	// 1/8*square of deltaTheta
+	/* store the last value */
 	qa = q0;
 	qb = q1;
 	qc = q2;
-	q0 += (-qb * gx - qc * gy - q3 * gz);
-	q1 += (qa * gx + qc * gz - q3 * gy);
-	q2 += (qa * gy - qb * gz + q3 * gx);
-	q3 += (qa * gz + qb * gy - qc * gx);
+	qd = q3;
+	/* 2nd order approximation */
+	q0 = qa*(1 - deltaTheta) + (-qb * gx - qc * gy - qd * gz);
+	q1 = qb*(1 - deltaTheta) + ( qa * gx + qc * gz - qd * gy);
+	q2 = qc*(1 - deltaTheta) + ( qa * gy - qb * gz + qd * gx);
+	q3 = qd*(1 - deltaTheta) + ( qa * gz + qb * gy - qc * gx);
 
 	// Normalise quaternion
 	recipNorm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);

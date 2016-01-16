@@ -157,6 +157,15 @@ typedef enum
 #define CLK_DIS(t, x)              (*((uint32_t*) t[x].addr) &= ~t[x].mask)
 #define REG_GET(t, x)              ((*(uint32_t*) t[x].addr & t[x].mask)>>t[x].shift)
 
+enum
+{
+    CH_OK,
+    CH_ERR,
+    CH_TIMEOUT,
+    CH_OVERFLOW,
+    CH_BUSY,
+};
+
 /**
  * \struct map_t
  * \brief QuickInitType

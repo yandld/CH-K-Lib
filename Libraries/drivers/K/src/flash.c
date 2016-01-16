@@ -51,16 +51,28 @@
 #define FTF    FTFA
 #endif
 
+
+volatile uint8_t s_flash_command_run[] = {0x00, 0xB5, 0x80, 0x21, 0x01, 0x70, 0x01, 0x78, 0x09, 0x06, 0xFC, 0xD5,0x00, 0xBD};
+typedef void (*flash_run_entry_t)(volatile uint8_t *reg);
+flash_run_entry_t s_flash_run_entry;
+    
+
+    
 static inline uint8_t FlashCmdStart(void)
 {
     /* clear command result flags */
     FTF->FSTAT = ACCERR | FPVIOL;
-    FTF->FSTAT = CCIF;
-    while(!(FTF->FSTAT & CCIF));
-    if(FTF->FSTAT & (ACCERR | FPVIOL | MGSTAT0)) return FLASH_ERROR;
-    return FLASH_OK;
+    s_flash_run_entry = (flash_run_entry_t)((uint32_t)s_flash_command_run + 1);
+    s_flash_run_entry(&FTF->FSTAT);
+    
+    if(FTF->FSTAT & (ACCERR | FPVIOL | MGSTAT0)) return CH_ERR;
+    return CH_OK;
 }
 
+ /**
+ * @brief  get flash sector size
+ * @retval flash sector size
+ */
 uint32_t FLASH_GetSectorSize(void)
 {
     return SECTOR_SIZE;
@@ -160,53 +172,77 @@ uint8_t FLASH_WriteSector(uint32_t addr, const uint8_t *buf, uint32_t len)
         ret = FlashCmdStart();
         __enable_irq();
         
-		if(FLASH_OK != ret) 
+		if(CH_OK != ret) 
         {
-            return FLASH_ERROR;
+            return CH_ERR;
         }
     }
-    return FLASH_OK;
+    return CH_OK;
 }
 
-static uint8_t buf[SECTOR_SIZE];
 
-uint32_t FLASH_Test(uint32_t startAddr, uint32_t len)
+uint32_t FLASH_SetcorTest(uint32_t addr)
 {
-    int addr, i,err;
-    
+    uint32_t ret, i,j;
     uint8_t *p;
-
-    FLASH_Init();
+    ALIGN(8) uint8_t buf[32];
     
-    for(i=0;i<SECTOR_SIZE;i++)
+    LIB_TRACE("program addr:0x%X(%dKB) ...", addr, addr/1024);
+    ret = FLASH_EraseSector(addr);
+    
+    for(i=0; i<sizeof(buf); i++)
     {
         buf[i] = i % 0xFF;
     }
     
-    for (addr = startAddr; addr<len; addr+=SECTOR_SIZE)
+    for(i=0; i<(SECTOR_SIZE/sizeof(buf)); i++)
     {
-        LIB_TRACE("program addr:0x%X ...", addr);
-        err = FLASH_EraseSector(addr);
-        err += FLASH_WriteSector(addr, buf, SECTOR_SIZE);
-        if(err)
+        ret += FLASH_WriteSector(addr + sizeof(buf)*i, buf, sizeof(buf));  
+        if(ret)
         {
             LIB_TRACE("issue command failed\r\n");
-            return 1;
+            return CH_ERR;
         }
-        p = (uint8_t*)addr;
-        LIB_TRACE("varify addr:0x%X ...", addr);
-        for(i=0;i<SECTOR_SIZE;i++)
+    }
+    
+    LIB_TRACE("varify addr:0x%X ...", addr);
+    for(i=0; i<(SECTOR_SIZE/sizeof(buf)); i++)
+    {
+        p = (uint8_t*)(addr + sizeof(buf)*i);
+        for(j=0; j<sizeof(buf); j++)
         {
-            if(*p++ != (i%0xFF))
+            if(p[j] != (j%0xFF))
             {
-                err++;
-                LIB_TRACE("ERR:[%d]:0x%02X ", i, *p);
+                ret++;
+                LIB_TRACE("ERR:[%d]:0x%02X ", i, *p); 
             }
         }
-        if(!err)
-            LIB_TRACE("OK\r\n");
-        else
-            LIB_TRACE("ERR\r\n");
     }
-    return err;
+    return ret;
+}
+
+ /**
+ * @brief  flash self test
+ * @note   make sure to have enough stack size
+ * @retval FLASH_OK: succ, other flash test fail
+ */
+uint32_t FLASH_Test(uint32_t addr, uint32_t len)
+{
+    int i, ret;
+    FLASH_Init();
+    
+    for(i=0; i<(len/SECTOR_SIZE); i++)
+    {
+        ret = FLASH_SetcorTest(addr + i*SECTOR_SIZE);
+        if(ret == CH_OK)
+        {
+            LIB_TRACE("OK\r\n");
+        }
+        else
+        {
+            LIB_TRACE("ERR\r\n");
+            return ret;
+        }
+    }
+    return ret;
 }

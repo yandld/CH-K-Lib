@@ -32,7 +32,7 @@
 #include "uart.h"
 #include "board.h"
 
-#define UART_BUF_SIZE               (64)
+#define UART_BUF_SIZE               (128)
 
 struct uart_device
 {
@@ -56,10 +56,13 @@ static void _unlock(struct uart_device * dev)
 
 static void UART0_ISR(uint16_t byteReceived)
 {
+    rt_interrupt_enter();
+    
     struct uart_device *dev;
 
     dev = (struct uart_device *)rt_device_find("uart0");
-    if(dev)
+    
+    if(dev && dev->rx_len < UART_BUF_SIZE)
     {
         dev->rx_len++;
         dev->rx_buf[(dev->rx_len)-1] = byteReceived;
@@ -68,6 +71,8 @@ static void UART0_ISR(uint16_t byteReceived)
             dev->rtdev.rx_indicate((rt_device_t)dev, dev->rx_len); 
         }
     }
+    
+    rt_interrupt_leave();
 }
 
 static void UART1_ISR(uint16_t byteReceived)

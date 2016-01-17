@@ -55,15 +55,15 @@ void init_thread(void* parameter)
     
     
     /* mount file system */
-    if(dfs_mount("sd0", "/", "elm", 0, 0) != RT_EOK)
+    if(dfs_mount("sf0", "/", "elm", 0, 0) != RT_EOK)
     {
-        rt_kprintf("mount %s failed. format file system...\r\n", "sd0");
-        dfs_mkfs("elm", "sd0");
-        dfs_mount("sd0", "/", "elm", 0, 0);
+        rt_kprintf("mount %s failed. format file system...\r\n", "sf0");
+        dfs_mkfs("elm", "sf0");
+        dfs_mount("sf0", "/", "elm", 0, 0);
     }
     else
     {
-        dfs_mount("sf0", "/", "elm", 0, 0);
+      //  dfs_mount("sf0", "/", "elm", 0, 0);
     }
     
     

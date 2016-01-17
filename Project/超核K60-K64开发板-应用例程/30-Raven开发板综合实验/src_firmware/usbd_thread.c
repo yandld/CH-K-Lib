@@ -11,7 +11,8 @@ typedef struct
 rt_mq_t msd_mq;
 
 
-#define MSD_DEVICE      "sd0"
+#define MSD_DEVICE      "sf0"
+
 /* init */
 void usbd_msc_init (void)
 {
@@ -52,6 +53,7 @@ void usbd_thread(void* parameter)
     rt_device_t sd = rt_device_find(MSD_DEVICE);
     if(!sd)
     {
+         rt_kprintf("usbd: device%s not found\r\n", MSD_DEVICE);
          return;  
     }
     

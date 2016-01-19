@@ -25,14 +25,9 @@ int main(void)
 {
     /* 初始化Delay */
     DelayInit();
-    /* 使用简易初始化初始化一个GPIO 设置为推挽输出模式 */
+    
+    /* 初始化一个GPIO 设置为推挽输出模式 */
     GPIO_QuickInit(HW_GPIOA, 6, kGPIO_Mode_OPP);
-    /* 另外一种初始化方式: 结构体模式的初始化 */
-//    GPIO_InitTypeDef GPIO_InitStruct1;
-//    GPIO_InitStruct1.instance = HW_GPIOA;
-//    GPIO_InitStruct1.mode = kGPIO_Mode_OPP;
-//    GPIO_InitStruct1.pinx = 6;
-//    GPIO_Init(&GPIO_InitStruct1);
     
     /* 输出低电平 */
     GPIO_WriteBit(HW_GPIOA, 6, 0);

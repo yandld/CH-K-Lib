@@ -41,6 +41,7 @@ enum
 {
     kStatus_Success             = 0,
     kStatus_Fail                = 1,
+    kStatus_InvalidArgument     = 4,
     kStatus_Busy                = 15,
     kStatus_UnknownProperty     = 10300,
 
@@ -182,7 +183,6 @@ uint16_t calculate_crc(serial_packet_t *packet);
 /*
 *   Local functions
 */
-void application_run(void);
 __STATIC_INLINE uint32_t align_down(uint32_t data, uint32_t base)
 {
     return (data & ~(base-1));
@@ -700,6 +700,23 @@ static status_t handle_reset(void)
     return kStatus_Success;
 }
 
+static status_t handle_execute(void)
+{
+    execute_call_packet_t *packet = (execute_call_packet_t*)&s_readPacket.payload[0];
+    status_t status;
+    bool isArgmentValid = true;
+    //isArgmentValid = IsAppAddrValidate(packet->stackpointer, packet->callAddress);
+    
+    status = send_generic_response(kCommandTag_Reset, isArgmentValid ? kStatus_Success: kStatus_InvalidArgument);
+    
+    if (isArgmentValid)
+    {
+        application_run(packet->stackpointer, packet->callAddress);
+    }
+    
+    return status;
+}
+
 static void finalize_data_phase(status_t status)
 {
     send_generic_response(kCommandTag_WriteMemory, status);
@@ -791,6 +808,9 @@ void bootloader_run(void)
                 handle_write_memory();
                 bl_ctx.state = kCommandPhase_Data;
                 break;
+            case kCommandTag_Execute:
+                handle_execute();
+                break;
             case kCommandTag_Reset:
                 handle_reset();
                 break;
@@ -824,7 +844,7 @@ bool IsAppAddrValidate(void)
     } 
 }
 
-void application_run(void)
+void application_run(uint32_t sp, uint32_t pc)
 {
     typedef void(*app_entry_t)(void);
 
@@ -832,9 +852,9 @@ void application_run(void)
     static uint32_t s_applicationEntry = 0;
     static app_entry_t s_application = 0;
 
-    uint32_t* vectorTable = (uint32_t*)APPLICATION_BASE;
-    s_stackPointer = vectorTable[0];
-    s_applicationEntry = vectorTable[1];
+    bl_deinit_interface();
+    s_stackPointer = sp;
+    s_applicationEntry = pc;
     s_application = (app_entry_t)s_applicationEntry;
 
     // Change MSP and PSP

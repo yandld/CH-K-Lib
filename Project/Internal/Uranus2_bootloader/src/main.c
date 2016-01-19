@@ -13,6 +13,15 @@
 #define BOOTLOAD_TIMEOUT        (300)
 static bool jump = false;
 
+void bl_deinit_interface(void)
+{
+    UART0->BDH = 0;
+    UART0->BDL = 0;
+    UART0->C4 = 0;
+    UART0->C2 = 0;
+    SIM->SCGC4 &= ~SIM_SCGC4_UART0_MASK;
+}
+
 
 uint8_t bl_hw_if_read_byte(void)
 {
@@ -21,12 +30,10 @@ uint8_t bl_hw_if_read_byte(void)
     {
         if(jump == true)
         {
-            UART0->BDH = 0;
-            UART0->BDL = 0;
-            UART0->C4 = 0;
-            UART0->C2 = 0;
-            SIM->SCGC4 &= ~SIM_SCGC4_UART0_MASK;
-            application_run();
+            uint32_t *vectorTable = (uint32_t*)APPLICATION_BASE;
+            uint32_t sp = vectorTable[0];
+            uint32_t pc = vectorTable[1];
+            application_run(sp, pc);
         }
     }
     return (ch & 0xFF);

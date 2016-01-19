@@ -132,15 +132,24 @@ typedef struct WriteMemoryPacket
     uint32_t byteCount;             //!< Parameter 1: Number of bytes to write.
 } write_memory_packet_t;
 
+//! @brief Execute/Call packet format.
+typedef struct ExecuteCallPacket
+{
+    command_packet_t commandPacket; //!< header
+    uint32_t callAddress;           //!< Paremeter 0: function address.
+    uint32_t argumentWord;          //!< Parameter 1: argument.
+    uint32_t stackpointer;          //!< Parameter 2: stack pointer
+} execute_call_packet_t;
 
 void bootloader_run(void);
-void application_run(void);
+void application_run(uint32_t sp, uint32_t pc);
 bool bootloader_isActive(void);
 bool IsAppAddrValidate(void);
 
 /* low level interface */
 void bl_hw_if_write(const uint8_t *buffer, uint32_t length);
 uint8_t bl_hw_if_read_byte(void);
+void bl_deinit_interface(void);
 
 
 #endif // __BL_CORE_H__

@@ -142,7 +142,7 @@ typedef struct ExecuteCallPacket
 } execute_call_packet_t;
 
 void bootloader_run(void);
-void application_run(uint32_t sp, uint32_t pc);
+void application_run(void);
 bool bootloader_isActive(void);
 bool IsAppAddrValidate(void);
 

@@ -225,6 +225,12 @@ void assert_failed(char * file, uint32_t line)
 }
 #endif
 
+#pragma weak NMI_isr
+void NMI_isr(void)
+{
+    
+}
+
 /**
  * @brief  非可屏蔽中断 non maskable interrupt
  */
@@ -233,6 +239,7 @@ void NMI_Handler(void)
     /* clear NMI pending bit */
     // MCM->ISR |= MCM_ISR_NMI_MASK;
     // printf("NMI ENTER\r\n");
+    NMI_isr();
 }
 
 

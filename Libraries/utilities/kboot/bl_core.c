@@ -178,7 +178,7 @@ static status_t serial_packet_read(uint8_t packetType);
 status_t serial_packet_write(void);
 void crc16_update(uint16_t *currectCrc, const uint8_t *src, uint32_t lengthInBytes);
 uint16_t calculate_crc(serial_packet_t *packet);
-
+static void jump_to_app(uint32_t sp, uint32_t pc);
 
 /*
 *   Local functions
@@ -711,7 +711,7 @@ static status_t handle_execute(void)
     
     if (isArgmentValid)
     {
-        application_run(packet->stackpointer, packet->callAddress);
+        jump_to_app(packet->stackpointer, packet->callAddress);
     }
     
     return status;
@@ -844,7 +844,15 @@ bool IsAppAddrValidate(void)
     } 
 }
 
-void application_run(uint32_t sp, uint32_t pc)
+void application_run(void)
+{
+    uint32_t *vectorTable = (uint32_t*)APPLICATION_BASE;
+    uint32_t sp = vectorTable[0];
+    uint32_t pc = vectorTable[1];
+    jump_to_app(sp, pc);
+}
+
+static void jump_to_app(uint32_t sp, uint32_t pc)
 {
     typedef void(*app_entry_t)(void);
 

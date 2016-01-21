@@ -30,10 +30,7 @@ uint8_t bl_hw_if_read_byte(void)
     {
         if(jump == true)
         {
-            uint32_t *vectorTable = (uint32_t*)APPLICATION_BASE;
-            uint32_t sp = vectorTable[0];
-            uint32_t pc = vectorTable[1];
-            application_run(sp, pc);
+            application_run();
         }
     }
     return (ch & 0xFF);

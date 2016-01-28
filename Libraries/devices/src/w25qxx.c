@@ -128,7 +128,7 @@ static int w25qxx_probe(void)
     if((w25_dev.chip_id != 0xFFFF) || (w25_dev.chip_id != 0x0000))
     {
         w25qxx_power_up(); /* enable full access to all memory regin, something like unlock chip. */
-        w25qxx_write_sr(0x00);
+        //w25qxx_write_sr(0x00);
         return 0;
     }
     return 1;

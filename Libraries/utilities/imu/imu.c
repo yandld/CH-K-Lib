@@ -127,7 +127,7 @@ volatile float twoKi = twoKiDef;											// 2 * integral gain (Ki)
 volatile float integralFBx = 0.0f,  integralFBy = 0.0f, integralFBz = 0.0f;	// integral error terms scaled by Ki
 
 
-void MadgwickAHRSupdate(float gx,float gy,float gz,float ax,float ay,float az,float my,float mx,float mz, attitude_t * angle)
+void MadgwickAHRSupdate(float gx,float gy,float gz,float ax,float ay,float az,float mx,float my,float mz, attitude_t * angle)
 {
   float recipNorm;
   float q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;
@@ -347,7 +347,7 @@ uint32_t imu_get_euler_angle(float *adata, float *gdata, float *mdata, attitude_
                 (float)adata[2],
                 (float)mdata[0],
                 (float)mdata[1],
-                -(float)mdata[2],
+                (float)mdata[2],
                 angle);
     return 0;
 }

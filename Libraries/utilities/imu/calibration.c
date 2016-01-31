@@ -45,8 +45,8 @@ void dcal_reset_mag(struct dcal_t *dc)
     int i;
     for(i=0;i<3;i++)
     {
-        dc->m_min[i] = 0;
-        dc->m_max[i] = 0;
+        dc->m_min[i] = 1000;
+        dc->m_max[i] = -1000;
         dc->mg[i] = 1.000;
         dc->mo[i] = 0;
     } 
@@ -63,8 +63,8 @@ void dcal_init(struct dcal_t *dc)
             dc->go[i] = 0;
             dc->mo[i] = 0;
             dc->mg[i] = 1;
-            dc->m_max[i] = 0;
-            dc->m_min[i] = 0;  
+            dc->m_max[i] = -1000;
+            dc->m_min[i] = 1000;  
         }
         dc->outfrq = 200;
         dc->baudrate = 115200;

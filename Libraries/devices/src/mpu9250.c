@@ -475,7 +475,7 @@ int mpu9250_read_mag_raw(int16_t *mdata)
     uint8_t err,c;
     uint8_t val;
     uint8_t buf[7];
-    
+    int16_t temp;
     err = 1;
         val = ak8963_read_reg(AK8963_ST1) & 0x01;
         if(val)
@@ -488,9 +488,13 @@ int mpu9250_read_mag_raw(int16_t *mdata)
                 mdata[0] = (int16_t)((((int16_t)buf[1] << 8) | buf[0]));
                 mdata[1] = (int16_t)((((int16_t)buf[3] << 8) | buf[2]));
                 mdata[2] = (int16_t)((((int16_t)buf[5] << 8) | buf[4]));	
-                mdata[0] = mpu_dev.mag_adj[0]*(mdata[0]);
-                mdata[1] = mpu_dev.mag_adj[1]*(mdata[1]);
-                mdata[2] = mpu_dev.mag_adj[2]*(mdata[2]);
+                //mdata[0] = mpu_dev.mag_adj[0]*(mdata[0]);
+                //mdata[1] = mpu_dev.mag_adj[1]*(mdata[1]);
+                //mdata[2] = mpu_dev.mag_adj[2]*(mdata[2]);
+                mdata[2] = -mdata[2];
+                temp = mdata[1];
+                mdata[1] = mdata[0];
+                mdata[0] = temp;
                 err = 0;
             }
         }

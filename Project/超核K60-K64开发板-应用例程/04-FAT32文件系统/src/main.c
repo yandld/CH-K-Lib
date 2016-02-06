@@ -10,6 +10,8 @@
 #define ERROR_TRACE(rc)     do {if(rc != 0){printf("fatfs error:%d\r\n", rc);}} while(0)
 uint8_t buf[32];
 
+static FRESULT ListDirectory(const TCHAR *path);
+
 int main(void)
 {
     DelayInit();
@@ -35,6 +37,9 @@ int main(void)
     ERROR_TRACE(rc);
     rc = f_getfree("0:", &fre_clust, &fs);
     ERROR_TRACE(rc);
+    
+    ListDirectory("0:");
+    
     /* ¼ÆËã´ÅÅÌ¿Õ¼ä¼°Ê£Óà¿Õ¼ä */
     tot_sect = (fs->n_fatent - 2) * fs->csize;
     fre_sect = fre_clust * fs->csize;
@@ -70,3 +75,62 @@ int main(void)
 }
 
 
+static void FatfsDisplayFileInfo(FILINFO *fileInfo)
+{
+    char *fileName;
+#if _USE_LFN
+    fileName = (fileInfo->lfname[0] ? fileInfo->lfname : fileInfo->fname;
+#else
+    fileName = fileInfo->fname;
+#endif /* _USE_LFN */
+    /* note: if this file/directory don't have one attribute, '_' replace the attribute letter ('R' - readonly, 'H' - hide, 'S' - system) */
+    printf("    %s - %c%c%c - %s - %dBytes - %d-%d-%d %d:%d:%d\r\n", (fileInfo->fattrib & AM_DIR) ? "dir" : "fil",
+             (fileInfo->fattrib & AM_RDO) ? 'R' : '_',
+             (fileInfo->fattrib & AM_HID) ? 'H' : '_',
+             (fileInfo->fattrib & AM_SYS) ? 'S' : '_',
+             fileName,
+             (fileInfo->fsize),
+             (uint32_t)((fileInfo->fdate >> 9) + 1980) /* year */,
+             (uint32_t)((fileInfo->fdate >> 5) & 0x000Fu) /* month */,
+             (uint32_t)(fileInfo->fdate & 0x001Fu) /* day */,
+             (uint32_t)((fileInfo->ftime >> 11) & 0x0000001Fu) /* hour */,
+             (uint32_t)((fileInfo->ftime >> 5) & 0x0000003Fu) /* minute */,
+             (uint32_t)(fileInfo->ftime & 0x0000001Fu) /* second */
+             );
+}
+
+static FRESULT ListDirectory(const TCHAR *path)
+{
+    FRESULT fatfsCode = FR_OK;
+    FILINFO fileInfo;
+    DIR dir;
+    uint8_t outputLabel = 0;
+
+#if _USE_LFN
+    static uint8_t fileNameBuffer[_MAX_LFN];
+    fileInfo.lfname = fileNameBuffer;
+    fileInfo.lfsize = _MAX_LFN;
+#endif /* _USE_LFN */
+
+    fatfsCode = f_opendir(&dir, path);
+    if (fatfsCode)
+    {
+        return fatfsCode;
+    }
+    while (1)
+    {
+        fatfsCode = f_readdir(&dir, &fileInfo);
+        if ((fatfsCode) || (!fileInfo.fname[0]))
+        {
+            break;
+        }
+        outputLabel = 1;
+        FatfsDisplayFileInfo(&fileInfo);
+    }
+    if (!outputLabel)
+    {
+        printf("\r\n");
+    }
+
+    return fatfsCode;
+}

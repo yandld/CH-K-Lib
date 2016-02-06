@@ -20,6 +20,7 @@ void bl_deinit_interface(void)
     UART0->C4 = 0;
     UART0->C2 = 0;
     SIM->SCGC4 &= ~SIM_SCGC4_UART0_MASK;
+    SysTick_SetIntMode(false);
 }
 
 
@@ -64,7 +65,6 @@ void SysTick_Handler(void)
     static int timeout;
     if(timeout > BOOTLOAD_TIMEOUT/100)
     {
-        SysTick_SetIntMode(false);
         if((bootloader_isActive() == false) && (IsAppAddrValidate() == true))
         {
             jump = true;

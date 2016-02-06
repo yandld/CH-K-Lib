@@ -707,7 +707,7 @@ static status_t handle_execute(void)
     bool isArgmentValid = true;
     //isArgmentValid = IsAppAddrValidate(packet->stackpointer, packet->callAddress);
     
-    status = send_generic_response(kCommandTag_Reset, isArgmentValid ? kStatus_Success: kStatus_InvalidArgument);
+    status = send_generic_response(kCommandTag_Execute, isArgmentValid ? kStatus_Success: kStatus_InvalidArgument);
     
     if (isArgmentValid)
     {

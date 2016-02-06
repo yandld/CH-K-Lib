@@ -78,18 +78,6 @@
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>14</CpuCode>
-      <Books>
-        <Book>
-          <Number>0</Number>
-          <Title>User Manual (FRDM-KL25Z)</Title>
-          <Path>C:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.9.0\Boards\Freescale\FRDM-KL25Z\Documents\FRDM-KL25Z_UM.pdf</Path>
-        </Book>
-        <Book>
-          <Number>1</Number>
-          <Title>FRDM-KL25Z Web Page (FRDM-KL25Z)</Title>
-          <Path>http://www.freescale.com/webapp/sps/site/prod_summary.jsp?code=FRDM-KL25Z</Path>
-        </Book>
-      </Books>
       <DebugOpt>
         <uSim>0</uSim>
         <uTrg>1</uTrg>
@@ -305,7 +293,7 @@
 
   <Group>
     <GroupName>utilities</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

@@ -15,7 +15,7 @@
         <TargetCommonOption>
           <Device>MKL25Z64xxx4</Device>
           <Vendor>Freescale</Vendor>
-          <PackID>Keil.Kinetis_KLxx_DFP.1.9.0</PackID>
+          <PackID>Keil.Kinetis_KLxx_DFP.1.7.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x00000000,0x10000) IRAM(0x1FFFF800,0x2000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>

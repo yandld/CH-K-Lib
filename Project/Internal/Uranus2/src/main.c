@@ -307,7 +307,8 @@ int main(void)
                         dcal_output(&dcal);
                         GPIO_PinToggle(HW_GPIOC, 3);
                     }
-                    dcal_ginput(gdata);
+                    
+                    dcal_input(radata, rgdata, rmdata);
                     /* bmp read */
                     ret = bmp180_conversion_process(&dummy, &temperature);
                     if(!ret)

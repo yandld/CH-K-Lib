@@ -15,7 +15,9 @@
 #include "calibration.h"
 
 static int16_t gadj[3];
-
+static int16_t inital_acc[3];
+static int16_t inital_mag[3];
+    
 #ifndef ABS
 #define ABS(a)         (((a) < 0) ? (-(a)) : (a))
 #endif
@@ -25,6 +27,14 @@ static int16_t gadj[3];
 #define CAL_GYRO_INIT               (0x00)
 #define CAL_GYRO_COUNT              (0x02)
 #define CAL_GYRO_FINISH             (0x03)
+
+#define CAL_DEBUG		0
+#if ( CAL_DEBUG == 1 )
+#include <stdio.h>
+#define CAL_TRACE	printf
+#else
+#define CAL_TRACE(...)
+#endif
 
 void dcal_print(struct dcal_t * dc)
 {
@@ -72,39 +82,67 @@ void dcal_init(struct dcal_t *dc)
 }
 
 #define GYRO_SAMPLE_COUNT       (100)
-#define GYRO_STILL_LIMIT        (25)
+#define GYRO_STATIC_LIMIT       (500)
+#define ACC_STATIC_LIMIT        (10)
+#define MAG_STATIC_LIMIT        (5)
 
+static bool IsGyroStatic(int16_t *adata, int16_t *gdata, int16_t *mdata)
+{
+    if((ABS(gdata[0]) < GYRO_STATIC_LIMIT) && (ABS(gdata[1]) < GYRO_STATIC_LIMIT) && (ABS(gdata[2]) < GYRO_STATIC_LIMIT))
+    {
+        if((ABS(adata[0] - inital_acc[0]) < ACC_STATIC_LIMIT) && (ABS(adata[1] - inital_acc[1]) < ACC_STATIC_LIMIT) && (ABS(adata[2] - inital_acc[2])< ACC_STATIC_LIMIT))
+        {
+            if((ABS(mdata[0] - inital_mag[0]) < MAG_STATIC_LIMIT) && (ABS(mdata[1] - inital_mag[1]) < MAG_STATIC_LIMIT) && (ABS(mdata[2] - inital_mag[2]) < MAG_STATIC_LIMIT))
+            {
+                return true;
+            }
+            else
+            {
+                CAL_TRACE("mdata out of limit\r\n");
+            }
+            
+        }
+        else
+        {
+            CAL_TRACE("adata out of limit\r\n");
+        }
+    }
+    else
+    {
+        CAL_TRACE("gdata out of limit\r\n");
+    }
+    return false;
+}
 
-void dcal_ginput(int16_t *gdata)
+void dcal_input(int16_t *adata, int16_t *gdata, int16_t *mdata)
 {
     static  int32_t temp_sum[3];
     static int states = CAL_GYRO_INIT;
     static int still_count = 0;
+    
     switch(states)
     {
         case CAL_GYRO_INIT:
-            if((ABS(gdata[0]) < GYRO_STILL_LIMIT) && (ABS(gdata[1]) < GYRO_STILL_LIMIT) && (ABS(gdata[2]) < GYRO_STILL_LIMIT))
+            inital_acc[0] = adata[0];
+            inital_acc[1] = adata[1];
+            inital_acc[2] = adata[2];
+            inital_mag[0] = mdata[0];
+            inital_mag[1] = mdata[1];
+            inital_mag[2] = mdata[2];
+            CAL_TRACE("cal start, acc:%d %d %d\r\n", inital_acc[0], inital_acc[1], inital_acc[2]);
+            CAL_TRACE("cal start, mag:%d %d %d\r\n", inital_mag[0], inital_mag[1], inital_mag[2]);
+            if(IsGyroStatic(adata, gdata, mdata))
             {
-                still_count++;
-            }
-            else
-            {
-                still_count = 0;
-                states = CAL_GYRO_INIT;
-            }
-            if(still_count > 30)
-            {
-                states = CAL_GYRO_COUNT;
-                still_count = 0;
                 temp_sum[0] = 0;
                 temp_sum[1] = 0;
                 temp_sum[2] = 0;
+                states = CAL_GYRO_COUNT;
+                CAL_TRACE("CAL counting start...\r\n");
             }
             break;
         case CAL_GYRO_COUNT:
-            if((ABS(gdata[0]) < GYRO_STILL_LIMIT) && (ABS(gdata[1]) < GYRO_STILL_LIMIT) && (ABS(gdata[2]) < GYRO_STILL_LIMIT))
+            if(IsGyroStatic(adata, gdata, mdata))
             {
-                //printf("gcal sample data: %d %d %d\r\n", gdata[0], gdata[1], gdata[2]);
                 temp_sum[0] += gdata[0];
                 temp_sum[1] += gdata[1];
                 temp_sum[2] += gdata[2];
@@ -125,7 +163,7 @@ void dcal_ginput(int16_t *gdata)
             gadj[0] = temp_sum[0]/GYRO_SAMPLE_COUNT;
             gadj[1] = temp_sum[1]/GYRO_SAMPLE_COUNT;   
             gadj[2] = temp_sum[2]/GYRO_SAMPLE_COUNT;   
-            //printf("data output complete ! %d %d %d\r\n", gadj[0], gadj[1], gadj[2]);
+            CAL_TRACE("data output complete ! %d %d %d\r\n", gadj[0], gadj[1], gadj[2]);
             still_count = 0;
             states = CAL_GYRO_INIT;
             break;

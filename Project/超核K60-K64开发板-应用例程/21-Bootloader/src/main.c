@@ -13,7 +13,7 @@
 1. download this program to chip
 2. open Uranus.exe, reset chip, then press Connect within 1S.
 3. the App need to be linked at 0x5000, you can use 0-template as bootloader project template. swtich project option to flash_bootlaoder.
-4. then find the bin/hex file your bootloader project generaterd. then select bin file and download.
+4. then find the bin/hex file your bootloader project generaterd. then select hex file and download.
 5. program will automcically run after download complete
 */
 
@@ -22,6 +22,7 @@ static bool jump = false;
     
 void bl_deinit_interface(void)
 {
+    SYSTICK_ITConfig(false);
     UART_DeInit(HW_UART0);
 }
 

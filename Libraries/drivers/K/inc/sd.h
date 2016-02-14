@@ -73,8 +73,8 @@ uint8_t SD_Init(SD_InitTypeDef* SD_InitStruct);
 uint32_t SD_GetSizeInMB(void);
 uint8_t SD_ReadSingleBlock(uint32_t sector, uint8_t *buf);
 uint8_t SD_WriteSingleBlock(uint32_t sector,  uint8_t *buf);
-uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len);
-uint8_t SD_WriteMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len);
+uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint32_t len);
+uint8_t SD_WriteMultiBlock(uint32_t sector, uint8_t *buf, uint32_t len);
 uint32_t SD_QuickInit(uint32_t baudrate);
 
 

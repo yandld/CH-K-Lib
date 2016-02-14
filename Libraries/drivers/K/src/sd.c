@@ -680,7 +680,7 @@ uint32_t SD_StatusWait (uint32_t  mask)
  * @brief SD_ReadMultiBlock legcy support
  * \note this function is same as SDHC_ReadBlock(...)
  */ 		
-uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len)
+uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint32_t len)
 {
     return SDHC_ReadBlock(sector, buf, len);
 }
@@ -689,7 +689,7 @@ uint8_t SD_ReadMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len)
  * @brief SD_WriteMultiBlock legcy support
  * \note this function is same as SDHC_WriteBlock(...)
  */ 	
-uint8_t SD_WriteMultiBlock(uint32_t sector, uint8_t *buf, uint16_t len)
+uint8_t SD_WriteMultiBlock(uint32_t sector, uint8_t *buf, uint32_t len)
 {
     return SDHC_WriteBlock(sector, buf, len);
 }

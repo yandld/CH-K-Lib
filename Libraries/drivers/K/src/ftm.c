@@ -739,29 +739,34 @@ bool FTM_IsChnInterupt(uint32_t instance, uint32_t chl)
     return (bool)((FTM_InstanceTable[instance]->CONTROLS[chl].CnSC & FTM_CnSC_CHF_MASK)>>FTM_CnSC_CHF_SHIFT);
 }
 
+void FTM_IRQHandler(uint32_t instance)
+{
+    uint32_t i;
+    if(FTM_CallBackTable[instance])
+    {
+        FTM_CallBackTable[instance]();
+    }
+    /* clear pending register any way*/
+    if(FTM_InstanceTable[instance]->SC & (FTM_SC_TOF_MASK | FTM_SC_TOIE_MASK))
+    {
+        FTM_InstanceTable[instance]->SC &= ~FTM_SC_TOF_MASK;
+    }
+    for(i = 0; i < FTM_ChlMaxTable[instance]; i++)
+    {
+        if(FTM_InstanceTable[instance]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
+        {
+            FTM_InstanceTable[instance]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
+            //break;
+        }
+    }
+}
+
 /**
  * \brief 系统FTM0中断函数，用户无需使用
  */
 void FTM0_IRQHandler(void)
 {
-    uint32_t i;
-    if(FTM_CallBackTable[0])
-    {
-        FTM_CallBackTable[0]();
-    }
-    /* clear pending register */
-    if(FTM_InstanceTable[0]->SC & (FTM_SC_TOF_MASK | FTM_SC_TOIE_MASK))
-    {
-        FTM_InstanceTable[0]->SC &= ~FTM_SC_TOF_MASK;
-    }
-    for(i = 0; i < FTM_ChlMaxTable[0]; i++)
-    {
-        if(FTM_InstanceTable[0]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
-        {
-            FTM_InstanceTable[0]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
-            //break;
-        }
-    }
+    FTM_IRQHandler(HW_FTM0);
 }
 
 /**
@@ -769,24 +774,7 @@ void FTM0_IRQHandler(void)
  */
 void FTM1_IRQHandler(void)
 {
-    uint32_t i;
-    if(FTM_CallBackTable[1])
-    {
-        FTM_CallBackTable[1]();
-    }
-    /* clear pending register */
-    if(FTM_InstanceTable[1]->SC & (FTM_SC_TOF_MASK | FTM_SC_TOIE_MASK))
-    {
-        FTM_InstanceTable[1]->SC |= FTM_SC_TOF_MASK;
-    }
-    for(i = 0; i < FTM_ChlMaxTable[1]; i++)
-    {
-        if(FTM_InstanceTable[1]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
-        {
-            FTM_InstanceTable[1]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
-            //break;
-        }
-    }
+    FTM_IRQHandler(HW_FTM1);
 }
 
 #if defined(FTM2)
@@ -795,24 +783,7 @@ void FTM1_IRQHandler(void)
  */
 void FTM2_IRQHandler(void)
 {
-    uint32_t i;
-    if(FTM_CallBackTable[2])
-    {
-        FTM_CallBackTable[2]();
-    }
-    /* clear pending register */
-    if(FTM_InstanceTable[2]->SC & (FTM_SC_TOF_MASK | FTM_SC_TOIE_MASK))
-    {
-        FTM_InstanceTable[2]->SC &= ~FTM_SC_TOF_MASK;
-    }
-    for(i = 0; i < FTM_ChlMaxTable[2]; i++)
-    {
-        if(FTM_InstanceTable[2]->CONTROLS[i].CnSC & (FTM_CnSC_CHIE_MASK | FTM_CnSC_CHF_MASK))
-        {
-            FTM_InstanceTable[2]->CONTROLS[i].CnSC &= ~FTM_CnSC_CHF_MASK;
-            //break;
-        }
-    }
+    FTM_IRQHandler(HW_FTM2);
 }
 #endif
 

@@ -15,7 +15,7 @@
 //0: 80x60
 //1: 160x120
 //2: 240x180
-#define IMAGE_SIZE  0
+#define IMAGE_SIZE  1
 
 #if (IMAGE_SIZE  ==  0)
 #define OV7620_W    (80)
@@ -34,10 +34,7 @@
 #endif
 
 // 图像内存池
-uint8_t gCCD_RAM[(OV7620_H)*((OV7620_W/8)+1)];   //使用内部RAM
-
-/* 行指针 */
-uint8_t * gpHREF[OV7620_H+1];
+uint8_t gImageBuffer[(OV7620_H)*((OV7620_W/8)+1)];   //使用内部RAM
 
 /* 引脚定义 PCLK VSYNC HREF 接到同一个PORT上 */
 #define BOARD_OV7620_PCLK_PORT      HW_GPIOA
@@ -68,8 +65,8 @@ static void UserApp(uint32_t vcount);
 static void UserApp(uint32_t vcount)
 {
     GUI_printf(100,0, "frame:%d", vcount);
-    GUI_DispCCDImage(0, 15, OV7620_W, OV7620_H, gpHREF);
-    //SerialDispCCDImage(OV7620_W, OV7620_H, CCDBuffer);
+    GUI_DispCCDImage(0, 15, OV7620_W, OV7620_H, gImageBuffer);
+    //SerialDispCCDImage(OV7620_W, OV7620_H, gImageBuffer);
 }
 
 
@@ -96,19 +93,7 @@ int SCCB_Init(uint32_t I2C_MAP)
 void OV_ISR(uint32_t index)
 {
     static uint8_t status = TRANSFER_IN_PROCESS;
-    static uint32_t h_counter, v_counter;
-   // uint32_t i;
-    
-    /* 行中断 */
-    if(index & (1 << BOARD_OV7620_HREF_PIN))
-    {
-        DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)gpHREF[h_counter++]);
-        //i = DMA_GetMajorLoopCount(HW_DMA_CH2);
-        DMA_SetMajorLoopCounter(HW_DMA_CH2, (OV7620_W/8)+1);
-        DMA_EnableRequest(HW_DMA_CH2);
-        
-        return;
-    }
+    static uint32_t v_counter;
     /* 场中断 */
     if(index & (1 << BOARD_OV7620_VSYNC_PIN))
     {
@@ -118,10 +103,7 @@ void OV_ISR(uint32_t index)
         {
             case TRANSFER_IN_PROCESS: //接受到一帧数据调用用户处理
                     UserApp(v_counter++);
-                    //printf("i:%d %d\r\n", h_counter, i);
                     status = NEXT_FRAME;
-                    h_counter = 0;
-
                 break;
             case NEXT_FRAME: //等待下次传输
                 status =  TRANSFER_IN_PROCESS;
@@ -130,10 +112,11 @@ void OV_ISR(uint32_t index)
                 break;
         }
         GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
-        GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
+        //GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
+        DMA_SetMajorLoopCounter(HW_DMA_CH2, (OV7620_W/8)*OV7620_H);
+        DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)gImageBuffer);
+        DMA_EnableRequest(HW_DMA_CH2);
         PORTA->ISFR = 0xFFFFFFFF;
-        h_counter = 0;
-        return;
     }
 }
 
@@ -161,23 +144,17 @@ int main(void)
     }
     printf("OV7620 setup complete\r\n");
     
-    //每行数据指针
-    for(i=0; i<OV7620_H+1; i++)
-    {
-        gpHREF[i] = (uint8_t*)&gCCD_RAM[i*OV7620_W/8];
-    }
-    
     DMA_InitTypeDef DMA_InitStruct1 = {0};
     
     /* 场中断  行中断 像素中断 */
     GPIO_QuickInit(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_Mode_IPD);
     GPIO_QuickInit(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_Mode_IPD);
-    GPIO_QuickInit(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_Mode_IPD);
+    //GPIO_QuickInit(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_Mode_IPD);
     
     /* install callback */
     GPIO_CallbackInstall(BOARD_OV7620_VSYNC_PORT, OV_ISR);
    
-    GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
+    //GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
     GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
     GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge, true);
     
@@ -200,7 +177,7 @@ int main(void)
     DMA_InitStruct1.sDataWidth = kDMA_DataWidthBit_8;
     DMA_InitStruct1.sMod = kDMA_ModuloDisable;
     
-    DMA_InitStruct1.dAddr = (uint32_t)gpHREF[0];
+    DMA_InitStruct1.dAddr = NULL;
     DMA_InitStruct1.dLastAddrAdj = 0;
     DMA_InitStruct1.dAddrOffset = 1;
     DMA_InitStruct1.dDataWidth = kDMA_DataWidthBit_8;

@@ -6,8 +6,8 @@
 #include "chgui.h"
 
 //!< API functions
-void GUI_DispCCDImage(int x, int y, int xSize, int ySize, uint8_t** ppData);
-void SerialDispCCDImage(int xSize, int ySize, uint8_t** ppData); 
+void GUI_DispCCDImage(int x, int y, int xSize, int ySize, uint8_t* buf);
+void SerialDispCCDImage(int xSize, int ySize, uint8_t* buf);
 
 
 

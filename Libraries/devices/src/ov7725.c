@@ -180,8 +180,8 @@ static uint8_t ov7725_addr[] = {0x21};
 static const struct ov7725_reg reg_tbl[] =
 {
 
-    {OV7725_COM4         , 0x41},
-    {OV7725_CLKRC        , 0x02},
+    {OV7725_COM4         , 0XC1},
+    {OV7725_CLKRC        , 0X02},
     {OV7725_COM2         , 0x03},
     {OV7725_COM3         , 0xD0},
     {OV7725_COM7         , 0x40},

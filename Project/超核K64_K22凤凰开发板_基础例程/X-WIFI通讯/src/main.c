@@ -4,7 +4,7 @@
 #include "sd.h"
 
 #define SSID        "Yandld"
-#define PASSWD      "XXXXXXXX"
+#define PASSWD      "XXXXXX"
 
 typedef enum
 {
@@ -16,12 +16,12 @@ typedef enum
 
 static void UART0_ISR(uint16_t byteReceived)
 {
-    UART_WriteByte(HW_UART4, byteReceived);
+    UART_WriteByte(HW_UART4, byteReceived & 0xFF);
 }
 
 static void UART4_ISR(uint16_t byteReceived)
 {
-    printf("%c", byteReceived & 0xFF);
+    UART_WriteByte(HW_UART0, byteReceived & 0xFF);
 }
 
 
@@ -56,7 +56,7 @@ int main(void)
     
     UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     UART_QuickInit(UART4_RX_PE25_TX_PE24, 115200);
-
+    printf("ESP8266 demo!\r\n");
     SelectUART(kUART_SEL_ESP8266);
     
     GPIO_QuickInit(HW_GPIOE, 9, kGPIO_Mode_OPP); /* MODE */
@@ -69,6 +69,9 @@ int main(void)
     DelayMs(500);
     UART_CallbackRxInstall(HW_UART4, UART4_ISR);
     UART_ITDMAConfig(HW_UART4, kUART_IT_Rx, true);
+    
+    UART_CallbackRxInstall(HW_UART0, UART0_ISR);
+    UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
     
     UART_printf(HW_UART4, "AT+CWAUTOCONN=0\r\n");
     DelayMs(50);

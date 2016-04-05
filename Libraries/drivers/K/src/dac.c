@@ -49,6 +49,7 @@ static const IRQn_Type DAC_IRQnTable[] =
 void DAC_Init(DAC_InitTypeDef* DAC_InitStruct)
 {
     SIM->SCGC2 |= SIM_SCGC2_DAC0_MASK;
+    SIM->SCGC2 |= SIM_SCGC2_DAC1_MASK;
     /* trigger select */
     switch(DAC_InitStruct->triggerMode)
     {

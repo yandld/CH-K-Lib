@@ -32,7 +32,7 @@ void GUI_DispCCDImage(int x, int y, int xSize, int ySize, uint8_t* data)
     {
         for(h = 0; h < (xSize/8); h++)
         {
-            _DispBin(h*8+x, v+y, data[v*(xSize/8)+h+1]);
+            _DispBin(h*8+x, v+y, data[v*(xSize/8)+h+2]);
         }            
     }
 }

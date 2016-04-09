@@ -34,7 +34,7 @@
 #endif
 
 // 图像内存池
-uint8_t gImageBuffer[(OV7620_H)*((OV7620_W/8)+1)];   //使用内部RAM
+uint8_t gImageBuffer[(OV7620_H)*((OV7620_W/8))];   //使用内部RAM
 
 /* 引脚定义 PCLK VSYNC HREF 接到同一个PORT上 */
 #define BOARD_OV7620_PCLK_PORT      HW_GPIOA
@@ -54,21 +54,13 @@ uint8_t gImageBuffer[(OV7620_H)*((OV7620_W/8)+1)];   //使用内部RAM
 /* 状态机定义 */
 typedef enum
 {
-    TRANSFER_IN_PROCESS, //数据在处理
-    NEXT_FRAME,          //下一帧数据
+    kIdle,
+    kInCapture,
+    kComplete,
 }OV7620_Status;
 
-static void UserApp(uint32_t vcount);
-
-
-/* 接收完成一场后 用户处理函数 */
-static void UserApp(uint32_t vcount)
-{
-    GUI_printf(100,0, "frame:%d", vcount);
-    GUI_DispCCDImage(0, 15, OV7620_W, OV7620_H, gImageBuffer);
-    //SerialDispCCDImage(OV7620_W, OV7620_H, gImageBuffer);
-}
-
+static uint8_t status = kIdle;
+    
 
 int SCCB_Init(uint32_t I2C_MAP)
 {
@@ -89,34 +81,27 @@ int SCCB_Init(uint32_t I2C_MAP)
     return 0;
 }
 
-//航中断和长中断都使用PTA中断
+//场中断都使用PTA中断
 void OV_ISR(uint32_t index)
 {
-    static uint8_t status = TRANSFER_IN_PROCESS;
     static uint32_t v_counter;
     /* 场中断 */
     if(index & (1 << BOARD_OV7620_VSYNC_PIN))
     {
-        GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, false);
-        GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, false);
         switch(status)
         {
-            case TRANSFER_IN_PROCESS: //接受到一帧数据调用用户处理
-                    UserApp(v_counter++);
-                    status = NEXT_FRAME;
+            case kIdle:     /* 开始捕捉 */
+                DMA_SetMajorLoopCounter(HW_DMA_CH2, (OV7620_W/8)*OV7620_H);
+                DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)gImageBuffer);
+                DMA_EnableRequest(HW_DMA_CH2); 
+                status = kInCapture;
                 break;
-            case NEXT_FRAME: //等待下次传输
-                status =  TRANSFER_IN_PROCESS;
-                break;
-            default:
+            case kInCapture:  /*捕捉完毕，关闭中断 */
+                GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, false);
+                PORTA->ISFR = 0xFFFFFFFF;  
+                status = kComplete;
                 break;
         }
-        GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
-        //GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
-        DMA_SetMajorLoopCounter(HW_DMA_CH2, (OV7620_W/8)*OV7620_H);
-        DMA_SetDestAddress(HW_DMA_CH2, (uint32_t)gImageBuffer);
-        DMA_EnableRequest(HW_DMA_CH2);
-        PORTA->ISFR = 0xFFFFFFFF;
     }
 }
 
@@ -125,6 +110,7 @@ void OV_ISR(uint32_t index)
 int main(void)
 {
     uint32_t i;
+    int vcount = 0;
     DelayInit();
     /* 打印串口及小灯 */
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
@@ -142,19 +128,18 @@ int main(void)
         printf("no ov7725device found!\r\n");
         while(1);
     }
+    
     printf("OV7620 setup complete\r\n");
     
     DMA_InitTypeDef DMA_InitStruct1 = {0};
     
-    /* 场中断  行中断 像素中断 */
+    /* 场中断  像素中断 */
     GPIO_QuickInit(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_Mode_IPD);
     GPIO_QuickInit(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_Mode_IPD);
-    //GPIO_QuickInit(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_Mode_IPD);
     
     /* install callback */
     GPIO_CallbackInstall(BOARD_OV7620_VSYNC_PORT, OV_ISR);
-   
-    //GPIO_ITDMAConfig(BOARD_OV7620_HREF_PORT, BOARD_OV7620_HREF_PIN, kGPIO_IT_FallingEdge, true);
+    
     GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
     GPIO_ITDMAConfig(BOARD_OV7620_PCLK_PORT, BOARD_OV7620_PCLK_PIN, kGPIO_DMA_RisingEdge, true);
     
@@ -188,6 +173,14 @@ int main(void)
     
     while(1)
     {
-        
+        if(status == kComplete)
+        {
+            GUI_printf(100,0, "frame:%d", vcount++);
+            GUI_DispCCDImage(0, 15, OV7620_W, OV7620_H, gImageBuffer);
+            
+            /* 开启中断，开始下一次捕捉 */
+            status = kIdle;
+            GPIO_ITDMAConfig(BOARD_OV7620_VSYNC_PORT, BOARD_OV7620_VSYNC_PIN, kGPIO_IT_FallingEdge, true);
+        }
     }
 }

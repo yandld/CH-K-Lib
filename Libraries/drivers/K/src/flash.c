@@ -46,7 +46,15 @@
 #define SECTOR_SIZE     (4096)
 #define PROGRAM_CMD      PGM8
 #elif defined(FTFA)
-#define SECTOR_SIZE     (1024)
+    #if (__CORTEX_M == 0)
+        #if defined(MKL28Z7)
+        #define SECTOR_SIZE     (2048)
+        #else
+        #define SECTOR_SIZE     (1024)
+        #endif
+    #else
+    #define SECTOR_SIZE     (2048)
+    #endif
 #define PROGRAM_CMD      PGM4
 #define FTF    FTFA
 #endif

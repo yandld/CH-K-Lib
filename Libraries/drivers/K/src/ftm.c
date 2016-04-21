@@ -41,18 +41,18 @@ static const Reg_t SIM_FTMClockGateTable[] =
 {
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM0_MASK},
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM1_MASK},
-#ifdef SIM_SCGC3_FTM2_MASK
+#if defined(SIM_SCGC3_FTM2_MASK)
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM2_MASK},
-#endif
-#ifdef SIM_SCGC6_FTM2_MASK
+#elif defined(SIM_SCGC6_FTM2_MASK)
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM2_MASK},
 #endif
     
-#ifdef SIM_SCGC3_FTM3_MASK
+#if defined(SIM_SCGC3_FTM3_MASK)
     {(void*)&(SIM->SCGC3), SIM_SCGC3_FTM3_MASK},
-#endif
-#ifdef SIM_SCGC6_FTM3_MASK
+#elif defined(SIM_SCGC6_FTM3_MASK)
     {(void*)&(SIM->SCGC6), SIM_SCGC6_FTM3_MASK},
+#else
+    #warning "No FTM3 clock gate"
 #endif 
 };
 static const IRQn_Type FTM_IRQnTable[] = 
@@ -76,10 +76,8 @@ static void _FTM_InitBasic(uint32_t instance, uint32_t modulo, FTM_ClockDiv_Type
 {
     /* enable clock gate */
     *(uint32_t*)SIM_FTMClockGateTable[instance].addr |= SIM_FTMClockGateTable[instance].mask;
-    
     /* disable FTM, we must set CLKS(0) before config FTM! */
     FTM_InstanceTable[instance]->SC = 0;
-    
     /* enable to access all register including enhancecd register(FTMEN bit control whather can access FTM enhanced function) */
     FTM_InstanceTable[instance]->MODE |= FTM_MODE_WPDIS_MASK;
     

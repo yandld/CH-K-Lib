@@ -523,6 +523,7 @@ void CAN_SetRxFIFO(uint32_t instance)
 	while(!(CAN_MCR_FRZACK_MASK & (CANx->MCR))) {}; 
         
     CANx->MCR |= CAN_MCR_RFEN_MASK;
+    CANx->CTRL2 &= ~CAN_CTRL2_RFFN_MASK;
     CANx->CTRL2 |= CAN_CTRL2_RFFN(0);
     
     /* enable module */

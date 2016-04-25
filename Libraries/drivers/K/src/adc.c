@@ -259,7 +259,7 @@ uint8_t ADC_QuickInit(uint32_t MAP, ADC_ResolutionMode_Type resolutionMode)
     map_t * pq = (map_t*)&(MAP);
     ADC_InitTypeDef AD_InitStruct1;
     AD_InitStruct1.instance = pq->ip;
-    AD_InitStruct1.clockDiv = kADC_ClockDiv8;
+    AD_InitStruct1.clockDiv = kADC_ClockDiv2;
     AD_InitStruct1.resolutionMode = resolutionMode;
     AD_InitStruct1.triggerMode = kADC_TriggerSoftware;
     AD_InitStruct1.singleOrDiffMode = kADC_Single;

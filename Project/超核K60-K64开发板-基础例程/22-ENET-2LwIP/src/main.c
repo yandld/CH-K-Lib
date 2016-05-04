@@ -79,7 +79,7 @@ int main(void)
     int ret;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
     
     PIT_QuickInit(0, 1000*10);
     PIT_CallbackInstall(0, PIT_ISR);
@@ -151,10 +151,10 @@ int main(void)
     netif_set_default(&fsl_netif0);
     netif_set_up(&fsl_netif0);
         
+#endif
     u8_t *ip = (u8_t*)&fsl_netif0.ip_addr.addr;
     printf("dhcp new ip: %u.%u.%u.%u \r",ip[0], ip[1],ip[2], ip[3]);
-#endif
-
+    
     udp_echo_init();
     echo_init();
     while(1)

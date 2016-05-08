@@ -14,7 +14,7 @@ static void GPIO_ISR(uint32_t array)
 {
     if(array & (1<<26))
     {
-        DelayMs(3);
+        DelayMs(10);
         if(GPIO_ReadBit(HW_GPIOE, 26) == 0)
         {
             Stat1 ^= 1;
@@ -30,7 +30,7 @@ static void GPIO_ISR(uint32_t array)
     }
     if(array & (1<<27))
     {
-        DelayMs(3);
+        DelayMs(10);
         if(GPIO_ReadBit(HW_GPIOE, 27) == 0)
         {
             Stat2 ^= 1;
@@ -44,7 +44,6 @@ static void GPIO_ISR(uint32_t array)
             }
         }
     }
-    PORTE->ISFR = 0xFFFFFFFF;
 }
 
 int main(void)
@@ -64,8 +63,8 @@ int main(void)
     
     GPIO_CallbackInstall(HW_GPIOE, GPIO_ISR);
 
-    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_RisingEdge, true);
-    GPIO_ITDMAConfig(HW_GPIOE, 27, kGPIO_IT_RisingEdge, true);
+    GPIO_ITDMAConfig(HW_GPIOE, 26, kGPIO_IT_FallingEdge, true);
+    GPIO_ITDMAConfig(HW_GPIOE, 27, kGPIO_IT_FallingEdge, true);
     
 //    PIT_QuickInit(HW_PIT_CH0, 1000*10);
 //    PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);

@@ -15,7 +15,45 @@
 #include "request.h"
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "util.h"
+
+static void _webnet_request_decode_url( char *decoded, char *token, int len)
+{
+	char	*ip,  *op;
+	int		num, i, c;
+	
+	RT_ASSERT(decoded);
+	RT_ASSERT(token);
+
+	op = decoded;
+	for (ip = token; *ip && len > 0; ip++, op++) {
+		if (*ip == '+') {
+			*op = ' ';
+		} else if (*ip == '%' && isdigit(ip[1]) && isdigit(ip[2])) {
+
+/*
+ *			Convert %nn to a single character
+ */
+			ip++;
+			for (i = 0, num = 0; i < 2; i++, ip++) {
+				c = tolower(*ip);
+				if (c >= 'a' && c <= 'f') {
+					num = (num * 16) + 10 + c - 'a';
+				} else {
+					num = (num * 16) + c - '0';
+				}
+			}
+			*op = (char) num;
+			ip--;
+
+		} else {
+			*op = *ip;
+		}
+		len--;
+	}
+	*op = '\0';
+}
 
 /**
  * parse a query
@@ -25,10 +63,14 @@ static void _webnet_request_parse_query(struct webnet_request* request)
 	char* ptr;
 	rt_uint32_t index;
 
-	if ((request->query == RT_NULL) || (*request->query == '\0')) return; /* no query */
+	if ((request->query == RT_NULL) || (*request->query == '\0')) {
+        request->query = RT_NULL;
+        return; /* no query */
+    }
 
 	/* copy query */
 	request->query = rt_strdup(request->query);
+    _webnet_request_decode_url( request->query, request->query, strlen( request->query ) );
 	
 	/* get the query counter */
 	ptr = request->query;
@@ -106,7 +148,7 @@ static void _webnet_request_copy_str(struct webnet_request* request)
 /**
  * to check whether a query on the http request.
  */
-rt_bool_t webnet_request_has_query(struct webnet_request* request, char* name)
+rt_bool_t webnet_request_has_query(struct webnet_request* request, const char* name)
 {
 	rt_uint32_t index;
 
@@ -122,7 +164,7 @@ rt_bool_t webnet_request_has_query(struct webnet_request* request, char* name)
 /**
  * get query value according to the name
  */
-const char* webnet_request_get_query(struct webnet_request* request, char* name)
+const char* webnet_request_get_query(struct webnet_request* request, const char* name)
 {
 	rt_uint32_t index;
 

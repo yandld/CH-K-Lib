@@ -68,7 +68,7 @@ void webnet_request_destory(struct webnet_request* request);
 
 void webnet_request_parse(struct webnet_request* request, char* buffer, int length);
 
-rt_bool_t webnet_request_has_query(struct webnet_request* request, char* name);
-const char* webnet_request_get_query(struct webnet_request* request, char* name);
+rt_bool_t webnet_request_has_query(struct webnet_request* request, const char* name);
+const char* webnet_request_get_query(struct webnet_request* request, const char* name);
 
 #endif

@@ -49,8 +49,8 @@ void init_thread(void* parameter)
     
     dfs_mount("dflash0", "/", "elm", 0, 0);
     
-    mkdir("/webnet", 0);
-    int fd = open("/webnet/index.htm", O_RDWR | O_CREAT | O_TRUNC, 0);
+    mkdir("/www", 0);
+    int fd = open("/www/index.htm", O_RDWR | O_CREAT | O_TRUNC, 0);
     write(fd, "Hello!", 6);
     close(fd);
 

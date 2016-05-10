@@ -17,7 +17,7 @@
 #define WEBNET_USING_KEEPALIVE
 #define WEBNET_USING_COOKIE
 //#define WEBNET_USING_AUTH
-//#define WEBNET_USING_CGI
+#define WEBNET_USING_CGI
 //#define WEBNET_USING_ASP
 //#define WEBNET_USING_INDEX
 //#define WEBNET_USING_LOG
@@ -29,7 +29,7 @@
 #define WEBNET_PRIORITY         20			/* webnet thread priority */
 #define WEBNET_THREAD_STACKSIZE 1024		/* webnet thread stack size */
 #define WEBNET_PORT				80			/* webnet server listen port */
-#define WEBNET_ROOT				"/webnet"	/* webnet server root directory */
+#define WEBNET_ROOT				"/www"	    /* webnet server root directory */
 #define WEBNET_SERVER			"Server: webnet (RT-Thread)\r\n"
 #define WEBNET_PATH_MAX			256			/* maxiaml path length in webnet */
 

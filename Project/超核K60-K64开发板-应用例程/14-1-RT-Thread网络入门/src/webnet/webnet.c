@@ -17,6 +17,8 @@
 #include "session.h"
 #include "module.h"
 
+extern void devReset( struct webnet_session * session );
+
 /**
  * webnet thread entry
  */
@@ -47,6 +49,10 @@ static void webnet_thread(void *parameter)
 	/* initalize module (no session at present) */
 	webnet_module_handle_event(RT_NULL, WEBNET_EVENT_INIT);
 
+	webnet_cgi_set_root( "cgi-bin" );
+
+   // webnet_cgi_register( "devReset", devReset );
+
     /* Wait forever for network input: This could be connections or data */
     for (;;)
     {
@@ -71,6 +77,7 @@ static void webnet_thread(void *parameter)
         	struct webnet_session* accept_session;
             /* We have a new connection request */
 			accept_session = webnet_session_create(listenfd);
+
 			if (accept_session == RT_NULL)
 			{
                 /* create session failed, just accept and then close */

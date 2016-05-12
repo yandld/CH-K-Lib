@@ -30,7 +30,9 @@
 
 #endif
 
-
+/* global vars */
+static FTM_Type * const FTM_InstanceTable[] = FTM_BASES;
+    
 /* global vars */
 static FTM_Type * const FTM_InstanceTable[] = FTM_BASES;
 static FTM_CallBackType FTM_CallBackTable[ARRAY_SIZE(FTM_InstanceTable)] = {NULL};

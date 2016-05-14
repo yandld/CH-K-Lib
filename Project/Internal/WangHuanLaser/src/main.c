@@ -98,6 +98,8 @@ static void GPIOA_ISR(uint32_t array)
         {
             printf("TRIG!\r\n");
             LASER_Single(HW_UART5);
+            Stat1 = 0;
+            Stat2 = 0;
         }
     }
 }

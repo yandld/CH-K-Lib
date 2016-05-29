@@ -45,7 +45,9 @@ void imu_rev_process(char ch, enum imu_rev_mode mode)
 {
     static int len = 0;
     static int i;
-
+    uint8_t fcs_frame;
+    uint8_t fcs = 0;
+    
     static enum input_status status = STATUS_IDLE;
     if(mode == IMU_REV_Polling)
     {
@@ -84,16 +86,28 @@ void imu_rev_process(char ch, enum imu_rev_mode mode)
             i = 0;
             break;
         case STATUS_DATA:
-            
+            rev_buf[i++] = ch;
+        
             if(i == len)
             {
                 status = STATUS_FCS;
-                g_hander->handler();
-                break;
             }
-            rev_buf[i++] = ch;
             break;
         case STATUS_FCS:
+            fcs_frame = ch;
+            fcs = 0x88;
+            fcs += 0xAF;
+            fcs += len;
+            for(i=0; i<27; i++)
+            {
+                fcs += rev_buf[i];
+            }
+            
+            /* checksum is correct */
+            if(fcs == fcs_frame)
+            {
+                 g_hander->handler();
+            }
             status = STATUS_IDLE;
             break;
         default:

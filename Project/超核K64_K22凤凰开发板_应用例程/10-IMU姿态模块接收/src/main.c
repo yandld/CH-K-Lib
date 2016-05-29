@@ -15,7 +15,7 @@ void IMU_REV_Handler(void)
     imu_rev_get_data(&data);
     
     /* print results */
-    printf("P/R/Y/P:%05d %05d %05d %05d\r", data.pitch/100, data.roll/100, data.yaw/10, data.presure);
+    printf("P/R/Y:%2.2f %2.2f %2.2f\r\n", ((float)data.pitch)/100, ((float)data.roll)/100, ((float)data.yaw)/10);
 }
 
 
@@ -42,9 +42,10 @@ int main(void)
     /*姿态模块串口 */
     UART_QuickInit(UART4_RX_PE25_TX_PE24, 115200); 
     GPIO_QuickInit(HW_GPIOE, 26, kGPIO_Mode_OPP);//功能选择S0
-	  GPIO_QuickInit(HW_GPIOE, 27, kGPIO_Mode_OPP);//功能选择S1
-	  GPIO_WriteBit(HW_GPIOE, 26, 0);//功能选择S0=0
-	  GPIO_WriteBit(HW_GPIOE, 27, 1);//功能选择S1=1
+    GPIO_QuickInit(HW_GPIOE, 27, kGPIO_Mode_OPP);//功能选择S1
+    GPIO_WriteBit(HW_GPIOE, 26, 1);//功能选择S0=0
+    GPIO_WriteBit(HW_GPIOE, 27, 0);//功能选择S1=1
+    
     /* open interrupt */
     UART_CallbackRxInstall(HW_UART4, UART4_ISR);
     UART_ITDMAConfig(HW_UART4, kUART_IT_Rx, true);

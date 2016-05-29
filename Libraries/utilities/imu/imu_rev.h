@@ -11,7 +11,7 @@ enum imu_rev_mode
     IMU_REV_Interrupt,
 };
 
-struct imu_data
+typedef struct 
 {
     int16_t accl[3];
     int16_t gyro[3];
@@ -20,21 +20,17 @@ struct imu_data
     int16_t pitch;
     int16_t roll;
     int32_t presure;
-};
-typedef struct imu_data* imu_data_t;
+}imu_data;
 
-struct imu_rev_init
-{
-    char (*getc)(void);
-    void (*handler)(void);
-};
+
+
 
 typedef struct imu_rev_init* imu_rev_init_t;
 
 //!< API functions
-void imu_rev_init(imu_rev_init_t installer);
-void imu_rev_process(char ch, enum imu_rev_mode mode);
-int imu_rev_get_data(imu_data_t data);
+void imu_rev_init(void);
+void imu_rev_process(char ch);
+void imu_get_data(imu_data *imu);
 
 
 #endif

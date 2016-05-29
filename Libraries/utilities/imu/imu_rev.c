@@ -1,8 +1,8 @@
 #include "imu_rev.h"
 #include <string.h>
 
-static imu_rev_init_t g_hander;
 static char rev_buf[64];
+static imu_data data;
 
 enum input_status
 {
@@ -13,12 +13,17 @@ enum input_status
     STATUS_FCS,
 };
 
-void imu_rev_init(imu_rev_init_t installer)
+void imu_rev_init(void)
 {
-    g_hander = installer;
+    
 }
 
-int imu_rev_get_data(imu_data_t data)
+void imu_get_data(imu_data *imu)
+{
+    memcpy(imu, &data, sizeof(imu_data));
+}
+
+int imu_rev_phase_data(imu_data* data)
 {
     data->accl[0] = (rev_buf[0]<<8) + rev_buf[1];
     data->accl[1] = (rev_buf[2]<<8) + rev_buf[3];
@@ -41,7 +46,7 @@ int imu_rev_get_data(imu_data_t data)
     return 0;
 }
 
-void imu_rev_process(char ch, enum imu_rev_mode mode)
+void imu_rev_process(char ch)
 {
     static int len = 0;
     static int i;
@@ -49,14 +54,6 @@ void imu_rev_process(char ch, enum imu_rev_mode mode)
     uint8_t fcs = 0;
     
     static enum input_status status = STATUS_IDLE;
-    if(mode == IMU_REV_Polling)
-    {
-        /* get a char if using polling mode */
-        if(g_hander->getc())
-        {
-            ch = g_hander->getc();
-        }
-    }
     
     /* running status machine */
     switch(status)
@@ -106,7 +103,7 @@ void imu_rev_process(char ch, enum imu_rev_mode mode)
             /* checksum is correct */
             if(fcs == fcs_frame)
             {
-                 g_hander->handler();
+                imu_rev_phase_data(&data);
             }
             status = STATUS_IDLE;
             break;

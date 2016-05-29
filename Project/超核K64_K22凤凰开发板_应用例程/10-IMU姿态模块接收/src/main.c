@@ -4,32 +4,19 @@
 
 #include "imu_rev.h"
 
+
 /* 超核姿态模块接收试验 */
 /* 此实验配合超核串口姿态模块 请将姿态模块连接到 开发板对应引脚。 试验通过普通调试串口显示结果 */
 
-void IMU_REV_Handler(void)
-{
-    struct imu_data data;
-    
-    /* get data */
-    imu_rev_get_data(&data);
-    
-    /* print results */
-    printf("P/R/Y:%2.2f %2.2f %2.2f\r\n", ((float)data.pitch)/100, ((float)data.roll)/100, ((float)data.yaw)/10);
-}
+imu_data imu;
 
-
+/* UART4 串口中断 */
 static void UART4_ISR(uint16_t byteReceived)
 {
-    /* hander imu receive */
-    imu_rev_process((char)byteReceived, IMU_REV_Interrupt);
+    /* 在串口中断中调用 imu_rev_process 函数, byteReceived是串口接收到的数据 */
+    imu_rev_process(byteReceived);
 }
 
- struct imu_rev_init installer = 
-{
-    NULL, /* 如果使用Interrupt模式 则填入NULL即可 */
-    IMU_REV_Handler, /* 成功接收一帧后的处理函数 */
-};
 
 int main(void)
 {
@@ -50,12 +37,16 @@ int main(void)
     UART_CallbackRxInstall(HW_UART4, UART4_ISR);
     UART_ITDMAConfig(HW_UART4, kUART_IT_Rx, true);
 
-    /* install functions */
-    imu_rev_init(&installer);
+    /* 初始化IMU模块 */
+    imu_rev_init();
+    
     while(1)
     {
+        /* 获取数据并打印 */
+        imu_get_data(&imu);
+        printf("P/R/Y:%2.2f %2.2f %2.2f\r\n", ((float)imu.pitch)/100, ((float)imu.roll)/100, ((float)imu.yaw)/10);
         GPIO_ToggleBit(HW_GPIOA, 9);
-        DelayMs(500);
+        DelayMs(50);
     }
 }
 

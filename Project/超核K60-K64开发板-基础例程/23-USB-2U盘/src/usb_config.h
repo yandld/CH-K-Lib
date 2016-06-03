@@ -44,7 +44,7 @@
 #define USBD_POWER                  0
 #define USBD_MAX_PACKET0            32
 #define USBD_DEVDESC_IDVENDOR       0x0425
-#define USBD_DEVDESC_IDPRODUCT      0x0004
+#define USBD_DEVDESC_IDPRODUCT      0x0002
 #define USBD_DEVDESC_BCDDEVICE      0x0100
 
 

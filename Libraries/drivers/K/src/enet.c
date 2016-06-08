@@ -351,10 +351,14 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
  */
 void ENET_MacSendData(uint8_t *data, uint16_t len)
 {
-    ENET->EIR = ENET_EIMR_TXF_MASK;
     /* check if buffer is readly */
-    //while( pxENETTxDescriptor->status & TX_BD_R ) {};
-        
+    if(pxENETTxDescriptor->status & TX_BD_R)
+    {
+        return;
+    }
+    
+    ENET->EIR = ENET_EIMR_TXF_MASK;
+
     /* set Tx Descriptor */
     pxENETTxDescriptor->data = (uint8_t *)__REV((uint32_t)data);		
     pxENETTxDescriptor->length = __REVSH(len);
@@ -364,7 +368,7 @@ void ENET_MacSendData(uint8_t *data, uint16_t len)
         
     /* enable transmit */
     ENET->TDAR = ENET_TDAR_TDAR_MASK;
-    while(ENET->EIR & ENET_EIMR_TXF_MASK);
+    while((ENET->EIR & ENET_EIMR_TXF_MASK) == 0);
 }
 
 uint32_t ENET_GetReceiveLen(void)

@@ -12,7 +12,10 @@
  *				1.首先你需要确保对应于你的开发板，已经能够正常使用Emwin显示英文字符，有可
  *				能不同的TFT硬件驱动需要做小幅修改，本次实验的液晶驱动为SSD1289；
  *				2.在Edit-->Configuration-->Encoding:Encode in UTF-8 without sigurature；在这种编码下；
- *				在代码中输入的中文在编译时会转化成UTF-8编码格式，Emwin才能正常的显示。
+ *				在代码中输入的中文在编译时会转化成UTF-8编码格式，Emwin才能正常的显示；
+ *				3.在使用fatfs文件系统的时候，在文件diskio.c文件中有个disk_initialize函数，该函数会被
+ *				其他函数调用，只要你用到了f_open等等的函数。也就是说，只要你选择两个地方之一对sd卡进行
+ *				初始化就可以了，一个是main函数中，另一个是disk_initialize函数中，该例程中选择了前者。
  */
 #include "gpio.h"
 #include "common.h"

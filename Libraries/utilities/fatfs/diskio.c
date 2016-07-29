@@ -29,7 +29,14 @@ DSTATUS disk_initialize (
 	switch (pdrv)
     {
         case SD_CARD :
+			/* 
+			 * Bacause sd card has been initialized in the main function,
+			 * so, here you may not initialize sd card. Otherwise, sd card
+			 * will initialize twice and the latter is effective.
+			 */
+		/*
             SD_QuickInit(12*1000*1000);
+		 */
             return RES_OK;
 	}
 	return STA_NOINIT;

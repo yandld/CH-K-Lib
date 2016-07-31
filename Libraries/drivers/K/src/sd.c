@@ -35,7 +35,7 @@ static struct sd_card_handler sdh;
 #define ESDHC_XFERTYP_CMDTYP_SUSPEND         (0x01)
 #define ESDHC_XFERTYP_CMDTYP_RESUME          (0x02)
 #define ESDHC_XFERTYP_CMDTYP_ABORT           (0x03)
-
+/* Response Type Select */
 #define ESDHC_XFERTYP_RSPTYP_NO              (0x00)
 #define ESDHC_XFERTYP_RSPTYP_136             (0x01)
 #define ESDHC_XFERTYP_RSPTYP_48              (0x02)
@@ -236,7 +236,7 @@ uint32_t SDHC_SendCmd(SDHC_Cmd_t *cmd)
         return ESDHC_ERROR_cmd_FAILED;
     }
     
-    /* get respond data */
+    /* get respond data if it has response */
     if ((xfertyp & SDHC_XFERTYP_RSPTYP_MASK) != SDHC_XFERTYP_RSPTYP(ESDHC_XFERTYP_RSPTYP_NO))
     {
         cmd->resp[0] = SDHC->CMDRSP[0];
@@ -266,6 +266,7 @@ static uint8_t SD_InitCard(void)
 	while (SDHC->SYSCTL & SDHC_SYSCTL_INITA_MASK){};
     /* CMD0 -> CMD8 -> while(CMD55+ACMD41) ->CMD2 -> CMD3 ->CMD9 -> CMD7-> CMD16->(CMD55+ACMD6) */
 
+	/* CMD0 : Idle status without response */
 	cmd.cmd = ESDHC_CMD0;
 	cmd.arg = 0;
 	cmd.blkCount = 0;
@@ -276,9 +277,9 @@ static uint8_t SD_InitCard(void)
         LIB_TRACE("CMD0 error\r\n");
         return ESDHC_ERROR_INIT_FAILED;
     }
-	//CMD8
+	/* CMD8 : check whether chip supports HC with 48bits response*/
 	cmd.cmd = ESDHC_CMD8;
-	cmd.arg =0x000001AA;
+	cmd.arg = 0x000001AA; 	/* voltage supplied : 0001b ; chech pattern : 10101010b */
 	cmd.blkCount = 0;
 	result = SDHC_SendCmd(&cmd);
 	if (result > 0) 
@@ -287,30 +288,32 @@ static uint8_t SD_InitCard(void)
 	}
 	if (result == 0) //SDHC
 	{
-        LIB_TRACE("SDHC detected\r\n");
+        LIB_TRACE("SDHC detected, response is 0x%x 0x%x 0x%x 0x%x\r\n",cmd.resp[3],cmd.resp[2],cmd.resp[1],cmd.resp[0]);
 		hc = true;  					
 	}
     
 	do 
 	{								 
-		for(delay_cnt=0;delay_cnt<1000;delay_cnt++);
-		i++;   
-		cmd.cmd = ESDHC_CMD55;
-		cmd.arg =0;
+		for(delay_cnt = 0; delay_cnt < 1000; delay_cnt++);
+		i++;
+		
+		cmd.cmd = ESDHC_CMD55;    /* the response Arg should be 0x120 */
+		cmd.arg = 0;
         cmd.blkCount = 0;
         result = SDHC_SendCmd(&cmd);
-		
+		LIB_TRACE("CMD55 response is 0x%x 0x%x 0x%x 0x%x\r\n",cmd.resp[3],cmd.resp[2],cmd.resp[1],cmd.resp[0]);
 		cmd.cmd = ESDHC_ACMD41;
 		if(hc)
 		{
-			cmd.arg = 0x40300000;
+			cmd.arg = 0x40300000; /* bit[23-8] represent Voltage range and response 0xc0ff80000 represent 2.7-3.6V*/ 
 		}
 		else
 		{
 			cmd.arg = 0x00300000;
 		}
 		result = SDHC_SendCmd(&cmd);
-	}while ((0 == (cmd.resp[0] & 0x80000000)) && (i < 300));
+		LIB_TRACE("ACMD41 response is 0x%x 0x%x 0x%x 0x%x\r\n",cmd.resp[3],cmd.resp[2],cmd.resp[1],cmd.resp[0]);
+	}while ((0 == (cmd.resp[0] & 0x80000000)) && (i < 300)); /* busy bit31 if 0,On Initialization;1 Initialization Complete */
     if(i == 300)
     {
         LIB_TRACE("Timeout\r\n");

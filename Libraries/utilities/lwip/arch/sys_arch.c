@@ -91,6 +91,7 @@ void sys_mbox_post(sys_mbox_t *mbox,void *msg)
     }
     while(OSQPost((*mbox)->pQ,msg) != OS_ERR_NONE);
 }
+
 //尝试向一个消息邮箱发送消息
 //此函数相对于sys_mbox_post函数只发送一次消息，
 //发送失败后不会尝试第二次发送
@@ -268,16 +269,17 @@ u32_t sys_now(void)
 	return lwip_timer*10;
 }
 
-u8_t timer_expired(u32_t *last_time,u32_t tmr_interval)
-{
-	u32_t time;
-	time = *last_time;	
-	if((lwip_timer-time)>=tmr_interval){
-		*last_time = lwip_timer;
-		return 1;
-	}
-	return 0;
-}
+//u8_t timer_expired(u32_t *last_time, u32_t tmr_interval)
+//{
+//    u32_t time;
+//    time = *last_time;	
+//    if((lwip_timer - time) >= tmr_interval)
+//    {
+//        *last_time = lwip_timer;
+//        return 1;
+//    }
+//	return 0;
+//}
 
 #endif
 

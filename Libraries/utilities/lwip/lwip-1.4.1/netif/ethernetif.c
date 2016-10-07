@@ -132,11 +132,9 @@ low_level_init(struct netif *netif)
 static err_t
 low_level_output(struct netif *netif, struct pbuf *p)
 {
-//  struct ethernetif *ethernetif = netif->state;
   struct pbuf *q;
-//  uint32_t i;
-  u32_t tx_len;
-  tx_len = 0;
+  u32_t len;
+  len = 0;
     
 #if ETH_PAD_SIZE
   pbuf_header(p, -ETH_PAD_SIZE); /* drop the padding word */
@@ -144,18 +142,11 @@ low_level_output(struct netif *netif, struct pbuf *p)
 
     for (q = p; q != NULL; q = q->next)
     {
-        memcpy(&gTxBuf[tx_len], q->payload, q->len);
-        tx_len += q->len;
+        memcpy(&gTxBuf[len], q->payload, q->len);
+        len += q->len;
     }
     
-    ENET_MacSendData(gTxBuf, tx_len);
-
-  //  printf("sending frame:%d!!!!!!!!!!!!!\r\n", tx_len);
-//for(i=0;i<tx_len;i++)
-    {
-  //     printf("%x ", gTxBuf[i]);
-    }
-  //  printf("\r\n");
+    ENET_MacSendData(gTxBuf, len);
     
 #if ETH_PAD_SIZE
   pbuf_header(p, ETH_PAD_SIZE); /* reclaim the padding word */

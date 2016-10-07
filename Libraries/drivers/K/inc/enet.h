@@ -90,10 +90,10 @@
  */
 typedef struct
 {
-    uint16_t status;	            ///< control and status 
-  	uint16_t length;	            ///< transfer length 
+    volatile uint16_t status;	            ///< control and status 
+  	volatile uint16_t length;	            ///< transfer length 
     uint8_t  *data;	                ///< buffer address 
-  	uint32_t ebd_status;
+  	volatile uint32_t ebd_status;
   	uint16_t length_proto_type;
   	uint16_t payload_checksum;
   	uint32_t bdu;
@@ -147,7 +147,7 @@ bool ENET_MII_Write(uint16_t phy_addr, uint16_t reg_addr, uint16_t data);
 
 /* controller API */
 void ENET_Init(ENET_InitTypeDef* ENET_InitStrut);
-void ENET_MacSendData(uint8_t *data, uint16_t len);
+uint32_t ENET_MacSendData(uint8_t *data, uint16_t len);
 uint16_t ENET_MacReceiveData(uint8_t *data);
 void ENET_ITDMAConfig(ENET_ITDMAConfig_Type config);
 void ENET_CallbackTxInstall(ENET_CallBackTxType AppCBFun);

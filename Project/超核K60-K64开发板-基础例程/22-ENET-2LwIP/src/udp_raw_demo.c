@@ -10,30 +10,37 @@
 #include "lwip/init.h"
 #include "netif/etharp.h"
 
+#define UDP_PORT        (7)
 
-void udp_echo_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct 
-ip_addr *addr, u16_t port)
+void udp_echo_recv(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
 {
-    char buffer[512];
+    int i;
+    static u8_t buffer[1024];
     if (p != NULL) 
     {
-        if(pbuf_copy_partial(p, buffer, p->tot_len,0) != p->tot_len) 
+        if(pbuf_copy_partial(p, buffer, p->tot_len, 0) != p->tot_len) 
         {
             LWIP_DEBUGF(LWIP_DBG_ON, ("pbuf_copy_partial failed\r\n"));
         } 
         else 
         {
-            buffer[p->tot_len] = '\0';
-            LWIP_DEBUGF(LWIP_DBG_ON, ("got %s\r\n", buffer));
+            printf("port:%d\r\n", port);
+            for(i=0; i<p->tot_len; i++)
+            {
+                printf("%c", buffer[i]);
+            }
+            printf("\r\n");
+            
+            // send received packet back to sender
+            udp_sendto(pcb, p, addr, port);
         }
-        // send received packet back to sender
-        udp_sendto(pcb, p, addr, port);
+
         // free the pbuf
         pbuf_free(p);
     }
 }
 
-void udp_echo_init(void)
+void udp_demo_init(void)
 {
     struct udp_pcb * pcb;
 
@@ -44,12 +51,12 @@ void udp_echo_init(void)
         return;
     }
 
-    // bind to any IP address on port 7
-    if (udp_bind(pcb, IP_ADDR_ANY, 7) != ERR_OK) {
+    // bind to any IP address on port
+    if (udp_bind(pcb, IP_ADDR_ANY, UDP_PORT) != ERR_OK) {
         LWIP_DEBUGF(UDP_DEBUG, ("udp_bind failed!\n"));
         return;
     }
-    printf("UDP bind to PORT:7 OK!\r\n");
+    printf("UDP demo: bind to PORT:%d OK!\r\n", UDP_PORT);
 
     // set udp_echo_recv() as callback function
     // for received packets

@@ -48,44 +48,37 @@
 #include "lwip/init.h"
 #include "netif/etharp.h"
 
-#if 0
-u32_t last_arp_time;			
-u32_t last_tcp_time;	
-u32_t last_ipreass_time;
-#endif
 
-bool gEnetRev = false;
-
-
-struct netif fsl_netif0;
+struct netif ethif;
 extern err_t ethernetif_init(struct netif *netif);
 extern err_t ethernetif_input(struct netif *netif);
-u8_t timer_expired(u32_t *last_time,u32_t tmr_interval);
 extern void PIT_ISR(void);
-void LWIP_Polling(void);
 
 uint8_t     gCfgLoca_MAC[] = {0x00, 0xCF, 0x52, 0x35, 0x00, 0x01};
 
 void ENET_ISR(void)
 {
-    gEnetRev = true;
+    ethernetif_input(&ethif);
 }
 
-extern void udp_echo_init(void);
-extern void echo_init(void);
+extern void udp_demo_init(void);
+extern void tcp_sever_demo_init(void);
+extern void tcp_client_demo_init(void);
 
 int main(void)
 {
     int ret;
     DelayInit();
     GPIO_QuickInit(HW_GPIOE, 6, kGPIO_Mode_OPP);
-    UART_QuickInit(UART0_RX_PB16_TX_PB17, 115200);
-    
-    PIT_QuickInit(0, 1000*10);
-    PIT_CallbackInstall(0, PIT_ISR);
-    PIT_ITDMAConfig(0, kPIT_IT_TOF, true);
+    UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
     
     printf("ENET LwIP test!\r\n");
+    printf("CoreClock:%dHz\r\n", GetClock(kCoreClock));
+    
+    PIT_QuickInit(HW_PIT_CH0, 1000*10);
+    PIT_CallbackInstall(HW_PIT_CH0, PIT_ISR);
+    PIT_ITDMAConfig(HW_PIT_CH0, kPIT_IT_TOF, true);
+    
     
     /* enable PinMux */
     PORT_PinMuxConfig(HW_GPIOB, 0, kPinAlt4);
@@ -116,98 +109,61 @@ int main(void)
     ENET_CallbackRxInstall(ENET_ISR);
     ENET_ITDMAConfig(kENET_IT_RXF);
 
-    ip_addr_t fsl_netif0_ipaddr, fsl_netif0_netmask, fsl_netif0_gw;
+    ip_addr_t ethif_ipaddr, ethif_netmask, ethif_gw;
 
     lwip_init();
 
 #if LWIP_DHCP					 // DHCP
-    fsl_netif0_ipaddr.addr=0;
-    fsl_netif0_netmask.addr=0;
-    fsl_netif0_gw.addr=0;
+    ethif_ipaddr.addr=0;
+    ethif_netmask.addr=0;
+    ethif_gw.addr=0;
 #else    
-    IP4_ADDR(&fsl_netif0_ipaddr, 192,168,2,102);
-    IP4_ADDR(&fsl_netif0_netmask, 255,255,255,0);
-    IP4_ADDR(&fsl_netif0_gw, 192,168,2,100);
+    IP4_ADDR(&ethif_ipaddr, 192, 168, 1, 100);
+    IP4_ADDR(&ethif_netmask, 255, 255, 255, 0);
+    IP4_ADDR(&ethif_gw, 192, 168, 1, 1);
 #endif 
   
-    netif_add(&fsl_netif0, &fsl_netif0_ipaddr, &fsl_netif0_netmask, &fsl_netif0_gw, NULL, ethernetif_init, ethernet_input);
-    netif_set_default(&fsl_netif0);
-    netif_set_up(&fsl_netif0);
+    netif_add(&ethif, &ethif_ipaddr, &ethif_netmask, &ethif_gw, NULL, ethernetif_init, ethernet_input);
+    netif_set_default(&ethif);
+    netif_set_up(&ethif);
     
 #if LWIP_DHCP	
     printf("dhcp start getting addr...\r\n");
-    dhcp_start(&fsl_netif0);
-    while(fsl_netif0.dhcp->offered_ip_addr.addr == 0)
-    {
-        if(gEnetRev)
-        {
-            ethernetif_input(&fsl_netif0); 
-            gEnetRev = false;
-        }
-    }
-    
-    dhcp_fine_tmr();
-    netif_set_addr(&fsl_netif0, &(fsl_netif0.dhcp->offered_ip_addr), &(fsl_netif0.dhcp->offered_sn_mask), &(fsl_netif0.dhcp->offered_gw_addr));
-    netif_set_default(&fsl_netif0);
-    netif_set_up(&fsl_netif0);
-        
-#endif
-    u8_t *ip = (u8_t*)&fsl_netif0.ip_addr.addr;
-    printf("dhcp new ip: %u.%u.%u.%u \r",ip[0], ip[1],ip[2], ip[3]);
-    
-    udp_echo_init();
-    echo_init();
+    dhcp_start(&ethif);
     while(1)
     {
-        if(gEnetRev)
+        if((ethif.dhcp->offered_ip_addr.addr) !=0 && (ethif.dhcp->offered_gw_addr.addr) != 0 && (ethif.dhcp->offered_sn_mask.addr) != 0)
         {
-            gEnetRev = false;
-            ethernetif_input(&fsl_netif0); 
+            
+            break;
         }
+        sys_check_timeouts();
+    }
+    
+    netif_set_addr(&ethif, &(ethif.dhcp->offered_ip_addr), &(ethif.dhcp->offered_sn_mask), &(ethif.dhcp->offered_gw_addr));
+    netif_set_default(&ethif);
+    netif_set_up(&ethif);
+    ip_init();
+    dhcp_stop(&ethif);
+#endif
+    
+    u8_t *ip;
+    
+    ip = (u8_t*)&ethif.ip_addr.addr;
+    printf("ip: %u.%u.%u.%u \r\n",ip[0], ip[1],ip[2], ip[3]);
+    
+    ip = (u8_t*)&ethif.netmask.addr;
+    printf("netmask: %u.%u.%u.%u \r\n",ip[0], ip[1],ip[2], ip[3]);
+    
+    ip = (u8_t*)&ethif.gw.addr;
+    printf("netmask: %u.%u.%u.%u \r\n",ip[0], ip[1],ip[2], ip[3]);
+    
+    udp_demo_init();
+    tcp_sever_demo_init();
+    tcp_client_demo_init();
+    while(1)
+    {
+        sys_check_timeouts();
     }
 }
 
-#if 0
-u32_t input_time;
-#define CLOCKTICKS_PER_MS   10
-#define IP_TMR_INTERVAL 1000
-#define TCP_TMR_INTERVAL       250
-
-
-#if LWIP_DHCP>0	
-u32_t last_dhcp_fine_time;			
-u32_t last_dhcp_coarse_time;  
-u32_t dhcp_ip=0;
-#endif
-
-
-void LWIP_Polling(void){
-	
-    if(timer_expired(&input_time,5)) //接收包，周期处理函数
-  {
- //   ethernetif_input(&fsl_netif0); 
-  }
-  if(timer_expired(&last_tcp_time,TCP_TMR_INTERVAL/CLOCKTICKS_PER_MS))//TCP处理定时器处理函数
-  {
-	// tcp_tmr();
-  }
-  if(timer_expired(&last_arp_time,ARP_TMR_INTERVAL/CLOCKTICKS_PER_MS))//ARP处理定时器
-  {
-	etharp_tmr();
-  }
- 	if(timer_expired(&last_ipreass_time,IP_TMR_INTERVAL/CLOCKTICKS_PER_MS)){ //IP重新组装定时器
- 		ip_reass_tmr();
-   }
-  #if LWIP_DHCP>0			   					
-  if(timer_expired(&last_dhcp_fine_time,DHCP_FINE_TIMER_MSECS/CLOCKTICKS_PER_MS))
-  {
-	 dhcp_fine_tmr();
-  }
-  if(timer_expired(&last_dhcp_coarse_time,DHCP_COARSE_TIMER_MSECS/CLOCKTICKS_PER_MS))
-  {
-	dhcp_coarse_tmr();
-  }  
-  #endif
-  
-}
-#endif

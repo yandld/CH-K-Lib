@@ -254,7 +254,7 @@ bool ENET_MII_Read(uint16_t phy_addr, uint16_t reg_addr, uint16_t *data)
  */
 void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 {
-    uint16_t usData;
+    volatile uint16_t usData;
     
     SIM->SCGC2 |= SIM_SCGC2_ENET_MASK;
     MPU->CESR = 0;
@@ -320,10 +320,6 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
         LIB_TRACE("enet moudle - speed:100M\r\n");
         ENET->RCR &= ~ENET_RCR_RMII_10T_MASK; 
     }
-
-    
-    /* 使用增强型缓冲区描述符 */
-    ENET->ECR = ENET_ECR_EN1588_MASK;
     
     /* max receiced packet size */
     ENET->MRBR |= ENET_MRBR_R_BUF_SIZE_MASK;
@@ -333,7 +329,7 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
 	ENET->TDSR = (uint32_t) pxENETTxDescriptor;
     
 	/* clear all IT pending bit */
-	ENET->EIR = ( uint32_t ) 0xFFFFFFFF;
+	ENET->EIR = 0xFFFFFFFF;
 	
     /* enable moudle */
     ENET->ECR |= ENET_ECR_ETHEREN_MASK;
@@ -349,26 +345,27 @@ void ENET_Init(ENET_InitTypeDef* ENET_InitStrut)
  * @param[in]   len     数据长度 (< 1500字节)
  * @retval  None
  */
-void ENET_MacSendData(uint8_t *data, uint16_t len)
+uint32_t ENET_MacSendData(uint8_t *data, uint16_t len)
 {
     /* check if buffer is readly */
     if(pxENETTxDescriptor->status & TX_BD_R)
     {
-        return;
+        return CH_BUSY;
     }
     
-    ENET->EIR = ENET_EIMR_TXF_MASK;
-
     /* set Tx Descriptor */
     pxENETTxDescriptor->data = (uint8_t *)__REV((uint32_t)data);		
     pxENETTxDescriptor->length = __REVSH(len);
     pxENETTxDescriptor->bdu = 0x00000000;
-	pxENETTxDescriptor->ebd_status = TX_BD_INT | TX_BD_TS;// | TX_BD_IINS | TX_BD_PINS;
+	pxENETTxDescriptor->ebd_status = TX_BD_INT | TX_BD_TS;
 	pxENETTxDescriptor->status = ( TX_BD_R | TX_BD_L | TX_BD_TC | TX_BD_W );
         
     /* enable transmit */
     ENET->TDAR = ENET_TDAR_TDAR_MASK;
+    ENET->EIR = ENET_EIMR_TXF_MASK;
+    
     while((ENET->EIR & ENET_EIMR_TXF_MASK) == 0);
+    return CH_OK;
 }
 
 uint32_t ENET_GetReceiveLen(void)

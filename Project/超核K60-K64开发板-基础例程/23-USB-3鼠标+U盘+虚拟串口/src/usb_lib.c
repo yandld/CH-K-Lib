@@ -1200,7 +1200,7 @@ void USBD_RTX_TaskInit (void) {
  *      USB Device Descriptors
  *----------------------------------------------------------------------------*/
 #define USBD_MSC_DESC_LEN                 (USB_INTERFACE_DESC_SIZE + 2*USB_ENDPOINT_DESC_SIZE)
-#define USBD_CDC_ACM_DESC_LEN             (USB_INTERFACE_DESC_SIZE + /*USBD_MULTI_IF * USB_INTERFACE_ASSOC_DESC_SIZE +*/ 0x0013                 + \
+#define USBD_CDC_ACM_DESC_LEN             (USB_INTERFACE_DESC_SIZE + USBD_MULTI_IF * USB_INTERFACE_ASSOC_DESC_SIZE + 0x0013                 + \
                                            USB_ENDPOINT_DESC_SIZE + USB_INTERFACE_DESC_SIZE + 2*USB_ENDPOINT_DESC_SIZE)
 #define USBD_HID_DESC_LEN                 (USB_INTERFACE_DESC_SIZE + USB_HID_DESC_SIZE                                                          + \
                                           (USB_ENDPOINT_DESC_SIZE*(1+(USBD_HID_EP_INTOUT != 0))))

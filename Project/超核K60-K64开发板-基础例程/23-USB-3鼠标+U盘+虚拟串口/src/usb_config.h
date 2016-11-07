@@ -279,7 +279,7 @@
 //            <256=> 256 Bytes <512=> 512 Bytes <1024=> 1024 Bytes
 //       </h>
 //     </e>
-#define USBD_CDC_ACM_ENABLE             0
+#define USBD_CDC_ACM_ENABLE             1
 #define USBD_CDC_ACM_EP_INTIN           3
 #define USBD_CDC_ACM_WMAXPACKETSIZE     16
 #define USBD_CDC_ACM_BINTERVAL          1
@@ -328,7 +328,7 @@
 /* USB Device Calculations ---------------------------------------------------*/
 
 #define USBD_IF_NUM                (USBD_HID_ENABLE+USBD_MSC_ENABLE+(USBD_ADC_ENABLE*2)+(USBD_CDC_ACM_ENABLE*2)+USBD_CLS_ENABLE)
-#define USBD_MULTI_IF              (0)//USBD_CDC_ACM_ENABLE*(USBD_HID_ENABLE|USBD_MSC_ENABLE|USBD_ADC_ENABLE))
+#define USBD_MULTI_IF              (USBD_CDC_ACM_ENABLE*(USBD_HID_ENABLE|USBD_MSC_ENABLE|USBD_ADC_ENABLE))
 #ifndef MAX
 #define MAX(x, y)                (((x) < (y)) ? (y) : (x))
 #endif

@@ -146,6 +146,14 @@ int main(void)
     
     while(1)
     {
+        int32_t ch;
+        ch = USBD_CDC_ACM_GetChar();
+        if(ch != -1)
+        {
+            USBD_CDC_ACM_DataSend("USB VCOM test\r\n", 15);
+            USBD_CDC_ACM_PutChar(ch);
+        }
+        
         GetMouseInReport(report, 4);
         usbd_hid_get_report_trigger(0, (U8 *)report, 4);
         DelayMs(10);
